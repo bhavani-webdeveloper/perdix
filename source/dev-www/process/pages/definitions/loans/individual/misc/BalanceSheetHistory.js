@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.misc.BalanceSheetHistory"),
-["$log", "$q","Enrollment", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",'SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch","Scoring","AuthTokenHelper", "BundleManager", "IndividualLoan",
-function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUtils,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch,Scoring,AuthTokenHelper,BundleManager, IndividualLoan){
+["$log", "$q","Enrollment", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",'SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch","Scoring","AuthTokenHelper", "BundleManager", "Queries", "$filter",
+function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUtils,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch,Scoring,AuthTokenHelper,BundleManager, Queries, $filter){
 
     return {
         "type": "schema-form",
@@ -10,27 +10,27 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             var deferred = $q.defer();
             model.businessPLs = [];
             model.loanRepaymentHistory = [];
+            model.customerHistory=[];
             var keybasicLoanInfo = ['Loan Account Number', 'Operational Status', 'Product', 'Loan Amount', 'Frequency', 'Tenure', '# Tranche', 'EMI', 'Normal Interest Rate'];
-            var p1 = IndividualLoan.search({
-                stage: "Completed",
-                urn: model.customerUrn
-            }).$promise;
+            var p1 = Queries.getLoanAccountsByUrnAndStage(model.customerUrn, ["Completed"]);
 
-            var promiseArr = [p1];
+            var promiseArr = [];
 
-
-
-            p1.then(function(res){
+            p1.then(function(_res){
                 var loanIds = [];
-                for (var i=0;i<res.body.length;i++){
+                var res = $filter("orderBy") (_res, ['loanId', 'currentStage']);
+                if(res){
+                res=(res.length>3)?(_res.slice(-3)):(res);
+                for (var i=0;i<res.length;i++){
                     (function(i){
-                        loanIds.push(res.body[i].loanId);
-                        var promise = Scoring.financialSummarySnapshot({loan_id: res.body[i].loanId, score_name: "ConsolidatedScore"}).$promise;
-                        promise.then(function(resp){
+                        loanIds.push(res[i].loanId);
+                        var promise = Scoring.financialSummarySnapshot({loan_id: res[i].loanId, score_name: "ConsolidatedScore"}).$promise;
+                        promiseArr.push(promise);
+                        promiseArr[i].then(function(resp){
                             var bpl = resp[1];
-                            bpl.title = "Profit & Loss - " + res.body[i].accountNumber;
+                            bpl.title = "Profit & Loss - " + res[i].accountNumber;
                             var businessPL = {};
-                            var loanRepaymentHistory = {"basicLoanInfo": {}, loanOverview: {}};
+                            var loanRepaymentHistory = {"basicLoanInfo": {loanId: res[i].loanId, currentStage: res[i].currentStage}, loanOverview: {}};
                             businessPL.invoice = bpl.data[0]['Invoice'];
                             businessPL.invoicePCT = bpl.data[0]['Invoice pct'];
                             businessPL.cashRevenue = bpl.data[0]['Cash'];
@@ -52,9 +52,11 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                             businessPL.netIncome = bpl.data[0]['Net Income'];
                             businessPL.finalKinaraEmi = bpl.data[0]['Final Kinara EMI'];
                             businessPL.finalKinaraEmiPCT = bpl.data[0]['Final Kinara EMI pct'];
-                            businessPL.accountNumber = res.body[i].accountNumber;
+                            businessPL.accountNumber = res[i].accountNumber;
+                            businessPL.loanId = res[i].loanId;
+                            businessPL.currentStage = res[i].currentStage;
 
-                            if(resp.length >= 3 && resp[2] ){
+                            /* if(resp.length >= 3 && resp[2] ){
                                 var columns = resp[2].columns;
                                 for(var len = 0 ; len < resp[2].columns.length; len++ ){
                                     if(keybasicLoanInfo.indexOf(columns[len].data) > -1){
@@ -63,17 +65,17 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                                         loanRepaymentHistory.loanOverview[columns[len].data] = resp[2].data[0][columns[len].data];
                                     }                                
                                 }
-                            }
+                            } */
                             
                             model.businessPLs.push(businessPL);
                             model.loanRepaymentHistory.push(loanRepaymentHistory);
+                            model.customerHistory.push(resp);
                         }, function(){
-                            $log.info("Failed loading financial summary for loan_id::" + res.body[i].loanId);
-                        })
-                        promiseArr.push(promise);
-                    })(i)
-                    
+                            $log.info("Failed loading financial summary for loan_id::" + res[i].loanId);
+                        });
+                    })(i);
                 }
+            }
 
                 var bsLeft = [], bsRight = [];
                 repaymentHistoryForm = {
@@ -88,7 +90,8 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                                 view: "fixed",
                                 add: null,
                                 remove: null,
-                                titleExpr: "'Account #' + model.loanRepaymentHistory[arrayIndex].basicLoanInfo['Loan Account Number']",
+                                titleExpr: "model.loanRepaymentHistory[arrayIndex].basicLoanInfo['Loan Account Number'] ? ('Account #' + model.loanRepaymentHistory[arrayIndex].basicLoanInfo['Loan Account Number']) : \
+                                            ('Loan ID - ' + model.loanRepaymentHistory[arrayIndex].basicLoanInfo.loanId + ' (' + model.loanRepaymentHistory[arrayIndex].basicLoanInfo.currentStage + ')') ",
                                 items:[
                                     {
                                         type: "section",
@@ -121,7 +124,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
 
                         angular.forEach(model.loanRepaymentHistory[0].basicLoanInfo, function(value, key){
                             var item = {
-                                key: "loanRepaymentHistory[0].basicLoanInfo." + key,
+                                key: "loanRepaymentHistory[].basicLoanInfo." + key,
                                 title: key,
                                 type: "string",
                                 readonly: true,
@@ -130,7 +133,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                         });
                         angular.forEach(model.loanRepaymentHistory[0].loanOverview, function(value, key){
                             var item = {
-                                key: "loanRepaymentHistory[0].loanOverview." + key,
+                                key: "loanRepaymentHistory[].loanOverview." + key,
                                 title: key,
                                 type: "string",
                                 readonly: true,
@@ -141,6 +144,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
 
                 }).finally(function(){
                     deferred.resolve();
+                    BundleManager.pushEvent('customer-history-data', model._bundlePageObj, model.customerHistory);
                 })
 
             }, function(){});
@@ -162,7 +166,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                         view: "fixed",
                         add: null,
                         remove: null,
-                        titleExpr: "'Account #' + model.businessPLs[arrayIndex].accountNumber",
+                        titleExpr: "model.businessPLs[arrayIndex].accountNumber ? ('Account #' + model.businessPLs[arrayIndex].accountNumber) : ('Loan ID - ' + model.businessPLs[arrayIndex].loanId + ' (' + model.businessPLs[arrayIndex].currentStage + ')')",
                         items:[
                             {
                                 type: "section",

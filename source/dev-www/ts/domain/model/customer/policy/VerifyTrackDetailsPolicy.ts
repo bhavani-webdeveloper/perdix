@@ -34,7 +34,7 @@ export class VerifyTrackDetailsPolicy extends IPolicy<EnrolmentProcess> {
 
     run(enrolmentProcess: EnrolmentProcess): Observable<EnrolmentProcess> {
 
-        if(_.hasIn(enrolmentProcess.customer, "customerType") && enrolmentProcess.customer.customerType.toLowerCase() == 'enterprise'){
+        if(_.hasIn(enrolmentProcess.customer, "customerType") && enrolmentProcess.customer.customerType.toLowerCase() == 'enterprise' && enrolmentProcess.customer.vehiclesOwned && enrolmentProcess.customer.vehiclesFinanced){
             if(enrolmentProcess.customer.vehiclesOwned >= enrolmentProcess.customer.vehiclesFinanced){
                 enrolmentProcess.customer.vehiclesFree = enrolmentProcess.customer.vehiclesOwned - enrolmentProcess.customer.vehiclesFinanced;
             }

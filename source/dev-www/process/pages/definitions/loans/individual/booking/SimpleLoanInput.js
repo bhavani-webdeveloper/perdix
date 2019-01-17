@@ -251,17 +251,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.SimpleLoanInput"),
                         model.loanAccount = resp;
                         model.loanAccount.tenure = Number(resp.tenure);
                             var urns = [];                           
-                            Queries.getCustomerBasicDetails({
-                                "urns": urns
-                            }).then(
-                                function(resQuery) {
-                                    if (!_.isNull(model.loanAccount.applicant)) {
-                                        model.loanAccount.applicantName = resQuery.urns[model.loanAccount.applicant].first_name
-                                    }
-                                   
-                                },
-                                function(errQuery) {}
-                            );
+                            
                         model.currentStage = resp.currentStage;
                         model.additional = model.additional || {};
 
@@ -304,7 +294,20 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.SimpleLoanInput"),
                         "loanAccount.partnerCode",
                         "loanAccount.productCategory",
                         "loanAccount.frequency",
-                        "loanAccount.productCode",
+                        {
+                            key: "loanAccount.productCode",
+                            onSelect: function(valueObj, model, context) {
+                                model.loanAccount.productCode = valueObj.productCode;
+                                if(valueObj.tenure_from == valueObj.tenure_to) {
+                                    model.loanAccount.tenure = valueObj.tenure_to;
+                                }
+                                else {
+                                    delete model.loanAccount.tenure;
+                                    model.tenurePlaceHolderExpr = valueObj.tenure_from + '-' + valueObj.tenure_to;
+                                }
+                                getProductDetails(model.loanAccount.productCode, model);
+                            },
+                        },
                         "loanAccount.tenure"
                     ]
                 }, {
@@ -434,12 +437,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.SimpleLoanInput"),
                                     .$promise
                                     .then(function(res) {
                                         model.loanAccount = res.loanAccount;
-                                        $state.go("Page.Engine", {
-                                            pageName: "loans.individual.booking.SimpleLoanInput",
-                                            pageId: model.loanAccount.id
-                                        }, {
-                                            reload: true
-                                        });
+                                        model.loanAccount.tenure = Number(model.loanAccount.tenure);
+                                        LoanBookingCommons.getLoanAccountRelatedCustomersLegacy(model.loanAccount);
+                                        PageHelper.showProgress("loan-create", "Loan Created", 5000);
                                     }, function(httpRes) {
                                         PageHelper.showErrors(httpRes);
                                     })
@@ -503,6 +503,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.SimpleLoanInput"),
                             trancheTotalAmount += (model.loanAccount.disbursementSchedules[i].disbursementAmount || 0);
                         }
                     }
+                    if (trancheTotalAmount > model.loanAccount.loanAmount) {
+                        PageHelper.showProgress("loan-create", "Disbursement Amount is greater than Loan Amount of the loan product selected.", 5000);
+                        return false;
+                    }
                     // if (model.additional.product && model.additional.product.productType != 'OD' && trancheTotalAmount > model.loanAccount.loanAmount) {
                     //     PageHelper.showProgress("loan-create", "Total tranche amount is more than the Loan amount", 5000);
                     //     return false;
@@ -529,6 +533,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.SimpleLoanInput"),
                             }
                             if (model.loanAccount.loanAmount > model.additional.product.amountTo) {
                                 PageHelper.showProgress("loan-create", "Loan Amount requested should be in the range [" + model.additional.product.amountFrom + " - " + model.additional.product.amountTo + "]", 5000);
+                                return false;
+                            }
+
+                            if (trancheTotalAmount > model.additional.product.amountTo || trancheTotalAmount < model.additional.product.amountFrom) {
+                                PageHelper.showProgress("loan-create", "Total disbursement amount should be in the range [" + model.additional.product.amountFrom + " - " + model.additional.product.amountTo + "]", 5000);
                                 return false;
                             }
                         }

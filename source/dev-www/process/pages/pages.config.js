@@ -7,6 +7,11 @@ irf.pages.config([
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "LeadDashboardCtrl"
 	},{
+		name: "Page.witfinLeadDashboard",
+		url: "/witfinLeadDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "witfinLeadDashboardCtrl"
+	},{
 		name: "Page.JournalMaintenanceDashboard",
 		url: "/JournalMaintenanceDashboard",
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
@@ -16,6 +21,16 @@ irf.pages.config([
 		url: "/JournalPostingDashboard",
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "JournalPostingDashboardCtrl"
+	},{
+		name: "Page.JournalMultiPostingDashboard",
+		url: "/JournalMultiPostingDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "JournalMultiPostingDashboardCtrl"
+	},{
+		name: "Page.FinconAccountingDashboard",
+		url: "/FinconAccountingDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "FinconAccountingDashboardCtrl"
 	},{
 		name: "Page.ReferenceCodeDashboard",
 		url: "/ReferenceCodeDashboard",
@@ -117,10 +132,25 @@ irf.pages.config([
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "DocumentTrackingDashboardCtrl"
 	},{
+		name: "Page.ScoreParameterMaintenanceDashboard",
+		url: "/ScoreParameterMaintenanceDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "ScoreParameterMaintenanceDashboardCtrl"
+	},{
 		name: "Page.CentreCreationDashboard",
 		url: "/CentreCreationDashboard",
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "CentreCreationDashboardCtrl"
+	},{
+		name: "Page.ServiceRequestDashboard",
+		url: "/ServiceRequestDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "ServiceRequestDashboardCtrl"		
+	},{
+		name: "Page.ManagementReportDashboard",
+		url: "/ManagementReportDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "PageManagementReportDashboardCtrl"		
 	}];
 
 	angular.forEach(statesDefinition, function(value, key){
@@ -138,6 +168,8 @@ irf.pages.config([
 	});
 
 	elemConfig.configNavigator(irfNavigatorProvider.factory);
+
+	elemConfig.configFormHelper(formHelperProvider.factory);
 }]);
 irf.pages.run(["Model_ELEM_FC", "MODEL_ELEM_COMMONS", "$rootScope", "SessionStore", "AuthTokenHelper","PageHelper", function(Model_ELEM_FC, MODEL_ELEM_COMMONS, $rootScope, SessionStore, AuthTokenHelper,PageHelper) {
 	$rootScope.$on("irf-login-success", function() {

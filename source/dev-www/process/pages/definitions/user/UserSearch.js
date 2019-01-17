@@ -97,14 +97,6 @@ irf.pageCollection.factory(irf.page("user.UserSearch"),
                         }
                     }
 
-                    var banks = formHelper.enum('bank').data;
-                    var BankName= null;
-                    for (var i = 0; i < banks.length; i++) {
-                        if (banks[i].value == searchOptions.bankId) {
-                            BankName = banks[i].name;
-                        }
-                    }
-
                     return User.query(
                         {
                             page: pageOpts.pageNo,
@@ -112,7 +104,6 @@ irf.pageCollection.factory(irf.page("user.UserSearch"),
                             userName: searchOptions.userName,
                             login: searchOptions.login,
                             branchName: branchName,
-                            bankName:BankName,
                             partnerCode: searchOptions.partnerCode
 
                         }
@@ -152,10 +143,6 @@ irf.pageCollection.factory(irf.page("user.UserSearch"),
                             {
                                 title: 'User ID',
                                 data: 'userName'
-                            },
-                            {
-                                title: 'Bank Name',
-                                data: 'bankName'
                             },
                             {
                                 title: 'HUB_NAME',

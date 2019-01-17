@@ -6,6 +6,8 @@ import {ILoanRepository} from "../../../domain/model/loan/ILoanRepository";
 import RepositoryFactory = require("../../../domain/shared/RepositoryFactory");
 import {RepositoryIdentifiers} from "../../../domain/shared/RepositoryIdentifiers";
 import {IQueryRepository} from "../../../domain/shared/query/IQueryRepository";
+import AngularResourceService = require("../../../infra/api/AngularResourceService");
+
 
 export class LoanPurpose1LOVConfiguration extends LOVElementConfiguration{
 
@@ -23,7 +25,19 @@ export class LoanPurpose1LOVConfiguration extends LOVElementConfiguration{
         ];
     };
     onSelect: Function = function(valueObj, model, context) {
+
+        var SessionStore = AngularResourceService.getInstance().getNGService("SessionStore");
+
         model.loanAccount.loanPurpose2 = '';
+
+        if (SessionStore.getGlobalSetting('siteCode') == 'witfin') {
+            if(model.loanAccount.loanPurpose1 == 'Purchase - New Vehicle'){
+                model.loanAccount.vehicleLoanDetails.vehicleType = 'New';
+            }else if (model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle'){
+                model.loanAccount.vehicleLoanDetails.vehicleType = 'Used';
+            }
+        }
+        
     };
 
     lovonly: boolean = true;

@@ -2,7 +2,7 @@
    "customerMinAgeGenericProduct": 18,
    "customerMaxGenericAge": 60,
    "customerMaxAgeBcProduct": 58,
-   "customerAgeLimitForSingleFemale": 35,
+   "customerAgeLimitForSingleFemale": 18,
    "stages": [{
       "order": 1,
       "code": "GroupCreation",
@@ -119,6 +119,17 @@
       ]
    }, {
       "order": 12,
+      "code": "Completed",
+      "name": "Completed",
+      "isAccountOpening": false,
+      "stageType": "COMPLETED",
+      "allowedRoles": [
+         "A",
+         "ARM",
+         "RM"
+      ]
+   }, {
+      "order": 13,
       "code": "Rejected",
       "name": "Rejected",
       "isAccountOpening": false,
@@ -144,6 +155,15 @@
             "items": null,
             "required": [],
             "properties": {
+               "branchId": {
+                  "title": "Branch Id",
+                  "type": "number",
+                  "minLength": 1,
+                  "maxLength": 15,
+                  "captureStages": [
+                     "GroupCreation"
+                  ]
+               },
                "partnerCode": {
                   "title": "Partner Code",
                   "type": "string",
@@ -191,7 +211,7 @@
                   "title": "Group  Status",
                   "type": "string",
                   "captureStages": [
-                     "GroupCreation","GRT","ApplicationPending","LoanDisbursement","CGT3","CGT2","CGT1","DSC","LoanBooking","Checker2",
+                     "GroupCreation","GRT","ApplicationPending","LoanDisbursement","CGT3","CGT2","CGT1","DSC","LoanBooking","Checker1",
                      "Checker2","Rejected"
                   ]
                },
@@ -651,7 +671,7 @@
                         "GroupCreation"
                      ]
                   },
-                  "outstandingLoanAmount": {
+                  "outStandingLoanAmount": {
                      "title": "Outstanding Loan Amount",
                      "type": "number",
                      "captureStages": [
@@ -853,6 +873,38 @@
                         "GRT",
                         "LoanDisbursement"
                      ]
+                  },
+                  "dscOverrideRequestRemarks": {
+                     "title": "dscOverrideRequestRemarks",
+                     "type": "string",
+                     "captureStages": [
+                        "DSC"
+                     ]
+                  },
+                  "dscOverrideRequestFileId": {
+                     "title": "dscOverrideRequestFileId",
+                     "type": "string",
+                     "captureStages": [
+                        "DSC"
+                     ]
+                  },
+                  "loanAmountSanctionedInPaisa": {
+                     "title": "loanAmountSanctionedInPaisa",
+                     "type": "number",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
+                  },
+                  "loanAmountRequested": {
+                     "title": "loanAmountRequested",
+                     "type": "number",
+                     "minLength": 1,
+                     "maxLength": 100,
+                     "captureStages": [
+                        "GroupCreation"
+                     ]
                   }
                }
             }
@@ -902,10 +954,10 @@
 			  "GroupCreation",
                 "Checker1",
 				"AgreementUploadPending"
-				
+
               ]
             },
-			  
+
 			 "agreementStatus": {
               "title": "agreementStatus",
               "type": "string",
@@ -939,7 +991,7 @@
               ]
             }
           }
-       
+
       },
          "cgt": {
             "title": "CGT Details",

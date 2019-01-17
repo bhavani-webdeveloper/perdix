@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationReviewQueue"),
-	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
-	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
+	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator",
+	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
 		var branch = SessionStore.getBranch();
 		var centres = SessionStore.getCentres(); 
 		var centreId=[];
@@ -14,8 +14,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationRevie
 			"title": "APPLICATION_REVIEW_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				model.branch = SessionStore.getCurrentBranch().branchName;
-				model.branchId = SessionStore.getCurrentBranch().branchId;
+				model.branch = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized");
 			},
 			definition: {
@@ -28,14 +27,22 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationRevie
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
+						'branch': {
+	                    	'title': "BRANCH",
+	                    	"type": ["string", "null"],
+							"x-schema-form": {
+								"type":"userbranch",
+								"screenFilter": true
+							}
+	                    },
 						"centre": {
 							"title": "CENTRE",
 							"type": ["integer", "null"],
 							"x-schema-form": {
 								"type": "select",
 								"enumCode": "centre",
-								"parentEnumCode": "branch",
-								"parentValueExpr": "model.branchId",
+								"parentEnumCode": "branch_id",
+								"parentValueExpr": "model.branch",
 								"screenFilter": true
 							}
 						},
@@ -84,7 +91,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationRevie
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'ApplicationReview',
-	                    'branchName':searchOptions.branch,
+	                    'branchId':searchOptions.branch,
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
@@ -135,6 +142,12 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationRevie
 					},
 					getColumns: function() {
 						return [{
+							title: 'ID',
+							data: 'id'
+						}, {
+							title: 'HUB_NAME',
+							data: 'branchName'
+						}, {
 							title: 'SCREENING_DATE',
 							data: 'screeningDate'
 						}, {
@@ -166,9 +179,13 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ApplicationRevie
 								entityManager.setModel('loans.individual.screening.ApplicationReview', {
 									_request: item
 								});
-								$state.go("Page.Bundle", {
+								irfNavigator.go({
+									state: "Page.Bundle",
 									pageName: "loans.individual.screening.ApplicationReview",
 									pageId: item.loanId
+								}, {
+									state: 'Page.Engine',
+                                    pageName: "loans.individual.screening.ApplicationReviewQueue"
 								});
 							},
 							isApplicable: function(item, index) {

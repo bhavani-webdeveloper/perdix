@@ -2,12 +2,22 @@ irf.models.factory('IndividualLoan',[
 "$resource","$httpParamSerializer","BASE_URL","searchResource","Upload","$q","PageHelper",
 function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHelper){
     var endpoint = BASE_URL + '/api/individualLoan'; 
+    var endpoint1 = BASE_URL + '/api'; 
   
 
     var resource = $resource(endpoint, null, {
         create:{
             method:'POST',
             url:endpoint
+        },
+        individualLoanDsc : {
+            method : 'POST',
+            url : endpoint + '/individualloandsc',
+            isArray:true
+        },
+        overrideDsc:{
+            method : 'POST',
+            url : endpoint + '/overridedsc'
         },
         update:{
             method:'PUT',
@@ -55,6 +65,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHe
             url:endpoint+'/findDisbursement',
             isArray:true
         },
+        getPreClosureDetails:{
+            method:'GET',
+            url:endpoint+'/findPreclosureAmount',
+        },
         getDisbursementList:{
             method:'GET',
             url:endpoint+'/getDisbursementList',
@@ -80,6 +94,14 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHe
          loadSingleLoanWithHistory:{
             method:'GET',
             url:endpoint+'/withhistory/:id'
+        },
+        getBatchSearch:{
+            method:'GET',
+            url:'process/schemas/ACHPDCRealizationBatchMonitoring.json'
+        },
+        bulkIndividualLoan:{
+            method:'PUT',
+            url:endpoint1+'/bulkIndividualLoan'
         },
         get:{
             method:'GET',
@@ -135,6 +157,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHe
             url:endpoint+'/loanActionSummary/:id',
             isArray:true
         },
+        getPortfolioAnalytics: {
+            method: 'GET',
+            url: endpoint + "/getPortfolioAnalytics/:loanId"
+        }
     });
     resource.getAllDocumentsUrl = function(loanId){
         return endpoint + '/documents/loanId?loanId='+loanId;
@@ -158,5 +184,23 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHe
             }, progress);
             return deferred.promise;
         }
+    resource.disbursementUpload = function(file, progress) {
+        var deferred = $q.defer();
+        Upload.upload({
+            url: BASE_URL + "/api/individualLoan/batchDisbursementUpload",
+            data: {
+                file: file
+            }
+        }).then(function(resp) {
+            // TODO handle success
+            PageHelper.showProgress("page-init", "successfully uploaded.", 2000);
+            deferred.resolve(resp);
+        }, function(errResp) {
+            // TODO handle error
+            PageHelper.showErrors(errResp);
+            deferred.reject(errResp);
+        }, progress);
+        return deferred.promise;
+    }
         return resource;
 }]);

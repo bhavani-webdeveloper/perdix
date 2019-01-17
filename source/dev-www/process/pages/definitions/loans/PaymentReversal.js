@@ -49,7 +49,7 @@ function($log, Queries, SessionStore, $state, formHelper, LoanAccount, Utils, Pa
                         },
                         search: function(inputModel, form, model) {
                             var deferred = $q.defer();
-                            LoanAccount.getTransactionForReversal({accountId: (inputModel.accountId || model.repayment.accountId), "accountNo": (inputModel.accountId || model.repayment.accountId)}).$promise
+                            LoanAccount.findTransactionForReversal({accountNo: (inputModel.accountId || model.repayment.accountId)}).$promise
                             .then(function(resp) {
                                 deferred.resolve({
                                     "headers": {
@@ -62,9 +62,8 @@ function($log, Queries, SessionStore, $state, formHelper, LoanAccount, Utils, Pa
                         },
                         getListDisplayItem: function(item, index) {
                             return [
-                                item.account_number,
-                                item.first_name,
-                                'Rs.' + item.repayment_amount + ' on ' + item.repayment_date
+                                item.transactionId,
+                                'Rs.' + item.amount + ' on ' + item.transactionDate
                             ];
                         },
                         onSelect: function(result, model, context) {

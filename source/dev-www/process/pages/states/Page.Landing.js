@@ -1,6 +1,6 @@
 irf.pages.controller("PageLandingCtrl",
-["$log", "$scope", "SessionStore", "PagesDefinition", "irfSimpleModal", "$sce",
-function($log, $scope, SessionStore, PagesDefinition, irfSimpleModal, $sce){
+["$log", "$scope", "SessionStore", "PagesDefinition", "irfSimpleModal", "$sce", "Commons",
+function($log, $scope, SessionStore, PagesDefinition, irfSimpleModal, $sce, Commons){
 	$log.info("Page.Landing loaded");
 
 	$scope.branch = SessionStore.getBranch();
@@ -57,7 +57,8 @@ function($log, $scope, SessionStore, PagesDefinition, irfSimpleModal, $sce){
 			pagesArray.push(v);
 		});
 		for (i in favoriteItems) {
-			$scope.allPages[favoriteItems[i]].favorited = 'favorite';
+			if ($scope.allPages[favoriteItems[i]])
+				$scope.allPages[favoriteItems[i]].favorited = 'favorite';
 		}
 		var favPickerModal = irfSimpleModal("Pick favorites", favoritesPopupHtml, {
 			"pages": pagesArray,
@@ -79,4 +80,49 @@ function($log, $scope, SessionStore, PagesDefinition, irfSimpleModal, $sce){
 			$('#_favoriteSearchText').focus();
 		});
 	};
+
+	$scope.tipOfTheDayEnabled = (SessionStore.getGlobalSetting('tipOfTheDayEnabled')+'').toLowerCase() == 'true';
+	if ($scope.tipOfTheDayEnabled) {
+		var tipicons = ["fa-umbrella", "fa-trophy", "fa-tree", "fa-space-shuttle", "fa-plane", "fa-rocket", "fa-soccer-ball-o", "fa-paper-plane", "fa-ship", "fa-life-bouy", "fa-lightbulb-o", "fa-gift", "fa-beer", "fa-cloud", "fa-comment", "fa-commenting-o", "fa-glass", "fa-lemon-o", "fa-hourglass-2", "fa-leaf", "fa-lemon-o", "fa-moon-o", "fa-road", "fa-university", "fa-star", "fa-key"];
+		var tipsCache = {};
+		var tipDate = SessionStore.getSystemDate();
+		$scope.showNextTipButton = false;
+		$scope.loadTipOfTheDay = function(action) {
+			switch (action) {
+				case 'previous':
+				tipDate = moment(tipDate, SessionStore.getSystemDateFormat()).add(-1,'days').format(SessionStore.getSystemDateFormat());
+				$scope.showNextTipButton = true;
+				break;
+				case 'next':
+				tipDate = moment(tipDate, SessionStore.getSystemDateFormat()).add(1,'days').format(SessionStore.getSystemDateFormat());
+				if (tipDate == SessionStore.getSystemDate()) {
+					$scope.showNextTipButton = false;
+				}
+				break;
+			}
+			$scope.tipicon = tipicons[Math.floor(Math.random()*tipicons.length)];
+			$scope.tipOfTheDayLoading = true;
+			if (tipsCache[tipDate]) {
+				$scope.tipOfTheDay = tipsCache[tipDate];
+				$scope.tipOfTheDayLoading = false;
+			} else {
+				Commons.tipOfTheDay({
+					'bankId': SessionStore.getBankId(),
+					'thoughtDate': tipDate
+				}, {},function (resp) {
+					if (resp && resp.thoughtOfTheDay) {
+						$scope.tipOfTheDay = tipsCache[resp.thoughtDate] = resp.thoughtOfTheDay;
+					}
+				}, function () {
+					$scope.tipOfTheDay = '<br><center><i class="fa fa-bolt">&nbsp;</i> {{"NO_TIPS"|translate}}</center><br>';
+				}).$promise.finally(function() {
+					$scope.tipOfTheDayLoading = false;
+				});
+			}
+		};
+		$scope.loadTipOfTheDay();
+		$scope.$on("irf-login-success", function () {
+			$scope.loadTipOfTheDay();
+		})
+	}
 }]);

@@ -74,6 +74,7 @@ function($log, $scope, SessionStore, $state, $stateParams, Psychometric, $elemen
 	var testCountdownId = null, breakCountdownId = null, testResumed = true;
 	var startCountdown = function() {
 		$scope.testStatus = 'Answering';
+		$scope.test.createdAt = moment().format("YYYY-MM-DD[T]HH:mm:ss.SSS+0000"); // UI BASED DURATION
 		var testDuration = $scope.test.testDuration;
 		var totalTime = testDuration * 1000, startTime = new Date().getTime();
 
@@ -188,6 +189,7 @@ function($log, $scope, SessionStore, $state, $stateParams, Psychometric, $elemen
 				answerId: $scope.test.questions[i].answerId
 			});
 		};
+		testToSend.submittedAt = moment().format("YYYY-MM-DD[T]HH:mm:ss.SSS+0000"); // UI BASED DURATION
 		$log.info(testToSend);
 		Psychometric.postTest(testToSend, function(resp){
 			$log.info(resp);

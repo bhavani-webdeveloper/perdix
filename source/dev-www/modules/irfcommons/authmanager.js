@@ -43,7 +43,7 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 
 	var removeUserData = function() {
 		userData = null;
-		SessionStore.setSession({});
+		SessionStore.clear();
 	};
 
 	var getUser = function() {
@@ -83,7 +83,7 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 				irfStorageService.storeJSON('UserData', accountResponse);
 				deferred.resolve(accountResponse);
 			});
-		}, deferred.reject);
+		}, function() {deferred.reject({ 'statusText': 'Perdix server is down. Pl contact administrator' })});
 		return deferred.promise;
 	};
 
@@ -140,31 +140,6 @@ function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelp
 			$log.error(e);
 			deferred.reject({ 'statusText': 'User service failed. ' + e });
 		});
-		return deferred.promise;
-	};
-
-	var postLogin = function(refresh) {
-		var deferred = $q.defer();
-		removeUserData();
-		getUser().then(function(result) {
-			var m = irfStorageService.getMasterJSON("UserProfile");
-			var km = _.keys(m);
-			if (km.length !== 1 || km[0] !== username) {
-				// clear UserProfile
-				irfStorageService.removeMasterJSON("UserProfile");
-			}
-			setUserData(result);
-
-			var p = [
-				irfStorageService.cacheAllMaster(true, refresh),
-				loadUserBranches()
-			];
-			$q.all(p).then(function(msg) {
-				SessionStore.session.offline = false;
-				deferred.resolve();
-				themeswitch.changeTheme(themeswitch.getThemeColor(), true);
-			}, deferred.reject);
-		}, deferred.reject);
 		return deferred.promise;
 	};
 

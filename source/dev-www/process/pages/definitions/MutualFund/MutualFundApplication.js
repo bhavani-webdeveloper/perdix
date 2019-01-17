@@ -336,7 +336,7 @@
                         },
                         {
                             type: "fieldset",
-                            condition: "model.customer.iscordova",
+                            // condition: "model.customer.iscordova",
                             title: "VALIDATE_BIOMETRIC",
                             items: [{
                                 key: "customer.isBiometricValidated",
@@ -366,7 +366,7 @@
                         },
                         {
                             type: "button",
-                            condition: "!model.customer.iscordova",
+                            condition: "model.customer.iscordova",
                             title: "VALIDATE_BIOMETRIC",
                             notitle: true,
                             fieldHtmlClass: "btn-block",

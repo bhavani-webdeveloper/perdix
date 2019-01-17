@@ -113,6 +113,18 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"),
                             readonly:true
                         }]
                     }, {
+                        "type": "box",
+                        readonly: model.readonly,
+                        "title": "COMMENTS",
+                        "colClass": "col-sm-6",
+                        "items": [{
+                            "key": "jewel_appraisal.comments",
+                            "type": "textarea",
+                            "title": "COMMENTS"
+                        }]
+                    },
+                    
+                    {
                         type: "actionbox",
                         condition: "!model.readonly",
                         items: [{

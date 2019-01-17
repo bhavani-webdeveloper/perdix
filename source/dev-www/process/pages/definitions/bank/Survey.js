@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("bank.Survey"),
- ["$log", "SessionStore","irfNavigator", "$state","$stateParams","Utils", "formHelper", "$q", "irfProgressMessage", "PageHelper", "SurveyInformation",
-    function($log, SessionStore,irfNavigator, $state,$stateParams,Utils, formHelper, $q, irfProgressMessage, PageHelper, SurveyInformation) {
+ ["$log", "SessionStore","irfNavigator", "$state","$stateParams","Utils", "formHelper", "$q", "irfProgressMessage", "PageHelper", "SurveyInformation", "$filter",
+    function($log, SessionStore,irfNavigator, $state,$stateParams,Utils, formHelper, $q, irfProgressMessage, PageHelper, SurveyInformation, $filter) { 
         var fixData = function(model) {
             $log.info("data fixed");
             if (model.bank_survey.udf6) model.bank_survey.udf6 = Number(model.bank_survey.udf6);
@@ -13,6 +13,7 @@ irf.pageCollection.factory(irf.page("bank.Survey"),
             if (model.bank_survey.udf16) model.bank_survey.udf16 = Number(model.bank_survey.udf16);
             if (model.bank_survey.udf17) model.bank_survey.udf17 = Number(model.bank_survey.udf17);
             if (model.bank_survey.udf18) model.bank_survey.udf18 = Number(model.bank_survey.udf18);
+
             return model;
         }
 
@@ -21,6 +22,7 @@ irf.pageCollection.factory(irf.page("bank.Survey"),
             "title": "SURVEY",
             initialize: function(model, form, formCtrl) {
                 model.bank_survey = model.bank_survey || {};
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
 
                 if (!(model && model.bank_survey && model.bank_survey.id && model.$$STORAGE_KEY$$)) {
                     PageHelper.showLoader();
@@ -50,7 +52,7 @@ irf.pageCollection.factory(irf.page("bank.Survey"),
             offline: true,
             getOfflineDisplayItem: function(item, index) {
                 return [
-                    item.bank_survey.date
+                    item.bank_survey.surveyDate
                 ]
             },
             form: [{
@@ -59,7 +61,11 @@ irf.pageCollection.factory(irf.page("bank.Survey"),
                 "items": [
                     "bank_survey.surveyDate",
                     "bank_survey.surveyOfficerName",
-                    "bank_survey.branchId",
+                    {
+                        "key": "bank_survey.branchId",
+                        "type": "select",
+                        "readonly": true
+                    },
                     "bank_survey.surveyVillage",
                     "bank_survey.surveyBlock",
                     "bank_survey.population",
@@ -67,6 +73,7 @@ irf.pageCollection.factory(irf.page("bank.Survey"),
                     "bank_survey.household",
                     "bank_survey.areaType",
                     "bank_survey.migration",
+                    "bank_survey.udf20",
                     "bank_survey.povertyLevel",
                     //"bank_survey.communities",
                     {
@@ -133,24 +140,38 @@ irf.pageCollection.factory(irf.page("bank.Survey"),
                 "type": "box",
                 "title": "ECONOMIC_ACTIVITIES/LIVELYHOOD_OF_THE_DWELLERS",
                 "items": [
-                    "bank_survey.udf1"
+                    {
+                        key: "bank_survey.surveyEconomicDetailsList",
+                        type: "array",
+                        "titleExpr" : "(model.bank_survey.surveyEconomicDetailsList[arrayIndex].economicActivity ?  model.bank_survey.surveyEconomicDetailsList[arrayIndex].economicActivity : '" + $filter('translate')('ACTIVITY') + "')",
+                        items: [
+                            "bank_survey.surveyEconomicDetailsList[].economicActivity",
+                        ]
+                    }
                 ]
             }, {
                 "type": "box",
                 "title": "SOURCE_OF_CREDIT_IN_THE_VILLAGE/SLUM",
                 "items": [
-                    "bank_survey.udf3",
-                    "bank_survey.udf4",
-                    "bank_survey.udf5",
-                    "bank_survey.udf6",
-                    "bank_survey.udf7",
-                    "bank_survey.udf8",
-                    "bank_survey.udf9",
-                    "bank_survey.udf10",
-                    "bank_survey.udf11",
-                    "bank_survey.udf12",
-                    "bank_survey.udf13",
-                    "bank_survey.udf14"
+                    {
+                        key: "bank_survey.surveyCreditSourceList",
+                        type: "array",
+                        "titleExpr" : "(model.bank_survey.surveyCreditSourceList[arrayIndex].source ?  model.bank_survey.surveyCreditSourceList[arrayIndex].source : '') + (model.bank_survey.surveyCreditSourceList[arrayIndex].instituteName ?  ' - ' + model.bank_survey.surveyCreditSourceList[arrayIndex].instituteName : '')",
+                        items: [
+                            "bank_survey.surveyCreditSourceList[].source",
+                            "bank_survey.surveyCreditSourceList[].instituteName",
+                            "bank_survey.surveyCreditSourceList[].sourcingDifficulty",
+                            "bank_survey.surveyCreditSourceList[].minimumLoanSize",
+                            "bank_survey.surveyCreditSourceList[].maximumLoanSize",
+                            "bank_survey.surveyCreditSourceList[].interestRate",
+                            "bank_survey.surveyCreditSourceList[].repaymentPeriod",
+                            "bank_survey.surveyCreditSourceList[].repaymentFrequency",
+                            "bank_survey.surveyCreditSourceList[].collateral",
+                            "bank_survey.surveyCreditSourceList[].pernaltyAction",
+                            "bank_survey.surveyCreditSourceList[].clientBase",
+                            "bank_survey.surveyCreditSourceList[].operationSince",
+                        ]
+                    }
                 ]
             }, {
                 "type": "box",
@@ -172,11 +193,22 @@ irf.pageCollection.factory(irf.page("bank.Survey"),
                     "bank_survey.motivationRequired",
                     "bank_survey.udf2"
                 ]
-            }, {
+            }, {            
                 "type": "box",
                 "title": "MAP_INCLUDE",
-                "items": [
-                    "bank_survey.latitude"  
+                "condition":"model.siteCode!= 'sambandh'",
+                "items": [{
+                        "key": "bank_survey.latitude",
+                        "required": true
+                    }
+                ]
+            },{            
+                "type": "box",
+                "condition":"model.siteCode == 'sambandh'",
+                "title": "MAP_INCLUDE",
+                "items": [{
+                        "key": "bank_survey.latitude",
+                    }
                 ]
             },
             {
@@ -208,7 +240,7 @@ irf.pageCollection.factory(irf.page("bank.Survey"),
                
                 preSave: function(model, form, formName) {
                     var deferred = $q.defer();
-                    if (model.bank_survey.date) {
+                    if (model.bank_survey.surveyDate) {
                         deferred.resolve();
                     } else {
                         irfProgressMessage.pop('save', 'date is required', 3000);

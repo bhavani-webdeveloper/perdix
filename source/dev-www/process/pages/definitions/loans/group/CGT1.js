@@ -142,6 +142,17 @@ define({
                 }, {
                     "key": "group.cgt1Photo",
                     //required: true,
+                    "condition":"model.siteCode == 'KGFS'",
+                    "title": "CGT_1_PHOTO",
+                    "category": "Group",
+                    "subCategory": "CGT1PHOTO",
+                    "type": "file",
+                    "offline": true,
+                    "fileType": "image/*",
+                },{
+                    "key": "group.cgt1Photo",
+                    "condition":"model.siteCode != 'KGFS'",
+                    required: true,
                     "title": "CGT_1_PHOTO",
                     "category": "Group",
                     "subCategory": "CGT1PHOTO",
@@ -185,6 +196,17 @@ define({
                 }, {
                     "key": "group.cgt1EndPhoto",
                     //required: true,
+                    "condition":"model.siteCode == 'KGFS'",
+                    "title": "CGT_1_PHOTO",
+                    "category": "Group",
+                    "subCategory": "CGT1PHOTO",
+                    "type": "file",
+                    "offline": true,
+                    "fileType": "image/*",
+                },{
+                    "key": "group.cgt1EndPhoto",
+                    "condition":"model.siteCode != 'KGFS'",
+                    required: true,
                     "title": "CGT_1_PHOTO",
                     "category": "Group",
                     "subCategory": "CGT1PHOTO",
@@ -513,7 +535,7 @@ define({
                     }
                     PageHelper.showLoader();
                     $timeout(function() {
-                        model.group.cgtDate1 = new Date();
+                        model.group.cgtDate1 = SessionStore.getSystemDate()+"T"+moment().format('HH:mm:ss')+"Z";
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
                         PageHelper.hideLoader();
                     });
@@ -525,7 +547,7 @@ define({
                     }
                     PageHelper.showLoader();
                     $timeout(function() {
-                        model.group.cgtEndDate1 = new Date();
+                        model.group.cgtEndDate1 = SessionStore.getSystemDate()+"T"+moment().format('HH:mm:ss')+"Z";
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
                         PageHelper.hideLoader();
                     });

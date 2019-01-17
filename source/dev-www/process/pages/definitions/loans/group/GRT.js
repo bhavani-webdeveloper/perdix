@@ -48,6 +48,10 @@ define({
                 model.group.firstRepaymentDate=model.group.jlgGroupMembers[0].firstRepaymentDate;
                }
             }
+
+            for (var i=0; i< model.group.jlgGroupMembers.length; i++){
+                model.group.jlgGroupMembers[i].loanAmountSanctionedInPaisa = (model.group.jlgGroupMembers[i].loanAmountSanctionedInPaisa || 0 )/ 100; 
+            }
         };
 
         var fillNames = function(model) {
@@ -166,7 +170,18 @@ define({
                 }, {
                     "key": "group.grtPhoto",
                     "title": "GRT_PHOTO",
+                    "condition":"model.siteCode=='KGFS'",
                     //required: true,
+                    "category": "Group",
+                    "subCategory": "GRTPHOTO",
+                    "type": "file",
+                    "offline": true,
+                    "fileType": "image/*",
+                },{
+                    "key": "group.grtPhoto",
+                    "title": "GRT_PHOTO",
+                    "condition":"model.siteCode !='KGFS'",
+                    required: true,
                     "category": "Group",
                     "subCategory": "GRTPHOTO",
                     "type": "file",
@@ -201,7 +216,18 @@ define({
                     "key": "group.grtEndPhoto",
                     "type": "file",
                     "offline": true,
+                    "condition":"model.siteCode=='KGFS'",
                     //required: true,
+                    "title": "GRT_PHOTO",
+                    "category": "Group",
+                    "subCategory": "GRTPHOTO",
+                    "fileType": "image/*",
+                },{
+                    "key": "group.grtEndPhoto",
+                    "type": "file",
+                    "offline": true,
+                    "condition":"model.siteCode !='KGFS'",
+                    required: true,
                     "title": "GRT_PHOTO",
                     "category": "Group",
                     "subCategory": "GRTPHOTO",
@@ -210,6 +236,7 @@ define({
                     "key": "group.udf1",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -218,6 +245,7 @@ define({
                     "key": "group.udf2",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -226,6 +254,7 @@ define({
                     "key": "group.udf3",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -234,6 +263,7 @@ define({
                     "key": "group.udf4",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -242,6 +272,7 @@ define({
                     "key": "group.udf5",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -250,6 +281,7 @@ define({
                     "key": "group.udf6",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -297,6 +329,7 @@ define({
                     "key": "group.udf1",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -305,6 +338,7 @@ define({
                     "key": "group.udf2",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -313,6 +347,7 @@ define({
                     "key": "group.udf3",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -321,6 +356,7 @@ define({
                     "key": "group.udf4",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -329,6 +365,7 @@ define({
                     "key": "group.udf5",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -337,6 +374,7 @@ define({
                     "key": "group.udf6",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -345,6 +383,7 @@ define({
                     "key": "group.udf7",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -353,6 +392,7 @@ define({
                     "key": "group.udf8",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -361,6 +401,7 @@ define({
                     "key": "group.udf9",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -369,6 +410,7 @@ define({
                     "key": "group.udf10",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -377,6 +419,7 @@ define({
                     "key": "group.udf11",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -385,6 +428,7 @@ define({
                     "key": "group.udf12",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -393,6 +437,7 @@ define({
                     "key": "group.udf13",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -401,6 +446,7 @@ define({
                     "key": "group.udf14",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -409,6 +455,7 @@ define({
                     "key": "group.udf15",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -417,6 +464,7 @@ define({
                     "key": "group.udf16",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -425,6 +473,7 @@ define({
                     "key": "group.udf17",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -433,6 +482,7 @@ define({
                     "key": "group.udf18",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -441,6 +491,7 @@ define({
                     "key": "group.udf19",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -449,6 +500,7 @@ define({
                     "key": "group.udf20",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -457,6 +509,7 @@ define({
                     "key": "group.udf21",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -465,6 +518,7 @@ define({
                     "key": "group.udf22",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -508,6 +562,7 @@ define({
                     "key": "group.udf1",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -516,6 +571,7 @@ define({
                     "key": "group.udf2",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -524,6 +580,7 @@ define({
                     "key": "group.udf3",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -532,6 +589,7 @@ define({
                     "key": "group.udf4",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -540,6 +598,7 @@ define({
                     "key": "group.udf5",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -548,6 +607,7 @@ define({
                     "key": "group.udf6",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -556,6 +616,7 @@ define({
                     "key": "group.udf7",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -564,6 +625,7 @@ define({
                     "key": "group.udf8",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -572,6 +634,7 @@ define({
                     "key": "group.udf9",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -580,6 +643,7 @@ define({
                     "key": "group.udf10",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -588,6 +652,7 @@ define({
                     "key": "group.udf11",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -596,6 +661,7 @@ define({
                     "key": "group.udf12",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -604,6 +670,7 @@ define({
                     "key": "group.udf13",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -612,6 +679,7 @@ define({
                     "key": "group.udf14",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -620,6 +688,7 @@ define({
                     "key": "group.udf15",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -628,6 +697,7 @@ define({
                     "key": "group.udf16",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -636,6 +706,7 @@ define({
                     "key": "group.udf17",
                     "required":true,
                     "type":"checkbox",
+                    "fullwidth": true,
                     "schema":{
                         "default":false
                     },
@@ -812,6 +883,19 @@ define({
                         "readonly": true,
                         "title": "RELATION",
                     }, {
+                        "key": "group.jlgGroupMembers[].loanAmountRequested",
+                        "readonly": true,
+                        "condition":"model.siteCode !='KGFS'",
+                        "title": "LOAN_AMOUNT_REQUESTED_",
+                        "type": "amount",
+                        "readonly": true
+                    }, {
+                        "key": "group.jlgGroupMembers[].loanAmountSanctionedInPaisa",
+                        "title": "LOAN_AMOUNT_RECOMMENDED_FROM_BRANCH",
+                        "condition":"model.siteCode !='KGFS'",
+                        "type": "amount",
+                        "readonly": true
+                    },  {
                         "key": "group.jlgGroupMembers[].loanAmount",
                         "readonly": true,
                         "title": "LOAN_AMOUNT",
@@ -907,7 +991,7 @@ define({
                                 var t = targetstage[i];
                                 if (t.name == stage1 && 'default' == t.field2) {
                                     model.review.targetStage = t.field1;
-                                    model.review.rejectStage = "Rejected";
+                                    model.review.rejectStage = model.siteCode =='saija' ? "GRT2" : "Rejected";
                                     break;
                                 }
                             }
@@ -975,7 +1059,22 @@ define({
                                 bindMap: {},
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model, context) {
-                                    var out = [{name: "Rejected"}];
+                                    var out = [];
+                                    if(model.siteCode == 'saija') {
+                                        var stage1 = model.group.currentStage;
+                                        var targetstage = formHelper.enum('groupLoanBackStages').data;
+                                        for (var i = 0; i < targetstage.length; i++) {
+                                            var t = targetstage[i];
+                                            if (t.name == stage1 && 'reject' == t.field2) {
+                                                out.push({
+                                                    name: t.field1,
+                                                })
+                                                break;
+                                            }
+                                        }
+                                    } else {
+                                        {name: "Rejected"}
+                                    }
                                     return $q.resolve({
                                         headers: {
                                             "x-total-count": out.length
@@ -1015,7 +1114,7 @@ define({
                 startGRT: function(model, form) {
                     PageHelper.showLoader();
                     $timeout(function() {
-                        model.group.grtDate = new Date();
+                        model.group.grtDate = SessionStore.getSystemDate()+"T"+moment().format('HH:mm:ss')+"Z";
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
                         PageHelper.hideLoader();
                     });
@@ -1028,19 +1127,31 @@ define({
                     }
                     PageHelper.showLoader();
                     $timeout(function() {
-                        model.group.grtEndDate = new Date();
+                        model.group.grtEndDate = SessionStore.getSystemDate()+"T"+moment().format('HH:mm:ss')+"Z";
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
                         PageHelper.hideLoader();
                     });
                 },
                 submit: function(model, form, formName) {
+                    PageHelper.showLoader();
 
                     if(!model.group.grtEndDate) {
                         irfProgressMessage.pop('GRT-proceed', 'Please End GRT before proceeding with the action.', 3000);
                         return;
                     }
+                    if(model.siteCode == 'saija') {
+                        var cbsdate = SessionStore.getCBSDate();
+                        if (model.group.scheduledDisbursementDate && moment(model.group.scheduledDisbursementDate, SessionStore.getSystemDateFormat()).diff(cbsdate, "days") <0) {
+                            PageHelper.showProgress("loan-create", "Scheduled disbursement date should be greater than or equal to system date", 5000);
+                            return false;
+                        }
 
-                    PageHelper.showLoader();
+                        if (model.group.firstRepaymentDate && moment(model.group.firstRepaymentDate, SessionStore.getSystemDateFormat()).diff(model.group.scheduledDisbursementDate, "days") <=0) {
+                            PageHelper.showProgress("loan-create", "Repayment date should be greater than disbursement date", 5000);
+                            return false;
+                        }
+                    }
+
                     irfProgressMessage.pop('GRT-proceed', 'Working...');
                     PageHelper.clearErrors();
                     model.groupAction = "PROCEED";
@@ -1053,7 +1164,7 @@ define({
                     }
                     var reqData = _.cloneDeep(model);
                     if(model.siteCode == 'saija') {
-                        reqData.stage='LoanBooking';
+                        reqData.stage='Checker1';
                     }
                     GroupProcess.updateGroup(reqData, function(res) {
                         formHelper.newOffline.deleteOffline($stateParams.pageName, model);                        

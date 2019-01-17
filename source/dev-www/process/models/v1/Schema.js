@@ -12,6 +12,11 @@ irf.models.factory('SchemaResource',function($resource,$httpParamSerializer,BASE
         getUserSchema: {
             method: "GET",
             url: "process/schemas/user.json"
-        }
+        },
+        getJournalMultiSchema: {
+            method: 'GET',
+            url: 'process/schemas/JournalMultiPosting.json'
+        },
+
     });
 });

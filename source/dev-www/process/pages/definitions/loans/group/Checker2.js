@@ -1135,6 +1135,7 @@ return {
                     "htmlClass": "col-sm-6",
                     "items": [{
                         "title": "ACCOUNT_NUMBER",
+                        condition: "model.group.jlgGroupMembers[arrayIndex].loanAccount",
                         "key": "group.jlgGroupMembers[].loanAccount.accountNumber", // TODO: loan appl. date, loan tenure, loan appl. file, 
                         "type": "string"
                     }, {
@@ -1142,14 +1143,27 @@ return {
                         "key": "group.productCode" // TODO: this should be product name
                     }, {
                         "title": "LOAN_AMOUNT",
+                        condition: "model.group.jlgGroupMembers[arrayIndex].loanAccount",
                         "key": "group.jlgGroupMembers[].loanAccount.loanAmount", // TODO: loan appl. date, loan tenure, loan appl. file, 
                         "type": "amount"
                     }, {
                         "title": "TENURE",
+                        condition: "model.group.jlgGroupMembers[arrayIndex].loanAccount",
                         "key": "group.jlgGroupMembers[].loanAccount.tenure",
                         "type": "date"
+                    },{
+                        "title": "LOAN_AMOUNT",
+                        condition: "!(model.group.jlgGroupMembers[arrayIndex].loanAccount)",
+                        "key": "group.jlgGroupMembers[].loanAmount", // TODO: loan appl. date, loan tenure, loan appl. file, 
+                        "type": "amount"
                     }, {
+                        "title": "TENURE",
+                        condition: "!(model.group.jlgGroupMembers[arrayIndex].loanAccount)",
+                        "key": "group.tenure",
+                    }, 
+                     {
                         "title": "LOAN_APPLICATION_DATE",
+                        condition: "model.group.jlgGroupMembers[arrayIndex].loanAccount",
                         "key": "group.jlgGroupMembers[].loanAccount.loanApplicationDate",
                         "type": "date"
                     },]

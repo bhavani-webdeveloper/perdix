@@ -62,7 +62,8 @@ irf.pageCollection.config(["$provide", function($provide){
 	}
 }])
 
-var pages = irf.pages = angular.module("IRFPages", ["irf.elements", "IRFPageCollection","ngAnimate", "ngSanitize","ui.bootstrap"], function ($compileProvider) {
+
+var pages = irf.pages = angular.module("IRFPages", ["irf.elements", "IRFPageCollection","nvd3", "ngSanitize","ui.bootstrap","queryBuilder"], function ($compileProvider) {
 	$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|geo):/);
 });
 
@@ -217,10 +218,10 @@ irf.pages.constant('ALLOWED_STATES', ['Login', 'Reset']);
 irf.pages.run(
 ["$rootScope", "$log", "$timeout", "$q", "$state", "authService", "$location", "ALLOWED_STATES",
 "irfStorageService", "entityManager", "SessionStore", "irfElementsConfig", "irfOfflineFileRegistry",
-"PageHelper", "$translate", "$injector", "irfLazyLoader", "$filter", "formHelper",
+"PageHelper", "$translate", "$injector", "Locking", "$filter", "formHelper",
 function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED_STATES,
 	irfStorageService, entityManager, SessionStore, irfElementsConfig, irfOfflineFileRegistry,
-	PageHelper, $translate, $injector, irfLazyLoader, $filter, formHelper){
+	PageHelper, $translate, $injector, Locking, $filter, formHelper){
 
 	$rootScope.$on("irf-login-success", function() {
 		var userRole = SessionStore.getUserRole(); var fullAccess = false;
@@ -234,6 +235,7 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
 			for (var i = 0; i < banks.length; i++){
 				if(banks[i].name == bankName){
 					bankId = banks[i].value;
+					SessionStore.setBankId(bankId);
 					break;
 				}
 			}
@@ -241,6 +243,18 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
 			branches = $filter('filter')(branches, {"bankId" : bankId}, true);
 			if(branches && branches.length && branches.length > 0) {
 				SessionStore.setItem('UserAllowedBranches', branches);
+			}
+		}
+		else {
+			var bankName = SessionStore.getBankName();
+			var banks = formHelper.enum('bank').data;
+			var bankId = null;
+			for (var i = 0; i < banks.length; i++){
+				if(banks[i].name == bankName){
+					bankId = banks[i].value;
+					SessionStore.setBankId(bankId);
+					break;
+				}
 			}
 		}
 	});
@@ -283,6 +297,8 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
 		}
         /* Clearing page errors */
         PageHelper.clearErrors();
+        PageHelper.clearWarnings();
+        PageHelper.clearInfo();
 
         /* Gracefully clearing progress messages */
         PageHelper.gracefulClearProgress();
@@ -290,17 +306,9 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
         /* Hiding Loader */
         PageHelper.hideLoader();
 
-        // if (toState.name === 'Page.Engine' || toState.name === 'Page.Bundle'){
-        // 	/* Checking Existence of the page */
-	       //  var pageAvailable = $injector.has(irf.page(toParams.pageName));
-	       //  $log.info("Destination page (" + toParams.pageName + ") is already loaded? " + pageAvailable);
-
-	       //  /* If Page is not available. Load it using the RequireJS */
-	       //  if (false == pageAvailable){
-	       //  	event.preventDefault();
-	       //  	return irfLazyLoader.loadPage(toState, toParams, options);
-	       //  }	
-        // }
+		if (SessionStore.getGlobalSetting("lockingRequired") == "true") {
+			Locking.unlock();
+		}
 
 		if (fromState.name === 'Page.Engine' && fromParams && fromParams.pageName) {
 			var model = entityManager.getModel(fromParams.pageNam);
@@ -407,7 +415,6 @@ irf.pages.config([
 		templateUrl: "modules/irfpages/templates/Page.html",
 		controller: "PageCtrl",
 		params: {
-			pageData: null,
 			options: {
 				skipPageAccessCheck: false,
 				skipPageLazyLoad: false

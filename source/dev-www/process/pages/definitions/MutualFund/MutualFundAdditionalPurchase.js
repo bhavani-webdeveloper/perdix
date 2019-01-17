@@ -321,7 +321,7 @@ define({
                                     state: "Page.Adhoc",
 
                                     pageName: "MutualFund.MutualFundEKYC",
-                                    pageId: item.id,
+                                    pageId: $stateParams.pageId,
                                 }
                                 )
                  }

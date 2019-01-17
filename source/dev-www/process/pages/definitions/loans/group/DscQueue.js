@@ -115,10 +115,7 @@ define({
 									pageData: {
 										intent: "DSC_CHECK"
 									}
-								},{
-                                    state: "Page.Engine",
-                                    pageName: "loans.group.DscQueue",
-                                });
+								});
 							},
 							isApplicable: function(item, index) {
 

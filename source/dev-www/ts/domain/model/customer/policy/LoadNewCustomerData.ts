@@ -50,6 +50,11 @@ export class LoadNewCustomerData extends IPolicy<EnrolmentProcess> {
             }
             enrolmentProcess.customer.date = enrolmentProcess.customer.date || Utils.getCurrentDate();
             enrolmentProcess.customer.nameOfRo = enrolmentProcess.customer.nameOfRo || activeSession.getLoginname();
+            enrolmentProcess.customer.customerBranchId = enrolmentProcess.customer.customerBranchId || activeSession.getBranchId();
+            if (_.isArray(activeSession.getCenters()) && activeSession.getCenters().length > 0) {
+                enrolmentProcess.customer.centreId = enrolmentProcess.customer.centreId || Number(activeSession.getCenters()[0].centreCode);
+                enrolmentProcess.customer.centreName = enrolmentProcess.customer.centreName || activeSession.getCenters()[0].centreName;
+            }
                     let proofs = formHelperData.getAddressProof();
                     let panIndex = _.findIndex(proofs, function(p) {
                        return p.name == 'Pan Card';

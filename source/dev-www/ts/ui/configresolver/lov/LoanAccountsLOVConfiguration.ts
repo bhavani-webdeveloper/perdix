@@ -13,6 +13,9 @@ export class LoanAccountsLOVConfiguration extends LOVElementConfiguration {
     };
 
     search: Function = function(inputModel, form, model) {
+        /*let Queries = AngularResourceService.getInstance().getNGService("Queries");
+        return Queries.getAccountDetails([inputModel.accountNumber]);
+*/
         let Queries = AngularResourceService.getInstance().getNGService("Queries");
         return Queries.getReadyToDisburseAccountDetails(model.customer.urnNo);
 
@@ -21,7 +24,6 @@ export class LoanAccountsLOVConfiguration extends LOVElementConfiguration {
     };
 
     getListDisplayItem: Function =  function(data, index) {
-        console.log(data);
         return [
             'Account Number : ' + data.accountNumber,
             'Loan Amount : ' + data.loanAmount
@@ -41,7 +43,7 @@ export class LoanAccountsLOVConfiguration extends LOVElementConfiguration {
                 if(model.payment.paymentPurpose == 'Loan Disbursement') {
                     model.payment.amount = res.loanAmount;
                 }
-                if(model.pageConfig.DefaultBeneficaryParty == 'NONE' && res.disbursementSchedules.length > 0) {                    
+                if( model.pageConfig.DefaultBeneficaryParty == 'NONE' && res.disbursementSchedules.length > 0) {                    
                     model.payment.beneficiaryAccountNumber = res.disbursementSchedules[0].customerAccountNumber;
                     model.payment.beneficiaryIfsc = res.disbursementSchedules[0].ifscCode;
                     model.payment.beneficiaryBankName = res.disbursementSchedules[0].customerBankName;

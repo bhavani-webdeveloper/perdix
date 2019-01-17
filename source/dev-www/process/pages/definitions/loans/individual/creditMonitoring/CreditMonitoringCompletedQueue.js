@@ -8,6 +8,7 @@ define({
             "type": "search-list",
             "title": "CREDIT_MONITORING_COMPLETED_QUEUE",
             initialize: function(model, form, formCtrl) {
+                model.branch = SessionStore.getCurrentBranch().branchId;
                 $log.info("Credit Monitoring Schedule Queue got initialized");
             },
             definition: {
@@ -31,10 +32,10 @@ define({
                         },
                         "centre": {
                             "title": "CENTRE",
-                            "type": "integer",
-                            "enumCode": "centre",
+                            "type": ["integer", "null"],
                             "x-schema-form": {
                                 "type": "select",
+                                "enumCode": "centre",
                                 "parentEnumCode": "branch_id",
                                 "parentValueExpr": "model.branch",
                                 "screenFilter": true

@@ -33,6 +33,15 @@ try {
 	$upload_name = isset($_GET['upload_name']) ? $_GET['upload_name'] : '';
 
 	$inputFileName = __DIR__ . '/uploads/' . $_FILES['file']['name'];
+
+	
+	$ext = pathinfo($inputFileName, PATHINFO_EXTENSION);
+
+
+	if ($ext != "xlsx" && $ext != "xls") {
+        throw new Exception("File uploaded is not the correct file format please check and upload the correct one.");          
+    }
+
 	try {
 	    $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
 	    $objReader = PHPExcel_IOFactory::createReader($inputFileType);
@@ -64,6 +73,26 @@ try {
 	            throw new Exception("There is no proper date format in file Name: ".$inputFileName.". Check the format in Download Template.");
 	        }
 	}
+
+	$tempRow = 1;
+	$ValidExcelCheck = $sheet->rangeToArray('A' . $tempRow . ':' . $highestColumn . $tempRow,
+		                    NULL,
+		                    TRUE,
+		                    FALSE);
+
+	if ($upload_name == 'SECURITIZATION' ) {
+		if ($ValidExcelCheck[0][0] != 'account_number' && $ValidExcelCheck[0][3] != 'effective_date') {
+			throw new Exception("File uploaded is not the correct file format please check and upload the correct one."); 
+		}
+		
+	}
+
+	if ($upload_name == 'PAR' ) {
+		if ($ValidExcelCheck[0][0] != 'account_number' && $ValidExcelCheck[0][1] != 'AdjustedDelinquentDays') {
+			throw new Exception("File uploaded is not the correct file format please check and upload the correct one."); 
+		}
+	}
+
 
 	for ($row = 2; $row <= $highestRow; $row++) {
 		$matrixData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,

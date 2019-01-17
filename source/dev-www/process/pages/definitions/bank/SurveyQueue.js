@@ -16,7 +16,25 @@ define({
             definition: {
                 title: "SEARCH SURVEY",
                 searchForm: [
-                    "*"
+                {
+                    "key":"surveyOfficerName",
+                },
+                {
+                    "key":"surveyVillage",
+                },
+                {
+                    "key":"surveyDate",
+                },
+                {
+                    "key":"branchId",
+                    "condition": "model.siteCode != 'sambandh'",
+                },
+                {
+                    "key":"branchId",
+                    "enumCode":"userbranches",
+                    "condition": "model.siteCode =='sambandh'",
+                },
+
                 ],
                 autoSearch: true,
                 searchSchema: {
@@ -47,7 +65,6 @@ define({
                                 "screenFilter": true,
                             }
                         },
-
                     },
                     "required": ["LoanAccountNumber"]
                 },

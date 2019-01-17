@@ -59,7 +59,10 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHMandateDownload"
                         "type": "select",
                         "titleMap": {
                             "PENDING": "PENDING",
-                            "SUBMITTED": "SUBMITTED"
+                            "SUBMITTED": "SUBMITTED",
+                            'RE-SUBMITTED' : 'RE-SUBMITTED',
+                            'REJECTED' : 'REJECTED',
+                            'ACCEPTED' : 'ACCEPTED'
                         }
                     }, {
                         "title": "DOWNLOAD",

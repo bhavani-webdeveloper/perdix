@@ -13,6 +13,7 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", "dateFormats", fun
 		activated:false,
 		agentAmtLimit:null,
 		bankName:null,
+		bankId : null,
 		branchName:"Karambayam",
 		branchSetCode:null,
 		email:null,
@@ -114,6 +115,13 @@ irfSessionManager.factory('SessionStore', ["$log", "$window", "dateFormats", fun
 
 	self.getBankName = function() {
 		return session.bankName;
+	};
+
+	self.getBankId = function() {
+		return session.bankId;
+	};
+	self.setBankId = function(id) {
+		self.session.bankId = id;
 	};
 
 	self.getCentres = function() {

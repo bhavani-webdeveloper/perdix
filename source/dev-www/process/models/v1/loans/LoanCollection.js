@@ -1,14 +1,16 @@
 irf.models.factory('LoanCollection',[
-"$resource","$httpParamSerializer","BASE_URL","searchResource",
-function($resource,$httpParamSerializer,BASE_URL,searchResource){
+"$resource","$httpParamSerializer","BASE_URL","searchResource","Upload","$q","PageHelper",
+function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, PageHelper){
     var endpoint = BASE_URL + '/api/loanCollection';
+
+    var biEndPoint= irf.MANAGEMENT_BASE_URL;
     /*
     * GET /api/loanaccounts/reverse/{transactionId}/{transactionName} will translate into
     * {action:'reverse',param1:'<tid>',param2:'<tname>'}
     *
     * */
 
-    return $resource(endpoint, null, {
+    var resource = $resource(endpoint, null, {
         get:{
             method:'GET',
             url:endpoint+'/:id'
@@ -56,9 +58,16 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
                 }
                 return response;
             }
-
         }),
-        save:{ 
+        fetchDepositSummary: searchResource({
+            method: "GET",
+            url: endpoint + '/fetchBankDepositSummaries',
+        }),
+        getDepositSummary:{
+            method:'GET',
+            url:endpoint+'/depositSummary'
+        },
+        save:{
             method:'POST',
             url:endpoint+'/',
         },
@@ -66,10 +75,48 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource){
             method:'PUT',
             url:endpoint+'/',
         },
+        batchUpdate: {
+            method: 'PUT',
+            url: endpoint + '/batchRepay',
+            isArray: true
+        },
         processCashDeposite:{
             method:'POST',
-            url:endpoint+'/processCashDeposite',
-            isArray: true
+            url:endpoint+'/processCashDeposite'
+        },
+        updateDeposiSummary:{
+            method: 'PUT',
+            url:endpoint + '/updateDeposiSummary'
+        },
+        findDepositSummaries: searchResource({
+            method: "GET",
+            url: endpoint + "/findDepositSummaries"
+        }),
+        collectionRemainder:{
+            method:'GET',
+            //isArray: true,
+            url:biEndPoint+'/server-ext/repayment_reminder.php/',
         }
     });
+
+    resource.loanAssignmentUpload = function(file, progress) {
+            var deferred = $q.defer();
+            Upload.upload({
+                url: BASE_URL + "/api/individualLoan/loanCollectionAssignmentUpload",
+                data: {
+                    file: file
+                }
+            }).then(function(resp) {
+                // TODO handle success
+                PageHelper.showProgress("page-init", "successfully uploaded.", 2000);
+                deferred.resolve(resp);
+            }, function(errResp) {
+                // TODO handle error
+                PageHelper.showErrors(errResp);
+                deferred.reject(errResp);
+            }, progress);
+            return deferred.promise;
+        };
+
+    return resource;
 }]);

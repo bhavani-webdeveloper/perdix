@@ -27,6 +27,15 @@ irf.models.factory('Lead', ["$resource", "$httpParamSerializer", "BASE_URL", "se
 				method: 'GET',
 				url: endpoint + '/:id'
 			},
+			bulkLeadStatusUpdate:{
+				method: 'POST',
+				url: endpoint + '/bulkLeadStatusUpdate'
+			},
+			findLeads : {
+				method:'GET',
+				url:endpoint + '/findLeads?' + ':id',
+				isArray:true
+			}
 
 		});
 
@@ -48,6 +57,39 @@ irf.models.factory('Lead', ["$resource", "$httpParamSerializer", "BASE_URL", "se
 			}, progress);
 			return deferred.promise;
 		};
+
+		resource.getConfigFile = function() {
+			return {
+				"lead.currentStage": {
+					"Inprocess": {
+						"overrides": {
+							"leadProfile": {
+								"readonly": true
+							}
+						},
+                        "excludes": [
+                            "previousInteractions"
+                        ]
+					},
+					"BulkUpload": {
+						"excludes": [
+						"productDetails"
+						]
+					},
+				},
+				"siteCode": {
+					"sambandh": {
+						"excludes": [
+						"previousInteractions"
+						]
+					}
+				}
+
+
+			}
+		}
 		return resource;
 	}
-]);
+
+
+	]);

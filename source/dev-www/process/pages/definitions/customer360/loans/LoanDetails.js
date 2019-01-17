@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
- ["$log","GroupProcess", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal",
-    function($log,GroupProcess, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal) {
+ ["PagesDefinition","translateFilter","$log","GroupProcess", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal", "irfNavigator", "RepaymentReminder","Misc","$httpParamSerializer",
+    function(PagesDefinition,translateFilter,$log,GroupProcess, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal, irfNavigator, RepaymentReminder,Misc, $httpParamSerializer) {
 
         var transactionDetailHtml = "\
         <irf-simple-summary-table irf-table-def='model.orgTransactionDetails' />\
@@ -8,7 +8,11 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
 
         var deriveRecordStr=function(format,data){
             var Recordstr=format;
-            Recordstr=Recordstr.replace("<ACCOUNT>",data.accountId).replace("<FEE_SEQUENCE_NUMBER>",data.sequenceNum).replace("<DEMAND_SEQUENCE_NUMBER>",data.sequenceNum);
+            Recordstr=Recordstr
+                .replace("<ACCOUNT>",data.accountId)
+                .replace("<FEE_SEQUENCE_NUMBER>",data.sequenceNum)
+                .replace("<DEMAND_SEQUENCE_NUMBER>",data.sequenceNum)
+                .replace("<LOAN_ID>", $stateParams.pageId);
             return Recordstr;
         }
 
@@ -17,6 +21,13 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
             "title": "Loan Details",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
+                //
+                var remainingDocsArray=[];
+                var uploadedExistingDocs=[];
+                var masterDocumentsArray=[];
+                var allExistingDocs = []; 
+                var newLoanDocuments=[];
+                //
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
                 model.transactions=model.transactions||{};
                 var loanAccountId = $stateParams.pageId;
@@ -25,11 +36,21 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                 model.loanDocuments.existingDocuments = model.loanDocuments.existingDocuments || [];
                 model.loanDocuments = model.loanDocuments || {};
                 model.loanDocuments.newLoanDocuments = model.loanDocuments.newLoanDocuments || [];
+                model.newLoanDocuments=model.loanDocuments.newLoanDocuments || [];
                 model.reqData = model.reqData || {};
                 model.reqData.loanAccount = model.reqData.loanAccount || {};
                 model.reqData.loanAccount.loanDocuments = model.reqData.loanAccount.loanDocuments || [];
                 PageHelper.showLoader();
+                model.pageConfig = {};
 
+                PagesDefinition.getRolePageConfig("Page/Engine/customer360.loans.LoanDetails")
+                    .then(function(data){
+                        if(!_.isNull(data)){
+                            model.pageConfig = data;
+                        }
+                    },function(error){
+                        PageHelper.showErrors(error)
+                    });
                 var promise = Queries.feesFormMapping().then(function(response) {
                                     var test = response;
                                     if (response && response.body && response.body.length) {
@@ -43,9 +64,33 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     .$promise
                     .then(function(res) {
                         model.loanAccount = res;
-
+                       
+                        uploadedExistingDocs=res.loanDocuments;
+                      
+                        model.loanAccount.processingFee = model.loanAccount.processingFeeInPaisa ? model.loanAccount.processingFeeInPaisa/100 : 0;
+                        var promiseArray = [];
+                        if(model.loanAccount.loanDocuments && model.loanAccount.loanDocuments.length>0){
+                            for(documents of model.loanAccount.loanDocuments){
+                                if(documents.document=='WAIVERAPPROVAL'){
+                                    model.loanAccount.waiverdocumentId= documents.documentId;
+                                    model.loanAccount.waiverdocumentstatus= documents.documentStatus;
+                                    model.loanAccount.waiverdocumentrejectReason=documents.rejectReason;
+                                    model.loanAccount.waiverdocumentremarks=documents.remarks;
+                                }
+                            }
+                        }
+                        model.showmessageHistory = false;
+                        if(model.loanAccount.loanType != 'JLG'){
+                            IndividualLoan.loanRemarksSummary({id:loanAccountId}).$promise.then(function (resp){
+                                model.messageHistory= resp;
+                                for(i in model.messageHistory){
+                                    model.messageHistory[i].createdDate = _.replace(model.messageHistory[i].createdDate, /T/, " ")  
+                                }
+                                model.showmessageHistory = true;
+                            });
+                        }
                         if (_.hasIn(model.loanAccount, 'accountNumber') && !_.isNull(model.loanAccount.accountNumber)) {
-                            LoanAccount.get({
+                            var loanpromise = LoanAccount.get({
                                     accountId: model.loanAccount.accountNumber
                                 })
                                 .$promise
@@ -82,7 +127,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                         if(model.cbsLoan.lastProvisioningDate)
                                         model.cbsLoan.lastProvisioningDate = Utils.dateToLocalTZ(model.cbsLoan.lastProvisioningDate).format("D-MMM-YYYY");
 
-                                        
+
 
                                         model.cbsLoan.tenureStr = model.cbsLoan.tenureMagnitude + " " + model.cbsLoan.tenureUnit;
                                         var localUtcOffset = moment().utcOffset();
@@ -100,6 +145,9 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                 model.transactions.transactionId = model.cbsLoan.transactions[i].transactionId;
                                                 model.transactions.transactionType = model.cbsLoan.transactions[i].instrument;
                                             }
+                                            if (t.description && t.description == "ADJUST_PENAL_INTEREST" && t.transactionName == "Prepayment") {
+                                                t.transactionName ='Penal Interest Payment';
+                                            }
                                         }
                                         for (var i = 0; i < model.cbsLoan.repaymentSchedule.length; i++) {
                                             model.cbsLoan.repaymentSchedule[i].valueDate = moment.utc(model.cbsLoan.repaymentSchedule[i].valueDate).utcOffset(localUtcOffset).format("D-MMM-YYYY");
@@ -107,45 +155,102 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                         model.cbsLoan.repaymentScheduleTblFormat = {columns:[], data :[]};
                                         if(model.cbsLoan.repaymentSchedule.length > 0){
                                             var keys = Object.keys(model.cbsLoan.repaymentSchedule[0]);
-                                            var title, format;
+                                            var title, format, orderNo;
                                             for(var itr = 0; itr < keys.length; itr++){
                                                 format, title = '';
                                                 switch(keys[itr]){
-                                                    case 'valueDate' : 
+                                                    case 'valueDate' :
                                                         title = "DEMAND_DATE";
+                                                        orderNo = 0;
                                                         break;
                                                     case 'description':
                                                         title = "TYPE";
-                                                        model.cbsLoan.repaymentScheduleTblFormat.columns.splice(1, 0, {"title": title, "data": keys[itr]});
+                                                        orderNo = 1;
+                                                        model.cbsLoan.repaymentScheduleTblFormat.columns.splice(1, 0, {"title": title, "data": keys[itr], "orderNo": orderNo});
                                                         continue;
                                                     case 'amount1':
                                                         title = "AMOUNT";
                                                         format = "currency";
+                                                        orderNo = 2;
                                                         break;
                                                     case 'amount3':
                                                         title = "DUE";
                                                         format = "currency";
+                                                        orderNo = 6;
                                                         break;
                                                     case 'part1':
                                                         title = "NORMAL_INTEREST";
                                                         format = "currency";
+                                                        orderNo = 5;
                                                         break;
                                                     case 'part2':
                                                         title = "PRINCIPAL";
                                                         format = "currency";
+                                                        orderNo = 4;
                                                         break;
                                                     case 'amount2':
                                                         title = "BALANCE";
                                                         format = "currency";
+                                                        orderNo = 3;
                                                         break;
                                                     default:
                                                         continue;
                                                 }
-                                                model.cbsLoan.repaymentScheduleTblFormat.columns.push({"title": title, "data": keys[itr], format: format});
+                                                model.cbsLoan.repaymentScheduleTblFormat.columns.push({"title": title, "data": keys[itr], format: format, "orderNo": orderNo});
                                             }
+                                            model.cbsLoan.repaymentScheduleTblFormat.columns = model.cbsLoan.repaymentScheduleTblFormat.columns.sort(function(a, b){return a.orderNo - b.orderNo});
                                             model.cbsLoan.repaymentScheduleTblFormat.data = model.cbsLoan.repaymentSchedule;
                                             model.cbsLoan.orgRepaymentScheduleTblFormat = {columns: model.cbsLoan.repaymentScheduleTblFormat.columns};
                                             model.cbsLoan.orgRepaymentScheduleTblFormat.data = $filter('filter')(model.cbsLoan.repaymentSchedule, {status: 'true'});
+                                        }
+
+                                        for (var i = 0; i < model.cbsLoan.accountStatement.length; i++) {
+                                            model.cbsLoan.accountStatement[i].valueDate = moment.utc(model.cbsLoan.accountStatement[i].valueDate).utcOffset(localUtcOffset).format("D-MMM-YYYY");
+                                        }
+                                        for (var i=0; i < model.cbsLoan.accountStatement.length; i++) {
+                                            accountStat = model.cbsLoan.accountStatement[i];
+                                            if (accountStat.accountEntryType.toUpperCase() == 'DEBIT') {
+                                                accountStat.debitAmount = accountStat.amount;
+                                            }
+                                            if (accountStat.accountEntryType.toUpperCase() == 'CREDIT') {
+                                                accountStat.creditAmount = accountStat.amount;
+                                            }
+                                        }
+                                        model.cbsLoan.accountStatementTblFormat = {columns:[], data :[]};
+                                        if(model.cbsLoan.accountStatement.length > 0){
+                                            var title, format, orderNo, data;
+                                            model.cbsLoan.accountStatementTblFormat.columns =  [
+                                                {
+                                                    "data": "valueDate",
+                                                    "title": "Value Date"
+                                                },
+                                                {
+                                                    "data": "description",
+                                                    "title": "DESCRIPTION",
+                                                },
+                                                {
+                                                    "data": "transactionId",
+                                                    "title": "TRANSACTION_ID"
+                                                },
+                                                {
+                                                    "data": "debitAmount",
+                                                    "title": "DEBIT_BALANCE",
+                                                    "format": "currency"
+                                                },
+                                                {
+                                                    "data": "creditAmount",
+                                                    "title": "CREDIT_BALANCE",
+                                                    "format": "currency"
+                                                },
+                                                {
+                                                    "data": "balance",
+                                                    "title": "BALANCE",
+                                                    "format": "currency"
+                                                }
+                                            ];
+                                            model.cbsLoan.accountStatementTblFormat.data = model.cbsLoan.accountStatement;
+                                            model.cbsLoan.orgAccountStatementTblFormat = {columns: model.cbsLoan.accountStatementTblFormat.columns};
+                                            model.cbsLoan.orgAccountStatementTblFormat.data = model.cbsLoan.accountStatementTblFormat.data;
                                         }
 
                                         model.cbsLoan.orgTransactions = {};
@@ -153,10 +258,10 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
 
                                         if (model.cbsLoan.transactions.length > 0) {
                                             model.cbsLoan.invoiceTransactions.columns = [
-                                                {
-                                                    "title": "Invoice #",
-                                                    "data": "entityId"
-                                                },
+                                                // {
+                                                //     "title": "Invoice #",
+                                                //     "data": "entityId"
+                                                // },
                                                 {
                                                     "title": "Date",
                                                     "data": "valueDateStr"
@@ -178,12 +283,12 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                             if (data.status =="false"){
                                                                 // Penal Interest
                                                             } else if (data.status == "true"){
-                                                                
+
                                                             }
                                                             var m = $filter('filter')(model.feesFormMappingList, {invoice_type: "Demand", demand_type:"Scheduled"});
                                                             if (m && m.length > 0){
                                                                 recordStr = deriveRecordStr(m[0].record_id_format, data);
-                                                                return Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name="+ m[0].form_name +"&record_id=" + recordStr);    
+                                                                return Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name="+ m[0].form_name +"&record_id=" + recordStr);
                                                             }
                                                         } else if (data.transactionName == 'Fee Charge'){
                                                             var m = $filter('filter')(model.feesFormMappingList, {fee_category:data.param1, fee_description: data.description, invoice_type: "Fee Charge"});
@@ -193,7 +298,17 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
 
                                                             if (m && m.length>0){
                                                                  recordStr = deriveRecordStr(m[0].record_id_format, data);
-                                                                return Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + m[0].form_name + "&record_id=" + recordStr);    
+                                                                return Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + m[0].form_name + "&record_id=" + recordStr);
+                                                            }
+                                                        } else if (data.transactionName == 'Fee Payment'){
+                                                            var m = $filter('filter')(model.feesFormMappingList, {fee_category:data.param1, fee_description: data.description, invoice_type: "Fee Payment"});
+                                                            if (m && m.length==0){
+                                                                m = $filter('filter')(model.feesFormMappingList, {fee_category:data.param1, fee_description: "ALL", invoice_type: "Fee Payment"});
+                                                            }
+
+                                                            if (m && m.length>0){
+                                                                 recordStr = deriveRecordStr(m[0].record_id_format, data);
+                                                                return Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + m[0].form_name + "&record_id=" + recordStr);
                                                             }
                                                         }
                                                         return Utils.alert("Form not maintained");
@@ -202,7 +317,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                             ];
                                             model.cbsLoan.orgTransactions.columns =  [
                                                 {
-                                                    "title": "Transaction ID", 
+                                                    "title": "Transaction ID",
                                                     "data": "transactionId",
                                                     "onClick": function(data){
                                                         PageHelper.showLoader();
@@ -222,22 +337,27 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                 },
                                                 {
                                                     "title": "Amount",
+                                                    "format" : "currency",
                                                     "data": "amount1"
                                                 },
                                                 {
                                                     "title": "Balance",
+                                                    "format" : "currency",
                                                     "data": "amount2"
                                                 },
                                                 {
                                                     "title": "Principal",
-                                                    "data": "part1"
-                                                },
-                                                {
-                                                    "title": "Interest",
+                                                    "format" : "currency",
                                                     "data": "part2"
                                                 },
                                                 {
+                                                    "title": "Interest",
+                                                    "format" : "currency",
+                                                    "data": "part1"
+                                                },
+                                                {
                                                     "title": "Penal",
+                                                    "format" : "currency",
                                                     "data": "part3"
                                                 },
                                                 {
@@ -249,7 +369,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                     "data": "transactionDateStr"
                                                 }
                                             ];
-                                            
+
 
                                             model.cbsLoan.orgTransactions.data = $filter('filter')(model.cbsLoan.transactions, {transactionName: '!Demand'});
                                             model.cbsLoan.invoiceTransactions.data = $filter('filter')(model.cbsLoan.transactions, function(value, index, array){
@@ -274,18 +394,61 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                     if (m && m.length > 0) {
                                                         isapplicable = true;
                                                     }
+                                                } else if (value.transactionName == 'Fee Payment') {
+                                                    var m = $filter('filter')(model.feesFormMappingList, {
+                                                        fee_category: value.param1,
+                                                        fee_description: value.description,
+                                                        invoice_type: "Fee Payment"
+                                                    });
+                                                    if (m && m.length==0){
+                                                        m = $filter('filter')(model.feesFormMappingList, {fee_category:value.param1, fee_description: "ALL", invoice_type: "Fee Payment"});
+                                                    }
+                                                    if (m && m.length > 0) {
+                                                        isapplicable = true;
+                                                    }
                                                 }
-                                                return isapplicable && (value.transactionName =='Demand' || value.transactionName == 'Fee Charge');
+                                                return isapplicable &&
+                                                    (
+                                                        value.transactionName =='Demand' ||
+                                                        value.transactionName == 'Fee Charge' ||
+                                                        (value.transactionName == 'Fee Payment' && parseFloat(value.part6)!=0 && parseFloat(value.part6)!=NaN));
                                             });
 
                                             _.forEach(model.cbsLoan.invoiceTransactions.data, function(txn){
-                                                txn.downloadText = 'Download';
+                                                if (txn.transactionName == 'Fee Payment') {
+                                                    txn.downloadText = 'Download Credit Note';
+                                                } else if (txn.transactionName == 'Fee Charge') {
+                                                    txn.downloadText = 'Download Invoice';
+                                                } else {
+                                                    txn.downloadText = 'Download Invoice';
+                                                }
+
                                             });
                                         }
                                         var loanDocuments = model.loanAccount.loanDocuments;
                                         var availableDocCodes = [];
                                         LoanBookingCommons.getDocsForProduct(model.cbsLoan.productCode, "LoanBooking", "DocumentUpload").then(function(docsForProduct) {
                                                 $log.info(docsForProduct);
+                                                masterDocumentsArray=docsForProduct;
+                                                for(var i=0;i<uploadedExistingDocs.length;i++){
+                                                    var pushFlag = true;
+                                                    for(var j=0;j<masterDocumentsArray.length;j++){
+                                                        if(masterDocumentsArray[j].document_name == uploadedExistingDocs[i].document){
+                                                           
+                                                            uploadedExistingDocs[i].$formsKey= masterDocumentsArray[j].forms_key;
+                                                            allExistingDocs.push(uploadedExistingDocs[i]);
+
+                                                            pushFlag=false;
+
+                                                        }
+                                                    }
+                                                    if(pushFlag){
+                                                        remainingDocsArray.push(uploadedExistingDocs[i]);
+                                                    }
+                                                }
+                                                model.remainingDocsArray = remainingDocsArray;
+                                                model.allExistingDocs = allExistingDocs;
+                                               
                                                 for (var i = 0; i < loanDocuments.length; i++) {
                                                     availableDocCodes.push(loanDocuments[i].document);
                                                     var documentObj = LoanBookingCommons.getDocumentDetails(docsForProduct, loanDocuments[i].document);
@@ -295,6 +458,29 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                         loanDocuments[i].document = "DOCUMENT_TITLE_NOT_MAINTAINED";
                                                     }
                                                 }
+                                                /*1)getting form key for form download , for loan documents
+                                                2) getting existing documents */
+                                                if (model.loanAccount.loanDocuments) {
+                                                    var existingDocuments = _.cloneDeep(model.loanAccount.loanDocuments);
+                                                    if(existingDocuments.length > docsForProduct.length){
+                                                        model.loanDocuments.existingDocuments = existingDocuments.slice(0,docsForProduct.length);
+                                                        model.loanDocuments.newLoanDocuments = existingDocuments.slice(docsForProduct.length);
+                                                        model.loanDocuments.newLoanDocuments.map(o => o.readonly=true);
+
+                                                    }else {
+                                                        model.loanDocuments.existingDocuments = existingDocuments;
+                                                    }
+
+                                                    _.forEach(model.loanDocuments.existingDocuments, function (obj, i) {
+                                                                if(i<=docsForProduct.length){
+                                                                obj.$downloadRequired = docsForProduct[i].download_required,
+                                                                    obj.$formsKey = docsForProduct[i].forms_key,
+                                                                    obj.disbursementId = docsForProduct[i].id
+                                                                }
+                                                        })
+
+                                                };
+
                                                 PageHelper.hideLoader();
                                             },
                                             function(httpRes) {
@@ -305,19 +491,76 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                         PageHelper.showErrors(httpRes);
                                     }
 
-                                )
-                                .finally(function() {
-                                    PageHelper.hideLoader();
-                                })
-                        }
+                                );
+                            promiseArray.push(loanpromise);
+                            var repaypromise = RepaymentReminder.getAccountDetails({accountNumber: model.loanAccount.accountNumber})
+                                .$promise
+                                .then(
+                                    function (res) {
+                                        $log.info(res);
+                                        model.loanRepaymentReminderHistory = res;
 
-                        if (model.loanAccount.loanDocuments) {
-                            for (var i = 0; i < model.loanAccount.loanDocuments.length; i++) {
-
-                                model.loanDocuments.existingDocuments.push(model.loanAccount.loanDocuments[i]);
+                                        for(var i=0; i<model.loanRepaymentReminderHistory.length;i++){
+                                            model.loanRepaymentReminderHistory[i].installmentAmount = (model.loanRepaymentReminderHistory[i].installmentAmount/100);
+                                            model.loanRepaymentReminderHistory[i].repaymentAmountInPaisa = (model.loanRepaymentReminderHistory[i].repaymentAmountInPaisa/100);
+                                        }
+                                    });
+                            promiseArray.push(repaypromise);
+                            var enrollmentpromise = Enrollment.getCustomerById({id: model.loanAccount.customerId})
+                                .$promise
+                                .then(
+                                    function (res) {
+                                        model.customer = res;
+                                        PageHelper.showProgress('load-loan', 'Done.', 2000);
+                                    }, function (httpRes) {
+                                        PageHelper.showProgress('load-loan', "Error while loading customer details", 2000);
+                                    }
+                                );
+                            promiseArray.push(enrollmentpromise);
+                            model.loanAccount.coBorrowers = [];
+                            model.loanAccount.guarantors1 = [];
+                            if(model.loanAccount.loanCustomerRelations) {
+                                for (var i = 0; i < model.loanAccount.loanCustomerRelations.length; i++) {
+                                    if (model.loanAccount.loanCustomerRelations[i].relation === 'APPLICANT' ||
+                                        model.loanAccount.loanCustomerRelations[i].relation === 'Applicant') {
+                                        model.loanAccount.applicantId = model.loanAccount.loanCustomerRelations[i].customerId;
+                                    }
+                                    else if (model.loanAccount.loanCustomerRelations[i].relation === 'COAPPLICANT' ||
+                                        model.loanAccount.loanCustomerRelations[i].relation === 'Co-Applicant') {
+                                        model.loanAccount.coBorrowers.push({
+                                            coBorrowerUrnNo:model.loanAccount.loanCustomerRelations[i].urn,
+                                            customerId:model.loanAccount.loanCustomerRelations[i].customerId
+                                        });
+                                    }
+                                    else if(model.loanAccount.loanCustomerRelations[i].relation === 'GUARANTOR' ||
+                                            model.loanAccount.loanCustomerRelations[i].relation === 'Guarantor'){
+                                        model.loanAccount.guarantors1.push({
+                                            guaUrnNo:model.loanAccount.loanCustomerRelations[i].urn,
+                                            customerId:model.loanAccount.loanCustomerRelations[i].customerId
+                                        });
+                                    }
+                                }
+                                LoanBookingCommons.getLoanAccountRelatedCustomersLegacy(model.loanAccount);
+                                console.log("rrrrr");
+                                console.log(model)
                             }
                         }
-                    })
+                        $q.all(promiseArray).finally(function() {
+
+                        PageHelper.hideLoader();
+                        })
+                    }, function(err){
+                        PageHelper.showErrors(err);
+                        PageHelper.hideLoader();
+                    });
+                // model.showmessageHistory = false;
+                // if(model.loanAccount.loanType != 'JLG'){
+                //     IndividualLoan.loanRemarksSummary({id:loanAccountId}).$promise.then(function (resp){
+                //         model.messageHistory= resp;
+                //         model.showmessageHistory = true;
+                //     });
+                // }
+               
 
             },
             form: [
@@ -338,6 +581,26 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         "required":false,
                         "title": "PRODUCT",
                         "type": "string"
+                    },
+                    {
+                        key: "loanAccount.baseLoanAccount",
+                        "readonly": true,
+                        title: "BASE_LOAN_ACCOUNT",
+                        condition:"model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+
+                    },
+                    {
+                        key: "loanAccount.linkedAccountNumber",
+                        readonly: true,
+                        title: "LINKED_LOAN_ACCOUNT",
+                        condition:"model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                    },
+                    {
+                        key: "loanAccount.transactionType",
+                        readonly: true,
+                        "required":false,
+                        title: "TRANSACTION_TYPE",
+
                     },
                     {
                         "key": "cbsLoan.accountBalance",
@@ -440,7 +703,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     },
                     {
                         "key": "cbsLoan.nextDemandScheduledDate",
-                        "title": "NEXT_DEMAND_RUN_DATE",
+                        "title": "NEXT_DEMAND_SCHEDULED_DATE",
                         "required":false,
                         "type": ["string","null"]
                     },
@@ -466,7 +729,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
             },
             {
                 "type": "box",
-                "title": "LOAN_OVERVIEW",
+                "title": "LOAN_FINANCIALS",
                 "condition" : "",
                 "readonly": true,
                 "items": [
@@ -526,19 +789,25 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     },
                     {
                         "key": "cbsLoan.totalPenalInterestRaised",
-                        "title": "TOTAL_INTEREST_RAISED",
+                        "title": "TOTAL_PENAL_INTEREST_RAISED",
                         "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.totalPenalInterestRepaid",
-                        "title": "TOTAL_INTEREST_REPAID",
+                        "title": "TOTAL_PENAL_INTEREST_REPAID",
                         "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.totalPenalInterestDue",
-                        "title": "TOTAL_INTEREST_DUE",
+                        "title": "TOTAL_PENAL_INTEREST_DUE",
+                        "required":false,
+                        "type": "number"
+                    },
+                    {
+                        "key": "cbsLoan.bookedNotDuePenalInterest",
+                        "title": "BOOKED_NOT_DUE_PENAL_INTEREST",
                         "required":false,
                         "type": "number"
                     },
@@ -556,19 +825,19 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     },
                     {
                         "key": "cbsLoan.totalDemandRaised",
-                        "title": "TOTAL_INTEREST_RAISED",
+                        "title": "TOTAL_DEMAND_RAISED",
                         "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.totalRepaid",
-                        "title": "TOTAL_INTEREST_REPAID",
+                        "title": "TOTAL_DEMAND_REPAID",
                         "required":false,
                         "type": "number"
                     },
                     {
                         "key": "cbsLoan.totalDemandDue",
-                        "title": "TOTAL_INTEREST_DUE",
+                        "title": "TOTAL_DEMAND_DUE",
                         "required":false,
                         "type": "number"
                     },
@@ -631,7 +900,17 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         "title": "LAST_PROVISIONING_DATE",
                         "required":false,
                         "type": "number"
-                    }
+                    },
+                    {
+                        "key": "loanAccount.waiverdocumentId",
+                        type: "file",
+                        "readonly":true,
+                        fileType: "application/pdf",
+                        category: "Loan",
+                        subCategory: "DOC1",
+                        title:"WAIVER_APPROVAL_DOCUMENT",
+                        using: "scanner"
+                    },
                 ]
             },
             {
@@ -675,13 +954,14 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         }, {
                             "key": "loanAccount.frequency",
                             "required":false,
+                            "enumCode":"loan_product_frequency",
                             "type": "select"
                         },{
                             "key":"loanAccount.expectedInterestRate",
                             title:"Expected Interest Rate",
                             "required":false,
                             "type":"number",
-                            "condition": "!model.loanAccount.loanType == 'JLG'"
+                            "condition": "model.loanAccount.loanType != 'JLG'"
                         }]
                     }, {
                         "type": "fieldset",
@@ -779,12 +1059,12 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             "required":false,
                             "title": "ENTITY_NAME",
                             "readonly": true,
-                            "condition": "!model.loanAccount.loanType == 'JLG'"
+                            "condition": "model.loanAccount.loanType != 'JLG'"
                         }, {
                             "key": "loanAccount.applicant",
                             "required":false,
                             "title": "APPLICANT_URN_NO",
-                            "condition": "!model.loanAccount.loanType == 'JLG'",
+                            "condition": "model.loanAccount.loanType != 'JLG'",
                             "type": "lov",
                             "lovonly": true,
                             "inputMap": {
@@ -832,68 +1112,82 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                 ];
                             }
                         }, {
-                            "key": "customer.applicantName",
+                            "key": "loanAccount.applicantName",
                             "title": "APPLICANT_NAME",
                             "required":false,
                             "readonly": true,
-                            "condition": "!model.loanAccount.loanType == 'JLG'"
-                        }, {
-                            "key": "loanAccount.coBorrowerUrnNo",
-                            "required":false,
-                            "title": "CO_APPLICANT_URN_NO",
-                            "condition": "!model.loanAccount.loanType == 'JLG'",
-                            "type": "lov",
-                            "lovonly": true,
-                            "inputMap": {
-                                "customerId": {
-                                    "key": "customer.customerId",
-                                    "title": "CUSTOMER_ID"
-                                },
-                                "firstName": {
-                                    "key": "customer.firstName",
-                                    "title": "CUSTOMER_NAME"
-                                },
-                                "branch": {
-                                    "key": "customer.branch",
-                                    "type": "select",
-                                    "screenFilter": true
-                                },
-                                "centreId": {
-                                    "key": "customer.centreId",
-                                    "type": "select",
-                                    "screenFilter": true
-                                }
-                            },
-                            "outputMap": {
-                                "urnNo": "loanAccount.coBorrowerUrnNo",
-                                "firstName": "customer.coBorrowerName"
-                            },
-                            "searchHelper": formHelper,
-                            "search": function(inputModel, form) {
-                                $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                var promise = Enrollment.search({
-                                    'customerId': inputModel.customerId,
-                                    'branchName': inputModel.branch || SessionStore.getBranch(),
-                                    'firstName': inputModel.firstName,
-                                    'centreId': inputModel.centreId,
-                                    'customerType': "individual",
-                                    'stage': "Completed"
-                                }).$promise;
-                                return promise;
-                            },
-                            getListDisplayItem: function(data, index) {
-                                return [
-                                    [data.firstName, data.fatherFirstName].join(' | '),
-                                    data.id,
-                                    data.urnNo
-                                ];
-                            }
-                        }, {
-                            "key": "customer.coBorrowerName",
-                            "required":false,
-                            "title": "COAPPLICANT_NAME",
+                            "condition": "model.loanAccount.loanType != 'JLG'"
+                        },
+                        {
+                            "type": "fieldset",
+                            "title": "COAPPLICANTS",
                             "readonly": true,
-                            "condition": "!model.loanAccount.loanType == 'JLG'"
+                            "condition": "model.loanAccount.loanType != 'JLG'",
+                            "items": [
+                                {
+                                    "key": "loanAccount.coBorrowers",
+                                    "title": "COAPPLICANTS",
+                                    "titleExpr": "model.loanAccount.coBorrowers[arrayIndex].customerId + ': ' + model.loanAccount.coBorrowers[arrayIndex].coBorrowerName",
+                                    "type": "array",
+                                    "startEmpty": true,
+                                    "schema": {
+                                        "maxItems": 4
+                                    },
+                                    "items": [
+                                        {
+                                            "key": "loanAccount.coBorrowers[].coBorrowerUrnNo",
+                                            "title": "CO_APPLICANT_URN_NO",
+                                            "type":"lov",
+                                            "lovonly": true,
+                                            "inputMap": {
+                                                "customerId":{
+                                                    "key":"customer.customerId",
+                                                    "title":"CUSTOMER_ID"
+                                                },
+                                                "firstName": {
+                                                    "key": "customer.firstName",
+                                                    "title": "CUSTOMER_NAME"
+                                                },
+                                                "branch": {
+                                                    "key": "customer.branch",
+                                                    "type": "select",
+                                                    "screenFilter": true
+                                                },
+                                                "centreId": {
+                                                    "key": "customer.centreId",
+                                                    "type": "select",
+                                                    "screenFilter": true
+                                                }
+                                            },
+                                            "outputMap": {
+                                                "id": "loanAccount.coBorrowers[arrayIndex].customerId",
+                                                "urnNo": "loanAccount.coBorrowers[arrayIndex].coBorrowerUrnNo",
+                                                "firstName":"loanAccount.coBorrowers[arrayIndex].coBorrowerName"
+                                            },
+                                            "searchHelper": formHelper,
+                                            "search": function(inputModel, form) {
+                                                $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                                var promise = Enrollment.search({
+                                                    'customerId':inputModel.customerId,
+                                                    'branchName': inputModel.branch ||SessionStore.getBranch(),
+                                                    'firstName': inputModel.firstName,
+                                                    'centreId':inputModel.centreId,
+                                                    'customerType':"individual",
+                                                    'stage': "Completed"
+                                                }).$promise;
+                                                return promise;
+                                            },
+                                            getListDisplayItem: function(data, index) {
+                                                return [
+                                                    [data.firstName, data.fatherFirstName].join(' | '),
+                                                    data.id,
+                                                    data.urnNo
+                                                ];
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
                         }]
                     }, {
                         "type": "fieldset",
@@ -908,7 +1202,8 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                     getSanctionedAmount(model);
                                 }
                             }, {
-                                key: "loanAccount.insuranceFee",
+                                key: "loanAccount.portfolioInsurancePremium",
+                                "title": "INSURANCE",
                                 "required":false,
                                 type: "amount",
                                 onChange: function(value, form, model) {
@@ -923,24 +1218,21 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                 }
                             }, {
                                 key: "loanAccount.securityEmi",
+                                "title": "SECURITY_EMI",
                                 "required":false,
                                 type: "amount",
                                 onChange: function(value, form, model) {
                                     getSanctionedAmount(model);
                                 }
                             }, {
-                                key: "loanAccount.processingFeeInPaisa",
+                                key: "loanAccount.processingFee",
+                                "title": "PROCESSING_FEE",
                                 "required":false,
                                 type: "amount"
                             }, {
                                 key: "loanAccount.otherFee",
                                 "required":false,
                                 type: "amount"
-                            }, {
-                                "key": "additional.loanAmount",
-                                "required":false,
-                                "type": "amount",
-                                "title": "NET_DISBURSEMENT_AMOUNT"
                             }, {
                                 "key": "loanAccount.interestRate",
                                 "required":false,
@@ -954,7 +1246,6 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                 "key": "loanAccount.loanPurpose1",
                                 "required":false,
                                 "title": "LOAN_PURPOSE",
-                                "type": "select"
                             }
                             /*,
                                                                  {
@@ -975,7 +1266,95 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                                  }*/
                         ]
                     }]
-                }, 
+                },
+                {
+                    type: "box",
+                    condition:"model.siteCode != 'sambandh'",
+                    title: "REMINDER_/_REPAYMEMT_HISTORY",
+                    "readonly": true,
+                    items: [{
+                        key: "loanRepaymentReminderHistory",
+                        type: "array",
+                        startEmpty: true,
+                        add: null,
+                        remove: null,
+                        view: "fixed",
+                        "titleExpr": "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Scheduled' || model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Scheduled Demand'  ? 'Repayment' + ': '+ moment(model.loanRepaymentReminderHistory[arrayIndexes[0]].repaymentDate).format('DD, MMMM YYYY') : model.loanRepaymentReminderHistory[arrayIndex].repaymentType + ': '+ moment(model.loanRepaymentReminderHistory[arrayIndexes[0]].demandDate).format('DD, MMMM YYYY')",
+                        "titleExprLocals": {moment: window.moment},
+                        items: [{
+                            key: "loanRepaymentReminderHistory[].instrumnetType",
+                            type: "string",
+                            title: "INSTRUMENT_TYPE",
+                            condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Scheduled' || model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Scheduled Demand'"
+                            },
+                            {
+                                key: "loanRepaymentReminderHistory[].repaymentAmountInPaisa",
+                                type: "string",
+                                title: "AMOUNT",
+                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Scheduled' || model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Scheduled Demand'"
+                            },
+                            {
+                                key: "loanRepaymentReminderHistory[].installmentAmount",
+                                type: "string",
+                                title: "AMOUNT",
+                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Reminder'"
+                            },
+                            {
+                                key: "loanRepaymentReminderHistory[].installmentAmount",
+                                type: "string",
+                                title: "AMOUNT",
+                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Promise to Pay'"
+                            },
+                            {
+                                key: "loanRepaymentReminderHistory[].repaymentDate",
+                                type: "string",
+                                title: "REPAYMENT_DATE",
+                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Scheduled' || model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Scheduled Demand'"
+                            },
+                            {
+                                key: "loanRepaymentReminderHistory[].reference",
+                                type: "string",
+                                title: "REFERENCE",
+                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Scheduled' || model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Scheduled Demand'"
+                            },
+                            {
+                                key: "loanRepaymentReminderHistory[].interactionMode",
+                                type: "string",
+                                title: "INTERACTION_MODE",
+                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Reminder'"
+                            },
+                            {
+                                key: "loanRepaymentReminderHistory[].interactionDate",
+                                type: "string",
+                                title: "INTERACTION_DATE_",
+                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Reminder'"
+                            },
+                            {
+                                key: "loanRepaymentReminderHistory[].reminderStatus",
+                                type: "string",
+                                title: "CALL_STATUS",
+                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Reminder'"
+                            },
+                            {
+                                key: "loanRepaymentReminderHistory[].repaymentDate",
+                                type: "string",
+                                title: "P2P_DATE",
+                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Promise to Pay'"
+                            },
+                            {
+                                key: "loanRepaymentReminderHistory[].reminderStatus",
+                                type: "string",
+                                title: "RECOVERY_ATTEMPT",
+                                condition: "model.loanRepaymentReminderHistory[].reminderStatus  &&  model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Promise to Pay'"
+                            },
+                            {
+                                key: "loanRepaymentReminderHistory[].reason",
+                                type: "string",
+                                title: "REASON",
+                                condition: "model.loanRepaymentReminderHistory[arrayIndex].repaymentType == 'Promise to Pay'"
+                            },]
+                    }]
+                },
                 {
                     "type": "box",
                     "colClass": "col-sm-12",
@@ -1053,7 +1432,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                     "htmlClass": "col-sm-2",
                                                     "items": [
                                                         {
-                                                            "html": "{{ model.cbsLoan.transactions[arrayIndex].transactionId }} / <strong>{{ model.cbsLoan.transactions[arrayIndex].transactionName }}</strong>",
+                                                            "html": "{{ model.cbsLoan.transactions[arrayIndex].transactionId }} / <strong>{{ model.cbsLoan.transactions[arrayIndex].transactionName == 'Fee Charge' ? (model.cbsLoan.transactions[arrayIndex].description ? model.cbsLoan.transactions[arrayIndex].description : model.cbsLoan.transactions[arrayIndex].transactionName ) : model.cbsLoan.transactions[arrayIndex].transactionName}}</strong>",
                                                             "type": "section"
                                                         }
                                                     ]
@@ -1127,78 +1506,6 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     ]
                 },
                 {
-                    type: "box",
-                    "condition": "model.siteCode=='KGFS'",
-                    "colClass": "col-sm-12",
-                    title: "Disbursement Repayment Scheduled",
-                    "items": [{
-                        "type": "section",
-                        "htmlClass": "col-sm-12",
-                        "items": [{
-                            type: "tableview",
-                            htmlClass: "table-striped",
-                            listStyle: "table",
-                            key: "loanAccount.newLoanDemandSchedules",
-                            title: "",
-                            selectable: false,
-                            expandable: true,
-                            paginate: false,
-                            searching: false,
-                            getColumns: function() {
-                                return [{
-                                    title: 'Scheduled Date',
-                                    data: 'scheduleDate',
-                                    render: function(data, type, full, meta) {
-                                        return (moment(data).format("DD-MMM-YYYY"));
-                                    }
-                                }, {
-                                    title: 'INSTALLMENT_AMOUNT',
-                                    data: 'installmentAmountInPaisa',
-                                    render: function(data, type, full, meta) {
-                                        if (data) {
-                                            data = data / 100;
-                                            return '<i class="fa fa-inr"></i> ' + data;
-                                        }else{
-                                            return data
-                                        }  
-                                    }
-                                }, {
-                                    title: 'Pending Amount',
-                                    data: 'pendingAmountInPaisa',
-                                    render: function(data, type, full, meta) {
-                                        if (data) {
-                                            data = data / 100
-                                            return '<i class="fa fa-inr"></i> ' + data; 
-                                        }else{
-                                            return data
-                                        }                                          
-                                    }
-                                }, {
-                                    title: 'Repaid Amount',
-                                    data: 'repaymentAmountInPaisa',
-                                    render: function(data, type, full, meta) {
-                                        if (data) {
-                                            data = data / 100;
-                                            return '<i class="fa fa-inr"></i> ' + data;
-                                        }else{
-                                            return data
-                                        }     
-                                    }
-                                }, {
-                                    title: 'REPAYMENT_TYPE',
-                                    data: 'repaymentType'
-                                }, {
-                                    title: 'LAST_REPAYMENT_DATE',
-                                    data: 'repaymentDate'
-                                }]
-                            },
-                            getActions: function(item) {
-                                return [];
-                            }
-                        }]
-                    }]
-                },
-                {
                     "type": "box",
                     "colClass": "col-sm-12",
                     "title": "REPAYMENT_SCHEDULE",
@@ -1215,7 +1522,23 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         },
                         ] // END of box items
                 },
-                
+                {
+                    "type": "box",
+                    "colClass": "col-sm-12",
+                    "title": "ACCOUNT_STATEMENT",
+                    "htmlClass": "text-danger",
+                    "items": [{
+                            "type": "fieldset",
+                            "title": "ACCOUNT_STATEMENT",
+                            "items": [{
+                                type: "section",
+                                colClass: "col-sm-12",
+                                html: "<irf-simple-summary-table irf-table-def='model.cbsLoan.orgAccountStatementTblFormat'></irf-simple-summary-table>"
+                            }
+                            ]
+                        },
+                        ] // END of box items
+                },
                 {
                     "type": "box",
                     "colClass": "col-sm-12",
@@ -1242,6 +1565,25 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         }
                     ] // END of box items
                 },
+                {
+                    "type": "box",
+                   "condition": "model.siteCode == 'KGFS' && model.showmessageHistory",
+                    "title": "MESSAGE_HISTORY",
+                    "readonly": true,
+                    "items": [{
+                        "key": "messageHistory",
+                        "type": "array",
+                        "view": "fixed",
+                        "titleExpr": "actions.getStageTitle(model, arrayIndex)",
+                        "items": [{
+                            "type": "section",
+                            "htmlClass": "",
+                            "html": '<i class="fa fa-commenting text-gray">&nbsp;</i> {{model.messageHistory[arrayIndex].remarks}}\
+                            <br><i class="fa fa-clock-o text-gray">&nbsp;</i> {{model.messageHistory[arrayIndex].createdDate}}\
+                            <br><i class="fa fa-user  text-gray">&nbsp;</i> {{model.messageHistory[arrayIndex].userId}}<br>'
+                        }]
+                    }]
+                }
 
                 // {
                 //     "type": "box",
@@ -1271,7 +1613,8 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                 //             "type": "string"
                 //         }]
                 //     }]
-                // }, 
+                // },
+                ,
                 {
                     "type": "box",
                     "title": "DISBURSEMENT_DETAILS",
@@ -1300,56 +1643,79 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                     });
                                 }
                             }
-                        }, {
-                            key: "loanAccount.customerBankAccountNumber",
-                            "required":false,
-                            type: "lov",
-                            autolov: true,
-                            title: "CUSTOMER_BANK_ACC_NO",
-                            bindMap: {
-                                "customerId": "loanAccount.customerId"
-                            },
-                            outputMap: {
-                                "account_number": "loanAccount.customerBankAccountNumber",
-                                "ifsc_code": "loanAccount.customerBankIfscCode",
-                                "customer_bank_name": "loanAccount.customerBank",
-                                "customer_bank_branch_name": "loanAccount.customerBranch"
-                            },
-                            searchHelper: formHelper,
-                            search: function(inputModel, form, model) {
-                                return Queries.getCustomerBankAccounts(
-                                    inputModel.customerId
-                                );
-                            },
-                            getListDisplayItem: function(item, index) {
-                                return [
-                                    item.account_number + (item.is_disbersement_account == 1 ? '&nbsp;&nbsp;<span class="color-theme"><i class="fa fa-check-square">&nbsp;</i>{{"DEFAULT_DISB_ACCOUNT"|translate}}</span>' : ''),
-                                    item.ifsc_code + ', ' + item.customer_bank_name,
-                                    item.customer_bank_branch_name
-                                ];
-                            }
-                        }, {
-                            key: "loanAccount.customerBankIfscCode",
-                            "required":false,
-                            title: "CUSTOMER_BANK_IFSC",
-                            "readonly": true
-                        }, {
-                            key: "loanAccount.customerBank",
-                            "required":false,
-                            title: "CUSTOMER_BANK",
-                            "readonly": true
-                        }, {
-                            key: "loanAccount.customerBranch",
-                            "required":false,
-                            title: "BRANCH_NAME",
-                            "readonly": true
-                        }, {
+                        },
+                        // }, {
+                        //     key: "loanAccount.customerBankAccountNumber",
+                        //     "required":false,
+                        //     type: "lov",
+                        //     autolov: true,
+                        //     title: "CUSTOMER_BANK_ACC_NO",
+                        //     bindMap: {
+                        //         "customerId": "loanAccount.customerId"
+                        //     },
+                        //     outputMap: {
+                        //         "account_number": "loanAccount.customerBankAccountNumber",
+                        //         "ifsc_code": "loanAccount.customerBankIfscCode",
+                        //         "customer_bank_name": "loanAccount.customerBank",
+                        //         "customer_bank_branch_name": "loanAccount.customerBranch"
+                        //     },
+                        //     searchHelper: formHelper,
+                        //     search: function(inputModel, form, model) {
+                        //         return Queries.getCustomerBankAccounts(
+                        //             inputModel.customerId
+                        //         );
+                        //     },
+                        //     getListDisplayItem: function(item, index) {
+                        //         return [
+                        //             item.account_number + (item.is_disbersement_account == 1 ? '&nbsp;&nbsp;<span class="color-theme"><i class="fa fa-check-square">&nbsp;</i>{{"DEFAULT_DISB_ACCOUNT"|translate}}</span>' : ''),
+                        //             item.ifsc_code + ', ' + item.customer_bank_name,
+                        //             item.customer_bank_branch_name
+                        //         ];
+                        //     }
+                        // }, {
+                        //     key: "loanAccount.customerBankIfscCode",
+                        //     "required":false,
+                        //     title: "CUSTOMER_BANK_IFSC",
+                        //     "readonly": true
+                        // }, {
+                        //     key: "loanAccount.customerBank",
+                        //     "required":false,
+                        //     title: "CUSTOMER_BANK",
+                        //     "readonly": true
+                        // }, {
+                        //     key: "loanAccount.customerBranch",
+                        //     "required":false,
+                        //     title: "BRANCH_NAME",
+                        //     "readonly": true
+                        // },
+                         {
                             key: "loanAccount.disbursementSchedules",
                             "required":false,
                             title: "DISBURSEMENT_SCHEDULES",
                             add: null,
                             remove: null,
-                            items: [{
+                            items: [
+                            {
+                                key: "loanAccount.disbursementSchedules[].customerNameInBank",
+                                title: "CUSTOMER_NAME",
+                                readonly: true
+                            },{
+                                key: "loanAccount.disbursementSchedules[].customerAccountNumber",
+                                title: "CUSTOMER_BANK_ACC_NO",
+                                readonly: true
+                            },{
+                                key: "loanAccount.disbursementSchedules[].ifscCode",
+                                title: "CUSTOMER_BANK_IFSC",
+                                readonly: true
+                            },{
+                                key: "loanAccount.disbursementSchedules[].customerBankName",
+                                title: "CUSTOMER_BANK",
+                                readonly: true
+                            },{
+                                key: "loanAccount.disbursementSchedules[].customerBankBranchName",
+                                title: "BRANCH_NAME",
+                                readonly: true
+                            },{
                                 key: "loanAccount.disbursementSchedules[].trancheNumber",
                                 "required":false,
                                 title: "TRANCHE_NUMBER",
@@ -1444,22 +1810,22 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                 }, {
                     "type": "box",
                     "title": "GUARANTOR_NOMINEE_DETAILS",
-                    "condition": "model.loanAccount.guarantors.length>0",
+                    "condition": "model.loanAccount.guarantors1.length>0",
                     readonly: true,
                     "items": [{
                         "type": "fieldset",
                         "title": "GUARANTOR",
                         "items": [{
-                            key: "loanAccount.guarantors",
+                            key: "loanAccount.guarantors1",
                             "required":false,
                             notitle: "true",
                             view: "fixed",
-                            "condition": "model.loanAccount.guarantors.length>0",
+                            "condition": "model.loanAccount.guarantors1.length>0",
                             type: "array",
                             add: null,
                             remove: null,
                             items: [{
-                                "key": "loanAccount.guarantors[].guaUrnNo",
+                                "key": "loanAccount.guarantors1[].guaUrnNo",
                                 "title": "URN_NO",
                                 "type": "lov",
                                 "lovonly": true,
@@ -1484,8 +1850,8 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                     }
                                 },
                                 "outputMap": {
-                                    "urnNo": "loanAccount.guarantors[arrayIndex].guaUrnNo",
-                                    "firstName": "loanAccount.guarantors[arrayIndex].guaFirstName"
+                                    "urnNo": "loanAccount.guarantors1[arrayIndex].guaUrnNo",
+                                    "firstName": "loanAccount.guarantors1[arrayIndex].guaFirstName"
                                 },
                                 "searchHelper": formHelper,
                                 "search": function(inputModel, form) {
@@ -1508,7 +1874,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                     ];
                                 }
                             }, {
-                                key: "loanAccount.guarantors[].guaFirstName",
+                                key: "loanAccount.guarantors1[].guaFirstName",
                                 title: "NAME",
                                 "readonly": true
                             }]
@@ -1544,12 +1910,12 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                         model.loanAccount.portfolioInsuranceUrn = model.loanAccount.coBorrowerUrnNo;
                                         break;
                                     case "guarantor":
-                                        if (_.isEmpty(model.loanAccount.guarantors[0].guaUrnNo)) {
+                                        if (_.isEmpty(model.loanAccount.guarantors1[0].guaUrnNo)) {
                                             Utils.alert("Please Select a Guarantor");
                                             model.additional.portfolioUrnSelector = "";
                                             break;
                                         }
-                                        model.loanAccount.portfolioInsuranceUrn = model.loanAccount.guarantors[0].guaUrnNo;
+                                        model.loanAccount.portfolioInsuranceUrn = model.loanAccount.guarantors1[0].guaUrnNo;
                                         break;
                                 }
                             }
@@ -1648,64 +2014,286 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         }]
                     }]
                 },
-
                 {
                     "type": "box",
                     "title": "LOAN_DOCUMENTS",
+                    "condition": 'model.loanAccount.loanType != "JLG"',
                     "items": [{
-                        "type": "fieldset",
-                        "title": "EXISTING_LOAN_DOCUMENTS",
-                        "condition": "model.loanAccount.loanType != 'JLG'",
-                        "items": [{
-                            "type": "array",
-                            "required":false,
-                            "key": "loanDocuments.existingDocuments",
-                            "add": null,
-                            "startEmpty": true,
-                            "remove": null,
-                            "titleExpr": "model.loanDocuments.existingDocuments[arrayIndex].document",
-                            "items": [{
-                                "title": "DOWNLOAD_FORM",
-                                "notitle": true,
-                                "fieldHtmlClass": "btn-block",
-                                "style": "btn-default",
-                                "icon": "fa fa-download",
-                                "type": "button",
-                                "readonly": false,
-                                "key": "loanAccount.loanDocs[].documentId",
-                                "onClick": function(model, form, schemaForm, event) {
-                                    var fileId = model.loanDocuments.existingDocuments[schemaForm.arrayIndex].documentId;
-                                    Utils.downloadFile(Files.getFileDownloadURL(fileId));
-                                }
+                                "type": "fieldset",
+                                "title": "EXISTING_LOAN_DOCUMENTS",
+                                "items": [{
+                                    "type": "array",
+                                    //"key": "loanDocuments.existingDocuments",
+                                    "key":"allExistingDocs",
+                                    "add": null,
+                                    "startEmpty": true,
+                                    "remove": null,
+                                    "notitle": true,
+                                    "view": "fixed",
+                                    "items": [{
+                                        "type": "section",
+                                        "htmlClass": "row",
+                                        "items": [{
+                                                "type": "section",
+                                                "htmlClass": "col-sm-7",
+                                                "items": [{
+                                                    "key": "allExistingDocs[].document",
+                                                    "notitle": true,
+                                                    "titleExpr": "model.allExistingDocs[arrayIndex].document",
+                                                    "type": "anchor",
+                                                    "fieldHtmlClass": "text-bold",
+                                                    "onClick": function (model, form, schemaForm, event) {
+                                                        var doc = model.allExistingDocs[event.arrayIndex];
+                                                       
+                                                       Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + doc.$formsKey + "&record_id=" + model.loanAccount.id)
+                                                    }
+                                                }]
+                                            },
+                                            {
+                                                "type": "section",
+                                                "htmlClass": "col-sm-5",
+                                                "items": [{
+                                                    title: "Upload",
+                                                    key: "allExistingDocs[].documentId",
+                                                    "condition": "model.pageConfig.documentUploadAllowed",
+                                                    type: "file",
+                                                    fileType: "application/pdf",
+                                                    category: "Loan",
+                                                    subCategory: "DOC1",
+                                                    "notitle": true,
+                                                    using: "scanner"
 
-                            }]
-                        }]
-                    }, {
-                        "type": "fieldset",
-                        "title": "ADD_LOAN_DOCUMENTS",
-                        "condition": "model.loanAccount.loanType != 'JLG'",
-                        "items": [{
-                            "type": "array",
-                            "required":false,
-                            "key": "loanDocuments.newLoanDocuments",
-                            "title": "ADD_DOCUMENTS",
-                            "startEmpty": true,
-                            "titleExpr": "model.loanDocuments.newLoanDocuments[arrayIndex].document",
-                            "items": [
-                                {
-                                    "title": "Upload",
-                                    "required":false,
-                                    "key": "loanDocuments.newLoanDocuments[].documentId",
-                                    type: "file",
-                                    fileType: "*/*",
-                                    category: "Loan",
-                                    subCategory: "DOC1",
-                                    notitle: true
-                                }
-                            ]
-                        }]
-                    },
-                    {
+                                                }, {
+                                                    title: "Upload",
+                                                    key: "allExistingDocs[].documentId",
+                                                    "condition": "!model.pageConfig.documentUploadAllowed",
+                                                    readonly: true,
+                                                    type: "file",
+                                                    fileType: "application/pdf",
+                                                    category: "Loan",
+                                                    subCategory: "DOC1",
+                                                    "notitle": true,
+                                                    using: "scanner"
+
+                                                }]
+                                            }
+                                        ]
+                                    }]
+
+                                }]
+                            },
+                             // second form
+                             {
+                                "type": "fieldset",
+                                "title": "Addtional  Documents :",
+                                "items": [{
+                                    "type": "array",
+                                    "key": "remainingDocsArray",
+                                    "condition": "(!_.isUndefined(model.pageConfig.readonly) && model.pageConfig.readonly==false)",
+                                    "add": null,
+                                    "startEmpty": true,
+                                    "remove": null,
+                                    "notitle": true,
+                                    "view": "fixed",
+                                    "items": [{
+                                        "type": "section",
+                                        "htmlClass": "row",
+                                        "items": [{
+                                                "type": "section",
+                                                "htmlClass": "col-sm-7",
+                                                "items": [{
+                                                    "key": "remainingDocsArray[].document",
+                                                    "notitle": true,
+                                                    "titleExpr": "model.remainingDocsArray[arrayIndex].document",
+                                                    "type": "anchor",
+                                                    "fieldHtmlClass": "text-bold",
+                                                    "onClick": function (model, form, schemaForm, event) {
+                                                        var doc = model.remainingDocsArray[event.arrayIndex];
+                                                        
+                                                       // Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + doc.$formsKey + "&record_id=" + model.loanAccount.id)
+                                                    }
+                                                }]
+                                            },
+                                            {
+                                                "type": "section",
+                                                "htmlClass": "col-sm-5",
+                                                "items": [{
+                                                    title: "Upload",
+                                                    key: "remainingDocsArray[].documentId",
+                                                    
+                                                    "condition": "model.pageConfig.documentUploadAllowed",
+                                                    type: "file",
+                                                    fileType: "application/pdf",
+                                                    category: "Loan",
+                                                    subCategory: "DOC1",
+                                                    "notitle": true,
+                                                    using: "scanner"
+
+                                                }, {
+                                                    title: "Upload",
+                                                    key: "remainingDocsArray[].documentId",
+                                                    "condition": "!model.pageConfig.documentUploadAllowed",
+                                                    readonly: true,
+                                                    type: "file",
+                                                    fileType: "application/pdf",
+                                                    category: "Loan",
+                                                    subCategory: "DOC1",
+                                                    "notitle": true,
+                                                    using: "scanner"
+
+                                                }]
+                                            }
+                                        ]
+                                    }]
+
+                                }]
+                            },
+                            // sec form
+                            {
+                                "type": "fieldset",
+                                "title": "ADD_LOAN_DOCUMENTS",
+                                "items": [{
+                                    "type": "array",
+                                    "key": "loanDocuments.newLoanDocuments",
+                                    "startEmpty": true,
+                                    "title": "ADD_DOCUMENTS",
+                                    "remove": null,
+                                    "notitle": true,
+                                    "condition": "!(!_.isUndefined(model.pageConfig.readonly) && model.pageConfig.readonly==false)",
+                                    "readonly": true,
+                                    "view": "fixed",
+                                    "items": [{
+                                        "type": "section",
+                                        "htmlClass": "row",
+                                        "items": [{
+                                                "type": "section",
+                                                "htmlClass": "col-sm-7",
+                                                "items": [{
+                                                    "key": "loanDocuments.newLoanDocuments[].document",
+                                                    "notitle": true,
+                                                    "titleExpr": "model.loanDocuments.newLoanDocuments[arrayIndex].document",
+                                                    "placeholder": "Name",
+                                                    "fieldHtmlClass": "text-bold",
+                                                }]
+                                            },
+                                            {
+                                                "type": "section",
+                                                "htmlClass": "col-sm-5",
+                                                "items": [{
+                                                    title: "Upload",
+                                                    "key": "loanDocuments.newLoanDocuments[].documentId",
+                                                    type: "file",
+                                                    fileType: "application/pdf",
+                                                    category: "Loan",
+                                                    subCategory: "DOC1",
+                                                    "notitle": true,
+                                                    using: "scanner"
+
+                                                }]
+                                            }
+                                        ]
+                                    }]
+
+                                }, {
+                                    "type": "array",
+                                    "key": "newLoanDocuments",
+                                    "startEmpty": true,
+                                    "title": "ADD_DOCUMENTS",
+                                    "remove": null,
+                                    "notitle": true,
+                                    "condition": "!_.isUndefined(model.pageConfig.readonly) && model.pageConfig.readonly==false",
+                                    "view": "fixed",
+                                    "items": [{
+                                        "type": "section",
+                                        "htmlClass": "row",
+                                        "condition": "model.newLoanDocuments[arrayIndex].readonly",
+                                        "readonly": true,
+                                        "items": [{
+                                                "type": "section",
+                                                "htmlClass": "col-sm-7",
+                                                "items": [{
+                                                    "key": "newLoanDocuments[].document",
+                                                    "notitle": true,
+                                                    "titleExpr": "model.newLoanDocuments[arrayIndex].document",
+                                                    "placeholder": "Name",
+                                                    "fieldHtmlClass": "text-bold",
+                                                }]
+                                            },
+                                            {
+                                                "type": "section",
+                                                "htmlClass": "col-sm-5",
+                                                "items": [{
+                                                    title: "Upload",
+                                                    "key": "newLoanDocuments[].documentId",
+                                                    type: "file",
+                                                    fileType: "application/pdf",
+                                                    category: "Loan",
+                                                    subCategory: "DOC1",
+                                                    "notitle": true,
+                                                    using: "scanner"
+
+                                                }]
+                                            }
+                                        ]
+                                    }, {
+                                        "type": "section",
+                                        "htmlClass": "row",
+                                        "condition": "!model.newLoanDocuments[arrayIndex].readonly",
+                                        "items": [{
+                                                "type": "section",
+                                                "htmlClass": "col-sm-7",
+                                                "items": [{
+                                                    "key": "newLoanDocuments[].document",
+                                                    "notitle": true,
+                                                    "titleExpr": "model.newLoanDocuments[arrayIndex].document",
+                                                    "placeholder": "Name",
+                                                    "fieldHtmlClass": "text-bold",
+                                                }]
+                                            },
+                                            {
+                                                "type": "section",
+                                                "htmlClass": "col-sm-5",
+                                                "items": [{
+                                                    title: "Upload",
+                                                    "key": "newLoanDocuments[].documentId",
+                                                    type: "file",
+                                                    fileType: "application/pdf",
+                                                    category: "Loan",
+                                                    subCategory: "DOC1",
+                                                    "notitle": true,
+                                                    using: "scanner"
+
+                                                }]
+                                            }
+                                        ]
+                                    } ]
+
+                                }]
+                            },
+                            {
+                                "type": "grid",
+                                "orientation": "horizontal",
+                                "items": [{
+                                        "type": "button",
+                                        "title": "Update",
+                                        "notitle": true,
+                                        "onClick": "actions.update(model, formCtrl, form, $event)"
+                                    },
+                                    {
+                                        "type": "button",
+                                        "title": "DOWNLOAD_ALL_FORMS",
+                                        "condition":"model.loanDocuments != null && model.loanDocuments.existingDocuments != null && model.loanDocuments.existingDocuments.length !=0",
+                                        "fieldHtmlClass": "pull-right",
+                                        "onClick": function (model, form, schemaForm, event) {
+                                            Utils.downloadFile(Misc.allFormsDownload({recordId:model.loanAccount.id}));
+                                           // Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/forms/AllFormsDownload.php?record_id=" + model.loanAccount.id);
+
+                                           // var fileUrl = IndividualLoan.getAllDocumentsUrl(model.loanAccount.id);
+                                            //Utils.downloadFile(fileUrl);
+                                        }
+                                    }
+                                ]
+                            },{
                         "title": "Loan Doument Download",
                         "key": "loanAccount.applicationFileId",
                         "condition": "model.loanAccount.loanType == 'JLG'",
@@ -1724,30 +2312,78 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     },{
                         "title": "Agreement File Download",
                         "key": "loanAccount.bcAccount.agreementFileId",
-                        "condition": "model.loanAccount.loanType == 'JLG'",
+                        "condition": "model.loanAccount.loanType == 'JLG' && model.loanAccount.bcAccount",
                         "type": "file",
                         "fileType": "*/*",
                         "category": "Loan",
                         "subCategory": "DOC1"
+                    },{
+                        "type": "fieldset",
+                        "title": "NOC_LETTER_DOWNLOAD",
+                        "condition": "model.cbsLoan.operationalStatus=='Closed' && model.pageConfig.showNocLetter == true ",
+                        "items": [{
+                            "type": "button",
+                            "title": "DOWNLOAD_NOC_FORM",
+                            "onClick": function(model,formCtrl, form){
+                                var requestParams = {
+                                    form_name: "loan_closure_letter",
+                                    record_id: model.loanAccount.id
+                                };
+                                url = irf.FORM_DOWNLOAD_URL + "?" + $httpParamSerializer(requestParams);
+                                Utils.downloadFile(url);
+                            }
+                        }]
                     }]
-                }, {
+                },
+                
+                {
+                    "type":"box",
+                    "title": "PAYER_DETAILS",
+                    "condition": "model.siteCode != 'IREPDhan'",
+                        "items": [
+                        {
+                            "key":"loanAccount.payeeName",
+                            "title": "PAYEE_NAME",
+                            "readonly": true
+                        },
+                        {
+                            "key": "loanAccount.payeeMobileNumber",
+                            "title": "PAYEE_MOBILE_NUMBER",
+                            "inputmode": "number",
+                            "numberType": "tel",
+                            "readonly": true
+                        },
+                        {
+                            "key": "loanAccount.payeeRelationToApplicant",
+                            "title": "PAYEE_RELATION",
+                            "type":"select",
+                            "enumCode": "payerRelation",
+                            "readonly": true
+                        }
+                    ]
+                },
+                //submit is hidden by default for irep now
+                /*{
                     "type": "actionbox",
-                    "condition": "!model.loanAccount.loanType == 'JLG'",
+                    "condition": "model.siteCode == 'IREPDhan'",
+                    "items": [{
+                        "type": "submit",
+                        "title":"SUBMIT"
+                    }]
+                },*/
+                 {
+                    "type": "actionbox",
+                    "condition": "model.loanAccount.loanType != 'JLG' && model.siteCode != 'KGFS'",
                     "items": [{
                         "type": "button",
-                        "title": "DOWNLOAD_ALL_DOCS",
-                        "fieldHtmlClass": "pull-right"
-                    },{
-                        "type": "button",
-                        "title": "REPAYMENT_SCHEDULE_REPORT",
-                        "fieldHtmlClass": "pull-right"
-                    }, {
-                        "type": "submit",
-                        "title": "SUBMIT"
-                    }]
-                },{
+                        "title": "BACK",
+                        "onClick": function(model,formCtrl, form){
+                            irfNavigator.goBack();
+                        }
+                    },]
+                }, {
                     "type": "actionbox",
-                    "condition": "model.loanAccount.loanType == 'JLG'",
+                    "condition": "model.siteCode=='KGFS'",
                     "items": [{
                         "type": "button",
                         "title": "REPAYMENT_SCHEDULE_REPORT",
@@ -1792,8 +2428,25 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             };
                             GroupProcess.getLoanPrint(repaymentInfo, opts);
                         }
+                    }, {
+                        "type": "button",
+                        "title": "BACK",
+                        "onClick": function(model,formCtrl, form){
+                            irfNavigator.goBack();
+                        }
                     }]
-                }
+                },
+                {
+                    "type": "actionbox",
+                    "condition": "model.loanAccount.loanType == 'JLG' && model.siteCode != 'KGFS'",
+                    "items": [{
+                        "type": "button",
+                        "title": "BACK",
+                        "onClick": function(model,formCtrl, form){
+                            irfNavigator.goBack();
+                        }
+                    }]
+                },
             ],
             schema: function() {
                 return SchemaResource.getLoanAccountSchema().$promise;
@@ -1809,23 +2462,97 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     }
                     return deferred.promise;
                 },
+                getStageTitle: function(model, arrayIndex) {
+                    if(messageHistory.length - 1 != arrayIndex && model.messageHistory[arrayIndex].preStage != null && model.messageHistory[arrayIndex].postStage != null){
+                        var preStage = model.messageHistory[arrayIndex].preStage;
+                        var postStage = model.messageHistory[arrayIndex].postStage;
+                        preStage =  translateFilter(preStage)  ;
+                        postStage = translateFilter(postStage) ;
+                        return preStage == postStage ? postStage : preStage + ' ⤑ ' + postStage; // &DDotrahd;
+                    }
+                    
+                },  
+                update: function(model, formCtrl, form, $event){
+                    /* 1)This update is used to update the Existing Document section ,
+                    2) separate pageConfig is required to enable this button as it is role specific
+                    */
+                    $log.info(model);
+                    PageHelper.clearErrors();
+                    var reqData = {
+                        loanAccount : null,
+                        loanProcessAction : "SAVE"
+                    };
+                    
+                    //updating existing doc
+                    reqData.loanAccount = _.cloneDeep(model.loanAccount);
+                    reqData.loanAccount.loanDocuments=[];
+                    _.forEach(model.remainingDocsArray, function(obj,i){
+                        if(obj.documentId){
+                            reqData.loanAccount.loanDocuments.push(obj);
+                        }
+                    });
+                    _.forEach(model.allExistingDocs, function(obj,i){
+                        if(obj.documentId){
+                            reqData.loanAccount.loanDocuments.push(obj);
+                        }
+                    })
+                    
+                    // updating new loan Account
+                    if (model.newLoanDocuments) {
+                        for (var i = 0; i < model.newLoanDocuments.length; i++) {
+                            model.newLoanDocuments[i].loanId = reqData.loanAccount.id;
+                            model.newLoanDocuments[i].accountNumber = reqData.loanAccount.accountNumber;
+                            model.newLoanDocuments[i].documentStatus = "APPROVED";
+
+                            reqData.loanAccount.loanDocuments.push(model.newLoanDocuments[i]);
+                        }
+                    }
+                    PageHelper.showLoader();
+                    IndividualLoan.update(reqData).$promise.then(function(response) {
+                        PageHelper.hideLoader();
+                        $log.info(response);
+                        PageHelper.showProgress("Loan_Document_Upload", "Update Successful", 5000)
+                        $state.reload();
+                    }, function(errorResponse) {
+                        PageHelper.showErrors(errorResponse);
+                        PageHelper.showProgress("Loan_Document_Upload", "Oops. An Error Occurred", 5000);
+                        PageHelper.hideLoader();
+                    }).finally(function() {
+                        PageHelper.hideLoader();
+                    });
+
+                },
                 submit: function(model, form, formName) {
                     $log.info(model);
                     PageHelper.clearErrors();
+                    // if(model.loanAccount.guarantors){
+                    //    delete model.loanAccount.guarantors;
+                    // }
                     model.reqData.loanAccount = _.cloneDeep(model.loanAccount);
-                    //alert(model.reqData.loanAccount.loanDocuments.length);
-                    model.reqData.loanAccount.loanDocuments = model.reqData.loanAccount.loanDocuments || [];
                     model.reqData.loanProcessAction = "PROCEED";
                     model.reqData.stage = null;
-                    if (model.loanDocuments.newLoanDocuments) {
-                        for (var i = 0; i < model.loanDocuments.newLoanDocuments.length; i++) {
-                            model.loanDocuments.newLoanDocuments[i].loanId = model.loanAccount.id;
-                            model.loanDocuments.newLoanDocuments[i].accountNumber = model.loanAccount.accountNumber;
-                            model.loanDocuments.newLoanDocuments[i].documentStatus = "APPROVED";
-
-                            model.reqData.loanAccount.loanDocuments.push(model.loanDocuments.newLoanDocuments[i]);
+                    //alert(model.reqData.loanAccount.loanDocuments.length);
+                    
+                    model.reqData.loanAccount.loanDocuments=[];
+                    _.forEach(model.remainingDocsArray, function(obj,i){
+                        if(obj.documentId){
+                            model.reqData.loanAccount.loanDocuments.push(obj);
                         }
+                    });
+                    _.forEach(model.allExistingDocs, function(obj,i){
+                        if(obj.documentId){
+                            model.reqData.loanAccount.loanDocuments.push(obj);
+                        }
+                    })
+                   
+                    if (model.newLoanDocuments) {
+                        for (var i = 0; i < model.newLoanDocuments.length; i++) {
+                            model.newLoanDocuments[i].loanId = model.loanAccount.id;
+                            model.newLoanDocuments[i].accountNumber = model.loanAccount.accountNumber;
+                            model.newLoanDocuments[i].documentStatus = "APPROVED";
 
+                            model.reqData.loanAccount.loanDocuments.push(model.newLoanDocuments[i]);
+                        }
                     }
                     PageHelper.showLoader();
                     IndividualLoan.update(model.reqData).$promise.then(function(response) {
@@ -1839,7 +2566,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         PageHelper.hideLoader();
                     }).finally(function() {
                         PageHelper.hideLoader();
-                    });;
+                    });
 
                 }
             }

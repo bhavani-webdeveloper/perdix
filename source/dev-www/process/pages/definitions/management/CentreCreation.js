@@ -1,9 +1,9 @@
 define({
     pageUID: "management.CentreCreation",
     pageType: "Engine",
-    dependencies: ["$log","formHelper","PageHelper","CentreCreationResource","$state","SessionStore","Utils","irfNavigator","$stateParams", "RolesPages", "$filter", "Enrollment", "Queries", "$q"],
+    dependencies: ["$log","formHelper","PageHelper","CentreCreationResource","$state","SessionStore","Utils","irfNavigator","$stateParams", "RolesPages", "$filter", "Enrollment", "Queries", "$q","PagesDefinition"],
     $pageFn: 
-    function($log, formHelper, PageHelper, CentreCreationResource,$state, SessionStore, Utils,irfNavigator,$stateParams, RolesPages, $filter, Enrollment, Queries, $q){
+    function($log, formHelper, PageHelper, CentreCreationResource,$state, SessionStore, Utils,irfNavigator,$stateParams, RolesPages, $filter, Enrollment, Queries, $q,PagesDefinition){
     //var branch = SessionStore.getBranch();
     return {
                 "type": "schema-form",
@@ -13,10 +13,19 @@ define({
                     model.editMode = true;
                     model.centre=model.centre||{};
                     model.centre.branchId = SessionStore.getBranchId();
-                    model.centre.centreGpsCaptureDate = model.centre.centreGpsCaptureDate || Utils.getCurrentDate();
+                    model.centre.status= model.centre.status||'ACTIVE';
+                    model.centre.centreGpsCaptureDate = model.centre.centreGpsCaptureDate || SessionStore.getCBSDate();
+                    PagesDefinition.getPageConfig("Page/Engine/management.CentreCreation")
+                        .then(function(data){
+                            model.pageConfig = data; 
+                            
+                            
+                            /* Handle Allowed Branches */
+                            
+                        });
                     if ($stateParams.pageId) {
                         model.editMode = false;
-                        var id = $stateParams.pageId;
+                        var id = $stateParams.pageId;                        
                         PageHelper.showLoader();                        
                         CentreCreationResource.centreGetByID({
                             centreid: id
@@ -25,6 +34,7 @@ define({
                             model.centre.monthlyMeetingTime = moment(model.centre.monthlyMeetingTime).toDate();
                             model.centre.weeklyMeetingTime = moment(model.centre.weeklyMeetingTime).toDate();
                             model.centre.fortnightlyMeetingTime= moment(model.centre.fortnightlyMeetingTime).toDate();
+                            model.centre.centreGpsCaptureDate = model.centre.centreGpsCaptureDate || SessionStore.getCBSDate();
                             
                             var addressArr = model.centre.centreAddress.split("~#");
                             if(addressArr && addressArr.length > 0) {
@@ -53,18 +63,37 @@ define({
                                     {
                                         key: "centre.branchId",
                                         type: "select",
-                                       // "readonly": true,
+                                        readonly: true,
+                                        title: "BRANCH_NAME",
+                                        enumCode: "userbranches",
+                                        condition:"model.editMode && model.pageConfig.AllowedBranches=='ACTIVE_BRANCH'"
+
+                                    },
+                                    {
+                                        key: "centre.branchId",
+                                        type: "select",
+                                        //"readonly": true,
                                         title: "BRANCH_NAME",
                                         enumCode: "branch_id",
-                                        condition:"model.editMode"
+                                        condition:"model.editMode && model.pageConfig.AllowedBranches!='ACTIVE_BRANCH'"
+                                        //condition:"model.editMode && (model.pageConfig.AllowedBranches=='USER_BRANCHES' || model.pageConfig.AllowedBranches=='ALL_BRANCHES')"
 
+                                    },
+                                    {
+                                        key: "centre.branchId",
+                                        type: "select",
+                                        readonly: true,
+                                        title: "BRANCH_NAME",
+                                        enumCode: "userbranches",
+                                        condition: "!model.editMode && model.pageConfig.AllowedBranches=='ACTIVE_BRANCH'"                                        
                                     },
                                     {
                                         key: "centre.branchId",
                                         type: "select",
                                         title: "BRANCH_NAME",
                                         enumCode: "branch_id",
-                                        condition: "!model.editMode"                                        
+                                        condition:"!model.editMode && model.pageConfig.AllowedBranches!='ACTIVE_BRANCH'"
+                                        //condition: "!model.editMode && (model.pageConfig.AllowedBranches=='USER_BRANCHES' || model.pageConfig.AllowedBranches=='ALL_BRANCHES')"                                        
                                     },
                                     {
                                         key: "centre.centreName",
@@ -156,8 +185,9 @@ define({
                                     },
                                     {
                                         key: "centre.status",
+                                        "required":true,
                                         type: "radios",
-                                        condition: "model.centre.status = 'ACTIVE'",
+                                        //condition: "model.centre.status = 'ACTIVE'",
                                         titleMap:{
                                         "ACTIVE":"ACTIVE",
                                         "INACTIVE":"INACTIVE"
@@ -172,15 +202,14 @@ define({
                                     },
                                     {
                                         key: "centre.centreGpsCaptureDate",
+                                        "required":true,
                                         type: "date",
                                         onChange : function (modelValue, form, model) {
-                                        PageHelper.clearErrors();
-                                        //model.centre.date_creation = moment(model.centre.centreGpsCaptureDate).format("YYYY-MM-DD");                                        
-                                        var daydiff = moment().diff(model.centre.centreGpsCaptureDate, 'days');
-                                        if(daydiff < 0) {  
-                                            PageHelper.clearErrors();                                  
-                                            PageHelper.setError({message: "Centre Creation Date can not be future date"});                                    
-                                        }
+                                            PageHelper.clearErrors();                                      
+                                            if(model.centre.centreGpsCaptureDate > SessionStore.getCBSDate()) {  
+                                                PageHelper.clearErrors();                                  
+                                                PageHelper.setError({message: "Centre Creation Date can not be future date"});                                    
+                                            }
                                         } 
                                     },
                                     {
@@ -293,6 +322,7 @@ define({
                                     },
                                     {
                                         key: "centre.meetingPreference",
+                                        "required":true,
                                         title :"MEETING_FREQUENCY",
                                         type: "select",
                                         titleMap: {
@@ -416,8 +446,7 @@ define({
                                         condition : "model.centre.meetingPreference === 'FORTNIGHTLY'",
                                         key: "centre.fortnightlyMeetingTime",
                                         type: "time"
-                                    }
-                                    
+                                    } 
                                  ]
                         },
                         {
@@ -436,6 +465,18 @@ define({
                         PageHelper.showLoader();
                         PageHelper.clearErrors();
                         PageHelper.showProgress('centreCreationSubmitRequest', 'Processing');
+                        if (model.centre.centreGpsCaptureDate) {
+                            if (model.centre.centreGpsCaptureDate > SessionStore.getCBSDate()) {
+                                PageHelper.clearErrors();
+                                PageHelper.hideLoader();
+                                PageHelper.showProgress('centreCreationSubmitRequest', 'validation-error');
+                                PageHelper.setError({
+                                    message: "Centre Creation Date can not be future date"
+                                });
+                                return;
+                            }
+                        }
+                        
                         var tempModelData = _.clone(model.centre);
                         //delete tempModelData['monthlyMeeting'];
                         tempModelData.centreAddress = [tempModelData.centreAddress, tempModelData.locality, tempModelData.villageName, tempModelData.district, tempModelData.state, tempModelData.pincode].join("~#");

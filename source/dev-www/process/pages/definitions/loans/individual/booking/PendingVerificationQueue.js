@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.PendingVerificationQueue"),
-["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan", "entityManager", "LoanBookingCommons",
-function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan, entityManager, LoanBookingCommons){
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan", "entityManager", "LoanBookingCommons", "irfNavigator","$filter","irfProgressMessage","Locking",
+function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan, entityManager, LoanBookingCommons, irfNavigator, $filter,irfProgressMessage,Locking){
     return {
         "type": "search-list",
         "title": "LOAN_PENDING_VERIFICATION_QUEUE",
@@ -9,6 +9,8 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
             $log.info("search-list sample got initialized");
         
             model.stage = 'DocumentVerification';
+            model.branch = SessionStore.getCurrentBranch().branchId;
+            siteCode = SessionStore.getGlobalSetting('siteCode');
             console.log(model);
         },
 
@@ -30,45 +32,61 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
                 "title": "VIEW_LOANS",
                 "required":["branch"],
                 "properties": {
-                    "branchName": {
-                        "title": "BRANCH_NAME",
+                    'branch': {
+                        'title': "BRANCH",
                         "type": ["string", "null"],
-                        "enumCode": "branch",
                         "x-schema-form": {
-                            "type": "select"
+                            "type": "userbranch",
+                            "screenFilter": true
                         }
-
                     },
-                    "centreCode": {
-                        "title": "CENTER_NAME",
-                        "type": ["number", "null"],
-                        "enumCode": "centre",
+                    "centre": {
+                        "title": "CENTRE",
+                        "type": ["integer", "null"],
                         "x-schema-form": {
                             "type": "select",
-                            "parentEnumCode":"branch"
+                            "enumCode": "centre",
+                            "parentEnumCode": "branch",
+                            "parentValueExpr": "model.branch",
+                            "screenFilter": true
+                        }
+                    },
+                    "partner_code": {
+                        "title": "PARTNER_CODE",
+                        "type":["string","null"],
+                        "x-schema-form": {
+                            "type":"select",
+                            "enumCode": "partner"
                         }
                     },
                     "loan_product": {
                         "title": "Loan Product",
                         "type": "string",
-                        "default": "1",
+                        
                         "x-schema-form": {
-                            "type": "select",
-                            /*"titleMap": {
-                                "1": "Asset Purchase- Secured",
-                                "2": "Working Capital - Secured",
-                                "3": "Working Capital -Unsecured",
-                                "4": "Machine Refinance- Secured",
-                                "5": "Business Development- Secured",
-                                "6": "Business Development- Unsecured",
-                                "7": "LOC- RFD-Secured",
-                                "8": "LOC- RFD-Unsecured",
-                                "9": "LOC RFID- Secured",
-                                "10": "LOC- RFID- Unsecured"
-                            }*/
-                            "enumCode": "loan_product"
+                            "type": "lov",
+                            "lovonly": true,
+                            search: function (inputModel, form, model, context) {
+                                var loanProduct = formHelper.enum('loan_product').data;
+                                var products = $filter('filter')(loanProduct, {parentCode: model.partner_code ? model.partner_code : undefined}, true);
+
+                                return $q.resolve({
+                                    headers: {
+                                        "x-total-count": products.length
+                                    },
+                                    body: products
+                                });
+                            },
+                            onSelect: function (valueObj, model, context) {
+                                model.loan_product = valueObj.field1;
+                            },
+                            getListDisplayItem: function (item, index) {
+                                return [
+                                    item.name
+                                ];
+                            },
                         }
-                    }
+                    },
                     // "sanction_date": {
                     //     "title": "SANCTION_DATE",
                     //     "type": "string",
@@ -82,13 +100,11 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
                 return formHelper;
             },
             getResultsPromise: function(searchOptions, pageOpts){
-                if (_.hasIn(searchOptions, 'centreCode')){
-                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
-                }
+                
                 return IndividualLoan.search({
                     'stage': 'DocumentVerification',
-                    'branchName': searchOptions.branchName,
-                    'centreCode': searchOptions.centreCodeForSearch,
+                    'branchId':searchOptions.branch,
+                    'centreCode': searchOptions.centre,
                     'customerId': searchOptions.customerId,
                     'page': pageOpts.pageNo,
                     'per_page': pageOpts.itemsPerPage,
@@ -125,8 +141,42 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
                             name: "VERIFY_DOCUMENT",
                             desc: "",
                             fn: function(item, index){
-                                entityManager.setModel('loans.individual.booking.DocumentVerification', {_queue:item});
-                                $state.go('Page.Engine', {pageName: 'loans.individual.booking.DocumentVerification', pageId: item.loanId});
+                                if (siteCode == 'pahal') {
+                                    entityManager.setModel('pahal.loans.individual.booking.DocumentVerification', {_queue:item});
+                                    irfNavigator.go({
+                                        state: 'Page.Engine', 
+                                        pageName: 'pahal.loans.individual.booking.DocumentVerification', 
+                                        pageId: item.loanId,
+                                        pageData: item
+                                    },
+                                    {
+                                        state: 'Page.Engine',
+                                        pageName: "loans.individual.booking.PendingVerificationQueue"
+                                    });   
+                                } else if (siteCode == 'witfin') {
+                                    entityManager.setModel('witfin.loans.individual.booking.DocumentVerification', {_queue:item});
+                                    irfNavigator.go({
+                                        state: 'Page.Engine', 
+                                        pageName: 'witfin.loans.individual.booking.DocumentVerification', 
+                                        pageId: item.loanId,
+                                        pageData: item
+                                    },
+                                    {
+                                        state: 'Page.Engine',
+                                        pageName: "loans.individual.booking.PendingVerificationQueue"
+                                    });   
+                                } else {
+                                    entityManager.setModel('loans.individual.booking.DocumentVerification', {_queue:item});
+                                    irfNavigator.go({
+                                        state: 'Page.Engine', 
+                                        pageName: 'loans.individual.booking.DocumentVerification', 
+                                        pageId: item.loanId
+                                    },
+                                    {
+                                        state: 'Page.Engine',
+                                        pageName: "loans.individual.booking.PendingVerificationQueue"
+                                    }); 
+                                }
                             },
                             isApplicable: function(item, index){
                                 return true;

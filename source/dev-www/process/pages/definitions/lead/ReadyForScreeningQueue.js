@@ -30,7 +30,7 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 */
 		return {
 			"type": "search-list",
-			"title": siteCode == 'sambandh' ? "READY_FOR_ENROLLMENT" :"READY_FOR_SCREENING",
+			"title": siteCode == 'sambandh' || siteCode == 'saija' ? "READY_FOR_ENROLLMENT" :"READY_FOR_SCREENING",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branch = branch;
@@ -222,7 +222,25 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 								});
 							},
 							isApplicable: function(item, index) {
-								return ((siteCode !== 'sambandh')&&(siteCode !== 'KGFS')) ? true : false;
+								return siteCode !== 'sambandh' && siteCode !== 'saija' && siteCode !== 'IREPDhan' && siteCode !== 'KGFS' ? true : false;
+							}
+						},{
+							name: "Do KYC and CB",
+							desc: "",
+							icon: "fa fa-pencil-square-o",
+							fn: function(item, index) {
+								entityManager.setModel('lead.LeadGeneration', {
+									_request: item
+								});
+								$state.go("Page.Bundle", {
+									pageName: "irep.loans.individual.origination.KycCBInput",
+									pageData: {
+										lead_id: item.id
+									}
+								});
+							},
+							isApplicable: function(item, index) {
+								return siteCode == 'IREPDhan' ? true : false;
 							}
 						},
 						{
@@ -233,7 +251,14 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 								entityManager.setModel('lead.LeadGeneration', {
 									_request: item
 								});
-								if (siteCode == 'sambandh') {
+								$state.go("Page.Engine", {
+									pageName: "customer.IndividualEnrollment3",
+									pageData: {
+										lead_id: item.id
+									}
+								});
+
+								if (siteCode == 'sambandh' || siteCode == 'saija') {
 									$state.go("Page.Engine", {
 										pageName: "customer.IndividualEnrollment3",
 										pageData: {
@@ -247,10 +272,10 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 											lead_id: item.id
 										}
 									});
-								}	
+								}
 							},
 							isApplicable: function(item, index) {
-								return ((siteCode == 'sambandh')||(siteCode =='KGFS'))? true : false;
+								return siteCode == 'sambandh' || siteCode == 'saija' || siteCode =='KGFS'? true : false;
 							}
 						},
 						{
@@ -267,6 +292,7 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 								});
 							},
 							isApplicable: function(item, index) {
+
 								return true;
 							}
 						}];

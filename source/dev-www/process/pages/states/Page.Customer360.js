@@ -1,7 +1,8 @@
+
 irf.pages.controller("Customer360Ctrl",
-["$log", "$scope", "$stateParams","Queries", "$q", "formHelper", "SessionStore", "PagesDefinition", "Enrollment", 
+["$log", "$scope", "$stateParams","Queries", "$q", "formHelper", "SessionStore", "PagesDefinition", "Enrollment",
 "entityManager", "Utils", "PageHelper", "$filter", "$httpParamSerializer", "AuthTokenHelper",
-function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, PagesDefinition, Enrollment, 
+function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, PagesDefinition, Enrollment,
 	entityManager, Utils, PageHelper, $filter, $httpParamSerializer, AuthTokenHelper){
 	$log.info("Customer360 loaded");
 
@@ -9,17 +10,39 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 	$scope.role = SessionStore.getRole();
 	$scope.customerId = $stateParams.pageId;
 	var siteCode = SessionStore.getGlobalSetting('siteCode');
-	if ($stateParams.pageData) {
-		$scope.pageData=$stateParams.pageData;
-	}
 	$log.info($stateParams);
 	//$scope.siteCode=$stateParams.pageData;
 	$scope.formHelper = formHelper;
 
+	var getCustomerProfilePageUrl = function() {
+		if (siteCode == 'sambandh') {
+			return "Page/Engine/sambandh.customer.IndividualEnrollment3";
+		}  else if (siteCode == 'saija') {
+			return "Page/Engine/customer.IndividualEnrollmentStage2";
+		} else if(siteCode == 'witfin') {
+			return "Page/Engine/witfin.customer360.CustomerProfile";
+		} else if(siteCode == 'pahal') {
+			return "Page/Engine/pahal.customer360.CustomerProfile";
+		}else {
+			return "Page/Engine/customer360.CustomerProfile";
+		}
+
+	}
+
+	var getBusinessProfilePageUrl = function() {
+		if(siteCode == 'witfin') {
+			return "Page/Engine/witfin.customer360.BusinessProfile";
+		}else if(siteCode == 'pahal') {
+			return "Page/Engine/pahal.customer360.BusinessProfile";
+		} else {
+			return "Page/Engine/customer360.BusinessProfile";
+		}
+	}
+
 	var customerDefinition = {
 		"title": "CUSTOMER_360",
 		"items": [
-			(siteCode == 'sambandh') ? "Page/Engine/customer.IndividualEnrollment3" : "Page/Engine/customer360.CustomerProfile",
+			getCustomerProfilePageUrl(),
 			{
 				"title": "LOANS",
 				"iconClass": "fa fa-key",
@@ -33,9 +56,23 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 						]
 					},
 					"Page/Engine/customer360.loans.View",
-					"Page/Engine/customer360.loans.Service"	
+					"Page/Engine/customer360.loans.Service"
 				]
 			},
+			{
+                "title": "CREDIT_BUREAU",
+                "iconClass": "fa fa-user",
+                "items": [
+                    {
+                        "title": "CREDIT_BUREAU",
+                        "iconClass": "fa fa-user",
+                        "items": [
+                            ]
+                    },
+                    "Page/Engine/customer360.Idencheck",
+					"Page/Engine/customer360.CreditBureauResults"
+                ]
+            } ,
 			{
 				"title": "REQUEST_RECAPTURE",
 				"shortTitle": "REQUEST",
@@ -46,31 +83,21 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 					"Page/Engine/customer360.RequestRecaptureGPS"
 				]
 			},
-			"Page/CustomerHistory",
-			"Page/Engine/customer360.Recapture"
+			"Page/Engine/customer360.Recapture",
+			"Page/Engine/customer360.CustomerHistorySummary",
+			"Page/Engine/customer360.CustomerDeathMarking",
+			"Page/Engine/customer360.loans.CustomerGroupsView",
+			"Page/Engine/customer360.ViewInsurance"
 		]
 	};
+	//"Page/CustomerHistory",
 
 	var enrollmentDefinition = {
 		"title": "CUSTOMER_360",
 		"items": [
 			"Page/Engine/customer360.EnrollmentProfile",
-			{
-				"title": "LOANS",
-				"iconClass": "fa fa-key",
-				"items": [
-					{
-						"title": "NEW_LOAN",
-						"iconClass": "fa fa-key",
-						"items": [
-							"Page/Engine/Loans.NewJewel",
-							"Page/Engine/Loans.NewMEL"
-						]
-					},
-					"Page/Engine/customer360.loans.View",
-					"Page/Engine/customer360.loans.Service"	
-				]
-			},
+			"Page/Engine/customer360.loans.View",
+			"Page/Engine/customer360.loans.Service",
 			{
 				"title": "REQUEST_RECAPTURE",
 				"shortTitle": "REQUEST",
@@ -81,17 +108,21 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 					"Page/Engine/customer360.RequestRecaptureGPS"
 				]
 			},
-			"Page/CustomerHistory",
+			"Page/Adhoc/customer360.FinancialWellbeingReport",
+			"Page/Engine/customer360.CustomerHistorySummary",
 			"Page/Engine/customer360.Recapture",
 			"Page/Engine/customer360.CustomerSummaryView",
-			"Page/Engine/customer360.loans.CustomerGroupsView"
+			"Page/Engine/customer360.CustomerDeathMarking",
+			"Page/Engine/customer360.loans.CustomerGroupsView",
+			"Page/Engine/customer360.ViewInsurance"
+
 		]
 	};
 
 	var enterpriseDefinition = {
 		"title": "BUSINESS_360",
 		"items": [
-			"Page/Engine/customer360.BusinessProfile",
+			getBusinessProfilePageUrl(),
 			{
 				"title": "LOANS",
 				"iconClass": "fa fa-key",
@@ -120,7 +151,6 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 		"type": "box",
 		"title": "PORTFOLIO",
 		"colClass": "col-sm-12",
-		"readonly": true,
 		"items": [{
 			"type": "section",
 			"htmlClass": "row",
@@ -143,26 +173,69 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 				"type": "section",
 				"htmlClass": "col-sm-6",
 				"items": [{
+					"readonly": true,
 					"key": "customer.nameWithAge",
 					"title": "CUSTOMER_NAME"
 				},{
+					"readonly": true,
 					"key": "customer.dateOfBirth",
 					"title": "T_DATEOFBIRTH",
 					"type": "date"
 				},{
+					"readonly": true,
 					"key": "customer.mobilePhone",
 					"title": "MOBILE_PHONE"
 				},{
+					"readonly": true,
 					"key": "customer.identityProofNo",
 					"titleExpr": "model.customer.identityProof | translate"
 				},{
+					"readonly": true,
 					"key": "customer.idAndBcCustId",
 					"title": "Id & Legacy Cust Id",
 					"titleExpr": "('ID'|translate) + ' & ' + ('BC_CUST_ID'|translate)"
 				},{
+					"readonly": true,
 					"key": "customer.urnNo",
 					"title": "URN_NO"
-				}]
+				}, {
+					"key": "customerBlockedStatusHtml",
+					"condition":"model.pageConfig.isBlockAccess",
+					"type": "html",
+					"title": "STATUS"
+				},{
+					"key":"customer.blockingRemarks",
+					"condition":"model.customer.blocked && model.pageConfig.isBlockAccess && model.additions.blockStatusChange",
+					"type": "string",
+					"required":true,
+					'title': "REASON_FOR_BLOCKING",
+					// "titleExpr": "REASON_FOR_+(model.customer.blocked ? 'BLOCK':'UNBLOCK'",
+				},
+				{
+					"key":"customer.blockingRemarks",
+					"condition":"!model.customer.blocked && model.pageConfig.isBlockAccess && model.additions.blockStatusChange",
+					"type": "string",
+					"required":true,
+					'title': "REASON_FOR_UNBLOCKING",
+					// "titleExpr": "REASON_FOR_+(model.customer.blocked ? 'BLOCK':'UNBLOCK'",
+				},
+				{
+					"key":"customer.blockingRemarks",
+					"condition":"model.customer.blocked && model.pageConfig.isBlockAccess && !model.additions.blockStatusChange",
+					"type": "string",
+					// "required":true,
+					"readonly":true,
+					'title': "REASON_FOR_BLOCKING",
+					// "titleExpr": "REASON_FOR_+(model.customer.blocked ? 'BLOCK':'UNBLOCK'",
+				},
+				{
+					"type":"button",
+					condition:"model.additions.blockStatusChange",
+					"title":"SUBMIT",
+					onClick:"actions.modifyBlockedStatus(model,false)"
+				}
+				
+			]
 			},{
 				"type": "section",
 				"htmlClass": "col-sm-2 hidden-xs",
@@ -175,7 +248,6 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 		"type": "box",
 		"title": "PORTFOLIO",
 		"colClass": "col-sm-12",
-		"readonly": true,
 		"items": [{
 			"type": "section",
 			"htmlClass": "row",
@@ -198,22 +270,63 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 				"type": "section",
 				"htmlClass": "col-sm-8",
 				"items": [{
+					"readonly":true,
 					"key": "customer.firstName",
 					"title": "ENTITY_NAME"
 				},{
+					"readonly":true,
 					"key": "customer.enterprise.companyOperatingSince",
 					"title": "OPERATING_SINCE",
 					"type": "date"
 				},{
+					"readonly":true,
 					"key": "customer.latitude",
 					"title": "BUSINESS_LOCATION",
 					"type": "geotag",
 					"latitude": "customer.latitude",
 					"longitude": "customer.longitude"
 				},{
+					"readonly":true,
 					"key": "customer.urnNo",
 					"title": "URN_NO"
-				}]
+				}, {
+					"key": "customerBlockedStatusHtml",
+					"condition":"model.pageConfig.isBlockAccess",
+					"type": "html",
+					"title": "STATUS"
+				},{
+					"key":"customer.blockingRemarks",
+					"condition":"model.customer.blocked && model.pageConfig.isBlockAccess && model.additions.blockStatusChange",
+					"type": "string",
+					"required":true,
+					'title': "REASON_FOR_BLOCKING",
+					// "titleExpr": "REASON_FOR_+(model.customer.blocked ? 'BLOCK':'UNBLOCK'",
+				},
+				{
+					"key":"customer.blockingRemarks",
+					"condition":"!model.customer.blocked && model.pageConfig.isBlockAccess && model.additions.blockStatusChange",
+					"type": "string",
+					"required":true,
+					'title': "REASON_FOR_UNBLOCKING",
+					// "titleExpr": "REASON_FOR_+(model.customer.blocked ? 'BLOCK':'UNBLOCK'",
+				},
+				{
+					"key":"customer.blockingRemarks",
+					"condition":"model.customer.blocked && model.pageConfig.isBlockAccess && !model.additions.blockStatusChange",
+					"type": "string",
+					// "required":true,
+					"readonly":true,
+					'title': "REASON_FOR_BLOCKING",
+					// "titleExpr": "REASON_FOR_+(model.customer.blocked ? 'BLOCK':'UNBLOCK'",
+				},
+				{
+					"type":"button",
+					condition:"model.additions.blockStatusChange",
+					"title":"SUBMIT",
+					onClick:"actions.modifyBlockedStatus(model,false)"
+				}
+			
+			]
 			},{
 				"type": "section",
 				"htmlClass": "col-sm-2 hidden-xs",
@@ -314,12 +427,16 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 
 	$scope.initialize = function(data) {
 		$log.info(data);
-		$scope.model = {customer: data};
+		$scope.model = {
+			customer: data,
+			actions: $scope.actions,
+			customerBlockedStatusHtml: '{{(model.customer.blocked?"BLOCKED":"ACTIVE")|translate}} (<a href="" ng-click="model.actions.modifyBlockedStatus(model,true)">{{(model.customer.blocked?"UNBLOCK":"BLOCK")|translate}}</a>)'
+		};
 		$scope.introFormName = "introForm";
 		$scope.pageTitle = 'CUSTOMER_360';
-		
+		$scope.model.pageConfig = $scope.pageConfig;
 		if (data.customerType === 'Enterprise') {
-			$scope.introForm = enterprisePortfolioForm;
+			$scope.introForm = enterprisePortfolioForm
 			//$scope.pageTitle = 'BUSINESS_360';
 		} else {
 			$scope.introForm = customerPortfolioForm;
@@ -356,11 +473,25 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 				return $q.resolve(menu);
 			};
 		}
-		
+
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer.IndividualEnrollmentStage2']) {
+			$scope.dashboardDefinition.$menuMap['Page/Engine/customer.IndividualEnrollmentStage2'].onClick = function(event, menu) {
+				menu.stateParams.pageId = $scope.customerId;
+				return $q.resolve(menu);
+			};
+		}
+
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/sambandh.customer.IndividualEnrollment3']) {
+			$scope.dashboardDefinition.$menuMap['Page/Engine/sambandh.customer.IndividualEnrollment3'].onClick = function(event, menu) {
+				menu.stateParams.pageId = $scope.customerId;
+				return $q.resolve(menu);
+			};
+		}
+
 		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.EnrollmentProfile'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.EnrollmentProfile'].onClick = function(event, menu) {
 			menu.stateParams.pageId = $scope.customerId;
-			menu.stateParams.pageData = $scope.pageData || {};
+			menu.stateParams.pageData = menu.stateParams.pageData || {};
 			menu.stateParams.pageData.enabletrue = !!$scope.pageConfig.readonly;
 			entityManager.setModel(menu.stateParams.pageName, $scope.model);
 			return $q.resolve(menu);
@@ -368,6 +499,34 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 
 		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.BusinessProfile'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.BusinessProfile'].onClick = function(event, menu) {
+			menu.stateParams.pageId = $scope.customerId;
+			entityManager.setModel(menu.stateParams.pageName, $scope.model);
+			return $q.resolve(menu);
+		};
+
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/witfin.customer360.BusinessProfile'])
+		$scope.dashboardDefinition.$menuMap['Page/Engine/witfin.customer360.BusinessProfile'].onClick = function(event, menu) {
+			menu.stateParams.pageId = $scope.customerId;
+			entityManager.setModel(menu.stateParams.pageName, $scope.model);
+			return $q.resolve(menu);
+		};
+
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/witfin.customer360.CustomerProfile'])
+		$scope.dashboardDefinition.$menuMap['Page/Engine/witfin.customer360.CustomerProfile'].onClick = function(event, menu) {
+			menu.stateParams.pageId = $scope.customerId;
+			entityManager.setModel(menu.stateParams.pageName, $scope.model);
+			return $q.resolve(menu);
+		};
+
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/pahal.customer360.BusinessProfile'])
+		$scope.dashboardDefinition.$menuMap['Page/Engine/pahal.customer360.BusinessProfile'].onClick = function(event, menu) {
+			menu.stateParams.pageId = $scope.customerId;
+			entityManager.setModel(menu.stateParams.pageName, $scope.model);
+			return $q.resolve(menu);
+		};
+
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/pahal.customer360.CustomerProfile'])
+		$scope.dashboardDefinition.$menuMap['Page/Engine/pahal.customer360.CustomerProfile'].onClick = function(event, menu) {
 			menu.stateParams.pageId = $scope.customerId;
 			entityManager.setModel(menu.stateParams.pageName, $scope.model);
 			return $q.resolve(menu);
@@ -392,8 +551,40 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			return $q.resolve(menu);
 		};
 
+		if ($scope.dashboardDefinition.$menuMap['Page/Adhoc/customer360.FinancialWellbeingReport'])
+		$scope.dashboardDefinition.$menuMap['Page/Adhoc/customer360.FinancialWellbeingReport'].onClick = function(event, menu) {
+			menu.stateParams.pageId = $scope.customerId;
+			return $q.resolve(menu);
+		};
+
+
 		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerSummaryView'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerSummaryView'].onClick = function(event, menu) {
+			menu.stateParams.pageId = $scope.customerId;
+			return $q.resolve(menu);
+		};
+
+
+
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerHistorySummary'])
+		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerHistorySummary'].onClick = function(event, menu) {
+			menu.stateParams.pageId = $scope.customerId;
+			return $q.resolve(menu);
+		};
+
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.Idencheck'])
+		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.Idencheck'].onClick = function(event, menu) {
+			menu.stateParams.pageId = $scope.customerId;
+			return $q.resolve(menu);
+		};
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CreditBureauResults'])
+		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CreditBureauResults'].onClick = function(event, menu) {
+			menu.stateParams.pageId = $scope.customerId;
+			return $q.resolve(menu);
+		};
+
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerDeathMarking'])
+		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.CustomerDeathMarking'].onClick = function(event, menu) {
 			menu.stateParams.pageId = $scope.customerId;
 			return $q.resolve(menu);
 		};
@@ -401,11 +592,13 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.loans.View'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.loans.View'].onClick = function(event, menu) {
 			menu.stateParams.pageId = $scope.model.customer.urnNo;
+			menu.stateParams.pageData = {pageType:'View'};
 			return $q.resolve(menu);
 		};
 
         if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.loans.Service'])
 		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.loans.Service'].onClick = function(event, menu) {
+			menu.stateParams.pageData = {pageType:'Service'};
 			menu.stateParams.pageId = $scope.model.customer.urnNo;
 			return $q.resolve(menu);
 		};
@@ -450,11 +643,46 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			return $q.resolve(menu);
 		};
 
+		if ($scope.dashboardDefinition.$menuMap['Page/Engine/customer360.ViewInsurance'])
+		$scope.dashboardDefinition.$menuMap['Page/Engine/customer360.ViewInsurance'].onClick = function(event, menu) {
+			menu.stateParams.pageId = $scope.customerId;
+			return $q.resolve(menu);
+		};
+
 	};
 
 	$scope.initializeSF = function(model, form, formCtrl) {
 	};
 
-	$scope.actions = {};
+	$scope.actions = {
+		modifyBlockedStatus: function(model,api) {
+			if(api){
+				model.customer.blocked = !model.customer.blocked;
+				model.customer.blockingRemarks = null;
+				model.additions = {};
+				model.additions.blockStatusChange = true;
+				return;
+			}
+			var message = model.customer.blocked? "Do you want to activate the customer?": "Do you want to block the customer?";
+			Utils.confirm(message).then(function() {
+				PageHelper.showBlockingLoader("Changing...");
+				if(model.customer.blockingRemarks == null || model.customer.blockingRemarks == ""){
+					PageHelper.showProgress('Blocking','Block Remarks Required',2000);
+					return
+				}
+				Enrollment.modifyBlockedStatus({
+					customerId: model.customer.id,
+					isBlocked : model.customer.blocked,
+					blockingRemarks : model.customer.blockingRemarks
+				}).$promise.then(function(response){
+					model.customer.blocked = response.blocked;
+					model.customer.version = response.version;
+					model.customer.blockStatusChangedBy = response.blockStatusChangedBy;
+					model.customer.blockStatusChangedAt = response.blockStatusChangedAt;
+					model.additions.blockStatusChange = false;
+				}, PageHelper.showErrors).finally(PageHelper.hideBlockingLoader);
+			});
+		}
+	};
 
 }]);

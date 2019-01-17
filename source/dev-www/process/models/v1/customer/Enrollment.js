@@ -1,7 +1,9 @@
-irf.models.factory('Enrollment',function($resource,$q,Upload,$httpParamSerializer,BASE_URL, searchResource){
+irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL, searchResource){
     var endpoint = BASE_URL + '/api/enrollments';
+    var snapshotFrom = '/snapshotDiff?snapshotIdFrom=';
+    var snapshotTo  = 'snapshotIdTo=';
     var managementEndPoint= irf.MANAGEMENT_BASE_URL;
-
+    var endpoint1 = BASE_URL +'/api/creditbureau/verification'; 
     var transformResponse = function(customer){
         if (_.hasIn(customer, "customerBankAccounts") && _.isArray(customer.customerBankAccounts)){
             _.forEach(customer.customerBankAccounts, function(bankAccount){
@@ -26,11 +28,15 @@ irf.models.factory('Enrollment',function($resource,$q,Upload,$httpParamSerialize
      *      /enrollments/1           -> $get({id:1})
      * $post will send data as form data, save will send it as request payload
      */
-    var resource = $resource(endpoint, null, {
+    return $resource(endpoint, null, {
 
         get:{
             method:'GET',
             url:endpoint+'/:service/:id'
+        },
+        idenCheckVerification :{
+            method:'POST',
+            url : endpoint1
         },
         query:{
             method:'GET',
@@ -65,14 +71,8 @@ irf.models.factory('Enrollment',function($resource,$q,Upload,$httpParamSerialize
         },
         update:{
             method:'PUT',
-            url:endpoint+'/:service'   
+            url:endpoint+'/:service'
         },
-
-        houseHoldLink:{
-            method:'POST',
-            url:endpoint+'/linkhousehold'
-        },
-
         post:{
             method:'POST',
             url:endpoint+'/:service/:format',
@@ -90,6 +90,10 @@ irf.models.factory('Enrollment',function($resource,$q,Upload,$httpParamSerialize
             transformRequest: function (data) {
                 return $httpParamSerializer(data);
             }
+        },
+        getSanpshotDiff: {
+            method: 'GET',
+            url: endpoint + snapshotFrom + ':id1' + "&" + snapshotTo + ':id2'
         },
         postWithFile:{
             method:'POST',
@@ -178,31 +182,17 @@ irf.models.factory('Enrollment',function($resource,$q,Upload,$httpParamSerialize
         getWithHistory: {
             method: 'GET',
             url: endpoint+'/withhistory/:id'
+        },
+        lenderSearch: searchResource({
+            method: 'GET',
+            url: endpoint + '/findInternal/'
+        }),
+        modifyBlockedStatus: {
+            method:'GET',
+            url: endpoint + '/modifyBlockedStatus'
         }
     });
-
-    resource.insuranceUpload = function(file, progress) {
-        var deferred = $q.defer();
-        Upload.upload({
-            url: BASE_URL + "/api/feed/insuranceupload",
-
-            data: {
-                file: file,
-                feedCategory: 'PortfolioInsuranceDetails'
-            }
-        }).then(function(resp) {
-            PageHelper.showProgress("page-init", "successfully uploaded.", 2000);
-            deferred.resolve(resp);
-        }, function(errResp) {
-            PageHelper.showErrors(errResp);
-            deferred.reject(errResp);
-        }, progress);
-        return deferred.promise;
-    };
-
-    return resource;
 });
-
 
 
 irf.pageCollection.factory("EnrollmentHelper",
@@ -522,6 +512,25 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
     * if cust id set, promise resolved with PROCEED response
     * if error occurs, promise rejected with null.
     * */
+
+    var saveandproceed= function (res){
+        var deferred = $q.defer();
+        $log.info("Attempting Proceed");
+        $log.info(res);
+        PageHelper.clearErrors();
+            PageHelper.showLoader();
+            res.enrollmentAction = "PROCEED";
+            Enrollment.updateEnrollment(res, function (res, headers) {
+                PageHelper.hideLoader();
+                deferred.resolve(res);
+            }, function (res, headers) {
+                PageHelper.hideLoader();
+                PageHelper.showErrors(res);
+                deferred.reject(res);
+            });
+        return deferred.promise;
+
+    };
     var proceedData = function(res){
 
         var deferred = $q.defer();
@@ -637,6 +646,7 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
         fixData: fixData,
         saveData: saveData,
         proceedData: proceedData,
+        saveandproceed:saveandproceed,
         validateData: validateData,
         validateDate:validateDate,
         validateBankAccounts:validateBankAccounts,

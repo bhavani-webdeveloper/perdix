@@ -44,6 +44,10 @@ export class LeadProcess implements CanApplyPolicy {
         )
     }
 
+    static createFromPlainLeadObject(leadObj:Object): Observable<LeadProcess> {
+        return LeadProcessFactory.createFromPlainLeadObject(leadObj);
+    }
+
     static get(id: number): Observable<LeadProcess> {
         let obs1 = LeadProcessFactory.createFromLeadId(id);
         return obs1.flatMap(

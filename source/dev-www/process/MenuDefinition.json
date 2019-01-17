@@ -2,12 +2,23 @@
     "title": "Main navigation",
     "items": [
         "Page/Landing",
+         {
+            "title": "AGENT",
+            "iconClass": "fa fa-user-secret",
+            "items": [
+                "Page/Engine/agent.AgentSearch",
+                "Page/Adhoc/agent.AgentDashboard"
+            ]
+        },
         {
             "title": "CUSTOMER",
             "iconClass": "fa fa-user",
             "items": [
+                "Page/Engine/sambandh.customer.CustomerSearch",
                 "Page/Engine/CustomerSearch",
+                "Page/Engine/FSOCustomerSearch",
                 "Page/Engine/ProfileInformation",
+                "Page/Engine/kgfs.customer.Enrollment",
                 "Page/Engine/customer.IndividualEnrollment",
                 "Page/Engine/customer.EnterpriseEnrollment",
                 "Page/Engine/customer.IndividualEnrollment3",
@@ -16,14 +27,26 @@
                 "Page/Engine/EnrollmentHouseVerificationQueue",
                 "Page/EngineOffline/AssetsLiabilitiesAndHealth",
                 "Page/Engine/CustomerFormDownloads",
-                "Page/Engine/customer360.RecaptureQueue"
+                "Page/Engine/customer360.RecaptureQueue",
+                "Page/Adhoc/workflow.CustomerApprovalDashboard",
+                "Page/Adhoc/kgfs.kgfsWorkflow.GpsFPApprovalDashboard",
+                "Page/Adhoc/kgfs.customer.CustomerEnrollmentDashboard"
             ]
         },
+        "Page/Adhoc/sambandh.customer.EnrollmentDashboard",
+        "Page/Adhoc/MutualFund.MutualFundDashboard",
+        "Page/Adhoc/insurance.InsuranceRegistrationDashboard",
+        "Page/ServiceRequestDashboard",
         "Page/LeadDashboard",
+        "Page/Adhoc/coa.ChartOfAccountDashboard",
         "Page/LoanOriginationDashboard",
         "Page/Adhoc/payment.PaymentDashboard",
-        "Page/DocumentTrackingDashboard",
-        {
+        "Page/Adhoc/irep.loans.LoanOriginationDashboard",
+        "Page/Adhoc/witfin.loans.LoanOriginationDashboard",
+        "Page/Adhoc/witfin.loans.VehicleValuationDashboard",
+        "Page/Adhoc/pahal.loans.LoanOriginationDashboard",
+        "Page/Adhoc/kgfs.loans.LoanBookingDashboard",
+        "Page/DocumentTrackingDashboard", {
             "title": "INDIVIDUAL_LOANS",
             "iconClass": "fa fa-female",
             "items": [
@@ -42,23 +65,22 @@
                 "Page/Engine/loans.individual.PendingCashQueue",
                 "Page/Engine/loans.individual.PendingClearingQueue",
                 "Page/Engine/loans.individual.PortfolioInsuranceFeeDownload"
+
             ]
         },
         "Page/LUCDashboard",
         "Page/CreditMonitoringDashboard",
         "Page/InventoryDashboard",
         "Page/Adhoc/loans.group.GroupDashboard",
-        "Page/Engine/CentrePaymentCollectionDownload",
-        {
+        "Page/Engine/CentrePaymentCollectionDownload", {
             "title": "JOURNAL_ENTRY",
             "iconClass": "fa fa-exchange",
             "items": [
                 "Page/JournalMaintenanceDashboard",
-                "Page/JournalPostingDashboard"
+                "Page/JournalPostingDashboard",
+                "Page/FinconAccountingDashboard"
             ]
-        },
-        "Page/Adhoc/MutualFund.MutualFundDashboard",
-        {
+        }, {
             "title": "MANAGEMENT",
             "iconClass": "fa fa-cubes",
             "items": [
@@ -66,19 +88,34 @@
                 "Page/Engine/management.Pages",
                 "Page/Engine/management.UserRoles",
                 "Page/Engine/management.RolesPages",
+                "Page/Engine/management.AdminScreen",
                 "Page/Engine/management.RolesReports",
-                "Page/Engine/management.SpokeMerger",
+                "Page/Engine/management.ScoreMaintenance",
+                "Page/Adhoc/management.product.LoanProductDashboard",
+                "Page/Engine/management.SpokeMerger/interbranch",
                 "Page/Engine/management.SpokeMerger/intrabranch",
+                "Page/Engine/management.MachineMaster",
                 "Page/Engine/management.BranchMerger",
                 "Page/Engine/management.MasterDataMaintenance",
                 "Page/Engine/management.TaggingMaintenance",
                 "Page/ReferenceCodeDashboard",
+                "Page/Adhoc/management.BranchCreationDashboard",
+                "Page/ScoreParameterMaintenanceDashboard",
                 "Page/CentreCreationDashboard",
                 "Page/UserDashboard",
-                "Page/Adhoc/bank.Survey.SurveyDashboard" 
+                "Page/Adhoc/bank.Survey.SurveyDashboard", {
+                    "title": "AUDIT_MANAGEMENT",
+                    "iconClass": "fa fa-cubes",
+                    "items": [
+                        "Page/Engine/management.audit.AuditStage",
+                        "Page/Engine/management.audit.AuditStageActivities"
+                    ]
+                },
+                "Page/ManagementReportDashboard",
+                "Page/Engine/management.DeathMarkingSearch",
+                "Page/Engine/management.RuleMaintenance"
             ]
-        },
-        {
+        }, {
             "title": "PSYCHOMETRIC",
             "iconClass": "fa fa-puzzle-piece",
             "items": [
@@ -88,9 +125,18 @@
                 "Page/Engine/psychometric.QuestionMaintenance",
                 "Page/Engine/psychometric.Queue"
             ]
+        }, {
+            "title": "LENDER",
+            "iconClass": "fa fa-user",
+            "items": [
+                "Page/Engine/lender.enrolment.Registration",
+                "Page/Engine/lender.enrolment.LenderSearch",
+                "Page/Adhoc/lender.liabilities.LoanBookingDashboard"
+            ]
         },
         "Page/ReportsDashboard",
         "Page/ScoreDashboard",
-        "Page/Adhoc/audit.AuditDashboard"
+        "Page/Adhoc/audit.AuditDashboard",
+        "Page/Engine/excelUpload.ExcelUpload"
     ]
 }

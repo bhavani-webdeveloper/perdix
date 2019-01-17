@@ -31,13 +31,13 @@
                 "title": "LOAN_PURPOSE_2",
                 "orderNo": 40
             },
-            "schemeCode":{
-                "key":"loanAccount.schemeCode",
-                "type":"lov",
-                "resolver":"SchemeCodeLOVConfiguration",
-                "autolov":true,
-                "title":"SCHEME_CODE",
-                "orderNo":45
+            "schemeCode": {
+                "key": "loanAccount.schemeCode",
+                "type": "lov",
+                "resolver": "SchemeCodeLOVConfiguration",
+                "autolov": true,
+                "title": "SCHEME_CODE",
+                "orderNo": 45
             },
             "loanAmountRequested": {
                 "key": "loanAccount.loanAmountRequested",
@@ -72,21 +72,9 @@
             },
             "udf5": {
                 "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5",
-                "title" : "FLAT_RATE",
+                "title": "FLAT_RATE",
                 "type": "string",
-                "orderNo" : 75
-            },
-            "udf7": {
-                "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7",
-                "title" : "ELIGIBLE_DISPOSABLE_INCOME",
-                "type": "number",
-                "orderNo" : 150
-            },
-            "udf3": {
-                "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3",
-                "type": "number",
-                "title":"MAXIMUM_ELIGIBLE_LOAN",
-                "orderNo" : 160
+                "orderNo": 75
             },
             "expectedInterestRate": {
                 "key": "loanAccount.expectedInterestRate",
@@ -225,76 +213,76 @@
         "orderNo": 40,
         "items": {
             "vehicleType": {
-               "key": "loanAccount.vehicleLoanDetails.vehicleType",
-               "type": "select",
-               "enumCode": "vehicle_type",
-               "title": "VEHICLE_TYPE"
+                "key": "loanAccount.vehicleLoanDetails.vehicleType",
+                "type": "select",
+                "enumCode": "vehicle_type",
+                "title": "VEHICLE_TYPE"
             },
             "endUse": {
-               "key": "loanAccount.vehicleLoanDetails.endUse",
-               "type": "select",
-               "enumCode": "vehicle_end_use",
-               "title": "END_USE_OF_VEHICLE"
+                "key": "loanAccount.vehicleLoanDetails.endUse",
+                "type": "select",
+                "enumCode": "vehicle_end_use",
+                "title": "END_USE_OF_VEHICLE"
             },
             "usedFor": {
-               "key": "loanAccount.vehicleLoanDetails.usedFor",
-               "type": "radios",
-               "enumCode": "vehicle_used_for",
-               "title": "NATURE_OF_USE"
+                "key": "loanAccount.vehicleLoanDetails.usedFor",
+                "type": "radios",
+                "enumCode": "vehicle_used_for",
+                "title": "NATURE_OF_USE"
             },
             "segment": {
-               "key": "loanAccount.vehicleLoanDetails.segment",
-               "type": "select",
-               "enumCode": "vehicle_segment",
-               "title": "SEGMENT"
+                "key": "loanAccount.vehicleLoanDetails.segment",
+                "type": "select",
+                "enumCode": "vehicle_segment",
+                "title": "SEGMENT"
             },
             "category": {
-               "key": "loanAccount.vehicleLoanDetails.category",
-               "type": "select",
-               "enumCode": "vehicle_category",
-               "title": "CATEGORY"
+                "key": "loanAccount.vehicleLoanDetails.category",
+                "type": "select",
+                "enumCode": "vehicle_category",
+                "title": "CATEGORY"
             },
             "manufacturer": {
-               "key": "loanAccount.vehicleLoanDetails.manufacturer",
-               "type": "select",
-               "enumCode": "vehicle_manufacturer",
-               "title": "MANUFACTURER"
+                "key": "loanAccount.vehicleLoanDetails.manufacturer",
+                "type": "select",
+                "enumCode": "vehicle_manufacturer",
+                "title": "MANUFACTURER"
             },
             "make": {
-               "key": "loanAccount.vehicleLoanDetails.make",
-               "type": "select",
-               "enumCode": "vehicle_make",
-               "title": "MAKE"
+                "key": "loanAccount.vehicleLoanDetails.make",
+                "type": "select",
+                "enumCode": "vehicle_make",
+                "title": "MAKE"
             },
             "vehicleModel": {
-               "key": "loanAccount.vehicleLoanDetails.vehicleModel",
-               "type": "select",
-               "enumCode": "vehicle_model",
-               "title": "MODEL"
+                "key": "loanAccount.vehicleLoanDetails.vehicleModel",
+                "type": "select",
+                "enumCode": "vehicle_model",
+                "title": "MODEL"
             },
             "yearOfManufacture": {
-               "key": "loanAccount.vehicleLoanDetails.yearOfManufacture",
-               "type": "string",
-               "title": "MANUFACTURER_DATE"
+                "key": "loanAccount.vehicleLoanDetails.yearOfManufacture",
+                "type": "string",
+                "title": "MANUFACTURER_DATE"
             },
             "assetDetails": {
-               "key": "loanAccount.vehicleLoanDetails.assetDetails",
-               "type": "select",
-               "title": "DESCRIPTION",
-               "enumCode": "business_asset_description"
+                "key": "loanAccount.vehicleLoanDetails.assetDetails",
+                "type": "select",
+                "title": "DESCRIPTION",
+                "enumCode": "business_asset_description"
             },
             "assetSubDetails": {
-               "key": "loanAccount.vehicleLoanDetails.assetSubDetails",
-               "type": "select",
-               "title": "DESCRIPTION",
-               "enumCode": "business_asset_sub_description",
-               "parentEnumCode": "business_asset_description",
-               "parentValueExpr": "model.loanAccount.vehicleLoanDetails.assetDetails"
+                "key": "loanAccount.vehicleLoanDetails.assetSubDetails",
+                "type": "select",
+                "title": "DESCRIPTION",
+                "enumCode": "business_asset_sub_description",
+                "parentEnumCode": "business_asset_description",
+                "parentValueExpr": "model.loanAccount.vehicleLoanDetails.assetDetails"
             },
             "registrationNumber": {
-               "key": "loanAccount.vehicleLoanDetails.registrationNumber",
-               "type": "text",
-               "title": "REGN_NO"
+                "key": "loanAccount.vehicleLoanDetails.registrationNumber",
+                "type": "text",
+                "title": "REGN_NO"
             },
             "price": {
                 "key": "loanAccount.vehicleLoanDetails.price",
@@ -302,7 +290,7 @@
                 "title": "PRICE"
             },
             "permitType": {
-                "key" : "loanAccount.vehicleLoanDetails.permitType",
+                "key": "loanAccount.vehicleLoanDetails.permitType",
                 "type": "string"
             }
         }
@@ -367,10 +355,15 @@
                 "required": true,
                 "title": "INTEREST_RATE"
             },
-            "udf6": {
-                "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6",
-                "type": "string",
-                "required": true
+            "udf8": {
+                "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf8",
+                "title": "ELIGIBLE_DISPOSABLE_INCOME",
+                "type": "number"
+            },
+            "udf3": {
+                "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3",
+                "type": "number",
+                "title": "MAXIMUM_ELIGIBLE_LOAN"
             },
             "processingFeePercentage": {
                 "key": "loanAccount.processingFeePercentage",
@@ -391,6 +384,18 @@
                 "type": "amount",
                 "title": "COMMERCIAL_CIBIL_CHARGE"
 
+            },
+            "loanChannels": {
+                "key": "loanAccount.loanChannels",
+                "enumCode": "decisionmaker",
+                "type": "radios",
+                "title": "ESCALATE"
+            },
+            "processingFee": {
+                "key": "loanAccount.processingFee",
+                "title": "PROCESSING_FEE",
+                "type": "number",
+                "readonly": true
             }
         }
     },
@@ -399,7 +404,7 @@
         "title": "PROPOSED_LOAN_UTILIZATION",
         "orderNo": 59,
         "items": {
-            "loanUtilisationDetail" : {
+            "loanUtilisationDetail": {
                 "key": "loanAccount.loanUtilisationDetail",
                 "type": "array",
                 "startEmpty": true,
@@ -493,6 +498,11 @@
                         "title": "VEHICLE_ROUTE_VIA",
                         "type": "string"
                     },
+                    "ratePerTrip": {
+                        "key": "loanAccount.vehicleLoanDetails.vehicleRouteDetails[].ratePerTrip",
+                        "title": "RATE_PER_TRIP",
+                        "type": "amount"
+                    },
                     "trips": {
                         "key": "loanAccount.vehicleLoanDetails.vehicleRouteDetails[].trips",
                         "title": "TRIPS",
@@ -568,20 +578,20 @@
         "title": "VEHICLE_LOAN_INCOME",
         "orderNo": 310,
         "items": {
-            "VehicleLoanIncomes":{
+            "VehicleLoanIncomes": {
                 "key": "loanAccount.vehicleLoanDetails.vehicleLoanIncomes",
-                "type":"array",
+                "type": "array",
                 "add": null,
                 "remove": null,
                 "view": "fixed",
                 "items": {
-                    "incomeType":{
+                    "incomeType": {
                         "key": "loanAccount.vehicleLoanDetails.vehicleLoanIncomes[].incomeType",
                         "title": "VEHICLE_LOAN_INCOME_TYPE",
                         "type": "select",
                         "enumCode": "vehicle_income_types"
                     },
-                    "incomeAmount":{
+                    "incomeAmount": {
                         "key": "loanAccount.vehicleLoanDetails.vehicleLoanIncomes[].incomeAmount",
                         "title": "VEHICLE_LOAN_INCOME_AMOUNT",
                         "type": "amount"
@@ -596,7 +606,7 @@
         "title": "VEHICLE_EXPENSE",
         "orderNo": 320,
         "items": {
-            "VehicleExpenses" :{
+            "VehicleExpenses": {
                 "key": "loanAccount.vehicleLoanDetails.vehicleLoanExpenses",
                 "title": "VEHICLE_EXPENSE",
                 "type": "array",
@@ -605,13 +615,13 @@
                 "view": "fixed",
                 "titleExpr": "model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[arrayIndexes[0]].expenseType",
                 "items": {
-                    "expenseType" :{
+                    "expenseType": {
                         "key": "loanAccount.vehicleLoanDetails.vehicleLoanExpenses[].expenseType",
                         "title": "VEHICLE_EXPENSE_TYPE",
                         "type": "select",
                         "enumCode": "vehicle_expense_types"
                     },
-                    "expenseAmount" :{
+                    "expenseAmount": {
                         "key": "loanAccount.vehicleLoanDetails.vehicleLoanExpenses[].expenseAmount",
                         "type": "amount",
                         "title": "VEHICLE_EXPENSE_AMOUNT"
@@ -846,7 +856,7 @@
                 "title": "ODOMETER_READING",
                 "inputmode": "number",
                 "numberType": "number",
-                "type":"number"
+                "type": "number"
             },
             "estimatedReading": {
                 "key": "loanAccount.vehicleLoanDetails.estimatedReading",
@@ -872,6 +882,25 @@
                 "title": "USED_FOR",
                 "type": "radios",
                 "enumCode": "vehicle_used_for"
+            },
+            "model": {
+                "key": "loanAccount.vehicleLoanDetails.model",
+                "title": "MODEL",
+                "type": "text",
+                "required": "true"
+            },
+            "yearOfManufacture": {
+                "key": "loanAccount.vehicleLoanDetails.yearOfManufacture",
+                "title": "YEAR_OF_MANUFACTURE",
+                "type": "date",
+                "required": "true"
+            },
+            "trailerAttached": {
+                "key": "loanAccount.vehicleLoanDetails.trailerAttached",
+                "title": "TRAILER_ATTACHED",
+                "type": "select",
+                "required": "true",
+                "enumCode": "vehicle_trailerAttached"
             }
         }
     },
@@ -1103,7 +1132,7 @@
                 "key": "loanAccount.vehicleLoanDetails.currentInvoiceValue",
                 "title": "CURRENT_INVOICE_VALUE",
                 "inputmode": "number",
-                "numberType": "tel"
+                "numberType": "number"
             },
             "rcbookStatus": {
                 "key": "loanAccount.vehicleLoanDetails.rcbookStatus",
@@ -1248,7 +1277,7 @@
                 "key": "loanAccount.vehicleLoanDetails.vehiclePhotoCaptures",
                 "title": "VEHICLE_PHOTO_CAPTURES",
                 "startEmpty": true,
-                "view":"fixed",
+                "view": "fixed",
                 "items": {
                     "photoFileId": {
                         "key": "loanAccount.vehicleLoanDetails.vehiclePhotoCaptures[].photoFileId",
@@ -1261,7 +1290,7 @@
                         "using": "scanner"
                     },
                     "photoRemarks": {
-                        "key":"loanAccount.vehicleLoanDetails.vehiclePhotoCaptures[].photoRemarks",
+                        "key": "loanAccount.vehicleLoanDetails.vehiclePhotoCaptures[].photoRemarks",
                         "title": "PHOTO_REMARKS"
                     }
                 }
@@ -1475,18 +1504,92 @@
                         "key": "loanAccount.nominees[].nomineeRelationship",
                         "type": "select",
                         "title": "RELATIONSHIP"
+                    },
+                    "nomineeMinor": {
+                        "key": "loanAccount.nominees[].nomineeMinor",
+                        "title": "NOMINEE_MINOR",
+                        "type": "checkbox",
+                        "schema": {
+                            "type": ["boolean", "null"]
+                        }
+
+                    },
+                    "nomineeGuardian": {
+                        "type": "array",
+                        "title": "GUARDIAN_DETAILS",
+                        "condition": "model.loanAccount.nominees[arrayIndex].nomineeMinor==true",
+                        "add": null,
+                        "view": "fixed",
+                        "remove": null,
+                        "items": {
+                            "nomineeGuardianFirstName": {
+                                "key": "loanAccount.nominees[].guardianFirstName",
+                                "title": "NAME",
+                                "type": "lov"
+                            },
+                            "nomineeGuardianGender": {
+                                "key": "loanAccount.nominees[].guardianGender",
+                                "type": "select",
+                                "title": "GENDER"
+                            },
+                            "nomineeGuardianDOB": {
+                                "key": "loanAccount.nominees[].guardianDOB",
+                                "type": "date",
+                                "title": "DATE_OF_BIRTH"
+                            },
+                            "nomineeGuardianDoorNo": {
+                                "key": "loanAccount.nominees[].guardianDoorNo",
+                                "title": "DOOR"
+                            },
+                            "nomineeGuardianLocality": {
+                                "key": "loanAccount.nominees[].guardianLocality",
+                                "title": "LOCALITY"
+                            },
+                            "nomineeGuardianStreet": {
+                                "key": "loanAccount.nominees[].guardianStreet",
+                                "title": "STREET"
+                            },
+                            "nomineeGuardianPincode": {
+                                "key": "loanAccount.nominees[].guardianPincode",
+                                "title": "PIN_CODE",
+                                "type": "lov"
+                            },
+                            "nomineeGuardianDistrict": {
+                                "key": "loanAccount.nominees[].guardianDistrict",
+                                "type": "text",
+                                "title": "DISTRICT"
+                            },
+                            "nomineeGuardianState": {
+                                "key": "loanAccount.nominees[].guardianState",
+                                "title": "STATE"
+                            },
+                            "nomineeGuardianRelationship": {
+                                "key": "loanAccount.nominees[].guardianRelationWithMinor",
+                                "type": "select",
+                                "title": "RELATIONSHIP"
+                            },
+                            "nomineeGuardianAddressSameasBorrower":{
+                                "key": "loanAccount.nominees[].guardianAddressSameAsCustomer",                        
+                                "type": "checkbox",
+                                "title": "ADDRESS_SAME_AS_BORROWERs",
+                                "schema": {
+                                    "type": ["boolean", "null"]
+                                }
+                            }
+                        }
                     }
                 }
             }
+
         }
     },
     "PayerDetails": {
-        "type":"box",
+        "type": "box",
         "title": "PAYER_DETAILS",
-        "orderNo":50,
+        "orderNo": 50,
         "items": {
             "payeeName": {
-                "key":"loanAccount.payeeName",
+                "key": "loanAccount.payeeName",
                 "title": "PAYEE_NAME"
             },
             "payeeMobileNumber": {
@@ -1498,7 +1601,7 @@
             "payeeRelationToApplicant": {
                 "key": "loanAccount.payeeRelationToApplicant",
                 "title": "PAYEE_RELATION",
-                "type":"select",
+                "type": "select",
                 "enumCode": "payerRelation"
             }
         }
@@ -1512,23 +1615,23 @@
                 "key": "loanAccount.telecallingDetails",
                 "title": "TELE_CALLING_DETAILS",
                 "type": "array",
-                "startEmpty":true,
+                "startEmpty": true,
                 "items": {
                     "personContacted": {
-                        "key":"loanAccount.telecallingDetails[].personContacted",
+                        "key": "loanAccount.telecallingDetails[].personContacted",
                         "title": "CONTACT_PERSON_NAME"
                     },
                     "contactNumber": {
-                        "key":"loanAccount.telecallingDetails[].contactNumber",
-                        "title":"CONTACT_NUMBER"
+                        "key": "loanAccount.telecallingDetails[].contactNumber",
+                        "title": "CONTACT_NUMBER"
                     },
                     "occupation": {
-                        "key":"loanAccount.telecallingDetails[].occupation",
-                        "title":"OCCUPATION"
+                        "key": "loanAccount.telecallingDetails[].occupation",
+                        "title": "OCCUPATION"
                     },
                     "address": {
-                        "key":"loanAccount.telecallingDetails[].address",
-                        "title":"CUSTOMER_ADDRESS",
+                        "key": "loanAccount.telecallingDetails[].address",
+                        "title": "CUSTOMER_ADDRESS",
                         "type": "textarea"
                     },
                     "knownSince": {
@@ -1577,8 +1680,8 @@
                 "key": "loanAccount.vehicleLoanDetails.vehicleLoanDocuments",
                 "items": {
                     "docType": {
-                        "type":"select",
-                        "enumCode":"vehicle_doc_type",
+                        "type": "select",
+                        "enumCode": "vehicle_doc_type",
                         "title": "DOCUMENT_TYPE",
                         "key": "loanAccount.vehicleLoanDetails.vehicleLoanDocuments[].docType"
                     },
@@ -1605,6 +1708,174 @@
             }
         }
     },
+    "LoanDetails": {
+        "type": "box",
+        "title": "LOAN_DETAILS",
+        "items": {
+            "loanType": {
+                "orderNo": "2",
+                "title": "LOAN_TYPE",
+                "type": "select",
+                "key": "loanAccount.loanType"
+            },
+            "partner": {
+                "orderNo": "2",
+                "title": "PARTNER",
+                "type": "select",
+                "key": "loanAccount.partnerCode"
+            },
+            "frequency": {
+                "orderNo": "3",
+                "title": "FREQUENCY",
+                "type": "select",
+                "key": "loanAccount.frequency"
+
+            },
+            "loanProductCategory": {
+                "orderNo": "4",
+                "title": "LOAN_PRODUCTS",
+                "type": "select",
+                "key": "loanAccount.productCategory"
+            },
+            "loanProductCode":{
+                "orderNo": "5",
+                "title": "LOAN_PRODUCT_CODE",
+                "type": "lov",
+                "key": "loanAccount.productCode"
+            },
+            "loanApplicationDate": {
+                "orderNo": "6",
+                "title": "LOAN_APPLICATION_DATE",
+                "type": "date",
+                "key": "loanAccount.loanApplicationDate"
+            },
+            "loanAmountRequested": {
+                "orderNo": "7",
+                "title": "LOAN_AMOUNT_REQUESTED",
+                "key": "loanAccount.loanAmount"
+            },
+            "requestedTenure": {
+                "orderNo": "8",
+                "title": "REQUESTED_TENURE",
+                "type": "numeric",
+                "key": "loanAccount.tenure"
+            },
+            "interestRate": {
+                "key": "loanAccount.interestRate",
+                "type": "number",
+                "required": true,
+                "title": "INTEREST_RATE"
+            },
+            "loanPurpose1": {
+                "orderNo": "9",
+                "title": "LOAN_PURPOSE_1",
+                "type": "select",
+                "key": "loanAccount.loanPurpose1"
+            },
+            "loanPurpose2": {
+                "orderNo": "10",
+                "title": "LOAN_PURPOSE_2",
+                "type": "select",
+                "key": "loanAccount.loanPurpose2"
+            },
+            "loanPurpose3": {
+                "orderNo": "11",
+                "title": "LOAN_PURPOSE_3",
+                "type": "select",
+                "key": "loanAccount.loanPurpose3"
+            },
+            "centreName": {
+                "orderNo":"0",
+                "key": "loanAccount.loanCentre.centreId",
+                "title": "CENTRE_NAME"
+
+            },
+            "witnessDetails": {
+                "title": "WITNESS_DETAILS",
+                "type": "array",
+                "add": null,
+                "remove": null,
+                "view": "fixed",
+                "items": {
+                    "witnessFirstName": {
+                        "key": "loanAccount.witnessFirstName",
+                        "type": "lov",
+                        "title": "FIRST_NAME"
+                    },
+                    "witnessDOB": {
+                        "title": "DOB"
+                    },
+                    "witnessRelationship": {
+                        "key": "loanAccount.witnessRelationship",
+                        "type": "text",
+                        "title": "RELATIONSHIP",
+                        "readonly": true
+                    }
+                }
+            }
+        }
+
+
+    },
+    "JewelDetails": {
+        "type": "box",
+        "title": "JEWEL_DETAILS",
+        "items": {
+            "jewelPouchNo": {
+                "type": "numeric",
+                "title": "POUCH_NO",
+                "key": "loanAccount.jewelLoanDetails.jewelPouchNo"
+            },
+            "ornamentDetails": {
+                "type": "array",
+                "title": "ORNAMENT_DETAILS",
+                "key": "loanAccount.ornamentsAppraisals",
+                "items": {
+                    "ornamentDescription": {
+                        "title": "ORNAMENT_DESCRIPTION",
+                        "type": "text",
+                        "key": "loanAccount.ornamentsAppraisals[].ornamentsDescription"
+                    },
+                    "stoneDescription": {
+                        "title": "STONE_DESCRIPTION",
+                        "type": "text",
+                        "key": "loanAccount.ornamentsAppraisals[].stoneDescription"
+                    },
+                    "jewelDefects": {
+                        "title": "JEWEL_DEFECTS",
+                        "type": "text",
+                        "key": "loanAccount.ornamentsAppraisals[].jewelDefects"
+                    },
+                    "noOfArticles": {
+                        "title": "NO_OF_ARTICLES",
+                        "key": "loanAccount.ornamentsAppraisals[].noOfArticles"
+                    },
+                    "grossWeight": {
+                        "title": "GROSS_WEIGHT",
+                        "key": "loanAccount.ornamentsAppraisals[].grossWeightInGrams"
+                    },
+                    "netWeight": {
+                        "title": "NET_WEIGHT",
+                        "key": "loanAccount.ornamentsAppraisals[].netWeightInGrams"
+                    },
+                    "carat": {
+                        "title": "CARAT",
+                        "key": "loanAccount.ornamentsAppraisals[].qualityInCarats"
+                    },
+                    "rate": {
+                        "key": "loanAccount.ornamentsAppraisals[].ratePerGramInPaisa",
+                        "title": "RATE",
+                        "type": "numeric"
+                    },
+                    "marketValue": {
+                        "key": "loanAccount.ornamentsAppraisals[].marketValueInPaisa",
+                        "title": "MARKET_VALUE",
+                        "type": "numeric"
+                    }
+                }
+            }
+        }
+    },
     "actionbox": {
         "type": "actionbox",
         "items": {
@@ -1615,4 +1886,5 @@
             }
         }
     }
+
 }

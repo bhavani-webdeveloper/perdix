@@ -11,7 +11,9 @@
                 "aadhaarNo": {
                     "type": ["string", "null"],
                     "title": "AADHAAR_NO",
-                    "pattern":"^[2-9]{1}[0-9]{11}$"
+                    "pattern":"^[2-9]{1}[0-9]{11}$",
+                    "minLength": 12,
+                    "maxLength": 12
                 },
                 "whatsAppMobileNo": {
                     "type": ["string", "null"],
@@ -20,7 +22,7 @@
                 "email": {
                     "type": ["string", "null"],
                     "pattern": "^\\S+@\\S+$",
-                    "title": "EMAIL"    
+                    "title": "EMAIL"
                 },
                 "nameInLocalLanguage":{
                     "type":["string","null"],
@@ -101,6 +103,36 @@
                         }
                     }
                 },
+                "fixedAssetsMachinaries": {
+                    "type": "array",
+                    "title": "FIXED_ASSET_MACHINARIES",
+                    "items": {
+                        "type":"object",
+                        "properties": {
+                            "machineDescription": {
+                                "type": ["string","null"],
+                                "title": "MACHINE_DESCRIPTION"
+                                
+                            },
+                            "manufacturerName": {
+                                "type": ["string","null"],
+                                "title": "MANUFACTURER_NAME"
+                            },
+                            "machineType": {
+                                "type": ["string","null"],
+                                "title": "MACHINE_TYPE"
+                            },
+                            "workProcess": {
+                                "type": ["string","null"],
+                                "title": "WORK_PROCESS"
+                            },
+                            "model": {
+                                "type": ["string","null"],
+                                "title": "MODEL"
+                            }
+                        }
+                    }
+                },
                 "addressProof": {
                     "type": ["string","null"],
                     "title": "ADDRESS_PROOF",
@@ -125,8 +157,7 @@
                 },
                 "addressProofNo": {
                     "type": ["string","null"],
-                    "title": "ADDRESS_PROOF_NO",
-                    "pattern":"^[2-9]{1}[0-9]{11}$"
+                    "title": "ADDRESS_PROOF_NO"
                 },
                 "addressProofValidUptoDate": {
                     "type": ["string","null"],
@@ -197,6 +228,10 @@
                     "enumCode": "enrolledAs",
                     "default":"CUSTOMER"
                 },
+                "weddingAnniversery": {
+                    "type":["string", "null"],
+                    "title":"WEDDING_ANNIVERSERY"
+                },
                 "enterprise": {
                     "type": "object",
                     "properties": {
@@ -257,7 +292,7 @@
                         },
                         "state": {
                             "type":["string","null"]
-                        },
+                        },                        
                         "version": {
                             "type": ["integer","null"]
                         }
@@ -366,6 +401,13 @@
                         "pincode": {
                             "type": ["integer","null"]
                         },
+                        "division": {
+                            "type": ["string","null"],
+                            "title": "Division"
+                        },
+                        "region": {
+                            "type":["string","null"]
+                        },
                         "registeredAt": {
                             "type": ["string","null"]
                         },
@@ -448,15 +490,51 @@
                         "properties": {
                             "assetType": {
                                 "type": "string",
-                                "title": "ASSET_TYPE"
+                                "title": "VEHICLE_TYPE"
                             },
                             "valueOfAsset": {
                                 "type": "number",
                                 "title": "VALUE_OF_THE_ASSET"
                             },
                             "vehicleMakeModel": {
-                                "type": "string",
+                                "type": ["string", "null"],
                                 "title": "VEHICLE_MAKE_MODEL"
+                            },
+                            "endUse": {
+                                "type": ["string","null"],
+                                "title": "END_USE_OF_VEHICLE"
+                            },
+                            "natureOfUse": {
+                                "type": ["string","null"],
+                                "title": "NATURE_OF_USE"
+                            },
+                            "manufacturer": {
+                                "type": ["string","null"],
+                                "title": "MANUFACTURER"
+                            },
+                            "make": {
+                                "type": ["string","null"],
+                                "title": "MAKE"
+                            },
+                            "assetCategory": {
+                                "type": ["string","null"],
+                                "title": "CATEGORY"
+                            },
+                            "manufactureDate": {
+                                "type": ["string", "null"],
+                                "title": "YEAR_AND_MONTH_OF_MANUFACTURE"
+                            },
+                            "details": {
+                                "type": ["string", "null"],
+                                "title": "DESCRIPTION"
+                            },
+                            "subDetails": {
+                                "type": ["string", "null"],
+                                "title": "SUB_DESCRIPTION"
+                            },
+                            "assetregistrationNumber": {
+                                "type": ["string", "null"],
+                                "title": "REGISTRATION_NUMBER"
                             }
                         }
                     }
@@ -485,7 +563,7 @@
 
                         },
                         "required": [
-                            
+
                         ]
                     }
                 },
@@ -574,7 +652,7 @@
                                         },
                                         "monthsPerYear": {
                                             "type": ["integer","null"],
-                                            "title": "MONTHS_PER_YEAR",
+                                            "title": "PER_YEAR",
                                             "minimum": 1,
                                             "maximum": 12,
                                             "captureStages":[
@@ -603,6 +681,10 @@
                                 "enumCode": "relation"
 
                             },
+                            "primaryOccupation": {
+                                "type": ["string", "null"],
+                                "title": "PRIMARY_OCCUPATION"
+                            },
                             "contributionToExpenditure":{
                                 "type": ["number","null"],
                                 "title":"CONTRIBUTION_TO_EXPENDITURE",
@@ -617,6 +699,7 @@
                                 "title":"MARITAL_STATUS",
                                 "enumCode":"marital_status"
                             }
+
                         },
                         "required": [
                             "dateOfBirth",
@@ -899,6 +982,11 @@
                                 "type": ["integer","null"],
                                 "title": "LOAN_AMOUNT_IN_PAISA"
                             },
+                            "loanSourceCategory": {
+                                "type": ["string","null"],
+                                "title": "LOAN_SOURCE_CATEGORY",
+                                "enumCode": "loan_source_category"
+                            },
                             "loanSource": {
                                 "type": ["string","null"],
                                 "title": "LOAN_SOURCE",
@@ -918,6 +1006,12 @@
                                 "type": ["string","null"],
                                 "title": "START_DATE",
                                 "format": "date"
+                            },
+                            "uploadReceipts": {
+                                "type": ["string","null"],
+                                "title":"UPLOAD_RECEIPTS",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "LIABILITIES"
                             }
                         },
                         "required": [
@@ -933,6 +1027,10 @@
                 "locality": {
                     "type": ["string","null"],
                     "title": "LOCALITY"
+                },
+                "taluk": {
+                    "type": ["string","null"],
+                    "title": "TALUK"
                 },
                 "landmark": {
                     "type": ["string","null"],
@@ -983,6 +1081,10 @@
                     "type": ["string","null"],
                     "title": "LOCALITY"
                 },
+                "mailingtaluk": {
+                    "type": ["string","null"],
+                    "title": "TALUK"
+                },
                 "mailingPincode": {
                     "type": ["string","null"],
                     "title": "PIN_CODE"
@@ -995,6 +1097,14 @@
                     "type": ["string","null"],
                     "title": "STATE",
                     "enumCode":"state_master"
+                },  
+                "mailingRegion": {
+                    "type": ["string","null"],
+                    "title": "Region"
+                },
+                "mailingDivision": {
+                    "type": ["string","null"],
+                    "title": "Division"
                 },
                 "mailingStreet": {
                     "type": ["string","null"],
@@ -1132,6 +1242,10 @@
                     "items": {
                         "type": "object",
                         "properties": {
+                            "assetType": {
+                                "type": ["string", "null"],
+                                "title": "ASSET_TYPE"
+                            },
                             "address": {
                                 "type": ["string","null"],
                                 "title": "Address"
@@ -1166,6 +1280,13 @@
                     "minimum":100000,
                     "maximum":999999
                 },
+                "division": {
+                    "type": ["string","null"],
+                    "title": "Division"
+                },
+                "region": {
+                    "type":["string","null"]
+                },
                 "place": {
                     "type": ["string","null"],
                     "title": "PLACE"
@@ -1192,6 +1313,14 @@
                     "type": ["string","null"],
                     "title": "SPOUSE_LASTNAME"
                 },
+                "organisation": {
+                    "type": ["string","null"],
+                    "title": "ORGANISATION"
+                },
+                "designation": {
+                    "type": ["string","null"],
+                    "title": "DESIGNATION"
+                },
                 "spouseMiddleName": {
                     "type": ["string","null"],
                     "title": "SPOUSE_MIDDLENAME"
@@ -1200,7 +1329,7 @@
                     "type": ["string","null"],
                     "title": "STATE",
                     "enumCode":"state_master"
-                },
+                },                
                 "stdCode": {
                     "type": ["string","null"],
                     "title": "STD_CODE"
@@ -1240,7 +1369,7 @@
                             "properties": {
                                 "udf1":{
                                     "title": "SPOUSE_LOAN_CONSENT",
-                                    "type":["boolean","null"]
+                                    "type":["boolean","null", "string"]
                                 },
                                 "udf2":{
                                     "title":"IF_HOUSE_RENTED_NAME_OF_LANDLORD",
@@ -1526,7 +1655,7 @@
                                 "enumCode": "relationship"
                             },
                             "address": {
-                                "type": "string",
+                                "type": ["string", "null"],
                                 "title": "ADDRESS"
                             },
                             "knownSince": {
@@ -1536,11 +1665,11 @@
                                 "maximum": 99
                             },
                             "opinion": {
-                                "type": "string",
+                                "type": ["string", "null"],
                                 "title": "OPINION_ON_APPLICANT"
                             },
                             "financialStatus": {
-                                "type": "string",
+                                "type": ["string", "null"],
                                 "title": "FINANCIAL_STATUS"
                             },
                             "goodsSold": {
@@ -1563,6 +1692,11 @@
                                 "type": ["number","null"],
                                 "title": "OUTSTANDING_PAYABLE"
                             },
+                            "mobileNo": {
+                                "type": ["string", "null"],
+                                "maxLength": 10,
+                                "minLength": 10
+                            },
                             "outstandingReceivable": {
                                 "type": ["number","null"],
                                 "title": "OUTSTANDING_RECEIVABLE"
@@ -1574,11 +1708,13 @@
                 },
                 "inCurrentAddressSince": {
                     "type": ["string","null"],
-                    "title": "IN_CURRENT_ADDRESS_SINCE"
+                    "title": "IN_CURRENT_ADDRESS_SINCE",
+                    "enumCode": "years_in_current_address"
                 },
                 "inCurrentAreaSince": {
                     "type": ["string","null"],
-                    "title": "IN_CURRENT_AREA_SINCE"
+                    "title": "IN_CURRENT_AREA_SINCE",
+                    "enumCode": "years_in_current_area"
                 },
                 "villageName": {
                     "type": ["string","null"],
@@ -1616,7 +1752,7 @@
                                 "title": "ACCOUNT_NUMBER"
                             },
                             "confirmedAccountNumber": {
-                                "type": ["string","null"],
+                                "type": ["string","null","integer","number"],
                                 "title": "CONFIRMED_ACCOUNT_NUMBER"
                             },
                             "limit": {
@@ -1631,8 +1767,9 @@
                                 "enumCode": "account_type"
                             },
                             "isDisbersementAccount": {
-                                "type": ["boolean","null"],
-                                "title": "DISBURSEMENT_ACCOUNT"
+                                "type": "boolean",
+                                "title": "DISBURSEMENT_ACCOUNT",
+                                "default": false
                             },
                             "bankStatements": {
                               "type": "array",
@@ -1686,6 +1823,27 @@
 
                         }
                     }
+                },
+                "enterpriseNetworth": {
+                    "type": "array",
+                    "title": "ENTERPRISE_NET_WORTH",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "tangibleNetworth": {
+                               "type": ["number","null"],
+                               "title": "TANGIBLE_NET_WORTH"
+                            },
+                            "financialYear": {
+                               "type": ["string","null"],
+                               "title": "FINANCIAL_YEAR"
+                            }
+                        }
+                    }
+                },
+                "customerCategory": {
+                    "type": ["string","null"],
+                    "title": "CUSTOMER_CATEGORY"
                 }
             },
             "required": [

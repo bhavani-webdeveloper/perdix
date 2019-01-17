@@ -104,7 +104,11 @@
             method: 'GET',
             url: endpoint + '/report_parameters.php',
             isArray: true
-        }
+        },
+        downLoadReport: {
+            method: 'POST',
+            url: endpoint + '/newdownload.php',
+        },
 		
     });
 

@@ -20,10 +20,6 @@ irf.models.factory('BIReports', function($resource, $httpParamSerializer, search
             method: 'PUT',
             url: endpoint + '/biportal/api/ReportDrilldown.php'
         },
-		reportFilterList: {
-            method: 'GET',
-            url: endpoint + '/biportal/api/AccessLevelDefinition.php'
-        },
 		reportTabList: {
             method: 'GET',
             url: endpoint + '/biportal/api/TabDefinition.php'

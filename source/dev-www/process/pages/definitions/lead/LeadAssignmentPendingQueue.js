@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"),
- ["$log", "formHelper","PageHelper", "Lead", "$state", "$q", "SessionStore", "Utils", "entityManager",
-	function($log, formHelper,PageHelper, Lead, $state, $q, SessionStore, Utils, entityManager) {
+ ["$log", "formHelper","PageHelper", "Lead", "$q", "SessionStore","LeadHelper","irfNavigator",
+	function($log, formHelper,PageHelper, Lead,$q, SessionStore, LeadHelper,irfNavigator) {
 		var branch = SessionStore.getBranch();
 
 		
@@ -24,7 +24,7 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"),
 					"properties": {
 						"branch": {
 							"title": "HUB_NAME",
-							"type": "string",
+							"type": ["string","null"],
 							"enumCode": "branch",
 							"x-schema-form": {
 								"type": "select",
@@ -100,6 +100,7 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"),
 							item.addressLine1,
 							item.cityTownVillage,
 							item.pincode,
+							item.transactionType,
 							item.mobileNo
 						]
 					},
@@ -132,7 +133,10 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"),
 						}, {
 							title: 'Pincode',
 							data: 'pincode'
-						},{
+						}, {
+							title: 'Type',
+							data: 'transactionType'
+						}, {
 							title: 'Mobile No',
 							data: 'mobileNo'
 						}]
@@ -166,13 +170,56 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"),
 									PageHelper.showProgress("bulk-create", "Atleast one loan should be selected for Batch creation", 5000);
 									return false;
 								}
-								$state.go("Page.Engine", {
-									pageName: "lead.LeadReassign",
-									pageData: items
+						/* 1)conditional check that all items selected from this queue should contains same transaction type 
+						    and if no transaction type found then defaulting to new loan
+						*/
+						    let validateSameTransactionType = items[0]['transactionType']?items[0]['transactionType']:"New Loan"
+						        _.each(items, function (item) {
+						            if (_.isNull(item['transactionType']))
+						                item['transactionType'] = "New Loan";
+						            if (item['transactionType'] != validateSameTransactionType) {
+						                PageHelper.showProgress("bulk-create", "Transaction Type of selected items should be same", 5000);
+						                validateSameTransactionType=false;
+						            }
 								});
+							
+						/*  1)see irfpages for implementation : passing bacparam as second argument which is state
+						      of the page to which the next page will go back 
+						*/  
+								if (validateSameTransactionType != false) {
+									irfNavigator.go({
+										'state': 'Page.Engine',
+										'pageName': 'lead.LeadReassign',
+										'pageData': items
+									}, {
+										'state': 'Page.LeadDashboard'
+									});
+								}
+						    },
+						    isApplicable: function (items) {
+						        return true;
+						    }
+						}, {
+							name: "Reject Lead",
+							desc: "",
+							htmlClass: "style='margin-left:10px'",
+							fn: function(items) {
+								if (items.length == 0) {
+									PageHelper.showProgress("bulk-reject", "Atleast one loan should be selected for Batch Rejecton", 5000);
+									return false;
+								}
+								_.each(items, function (item) {
+									item.leadStatus="Reject";
+									item.currentStage="Inprocess";
+								  });
+								LeadHelper.BulkLeadStatusUpdate(items).then(function(resp) {
+									PageHelper.showProgress("Bulk-lead-Reject", "Done. lead Rejected", 5000);
+								}, function(err){
+									PageHelper.showProgress("Bulk-lead-Reject", "error in rejecting lead", 5000);
+								});  
 							},
 							isApplicable: function(items) {
-								return true;
+                                return true;
 							}
 						}];
 					}

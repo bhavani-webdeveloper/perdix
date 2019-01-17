@@ -10,13 +10,9 @@ irf.pages.controller("CentreCreationDashboardCtrl", ['$log', '$scope', 'PagesDef
                 "Page/Engine/management.CentreCreationSearch"
             ]
         };
-
-
-         PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
+        PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
             $scope.dashboardDefinition = resp;
              
-        });
-
-        
+        });     
     }
 ]);

@@ -3,7 +3,6 @@
     "customerMaxGenericAge":60,
     "customerMaxAgeBcProduct":58,
     "customerAgeLimitForSingleFemale":35,
-    "productValidationFromStage":"LoanBooking",
     "stages":[
        {
           "order":1,
@@ -162,58 +161,60 @@
           "sendSms":"Yes",
           "smsCategory":"Sanction",
           "isAccountOpening":false,
+          "isPreAccountOpening":true,
           "allowedRoles":[
              "WM"
           ]
        },
        {
-         "order":14,
-         "code":"DSCOverride",
-         "name":"Dsc Override",
-         "stageType":"CAPTURE",
-         "sendSms":"Yes",
-         "smsCategory":"Sanction",
-         "isAccountOpening":false,
-         "allowedRoles":[
-            "WM"
-         ]
-      },
+        "order":14,
+        "code":"DSCOverride",
+        "name":"Dsc Override",
+        "stageType":"CAPTURE",
+        "sendSms":"Yes",
+        "smsCategory":"Sanction",
+        "isAccountOpening":false,
+        "isPreAccountOpening":true,
+        "allowedRoles":[
+           "WM"
+        ]
+     },
        {
-          "order":15,
-          "code":"DocumentUpload",
-          "name":"Document Download and Upload",
-          "stageType":"CAPTURE",
-          "sendSms":"Yes",
-          "smsCategory":"LoanBooking",
-          "isAccountOpening":false,
-          "allowedRoles":[
-             "WM"
-          ]
-       },
-       {
-          "order":16,
-          "code":"Checker1",
-          "name":"Checker1",
-          "stageType":"CAPTURE",
-          "sendSms":"No",
-          "smsCategory":"LoanBooking",
-          "isAccountOpening":false,
-          "allowedRoles":[
-             "WM"
-          ]
-       },
-       {
-         "order":17,
-         "code":"Checker2",
-         "name":"Checker2",
-         "stageType":"CAPTURE",
-         "sendSms":"No",
-         "smsCategory":"LoanBooking",
-         "isAccountOpening":false,
-         "allowedRoles":[
-            "WM"
-         ]
-      },
+        "order":15,
+        "code":"DocumentUpload",
+        "name":"Document Download and Upload",
+        "stageType":"CAPTURE",
+        "sendSms":"Yes",
+        "smsCategory":"LoanBooking",
+        "isAccountOpening":true,
+        "allowedRoles":[
+           "WM"
+        ]
+     },
+     {
+        "order":16,
+        "code":"Checker1",
+        "name":"Checker1",
+        "stageType":"CAPTURE",
+        "sendSms":"No",
+        "smsCategory":"LoanBooking",
+        "isAccountOpening":false,
+        "allowedRoles":[
+           "WM"
+        ]
+     },
+     {
+       "order":17,
+       "code":"Checker2",
+       "name":"Checker2",
+       "stageType":"CAPTURE",
+       "sendSms":"No",
+       "smsCategory":"LoanBooking",
+       "isAccountOpening":false,
+       "allowedRoles":[
+          "WM"
+       ]
+    },
        {
          "order":18,
          "code":"Completed",
@@ -506,7 +507,7 @@
                    "captureStages":[
                       "Screening", "LoanInitiation"
                    ],
-                   "refCodeCategory":"relationship"
+                   "refCodeCategory":"relation"
                 },
                 "witnessFirstName":{
                    "title":"Witness First Name",
@@ -979,7 +980,7 @@
                    "title":"REPAYMENT_DATE",
                    "type":"date",
                    "captureStages":[
-                      "LoanBooking"
+                      "LoanBooking", "LoanInitiation"
                    ]
                 },
                 "frequency":{
@@ -1231,7 +1232,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineeMiddleName":{
@@ -1240,7 +1241,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineeLastName":{
@@ -1249,14 +1250,14 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineeRelationship":{
                       "title":"Nominee Relationship",
                       "type":"string",
                       "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                        "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ],
                       "refCodeCategory":"relation"
                    },
@@ -1266,7 +1267,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                        "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineeStreet":{
@@ -1275,7 +1276,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineeLocality":{
@@ -1284,14 +1285,14 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineeDistrict":{
                       "title":"Nominee District",
                       "type":"string",
                       "captureStages":[
-                         "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ],
                       "refCodeCategory":"district"
                    },
@@ -1301,7 +1302,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                        "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineePincode":{
@@ -1310,21 +1311,21 @@
                       "minimum":6,
                       "maximum":6,
                       "captureStages":[
-                         "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineeDOB":{
                       "title":"Nominee DOB",
                       "type":"string",
                       "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview","FieldAppraisal"
+                        "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview","FieldAppraisal"
                       ]
                    },
                    "nomineeGender":{
                       "title":"Nominee Gender",
                       "type":"string",
                       "captureStages":[
-                         "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ],
                       "refCodeCategory":"gender"
                    },
@@ -1332,7 +1333,7 @@
                       "title":"Nominee Minor",
                       "type":"boolean",
                       "captureStages":[
-                         "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianTitle":{
@@ -1341,7 +1342,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianFirstName":{
@@ -1350,7 +1351,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianMiddleName":{
@@ -1359,7 +1360,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianLastName":{
@@ -1368,14 +1369,14 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianRelationWithMinor":{
                       "title":"Guardian Relation With Minor",
                       "type":"string",
                       "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                        "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ],
                       "refCodeCategory":"relationship"
                    },
@@ -1383,7 +1384,7 @@
                       "title":"Guardian DOB",
                       "type":"string",
                       "captureStages":[
-                         "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianDoorNo":{
@@ -1392,7 +1393,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianStreet":{
@@ -1401,7 +1402,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianLocality":{
@@ -1410,14 +1411,14 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                        "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianDistrict":{
                       "title":"Guardian District",
                       "type":"string",
                       "captureStages":[
-                         "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ],
                       "refCodeCategory":"district"
                    },
@@ -1427,7 +1428,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                        "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                        "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianPincode":{
@@ -1436,14 +1437,14 @@
                       "minimum":6,
                       "maximum":6,
                       "captureStages":[
-                         "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianGender":{
                       "title":"Guardian Gender",
                       "type":"string",
                       "captureStages":[
-                         "LoanInitiation", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ],
                       "refCodeCategory":"gender"
                    }
@@ -3162,8 +3163,6 @@
                    "ratePerGramInPaisa":{
                       "title":"Rate Per Gram In Paisa",
                       "type":"number",
-                      "minimum":1,
-                      "maximum":100,
                       "captureStages":[
                          "Screening", "LoanInitiation"
                       ]
@@ -3171,8 +3170,6 @@
                    "ratePerGram22CaratInPaisa":{
                       "title":"Rate Per Gram22 CaratInPaisa",
                       "type":"number",
-                      "minimum":1,
-                      "maximum":100,
                       "captureStages":[
                          "Screening", "LoanInitiation"
                       ]
@@ -3180,8 +3177,6 @@
                    "marketValueInPaisa":{
                       "title":"Market Value In Paisa",
                       "type":"number",
-                      "minimum":1,
-                      "maximum":100,
                       "captureStages":[
                          "Screening", "LoanInitiation"
                       ]
@@ -3930,7 +3925,7 @@
                       "title":"customerSignatureDate",
                       "type":"date",
                       "captureStages":[
-                         "Screening", "Sanction", "LoanBooking", "LoanInitiation"
+                         "Screening", "Sanction", "LoanBooking", "DSCOverride","LoanInitiation"
                       ]
                    },
                    "moratoriumPeriodInDays": {
@@ -3939,35 +3934,35 @@
                       "minimum": 1,
                       "maximum": 10000000,
                       "captureStages": [
-                         "Screening", "Sanction", "LoanBooking", "LoanInitiation"
+                         "Screening", "Sanction", "LoanBooking","DSCOverride", "LoanInitiation"
                       ]
                    },
                    "disbursementAmount":{
                       "title":"disbursementAmount",
                       "type":"integer",
                       "captureStages":[
-                         "Screening", "Sanction", "LoanBooking", "LoanInitiation"
+                         "Screening", "Sanction", "LoanBooking","DSCOverride", "LoanInitiation"
                       ]
                    },
                    "disbursementFromBankAccountNumber":{
                       "title":"disbursementFromBankAccountNumber",
                       "type":"string",
                       "captureStages":[
-                         "Screening", "LoanInitiation","DocumentUpload"
+                         "Screening", "LoanInitiation","DSCOverride","DocumentUpload"
                       ]
                    },
                    "scheduledDisbursementDate":{
                       "title":"scheduledDisbursementDate",
                       "type":"date",
                       "captureStages":[
-                         "Screening","LoanBooking", "LoanInitiation"
+                         "Screening","LoanBooking","DSCOverride", "LoanInitiation"
                       ]
                    },
                    "trancheNumber":{
                       "title":"trancheNumber",
                       "type":"string",
                       "captureStages":[
-                         "Screening", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Screening", "Sanction", "DSCOverride","LoanInitiation", "PendingForPartner"
                       ]
                    },
                    "tranchCondition":{
@@ -3976,7 +3971,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Screening", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Screening", "Sanction", "LoanInitiation","DSCOverride", "PendingForPartner"
                       ]
                    },
                    "customerAccountNumber":{
@@ -3985,7 +3980,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Screening", "LoanInitiation", "PendingForPartner", "DocumentUpload"
+                         "Screening", "LoanInitiation", "PendingForPartner","DSCOverride", "DocumentUpload"
                       ]
                    },
                    "customerNameInBank":{
@@ -3994,63 +3989,63 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Screening" ,"DocumentUpload", "LoanInitiation"
+                         "Screening" ,"DocumentUpload", "DSCOverride","LoanInitiation"
                       ]
                    },
                    "ifscCode":{
                       "title":"ifscCode",
                       "type":"string",
                       "captureStages":[
-                         "Screening", "LoanInitiation", "PendingForPartner", "DocumentUpload"
+                         "Screening", "LoanInitiation", "PendingForPartner","DSCOverride", "DocumentUpload"
                       ]
                    },
                    "customerBankName":{
                       "title":"customerBankName",
                       "type":"string",
                       "captureStages":[
-                         "Screening", "LoanInitiation", "PendingForPartner", "DocumentUpload"
+                         "Screening", "LoanInitiation", "PendingForPartner", "DSCOverride","DocumentUpload"
                       ]
                    },
                    "customerBankBranchName":{
                       "title":"customerBankBranchName",
                       "type":"string",
                       "captureStages":[
-                         "Screening", "LoanInitiation", "PendingForPartner", "DocumentUpload"
+                         "Screening", "LoanInitiation", "PendingForPartner","DSCOverride", "DocumentUpload"
                       ]
                    },
                    "party":{
                       "title":"party",
                       "type":"string",
                       "captureStages":[
-                         "Screening", "DocumentUpload", "LoanInitiation"
+                         "Screening", "DocumentUpload", "DSCOverride","LoanInitiation"
                       ]
                    },
                    "feeAmountPayment":{
                       "title":"feeAmountPayment",
                       "type":"string",
                       "captureStages":[
-                         "LoanBooking"
+                         "LoanBooking","DSCOverride"
                       ]
                    },
                    "penalInterestDuePayment":{
                       "title":"penalInterestDuePayment",
                       "type":"string",
                       "captureStages":[
-                         "LoanBooking"
+                         "LoanBooking","DSCOverride"
                       ]
                    },
                    "normalInterestDuePayment":{
                       "title":"normalInterestDuePayment",
                       "type":"string",
                       "captureStages":[
-                         "LoanBooking"
+                         "LoanBooking","DSCOverride"
                       ]
                    },
                    "principalDuePayment":{
                       "title":"principalDuePayment",
                       "type":"string",
                       "captureStages":[
-                         "LoanBooking"
+                         "LoanBooking","DSCOverride"
                       ]
                    },
                    "linkedAccountTotalPrincipalDue": {
@@ -4059,7 +4054,7 @@
                       "minLength": 1,
                       "maxLength": 100,
                       "captureStages": [
-                         "LoanBooking"
+                         "LoanBooking","DSCOverride"
                       ]
                    },
                    "linkedAccountNormalInterestDue": {
@@ -4068,7 +4063,7 @@
                       "minLength": 1,
                       "maxLength": 100,
                       "captureStages": [
-                         "LoanBooking"
+                         "LoanBooking","DSCOverride"
                       ]
                    },
                    "linkedAccountPenalInterestDue": {
@@ -4077,7 +4072,7 @@
                       "minLength": 1,
                       "maxLength": 100,
                       "captureStages": [
-                         "LoanBooking"
+                         "LoanBooking","DSCOverride"
                       ]
                    },
                    "linkedAccountPreclosureFee": {
@@ -4086,7 +4081,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "LoanBooking"
+                        "LoanBooking","DSCOverride"
                      ]
                   },
                    "linkedAccountTotalFeeDue": {
@@ -4095,8 +4090,15 @@
                       "minLength": 1,
                       "maxLength": 100,
                       "captureStages": [
-                         "LoanBooking"
+                         "LoanBooking","DSCOverride"
                       ]
+                   },
+                   "dscOverride":{
+                    "title": "DscOverride",
+                    "type":"boolean",
+                    "captureStages":[
+                       "LoanInitiation", "DocumentUpload" ,"DSCOverride","Checker1","Checker2"
+                    ]
                    }
                 }
              }

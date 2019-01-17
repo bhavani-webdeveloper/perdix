@@ -7,7 +7,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.RejectedDisbu
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {
 
-                    model.branchId = SessionStore.getCurrentBranch().branchId;
+                    model.branch = SessionStore.getCurrentBranch().branchId;
                     model.stage = 'RejectedDisbursement';
                     console.log(model);
                 },
@@ -17,7 +17,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.RejectedDisbu
                     autoSearch: true,
                     sorting:true,
                     sortByColumns:{
-                        "customerSignatureDate":"Customer Signature Date",
                         "scheduledDisbursementDate":"Scheduled Disbursement Date"
 
                     },
@@ -29,16 +28,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.RejectedDisbu
                         "title": "VIEW_LOANS",
                         "required":[],
                         "properties": {
-
-                            // "customerSignatureDate": {
-                            //     "title": "CUSTOMER_SIGNATURE_DATE",
-                            //     "type": "string",
-                            //     "x-schema-form": {
-                            //         "type": "date"
-
-                            //     }
-                            // },
-
                             "scheduledDisbursementDate": {
                                 "title": "SCHEDULED_DISBURSEMENT_DATE",
                                 "type": "string",
@@ -46,13 +35,24 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.RejectedDisbu
                                     "type": "date"
                                 }
                             },
-                            "branchId": {
-                                "title": "BRANCH",
-                                "type": "integer",
-                                "readonly": true,
-                                "enumCode": "branch_id",
+                            'branch': {
+                                'title': "BRANCH",
+                                "type": ["string", "null"],
                                 "x-schema-form": {
-                                    "type": "select"
+                                    "type": "userbranch",
+                                    "readonly":true,
+                                    "screenFilter": true
+                                }
+                            },
+                            "centre": {
+                                "title": "CENTRE",
+                                "type": ["integer", "null"],
+                                "x-schema-form": {
+                                    "type": "select",
+                                    "enumCode": "centre",
+                                    "parentEnumCode": "branch",
+                                    "parentValueExpr": "model.branch",
+                                    "screenFilter": true
                                 }
                             }
 
@@ -66,7 +66,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.RejectedDisbu
                             'currentStage': 'RejectedDisbursement',
                             'customerSignatureDate': searchOptions.customerSignatureDate,
                             'scheduledDisbursementDate': searchOptions.scheduledDisbursementDate,
-                            'branchId': searchOptions.branchId
+                            'branchId':searchOptions.branch,
+                            'centreId': searchOptions.centre
                         }).$promise;
 
                     },
@@ -92,8 +93,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.RejectedDisbu
                         getListItem: function(item){
                             return [
                                 item.customerName + " ( Account #: "+item.accountNumber+")",
-                                "<em>Disbursed Amount:  &#8377;"+(_.isEmpty(item.disbursedAmount)?0:item.disbursedAmount)+", Disbursement Amount :  &#8377;"+item.disbursementAmount+"</em>",
-                                "Customer Signature Date  : " + (_.isEmpty(item.customerSignatureDate)?" NA ":item.customerSignatureDate)+", Scheduled Disbursement Date :"+(_.isEmpty(item.scheduledDisbursementDate)?" NA ":item.scheduledDisbursementDate)
+                                "<em>Disbursed Amount:  &#8377;"+((!item.disbursedAmount)?0:item.disbursedAmount)+", Disbursement Amount :  &#8377;"+item.disbursementAmount
+                                + ", Scheduled Disbursement Date :" + ((!item.scheduledDisbursementDate) ? " NA " : item.scheduledDisbursementDate) + "</em>"
                             ]
                         },
                         getActions: function(){

@@ -285,7 +285,9 @@
        "required":[
           "accountDetails",
           "loanCustomerRelations",
-          "loanCentre"
+          "loanCentre",
+          "jewelLoanDetails",
+          "ornaments"
         
        ],
        "properties":{
@@ -557,7 +559,7 @@
                    "captureStages":[
                       "Screening", "LoanInitiation"
                    ],
-                   "refCodeCategory":"relationship"
+                   "refCodeCategory":"relation"
                 },
                 "witnessFirstName":{
                    "title":"Witness First Name",
@@ -4148,6 +4150,13 @@
                       "captureStages": [
                          "LoanBooking","DSCOverride"
                       ]
+                   },
+                   "dscOverride":{
+                    "title": "DscOverride",
+                    "type":"boolean",
+                    "captureStages":[
+                       "LoanInitiation", "DocumentUpload" ,"DSCOverride","Checker1","Checker2"
+                    ]
                    }
                 }
              }

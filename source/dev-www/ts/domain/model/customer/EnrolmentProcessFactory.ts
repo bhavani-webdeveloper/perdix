@@ -20,7 +20,6 @@ declare var enrolmentProcessConfig: Object;
 class EnrolmentProcessFactory {
 
     static enrolmentPolicyFactory:EnrolmentPolicyFactory = EnrolmentPolicyFactory.getInstance();
-    // static enrolmentProcessConfig:any = EnrolmentProcess.getProcessConfig();
 
     static fromCustomer(obj: Customer): Observable<EnrolmentProcess> {
         let ep = new EnrolmentProcess();
@@ -64,6 +63,11 @@ class EnrolmentProcessFactory {
             )
     }
 
+    static plainToClass(customer:Customer): Observable<EnrolmentProcess> {
+        let ep:EnrolmentProcess = new EnrolmentProcess();
+        ep.customer = <Customer>plainToClass<Customer, Object>(Customer, Utils.toJSObj(customer));
+        return Observable.of(ep);
+    }
 
 }
 

@@ -1,16 +1,14 @@
 irf.pageCollection.factory(irf.page("loans.individual.booking.PendingQueue"),
-["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan", "LoanBookingCommons",
-function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan, LoanBookingCommons){
+["$log", "formHelper", "Enrollment", "$state", "SessionStore", "$q", "IndividualLoan", "LoanBookingCommons","$filter",
+function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan, LoanBookingCommons, $filter){
     return {
         "type": "search-list",
         "title": "LOAN_BOOKING_QUEUE",
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            model.branchName = SessionStore.getBranch();
-            model.branchId = SessionStore.getBranchId();
             model.stage = 'LoanBooking';
-            console.log(model);
+            model.branch = SessionStore.getCurrentBranch().branchId;
         },
         offline: false,
         definition: {
@@ -30,15 +28,24 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
                 "title": "VIEW_LOANS",
                 "required":["branch"],
                 "properties": {
-                    "centreCode": {
-                        "title": "CENTER_NAME",
-                        "type": ["number", "null"],
-                        "enumCode": "centre",
+                    'branch': {
+                        'title': "BRANCH",
+                        "type": ["string", "null"],
+                        "x-schema-form": {
+                            "type": "userbranch",
+                            "screenFilter": true
+                        }
+                    },
+                    "centre": {
+                        "title": "CENTRE",
+                        "type": ["integer", "null"],
                         "x-schema-form": {
                             "type": "select",
-                            "parentValueExpr": "model.branchId"
-                        },
-                        
+                            "enumCode": "centre",
+                            "parentEnumCode": "branch",
+                            "parentValueExpr": "model.branch",
+                            "screenFilter": true
+                        }
                     },
                     "sanction_date": {
                         "title": "SANCTION_DATE",
@@ -47,15 +54,43 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
                             "type": "date"
                         }
                     },
+                    "partner_code": {
+                        "title": "PARTNER_CODE",
+                        "type":["string","null"],
+                        "x-schema-form": {
+                            "type":"select",
+                            "enumCode": "partner"
+                        }
+                    },
                     "loan_product": {
                         "title": "Loan Product",
                         "type": "string",
-                        "default": "1",
+                        
                         "x-schema-form": {
-                            "type": "select",
-                            "enumCode": "loan_product"
+                            "type": "lov",
+                            "lovonly": true,
+                            search: function (inputModel, form, model, context) {
+                                var loanProduct = formHelper.enum('loan_product').data;
+                                var products = $filter('filter')(loanProduct, {parentCode: model.partner_code ? model.partner_code : undefined}, true);
+
+                                return $q.resolve({
+                                    headers: {
+                                        "x-total-count": products.length
+                                    },
+                                    body: products
+                                });
+                            },
+                            onSelect: function (valueObj, model, context) {
+                                model.loan_product = valueObj.field1;
+                            },
+                            getListDisplayItem: function (item, index) {
+                                return [
+                                    item.name
+                                ];
+                            },
                         }
                     },
+                    
                     "account_number": {
                         "title": "LOAN_ACCOUNT_NUMBER",
                         "type": "string"
@@ -85,8 +120,8 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
                 }
                 return IndividualLoan.search({
                     'stage': 'LoanBooking',
-                    'branchName': searchOptions.branchName,
-                    'centreCode': searchOptions.centreCodeForSearch,
+                    'branchId':searchOptions.branch,
+                    'centreCode': searchOptions.centre,
                     'customerId': null,
                     'accountNumber':null,
                     'page': pageOpts.pageNo,

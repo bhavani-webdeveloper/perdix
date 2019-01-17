@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="bower_components/select2/dist/css/select2.min.css" />
     <link rel="stylesheet" href="bower_components/datatables.net-bs/css/dataTables.bootstrap.css" />
     <link rel="stylesheet" href="bower_components/angular-data-table/release/dataTable.css" />
+    <link rel="stylesheet" href="bower_components/angular-data-table/release/material.css" />
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -108,8 +109,11 @@
 <script src="bower_components/angular-data-table/release/dataTable.js"></script>
 <script src="bower_components/mathjs/dist/math.min.js"></script>
 <script src="bower_components/lz-string/libs/lz-string.min.js"></script>
+<script src="bower_components/myforce-angularjs-query-builder/query-builder-directive.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
+
+
 
 <!--
   IE8 support, see AngularJS Internet Explorer Compatibility http://docs.angularjs.org/guide/ie
@@ -139,6 +143,7 @@
 <script src="modules/models/common/Bank.js"></script>
 <script src="modules/models/common/Link.js"></script>
 <script src="modules/models/common/Message.js"></script>
+<script src="modules/models/common/Locking.js"></script>
 
 <script src="modules/irfcommons/irfcommons.js"></script>
 <script src="modules/irfcommons/translate.js"></script>
@@ -161,6 +166,7 @@
 <script src="modules/irfpages/states/Page.EngineOffline.js"></script>
 <script src="modules/irfpages/states/Page.BundleOffline.js"></script>
 <script src="modules/irfpages/states/Page.Timeline.js"></script>
+<script src="process/models/v1/insurance/Insurance.js"></script>
 
 <script src="modules/logger/logger.js"></script>
 
@@ -180,14 +186,17 @@
 <script src="process/models/v1/Queries.js"></script>
 <script src="process/models/v1/Schema.js"></script>
 <script src="process/models/v1/customer/Enrollment.js"></script>
+<script src="process/models/v1/customer/Workflow.js"></script>
 <script src="process/models/v1/customer/IrfFormRequestProcessor.js"></script>
 <script src="process/models/v1/customer/CreditBureau.js"></script>
 <script src="process/models/v1/bank/BankMaster.js"></script>
 <script src="process/models/v1/bank/SurveyInformation.js"></script>
 <script src="process/models/v1/customer/CustomerBankBranch.js"></script>
+<script src="process/models/v1/customer/Dedupe.js"></script>
 <script src="process/models/v1/loans/LoanProcess.js"></script>
 <script src="process/models/v1/loans/LoanAccount.js"></script>
 <script src="process/models/v1/loans/LoanCollection.js"></script>
+<script src="process/models/v1/loans/RepaymentReminder.js"></script>
 <script src="process/models/v1/loans/Groups.js"></script>
 <script src="process/models/v1/loans/GroupProcess.js"></script>
 <script src="process/models/v1/loans/ACH.js"></script>
@@ -199,22 +208,42 @@
 <script src="process/models/v1/loans/IndividualLoan.js"></script>
 <script src="process/models/v1/loans/SimpleLoanInput.js"></script>
 <script src="process/models/v1/loans/DocumentTracking.js"></script>
+<script src="process/models/v1/excelUpload/ExcelUpload.js"></script>
 <script src="process/models/v1/loans/Inventory.js"></script>
 <script src="process/models/v1/loans/ACHPDCBatchProcess.js"></script>
+<script src="process/models/v1/loans/SecurityEMIRefundResource.js"></script>
 <script src="process/models/v1/management/ReferenceCode.js"></script>
 <script src="process/models/v1/management/Maintenance.js"></script>
 <script src="process/models/v1/management/CentreCreationResource.js"></script>
+<script src="process/models/v1/management/DeathMarking.js"></script>
+
+<script src="process/models/v1/management/Commons.js"></script>
+
+<script src="process/models/v1/management/BranchCreationResource.js"></script>
+<script src="process/models/v1/management/Product.js"></script>
+<script src="process/models/v1/management/Misc.js"></script>
 <script src="process/models/v1/lead/Lead.js"></script>
 <script src="process/models/v1/Journal/Journal.js"></script>
 <script src="process/models/v1/psychometric/Psychometric.js"></script>
 <script src="process/models/v1/user/User.js"></script>
 <script src="process/models/v1/bi/BIReports.js"></script>
+<script src="process/models/v1/management/ScoresMaintenance.js"></script>
+<script src="process/models/v1/management/ReportsMaintenance.js"></script>
+<script src="process/models/v1/management/RuleMaintenance.js"></script>
+
 <script src="process/models/v1/bi/BIAnalytics.js"></script>
 <script src="process/models/v1/audit/Audit.js"></script>
-<script src="process/models/v1/mutualFund/MutualFund.js"></script>
+<script src="process/models/v1/messaging/Messaging.js"></script>
 <script src="process/models/v1/ui/UIRepository.js"></script>
+<script src="process/models/v1/lender/LiabilityAccountProcess.js"></script>
+<script src="process/models/v1/lender/Schedule.js"></script>
+<script src="process/models/v1/management/CbsDateResource.js"></script>
+<script src="process/models/v1/worklist/Worklist.js"></script>
+<!-- <script src="process/models/v1/tagMaster/tagMaster.js"></script> -->
+<script src="process/models/v1/chartOfAccounts/ChartOfAccount.js"></script>
+<script src="process/models/v1/agent/Agent.js"></script>
 <script src="process/models/v1/payment/Payment.js"></script>
-
+<script src="process/models/v1/mutualFund/MutualFund.js"></script>
 
 <script src="process/models/php/management/Masters.js"></script>
 <script src="process/models/php/management/RolesPages.js"></script>
@@ -225,6 +254,7 @@
 <!-- build:js js/process/pages.js -->
 <script src="process/pages/pages.config.js"></script>
 <script src="process/pages/states/Page.Landing.js"></script>
+<script src="process/pages/definitions/workflow/CustomerApprovalDashboard.js"></script>
 <script src="process/pages/states/Page.Customer360.js"></script>
 <script src="process/pages/states/Page.CustomerHistory.js"></script>
 <script src="process/pages/states/Page.BIDashboard.js"></script>
@@ -233,6 +263,7 @@
 <script src="process/pages/states/Page.LeadDashboard.js"></script>
 <script src="process/pages/states/Page.JournalMaintenanceDashboard.js"></script>
 <script src="process/pages/states/Page.JournalPostingDashboard.js"></script>
+<script src="process/pages/states/Page.JournalMultiPostingDashboard.js"></script>
 <script src="process/pages/states/Page.LUCDashboard.js"></script>
 <script src="process/pages/states/Page.CreditMonitoringDashboard.js"></script>
 <script src="process/pages/states/Page.ReferenceCodeDashboard.js"></script>
@@ -245,7 +276,17 @@
 <script src="process/pages/states/Page.LoansACHPDCDashboard.js"></script>
 <script src="process/pages/states/Page.LoansCollectionsDashboard.js"></script>
 <script src="process/pages/states/Psychometric.Test.js"></script>
+<script src="process/pages/states/Page.ScoreParameterMaintenanceDashboard.js"></script>
 <script src="process/pages/states/Page.CentreCreationDashboard.js"></script>
+<script src="process/pages/states/Page.ServiceRequestDashboard.js"></script>
+<script src="process/pages/states/witfin/Page.witfinLeadDashboard.js"></script>
+<script src="process/pages/states/pahal/Page.pahalLeadDashboard.js"></script>
+<script src="process/pages/definitions/Journal/FinconAccounting.js"></script>
+<script src="process/pages/definitions/Journal/FinconAccountingReview.js"></script>
+<script src="process/pages/definitions/Journal/CompletedFinconAccount.js"></script>
+<script src="process/pages/definitions/Journal/RejectedFinconAccount.js"></script>
+
+ <script src="process/pages/states/Page.FinconAccountingDashboard.js"></script>
 
 <!-- for bi reports -->
 <script src="process/pages/states/ReportsDashboard.js"></script>
@@ -254,6 +295,7 @@
 
 <!-- build:js js/process/pages/definitions.js -->
 <!-- <script src="process/pages/definitions/demo/Demo.js"></script> -->
+<!-- <script src="process/pages/definitions/demo/Demo3.js"></script> -->
 <script src="process/pages/definitions/demo/Demo2.js"></script>
 <script src="process/pages/definitions/UserProfile.js"></script>
 <script src="process/pages/definitions/bi/BIReports.js"></script>
@@ -264,6 +306,7 @@
 <script src="process/pages/definitions/score/CreateScore.js"></script>
 <script src="process/pages/definitions/score/ManageScore.js"></script>
 <script src="process/pages/definitions/score/UpdateScore.js"></script>
+    <script src="process/pages/definitions/score/ScoreValues.js"></script>
 
 <script src="process/pages/definitions/score/ManageScoreParameters.js"></script>
 <script src="process/pages/definitions/score/UpdateScoreParameters.js"></script>
@@ -289,8 +332,19 @@
 <script src="process/pages/definitions/bank/Survey.js"></script>
 <script src="process/pages/definitions/bank/SurveyDashboard.js"></script>
 
-<script src="process/pages/definitions/MutualFund/MutualFundEKYC.js"></script>
-<script src="process/pages/definitions/MutualFund/MutualFundDashboard.js"></script>
+<script src="process/pages/definitions/witfin/loans/LoanOriginationDashboard.js"></script>
+<script src="process/pages/definitions/witfin/loans/VehicleValuationDashboard.js"></script>
+<script src="process/pages/definitions/pahal/loans/LoanOriginationDashboard.js"></script>
+<script src="process/pages/definitions/irep/loans/LoanOriginationDashboard.js"></script>
+<script src="process/pages/definitions/kgfs/loans/LoanBookingDashboard.js"></script>
+
+<script src="process/pages/definitions/kgfs/kgfsWorkflow/GpsFPApprovalDashboard.js"></script>
+<script src="process/pages/definitions/kgfs/customer/CustomerEnrollmentDashboard.js"></script>
+<script src="process/pages/definitions/kgfs/customer/CustomerSearchQueue.js"></script>
+
+<script src="process/pages/definitions/lender/liabilities/LoanBookingDashboard.js"></script>
+<script src="process/pages/definitions/payment/PaymentDashboard.js"></script>
+<!-- <script src="process/pages/definitions/payment/PaymentInitiation.js"></script> -->
 
 <script src="process/pages/definitions/management/ManagementHelper.js"></script>
 <script src="process/pages/definitions/management/VillageCRU.js"></script>
@@ -307,6 +361,14 @@
 <script src="process/pages/definitions/management/BranchMerger.js"></script>
 <script src="process/pages/definitions/management/MasterDataMaintenance.js"></script>
 <script src="process/pages/definitions/management/TaggingMaintenance.js"></script>
+<script src="process/pages/definitions/management/product/LoanProductDashboard.js"></script>
+<script src="process/pages/definitions/management/BranchCreationDashboard.js"></script>
+
+
+<script src="process/pages/definitions/coa/ChartOfAccountDashboard.js"></script>
+
+
+<script src="process/pages/states/Page.ManagementReportDashboard.js"></script>
 
 <script src="process/pages/definitions/user/UserMaintanence.js"></script>
 <script src="process/pages/definitions/user/UserSearch.js"></script>
@@ -315,8 +377,13 @@
 
 <script src="process/pages/definitions/customer/EnrollmentHouseVerificationQueue.js"></script>
 <script src="process/pages/definitions/customer/CustomerSearch.js"></script>
+<script src="process/pages/definitions/workflow/CustomerApprovalApprove.js"></script>
+<script src="process/pages/definitions/workflow/CustomerApprovalQueue.js"></script>
+<script src="process/pages/definitions/workflow/CustomerApprovalInit.js"></script>
+<script src="process/pages/definitions/customer/FSOCustomerSearch.js"></script>
 <script src="process/pages/definitions/customer/EnrollmentStage1.js"></script>
 <script src="process/pages/definitions/customer/AssetsLiabilitiesAndHealth.js"></script>
+<script src="process/pages/definitions/customer/Dedupe.js"></script>
 <script src="process/pages/definitions/customer/CustomerRUD.js"></script>
 <script src="process/pages/definitions/customer/EDF.js"></script>
 <script src="process/pages/definitions/customer/CBCheck.js"></script>
@@ -324,9 +391,12 @@
 <script src="process/pages/definitions/customer/CBCheckStatusQueue.js"></script>
 <script src="process/pages/definitions/customer/EnterpriseEnrollment.js"></script>
 <script src="process/pages/definitions/customer/EnterpriseEnrolment2.js"></script>
+<script src="process/pages/definitions/customer/EnterpriseEnrolment2BusinessBasic.js"></script>
+<script src="process/pages/definitions/customer/EnterpriseEnrolment2BusinessFinancial.js"></script>
 <script src="process/pages/definitions/customer/IndividualEnrollment.js"></script>
 <script src="process/pages/definitions/customer/IndividualEnrolment2.js"></script>
 <script src="process/pages/definitions/customer/IndividualEnrollment3.js"></script>
+<script src="process/pages/definitions/customer/IndividualEnrollmentStage2.js"></script>
 
 <script src="process/pages/definitions/customer360/CustomerProfile.js"></script>
 <script src="process/pages/definitions/customer360/BusinessProfile.js"></script>
@@ -337,18 +407,28 @@
 <script src="process/pages/definitions/customer360/loans/View.js"></script>
 <script src="process/pages/definitions/customer360/loans/Service.js"></script>
 <script src="process/pages/definitions/customer360/loans/LoanDetails.js"></script>
+<script src="process/pages/definitions/customer360/CustomerHistorySummary.js"></script>
+<script src="process/pages/definitions/customer360/CustomerHistory.js"></script>
+<script src="process/pages/definitions/customer360/Idencheck.js"></script>
+<script src="process/pages/definitions/customer360/CreditBureauResults.js"></script>
+<script src="process/pages/definitions/customer360/CustomerDeathMarking.js"></script>
+<script src="process/pages/definitions/customer360/FinancialWellbeingReport.js"></script>
+<script src="process/pages/definitions/customer360/viewInsurance.js"></script>
+<script src="process/pages/definitions/customer360/Insurance.js"></script>
 
 <script src="process/pages/definitions/loans/LoanRepay.js"></script>
 <script src="process/pages/definitions/loans/DirectLoanRepay.js"></script>
 <script src="process/pages/definitions/loans/LoanAmend.js"></script>
 <script src="process/pages/definitions/loans/UnmarkNPA.js"></script>
+<script src="process/pages/definitions/loans/PayersDetails.js"></script>
 <script src="process/pages/definitions/loans/ReferenceCode.js"></script>
 <script src="process/pages/definitions/loans/PaymentReversal.js"></script>
 <script src="process/pages/definitions/loans/LOMSReversal.js"></script>
 <script src="process/pages/definitions/loans/FreezeAccount.js"></script>
+<script src="process/pages/definitions/loans/Repossession.js"></script>
 
 <script src="process/pages/definitions/loans/group/GroupDashboard.js"></script>
-<!-- <script src="process/pages/definitions/loans/group/CentrePaymentCollection.js"></script> -->
+<script src="process/pages/definitions/loans/group/CentrePaymentCollection.js"></script>
 <script src="process/pages/definitions/loans/group/CentrePaymentCollectionDownload.js"></script>
 <script src="process/pages/definitions/loans/group/CustomerFormDownloads.js"></script>
 <script src="process/pages/definitions/loans/group/GroupRepaymentQueue.js"></script>
@@ -367,30 +447,48 @@
 <script src="process/pages/definitions/loans/individual/booking/IFMRDO.js"></script>
 <script src="process/pages/definitions/loans/individual/booking/PendingQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/booking/CaptureDisbursement.js"></script>
-<script src="process/pages/definitions/loans/individual/booking/DocumentUpload.js"></script>
 <script src="process/pages/definitions/loans/individual/booking/DocumentVerification.js"></script>
 <script src="process/pages/definitions/loans/individual/booking/PendingVerificationQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/booking/Disburse.js"></script>
 <script src="process/pages/definitions/loans/individual/booking/LoanBooking.js"></script>
 <script src="process/pages/definitions/loans/individual/booking/LoanInput.js"></script>
 <script src="process/pages/definitions/loans/individual/booking/SimpleLoanInput.js"></script>
+<script src="process/pages/definitions/loans/individual/booking/DocumentUpload.js"></script>
 
 <script src="process/pages/definitions/loans/individual/screening/LoanSanctionQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/SanctionInput.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/ScreeningInput.js"></script>
+<script src="process/pages/definitions/loans/individual/screening/DedupeQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/screening/DedupeView.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/ScreeningReview.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/ScreeningReviewQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/screening/DoPartnerView.js"></script>
+<script src="process/pages/definitions/loans/individual/screening/DoPartnerReview.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/ApplicationQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/ScreeningQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/Application.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/FieldAppraisal.js"></script>
+<script src="process/pages/definitions/loans/individual/screening/PersonalDiscussion.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/LoanRequest.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/Review.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/CBCheck.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/ApplicationReview.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/FieldAppraisalReview.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/ApplicationReviewQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/screening/LoanAnalyticsView.js"></script>
+
+<script src="process/pages/definitions/loans/individual/screening/BranchNewConversationQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/screening/BranchRepliedConversationQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/screening/SpokeNewConversationQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/screening/SpokeRepliedConversationQueue.js"></script>
+
+<!-- <script src="process/pages/definitions/witfin/customer/IndividualEnrollment2.js"></script> -->
+<!-- <script src="process/pages/definitions/witfin/customer/EnterpriseEnrolment2.js"></script> -->
+<!-- <script src="process/pages/definitions/witfin/loans/individual/screening/BranchCrAppraisal.js"></script> -->
+
 <script src="process/pages/definitions/loans/individual/screening/FieldAppraisalReviewQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/screening/ZonalRiskReviewQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/screening/ZonalRiskReview.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/FieldAppraisalQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/CentralRiskReviewQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/CentralRiskReview.js"></script>
@@ -404,6 +502,8 @@
 <script src="process/pages/definitions/loans/individual/screening/LoanView.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/LoanViewList.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/LoanOriginationQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/screening/DedupeQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/screening/DedupeView.js"></script>
 <script src="process/pages/definitions/loans/individual/booking/DocumentUploadQueue.js"></script>
 <script src="process/pages/definitions/loans/CloseLoan.js"></script>
 
@@ -423,6 +523,8 @@
 <script src="process/pages/definitions/loans/individual/disbursement/MultiDocVerification.js"></script>
 <script src="process/pages/definitions/loans/individual/disbursement/ReadyForDisbursementQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/disbursement/DisbursementConfirmationQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/disbursement/DisbursementDocumentUploadQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/disbursement/DisbursementDocumentUpload.js"></script>
 <script src="process/pages/definitions/loans/individual/disbursement/Disbursement.js"></script>
 <script src="process/pages/definitions/loans/individual/disbursement/DisbursementConfirmation.js"></script>
 <script src="process/pages/definitions/loans/individual/disbursement/LOCDisbursementQueue.js"></script>
@@ -431,8 +533,11 @@
 
 <script src="process/pages/definitions/loans/individual/collections/BouncePromiseQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/collections/BounceRecoveryQueue.js"></script>
+
 <script src="process/pages/definitions/loans/individual/collections/BounceQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/collections/CreditValidation.js"></script>
+<script src="process/pages/definitions/loans/individual/collections/BRSApproval.js"></script>
+<script src="process/pages/definitions/loans/individual/collections/BRSApprovalQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/collections/P2PUpdate.js"></script>
 <script src="process/pages/definitions/loans/individual/collections/CreditValidationQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/collections/TransactionAuthorizationQueue.js"></script>
@@ -440,10 +545,12 @@
 <script src="process/pages/definitions/loans/individual/collections/DepositStage.js"></script>
 <script src="process/pages/definitions/loans/individual/collections/ChargeFee.js"></script>
 <script src="process/pages/definitions/loans/individual/collections/MonthlyDemandList.js"></script>
+<script src="process/pages/definitions/loans/individual/collections/offlineCollectionUpload.js"></script>
 
 <script src="process/pages/definitions/loans/individual/luc/LucScheduleQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/luc/LucRiskQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/luc/LucRescheduledQueue.js"></script>
+<script src="process/pages/definitions/loans/individual/luc/LucReviewQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/luc/LucLegalRecoveryQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/luc/LucHelper.js"></script>
 
@@ -494,6 +601,10 @@
 <script src="process/pages/definitions/loans/individual/InventoryTracking/InventoryBatchQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/InventoryTracking/InventoryInTransist.js"></script>
 
+<script src="process/pages/definitions/loans/individual/reversal/reversalExecution.js"></script>
+<script src="process/pages/definitions/loans/individual/reversal/reversalSearch.js"></script>
+
+
 
 <script src="process/pages/definitions/loans/individual/writeoff/WriteOffQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/writeoff/WriteOffExecution.js"></script>
@@ -506,6 +617,10 @@
 
 <script src="process/pages/definitions/audit/AuditDashboard.js"></script>
 <script src="process/pages/definitions/audit/AuditDetails.js"></script>
+
+
+<script src="process/pages/definitions/agent/AgentDashboard.js"></script>
+
 <script src="process/pages/definitions/audit/PublishedAuditsViewQueue.js"></script>
 <script src="process/pages/definitions/audit/PublishedAuditsQueue.js"></script>
 <script src="process/pages/definitions/audit/OpenRegularAuditsQueue.js"></script>
@@ -536,6 +651,11 @@
 <script src="process/pages/definitions/audit/AuditsViewQueue.js"></script>
 <script src="process/pages/definitions/audit/AuditDumps.js"></script>
 
+<script src="process/pages/definitions/MutualFund/MutualFundEKYC.js"></script>
+<script src="process/pages/definitions/MutualFund/MutualFundDashboard.js"></script>
+<script src="process/pages/definitions/insurance/InsuranceRegistrationDashboard.js"></script>
+
+
 <script src="process/pages/definitions/audit/detail/GeneralObservation.js"></script>
 <script src="process/pages/definitions/audit/detail/ScoreSheet.js"></script>
 <script src="process/pages/definitions/audit/detail/ProcessCompliance.js"></script>
@@ -553,16 +673,33 @@
 <script src="process/pages/definitions/audit/detail/processcompliance/NonSamplingIssues.js"></script>
 <script src="process/pages/definitions/audit/detail/processcompliance/NonSamplingIssueDetails.js"></script>
 
+<script src="process/pages/definitions/lender/enrolment/Lender360.js"></script>
+<script src="process/pages/definitions/lender/enrolment/View.js"></script>
+<script src="process/pages/definitions/lender/enrolment/Loan.js"></script>
+<script src="process/pages/definitions/coa/ListOfAccount.js"></script>
 <script src="process/pages/definitions/bank/Survey.js"></script>
-<script src="process/pages/definitions/payment/PaymentDashboard.js"></script>
+<script src="process/pages/definitions/management/ScoreCreation.js"></script>
+<script src="process/pages/definitions/management/ScoreCreationSearch.js"></script>
+
+<script src="process/pages/definitions/management/ReportMasterCreation.js"></script>
+<script src="process/pages/definitions/management/ReportMasterSearch.js"></script>
+
+<script src="process/pages/definitions/sambandh/customer/CustomerSearch.js"></script>
+<script src="process/pages/definitions/sambandh/customer/EnrollmentDashboard.js"></script>
+<script src="process/pages/definitions/sambandh/customer/CustomerSearchQueue.js"></script>
+
+<script src="process/pages/definitions/management/ReportsParameterMapping.js"></script>
 
 <!-- endbuild -->
 <!--Cordova-->
 <script type="text/javascript" src="js/index.js"></script>
 <script type="text/javascript" src="js/require.js"></script>
 <script type="text/javascript" src="js/vendor/Reflect.js"></script>
+
+
 <script>
-   require.config({
+  require.config({
+
     baseUrl: "./",
     paths: {
         "pages": "process/pages/definitions",
@@ -588,7 +725,6 @@
 
   requirejs.onError = function(err){
     console.log(err);
-    debugger;
   }
 </script>
 </body>

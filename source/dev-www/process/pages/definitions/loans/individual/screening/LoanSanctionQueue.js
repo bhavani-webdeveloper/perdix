@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.LoanSanctionQueue"), 
-	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
-	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
+	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator","irfProgressMessage","Locking",
+	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator,irfProgressMessage,Locking) {
 		var branch = SessionStore.getBranch();
 		return {
 			"type": "search-list",
@@ -8,6 +8,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanSanctionQueu
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				// model.branch = branch;
+				model.branch = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized");
 			},
 			definition: {
@@ -23,19 +24,19 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanSanctionQueu
 						'branch': {
 	                    	'title': "BRANCH",
 	                    	"type": ["string", "null"],
-	                    	"enumCode": "branch",
 							"x-schema-form": {
-								"type": "select",
+								"type":"userbranch",
 								"screenFilter": true
 							}
 	                    },
-						"centre": {
+                        "centre": {
 							"title": "CENTRE",
 							"type": ["integer", "null"],
 							"x-schema-form": {
 								"type": "select",
 								"enumCode": "centre",
 								"parentEnumCode": "branch",
+								"parentValueExpr": "model.branch",
 								"screenFilter": true
 							}
 						},
@@ -79,7 +80,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanSanctionQueu
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'villageName':searchOptions.villageName,
-	                    'branchName': searchOptions.branch,
+	                    'branchId':searchOptions.branch,
 	                    'centreCode': searchOptions.centre,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
@@ -175,9 +176,13 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanSanctionQueu
 								entityManager.setModel('loans.individual.screening.SanctionInput', {
 									_request: item
 								});
-								$state.go("Page.Bundle", {
+								irfNavigator.go({
+									state: "Page.Bundle",
 									pageName: "loans.individual.screening.SanctionInput",
 									pageId: item.loanId
+								}, {
+									state: 'Page.Engine',
+									pageName: "loans.individual.screening.LoanSanctionQueue"
 								});
 							},
 							isApplicable: function(item, index) {

@@ -15,6 +15,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
             var init = function() {
                 var deferred = $q.defer();
                 model.customer = model.customer || {};
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 if (model.customer.id) {
                     deferred.resolve();
                 } else if ($stateParams.pageId) {
@@ -25,7 +26,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                      model.customer.enterprise.isGSTAvailable = "No";
                          }
                          if(model.customer.enterprise.isGSTAvailable == "Yes"){
-                             model.customer.enterprise.companyRegistered = "YES";    
+                             model.customer.enterprise.companyRegistered = "YES";
                              model.customer.enterprise.isGSTAvailable = "YES";
                          }
                         deferred.resolve();
@@ -333,7 +334,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             var businessSectors = formHelper.enum('businessSector').data;
 
                             var selectedBusinessSector  = null;
-                            
+
                             for (var i=0;i<businessSectors.length;i++){
                                 if (businessSectors[i].value == model.customer.enterprise.businessSector && businessSectors[i].parentCode == model.customer.enterprise.businessType){
                                     selectedBusinessSector = businessSectors[i];
@@ -347,7 +348,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                     out.push({
                                         name: businessSubsectors[i].name,
                                         value: businessSubsectors[i].value
-                                    })    
+                                    })
                                 }
                             }
                             return $q.resolve({
@@ -386,6 +387,18 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                         enumCode: "decisionmaker",
                         required: true
                     },*/
+                    {
+                        key: "customer.enterprise.creditRating",
+                        title: "CREDIT_RATING",
+                        type: "number",
+                        condition:"model.siteCode == 'IFMRCapital'"
+                    },
+                    {
+                        key: "customer.enterprise.ratingAgency",
+                        title: "RATING_AGENCY",
+                        type: "number",
+                        condition:"model.siteCode == 'IFMRCapital'"
+                    },
                     {
                         key: "customer.enterpriseCustomerRelations",
                         type: "array",
@@ -449,6 +462,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 title: "CUSTOMER_NAME"
                             },
                             {
+                                key: "customer.enterpriseCustomerRelations[].shareHoldingPercentage",
+                                title: "SHARE_HOLDING_PERCENTAGE",
+                                type: "number",
+                                condition:"model.siteCode == 'IFMRCapital'"
+                            },
+                            {
                                 key: "customer.enterpriseCustomerRelations[].experienceInBusiness",
                                 title: "EXPERIENCE_IN_BUSINESS",
                                 type:"select",
@@ -462,7 +481,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 type: "select",
                                 enumCode: "business_involvement"
                             },
-                            
+
                             {
                                 key: "customer.enterpriseCustomerRelations[].partnerOfAnyOtherCompany",
                                 title: "PARTNER_OF_ANY_OTHER_COMPANY",
@@ -498,7 +517,11 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     {
                         "key": "customer.landLineNo",
                         "inputmode": "number",
-                        "numberType": "tel"  
+                        "numberType": "tel"
+                    },
+                    {
+                         "key": "customer.email",
+                         condition:"model.siteCode == 'IFMRCapital'"
                     },
                     "customer.doorNo",
                     "customer.street",
@@ -506,6 +529,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     {
                         key: "customer.pincode",
                         type: "lov",
+                        condition:"model.siteCode!='IREPDhan'",
                         fieldType: "number",
                         autolov: true,
                         inputMap: {
@@ -532,6 +556,55 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
                         },
                         getListDisplayItem: function(item, index) {
+                            return [
+                                item.division + ', ' + item.region,
+                                item.pincode,
+                                item.district + ', ' + item.state
+                            ];
+                        }
+                    },{
+                        key: "customer.pincode",
+                        type: "lov",
+                        fieldType: "number",
+                        autolov: true,
+                        condition: "model.siteCode == 'IREPDhan'",
+                        inputMap: {
+                            "pincode":"customer.pincode",
+                           "district": {
+                               key: "customer.district"
+                           },
+                           "state": {
+                               key: "customer.state"
+                           },
+                           "division": {
+                               key: "customer.division"
+                           },
+                           "region": {
+                               key: "customer.region"
+                           }
+                        },
+                        outputMap: {
+                            "division": "lead.area",
+                            "region": "lead.cityTownVillage",
+                            "pincode": "lead.pincode",
+                            "district": "lead.district",
+                            "state": "lead.state"
+
+                        },
+                        searchHelper: formHelper,
+                        search: function (inputModel, form, model) {
+                            if (!inputModel.pincode) {
+                                return $q.reject();
+                            }
+                            return Queries.searchPincodes(
+                                inputModel.pincode,
+                                inputModel.district,
+                                inputModel.state,
+                                inputModel.region,
+                                inputModel.division
+                            );
+                        },
+                        getListDisplayItem: function (item, index) {
                             return [
                                 item.division + ', ' + item.region,
                                 item.pincode,
@@ -656,7 +729,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 type: "password"
                             },
                             {
-                                key: "customer.customerBankAccounts[].confirmedAccountNumber"
+                                key: "customer.customerBankAccounts[].confirmedAccountNumber",
+                                "title": "CONFIRMED_ACCOUNT_NUMBER"
                             },
                             {
                                 key: "customer.customerBankAccounts[].accountType",
@@ -687,7 +761,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                             {
                                 key:"customer.customerBankAccounts[].bankStatementDocId",
                                 type:"file",
-                                required: true,
+                                // required: true,
                                 title:"BANK_STATEMENT_UPLOAD",
                                 fileType:"application/pdf",
                                 "category": "CustomerEnrollment",
@@ -736,10 +810,20 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].noOfEmiChequeBounced",
                                         type: "amount",
-                                        required:true, 
-                                        //maximum:99,                                     
+                                        required:true,
+                                        //maximum:99,
                                         title: "NO_OF_EMI_CHEQUE_BOUNCED"
                                     },
+                                    {
+                                        key: "customer.customerBankAccounts[].bankStatements[].bankStatementPhoto",
+                                        type: "file",
+                                        required: true,
+                                        title: "BANK_STATEMENT_UPLOAD",
+                                        fileType: "application/pdf",
+                                        "category": "CustomerEnrollment",
+                                        "subCategory": "IDENTITYPROOF",
+                                        using: "scanner"
+                                    }
                                 ]
                             },
                             {
@@ -770,7 +854,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                            {
                                key:"customer.liabilities[].loanType",
                                type:"select",
-                               enumCode:"liability_loan_type" 
+                               enumCode:"liability_loan_type"
                            },
                            {
                                key:"customer.liabilities[].loanSource",
@@ -823,7 +907,16 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                type:"number",
                                title:"RATE_OF_INTEREST"
                            },
-                           
+                           {
+                                key: "customer.liabilities[].proofDocuments",
+                                title: "DOCUMENTS",
+                                "category": "Loan",
+                                "subCategory": "DOC1",
+                                type: "file",
+                                fileType: "application/pdf",
+                                using: "scanner"
+                            }
+
                            /*{
                                key:"customer.liabilities[].interestExpense",
                                title:"INTEREST_EXPENSE"
@@ -850,7 +943,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 key: "customer.buyerDetails[].buyerName",
                                 title: "BUYER_NAME",
                                 type: "string"
-                            }, 
+                            },
                             {
                                 key: "customer.buyerDetails[].customerSince",
                                 title: "CUSTOMER_SINCE",
@@ -879,7 +972,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 key: "customer.buyerDetails[].product",
                                 title:"PRODUCT",
                                 type: "string"
-                            }, 
+                            },
                             {
                                 key: "customer.buyerDetails[].sector",
                                 title: "SECTOR",
@@ -909,7 +1002,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     {
                         key:"customer.supplierDetails",
                         title:"SUPPLIERS_DEATILS",
-                        type: "array", 
+                        type: "array",
                         items:[
                             {
                                 key:"customer.supplierDetails[].supplierName",
@@ -934,9 +1027,9 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 title:"PAYABLE_OUTSTANDING",
                                 type:"amount"
                             },
-                         ] 
-                     }     
-                ] 
+                         ]
+                     }
+                ]
             },
             {
                type:"box",
@@ -1057,6 +1150,15 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                         key: "customer.incomeThroughSales[].incomeSalesDate",
                                         title: "DATE",
                                         type: "date"
+                                    },
+                                    {
+                                        key: "customer.incomeThroughSales[].invoiceDocId",
+                                        type: "file",
+                                        title: "INVOICE_DOCUMENT",
+                                        fileType: "application/pdf",
+                                        "category": "CustomerEnrollment",
+                                        "subCategory": "IDENTITYPROOF",
+                                        using: "scanner"
                                     }
                                 ]
                             },
@@ -1086,6 +1188,15 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                         title: "FREQUENCY",
                                         type: "select",
                                         enumCode: "frequency"
+                                    },
+                                    {
+                                        key: "customer.expenditures[].billDocId",
+                                        type: "file",
+                                        title: "BILLS",
+                                        fileType: "application/pdf",
+                                        "category": "CustomerEnrollment",
+                                        "subCategory": "IDENTITYPROOF",
+                                        using: "scanner"
                                     }
                                 ]
                             },
@@ -1154,8 +1265,16 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                         key: "customer.rawMaterialExpenses[].rawMaterialDate",
                                         title: "DATE",
                                         type: "date"
+                                    },
+                                    {
+                                        key: "customer.rawMaterialExpenses[].invoiceDocId",
+                                        title: "PURCHASE_BILLS",
+                                        "category": "Loan",
+                                        "subCategory": "DOC1",
+                                        type: "file",
+                                        fileType: "application/pdf",
+                                        using: "scanner"
                                     }
-
                                 ]
                             },
                             ]
@@ -1214,7 +1333,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                     },
                                 ]
                             },
-                               
+
                 ]
             },
             {
@@ -1350,6 +1469,15 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 fileType:"application/pdf",
                                 using: "scanner"
                             },
+                            {
+                                key: "customer.fixedAssetsMachinaries[].machineImage",
+                                title:"MACHINE_IMAGE",
+                                "category":"Loan",
+                                "subCategory":"DOC1",
+                                type: "file",
+                                fileType:"application/pdf",
+                                using: "scanner"
+                            }
                          ]
                      }
                  ]
@@ -1361,7 +1489,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     {
                         key:"customer.verifications",
                         title:"REFERENCES",
-                        type: "array", 
+                        type: "array",
                         items:[
                             {
                                 key:"customer.verifications[].relationship",
@@ -1384,7 +1512,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 key:"customer.verifications[].mobileNo",
                                 title:"CONTACT_NUMBER",
                                 type:"string",
-                                
+
                             },
                             {
                                 key:"customer.verifications[].address",
@@ -1445,7 +1573,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 }
                             ]
                             }
-                         ] 
+                         ]
                     },
                 ]
             },
@@ -1488,7 +1616,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     {
                         var count = 0;
                         for (var i = 0; i < model.customer.enterpriseRegistrations.length; i++) {
-                            if (model.customer.enterpriseRegistrations[i].registrationType === "GST No" 
+                            if (model.customer.enterpriseRegistrations[i].registrationType === "GST No"
                                 && model.customer.enterpriseRegistrations[i].registrationNumber != ""
                                 && model.customer.enterpriseRegistrations[i].registrationNumber != null
                                 ) {

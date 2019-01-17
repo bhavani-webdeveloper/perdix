@@ -44,10 +44,7 @@ export class PaymentCustomerIDLOVConfiguration extends LOVElementConfiguration {
                 model.payment.beneficiaryIfsc = response.customerBankAccounts["0"].ifscCode;
                 model.payment.beneficiaryBankName = response.customerBankAccounts["0"].customerBankName;
                 model.payment.beneficiaryBankBranch = response.customerBankAccounts["0"].customerBankBranchName;
-                if(response.customerBankAccounts["0"].customerNameAsInBank != null)
                 model.payment.beneficiaryAccountName = response.customerBankAccounts["0"].customerNameAsInBank
-                else
-                model.payment.beneficiaryAccountName = model.payment.beneficiaryName 
             }
             else if(model.pageConfig.DefaultBeneficiaryParty == 'CUSTOMER' && response.customerBankAccounts.length == 0){
                 model.payment['flag'] = true;

@@ -39,9 +39,6 @@ irf.pageCollection.factory(irf.page("lead.LeadReject"), ["$log", "$state", "$fil
                         },
                         function(res) {
                             _.assign(model.lead, res);
-                            if (model.lead.dob) {
-                                model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
-                            }
                             if (model.lead.currentStage == 'Incomplete') {
                                 model.lead.customerType = "Enterprise";
                                 model.lead.leadStatus = "Incomplete";
@@ -163,7 +160,7 @@ irf.pageCollection.factory(irf.page("lead.LeadReject"), ["$log", "$state", "$fil
                                     }, {
                                         key: "lead.companyRegistered",
                                         type: "radios",
-                                        enumCode: "DECISIONMAKER"
+                                        enumCode: "decisionmaker"
                                     }, {
                                         key: "lead.businessType",
                                         type: "select",
@@ -367,7 +364,7 @@ irf.pageCollection.factory(irf.page("lead.LeadReject"), ["$log", "$state", "$fil
                             title: "INTERESTED_IN_LOAN_PRODUCT",
                             type: "select",
                             required: true,
-                            enumCode: "DECISIONMAKER",
+                            enumCode: "decisionmaker",
                             "onChange": function(modelValue, form, model) {
                                     if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
                                         model.lead.leadStatus = "Reject";
@@ -456,7 +453,7 @@ irf.pageCollection.factory(irf.page("lead.LeadReject"), ["$log", "$state", "$fil
                             items: [{
                                 key: "lead.eligibleForProduct",
                                 type: "radios",
-                                enumCode: "DECISIONMAKER",
+                                enumCode: "decisionmaker",
                                 onChange: "actions.changeStatus(modelValue, form, model)",
                             }]
                         }, {

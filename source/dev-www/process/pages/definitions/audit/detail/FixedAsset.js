@@ -209,7 +209,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"),
                         "items": boxItems
                     }, {
                         "type": "box",
-                        "condition": "!model.readonly",
+                        "readonly": model.readonly,
                         "title": "COMMENTS",
                         "colClass": "col-sm-6",
                         "items": [{

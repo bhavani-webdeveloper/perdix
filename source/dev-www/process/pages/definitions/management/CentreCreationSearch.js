@@ -11,12 +11,33 @@ define({
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
 			model.branchId = SessionStore.getCurrentBranch().branchId;
+			model.siteCode = SessionStore.getGlobalSetting("siteCode");
 			$log.info("search-list sample got initialized");
 		},
 		definition: {
 			title: "SEARCH_CENTRE",
 			searchForm: [
-				"*"
+				{
+					"key":"branchId",
+					"title":"BRANCH_ID",
+                    "condition": "model.siteCode != 'sambandh'",
+                },
+                {
+					"key":"branchId",
+					"title": "BRANCH_NAME",
+                    "enumCode":"userbranches",
+                    "condition": "model.siteCode =='sambandh'",
+				},
+				{
+					"key":"centreName",
+					"title":"CENTRE_CODE",
+					"condition": "model.siteCode =='sambandh'"
+				},
+				{
+					"key":"centreName",
+					"title":"CENTRE_NAME_",
+					"condition": "model.siteCode !='sambandh'",
+				}
 			],
 			searchSchema: {
 				"type": 'object',
@@ -90,7 +111,7 @@ define({
 					return [
 
 						{
-							title:'CENTRE_CODE',	
+							title:'CENTRE_CODE_',	
 							data: 'centreCode'
 						},
 						{

@@ -1,10 +1,10 @@
 <?php
 
-/*if (empty($_SERVER['HTTP_ORIGIN'])) {
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL);
-}*/
+// if (empty($_SERVER['HTTP_ORIGIN'])) {
+// 	ini_set('display_errors', 1);
+// 	ini_set('display_startup_errors', 1);
+// 	error_reporting(E_ALL);
+// }
 
 ob_start("ob_gzhandler");
 //header("Access-Control-Allow-Credentials: true");
@@ -28,5 +28,6 @@ define('DB_PASSWORD', 'root');
 define('DB_SCHEMA', 'financialForms');
 
 $connection = new mysqli(DB_HOST,DB_USER,DB_PASSWORD) or die ('Could not connect to the server. If this is first time, please reload the page.');	
+mysqli_set_charset($connection, "utf8");
 
 // echo 'Connected successfully';

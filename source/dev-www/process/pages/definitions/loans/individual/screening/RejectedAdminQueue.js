@@ -1,14 +1,15 @@
 
 irf.pageCollection.factory(irf.page("loans.individual.screening.RejectedAdminQueue"), 
-	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
-		function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
+	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator",
+		function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
 		var branch = SessionStore.getBranch();
 		return {
 			"type": "search-list",
 			"title": "REJECTED_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				model.branch = branch;
+				//model.branch = branch;
+				model.branch = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized");
 			},
 			definition: {
@@ -21,26 +22,25 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.RejectedAdminQue
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
-						"branch": 
-						{
-	                        "title": "HUB_NAME",
-	                        "type": "integer",
-	                        "enumCode": "branch_id",
-	                        "x-schema-form": {
-	                            "type": "select"
+						'branch': {
+	                    	'title': "BRANCH",
+	                    	"type": ["string", "null"],
+							"x-schema-form": {
+								"type":"userbranch",
+								"screenFilter": true
 							}
 	                    },
-						"centre": 
-						{
-	                        "title": "CENTRE",
-	                        "type": ["null", "number"],
-	                        "enumCode": "centre",
-	                        "screenFilter": true,
-	                        "x-schema-form": {
-	                            "type": "select",
-	                        	"parentEnumCode":"branch_id"
+                        "centre": {
+							"title": "CENTRE",
+							"type": ["integer", "null"],
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "centre",
+								"parentEnumCode": "branch",
+								"parentValueExpr": "model.branch",
+								"screenFilter": true
 							}
-	                    },
+						},
 	                    "applicantName":
 						{
 	                        "title": "APPLICANT_NAME",
@@ -86,7 +86,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.RejectedAdminQue
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'villageName':searchOptions.villageName,
-	                    'branchName': branchName,
+	                    'branchId':searchOptions.branch,
 	                    'centreCode': searchOptions.centre,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
@@ -178,9 +178,13 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.RejectedAdminQue
 								entityManager.setModel('loans.individual.screening.Rejected', {
 									_request: item
 								});
-								$state.go("Page.Bundle", {
+								irfNavigator.go({
+									state: "Page.Bundle",
 									pageName: "loans.individual.screening.Rejected",
 									pageId: item.loanId
+								}, {
+									state: 'Page.Engine',
+                                    pageName: "loans.individual.screening.RejectedAdminQueue"
 								});
 							},
 							isApplicable: function(item, index) {

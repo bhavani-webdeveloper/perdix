@@ -46,7 +46,7 @@
                   },
                   "loanOfficerId": {
                      "type": ["string", "null"],
-                     "title": "LOAN_OFFICER_NAME"
+                     "title": "ACTION_TAKEN_BY"
                   },
                   "typeOfInteraction": {
                      "type": ["string", "null"],
@@ -58,7 +58,7 @@
                   },
                   "additionalRemarks": {
                      "type": ["string", "null"],
-                     "title": "ADDITIONAL_REMARKS"
+                     "title": "REMARKS"
                   },
                   "location": {
                      "type": ["string", "null"],
@@ -99,7 +99,7 @@
                   },
                   "additionalRemarks": {
                      "type": ["string", "null"],
-                     "title": "ADDITIONAL_REMARKS"
+                     "title": "REMARKS"
                   },
                   "location": {
                      "type": ["string", "null"],
@@ -114,7 +114,22 @@
                }
             }
          },
-
+         "leadSource": {
+            "type":["string", "null"],
+            "title":"LEAD_SOURCE"
+         },
+         "referredBy": {
+            "type":["string", "null"],
+            "title":"REFERRED_BY"
+         },
+         "agentName": {
+            "type":["string", "null"],
+            "title":"AGENT_NAME"
+         },
+         "loanPurpose2": {
+            "type":["string", "null"],
+            "title":"LOAN_SUB_PURPOSE"
+         },
          "currentDate": {
             "type": ["string", "null"],
             "title": "CURRENT_DATE"
@@ -122,12 +137,12 @@
          "branchName": {
             "type": ["string", "null"],
             "title": "HUB_NAME",
-            "enumCode": "branch" 
+            "enumCode": "branch"
          },
          "branchId": {
             "type": "number",
             "title": "HUB_NAME",
-            "enumCode": "branch_id" 
+            "enumCode": "branch_id"
          },
          "centreName": {
             "type": "string",
@@ -136,8 +151,12 @@
          },
          "centreId": {
             "type": ["null", "number"],
-            "title": "SPOKE_NAME",
+            "title": "SPOKE",
             "enumCode": "centre"
+         },
+         "customerFirstName": {
+            "type":["string", "null"],
+            "title": "CUSTOMER_NAME"
          },
          "urnNo": {
             "type": ["string", "null"],
@@ -151,10 +170,21 @@
             "type": "integer",
             "title": "LEAD_ID"
          },
+         "occupation1": {
+            "type": ["string", "null"],
+            "title":"PRIMARY_OCCUPATION"
+         },
+         "licenseType": {
+            "type": ["string", "null"],
+            "title":"LICENCE_TYPE"
+         },
+         "leadCategory": {
+            "type": ["string", "null"],
+            "title":"CUSTOMER_CATEGORY"
+         },
          "leadName": {
             "type": ["string", "null"],
-            "title": "LEAD_NAME",
-            "pattern":"^[a-zA-Z][a-zA-Z\\s]+$"
+            "title": "LEAD_NAME"
          },
          "interestedInProduct": {
             "type": ["string", "null"],
@@ -206,7 +236,7 @@
          },
          "additionalRemarks": {
             "type": ["string", "null"],
-            "title": "ADDITIONAL_REMARKS"
+            "title": "REMARKS"
          },
          "dob": {
             "type": ["string", "null"],
@@ -257,30 +287,37 @@
          "maritalStatus": {
             "type": ["string", "null"],
             "title": "MARITAL_STATUS"
-           
+
          },
          "customerType": {
             "type": ["string", "null"],
+            "default": "Individual",
+            "title": "ENTITY_TYPE"
+         },
+         "applicantCustomerId": {
+            "type": "integer",
+            "title": "CHOOSE_EXISTING_APPLICANT"
+         },
+         "customerTypeString": {
+            "type": ["string", "null"],
+            "default": "Individual",
             "title": "ENTITY_TYPE"
          },
          "mobileNo": {
             "type": ["string", "null"],
             "maxLength": 10,
             "minLength": 10,
-            "title": "MOBILE_NUMBER1",
-            "pattern":"^[0-9]{10}$"
+            "title": "MOBILE_NUMBER1"
          },
          "alternateMobileNo": {
             "type": ["string", "null"],
             "title": "ALTERNATE_MOBILE_NUMBER",
             "maxLength": 10,
-            "minLength": 10,
-            "pattern":"^[0-9]{10}$"
+            "minLength": 10
          },
          "businessName": {
             "type": ["string", "null"],
-            "title": "BUSINESS_NAME",
-            "pattern":"^[a-zA-Z][a-zA-Z\\s]+$"
+            "title": "BUSINESS_NAME"
          },
          "businessType": {
             "type": ["string", "null"],
@@ -322,6 +359,14 @@
             "type": ["string", "null"],
             "title": "DISTRICT"
          },
+         "division": {
+            "type": ["string", "null"],
+            "title": "DIVISION"
+         },
+         "region": {
+            "type": ["string", "null"],
+            "title": "REGION"
+         },
          "location": {
             "type": ["string", "null"],
             "title": "LOCATION"
@@ -345,6 +390,26 @@
          "loanOfficer": {
             "type": ["string", "null"],
             "title": "LOAN_OFFICER"
+         },
+         "userName": {
+            "type": ["string", "null"],
+            "title": "USER_NAME"
+         },
+         "login": {
+            "type": ["string", "null"],
+            "title": "LOGIN"
+         },
+         "partnerCode": {
+            "type": ["string", "null"],
+            "title": "PARTNER_CODE"
+         },
+         "parentLoanAccount": {
+           "type": ["string", "null"],
+           "title": "PARENT_LOAN_ACCOUNT"
+         },
+         "vehicleRegistrationNumber": {
+           "type": ["string", "null"],
+           "title": "REGN_NO"
          },
          "udf": {
             "type": "object",

@@ -99,16 +99,21 @@ irf.commons.factory("Utils", ["$log", "$q", "$http", function($log, $q, $http){
 			return f + (m&l?' '+m:'') + (l?' '+l:'');
 		},
 		alert: function(message, title) {
+			var deferred = $q.defer();
 			if (typeof cordova === 'undefined') {
 				alert(message);
+				deferred.resolve();
 			} else {
 				navigator.notification.alert(
 					message,
-					null, // callback
+					function() {
+						deferred.resolve();
+					}, // callback
 					(typeof title === 'undefined' || !title) ? 'Alert' : title, // title
 					'OK'
 				);
 			}
+			return deferred.promise;
 		},
 		confirm: function(message, title) {
 			var deferred = $q.defer();
@@ -255,6 +260,7 @@ irf.commons.factory("Utils", ["$log", "$q", "$http", function($log, $q, $http){
 				return seconds + ' second' + numberEnding(seconds);
 			}
 			return 'less than a second'; //'just now' //or other string you like;
+			// return moment(milliseconds).humanize();
 		},
         dateToLocalTZ: function(mysqlDate){
         	var localUtcOffset = moment().utcOffset();
@@ -270,12 +276,14 @@ irf.commons.factory("Utils", ["$log", "$q", "$http", function($log, $q, $http){
 			});
 			$log.info("Generated UUID: " + uuid);
 			return uuid;
+		},
+		updateAppTitle: function(menuTitle) {
+			document.title = translateFilter(menuTitle) + " | " + document.mainTitle;
 		}
 	};
 }]);
 
-irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','Files', 
-	function($log, $q,irfSimpleModal,$sce,Files){
+irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','Files', function($log, $q,irfSimpleModal,$sce, Files){
 
 	return {
         getLabel: function(fingerId){
@@ -457,90 +465,88 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 				}, function(error){
 					deferred.reject('ERR_BIOMETRIC_CAPTURE_FAILED');
 				});
-			}else if (navigator.userAgent.indexOf("Trident") > 0 || navigator.userAgent.indexOf("MSIE") > 0 || (navigator.userAgent.indexOf("Firefox") > 0 && parseInt(navigator.userAgent.match(/Firefox\/([0-9]+)\./)[1]) < 60)) 
-				{
-			
-					var BiometricHTML = '\
-	                    <applet code="in/gov/uidai/auth/biometric/FingerPrintCaptureApplet.class" archive="resources/fingerprintutil/FingerPrintUtil.jar" id="webCaptureApplet" height="250px" width="525px"><param name="isEkycMode" value="false"> Choose a finger</applet>\
-	                    <button ng-click="$close(model.takeData())">Confirm</button>';
-					var result = [];
-					var out = null;
+			} else if (navigator.userAgent.indexOf("Trident") > 0 || navigator.userAgent.indexOf("MSIE") > 0 || (navigator.userAgent.indexOf("Firefox") > 0 && parseInt(navigator.userAgent.match(/Firefox\/([0-9]+)\./)[1]) < 60)) {
+				var BiometricHTML = '\
+                    <applet code="in/gov/uidai/auth/biometric/FingerPrintCaptureApplet.class" archive="resources/fingerprintutil/FingerPrintUtil.jar" id="webCaptureApplet" height="250px" width="525px"><param name="isEkycMode" value="false"> Choose a finger</applet>\
+                    <button ng-click="$close(model.takeData())">Confirm</button>';
+                var result = [];
+                var out = null;
 
-					var BiometricModal = irfSimpleModal("Capture Data", BiometricHTML, {
-						"result": result,
-						"takeData": function() {
-							var applet = document.getElementById('webCaptureApplet');
-							result = applet.getFingerPrints();
-							var tableField = null;
-							var thumb = null;
-							var obj = {};
-							for (var i = 0; i < result.length; i++) {
+                var BiometricModal = irfSimpleModal("Capture Data", BiometricHTML, {
+                	"result": result,
+                	"takeData": function() {
+                		var applet = document.getElementById('webCaptureApplet');
+                		result = applet.getFingerPrints();
+                		var tableField = null;
+                		var thumb = null;
+                		var obj = {};
+                		for (var i = 0; i < result.length; i++) {
+							
+							switch (i) {
+                                    case 0:
+                                        tableField = 'leftHandThumpImageId';
+                                        thumb = 'LeftThumb';
+                                        break;
+                                    case 1:
+                                        tableField = 'leftHandIndexImageId';
+                                        thumb = 'LeftIndex';
+                                        break;
+                                    case 2:
+                                        tableField = 'leftHandMiddleImageId';
+                                        thumb = 'LeftMiddle';
+                                        break;
+                                    case 3:
+                                        tableField = 'leftHandRingImageId';
+                                        thumb = 'LeftRing';
+                                        break;
+                                    case 4:
+                                        tableField = 'leftHandSmallImageId';
+                                        thumb = 'LeftLittle';
+                                        break;
+                                    case 5:
+                                        tableField = 'rightHandThumpImageId';
+                                        thumb = 'RightThumb';
+                                        break;
+                                    case 6:
+                                        tableField = 'rightHandIndexImageId';
+                                        thumb = 'RightIndex';
+                                        break;
+                                    case 7:
+                                        tableField = 'rightHandMiddleImageId';
+                                        thumb = 'RightMiddle';
+                                        break;
+                                    case 8:
+                                        tableField = 'rightHandRingImageId';
+                                        thumb = 'RightRing';
+                                        break;
+                                    case 9:
+                                        tableField = 'rightHandSmallImageId';
+                                        thumb = 'RightLittle';
+                                        break;
+                                }
+                                if (tableField!=null) {                                	
+                                    obj[thumb] = {};
+                                    obj[thumb]['data'] = result[i];
+                                    obj[thumb]['table_field'] = tableField;
+                                }
 
-								switch (i) {
-									case 0:
-										tableField = 'leftHandThumpImageId';
-										thumb = 'LeftThumb';
-										break;
-									case 1:
-										tableField = 'leftHandIndexImageId';
-										thumb = 'LeftIndex';
-										break;
-									case 2:
-										tableField = 'leftHandMiddleImageId';
-										thumb = 'LeftMiddle';
-										break;
-									case 3:
-										tableField = 'leftHandRingImageId';
-										thumb = 'LeftRing';
-										break;
-									case 4:
-										tableField = 'leftHandSmallImageId';
-										thumb = 'LeftLittle';
-										break;
-									case 5:
-										tableField = 'rightHandThumpImageId';
-										thumb = 'RightThumb';
-										break;
-									case 6:
-										tableField = 'rightHandIndexImageId';
-										thumb = 'RightIndex';
-										break;
-									case 7:
-										tableField = 'rightHandMiddleImageId';
-										thumb = 'RightMiddle';
-										break;
-									case 8:
-										tableField = 'rightHandRingImageId';
-										thumb = 'RightRing';
-										break;
-									case 9:
-										tableField = 'rightHandSmallImageId';
-										thumb = 'RightLittle';
-										break;
-								}
-								if (tableField != null) {
-									obj[thumb] = {};
-									obj[thumb]['data'] = result[i];
-									obj[thumb]['table_field'] = tableField;
-								}
+							             			
+                		}
+                		
+                		return obj;
+                		
+                		// deferred.resolve(result);
+                	}
+                });
+               
 
-
-							}
-
-							return obj;
-
-							// deferred.resolve(result);
-						}
-					});
-
-
-					BiometricModal.result.then(function(obj) {
-						console.log(obj)
-						deferred.resolve(obj);
-					}, function() {
-						console.log("Modal closed by user");
-						deferred.reject();
-					})
+                BiometricModal.result.then(function(obj) {
+                	console.log(obj)
+                	deferred.resolve(obj);
+                }, function(){
+                	console.log("Modal closed by user");
+                	deferred.reject();
+                })
 			} else {
 				deferred.reject('ERR_BIOMETRIC_PLUGIN_MISSING');
 			}
@@ -637,4 +643,103 @@ irf.commons.service("PrinterData", ["$state", "$log", "$timeout", function($stat
 		this.getLines =function() {
 			return this.lines;
 		}
+}])
+irf.commons.service('irfPrinter',["$log","PageHelper","Utils","irfSimpleModal",function($log,PageHelper,Utils,irfSimpleModal){
+	var self = this;
+	self.printPreview = function(printData){
+		self.data = printData;
+		if (Utils.isCordova && self.data.thermalReceipt) {
+			self.thermalReceipt = generateThermelPrint(data.thermalReceipt);
+			self.previewHtml = self.thermalReceipt.html;
+		} else if (self.data.paperReceipt) {
+			self.previewHtml = '<div class="web-print-wrapper">' + self.webPrintStyle + printData.paperReceipt + '</div>'
+		}
+		self.thermalReceipt = generateThermelPrint(self.data.thermalReceipt);
+		self.previewHtml = self.thermalReceipt.html;
+		self.previewHtml = mapButtonToHtml(self.previewHtml);
+		irfSimpleModal('Print Preview', self.previewHtml, {
+			print: function() {
+				self.print();
+			}
+		});
+	}
+	self.print = function(){
+			try {
+				if (Utils.isCordova && self.thermalReceipt.data) {
+					cordova.plugins.irfBluetooth.print(function() {
+						console.log("succc callback");
+					}, function(err) {
+						console.error(err);
+						console.log("errr callback");
+					}, self.thermalReceipt.data);
+				} else if (self.data.paperReceipt) {
+					window.print();
+				} else {
+					PageHelper.clearErrors();
+					PageHelper.setError({message: 'No Data To Print'});
+				}
+			} catch (err) {
+				console.log(err);
+				$log.info("pringing web data");
+			}
+	}
+	var mapButtonToHtml = function(html){
+		var button = `<br><div><button ng-click=model.print()>PRINT</button></div><br>`;
+		return html + button;
+	}
+	var generateThermelPrint = function(opts) {
+		// Code 
+			// 2 - string,
+			// 3 - line,
+			// 4 - keyvalue
+
+		// self.FONT_LARGE_BOLD =2,
+		// self.FONT_LARGE_NORMAL =1,
+		// self.FONT_SMALL_NORMAL =3,
+		// self.FONT_SMALL_BOLD =4,
+		var fontHtml = [
+			[''],
+			['<h3 style="white-space: pre">', '</h3>'],
+			['<h3 style="white-space: pre"><strong>', '</strong></h3>'],
+			['<p style="white-space: pre">', '<p>'],
+			['<p style="white-space: pre"><strong>', '</strong></p>']
+		];
+		var defaultFont = 3,defaultValue="",defaultCenter=false,data = [];
+		var html = '<div style="font-family:monospace">';
+		for(var i=0; i<opts.length; i++){
+			font = defaultFont;
+			value = defaultValue;
+			center = defaultCenter;
+			if(opts[i].length==2){										
+				center = false;
+				font  = opts[i][0]+1 < 5 ? opts[i][0] : defaultFont;
+				value = _.padEnd(" ",font+3 < 5 ?  24: 42,opts[i][1]);
+			}
+			else if (opts[i].length == 3){
+				center = opts[i][0] == 0 ? false : true;
+				font = opts[i][1]+1 < 5 ? opts[i][1] : defaultFont;
+				value = opts[i][2];
+			}
+			else if (opts[i].length == 4){
+				center = opts[i][0] == 0 ? false : true;
+				font = opts[i][1]+1 < 5? opts[i][1] : defaultFont;
+				value = _.padEnd(opts[i][2], font+3 < 5 ?  11: 23) + ': ' + opts[i][3];
+			}
+			var d = {
+				"bFont": font,
+				"text": value,
+				"style": {
+					"center": center
+				}
+			};
+			data.push(d);
+			var t = d.style.center? '<center>'+d.text+'</center>': d.text;
+			html += fontHtml[d.bFont][0] + t + fontHtml[d.bFont][1] + "";
+		}
+		return {
+			data: data,
+			html: html + '</div>'
+		};
+	}
+	self.webPrintStyle = '<style>@media print { body * { visibility: hidden; } .web-print-wrapper, .web-print-wrapper * { visibility: visible } .web-print-wrapper { position: absolute; top: 0; left: 0;} html, body {height: 100%;}}</style>';
 }])

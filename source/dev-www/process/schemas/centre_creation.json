@@ -47,7 +47,7 @@
             },
             "centreName": {
                "type": ["string", "null"],
-               "title": "CENTRE_NAME_"
+               "title": "CENTRE_NAME"
             },
             "employee": {
                "type": ["string", "null"],

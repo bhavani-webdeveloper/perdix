@@ -1,13 +1,14 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskReviewQueue"), 
-	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
-	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
+	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator",
+	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
 		return {
 			"type": "search-list",
-			"title": "RISK_REVIEW2", 
+			"title": "VP_CREDIT_RISK_REVIEW", 
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				// var currBranch = SessionStore.getCurrentBranch();
 				// model.branch = currBranch.branchName;
+				model.branch = SessionStore.getCurrentBranch().branchId;
 
 				$log.info("search-list sample got initialized");
 			},
@@ -24,19 +25,19 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskRevie
 						'branch': {
 	                    	'title': "BRANCH",
 	                    	"type": ["string", "null"],
-	                    	"enumCode": "branch",
 							"x-schema-form": {
-								"type": "select",
+								"type":"userbranch",
 								"screenFilter": true
 							}
 	                    },
-						"centre": {
+                        "centre": {
 							"title": "CENTRE",
 							"type": ["integer", "null"],
 							"x-schema-form": {
 								"type": "select",
 								"enumCode": "centre",
 								"parentEnumCode": "branch",
+								"parentValueExpr": "model.branch",
 								"screenFilter": true
 							}
 						},
@@ -90,7 +91,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskRevie
 	                    'area':searchOptions.area,
 	                    'status':searchOptions.status,
 	                    'villageName':searchOptions.villageName,
-	                    'branchName': searchOptions.branch,
+	                    'branchId':searchOptions.branch,
 	                    'centreCode': searchOptions.centre,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
@@ -179,16 +180,20 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.CentralRiskRevie
 					},
 					getActions: function() {
 						return [{
-							name: "RISK_REVIEW2",
+							name: "VP_CREDIT_RISK_REVIEW",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
 								entityManager.setModel('loans.individual.screening.CentralRiskReview', {
 									_request: item
 								});
-								$state.go("Page.Bundle", {
+								irfNavigator.go({
+									state: "Page.Bundle",
 									pageName: "loans.individual.screening.CentralRiskReview",
 									pageId: item.loanId
+								}, {
+									state: 'Page.Engine',
+                                    pageName: "loans.individual.screening.CentralRiskReviewQueue"
 								});
 							},
 							isApplicable: function(item, index) {

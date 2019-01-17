@@ -45,6 +45,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             "Page/Engine/loans.group.Cgt2Queue",
             "Page/Engine/loans.group.GrtQueue",
             "Page/Engine/loans.group.Grt2Queue",
+            "Page/Engine/loans.group.Checker1Queue",
             "Page/Engine/loans.group.GroupLoanBookingQueue",
             "Page/Engine/loans.group.ApplicationPendingQueue",
             "Page/Engine/loans.group.JLGDisbursementQueue",
@@ -86,6 +87,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
                 centreId.push(centres[i].centreId);
             }
         }
+        var siteCode = SessionStore.getGlobalSetting('siteCode');
         var banks = formHelper.enum('bank').data;
         var bankId;
         for (var i = 0; i < banks.length; i++){
@@ -228,7 +230,31 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             });
         }
 
-        if (checker1) {
+        if (checker1 && siteCode !='KGFS') {
+            checker1.data = '-';
+            GroupProcess.search({
+                'branchId': branchId,
+                'partner': userPartner,
+                'groupStatus': true,
+                'currentStage': "Checker1"
+            }, function(response) {
+                checker1.data = Number(response.headers['x-total-count']) || 0;
+            });
+        }
+
+        if (checker2 && siteCode !='KGFS') {
+            checker2.data = '-';
+            GroupProcess.search({
+                'branchId': branchId,
+                'partner': userPartner,
+                'groupStatus': true,
+                'currentStage': "Checker2"
+            }, function(response) {
+                checker2.data = Number(response.headers['x-total-count']) || 0;
+            });
+        }
+
+        if (checker1 && siteCode=='KGFS') {
             checker1.data = '-';
             GroupProcess.search({
                 'bankId': bankId,
@@ -240,7 +266,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             });
         }
 
-        if (checker2) {
+        if (checker2 && siteCode=='KGFS') {
             checker2.data = '-';
             GroupProcess.search({
                 'partner': "AXIS",
@@ -285,7 +311,31 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             });
         }
 
-        if (checker3) {
+        if (checker3 && siteCode !='KGFS') {
+            checker3.data = '-';
+            GroupProcess.search({
+                'branchId': branchId,
+                'partner': userPartner,
+                'groupStatus': true,
+                'currentStage': "Checker3"
+            }, function(response) {
+                checker3.data = Number(response.headers['x-total-count']) || 0;
+            });
+        }
+
+        if (checker4 && siteCode !='KGFS') {
+            checker4.data = '-';
+            GroupProcess.search({
+                'branchId': branchId,
+                'partner': userPartner,
+                'groupStatus': true,
+                'currentStage': "Checker4"
+            }, function(response) {
+                checker4.data = Number(response.headers['x-total-count']) || 0;
+            });
+        }
+
+        if (checker3 && siteCode=='KGFS') {
             checker3.data = '-';
             GroupProcess.search({
                 'partner': "AXIS",
@@ -296,7 +346,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             });
         }
 
-        if (checker4) {
+        if (checker4 && siteCode=='KGFS') {
             checker4.data = '-';
             GroupProcess.search({
                 'partner': "AXIS",

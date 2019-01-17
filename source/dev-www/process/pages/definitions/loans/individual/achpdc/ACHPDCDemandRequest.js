@@ -20,11 +20,22 @@ define({
                 "items": [ {
                         "type": "fieldset",
                         "title": "ACHPDC_REQUEST_INPUT",
-                        "items": [{
-                            "key": "achPdcCollections.demandDate",
-                            "title": "INSTALLMENT_DATE",
-                            "type": "date"
-                        }]
+                        "items": [
+                            {
+                                "key": "achPdcCollections.demandDate",
+                                "title": "INSTALLMENT_DATE",
+                                "type": "date"
+                            },
+                            {
+                                "key": "achPdcCollections.demandType",
+                                "title": "DEMAND_TYPE",
+                                "type": "select",
+                                "titleMap": {
+                                    "SCHEDULED" : "SCHEDULED",
+                                    "OVERDUE" : "OVERDUE"
+                                }
+                            }
+                        ]
                     }, {
                         "title": "REQUEST",
                         "htmlClass": "btn-block",

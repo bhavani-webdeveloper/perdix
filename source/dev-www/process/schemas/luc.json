@@ -144,6 +144,18 @@
 					"title": "UDF1",
 					"type": "string"
 				},
+				"udf4": {
+					"title": "UDF4",
+					"type": ["string", "null"]
+				},
+				"udf5": {
+					"title": "UDF5",
+					"type": ["string", "null"]
+				},
+				"udf6": {
+					"title": "UDF6",
+					"type": ["string", "null"]
+				},
 				"udfDate1": {
 					"title": "UDF_DATE1",
 					"type": "string"
@@ -164,13 +176,17 @@
 					"title": "LOAN_AMOUNT_USED",
 					"type": "number"
 				},
+				"loanAmountNotUsed": {
+					"title": "LOAN_AMOUNT_NOT_USED",
+					"type": "number"
+				},
 				"loanAmountPurpose": {
 					"title": "LOAN_AMOUNT_USED_FOR",
-					"type": "string"	
+					"type": "string"
 				},
 				"verifiedBy": {
 					"title": "VERIFIED_BY",
-					"type": "string"	
+					"type": "string"
 				},
 				"amountUsedPercentage": {
 					"title": "PERCENTAGE",
@@ -182,11 +198,11 @@
 				},
 				"intendedPurposePercentage": {
 					"title": "PERCENTAGE",
-					"type": "number"	
+					"type": "number"
 				},
 				"nonIntendedPurposeAmount": {
 					"title": "AMOUNT_USED_FOR_NON_INTENDED_PURPOSE",
-					"type": "number"	
+					"type": ["number", "null", "string"]
 				},
 				"nonIntendedPurposePercentage": {
 					"title": "PERCENTAGE",
@@ -194,11 +210,11 @@
 				},
 				"nonIntendedPurposeAmountSpentOn": {
 					"title": "UNINTENDED_AMOUNT_USED_FOR",
-					"type": "string"	
+					"type": "string"
 				},
 				"repayedDebitAmount": {
 					"title": "AMOUNT_USED_FOR_REPAYING_DEBIT",
-					"type": "number"	
+					"type": "number"
 				},
 				"monthlyInterestForDebit": {
 					"title": "MONTHLY_INTEREST_FOR_REPAYING_DEBIT",
@@ -354,47 +370,47 @@
 						"properties": {
 							"make": {
 								"title": "MAKE",
-								"type": "string"
+								"type": ["string", "null"]
 							},
 							"type": {
 								"title": "TYPE",
-								"type": "string"
+								"type": ["string", "null"]
 							},
 							"year": {
 								"title": "YEAR",
-								"type": "string"
+								"type": ["string", "null"]
 							},
 							"model": {
 								"title": "MODEL",
-								"type": "string"
+								"type": ["string", "null"]
 							},
 							"serialNumber": {
 								"title": "SERIAL_NUMBER",
-								"type": "string"
+								"type": ["string", "null"]
 							},
 							"assetType": {
 								"title": "ASSET_TYPE",
-								"type": "string"
+								"type": ["string", "null"]
 							},
 							"hypothecationLabelBeenApplied": {
 								"title": "IS_HYPOTHECATION_LABEL_APPLIED",
-								"type": "string"
+								"type": ["string", "null"]
 							},
 							"companyNameInOriginalInvoice": {
 								"title": "DOES_ORIGINAL_INVOICE_HAS_COMPANY_NAME",
-								"type": "string"
+								"type": ["string", "null"]
 							},
 							"hypothecatedTo": {
 								"title": "HYPOTHECATED_TO",
-								"type": "string"
+								"type": ["string", "null"]
 							},
 							"udf1": {
 								"title": "udf1",
-								"type": "string"
+								"type": ["string", "null"]
 							},
 							"udfDate1": {
 								"title": "udfDate1",
-								"type": "string"
+								"type": ["string", "null"]
 							}
 						}
 					}

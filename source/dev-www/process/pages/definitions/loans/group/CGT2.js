@@ -118,6 +118,17 @@ define({
                 }, {
                     "key": "group.cgt2Photo",
                     //required: true,
+                    "condition":"model.siteCode == 'KGFS'",
+                    "title": "CGT_2_PHOTO",
+                    "category": "Group",
+                    "subCategory": "CGT1PHOTO",
+                    "type": "file",
+                    "offline": true,
+                    "fileType": "image/*",
+                },{
+                    "key": "group.cgt2Photo",
+                    "condition":"model.siteCode != 'KGFS'",
+                    required: true,
                     "title": "CGT_2_PHOTO",
                     "category": "Group",
                     "subCategory": "CGT1PHOTO",
@@ -161,6 +172,17 @@ define({
                 }, {
                     "key": "group.cgt2EndPhoto",
                     //required: true,
+                    "condition":"model.siteCode == 'KGFS'",
+                    "title": "CGT_2_PHOTO",
+                    "category": "Group",
+                    "subCategory": "CGT2PHOTO",
+                    "type": "file",
+                    "offline": true,
+                    "fileType": "image/*",
+                },{
+                    "key": "group.cgt2EndPhoto",
+                    "condition":"model.siteCode != 'KGFS'",
+                    required: true,
                     "title": "CGT_2_PHOTO",
                     "category": "Group",
                     "subCategory": "CGT2PHOTO",
@@ -448,12 +470,12 @@ define({
                                 onClick: "actions.reject(model, formCtrl, form, $event)"
                             }, {
                             "type": "submit",
-                            condition:"model.action == 'PROCEED'",
+                            condition:"model.action == 'PROCEED' && model.group.currentStage=='CGT2'",
                             "title": "PROCEED"
                         }]
                     }
                 ]
-            },],
+            }],
 
             schema: {
                 "$schema": "http://json-schema.org/draft-04/schema#",
@@ -485,7 +507,7 @@ define({
                 startCGT2: function(model, form) {
                     PageHelper.showLoader();
                     $timeout(function() {
-                        model.group.cgtDate2 = new Date();
+                        model.group.cgtDate2 = SessionStore.getSystemDate()+"T"+moment().format('HH:mm:ss')+"Z";
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
                         PageHelper.hideLoader();
                     });
@@ -498,7 +520,7 @@ define({
                     }
                     PageHelper.showLoader();
                     $timeout(function() {
-                        model.group.cgtEndDate2 = new Date();
+                        model.group.cgtEndDate2 = SessionStore.getSystemDate()+"T"+moment().format('HH:mm:ss')+"Z";
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
                         PageHelper.hideLoader();
                     });

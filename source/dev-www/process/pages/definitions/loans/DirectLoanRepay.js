@@ -1,7 +1,7 @@
-irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'),
- ["$log", "$q", "$timeout","BiometricService", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-    "Groups", "AccountingUtils","Queries", "Enrollment", "Files", "elementsUtils", "Utils",
-    function($log, $q, $timeout,BiometricService, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils,Queries, Enrollment, Files, elementsUtils, Utils) {
+irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), 
+    ["$log", "$q", "$timeout","BiometricService", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
+    "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "Utils","Queries",
+    function($log, $q, $timeout,BiometricService, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, Utils,Queries) {
 
         function backToLoansList() {
             try {
@@ -49,7 +49,7 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'),
             initialize: function(model, form, formCtrl) {
                 PageHelper.showLoader();
                 irfProgressMessage.pop('loading-loan-details', 'Loading Loan Details');
-
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 model.bankName = SessionStore.getBankName();
                 model.branch = SessionStore.getBranch();
                 model.branchId = SessionStore.getBranchId();
@@ -120,6 +120,24 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'),
                         } else if (model.repayment.transactionName == 'Fee Payment') {
                             model.repayment.demandAmount = model.repayment.totalFeeDue;
                         }
+
+                        model.repayment.payOffAndDueAmount = Utils.ceil(data.payOffAndDueAmount);
+                        model.repayment.totalFeeDue = Utils.roundToDecimal(data.totalFeeDue);
+                        model.repayment.recoverableInterest = Utils.roundToDecimal(data.recoverableInterest);
+                        model.repayment.principalNotDue = Utils.roundToDecimal(data.principalNotDue);
+                        model.repayment.totalNormalInterestDue  = Utils.roundToDecimal(data.totalNormalInterestDue);
+                        model.repayment.preclosureFee = Utils.roundToDecimal(data.preclosureFee);
+                        model.repayment.payOffAmount = Utils.roundToDecimal(data.payOffAmount);
+                        model.repayment.totalPrincipalDue = Utils.roundToDecimal(data.totalPrincipalDue);
+                        model.repayment.totalPenalInterestDue = Utils.roundToDecimal(data.totalPenalInterestDue);
+                        model.repayment.totalDemandDue = Utils.roundToDecimal(data.totalDemandDue);
+                        model.repayment.totalDue = Utils.roundToDecimal(data.totalDemandDue + data.totalFeeDue + data.totalSecurityDepositDue);
+                        model.repayment.bookedNotDueNormalInterest = Utils.roundToDecimal(data.bookedNotDueNormalInterest);
+                        model.repayment.bookedNotDuePenalInterest = Utils.roundToDecimal(data.bookedNotDuePenalInterest);
+                        model.repayment.securityDeposit = Utils.roundToDecimal(data.securityDeposit);
+                        model.repayment.netPayoffAmount = Utils.roundToDecimal(data.payOffAmount + data.preclosureFee - data.securityDeposit);
+                        model.repayment.totalPayoffAmountToBePaid = Utils.roundToDecimal(data.payOffAndDueAmount + data.preclosureFee - data.securityDeposit);
+                        model.repayment.totalSecurityDepositDue = Utils.roundToDecimal(data.totalSecurityDepositDue);
                        
                         model.repayment.accountNumber =loanAccountNo;
                         model.repayment.instrument='CASH';
@@ -157,7 +175,116 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'),
                             },
                             onChange: function(value, form, model) {
                                 model.repayment.amount = deriveAmount(value, model.repayment);
+                                if(value == "Fee Payment"){
+                                    LoanAccount.get({accountId: model.repayment.accountNumber}).$promise.then(function (data){
+                                        model.repayment.totalFeeDue  = Utils.roundToDecimal(data.totalFeeDue);
+                                    })
+                                }
+                                // else if(value == "Advance Repayment"){
+
+                                // }
                             }
+                        },
+                        {
+                            key: "repayment.bookedNotDuePenalInterest",
+                            readonly: true,
+                            condition: "model.repayment.transactionName=='PenalInterestPayment'",
+                            title: "BOOKED_NOT_DUE_PENAL_INTEREST",
+                            type: "amount"
+                        },
+                        {
+                            key: "repayment.totalPenalInterestDue",
+                            readonly: true,
+                            condition: "model.repayment.transactionName=='Scheduled Demand'",
+                            title: "TOTAL_PENAL_INTEREST_DUE",
+                            type: "amount"
+                        },
+                        {
+                            type: "fieldset",
+                            title: "PRECLOSURE_BREAKUP",
+                            condition: "model.repayment.transactionName=='Pre-closure'",
+                            items: [
+                                {
+                                    key: "repayment.principalNotDue",
+                                    readonly: true,
+                                    title: "PRINCIPAL_NOT_DUE",
+                                    type: "amount"
+                                },
+                                {
+                                    key: "repayment.bookedNotDueNormalInterest",
+                                    readonly: true,
+                                    title: "BOOKED_NOT_DUE_NORMAL_INTEREST",
+                                    type: "amount"
+                                },
+                                {
+                                    key: "repayment.bookedNotDuePenalInterest",
+                                    readonly: true,
+                                    title: "BOOKED_NOT_DUE_PENAL_INTEREST",
+                                    type: "amount"
+                                },
+                                {
+                                    key: "repayment.recoverableInterest",
+                                    readonly: true,
+                                    title: "RECOVERABLE_INTEREST",
+                                    type: "amount"
+                                },
+                                {
+                                    key: "repayment.securityDeposit",
+                                    readonly: true,
+                                    title: "SECURITY_DEPOSIT",
+                                    type: "amount"
+                                },
+                                {
+                                    key: "repayment.preclosureFee",
+                                    readonly: true,
+                                    title: "PRECLOSURE_FEE",
+                                    type: "amount"
+                                },
+                                {
+                                    key: "repayment.totalFeeDue",
+                                    readonly: true,
+                                    title: "TOTAL_FEE_DUE",
+                                    type: "amount"
+                                },
+                                {
+                                    key: "repayment.netPayoffAmount",
+                                    readonly: true,
+                                    title: "NET_PAYOFF_AMOUNT",
+                                    type: "amount"
+                                },
+                                {
+                                    type: "section",
+                                    html: "<hr />"
+                                }
+                            ]
+                        },
+                        {
+                            key: "repayment.totalDemandDue",
+                            readonly: true,
+                            condition: "model.repayment.transactionName=='Scheduled Demand'",
+                            title: "TOTAL_DEMAND_DUE",
+                            type: "amount"
+                        },
+                        {
+                            key: "repayment.totalFeeDue",
+                            readonly: true,
+                            condition: "model.repayment.transactionName=='Scheduled Demand' || model.repayment.transactionName=='Fee Payment'",
+                            title: "TOTAL_FEE_DUE",
+                            type: "amount"
+                        },
+                        {
+                            key: "repayment.totalDue",
+                            readonly: true,
+                            title: "TOTAL_DUE",
+                            condition: "model.repayment.transactionName=='Scheduled Demand'",
+                            type: "amount"
+                        },
+                        {
+                            key: "repayment.totalDueWithPenal",
+                            readonly: true,
+                            title: "Total Due with Penal Interest",
+                            condition: "(model.repayment.transactionName=='Scheduled Demand' || model.repayment.transactionName == 'Advance Repayment') && model.repayment.totalDueWithPenal",
+                            type: "amount"
                         },
                         {
                             key:"repayment.amount",
@@ -170,20 +297,21 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'),
                             "type": "select",
                             "required": true,
                             "titleMap": [{
-                                name: "Cash",
-                                value: "CASH"
-                            }, {
-                                "name": "Cheque",
-                                "value": "CHQ"
-                            }, {
-                                "name": "NEFT",
-                                "value": "NEFT"
-                            }, {
-                                "name": "RTGS",
-                                "value": "RTGS"
-                            }]
-                        },
-                        {
+                                    name: "Cash",
+                                    value: "CASH"
+                                }, {
+                                    "name": "Cheque",
+                                    "value": "CHQ"
+                                }, {
+                                    "name": "NEFT",
+                                    "value": "NEFT"
+                                }, {
+                                    "name": "RTGS",
+                                    "value": "RTGS"
+                                }
+
+                            ]
+                        },{
                             key: "repayment.cashCollectionRemark",
                             condition:"model.repayment.instrument=='CASH'",
                             type:"select",
@@ -194,8 +322,7 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'),
                             key: "repayment.receiptNumber",
                             "title":"Receipt Number",
                             condition:"model.repayment.cashCollectionRemark=='Receipt Number'",
-                        },
-                        {
+                        }, {
                             key: "repayment.reference",
                             title: "CHEQUE_NUMBER",
                             "schema": {
@@ -220,7 +347,8 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'),
                             },
                             searchHelper: formHelper,
                             search: function(inputModel, form, model) {
-                                return Queries.getBankAccountsByPartnerForLoanRepay("Kinara");
+                                return Queries.getBankAccountsByPartnerForLoanRepay(SessionStore.getGlobalSetting("mainPartner") 
+                                    || "Kinara");
                             },
                             getListDisplayItem: function(item, index) {
                                 return [
@@ -279,11 +407,15 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'),
                             type: "date",
                             condition: "model.repayment.instrument=='NEFT' || model.repayment.instrument=='RTGS'"
                         },
-                        "additional.override_fp", 
+                        {
+                            key: "additional.override_fp", 
+                            condition: "model.siteCode == 'KGFS'",
+                        },
                         {
                             "key": "repayment.authorizationRemark",
-                            "condition": "model.additional.override_fp==true"
+                            "condition": "model.siteCode == 'KGFS' && model.additional.override_fp==true"
                         },
+
                          
                         {
                             type: "fieldset",
@@ -352,20 +484,27 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'),
                             "title": "Is Biometric Matched",
                             "readonly": true
                         }
-
                     ]
                 },
 
                 {
                     "type": "actionbox",
-                    "condition": "model.customer.isBiometricValidated ||model.additional.override_fp",
+                    "condition": "model.siteCode == 'KGFS' && (model.customer.isBiometricValidated ||model.additional.override_fp)",
                     "items": [{
                         "type": "submit",
                         "style": "btn-theme",
                         "title": "SUBMIT"
                     }]
                 },
-
+                {
+                    "type": "actionbox",
+                    "condition": "model.siteCode !== 'KGFS'",
+                    "items": [{
+                        "type": "submit",
+                        "style": "btn-theme",
+                        "title": "SUBMIT"
+                    }]
+                },
                 {
                     "type": "actionbox",
                     "condition": "model.repay.submissionDone",
@@ -594,7 +733,8 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'),
                                             if (resp.repaymentSchedule[i].description == 'Satisfied' || resp.repaymentSchedule[i].description == 'Advance') {
                                                 totalSatisfiedDemands++;
                                                 $log.info("inc s");
-                                            } else if (resp.repaymentSchedule[i].description == 'Projected' || resp.repaymentSchedule[i].description == 'true' || resp.repaymentSchedule[i].description == 'Due') {
+                                            } else if ((resp.repaymentSchedule[i].description == 'Projected' || resp.repaymentSchedule[i].description == 'true' || resp.repaymentSchedule[i].description == 'Due') 
+                                                && resp.repaymentSchedule[i].status == 'true') {
                                                 pendingInstallment++;
                                                 $log.info("inc p");
                                             }
@@ -748,8 +888,9 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'),
                 },
                 submit: function(model, formCtrl, formName) {
                     $log.info("Inside submit");
-                    if (!model.additional.override_fp && !model.customer.isBiometricValidated) {
-                        elementsUtils.alert('Fingerprint not verified');
+
+                    if (!model.additional.override_fp && !model.customer.isBiometricValidated && model.siteCode == 'KGFS') {
+                        elementsUtils.alert('Fingerprint not verified.');
                         return;  
                     }
 
@@ -769,7 +910,9 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'),
                                 alert(resp.response);
                                 $log.info(resp);
                                 model.repay = resp;
-                                model.repay.submissionDone = "yes";
+                                if(model.siteCode == 'KGFS') {
+                                    model.repay.submissionDone = "yes";
+                                }
                                 model.repay.accountNumber=model.repayment.tempencoreId;
                                 model.repay.accountId=model.repayment.tempencoreId;
                             } catch (err) {

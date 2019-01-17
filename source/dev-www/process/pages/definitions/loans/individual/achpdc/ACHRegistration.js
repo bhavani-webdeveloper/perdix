@@ -36,6 +36,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 				model.achACHSearch = model.achACHSearch || {};
 				model.ach.loanId = $stateParams.pageId;
 				model.isRejected = false;
+                		model.siteCode = SessionStore.getGlobalSetting("siteCode");
 				//flag is to identify Create(false) or Update(true), and to update Submit Button Name
 
 				if (!$stateParams.pageId) {
@@ -63,7 +64,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 							model.ach.reference2 = model.achIndividualLoanSearch.urnNo;
 							//model.ach.utilityCode = "HDFC05720000027482";
 							model.ach.accountId = model.achIndividualLoanSearch.accountNumber;
-							model.ach.bankAccountNumber = model.achIndividualLoanSearch.customerBankAccountNumber;
+							model.ach.bankAccountNumber = model.achIndividualLoanSearch.collectionAccountNumber;
 
 							model.ach.maximumAmount = parseInt(model.achIndividualLoanSearch.maxEmi);
 							model.ach.maximumAmount = model.ach.maximumAmount.toString();
@@ -155,16 +156,16 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 									$log.info("response: " + res);
 									model.achACHSearch = res;
 									for (var i = 0; i < model.achACHSearch.body.length; i++) {
-										if ((model.achACHSearch.body[i].accountId == model.ach.accountId) && (model.achACHSearch.body[i].mandateStatus != "REJECTED")) {
+										if ((model.achACHSearch.body[i].accountId == model.ach.accountId) && (model.achACHSearch.body[i].mandateActive)) {
 											PageHelper.showProgress("page-init", "ACH Registration Done for the Account", 5000);
 											$state.go("Page.Engine", {
 												pageName: "loans.individual.achpdc.ACHPDCQueue",
 												pageId: null,
 												pageData: null
 											});
-										} else if ((model.achACHSearch.body[i].accountId == model.ach.accountId) && (model.achACHSearch.body[i].mandateStatus == "REJECTED")) {
+										} else if ((model.achACHSearch.body[i].accountId == model.ach.accountId) && (!model.achACHSearch.body[i].mandateActive)) {
 											model.isRejected = true;
-											angular.extend(model.ach, model.achACHSearch.body[i]);
+										//	angular.extend(model.ach, model.achACHSearch.body[i]);
 											model.ach.mandateStatus = "PENDING";
 											model.ach.registrationStatus = "PENDING";
 										}
@@ -241,6 +242,10 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 							},
 							searchHelper: formHelper,
 							onSelect: function(result, model, arg1) {
+								if(model.siteCode == "witfin"){
+									model.ach.accountHolderName = result.customer_name_as_in_bank;
+									model.ach.accountType = result.account_type.toUpperCase();	
+								}
 								CustomerBankBranch.search({
 									'ifscCode': result.ifsc_code
 								}).$promise.then(function(response) {
@@ -369,7 +374,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 							searchHelper: formHelper,
 							search: function(inputModel, form, model) {
 								var deferred = $q.defer();
-								Queries.getBankAccountsByPartner("KGFS").then(
+								Queries.getBankAccountsByPartner(
+									SessionStore.getGlobalSetting("mainPartner") || "Kinara").then(
 									function(res) {
 										$log.info("hi this is sponser!!!");
 										$log.info(res);
@@ -442,6 +448,9 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHRegistration"), 
 						PageHelper.showProgress("page-init", "ACH Registration Successful", 5000);
 						if (model.isRejected) {
 							model.achUpdateStatus = [];
+							model.ach.mandateId = response.mandateId;
+							model.ach.verificationStatus = 'Verified';
+							model.ach.mandateStatus = 'ACCEPTED'
 							model.achUpdateStatus.push(model.ach);
 							ACH.updateMandateStatus(model.achUpdateStatus).$promise.then(
 								function(response) {

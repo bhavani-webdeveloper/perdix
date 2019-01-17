@@ -1,7 +1,6 @@
 irf.pageCollection.directive("irfSimpleSummaryTable", function(){
 
     return {
-
         restrict: 'E',
         scope: {  tableData : '=irfTableDef'},
         templateUrl: 'process/pages/templates/simple-summary-table.html',
@@ -38,7 +37,7 @@ irf.pageCollection.directive("irfSimpleSummaryTable", function(){
 
                 if(record && record.data && angular.isObject(record.data)){
 
-                    return (record.overrides && record.overrides.format && angular.isObject(record.overrides.format)) ? 
+                    return (record.overrides && record.overrides.format && angular.isObject(record.overrides.format)) ?
                     (record.overrides.format[column.data] ? record.overrides.format[column.data] : displayFormat) : displayFormat;
 
                 }
@@ -46,6 +45,62 @@ irf.pageCollection.directive("irfSimpleSummaryTable", function(){
                 return displayFormat;
             }
 
+}]);
+irf.pageCollection.directive("irfScoringDisplay", function(){
+
+    return {
+        restrict: 'E',
+        scope: {  scoringData : '=irfScoringData'},
+        templateUrl: 'process/pages/templates/irf-scoring-display.html',
+        controller: 'irfScoringDisplayController'
+    }
+}).controller("irfScoringDisplayController", ["$scope", function($scope){
+    var sd = $scope.scoringData.SubscoreDetails;
+    var ss = $scope.scoringData.SubscoreScores;
+    var _tData = {
+        "IndividualScores": [],
+        "OtherScores": []
+    };
+    _.forOwn(sd, function(v,k){
+        var _vsd = {};
+        _vsd['name'] = k;
+        _vsd['isIndividualScore'] = false;
+        _vsd['Score'] = ss[k];
+        if ( _.has(v, '__isIndividualScore') && v['__isIndividualScore'] == 'YES') {
+            _vsd['isIndividualScore'] = true;
+        }
+        // Data handling for non individual scores
+        if (_vsd['isIndividualScore'] == false){
+            _vsd['parameterData'] = v;
+            _tData.OtherScores.push(_vsd);
+        } else if (_vsd['isIndividualScore'] == true){
+            _vsd['customerParameterMapping'] = {};
+            _vsd['parameters'] = [];
+
+            var cids = v['CustomerIds'];
+
+            for (var i=0;i<cids.length; i++){
+                var _id = cids[i];
+                if (!_id)
+                    continue;
+                _vsd['customerParameterMapping'][_id] = {
+                    'Details' : v[_id].CustomerDetails,
+                    'Parameters': {}
+                };
+
+                _.forEach(v[_id].data, function(pData){
+                    _vsd['customerParameterMapping'][_id]['Parameters'][pData['Parameter']] = pData;
+                    if (_vsd['parameters'].indexOf(pData['Parameter'])<0){
+                        _vsd['parameters'].push(pData['Parameter']);
+                    }
+                })
+            }
+            _tData.IndividualScores.push(_vsd);
+        }
+        
+    })
+
+    $scope.scoringTableData = _tData;
 }]);
 
 irf.pageCollection.factory(irf.page("loans.individual.screening.Summary"),
@@ -61,6 +116,9 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
 
         model.enterpriseDetails = res[0];
         model.scoreDetails = [res[1], res[2], res[3], res[4]];
+        model.c = res[25].summary;
+        model.fullScoringDetails = res[26].data;
+        //model.scoreDetails[3].data.push({Parameter:"Hypothecation Status",color_hexadecimal:model.c.status,"Actual Value" :model.c.ActualValue})
 
 
         var managementScore = model.scoreDetails[0];
@@ -92,6 +150,10 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.liabilitiesSummary = res[19];
         model.machineryDetails = res[20];
         model.opexDetails = res[21];
+        model.stockDetails = res[23];
+        model.nonMachineryDetails = res[24];
+        model.hypothecationType = res[25];
+
 
         model.enterpriseDetails.columns = model.enterpriseDetails.columns.concat(model.ratioDetails.columns);
         _.merge(model.enterpriseDetails.data[0], model.ratioDetails.data[0]);
@@ -114,7 +176,8 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.assetsAndLiabilities.ownCapital = model.balanceSheet.data[0]['Own capital'];
         model.assetsAndLiabilities.building = model.balanceSheet.data[0]['Building'];
         model.assetsAndLiabilities.vehicle = model.balanceSheet.data[0]['Vehicle'];
-        model.assetsAndLiabilities.furnitureAndFixtures = model.balanceSheet.data[0]['Furniture & Fixtures'];
+        model.assetsAndLiabilities.furniture = model.balanceSheet.data[0]['Furniture'];
+        model.assetsAndLiabilities.fixture = model.balanceSheet.data[0]['Fixtures'];
         model.assetsAndLiabilities.totalFixedAssets = model.balanceSheet.data[0]['Total fixed assets'];
         model.assetsAndLiabilities.totalLengTermLiabilities = model.balanceSheet.data[0]['Total long-term liabilities'];
         model.assetsAndLiabilities.totalAssets = model.balanceSheet.data[0]['Total Assets'];
@@ -222,15 +285,15 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
 
         for (var i=0;i< model.deviationDetails.data.length; i++){
             var d = model.deviationDetails.data[i];
-            if (d.Mitigant && d.Mitigant.length!=00){
+            if (d.Mitigant && d.Mitigant.length!=0){
                 if (d.Mitigant && d.Mitigant!=null){
                     d.ListOfMitigants = d.Mitigant.split("|");
                 }
-                
+
                 if (d.ChosenMitigant && d.ChosenMitigant!=null){
                     d.ChosenMitigants = d.ChosenMitigant.split("|")
                 }
-                
+
             }
         }
 
@@ -241,12 +304,12 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             delete model.deviationParameter[model.deviationParameter.length-1].ListOfMitigants;
             delete model.deviationParameter[model.deviationParameter.length-1].Mitigant;
             model.deviationParameter[model.deviationParameter.length-1].mitigants = [];
-            if (d.Mitigant && d.Mitigant.length!=00){
+            if (d.Mitigant && d.Mitigant.length!=0){
                 d.ListOfMitigants = d.Mitigant.split("|");
                 for (var j =0; j < d.ListOfMitigants.length; j++) {
                     model.deviationParameter[model.deviationParameter.length-1].mitigants.push({mitigantName:d.ListOfMitigants[j]});
                 }
-                
+
             }
         }
         model.additional = {};
@@ -257,11 +320,55 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         $log.info(model.additional);
 
         model.enterpriseDetailsData = model.enterpriseDetails.data[0];
+        model.enterpriseDetailsData["Hypothecation Type"] = model.hypothecationType.data[0]["Hypothecation Type"];
 
     }; // END OF prepareData()
 
+    var computeScoringData = function(model, scoreName, deferred){
+        var api = Scoring.get;
+        var params = {
+            auth_token: AuthTokenHelper.getAuthData().access_token,
+            LoanId: model.cbModel.loanId,
+            ScoreName: scoreName,
+            isScoringOptimizationEnabled: model.isScoringOptimizationEnabled
+        };
 
-    var HOUSEHOLD_PL_HTML = 
+        if(model.isScoringV2ApiEnabled){
+            api = Scoring.getV2;
+            params = {
+                auth_token: AuthTokenHelper.getAuthData().access_token,
+                LoanId: model.cbModel.loanId,                ScoreName: scoreName,
+                isScoringOptimizationEnabled: model.isScoringOptimizationEnabled
+            }
+        }
+
+        api(params).$promise.then(function(response){
+            model.ScoreDetails = response.ScoreDetails;
+        }).finally(function(){
+            var onSuccessPromise = Scoring.financialSummary({
+                loan_id: model.cbModel.loanId, 
+                score_name: model.ScoreDetails.ScoreName || scoreName
+            }).$promise;
+            onSuccessPromise.then(function(res){
+                prepareData(res, model);
+                model.$prepared = true;
+                prepareDataDeferred.resolve();
+            });
+
+            var p3 = Enrollment.getCustomerById({id:model.cbModel.customerId}).$promise.then(function(res) {
+                model.customer = res;
+            }, function(httpRes) {
+                PageHelper.showErrors(httpRes);
+            }).finally(function() {
+            });
+
+            $q.all([onSuccessPromise, p3]).finally(function() {
+                deferred.resolve();
+            });
+        });
+    }
+
+    var HOUSEHOLD_PL_HTML =
     '<table class="table">'+
         '<colgroup>'+
             '<col width="30%"> <col width="40%"> <col width="30%">'+
@@ -310,6 +417,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 "colClass": "col-sm-12 table-box",
                 "title": "Business Summary",
                 "readonly": true,
+                condition: " model.siteCode != 'IREPDhan'",
                 "items": [
                     {
                         type: "section",
@@ -378,117 +486,22 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         //     ]
         // });
         
-/*        form.push({
-            type: "box",
-            colClass: "col-sm-12 table-box",
-            title: "SCORES",
-            items: [
-                {
-                    type: "section",
-                    htmlClass: "row",
-                    html: '<div class="col-sm-3"><div class="stat-container" ><dd class="stat-key"> Total Score</dd><dt class="stat-value"> {{ model.ScoreDetails[0].OverallWeightedScore }}</dt></div></div><div class="col-sm-3"><div class="stat-container" ><dd class="stat-key"> Status</dd><dt class="stat-value" ng-class="{\'text-a-green\': model.ScoreDetails[0].OverallPassStatus==\'PASS\', \'text-a-red\': model.ScoreDetails[0].OverallPassStatus==\'FAIL\'}"> {{ model.ScoreDetails[0].OverallPassStatus }}</dt></div></div><div class="clearfix"></div><hr>'
-                },
-                {
-                    type: "section",
-                    htmlClass: "row",
-                    items: [
-                        {
-                            type: "section",
-                            htmlClass: "col-sm-12",
-                            title: model.scoreDetails[0].title,
-                            html:
-'<div ng-init="_score=model.scoreDetails[0]">'+
-    '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{_score.title}} ({{model.totalScores.data[0][_score.title]}})</h3>'+
-    '<table class="table">'+
-        '<colgroup>'+
-            '<col width="25%">'+
-            '<col width="{{_score.colorPct}}%" ng-repeat-start="i in _score.values">'+
-            '<col width="{{_score.valuePct}}%" ng-repeat-end>'+
-        '</colgroup>'+
-        '<tbody>'+
-            '<tr>'+
-                '<th>Parameter Name</th>'+
-                '<th colspan="2" ng-repeat="j in _score.values">{{_score.sections[j].relation_detail}}</th>'+
-            '</tr>'+
-            '<tr ng-repeat="data in _score.sections[0].data" ng-init="parameterIndex=$index">'+
-                '<td>{{data.Parameter}}</td>'+
-                '<td ng-repeat-start="k in _score.values"> <span class="square-color-box" style="background:{{_score.sections[k].data[parameterIndex].color_hexadecimal}}"> </span></td>'+
-                '<td ng-repeat-end>{{_score.sections[k].data[parameterIndex].Applicant}}</td></tr>'+
-        '</tbody>'+
-    '</table>'+
-'</div>'
-                        },
-                        {
-                            type: "section",
-                            htmlClass: "col-sm-12",
-                            title: model.scoreDetails[1].title,
-                            html:
-'<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{ model.scoreDetails[1].title }} ({{ model.totalScores.data[0][model.scoreDetails[1].title] }})</h3>'+
-'<table class="table">'+
-    '<colgroup><col width="50%"><col width="5%"><col width="45%"></colgroup>'+
-    '<tbody>'+
-        '<tr><th>Parameter</th><th></th><th>Actual Value</th></tr>'+
-        '<tr ng-repeat="data in model.scoreDetails[1].data">'+
-            '<td>{{ data.Parameter }}</td>'+
-            '<td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td>'+
-            '<td>{{ data["Actual Value"] }}</td>'+
-        '</tr>'+
-    '</tbody>'+
-'</table>'
-                        }
-                    ]
-                },
-                {
-                    type: "section",
-                    htmlClass: "row",
-                    items: [
-                        {
-                            type: "section",
-                            htmlClass: "col-sm-6",
-                            condition: "model.currentStage!='ScreeningReview'",
-                            title: model.scoreDetails[2].title,
-                            html: '<h3>{{ model.scoreDetails[2].title }} ({{ model.totalScores.data[0][model.scoreDetails[2].title] }})</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.scoreDetails[2].data"><td>{{ data.Parameter }}</td><td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td><td>{{ data["Actual Value"] }}</td></tr></tbody></table>'
-                        },
-                        {
-                            type: "section",
-                            htmlClass: "col-sm-6",
-                            condition: "model.currentStage!='ScreeningReview'",
-                            title: model.scoreDetails[3].title,
-                            html: '<h3>{{ model.scoreDetails[3].title }} ({{ model.totalScores.data[0][model.scoreDetails[3].title] }})</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.scoreDetails[3].data"><td>{{ data.Parameter }}</td><td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td><td>{{ data["Actual Value"] }}</td></tr></tbody></table>'
-                        }
-                    ]
-                }
-                
-            ]
-        })*/
-
-        // for (i in model.scoreDetails) {
-        //     (function(i){
-        //         form.push({
-        //             type: "box",
-        //             "colClass": "col-sm-6",
-        //             title: model.scoreDetails[i].title + " (" + model.totalScores.data[0][model.scoreDetails[i].title] + ")",
-        //             condition: "model.currentStage!='ScreeningReview'",
-        //             items: [
-        //                 {
-        //                     type: "tableview",
-        //                     key: "scoreDetails[" + i + "].data",
-        //                     title: model.scoreDetails[i].title,
-        //                     selectable: false,
-        //                     paginate: false,
-        //                     searching: false,
-        //                     getColumns: function(){
-        //                         return model.scoreDetails[i].columns;
-        //                     }
-        //                 }
-        //             ]
-        //         });
-        //     })(i)
-            
-        //     // form.push()
-        // }
-
-/*        form.push({
+        if (model.fullScoringDetails){
+            form.push({
+                type: "box",
+                colClass: "col-sm-12 table-box",
+                title: "SCORES - ScoreName - "+ model.fullScoringDetails.ScoreCalculationDetails.ScoreName,
+                items: [
+                    {
+                        "type": "section",
+                        "htmlClass": "row",
+                        "html":"<irf-scoring-display irf-scoring-data='model.fullScoringDetails' />"
+                    }
+                ]
+            })
+        }
+        
+        form.push({
             type: "box",
             colClass: "col-sm-12",
             condition: "model.currentStage!='ScreeningReview'",
@@ -506,7 +519,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 }
             ]
         });
-        
+
         form.push({
             type: "box",
             colClass: "col-sm-12",
@@ -531,12 +544,12 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 type: "box",
                 colClass: "col-sm-12 table-box",
                 title: "Psychometric Scores",
-                condition: "model.currentStage != 'ScreeningReview'",
+                condition: "model.currentStage != 'ScreeningReview' && model.siteCode != 'IREPDhan'",
                 items: [
                     {
                         type: "section",
                         colClass: "col-sm-12",
-                        html: 
+                        html:
                         // '\
                         // <table class="table">\
                         //     <colgroup>\
@@ -577,21 +590,21 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             '</tr>'+
             '<tr ng-repeat=" (key, value) in _scores[0].data" ng-init="parameterIndex=$index">'+
                 '<td >{{key}}</td>'+
-                '<td >{{value["Cut Off Score"]}}</td>' + 
+                '<td >{{value["Cut Off Score"]}}</td>' +
                 '<td ng-repeat-start="_score in _scores"> <span class="square-color-box" style="background:{{_score.data[key].color_hexadecimal}}"> </span></td>'+
                '<td ng-repeat-end>{{_score.data[key].Score}}</td></tr>'+
 
             '<tr ng-repeat=" (key, value) in _scores[0].summary" ng-init="parameterIndex=$index">'+
                 '<td >{{key}}</td>'+
-                '<td ></td>' + 
-                '<td ng-repeat-start="_score in _scores"></td>' + 
+                '<td ></td>' +
+                '<td ng-repeat-start="_score in _scores"></td>' +
                 '<td ng-repeat-end ng-style = "key === \'Total Score\' ?{\'font-weight\': \'bold\'} : {}"> {{_score.summary[key]}}</td>'+
         '</tbody>'+
     '</table>'+
 '</div>'
                     }
                 ]
-            })*/
+            })
        // }
 
         // form.push({
@@ -629,7 +642,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         //         }
         //     ]
         // })
-        
+
         // form.push({
         //     type: "box",
         //     colClass: "col-sm-12",
@@ -661,7 +674,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                         html: '<div ng-init="household = model.pl.household['+ i +']">' + HOUSEHOLD_PL_HTML + '</div>'
                     }
                 ]
-            });    
+            });
         }
 
         // form.push({
@@ -677,7 +690,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         //         }
         //     ]
         // });
-        
+
         // if (model.pl.householdCoApplicant) {
         //     form.push({
         //         type: "box",
@@ -693,8 +706,8 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         //         ]
         //     });
         // }
-        
-        
+
+
         form.push({
             type: "box",
             colClass: "col-sm-12 table-box",
@@ -722,9 +735,9 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         '<tr> <th>{{"EXISTING_LOAN_PAYMENTS" | translate}}</th> <th></th> <th></td> <td></td> </tr>'+
         '<tr> <td></td><td>{{"BUSINESS_LIABILITIES" | translate}}</td><td>{{model.pl.business.businessLiabilities | irfCurrency}}</td> <td></td> </tr>'+
         '<tr> <td>{{"NET_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.pl.business.netBusinessIncome | irfCurrency}}</td> <td>{{model.pl.business.netBusinessIncomePCT }}</td> </tr>'+
-        '<tr class="text"> <td><strong>{{"IRCS EMI" | translate}}</strong></td><td></td><td><strong>{{model.pl.business.kinaraEmi | irfCurrency}}</strong></td> <td>{{model.pl.business.kinaraEmiPCT }}</td> </tr>'+
+        '<tr class="text"> <td><strong>{{"KINARA_EMI" | translate}}</strong></td><td></td><td><strong>{{model.pl.business.kinaraEmi | irfCurrency}}</strong></td> <td>{{model.pl.business.kinaraEmiPCT }}</td> </tr>'+
         '<tr> <td><strong>{{"NET_INCOME" | translate}}</strong></td> <td></td> <td><strong>{{model.pl.business.netIncome | irfCurrency}}</strong></td> <td></td> </tr>'+
-        '<tr class="table-bottom-summary"> <td>Final IRCS EMI</td><td></td><td>{{model.pl.business.finalKinaraEmi | irfCurrency}}</td> <td>{{model.pl.business.finalKinaraEmiPCT }}</td> </tr>'+
+        '<tr class="table-bottom-summary"> <td>{{"FINAL_KINARA_EMI" | translate}}</td><td></td><td>{{model.pl.business.finalKinaraEmi | irfCurrency}}</td> <td>{{model.pl.business.finalKinaraEmiPCT }}</td> </tr>'+
     '</tbody>'+
 '</table>'
                 }
@@ -737,7 +750,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             title: "BALANCE_SHEET",
             condition: "model.currentStage != 'ScreeningReview'",
             items: [
-               
+
                 {
                     type: "section",
                     colClass: "col-sm-12",
@@ -760,7 +773,8 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         '<tr class="table-sub-header"><th colspan="2">{{"FIXED_ASSETS" | translate}}</th><th colspan="2">{{"LONG_TERM_LIABILITIES" | translate}}</th></tr><tr><td>{{"MACHINERY" | translate}}</td><td>{{model.assetsAndLiabilities.machinery | irfCurrency}}</td><td>{{"LONGTERMDEBT" | translate}}</td><td>{{model.assetsAndLiabilities.longTermDebt | irfCurrency}}</td></tr>'+
         '<tr><td>{{"LAND" | translate}}</td><td>{{model.assetsAndLiabilities.land | irfCurrency}}</td><td>{{"OWN_CAPITAL" | translate}}</td><td>{{model.assetsAndLiabilities.ownCapital | irfCurrency}}</td></tr><tr><td>{{"BUILDING" | translate}}</td><td>{{model.assetsAndLiabilities.building | irfCurrency}}</td><td></td><td></td></tr>'+
         '<tr><td>{{"VEHICLE" | translate}}</td><td>{{model.assetsAndLiabilities.vehicle | irfCurrency}}</td><td></td><td></td></tr>'+
-        '<tr><td>{{"FURNITURE_AND_FIXING" | translate}}</td><td>{{model.assetsAndLiabilities.furnitureAndFixtures | irfCurrency}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"FURNITURE" | translate}}</td><td>{{model.assetsAndLiabilities.furniture | irfCurrency}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"FIXTURES" | translate}}</td><td>{{model.assetsAndLiabilities.fixture | irfCurrency}}</td><td></td><td></td></tr>'+
         '<tr><td>{{"TOTAL_FIXED_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalFixedAssets | irfCurrency}}</td><td>{{"TOTAL_LONG_TERM_LIABILITIES" | translate}}</td><td>{{model.assetsAndLiabilities.totalLengTermLiabilities | irfCurrency}}</td></tr><tr></tr>'+
         '<tr class="table-bottom-summary"><th>{{"TOTAL_ASSETS" | translate}}</th><th>{{model.assetsAndLiabilities.totalAssets | irfCurrency}}</th><th>{{"TOTAL_LIABILITIES" | translate}}</th><th>{{model.assetsAndLiabilities.totalLiabilities | irfCurrency}}</th></tr>'+
     '</tbody>'+
@@ -812,7 +826,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                         <hr>\
                         '
                 });
-            }    
+            }
         }
 
         form.push({
@@ -850,7 +864,37 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                     html: machineryDetailsTable
                 }
             ]
-        });        
+        });
+
+        var stockDetailsTable = "<irf-simple-summary-table irf-table-def = 'model.stockDetails'></irf-simple-summary-table>";
+
+        form.push({
+             type: "box",
+            colClass: "col-sm-12 table-box",
+            title: model.stockDetails.title,
+            items: [
+                {
+                    type: "section",
+                    colClass: "col-sm-12",
+                    html: stockDetailsTable
+                }
+            ]
+        });
+
+        var nonMachineryDetailsTable = "<irf-simple-summary-table irf-table-def = 'model.nonMachineryDetails'></irf-simple-summary-table>";
+
+        form.push({
+             type: "box",
+            colClass: "col-sm-12 table-box",
+            title: model.nonMachineryDetails.title,
+            items: [
+                {
+                    type: "section",
+                    colClass: "col-sm-12",
+                    html: nonMachineryDetailsTable
+                }
+            ]
+        });
 
         var businessBankStmtSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.businessBankStmtSummary'></irf-simple-summary-table>";
 
@@ -889,7 +933,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 {
                     type: "section",
                     colClass: "col-sm-12",
-                    html: '<div ng-repeat="bankAccount in model.bankAccountDetails.BankAccounts"><table class="table table-condensed" style="width:50%"><colgroup><col width="40%"><col width="60%"></colgroup><tbody><tr class="table-sub-header"><td>{{ "ACCOUNT_NAME" | translate }}</td><td>{{ bankAccount["Account Holder Name"] }}</td></tr><tr><td> {{ "LOAN_RELATION" | translate }}</td><td>{{ bankAccount["Customer Relation"] }}</td></tr><tr><td>{{ "ACCOUNT_TYPE" | translate }}</td><td>{{ bankAccount["Account Type"] }}</td></tr><tr><td>{{ "BANK_NAME" | translate }}</td><td>{{ bankAccount["Bank Name"] }}</td></tr><tr><td>{{ "IFS_CODE" | translate }}</td><td>{{ bankAccount["IFS Code"] }}</td></tr><tr><td>{{ "LIMIT" | translate }}</td><td>{{ bankAccount["Limit"] }}</td></tr></tbody></table><div class="clearfix"></div><table class="table table-condensed"><colgroup><col width="20%"><col width="20%"><col width="20%"><col width="20%"><col width="20%"></colgroup><thead><tr><th> {{ "MONTH" | translate }}</th><th> {{ "BANK_BALANCE" | translate }}</th><th> {{ "DEPOSITS" | translate }}</th><th> {{ "EMI_BOUNCED" | translate }}</th><th> {{ "NO_OF_CHEQUE_BOUNCED_SP" | translate }}</th></tr></thead><tbody><tr ng-repeat="bankStatement in bankAccount.BankStatements"><td>{{ bankStatement["Month"] }}</td><td>{{ bankStatement["Balance"] | irfCurrency}}</td><td>{{ bankStatement["Deposits"] | irfCurrency}}</td><td>{{ bankStatement["EMI Bounced"] }}</td><td>{{ bankStatement["Non-EMI Cheque Bounced"] }}</td></tr><tr class="top-bar with-bold"><td></td><td>{{ "AVERAGE_BANK_BALANCE" | translate }} <br /> {{ bankAccount["Average Bank Balance"] | irfCurrency}}</td><td>{{ "AVERAGE_BANK_DEPOSIT" | translate }} <br /> {{ bankAccount["Average Bank Deposit"] | irfCurrency}}</td><td>{{ "TOTAL_EMI_BOUNCED" | translate }} <br /> {{ bankAccount["Total EMI Bounced"] }}</td><td>{{ "TOTAL_CHEQUEU_BOUNCED_NON_EMI" | translate }} <br /> {{ bankAccount["Total Cheque Bounced (Non EMI)"] }}</td></tr></tbody></table> <br/><hr class="dotted"> <br/></div>'
+                    html: '<div ng-repeat="bankAccount in model.bankAccountDetails.BankAccounts"><table class="table table-condensed" style="width:50%"><colgroup><col width="40%"><col width="60%"></colgroup><tbody><tr class="table-sub-header"><td>{{ "ACCOUNT_NAME" | translate }}</td><td>{{ bankAccount["Account Holder Name"] }}</td></tr><tr><td> {{ "LOAN_RELATION" | translate }}</td><td>{{ bankAccount["Customer Relation"] }}</td></tr><tr><td>{{ "ACCOUNT_TYPE" | translate }}</td><td>{{ bankAccount["Account Type"] }}</td></tr><tr><td>{{ "BANK_NAME" | translate }}</td><td>{{ bankAccount["Bank Name"] }}</td></tr><tr><td>{{ "ACCOUNT_NUMBER" | translate }}</td><td>{{ bankAccount["Account Number"] }}</td></tr><tr><td>{{ "IFS_CODE" | translate }}</td><td>{{ bankAccount["IFS Code"] }}</td></tr><tr><td>{{ "LIMIT" | translate }}</td><td>{{ bankAccount["Limit"] }}</td></tr></tbody></table><div class="clearfix"></div><table class="table table-condensed"><colgroup><col width="20%"><col width="20%"><col width="20%"><col width="20%"><col width="20%"></colgroup><thead><tr><th> {{ "MONTH" | translate }}</th><th> {{ "BANK_BALANCE" | translate }}</th><th> {{ "DEPOSITS" | translate }}</th><th> {{ "EMI_BOUNCED" | translate }}</th><th> {{ "NO_OF_CHEQUE_BOUNCED_SP" | translate }}</th></tr></thead><tbody><tr ng-repeat="bankStatement in bankAccount.BankStatements"><td>{{ bankStatement["Month"] }}</td><td>{{ bankStatement["Balance"] | irfCurrency}}</td><td>{{ bankStatement["Deposits"] | irfCurrency}}</td><td>{{ bankStatement["EMI Bounced"] }}</td><td>{{ bankStatement["Non-EMI Cheque Bounced"] }}</td></tr><tr class="top-bar with-bold"><td></td><td>{{ "AVERAGE_BANK_BALANCE" | translate }} <br /> {{ bankAccount["Average Bank Balance"] | irfCurrency}}</td><td>{{ "AVERAGE_BANK_DEPOSIT" | translate }} <br /> {{ bankAccount["Average Bank Deposit"] | irfCurrency}}</td><td>{{ "TOTAL_EMI_BOUNCED" | translate }} <br /> {{ bankAccount["Total EMI Bounced"] }}</td><td>{{ "TOTAL_CHEQUEU_BOUNCED_NON_EMI" | translate }} <br /> {{ bankAccount["Total Cheque Bounced (Non EMI)"] }}</td></tr></tbody></table> <br/><hr class="dotted"> <br/></div>'
                 }
             ]
         });
@@ -898,7 +942,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             type: "box",
             colClass: "col-sm-12 table-box",
             title: "DEVIATION_AND_MITIGATIONS",
-            condition: "model.currentStage != 'ScreeningReview'",
+            condition: "model.currentStage != 'ScreeningReview' && model.siteCode != 'IREPDhan'",
             items: [
                 {
                     type: "section",
@@ -921,7 +965,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         //         }
         //     ]
         // })
-        
+
         // form.push({
         //     type: "box",
         //     colClass: "col-sm-12",
@@ -953,8 +997,10 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
             prepareDataDeferred = $q.defer();
             prepareDataPromise = prepareDataDeferred.promise;
-
+            model.siteCode = SessionStore.getGlobalSetting('siteCode');
             model.currentStage = bundleModel.currentStage;
+            model.isScoringV2ApiEnabled = SessionStore.getGlobalSetting('ScoringAPIVersion') == "2";
+            model.isScoringOptimizationEnabled = SessionStore.getGlobalSetting('isScoringOptimizationEnabled') == "true";
             model.ScoreDetails = [];
             model.customer = {};
             var $this = this;
@@ -979,33 +1025,9 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             if (bundlePageObj) {
                 model._bundlePageObj = _.cloneDeep(bundlePageObj);
             }
-            
+
             if (_.hasIn(model, 'cbModel')) {
-                Scoring.get({
-                    auth_token: AuthTokenHelper.getAuthData().access_token,
-                    LoanId: model.cbModel.loanId,
-                    ScoreName: scoreName
-                }).$promise.then(function(response){
-                    model.ScoreDetails = response.ScoreDetails;
-                }).finally(function(){
-                    var onSuccessPromise = Scoring.financialSummary({loan_id: model.cbModel.loanId, score_name: scoreName}).$promise;
-                    onSuccessPromise.then(function(res){
-                        prepareData(res, model);
-                        model.$prepared = true;
-                        prepareDataDeferred.resolve();
-                    });
-
-                    var p3 = Enrollment.getCustomerById({id:model.cbModel.customerId}).$promise.then(function(res) {
-                        model.customer = res;
-                    }, function(httpRes) {
-                        PageHelper.showErrors(httpRes);
-                    }).finally(function() {
-                    });
-
-                    $q.all([onSuccessPromise, p3]).finally(function() {
-                        deferred.resolve();
-                    });
-                });
+                computeScoringData(model, scoreName, deferred);
             } else {
                 deferred.resolve();
             }

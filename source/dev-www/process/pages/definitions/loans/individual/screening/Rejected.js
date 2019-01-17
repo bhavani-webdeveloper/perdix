@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page('loans.individual.screening.Rejected'),
 	["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
         ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan", "BundleManager",
-        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager) {
+        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan", "BundleManager", "irfNavigator",
+        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
         	$log.info("Inside LoanBookingBundle");
         	return {
         		"type": "page-bundle",
@@ -14,63 +14,79 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Rejected'),
                         title: 'SUMMARY',
                         pageClass: 'summary',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order: 5
                     },
                     {
                         pageName: 'customer.IndividualEnrolment2',
                         title: 'APPLICANT',
                         pageClass: 'applicant',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order: 10
                     },
                     {
                         pageName: 'customer.IndividualEnrolment2',
                         title: 'CO_APPLICANT',
                         pageClass: 'co-applicant',
                         minimum: 5,
-                        maximum: 3
+                        maximum: 3,
+                        order: 20
                     },
                     {
                         pageName: 'customer.IndividualEnrolment2',
                         title: 'GUARANTOR',
                         pageClass: 'guarantor',
                         minimum: 5,
-                        maximum: 3
+                        maximum: 3,
+                        order: 30
                     },
                     {
                         pageName: 'customer.EnterpriseEnrolment2',
                         title: 'BUSINESS',
                         pageClass: 'business',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order: 40
                     },
                     {
                         pageName: 'loans.individual.screening.LoanRequest',
                         title: 'LOAN_REQUEST',
                         pageClass: 'loan-request',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order: 50
                     },
                     {
                         pageName: 'loans.individual.screening.CreditBureauView',
                         title: 'CREDIT_BUREAU',
                         pageClass: 'cbview',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order: 80
                     },
                     {
                         pageName: 'loans.individual.screening.Review',
                         title: 'REVIEW',
                         pageClass: 'loan-review',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order: 60
                     },
                     {
                         pageName: 'loans.individual.misc.BalanceSheetHistory',
                         title: 'BALANCE_SHEET_HISTORY',
                         pageClass: 'balance-sheet-history',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order: 70
+                    }, {
+                        pageName: 'loans.individual.screening.detail.PortfolioAnalyticsView',
+                        title: 'Portfolio Analytics',
+                        pageClass: 'portfolio-analytics',
+                        minimum: 1,
+                        maximum: 1,
+                        order: 90
                     }
                 ],
                 "bundlePages": [],
@@ -105,6 +121,12 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Rejected'),
                                     var guarantors = [];
                                     var business;
                                     var urnNos = [];
+
+                                    if (res.currentStage!= 'Rejected'){
+                                        PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
+                                        irfNavigator.goBack();
+                                        return;
+                                    }
 
                                     for (var i=0; i<res.loanCustomerRelations.length; i++){
                                         var cust = res.loanCustomerRelations[i];
@@ -184,6 +206,12 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Rejected'),
                                         pageClass: 'cbview',
                                         model: {
                                             loanAccount: res
+                                        }
+                                    });
+                                    $this.bundlePages.push({
+                                        pageClass: 'portfolio-analytics',
+                                        model: {
+                                            loanId: bundleModel.loanId
                                         }
                                     });
 

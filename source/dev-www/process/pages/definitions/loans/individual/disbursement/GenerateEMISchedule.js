@@ -102,7 +102,9 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.GenerateEMISc
                                         }
                                         $log.info("Number of documents finally: " + loanDocuments.length);
                                         LoanProcess.generateScheduleForSpecifiedDate({
-                                        "accountNumber": model.loanAccountDisbursementSchedule.accountNumber,
+                                        // "accountNumber": model.loanAccountDisbursementSchedule.accountNumber,
+                                        "loanId": model.loanAccountDisbursementSchedule.loanId,
+                                        "tranchNumber": model.loanAccountDisbursementSchedule.trancheNumber,
                                         "amount":model.loanAccountDisbursementSchedule.disbursementAmount,
                                         "scheduledDisbursementDate":model.loanAccountDisbursementSchedule.scheduledDisbursementDate,
                                         "firstRepaymentDate":model.loanAccount.firstRepaymentDate

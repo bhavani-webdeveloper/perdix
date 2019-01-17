@@ -34,6 +34,9 @@ $settings = [
         'charset'   => 'utf8',
         'collation' => 'utf8_unicode_ci',
         'prefix'    => '',
+        'options' => [
+            PDO::ATTR_EMULATE_PREPARES => true,
+        ],
     ],
     'bi_db' => [
         'driver' => 'mysql',
@@ -69,9 +72,22 @@ $settings = [
         'v8_url' => getenv('PERDIX_V8_BASE_URL'),
         'username' => getenv('PERDIX_USERNAME'),
         'password' => getenv('PERDIX_PASSWORD'),
+        'disbursement_base_dir' => getenv('DISBURSEMENT_BASE_DIR'),
         'customer_upload_path' => getenv('CUSTOMER_UPLOAD_BASE_DIR'),
+        'partner_upload_path' => getenv('PARTNER_UPLOAD_BASE_DIR'),
+        'kyc_upload_path' => getenv('KYC_UPLOAD_BASE_DIR'),
         'individual_loan_upload_path' => getenv('LOAN_UPLOAD_BASE_DIR'),
         'par_upload_path' => getenv('PAR_UPLOAD_PATH')
+    ],
+    'bi_report' => [
+        'bi_base_url' => getenv('BI_BASE_URL')
+    ],
+    'mail_sender' => [
+        'name' => getenv('MAIL_SENDER_NAME'),
+        'mail' => getenv('MAIL_SENDER')
+    ],
+    'paths' => [
+        'sms_template_path' => getenv('SMS_TEMPLATE_PATH')
     ]
 ];
 
@@ -89,5 +105,6 @@ include_once(__DIR__.'/global_functions.php');
 $capsule = new \Illuminate\Database\Capsule\Manager;
 $capsule->addConnection($settings['db'], 'default');
 $capsule->addConnection($settings['bi_db'], 'bi_db');
+$capsule->addConnection($settings['encore_db'], 'encore_db');
 $capsule->setAsGlobal();
 $capsule->bootEloquent();

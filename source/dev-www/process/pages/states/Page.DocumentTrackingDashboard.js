@@ -14,7 +14,8 @@ irf.pages.controller("DocumentTrackingDashboardCtrl", ['$log', '$scope', "formHe
                 "Page/Engine/loans.individual.documentTracking.BatchInTransitQueue",
                 "Page/Engine/loans.individual.documentTracking.PendingVerificationQueue",
                 "Page/Engine/loans.individual.documentTracking.QualityCheckQueue",
-                "Page/Engine/loans.individual.documentTracking.PendingFilingQueue"
+                "Page/Engine/loans.individual.documentTracking.PendingFilingQueue",
+                "Page/Engine/loans.individual.documentTracking.BulkFiling"
             ]
         };
 
@@ -40,7 +41,7 @@ irf.pages.controller("DocumentTrackingDashboardCtrl", ['$log', '$scope', "formHe
 
             var pdcMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.documentTracking.PendingDispatchConfirmationQueue"];
             if (pdcMenu) {
-                DocumentTracking.search({
+                DocumentTracking.findBatches({
                     'stage': 'BatchConfirmation',
                     'branchId': branchId,
                     'centerId': null,
@@ -55,7 +56,7 @@ irf.pages.controller("DocumentTrackingDashboardCtrl", ['$log', '$scope', "formHe
 
             var bitMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.documentTracking.BatchInTransitQueue"];
             if (bitMenu) {
-                DocumentTracking.search({
+                DocumentTracking.findBatches({
                     'stage': 'BatchInTransit',
                     'branchId': null,
                     'centerId': null,
@@ -70,7 +71,7 @@ irf.pages.controller("DocumentTrackingDashboardCtrl", ['$log', '$scope', "formHe
 
             var pvMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.documentTracking.PendingVerificationQueue"];
             if (pvMenu) {
-                DocumentTracking.search({
+                DocumentTracking.findBatches({
                     'stage': 'PendingVerification',
                     'branchId': null,
                     'centerId': null,
@@ -110,6 +111,23 @@ irf.pages.controller("DocumentTrackingDashboardCtrl", ['$log', '$scope', "formHe
                     pfMenu.data = '-';
                 });
             }
+
+             var bfMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.documentTracking.BulkFiling"];
+            if (bfMenu) {
+                DocumentTracking.search({
+                    'stage': 'PendingFiling',
+                    'branchId': null,
+                    'centerId': null,
+                    'page': 1,
+                    'per_page': 1
+                }).$promise.then(function(response, headerGetter) {
+                    bfMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    bfMenu.data = '-';
+                });
+            }
+            
+
 
         });
     }

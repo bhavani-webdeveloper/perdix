@@ -77,9 +77,46 @@ define({
             }
         };
 
+        var activateLoans = function(jlgGroupMember) {
+            var deferred = $q.defer();
+            if(jlgGroupMember.loanAccount.accountNumber) {
+                LoanAccount.activateLoan({
+                    "accountId": jlgGroupMember.loanAccount.accountNumber
+                }, function(data) {
+                    $log.info("Inside success of activateLoan");
+                    LoanProcess.generateScheduleForSpecifiedDate({
+                            // "accountNumber": model._queue.accountNumber,
+                            "loanId": jlgGroupMember.loanAccount.id,
+                            "amount": jlgGroupMember.loanAmount,
+                            "scheduledDisbursementDate":jlgGroupMember.scheduledDisbursementDate,
+                            "firstRepaymentDate":jlgGroupMember.firstRepaymentDate
+                        })
+                        .$promise
+                        .then(function(resp) {
+                            deferred.resolve(resp);
+                        }, function(httpRes) {
+                            PageHelper.showProgress('loan-load', 'Failed to load the EMI Schedule. Try again.', 4000);
+                            PageHelper.showErrors(httpRes);
+                            deferred.reject(httpRes);
+                        });
+                }, function(res) {
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(res);
+                    PageHelper.showProgress('disbursement', 'Error while activating loan.', 2000);
+                    deferred.reject(res);
+                });
+            }
+            return deferred;
+        }
+
         var fillNames = function(model) {
             var deferred = $q.defer();
+            // var promiseArr = [];
+            // promiseArr.push(deferred);
             angular.forEach(model.group.jlgGroupMembers, function(member, key) {
+                if (model.siteCode == 'sambandh') {
+                    promiseArr.push(activateLoans(member));
+                }
                 Enrollment.get({
                     id: member.customerId
                 }, function(resp, headers) {
@@ -104,6 +141,7 @@ define({
                     } catch (err) {
 
                     }
+
                     if (key >= model.group.jlgGroupMembers.length - 1) {
                         deferred.resolve(model);
                     }
@@ -197,6 +235,7 @@ define({
                                     model.group.remarksHistory = resp;
                                 }).finally(function(){
                                     PageHelper.hideLoader();
+                                    irfProgressMessage.pop("group-init", "Loading Done", 2000);
                                 });
                             }, function(m) {
                                 PageHelper.showErrors(m);
@@ -259,24 +298,27 @@ define({
                         "title": "FREQUENCY",
                         "type": "select",
                         "readonly": true,
-                        "titleMap": {
-                            "M": "Monthly",
-                            "Q": "Quarterly"
-                        }
+                        "enumCode": "loan_product_frequency",
+                        // "titleMap": {
+                        //     "M": "Monthly",
+                        //     "Q": "Quarterly"
+                        // }
                     }, {
                         "key": "group.tenure",
                         "title": "TENURE",
                         "readonly": true,
                     }, {
                         "key": "group.scheduledDisbursementDate",
-                        "required":true,
+                        //"required":true,
                         "title": "SCHEDULED_DISBURSEMENT_DATE",
+                        "readonly": true,
                         "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                         "type": "date",
                     }, {
                         "key": "group.firstRepaymentDate",
                         "title": "FIRST_REPAYMENT_DATE",
-                        "required":true,
+                        "readonly": true,
+                        //"required":true,
                         "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                         "type": "date",
                     }]
@@ -396,6 +438,7 @@ define({
                             "type": "button",
                             "key": "group.jlgGroupMembers[].insurenceForm",
                             "title": "Download Insurance Form",
+                            "condition": "model.siteCode == 'KGFS'" ,
                             "onClick": function(model, form, schemaForm, event) {
                                 Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=bajaj_insurance&record_id=" + model.group.jlgGroupMembers[event.arrayIndex].loanAccount.id);
                             }
@@ -504,10 +547,18 @@ define({
                     }, {
                         "type": "button",
                         "key": "group",
-                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
+                        "condition": "model.siteCode == 'sambandh'",
                         "title": "DOWNLOAD_APPLICATION_FORM",
                         "onClick": function(model, form, schemaForm, event) {
                                 Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/forms/JLGAllFormsDownload.php?record_id=" + model.group.id);
+                        }
+                    }, {
+                        "type": "button",
+                        "key": "group",
+                        "condition": "model.siteCode == 'saija'",
+                        "title": "DOWNLOAD_APPLICATION_FORM",
+                        "onClick": function(model, form, schemaForm, event) {
+                                Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/forms/AllFormsDownload.php?type=JLG&record_id=" + model.group.id);
                         }
                     },]
                 },
@@ -716,6 +767,18 @@ define({
                 submit: function(model, formCtrl, form) {
                     // if(!validateForm(formCtrl)) 
                     //     return;
+                    if(model.siteCode == 'saija') {
+                        var cbsdate = SessionStore.getCBSDate();
+                        if (model.group.scheduledDisbursementDate && moment(model.group.scheduledDisbursementDate, SessionStore.getSystemDateFormat()).diff(cbsdate, "days") <0) {
+                            PageHelper.showProgress("loan-create", "Scheduled disbursement date should be greater than or equal to system date", 5000);
+                            return false;
+                        }
+
+                        if (model.group.firstRepaymentDate && moment(model.group.firstRepaymentDate, SessionStore.getSystemDateFormat()).diff(model.group.scheduledDisbursementDate, "days") <=0) {
+                            PageHelper.showProgress("loan-create", "Repayment date should be greater than disbursement date", 5000);
+                            return false;
+                        }
+                    }
                     PageHelper.showLoader();
                     irfProgressMessage.pop('Application-proceed', 'Working...');
                     PageHelper.clearErrors();

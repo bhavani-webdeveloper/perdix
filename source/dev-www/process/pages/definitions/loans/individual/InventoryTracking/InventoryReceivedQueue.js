@@ -11,7 +11,7 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.Inventor
 
 			},
 			definition: {
-				title: "SEARCH_INVENTORY",
+				title: "SEARCH INVENTORY",
 				searchForm: [
 					"*"
 				],
@@ -96,7 +96,7 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.Inventor
 					},
 					getColumns: function() {
 						return [{
-							title: 'INVENTORY_ID',
+							title: 'Inventory ID',
 							data: 'id'
 						}, {
 							title: 'Batch Number',
@@ -120,7 +120,7 @@ irf.pageCollection.factory(irf.page("loans.individual.InventoryTracking.Inventor
 					},
 					getActions: function() {
 						return [{
-							name: "UPDATE_INVENTORY",
+							name: "Update Inventory",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {

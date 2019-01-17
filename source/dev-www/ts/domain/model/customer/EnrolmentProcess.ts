@@ -129,6 +129,12 @@ export class EnrolmentProcess {
         }
     }
 
+    public removeEnterpriseCustomerRelations(loanProcess: LoanProcess, enrolmentDetails:EnterpriseCustomerRelation): void{
+        _.remove(this.customer.enterpriseCustomerRelations, function(relation){
+            return relation.linkedToCustomerId==enrolmentDetails.customerId;
+        })
+    }
+
      public refreshEnterpriseCustomerAgentRelations(agentProcess: AgentProcess): void{
         /* Loan customer */
 
@@ -183,4 +189,8 @@ export class EnrolmentProcess {
     static getProcessConfig() {
         return enrolmentProcessConfig;
     }
+
+    static plainToClass(customer:Object): Observable<EnrolmentProcess> {
+        return EnrolmentProcessFactory.plainToClass(customer);
+    } 
 }

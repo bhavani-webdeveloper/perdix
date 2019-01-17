@@ -392,6 +392,7 @@ define({
                                  .then(function(res){
                                  model.group.jlgGroupMembers[context.arrayIndex].maritalStatus = res.maritalStatus;
                                  model.group.jlgGroupMembers[context.arrayIndex].loanAmount = res.requestedLoanAmount;
+                                 model.group.jlgGroupMembers[context.arrayIndex].loanAmountRequested = res.requestedLoanAmount;
                                  model.group.jlgGroupMembers[context.arrayIndex].spouseDob=res.spouseDateOfBirth;
                                  model.group.jlgGroupMembers[context.arrayIndex].loanPurpose1 = res.requestedLoanPurpose;
                                  model.group.jlgGroupMembers[context.arrayIndex].witnessFirstName = undefined;
@@ -519,6 +520,7 @@ define({
                             return [
                                 data.name,
                                 data.relationShip,
+                                "Age: " + data.age ? (data.age + ' years') : '' ,
                             ];
                         },
                         onSelect: function(valueObj, model, context) {
@@ -534,15 +536,16 @@ define({
                         "searchHelper": formHelper,
                         "search": function(inputModel, form, model, context) {
                             var familyMembers = [];
-                            if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers)
-                            for (var idx = 0; idx < model.group.jlgGroupMembers[context.arrayIndex].familyMembers.length; idx++){
+                            if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers){
+                                var temp = model.group.jlgGroupMembers[context.arrayIndex].familyMembers;
+                            for (var idx = 0; idx < temp.length; idx++){
                                 if( 
                                 (model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].age>=18 &&
-                                    model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].age<=59)
+                                    model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].age<=59 && temp[idx].relationShip.toLowerCase() != "self")
                                 ) {
                                     familyMembers.push(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx]);
                                 }
-                            }
+                            }}
                             return $q.resolve({
                                 headers: {
                                     "x-total-count": familyMembers.length
@@ -554,6 +557,7 @@ define({
                             return [
                                 data.name,
                                 data.relationShip,
+                                "Age: " + data.age ? (data.age + ' years') : '' ,
                             ];
                         },
                         onSelect: function(valueObj, model, context) {

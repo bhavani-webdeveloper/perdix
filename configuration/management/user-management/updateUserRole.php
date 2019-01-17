@@ -9,7 +9,7 @@ UPDATE ".DB_SCHEMA.".user_roles SET user_id = ?, role_id = ? WHERE id = ?
 ";
 
 $INSERT_QUERY = "
-INSERT INTO ".DB_SCHEMA.".user_roles (user_id, role_id, created_at, last_edited_at) values (?, ?, now(), now())
+INSERT INTO ".DB_SCHEMA.".user_roles (user_id, role_id, created_by , created_at, last_edited_by, last_edited_at) values (?, ?, 'backend', now(), 'backend', now())
 ";
 
 try {

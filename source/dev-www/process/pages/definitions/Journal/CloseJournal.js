@@ -71,6 +71,11 @@ define({
                     type: "string",
                     readonly: true,
                     "title": "TRANSACTION_DESCRIPTION"
+                }, {
+                    key: "journal.transactionType",
+                    type: "string",
+                    readonly: true,
+                    "title": "TRANSACTION_TYPE"
                 }]
             }, {
                 "type": "actionbox",
@@ -107,7 +112,7 @@ define({
                 },
                 submit: function(model, form, formName) {
                     $log.info("Inside submit()");
-                    model.journal.isApplicable=1;
+                    model.journal.isApplicable=0;
                     PageHelper.showLoader();
                     PageHelper.showProgress("Journal Close", "Working...");
                     if (model.journal.id) {

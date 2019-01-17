@@ -7,11 +7,13 @@
  *
  *
  */
-irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper', '$filter', function(BundleLog, $injector, $q, formHelper, $filter){
+irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper', '$filter', '$log', function(BundleLog, $injector, $q, formHelper, $filter, $log){
 
     var currentInstance = null;
     var pages = [];
     var pageCounter = 0;
+
+    var autoSaveOfflineTimer = [];
 
     return {
         register: function(bundlePage, bundleModel, _pages){
@@ -36,8 +38,13 @@ irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper'
             BundleLog.info("Recieved event [" + eventName + "]");
             BundleLog.info("Calling event handler");
             if (_.hasIn(currentInstance.bundlePage, 'eventListeners') && _.hasIn(currentInstance.bundlePage.eventListeners, eventName)){
-                BundleLog.info("Inside here");
-                currentInstance.bundlePage.eventListeners[eventName](pageObj, currentInstance.bundleModel, obj);
+                BundleLog.info("Pushing event [" + eventName + "]");
+                try{
+                    currentInstance.bundlePage.eventListeners[eventName](pageObj, currentInstance.bundleModel, obj);
+                }catch (e){
+                    BundleLog.error("Error pushing event [" + eventName + "]. Proceeding to next event.", e);
+                }
+
             }
         },
         /**
@@ -48,10 +55,16 @@ irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper'
          */
         broadcastEvent: function(eventName, obj){
             var pagesLength = pages.length;
+            BundleLog.info("Broadcasting event [" + eventName + "]");
             for (var i=0; i<pagesLength; i++){
                 var page = pages[i].page;
                 if (_.hasIn(page, 'eventListeners.' + eventName)) {
-                    page.eventListeners[eventName](currentInstance.bundleModel, pages[i].model, obj);
+                    try {
+                        page.eventListeners[eventName](currentInstance.bundleModel, pages[i].model, obj);
+                    } catch(e){
+                        BundleLog.error("Error while broadcasting event [" + eventName + "]. Target Page Class:[" + pages[i].singlePageDefinition.pageClass + "] , Form Name: [" + pages[i].formName+ "]", e);
+                    }
+
                 }
             }
         },
@@ -69,7 +82,9 @@ irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper'
          * @param bundleModel
          * @return pageObj
          */
-        createPageObject: function(definition, model, bundleModel, shouldInitialize, bundlePageName) {
+        createPageObject: function(definition, model, bundleModel, isOnlineLoad, bundlePageName) {
+            var deferred = $q.defer();
+
             var pageObj = {};
             definition.bundlePageName = bundlePageName;
             pageObj.singlePageDefinition = _.cloneDeep(definition);
@@ -79,18 +94,45 @@ irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper'
             pageObj.formName = irf.form(definition.pageName) + (pageCounter++);
             pageObj.title = definition.title;
             pageObj.model = model || {};
-
             pageObj.error = false;
+            var pageDefPath = "pages/" + pageObj.pageName.replace(/\./g, "/");
             try {
                 pageObj.page = _.cloneDeep($injector.get(irf.page(pageObj.pageName)));
-                if (angular.isFunction(pageObj.page.initialize) && shouldInitialize) {
+                if (angular.isFunction(pageObj.page.initialize) && isOnlineLoad) {
                     pageObj.$initPromise = $q.when(pageObj.page.initialize(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.singlePageDefinition, bundleModel));
+                } else if (angular.isFunction(pageObj.page.offlineInitialize) && !isOnlineLoad) {
+                    pageObj.$initPromise = $q.when(pageObj.page.offlineInitialize(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.singlePageDefinition, bundleModel));
                 }
-            } catch (e) {
-                BundleLog.error(e);
-                pageObj.error = true;
+                deferred.resolve(pageObj);
+            } catch (err) {
+                if (err.message.startsWith("[$injector:unpr] Unknown provider: "+irf.page(pageObj.pageName)+"Provider")) {
+                    $log.warn("Loading Dynamic Bundle Child page... "+pageObj.pageName);
+                } else {
+                    $log.error(err);
+                }
+                require([pageDefPath], function(pageDefObj){
+                    /* Page is loaded, now bind it to pages */
+                    $log.info("[REQUIRE] Done loading page(" + pageObj.pageName + ")");
+                    irf.pageCollection.loadPage(pageDefObj.pageUID, pageDefObj.dependencies, pageDefObj.$pageFn);
+                    try {
+                        pageObj.page = _.cloneDeep($injector.get(irf.page(pageObj.pageName)));
+                        if (angular.isFunction(pageObj.page.initialize) && isOnlineLoad) {
+                            pageObj.$initPromise = $q.when(pageObj.page.initialize(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.singlePageDefinition, bundleModel));
+                        } else if (angular.isFunction(pageObj.page.offlineInitialize) && !isOnlineLoad) {
+                            pageObj.$initPromise = $q.when(pageObj.page.offlineInitialize(pageObj.model, pageObj.page.form, pageObj.formCtrl, pageObj.singlePageDefinition, bundleModel)); 
+                        }
+                        deferred.resolve(pageObj);
+                    } catch (e) {
+                        BundleLog.error("Error initializing page", e);
+                        pageObj.error = true;
+                    }
+                }, function(err){
+                    $log.info("[REQUIRE] Error loading page(" + pageObj.pageName + ")");
+                    $log.error(err)
+                });
+            } finally {
+                return deferred.promise;
             }
-            return pageObj;
         },
         initializePageUI: function(pageObj) {
             var deferredUI = $q.defer(); // TODO: deferredUI resolve
@@ -220,6 +262,14 @@ irf.pages.factory('BundleManager', ['BundleLog', '$injector', '$q', 'formHelper'
                     formHelper.resetFormValidityState(pages[idx].formCtrl);
                 }
             }
+        },
+
+        startAutoSaveOffline: function(callback, duration) {
+            autoSaveOfflineTimer.push(setInterval(callback, duration));
+        },
+        stopAutoSaveOffline: function() {
+            var a = autoSaveOfflineTimer.pop();
+            a && clearInterval(a);
         }
     }
 }]);
@@ -232,18 +282,24 @@ irf.pages.factory('BundleLog', ['$log', function($log){
         "debug": function(msg){
             $log.debug("<<BUNDLE>> :: " + msg);
         },
-        "error": function(msg){
+        "error": function(msg, e){
             $log.error("<<BUNDLE>> :: " + msg);
+            if (e){
+                console.error(e);
+            }
         },
-        "warn": function(msg){
+        "warn": function(msg, e){
             $log.warn("<<BUNDLE>> :: " + msg);
+            if (e){
+                console.warn(e);
+            }
         }
     }
 }]);
 
 irf.pages.controller("PageBundleCtrl",
-["$log", "$filter", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "$timeout", "BundleManager", "BundleLog", "OfflineManager", "PageHelper", "Utils", "SessionStore",
-function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManager, $timeout, BundleManager, BundleLog, OfflineManager, PageHelper, Utils, SessionStore) {
+["$log", "$filter", "$scope", "$state", "$stateParams", "$injector", "$q", "Locking", "irfNavigator", "$timeout", "BundleManager", "BundleLog", "OfflineManager", "PageHelper", "Utils", "SessionStore",
+function($log, $filter, $scope, $state, $stateParams, $injector, $q, Locking, irfNavigator, $timeout, BundleManager, BundleLog, OfflineManager, PageHelper, Utils, SessionStore) {
     var self = this;
 
     $scope.pages = [];
@@ -262,6 +318,15 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
                 form.colClass = 'col-sm-12';
             }
         }
+    };
+
+    var addPagetoPages = function(page){
+
+        var pos = _.sortedIndexBy($scope.pages, page, function(value){
+            return value.singlePageDefinition && value.singlePageDefinition.order? value.singlePageDefinition.order:10000;
+        });
+
+        $scope.pages.splice(pos,0,page);
     }
 
     $scope.isRemovable = function(definition) {
@@ -299,22 +364,33 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
     $scope.addTab = function(index, e) {
         e && e.preventDefault();
         var definition = $scope.addTabMenu[index];
-        var openPage = BundleManager.createPageObject(definition, null, $scope.bundleModel, true, $scope.pageName);
-        var insertIndex = -1;
-        for (var i = 0; i < $scope.pages.length; i++) {
-            if ($scope.pages[i].definition == definition) {
-                insertIndex = i+1;
-            }
-        };
-        if (insertIndex > -1) {
-            $scope.pages.splice(insertIndex, 0, openPage);
-        } else {
-            $scope.pages.push(openPage);
+        var p1 = null;
+
+        if ($scope.bundlePage.onAddNewTab){
+            p1 = $scope.bundlePage.onAddNewTab(definition, $scope.bundleModel);
         }
-        ++definition.openPagesCount;
-        if (definition.maximum <= definition.openPagesCount) {
-            BundleLog.debug($scope.addTabMenu.splice(index, 1));
-        }
+
+        $q.when(p1)
+            .then(function(model){
+                BundleManager.createPageObject(definition, model, $scope.bundleModel, true, $scope.pageName).then(function(pageObj) {
+                    var openPage = pageObj
+                    var insertIndex = -1;
+                    for (var i = 0; i < $scope.pages.length; i++) {
+                        if ($scope.pages[i].definition == definition) {
+                            insertIndex = i+1;
+                        }
+                    };
+                    if (insertIndex > -1) {
+                        $scope.pages.splice(insertIndex, 0, openPage);
+                    } else {
+                        $scope.pages.push(openPage);
+                    }
+                    ++definition.openPagesCount;
+                    if (definition.maximum <= definition.openPagesCount) {
+                        BundleLog.debug($scope.addTabMenu.splice(index, 1));
+                    }
+                })
+            });
         //BundleManager.initializePageUI(openPage);
     };
 
@@ -343,20 +419,23 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
             offlineData.bundlePages.push(initialData);
         }
         var prePromise;
-        if (_.isFunction($scope.bundlePage.preSave)) { 
+        if (_.isFunction($scope.bundlePage.preSave)) {
             prePromise = $scope.bundlePage.preSave(offlineData);
         }
-        if (prePromise && _.isFunction(prePromise.then)) {
-            prePromise.then(function() {
-                $scope.bundleModel.$$STORAGE_KEY$$ = OfflineManager.storeItem($scope.pageName, $scope.pageId, offlineData);
-                PageHelper.showProgress("offline-save", "Offline record saved/updated", 5000);
+        $q.when(prePromise)
+        .then(function(){
+            return OfflineManager.storeItem_v2($scope.pageName, $scope.pageId, offlineData, $scope.bundlePage.offlineStrategy);
+        })
+        .then(
+            function(success){
+                $scope.bundleModel.$$STORAGE_KEY$$ = success;
+                PageHelper.showProgress("offline-save", "Data Saved Successfully", 5000);
                 deferred.resolve($scope.bundleModel.$$STORAGE_KEY$$);
-            });
-        } else {
-            $scope.bundleModel.$$STORAGE_KEY$$ = OfflineManager.storeItem($scope.pageName, $scope.pageId, offlineData);
-            PageHelper.showProgress("offline-save", "Offline record saved/updated", 5000);
-            deferred.resolve($scope.bundleModel.$$STORAGE_KEY$$);
-        }
+            }, function(err){
+                $log.info(err);
+                deferred.reject(err);
+            }
+        )
         return deferred.promise;
     };
 
@@ -368,7 +447,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         }
     };
 
-    BundleManager.deleteOffline = function() {
+    /*BundleManager.deleteOffline = function() {
         if ($scope.bundleModel.$$STORAGE_KEY$$) {
             OfflineManager.removeItem($scope.pageName, $scope.bundleModel.$$STORAGE_KEY$$);
             delete $scope.bundleModel.$$STORAGE_KEY$$;
@@ -376,7 +455,23 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
         } else {
             return $q.reject();
         }
+    };*/
+
+    BundleManager.deleteOffline = function() {
+        if ($scope.bundleModel.$$STORAGE_KEY$$) {
+            return OfflineManager.removeItem_v2($scope.pageName, $scope.bundleModel.$$STORAGE_KEY$$, $scope.bundlePage.offlineStrategy).then(function(success) {
+                delete $scope.bundleModel.$$STORAGE_KEY$$;
+                return $q.resolve();
+            }, function(error) {
+                $log.info(error);
+                return $q.reject();
+            })
+
+        } else {
+            return $q.reject();
+        }
     };
+
 
     $scope.loadOfflinePage = function(event) {
         event.preventDefault();
@@ -385,7 +480,7 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
 /*
     var pageData = $stateParams.pageData;
     if (pageData && pageData.$offlineData) {
-        
+
         var offlineData = pageData.$offlineData;
         for (var i=0; i<offlineData.pagesData.length; i++){
             $scope.bundlePage.bundlePages.push(_.merge(offlineData.pagesData[i].pageDefinition, {model:offlineData.pagesData[i].model}));
@@ -407,118 +502,188 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
     $scope.initBundle = function() {
         var deferredInitBundle = $q.defer();
         /* Loading the page */
-        try {
-            $scope.bundlePage = _.cloneDeep($injector.get(irf.page($scope.pageName)));
-        } catch (e) {
-            BundleLog.error(e);
-            $scope.error = true;
-            //$state.go('Page.EngineError', {pageName:$scope.pageName});
-        }
-        /* Done loading the page. */
-        BundleLog.info("Bundle Page Loaded");
-        var bundleInstance = BundleManager.register($scope.bundlePage, $scope.bundleModel, $scope.pages);
-        BundleLog.info("Ready to accept events");
 
-        BundleLog.info("Ready to call pre_pages_initialize");
-        var bDefPromise;
-        if ($scope.bundlePage.bundleDefinitionPromise) {
-            bDefPromise = $scope.bundlePage.bundleDefinitionPromise();
-        } else {
-            bDefPromise = $scope.bundlePage.bundleDefinition;
-        }
-        $q.when(bDefPromise).then(function(bundleDefinition) {
-            var initPromise;
-            var pageData = $stateParams.pageData;
-            if (pageData && pageData.$offlineData && pageData.$offlineData.$$STORAGE_KEY$$) { // Loading offline data
-                var offlineData = pageData.$offlineData;
-                $stateParams.pageId = $scope.pageId = offlineData.pageId;
-                $scope.bundleModel = offlineData.bundleModel;
-                $scope.bundlePage.bundlePages = offlineData.bundlePages;
-                $scope.bundleModel.$$STORAGE_KEY$$ = offlineData.$$STORAGE_KEY$$;
-                initPromise = $q.resolve();
-            } else { // Loading online data
-                initPromise = $q.when($scope.bundlePage.pre_pages_initialize($scope.bundleModel));
-            }
-            initPromise.then(function(){
-                $scope.bundlePage.bundleDefinition = bundleDefinition;
-                var bundleDefinitionMap = _.keyBy(bundleDefinition, function(o){
-                    o.openPagesCount = 0;
-                    return o.pageClass;
-                });
-
-                var initialData = $scope.bundlePage.bundlePages; // $scope.bundlePage.bundlePages - initial data
-                if (initialData && initialData.length) {
-                    for (i in initialData) {
-                        var iData = _.cloneDeep(initialData[i]);
-                        var bDef = bundleDefinitionMap[iData.pageClass];
-                        var openPage = BundleManager.createPageObject(bDef, iData.model, $scope.bundleModel, !$scope.bundleModel.$$STORAGE_KEY$$, $scope.pageName);
-                        $scope.pages.push(openPage);
-                        if (!openPage.error && openPage.$initPromise) {
-                            initPromises.push(openPage.$initPromise);
-                        }
-                        bDef.openPagesCount++;
-                    }
-                    for (i in bundleDefinition) {
-                        var bDef = bundleDefinition[i];
-                        if (bDef.maximum > bDef.openPagesCount) {
-                            $scope.addTabMenu.push(bDef);
-                        }
-                    }
-                } else {
-                    for (i in bundleDefinition) {
-                        var bDef = bundleDefinition[i];
-                        if (typeof bDef.minimum === 'undefined') {
-                            bDef.minimum = 0;
-                        }
-                        if (typeof bDef.maximum === 'undefined') {
-                            bDef.maximum = 99;
-                        }
-                        if (bDef.minimum > 0) {
-                            for (var i = 0; i < bDef.minimum; i++) {
-                                var openPage = BundleManager.createPageObject(bDef, null, $scope.bundleModel, true, $scope.pageName);
-                                $scope.pages.push(openPage);
-                                if (!openPage.error && openPage.$initPromise) {
-                                    initPromises.push(openPage.$initPromise);
+        $q.when()
+            .then(function(){
+                var deferred = $q.defer();
+                try {
+                    $scope.bundlePage = _.cloneDeep($injector.get(irf.page($scope.pageName)));
+                    deferred.resolve();
+                } catch (e) {
+                    if (e.message.startsWith("[$injector:unpr] Unknown provider: "+irf.page($scope.pageName)+"Provider")) {
+                        $log.error("Loading Dynamic page...");
+                        try{
+                            var pageDefPath = "pages/" + $scope.pageName.replace(/\./g, "/");
+                            PageHelper.showLoader();
+                            require([pageDefPath], function(pageDefObj) {
+                                $log.info("[REQUIRE] Done loading page(" + $scope.pageName + ")");
+                                irf.pageCollection.loadPage(pageDefObj.pageUID, pageDefObj.dependencies, pageDefObj.$pageFn);
+                                try {
+                                    $scope.bundlePage = _.cloneDeep($injector.get(irf.page($scope.pageName)));
+                                    deferred.resolve();
+                                    PageHelper.hideLoader();
+                                } catch (e) {
+                                    $log.error(e);
+                                    $scope.error = true;
+                                    deferred.reject();
                                 }
-                            };
-                            bDef.openPagesCount = bDef.minimum;
+                            })
+                        } catch(e) {
+                            $log.error(e);
+                            deferred.reject();
                         }
-                        if (bDef.maximum > bDef.openPagesCount) {
-                            $scope.addTabMenu.push(bDef);
-                        }
+                    } else {
+                        $log.error(e);
+                        deferred.reject();
                     }
                 }
+                return deferred.promise;
+            })
+            //Locking starts
+            .then(function() {
+                var deferred = $q.defer();
+                $scope.bundlePage.locked = false;
+                var lockingRequired = false;
+                if (SessionStore.getGlobalSetting("lockingRequired") == "true" && $scope.bundlePage.lockingRequired && $scope.bundlePage.processType && $scope.bundlePage.processName && $scope.pageId) {
+                    if (angular.isFunction($scope.bundlePage.lockingRequired)) {
+                        lockingRequired = $scope.bundlePage.lockingRequired();
+                    } else {
+                        lockingRequired = !!$scope.bundlePage.lockingRequired;
+                    }
+                    var recordId = $scope['pageId'].split('.')[0];
+                    if (lockingRequired) {
+                        Locking.lock({
+                            "processType": $scope.bundlePage.processType,
+                            "processName": $scope.bundlePage.processName,
+                            "recordId": recordId
+                        }).$promise.then(function() {
+                            $scope.bundlePage.locked = true;
+                            deferred.resolve();
+                        }, function(err) {
+                            Utils.alert(err.data.error).finally(function(){
+                                irfNavigator.goBack();
+                                deferred.reject();
+                            });
+                        });
+                    } else {
+                        deferred.resolve();
+                    }
+                } else {
+                    deferred.resolve();
+                }
+                return deferred.promise;
+            })
+            //Locking ends
+            .then(function(){
+                /* Done loading the page. */
+                BundleLog.info("Bundle Page Loaded");
+                var bundleInstance = BundleManager.register($scope.bundlePage, $scope.bundleModel, $scope.pages);
+                BundleLog.info("Ready to accept events");
 
-                $q.all(initPromises).finally(function(){
-                    BundleLog.info("All page init done");
-                    $q.when($scope.bundlePage.post_pages_initialize($scope.bundleModel)).finally(deferredInitBundle.resolve);
-                    BundleLog.info("Call done post_pages_initialize");
+                BundleLog.info("Ready to call pre_pages_initialize");
+                var bDefPromise;
+                if ($scope.bundlePage.bundleDefinitionPromise) {
+                    bDefPromise = $scope.bundlePage.bundleDefinitionPromise();
+                } else {
+                    bDefPromise = $scope.bundlePage.bundleDefinition;
+                }
+                $q.when(bDefPromise).then(function(bundleDefinition) {
+                    var initPromise;
+                    var pageData = $stateParams.pageData;
+                    if (pageData && pageData.$offlineData && pageData.$offlineData.$$STORAGE_KEY$$) { // Loading offline data
+                        var offlineData = pageData.$offlineData;
+                        $stateParams.pageId = $scope.pageId = offlineData.pageId;
+                        $scope.bundleModel = offlineData.bundleModel;
+                        $scope.bundlePage.bundlePages = offlineData.bundlePages;
+                        $scope.bundleModel.$$STORAGE_KEY$$ = offlineData.$$STORAGE_KEY$$;
+                        if(angular.isFunction($scope.bundlePage.offlineInitialize)) {
+                            initPromise = $q.when($scope.bundlePage.offlineInitialize($scope.bundleModel));
+                        } else {
+                            initPromise = $q.resolve();
+                        }
+                    } else { // Loading online data
+                        initPromise = $q.when($scope.bundlePage.pre_pages_initialize($scope.bundleModel));
+                    }
+                    initPromise.then(function(){
+                        $scope.bundlePage.bundleDefinition = bundleDefinition;
+                        var initialData = $scope.bundlePage.bundlePages || []; // $scope.bundlePage.bundlePages - initial data
+
+                        var bundleDefinitionMap = _.keyBy(bundleDefinition, function(o){
+                            o.openPagesCount = $filter('filter')(initialData, {"pageClass": o.pageClass}, true).length;
+                            return o.pageClass;
+                        });
+
+                        if (initialData && initialData.length) {
+                            for (i in initialData) {
+                                var iData = initialData[i];
+                                var bDef = bundleDefinitionMap[iData.pageClass];
+
+                                var p = BundleManager.createPageObject(bDef, iData.model, $scope.bundleModel, !$scope.bundleModel.$$STORAGE_KEY$$, $scope.pageName).then(function(pageObj) {
+                                    var openPage = pageObj;
+                                    addPagetoPages(openPage);
+                                    if (!openPage.error && openPage.$initPromise) {
+                                        initPromises.push(openPage.$initPromise);
+                                    }
+                                    // bDef.openPagesCount++;
+                                })
+                                initPromises.push(p);
+
+                            }
+                            for (i in bundleDefinition) {
+                                var bDef = bundleDefinition[i];
+                                if (bDef.maximum > bDef.openPagesCount) {
+                                    $scope.addTabMenu.push(bDef);
+                                }
+                            }
+                        } else {
+                            for (i in bundleDefinition) {
+                                var bDef = bundleDefinition[i];
+                                if (typeof bDef.minimum === 'undefined') {
+                                    bDef.minimum = 0;
+                                }
+                                if (typeof bDef.maximum === 'undefined') {
+                                    bDef.maximum = 99;
+                                }
+                                if (bDef.minimum > 0) {
+                                    for (var i = 0; i < bDef.minimum; i++) {
+                                        var p = BundleManager.createPageObject(bDef, null, $scope.bundleModel, true, $scope.pageName).then(function(pageObj) {
+                                            var openPage = pageObj;
+                                            addPagetoPages(openPage);
+                                            if (!openPage.error && openPage.$initPromise) {
+                                                initPromises.push(openPage.$initPromise);
+                                            }
+                                        });
+                                        initPromises.push(p); // Adding the bundle page load (via require) itself to promises list.
+                                    };
+                                    bDef.openPagesCount = bDef.minimum;
+                                }
+                                if (bDef.maximum > bDef.openPagesCount) {
+                                    $scope.addTabMenu.push(bDef);
+                                }
+                            }
+                        }
+
+                        $q.all(initPromises).finally(function(){
+                            BundleLog.info("All page init done");
+                            $q.when($scope.bundlePage.post_pages_initialize($scope.bundleModel)).finally(deferredInitBundle.resolve);
+                            BundleLog.info("Call done post_pages_initialize");
+                        });
+                    }, function() {
+                        BundleLog.info("Bundle init rejected");
+                    });
+                }, function() {
+                    BundleLog.error("FAILED to load bundle definition. Define 'bundleDefinition[]' or 'bundleDefinitionPromise()' in bundlePage definition");
                 });
-            }, function() {
-                BundleLog.info("Bundle init rejected");
-            });
-        }, function() {
-            BundleLog.error("FAILED to load bundle definition. Define 'bundleDefinition[]' or 'bundleDefinitionPromise()' in bundlePage definition");
-        });
-        BundleLog.info("Call done pre_pages_initialize");
+                BundleLog.info("Call done pre_pages_initialize");
+            })
         return deferredInitBundle.promise;
     };
 
-    var autoSaveOfflineTimer = null;
-    var stopAutoSaveOffline = function() {
-        if (autoSaveOfflineTimer) {
-            clearInterval(autoSaveOfflineTimer);
-            autoSaveOfflineTimer = null;
-        }
-    };
-
     $scope.initBundle().then(function(){
-        if ($scope.pages && $scope.pages.length) {
-            BundleManager.initializePageUI($scope.pages[0]);
-        }
-        stopAutoSaveOffline();
+
+        BundleManager.stopAutoSaveOffline();
         if ($scope.bundlePage.offline && (n = (n = SessionStore.getGlobalSetting('bundle.offline.autosave.timeout'))? Number(n): 0)) {
-            autoSaveOfflineTimer = setInterval(BundleManager.saveOffline, n);
+            BundleManager.startAutoSaveOffline(BundleManager.saveOffline, n);
         }
         $timeout(function() {
             $(".bundle-page .irf-tabset ul.nav-tabs").affix({
@@ -532,13 +697,19 @@ function($log, $filter, $scope, $state, $stateParams, $injector, $q, entityManag
             });
 
             $('.bundle-page').bind('destroyed', function() {
-                stopAutoSaveOffline();
+                BundleManager.stopAutoSaveOffline();
             });
+
+            if ($scope.pages && $scope.pages.length) {
+                $scope.activeIndex = $scope.pages[0].formName;
+                BundleManager.initializePageUI($scope.pages[0]);
+            }
+
         });
     });
 
     $scope.$on('$destroy', function() {
-        stopAutoSaveOffline();
+        BundleManager.stopAutoSaveOffline();
     });
 
 }]);

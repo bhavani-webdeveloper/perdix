@@ -1,149 +1,139 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.Review"),
-["$log", "$q","LoanAccount", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
-'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
-function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUtils,
-    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan){
+["$log", 'SchemaResource', 'PageHelper', "Utils", "IndividualLoan", "Messaging", "SessionStore", "irfCurrencyFilter", "$filter",
+function($log, SchemaResource, PageHelper, Utils, IndividualLoan, Messaging, SessionStore, irfCurrencyFilter, $filter){
+	var getStageNameByStageCode = function(stageCode) {
+		var stageName;
+		switch(stageCode) {
+			case 'Screening':
+				stageName = $filter('translate')('SCREENING');
+				break;
+			case 'Dedupe':
+				stageName = $filter('translate')('DEDUPE');
+				break;
+			case 'ScreeningReview':
+				stageName = $filter('translate')('SCREENING_REVIEW');
+				break;
+			case 'Application':
+				stageName = $filter('translate')('APPLICATION');
+				break;
+			case 'ApplicationReview':
+				stageName = $filter('translate')('APPLICATION_REVIEW');
+				break;
+			case 'FieldAppraisal':
+				stageName = $filter('translate')('FIELD_APPRAISAL');
+				break;
+			case 'FieldAppraisalReview':
+				stageName = $filter('translate')('REGIONAL_RISK_REVIEW');
+				break;
+			case 'ZonalRiskReview':
+				stageName = $filter('translate')('ZONAL_RISK_REVIEW');
+				break;
+			case 'CentralRiskReview':
+				stageName = $filter('translate')('VP_CREDIT_RISK_REVIEW');
+				break;
+			case 'CreditCommitteeReview':
+				stageName = $filter('translate')('CREDIT_COMITTEE_REVIEW');
+				break;
+			case 'Sanction':
+				stageName = $filter('translate')('SANCTION');
+				break;
+			case 'Rejected':
+				stageName = $filter('translate')('REJECTED');
+				break;
+			default:
+				stageName = stageCode;
+				break;
+		}
+		return stageName;
+	};
+	return {
+		"type": "schema-form",
+		"title": "REVIEW",
+		"subTitle": "BUSINESS",
+		initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+			$log.info("bundleModel");
+			$log.info(bundleModel);
+			model.currentStage = bundleModel.currentStage;
+			model.conversationStatus = [];
+			if (model.loanAccount && model.loanAccount.id) {
+				PageHelper.showLoader();
+				IndividualLoan.loanRemarksSummary({id: model.loanAccount.id}).$promise.then(function (resp){
+					model.loanSummary = resp;
+					if (_.isArray(model.loanSummary) && model.loanSummary.length > 0) {
+						var lastEntry = model.loanSummary[model.loanSummary.length - 1];
+						var aTime = new moment(lastEntry.createdDate);
+						var bTime = new moment();
+						model.minutesInCurrentStage = Utils.millisecondsToStr( Math.abs(bTime.diff(aTime)) );
 
-    var branch = SessionStore.getBranch();
 
-    var validateForm = function(formCtrl){
-        formCtrl.scope.$broadcast('schemaFormValidate');
-        if (formCtrl && formCtrl.$invalid) {
-            PageHelper.showProgress("enrolment","Your form have errors. Please fix them.", 5000);
-            return false;
-        }
-        return true;
-    }
+						var currentStage = _.findLastKey(model.loanSummary, {'action': 'PROCEED' });
+						if(model.currentStage == 'loanView') {
+							model.loanSummary[currentStage].hideCreateConversation = true;
+						}
 
-    var navigateToQueue = function(model){
-        if(model.currentStage=='Screening')
-            $state.go('Page.Engine', {pageName: 'loans.individual.screening.ScreeningQueue', pageId:null});
-        if(model.currentStage=='ScreeningReview')
-            $state.go('Page.Engine', {pageName: 'loans.individual.screening.ScreeningReviewQueue', pageId:null});
-        if(model.currentStage=='Application')
-            $state.go('Page.Engine', {pageName: 'loans.individual.booking.ApplicationQueue', pageId:null});
-        if(model.currentStage=='ApplicationReview')
-            $state.go('Page.Engine', {pageName: 'loans.individual.screening.ApplicationReviewQueue', pageId:null});
-        if (model.currentStage == 'FieldAppraisal')
-            $state.go('Page.Engine', {pageName: 'loans.individual.screening.FieldAppraisalQueue', pageId:null});
-        if (model.currentStage == 'FieldAppraisalReview')
-            $state.go('Page.Engine', {pageName: 'loans.individual.screening.FieldAppraisalReviewQueue', pageId:null});
-        if (model.currentStage == 'CreditCommitteeReview')
-            $state.go('Page.Engine', {pageName: 'loans.individual.screening.CreditCommitteeReviewQueue', pageId:null});
-        if (model.currentStage == 'CentralRiskReview')
-            $state.go('Page.Engine', {pageName: 'loans.individual.screening.CentralRiskReviewQueue', pageId:null});
-    }
+						model.loanSummary[currentStage].isCurrentStage = true;	
+						model.loanSummary[currentStage]._conversationExpand = true;	
 
-    return {
-        "type": "schema-form",
-        "title": "REVIEW",
-        "subTitle": "BUSINESS",
-        initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
-            model.currentStage = bundleModel.currentStage;
-            if (_.hasIn(model, 'loanAccount')){
-                $log.info('Printing Loan Account');
-                $log.info(model.loanAccount);
-                PageHelper.showLoader();
-                IndividualLoan.loanRemarksSummary({id: model.loanAccount.id})
-                .$promise
-                .then(function (resp){
+						Messaging.getConversationStatus({
+		                    'process_id': model.loanAccount.id
+		                }).$promise.then(function(response) {
+							model.conversationStatus = response.body;
+							var i =0;
+							for(i in model.conversationStatus){
+								model.conversationStatus[i] = {'sub_process_id' :Number(model.conversationStatus[i].sub_process_id)};
+							}
+							for(var i = 0; i < model.loanSummary.length; i++) {
+								if(model.loanSummary[i].action == 'PROCEED' && (_.find(model.conversationStatus, {'sub_process_id': model.loanSummary[i].id}) || model.loanSummary[i].isCurrentStage)) {
+									model.loanSummary[i].conversationStatus =  true;
+								}
+							}
+		                });
+					}				
+				}).finally(PageHelper.hideLoader);
+			}
+		},
+		offline: false,
+		eventListeners: {},
+		form: [{
+			"type": "section",
+			"htmlClass": "col-sm-12",
+			"html":"<div class='callout callout-info text-white'><h1>{{ model.minutesInCurrentStage }}</h1> <p>spent in current stage.</p></div>"
+		}, {
+			"type": "timeline",
+			"key": "loanSummary",
+			"dateFormat": SessionStore.getDateFormat(),
+			"sortOrder": "DESC",
+			"momentFn": function(item, index) {
+				item._timeSpent = moment.duration(item.timeSpent * 60 * 1000).humanize();
+				item._titleHtml = '<div class="row"><div class="col-sm-2"><small>User ID</small><br><strong>'+item.userId+'</strong></div> ';
+				item._titleHtml += '<div class="col-sm-2"><small>Action</small><br><strong>';
+				if (item.action == 'SAVE') {
+					item._titleHtml += 'Saved';
+				} else {
+					item._titleHtml += 'Proceed';
+				}
+				item._titleHtml += '</strong></div>';
+				item._titleHtml += '<div class="col-sm-2"><small>From stage</small><br><strong>'+getStageNameByStageCode(item.preStage)+'</strong></div>';
+				item._titleHtml += '<div class="col-sm-2"><small>To stage</small><br><strong>'+getStageNameByStageCode(item.postStage)+'</strong></div>';
+				item._titleHtml += '<div class="col-sm-2"><small>Time taken</small><br><strong>'+item._timeSpent+'</strong></div>';
+				item._titleHtml += '<div class="col-sm-2"></div>';
+				item._bodyHtml = '<div class="row"><div class="col-sm-4">Loan Amount: <b>'+irfCurrencyFilter(item.loanAmount)+'</b></div>';
+				item._bodyHtml += '<div class="col-sm-4">Interest Rate: <b>'+item.interestRate+'</b></div>';
+				item._bodyHtml += '<div class="col-sm-4">Tenure: <b>'+item.tenure+'</b></div></div>';
+				if (item.status)
+					item._bodyHtml += '<b>Status:</b> '+item.status+'<br>';
+				item._footerHtml = '<b>Remarks:</b> <div style="white-space: pre-wrap;">'+(item.remarks?item.remarks:'--')+'</div>';
+				if (item.conversationStatus) {
+					item._footerHtml += '<hr><a href="" style="display: inherit;text-align: center;" ng-if="!model.loanSummary['+index+']._conversationExpand" ng-click="model.loanSummary['+index+']._conversationExpand=true" class="color-theme">{{\'VIEW_CONVERSATION\'|translate}}</a>'
+						+'<irf-messaging process-id="model.loanAccount.id" sub-process-id="model.loanSummary['+index+'].id" hide-create-conversation="model.loanSummary['+index+'].hideCreateConversation" conversation="model.loanSummary['+index+'].conversation" expand="model.loanSummary['+index+']._conversationExpand" readonly="!model.loanSummary['+index+'].isCurrentStage"></irf-messaging>';
+				}
 
-                    model.loanSummary = resp;
-
-                    if (_.isArray(model.loanSummary) && model.loanSummary.length > 0){
-                        var lastEntry = model.loanSummary[model.loanSummary.length - 1];
-                        var aTime = new moment(lastEntry.createdDate);
-                        var bTime = new moment();
-                        model.minutesInCurrentStage = Utils.millisecondsToStr( Math.abs(bTime.diff(aTime)) );
-                    }
-                },function (errResp){
-
-                })
-                .finally(function(){
-                    PageHelper.hideLoader();
-                })
-            }
-        },
-        offline: false,
-        getOfflineDisplayItem: function(item, index){
-            return [
-                item.customer.firstName,
-                item.customer.centreCode,
-                item.customer.id ? '{{"CUSTOMER_ID"|translate}} :' + item.customer.id : ''
-            ]
-        },
-        eventListeners: {
-            
-        },
-        form: [
-            {
-                "type": "box",
-                "colClass": "col-sm-12",
-                "title": "REMARKS_HISTORY",
-                "items": [
-                    {
-                        "type": "section",
-                        "htmlClass": "",
-                        "html":"<div class='callout callout-info text-white'><h1>{{ model.minutesInCurrentStage }}</h1> <p>spent in current stage.</p></div>"
-                    },
-                    {
-                        type:"tableview",
-                        key:"loanSummary",
-                        selectable: false,
-                        paginate: false,
-                        searching: false,
-                        getColumns: function() {
-                            return [{
-                                title: 'ACTION',
-                                data: 'action'
-                            }, {
-                                title: 'FROM_STAGE',
-                                data: 'preStage'
-                            }, {
-                                title: 'TO_STAGE',
-                                data: 'postStage'
-                            }, {
-                                title: 'USERNAME',
-                                data: 'userId'
-                            }, {
-                                title: 'CREATED_DATE',
-                                data: 'createdDate',
-                                render: function(data, type, full, meta) {
-                                    return moment(data, "YYYY-MM-DD[T]hh:mm:ss[Z]").format('YYYY-MM-DD hh:mm:ss');
-                                }
-                            }, {
-                                title: 'REMARKS',
-                                data: 'remarks'
-                            }, {
-                                title: 'STATUS',
-                                data: 'status'
-                            }, {
-                                title: 'LOAN_AMOUNT',
-                                data: 'loanAmount'
-                            }, {
-                                title: 'INTEREST_RATE',
-                                data: 'interestRate'
-                            }, {
-                                title: 'TENURE',
-                                data: 'tenure'
-                            },
-                            {
-                                title: 'TIME_SPENT',
-                                data: 'timeSpent',
-                                render: function(data, type, full, meta){
-                                    return Utils.millisecondsToStr(data * 60 * 1000);
-                                }
-                            }]
-                        }
-                    }
-                ]
-            }
-        ],
-        schema: function() {
-            return SchemaResource.getLoanAccountSchema().$promise;
-        },
-        actions: {
-            
-        }
-    };
+				return moment(item.createdDate, "YYYY-MM-DD[T]hh:mm:ss[Z]");
+			}
+		}],
+		schema: function() {
+			return SchemaResource.getLoanAccountSchema().$promise;
+		},
+		actions: {}
+	};
 }]);

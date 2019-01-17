@@ -44,9 +44,10 @@ irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, 
                             "type": ["integer", "null"],
                             "title": "CENTER",
                             "enumCode": "centre",
-                            "parentEnumCode": "branch_id",
                             "x-schema-form": {
                                 "type": "select",
+                                "parentEnumCode": "branch_id",
+                                "parentValueExpr": "model.loanAccount.branchId",
                              }
                           },
                         }
@@ -64,8 +65,11 @@ irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, 
                         "title": "CENTER",
                         "enumCode": "centre",
                         "parentEnumCode": "branch_id",
+                        "parentValueExpr": "model.loanAccount.branchId",
                         "x-schema-form": {
                             "type": "select",
+                            "parentEnumCode": "branch_id",
+                            "parentValueExpr": "model.loanAccount.branchId",
                         }
                     },
                     "created_by": {
@@ -89,6 +93,9 @@ irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, 
                         "title": "PRODUCT_CATEGORY",
                         "x-schema-form": {
                             "type": "select",
+                            "onChange": function(modelValue, form, model, formCtrl, event) {
+                                model.loanAccount.productCode = undefined;
+                            }
                         },
                         "enumCode": "loan_product_category"
                     },
@@ -97,6 +104,9 @@ irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, 
                         "title": "FREQUENCY",
                         "x-schema-form": {
                             "type": "select",
+                            "onChange": function(modelValue, form, model, formCtrl, event) {
+                                model.loanAccount.productCode = undefined;
+                            }
                         },
                         "enumCode": "loan_product_frequency"
                     },
@@ -118,24 +128,14 @@ irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, 
 
                                 return Queries.getLoanProductCode(model.loanAccount.productCategory, model.loanAccount.frequency, model.loanAccount.partnerCode);
                             },
-                            onSelect: function(valueObj, model, context) {
-                                model.loanAccount.productCode = valueObj.productCode;
-                                if(valueObj.tenure_from == valueObj.tenure_to) {
-                                    model.loanAccount.tenure = valueObj.tenure_to;
-                                }
-                                else {
-                                    delete model.loanAccount.tenure;
-                                    model.tenurePlaceHolderExpr = valueObj.tenure_from + '-' + valueObj.tenure_to;
-                                }
-                            },
                             getListDisplayItem: function(item, index) {
                                 return [
                                     item.name
                                 ];
                             },
-                            onChange: function(value, form, model) {
-                                getProductDetails(value, model);
-                            },
+                            // onChange: function(value, form, model) {
+                            //     getProductDetails(value, model);
+                            // },
                         }
                     },
                     "tenure": {
@@ -168,19 +168,29 @@ irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, 
                                 },
                                 "branch": {
                                     "key": "customer.branch",
-                                    "type": "select",
-                                    "screenFilter": true
+                                    "type": "select"
                                 },
                                 "centreId": {
                                     "key": "customer.centreId",
-                                    "type": "select",
-                                    "screenFilter": true
+                                    "type": "select"
                                 }
                             },
                             "outputMap": {
                                 "id": "loanAccount.customerId",
                                 "urnNo": "loanAccount.applicant",
                                 "firstName": "loanAccount.applicantName",
+                            },
+                            "initialize": function(inputModel, form, model, context) {
+                                var branches = formHelper.enum('branch').data;
+                                var branchName = null;
+                                for (var i=0;i<branches.length; i++){
+                                     if ( branches[i].code == model.loanAccount.branchId){
+                                        branchName = branches[i].name;
+                                        break;
+                                     }
+                                }
+                                inputModel.branch = branchName || SessionStore.getBranch();
+                                inputModel.centreId = model.loanAccount.loanCentre.centreId;
                             },
                             "searchHelper": formHelper,
                             "search": function(inputModel, form) {
@@ -213,6 +223,13 @@ irf.models.factory('SimpleLoanInput', function($resource, $filter, Utils, $log, 
                         "type": ["number", "null"],
                         "title": "LOAN_AMOUNT",
                         "placeholderExpr": "model.additional.product.amountBracket",
+                        "x-schema-form": {
+                            onChange:function(value,form,model){
+                                if (model.loanAccount.numberOfDisbursements ==1){
+                                    model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmount;
+                                } 
+                            }
+                        },
                     },
                     "processingFeePercentage": {
                         "type": ["number", "null"],

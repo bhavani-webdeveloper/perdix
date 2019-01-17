@@ -315,7 +315,7 @@ export class LoanProcess {
     }
 
     reject(): any {
-        this.stage = "REJECTED";
+        this.stage = "Rejected";
         this.loanProcessAction = "PROCEED";
         let pmBeforeUpdate: PolicyManager<LoanProcess> = new PolicyManager(this, LoanPolicyFactory.getInstance(), 'beforeReject', LoanProcess.getProcessConfig());
         let obs1 = pmBeforeUpdate.applyPolicies();
@@ -367,6 +367,10 @@ export class LoanProcess {
                 let pm: PolicyManager<LoanProcess> = new PolicyManager<LoanProcess>(loanProcess, LoanPolicyFactory.getInstance(), 'onNew', LoanProcess.getProcessConfig());
                 return pm.applyPolicies();
             });
+    }
+
+    static plainToClass(loanObj:Object): Observable<LoanProcess> {
+        return LoanProcessFactory.plainToClass(loanObj);
     }
 
 

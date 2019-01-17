@@ -107,9 +107,10 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, Upload, $q, 
         resource.achDemandListUpload = function(file, progress) {
             var deferred = $q.defer();
             Upload.upload({
-                url: BASE_URL + "/api/feed/achreversefeedupload",
+                url: BASE_URL + "/api/batch/achOrPdcRealizationUpload",
                 data: {
-                    file: file
+                    file: file,
+                    repaymentMode:'ACH'
                 }
             }).then(function(resp){
                 // TODO handle success

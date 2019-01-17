@@ -115,7 +115,7 @@ define({
                             fn: function(item, index) {
                                 irfNavigator.go({
                                     state: "Page.Engine",
-                                    pageName: "Journal.JournalPostingApproval",
+                                    pageName: "Journal.FinconAccounting",
                                     pageId: item.id,
                                 },
                                 {

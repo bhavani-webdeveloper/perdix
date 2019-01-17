@@ -12,6 +12,8 @@ import {OriginationToBookingPolicy} from './OriginationToBookingPolicy';
 import {DefaultVehicleComponentsPolicy} from './DefaultVehicleComponentsPolicy';
 import {DefaultVehicleAccessoriesPolicy} from './DefaultVehicleAccessoriesPolicy';
 import {CloseLeadonLoanSave} from './CloseLeadonLoanSave';
+import {CalculateVehicleViabilityPolicy} from './CalculateVehicleViabilityPolicy';
+import {VehicleValuationDone} from './VehicleValuationDone';
 import {LoanDerivedFieldsUpdate} from "./LoanDerivedFieldsUpdate";
 import {CustomerEnrolmentCompletedPolicy} from './CustomerEnrolmentCompletedPolicy';
 import {CustomerReferencePolicy} from './CustomerReferencePolicy';
@@ -21,6 +23,7 @@ import {DefaultIncomeTypePolicy} from './DefaultIncomeTypePolicy';
 import {DefaultVehicleDocumentsPolicy} from './DefaultVehicleDocumentsPolicy';
 import {DefaultCalculatedVehicleDetailsPolicy} from './DefaultCalculatedVehicleDetailsPolicy';
 import {DefaultIndividualReferencePolicy} from './DefaultIndividualReferencePolicy';
+import {LoanVirtualFieldsPolicy} from './LoanVirtualFieldsPolicy';
 
 export class LoanPolicyFactory implements IPolicyFactory{
 
@@ -61,6 +64,10 @@ export class LoanPolicyFactory implements IPolicyFactory{
                 return new DefaultVehicleAccessoriesPolicy();
             case 'CloseLeadonLoanSave':
                 return new CloseLeadonLoanSave();
+            case 'CalculateVehicleViabilityPolicy':
+                return new CalculateVehicleViabilityPolicy();
+            case 'VehicleValuationDone':
+                return new VehicleValuationDone();
             case 'LoanDerivedFieldsUpdate':
                 return new LoanDerivedFieldsUpdate();
             case 'CustomerEnrolmentCompletedPolicy':
@@ -79,6 +86,8 @@ export class LoanPolicyFactory implements IPolicyFactory{
                 return new DefaultCalculatedVehicleDetailsPolicy();
             case 'DefaultIndividualReferencePolicy':
                 return new DefaultIndividualReferencePolicy();
+            case 'LoanVirtualFieldsPolicy':
+                return new LoanVirtualFieldsPolicy();
             default:
                 return null;
         }

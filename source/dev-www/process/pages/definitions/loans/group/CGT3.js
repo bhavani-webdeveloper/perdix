@@ -117,7 +117,18 @@ define({
                 }, {
                     "key": "group.cgt3Photo",
                     "title": "CGT_3_PHOTO",
+                    required: true,
+                    "condition":"model.siteCode != 'KGFS'",
+                    "category": "Group",
+                    "subCategory": "CGT3PHOTO",
+                    "type": "file",
+                    "offline": true,
+                    "fileType": "image/*",
+                },{
+                    "key": "group.cgt3Photo",
+                    "title": "CGT_3_PHOTO",
                     //required: true,
+                    "condition":"model.siteCode == 'KGFS'",
                     "category": "Group",
                     "subCategory": "CGT3PHOTO",
                     "type": "file",
@@ -160,12 +171,23 @@ define({
                     "key": "group.cgt3EndPhoto",
                     "title": "CGT_3_PHOTO",
                     //required: true,
+                    "condition":"model.siteCode == 'KGFS'",
                     "category": "Group",
                     "subCategory": "CGT3PHOTO",
                     "type": "file",
                     "offline": true,
                     "fileType": "image/*",
                 }, {
+                    "key": "group.cgt3EndPhoto",
+                    "title": "CGT_3_PHOTO",
+                    "condition":"model.siteCode != 'KGFS'",
+                    required: true,
+                    "category": "Group",
+                    "subCategory": "CGT3PHOTO",
+                    "type": "file",
+                    "offline": true,
+                    "fileType": "image/*",
+                },{
                     "key": "group.Cgtbutton",
                     "title": "END_CGT3",
                     "type":"button",
@@ -484,7 +506,7 @@ define({
                 startCGT3: function(model, form) {
                     PageHelper.showLoader();
                     $timeout(function() {
-                        model.group.cgtDate3 = new Date();
+                        model.group.cgtDate3 = SessionStore.getSystemDate()+"T"+moment().format('HH:mm:ss')+"Z";
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
                         PageHelper.hideLoader();
                     });
@@ -497,7 +519,7 @@ define({
                     }
                     PageHelper.showLoader();
                     $timeout(function() {
-                        model.group.cgtEndDate3 = new Date();
+                        model.group.cgtEndDate3 = SessionStore.getSystemDate()+"T"+moment().format('HH:mm:ss')+"Z";
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
                         PageHelper.hideLoader();
                     });

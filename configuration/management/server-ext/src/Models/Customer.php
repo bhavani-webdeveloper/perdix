@@ -8,5 +8,5 @@ class Customer extends \Illuminate\Database\Eloquent\Model {
 
     protected $table = 'customer';
     const TABLE_NAME = 'customer';
-    //public $timestamps = false;
+    public $timestamps = false;
 }

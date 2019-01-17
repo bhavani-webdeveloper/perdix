@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.LoanSanction"),
 ["$log", "$q","LoanAccount", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
-'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
+'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan", "irfNavigator",
 function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUtils,
-    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan){
+    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan, irfNavigator){
 
     var branch = SessionStore.getBranch();
 

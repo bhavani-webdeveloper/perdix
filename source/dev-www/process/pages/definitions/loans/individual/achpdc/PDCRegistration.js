@@ -71,7 +71,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"), 
                 model.pdc.existingPDCCheque = model.pdc.existingPDCCheque || [];
                 model.pdc.existingSecurityCheque = model.pdc.existingSecurityCheque || [];
                 model.pdc.totalCheques = model.pdc.totalCheques || [];
-
+                model.pdc.InitialtotalCheques = _.clone(model.pdc.totalCheques);
                 //model to store pdc cheque types from PDC.getPDCCheque api
                 model.pdcGetPDCType = model.pdcGetPDCType || {};
                 model.pdcGetPDCType.pdcSummaryDTO = model.pdcGetPDCType.pdcSummaryDTO || [];
@@ -192,6 +192,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"), 
                                     if (model.pdcGetPDCType.body.pdcSummaryDTO.length > 0){
                                         model.flag = true;
                                     }
+
                                 },
                                 function(resError) {
                                     $log.info("PDC GET Error : " + resError);
@@ -200,6 +201,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"), 
                                 PageHelper.hideLoader();
 
                             });
+
                             model.Initialpdc =  _.clone(model.pdc);
                         },
                         function(httpRes) {
@@ -496,10 +498,9 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"), 
                             "key": "pdc.pdcChequeDetails[].status",
                             "type": "select",
                             "title": "STATUS",
-                            "titleMap": {
-                                "CANCELLED": "CANCELLED",
-                                "LOST": "LOST"
-                            }
+                            "titleMap": [{value: "DELETE", name: "CANCELLED"
+                            },{value: "DELETE", name: "LOST"
+                            }]
                         }, {
                             "key": "pdc.pdcChequeDetails[].pdcDeleteBtn",
                             "title": "DELETE_PDC",
@@ -548,8 +549,7 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"), 
                     model.exceedCheque = false;
                     //check if check count is less than no. of repayment
 
-
-                    for (var i = 0; i < model.pdc.addCheque.length; i++) {                        
+                    for (var i = 0; i < model.pdc.addCheque.length; i++) {
                         if ((model.pdc.addCheque[i].chequeType == "PDC") && (model.pdc.addCheque[i].pdcFrom + model.pdc.addCheque[i].numberOfCheque - 1) > model.repaymentLenght) {
                             model.pdcChequeExceedLimit.push(model.pdc.addCheque[i]);
                         }

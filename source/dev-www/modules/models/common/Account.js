@@ -49,6 +49,17 @@ function($resource,$httpParamSerializer,BASE_URL, $q, SessionStore, formHelper, 
         getUserRole: {
             method: 'GET',
             url: userManagementEndpoint + '/getRole.php'
+        },
+        getAnalyticsToken: {
+            method: 'GET',
+            url: endpoint + '/analyticsToken',
+            transformResponse: function(data, headersGetter, status) {
+                if (status === 200 && data) {
+                    return {'analyticsToken': data};
+                } else {
+                    return {error: "Analytics Login Failed for the user."};
+                }
+            }
         }
     });
 

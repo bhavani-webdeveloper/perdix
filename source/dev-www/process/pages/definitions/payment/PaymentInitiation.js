@@ -300,31 +300,16 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                         }
                     },
                     "BeneficiaryDetails.creditAccountNo":{
-                        "orderNo":50,
-                        "condition" : "model.pageConfig.BeneficiaryDetailsIsEditable"
+                        "readonly": true,
+                        "orderNo":50
                     },
                     "BeneficiaryDetails.beneficiaryBankName":{
                         "orderNo":80,
-                        "condition" : "model.pageConfig.BeneficiaryDetailsIsEditable"
+                        "readonly":true
                     },
                     "BeneficiaryDetails.beneficiaryBankBranch":{
                         "orderNo":90,
-                        "condition" : "model.pageConfig.BeneficiaryDetailsIsEditable"
-                    },
-                    "BeneficiaryDetails.creditAccountNo":{
-                        "orderNo":50,
-                        "condition" : "!model.pageConfig.BeneficiaryDetailsIsEditable",
-                        "readonly": true,
-                    },
-                    "BeneficiaryDetails.beneficiaryBankName":{
-                        "orderNo":80,
-                        "condition" : "!model.pageConfig.BeneficiaryDetailsIsEditable",
-                        "readonly": true,
-                    },
-                    "BeneficiaryDetails.beneficiaryBankBranch":{
-                        "orderNo":90,
-                        "condition" : "!model.pageConfig.BeneficiaryDetailsIsEditable",
-                        "readonly": true,
+                        "readonly":true
                     },
                     "BeneficiaryDetails.beneficiaryTransactionParticulars":{
                         "orderNo":100
@@ -361,14 +346,8 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                     "BeneficiaryDetails.beneficiaryIfsc":{
                         // "resolver": "PaymentBankIFSCLOVConfiguration",
                         "type": "string",
-                        "orderNo":70,
-                        "condition" : "model.pageConfig.BeneficiaryDetailsIsEditable"
-                    },
-                    "BeneficiaryDetails.beneficiaryIfsc":{
-                        "type": "string",
-                        "orderNo":70,
-                        "condition" : "!model.pageConfig.BeneficiaryDetailsIsEditable",
                         "readonly": true,
+                        "orderNo":70
                     },
                     "BeneficiaryDetails.beneficiaryName": {
                         "orderNo":1,

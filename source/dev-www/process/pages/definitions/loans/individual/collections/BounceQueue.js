@@ -1,44 +1,30 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.BounceQueue"),
-["$log", "formHelper", "LoanProcess", "$state", "SessionStore", "$q", "entityManager", "Utils", "PagesDefinition",
-function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, Utils, PagesDefinition){
-    return {
+["$log", "formHelper", "LoanProcess", "$state", "SessionStore", "$q", "entityManager", "Utils", "PagesDefinition", "$stateParams",
+function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, Utils, PagesDefinition, $stateParams){
+        return {
         "type": "search-list",
         "title": "BOUNCED_PAYMENTS",
         initialize: function (model, form, formCtrl) {
             $log.info("search-list sample got initialized");
-            model.branchId = SessionStore.getCurrentBranch().branchId;
-            model.pageConfig = {
-                isAllBranchAllowed: false,
-                centresRestricted: false
-            };
-
-            PagesDefinition.getRolePageConfig("Page/Engine/loans.individual.collections.BounceQueue")
-                .then(
-                function(config){
-                    if (config && _.hasIn(config, 'all_branch_allowed') && config['all_branch_allowed']) {
-                        model.pageConfig.isAllBranchAllowed = true;
-                    }
-
-                    if (model.pageConfig.isAllBranchAllowed === false){
-                        model.centres = SessionStore.getCurrentBranch().centresMappedToUser;
-
-                        /* Default centre */
-                        if (model.centres && model.centres.length>0){
-                            model.centre = model.centres[0].centreCode;
-                            model.centreName = model.centres[0].centreName;
-                        }
-                    }
-                }, function(err){
-                    model.pageConfig.isAllBranchAllowed = false;
-                }
-            )
+            model.branch = SessionStore.getCurrentBranch().branchId;
+            PagesDefinition.getPageConfig("Page/Engine/loans.individual.collections.BounceQueue")
+            .then(function(data){
+                console.log(data);
+                var defaultConfig = {
+                    IncludeUserFilter: false
+                };
+                _.defaults(data, defaultConfig);
+                model.pageConfig = _.extend(model.pageConfig, data);
+                if (model.pageConfig.IncludeUserFilter)
+                    model.assignedTo = SessionStore.getLoginname();
+            });
         },
         definition: {
             title: "SEARCH_BOUNCED_PAYMENTS",
             autoSearch: false,
             sorting:true,
             sortByColumns:{
-                "name":"Customer Name", 
+                "name":"Customer Name",
                 "centre_name":"Centre",
                 "sanction_date":"Sanction Date"
             },
@@ -46,40 +32,15 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                 "loan_no",
                 "first_name",
                 {
-                    "key": "branchId",
-                    "condition": "model.pageConfig.isAllBranchAllowed"
+                    "key": "branch",
+                    "readonly":true
                 },
                 {
                     "key": "centre",
-                    "condition": "model.pageConfig.isAllBranchAllowed"
-                },
-                {
-                    key: "centreName",
-                    type: "lov",
-                    autolov: false,
+                    "type":"select",
+                    "enumCode":"usercentre",
                     title:"CENTRE",
-                    condition: "model.pageConfig.isAllBranchAllowed===false",
-                    bindMap: {
-                    },
-                    searchHelper: formHelper,
-                    search: function(inputModel, form, model, context) {
-                        var centres = SessionStore.getCentres();
-                        return $q.resolve({
-                            headers: {
-                                "x-total-count": centres.length
-                            },
-                            body: centres
-                        });
-                    },
-                    onSelect: function(valueObj, model, context){
-                        model.centre = valueObj.centreCode;
-                        model.centreName = valueObj.centreName;
-                    },
-                    getListDisplayItem: function(item, index) {
-                        return [
-                            item.centreName
-                        ];
-                    }
+                    required:true,
                 },
                 {
                     "key": "promisreToPayDate"
@@ -97,22 +58,24 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                         "title": "CUSTOMER_NAME",
                         "type": "string"
                     },
-                    "branchId": {
-                        "title": "BRANCH_NAME",
-                        "type": ["null","number"],
-                        "enumCode": "branch_id",
+                    "branch": {
+                        'title': "BRANCH",
+                        "type": ["string", "null"],
                         "x-schema-form": {
-                            "type": "select"
+                            "type":"userbranch",
+                            "screenFilter": true
                         }
                     },
                     "centre": {
                         "title": "CENTRE",
-                        "type": ["null", "number"],
-                        "enumCode": "centre",
-                        "x-schema-form": {
-                            "type": "select",
-                            "parentValueExpr": "model.branchId"
-                        }
+                        "type": ["integer", "null"],
+                        // "x-schema-form": {
+                        //     "type": "select",
+                        //     "enumCode": "centre",
+                        //     "parentEnumCode": "branch_id",
+                        //     "parentValueExpr": "model.branch",
+                        //     "screenFilter": true
+                        // }
                     },
                     "promisreToPayDate":{
                         "title": "PROMISE_TO_PAY_DATE",
@@ -126,25 +89,28 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
             getSearchFormHelper: function() {
                 return formHelper;
             },
+
             getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
                 var promise = LoanProcess.bounceCollectionDemand({
-                    'accountNumbers': searchOptions.loan_no,  /*Service missing_27082016*/
-                    'branchId': searchOptions.branchId || SessionStore.getBranchId(),
+                    'accountNumbers': searchOptions.loan_no,
+                    /*Service missing_27082016*/
+                    'branchId': searchOptions.branch || SessionStore.getBranchId(),
                     'centreId': searchOptions.centre,
                     'customerName': searchOptions.first_name,
-                    'promisreToPayDate': searchOptions.promisreToPayDate,
+                    'promiseToPayDate': searchOptions.promisreToPayDate,
                     'page': pageOpts.pageNo,
-                    'per_page': pageOpts.itemsPerPage
+                    'per_page': pageOpts.itemsPerPage,
+                    'assignedTo': searchOptions.assignedTo
                 }).$promise;
-
                 return promise;
             },
+
             paginationOptions: {
                 "getItemsPerPage": function(response, headers){
-                    return 10;
+                    return 100;
                 },
                 "getTotalItemsCount": function(response, headers){
-                    return headers && headers['x-total-count'] || 10;
+                    return headers && headers['x-total-count'];
                 }
             },
             listOptions: {
@@ -165,13 +131,17 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                     if (_.hasIn(item, 'amount2') && _.isString(item['amount2'])){
                         item.amount2 = parseFloat(item['amount2']);
                     }
+                    if (_.hasIn(item, 'part5') && _.isString(item['part5'])){
+                        item.part5 = parseFloat(item['part5']);
+                    }
                     return [
                         item.customerName,
                         "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.accountId,
-                        "{{'TOTAL_AMOUNT_DUE'|translate}}: " + Utils.ceil(item.amount1 + item.amount2 + item.amount3),
-                        "{{'PRINCIPAL_DUE'|translate}}: " + item.part1,         
-                        "{{'INTEREST_DUE'|translate}}: " + item.part2,             
-                        "{{'PENAL_INTEREST'|translate}}: " + item.part3,  
+                        "{{'TOTAL_AMOUNT_DUE'|translate}}: " + Utils.ceil(item.amount1 + item.amount2 + item.amount3 + item.part5),
+                        "{{'PRINCIPAL_DUE'|translate}}: " + item.part1,
+                        "{{'INTEREST_DUE'|translate}}: " + item.part2,
+                        "{{'PENAL_INTEREST'|translate}}: " + item.part3,
+                        "{{'BOOKED_NOT_DUE_PENAL_INTEREST'|translate}}:" + item.part5,
                         "{{'FEES_DUE'|translate}}: " + item.amount2,
                         "{{'UNAPPROVED_AMOUNT'|translate}}: " + item.repaidAmountSum
                     ]
@@ -182,6 +152,8 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                             name: "COLLECT_PAYMENT",
                             desc: "",
                             fn: function(item, index){
+                                console.log("Th9s os yessssss");
+                                console.log(item);
                                 entityManager.setModel('loans.LoanRepay', {_bounce:item,_screen:"BounceQueue"});
                                 $state.go('Page.Engine',
                                     {

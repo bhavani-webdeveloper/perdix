@@ -13,17 +13,17 @@
         </thead>
         <tbody>
             <tr ng-repeat='record in tableData.data'>
-                <td ng-repeat='column in tableData.columns' ng-class = 'getStyleClass(column, record)' ng-if="!record.data" 
-                ng-switch = 'column.format' 
+                <td ng-repeat='column in tableData.columns' ng-class = 'getStyleClass(column, record)' ng-if="!record.data"
+                ng-switch = 'column.format'
                 ng-click = 'column.onClick && column.onClick(record)'>
                     <dummy  ng-switch-when="currency">{{record[column.data] | irfCurrency}}</dummy>
                     <dummy  ng-switch-when="pct">
-                    {{(record[column.data] !== null && record[column.data] !== undefined) ? ((record[column.data] | 
+                    {{(record[column.data] !== null && record[column.data] !== undefined) ? ((record[column.data] |
                     number : 2) + '%') : record[column.data]}}
                     </dummy>
                     <dummy ng-switch-default>{{record[column.data]}}</dummy>
                 </td>
-                <td ng-repeat='column in tableData.columns' ng-class = 'getStyleClass(column, record)' ng-if="record.data" 
+                <td ng-repeat='column in tableData.columns' ng-class = 'getStyleClass(column, record)' ng-if="record.data"
                 ng-switch = "getDisplayFormat(column, record)">
                     <dummy  ng-switch-when="currency">{{record.data[column.data] | irfCurrency}}</dummy>
                     <dummy  ng-switch-when="pct">
@@ -33,5 +33,12 @@
                 </td>
             </tr>
         </tbody>
+        <tfoot ng-if="tableData.summary && tableData.summary.__show_in_footer && tableData.summary.__show_in_footer==true">
+            <tr ng-repeat="(key,value) in tableData.summary" ng-if="key.substr(0,2) !== '__'">
+                <td>
+                    <strong>{{ key }}:</strong> &nbsp; &nbsp; &nbsp;{{value}}
+                </td>
+            </tr>
+        </tfoot>
     </table>
 </div>

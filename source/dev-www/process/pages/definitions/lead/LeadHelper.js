@@ -79,14 +79,14 @@ irf.pageCollection.factory("LeadHelper", ["$log", "Queries", "$q", "Lead", 'Page
             return deferred.promise;
         };
 
-        var AssignLead = function(res) {
+        var AssignLead = function(req) {
             var deferred = $q.defer();
             $log.info("Attempting Proceed");
-            $log.info(res);
+            $log.info(req);
                 PageHelper.clearErrors();
                 PageHelper.showLoader();
                 irfProgressMessage.pop('lead-update', 'Working...');
-                Lead.assignLead(res, function(res, headers) {
+                Lead.assignLead(req, function(res, headers) {
                     PageHelper.hideLoader();
                     irfProgressMessage.pop('lead-update', 'Done. lead updated ', 5000);
                     deferred.resolve(res);
@@ -98,6 +98,27 @@ irf.pageCollection.factory("LeadHelper", ["$log", "Queries", "$q", "Lead", 'Page
                 });
         
             return deferred.promise;
+        };
+
+        var BulkLeadStatusUpdate = function(req) {
+            var deferred = $q.defer();
+            $log.info("Attempting to BulkLeadStatus Reject");
+            $log.info(req);
+            PageHelper.clearErrors();
+            PageHelper.showLoader();
+            irfProgressMessage.pop('LeadBulkUpdate', 'Working ... ');
+            Lead.bulkLeadStatusUpdate(req, function(res, headers) {
+                PageHelper.hideLoader();
+                irfProgressMessage.pop('Bulk-lead-Reject', 'Done. lead Rejected', 5000);
+                deferred.resolve(res);
+            }, function(res, headers){
+                PageHelper.hideLoader();
+                irfProgressMessage.pop('Bulk-lead-Reject', 'Oops. Some error.', 2000);
+                PageHelper.showErrors(res);
+                deferred.reject(res);
+            });
+            return deferred.promise;
+
         };
 
         var followData = function(res) {
@@ -131,6 +152,8 @@ irf.pageCollection.factory("LeadHelper", ["$log", "Queries", "$q", "Lead", 'Page
             proceedData: proceedData,
             followData: followData,
             AssignLead:AssignLead,
+            BulkLeadStatusUpdate:BulkLeadStatusUpdate,
+
         };
     }
 ]);

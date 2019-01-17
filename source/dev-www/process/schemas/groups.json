@@ -333,7 +333,6 @@
                 "groupStatus": {
                     "type": "boolean",
                     "title": "GroupStatus"
-
                 },
                 "grtDoneBy": {
                     "type": "string",
@@ -468,8 +467,8 @@
 
                             },
                             "loanAmountSanctionedInPaisa": {
-                                "type": "integer",
-                                "title": "LoanAmountSanctionedInPaisa"
+                                "title": "LoanAmountSanctionedInPaisa",
+                                "type": ["number", "null"]
 
                             },
                             "loanPurpose1": {
@@ -789,6 +788,10 @@
                                 "title": "LoanAmountRequested"
 
                             },
+                            "loanAmountSanctionedInPaisa": {
+                                "title": "loanAmountSanctionedInPaisa",
+                                "type": ["number", "null"]
+                           },
                             "loanApplicationDate": {
                                 "type": "string",
                                 "title": "LoanApplicationDate"
@@ -1097,7 +1100,6 @@
                 "groupName",
                 "groupFormationDate",
                 "groupStatus",
-                "grtDate",
                 "grtDoneBy",
                 "grtRemarks",
                 "id",

@@ -6,6 +6,7 @@ define({
 
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
+        var siteCode = SessionStore.getGlobalSetting('siteCode');
 
         return {
             "type": "search-list",
@@ -13,6 +14,7 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 $log.info("DSC Queue got initialized");
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
             },
             definition: {
                 title: "DSC QUEUE",
@@ -41,6 +43,17 @@ define({
                     itemCallback: function(item, index) {},
                     getItems: function(response, headers) {
                         if (response != null && response.length && response.length != 0) {
+                            var temp = [];
+                            for (var i=0;i<response.length;i++){
+                                if(response[i].jlgGroup == null || typeof response[i].jlgGroup == 'undefined')
+                                // temp.push({
+                                //     "urnNo":response[i].jlgGroupMember.urnNo,
+                                //     "id":response[i].jlgGroup.id
+                                // });
+                                {
+                                    console.log(i);
+                                }
+                            }
                             return response;
                         }
                         return [];
@@ -56,6 +69,16 @@ define({
                         };
                     },
                     getColumns: function() {
+                        var branchList = formHelper.enum('branch_id').data;
+                        var branches = {}
+                        for (var i = 0; i < branchList.length; i++) {
+                            branches[branchList[i].value] = branchList[i].name;
+                        }
+                        var centreList = formHelper.enum('centre').data;
+                        var centres = {}
+                        for (var i = 0; i < centreList.length; i++) {
+                            centres[centreList[i].field3] = centreList[i].name;
+                        }
                         return [{
                             title: 'URN',
                             data: 'jlgGroupMember.urnNo'
@@ -63,12 +86,38 @@ define({
                             title: 'Group ID',
                             data: 'jlgGroup.id'
                         }, {
+                            title: 'GROUP_CODE',
+                            data: 'jlgGroup.groupCode'
+                        }, {
                             title: 'Group Name',
                             data: 'jlgGroup.groupName'
+                        }, {
+                            title: 'BRANCH_NAME',
+                            data: 'jlgGroup.branchId',
+                            render: function(data, type, full, meta) {
+                                if(data){
+                                    return branches[data];
+                                }
+                                else{
+                                   return data; 
+                                }
+                            }
+                        }, {
+                            title: 'CENTRE_CODE',
+                            data: 'jlgGroupMember.centreCode',
+                            render: function(data, type, full, meta) {
+                                if(data){
+                                    return centres[data];
+                                }
+                                else{
+                                   return data; 
+                                }
+                            }
                         }]
                     },
                     getActions: function() {
-                        return [{
+                        return [
+                            {
                             name: "Do DSC Override",
                             desc: "",
                             fn: function(item, index) {
@@ -103,8 +152,28 @@ define({
                                     PageHelper.hideLoader();
                                 }
                             },
-                            isApplicable: function(item, index) {
-                                return true;
+                            isApplicable: function(item, model) {
+                                return model.siteCode === "KGFS";
+                            }
+                        }, {
+                            name: "Do DSC Override",
+                            desc: "",
+                            fn: function(item, index) {
+                                irfNavigator.go({
+                                    state: "Page.Engine",
+                                    pageName: "loans.group.DscOverride",
+                                    pageId: item.dscIntegration.id,
+                                    pageData: {
+                                        jlgGroup: item.jlgGroup,
+                                        jlgGroupMember: item.jlgGroupMember,
+                                    }, 
+                                }, {
+                                    state: "Page.Engine",
+                                    pageName: "loans.group.DscOverrideQueue",
+                                });   
+                            },
+                            isApplicable: function(item, model) {
+                                return model.siteCode != "KGFS";
                             }
                         }, {
                             name: "View DSC Response",
@@ -122,3 +191,6 @@ define({
         };
     }
 })
+
+
+

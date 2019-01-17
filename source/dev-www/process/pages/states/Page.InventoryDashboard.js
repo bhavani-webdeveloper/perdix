@@ -3,7 +3,7 @@ irf.pages.controller("InventoryDashboardCtrl", ['$log', '$scope', 'PagesDefiniti
 		$log.info("Page.InventoryDashboard.html loaded");
 
 		var fullDefinition = {
-			"title": "INVENTORY_TRACKING_DASHBOARD",
+			"title": "Inventory Tracking Dashboard",
 			"iconClass": "fa fa-suitcase",
 			"items": [
 				"Page/Engine/loans.individual.InventoryTracking.InventoryTracking",
@@ -14,7 +14,7 @@ irf.pages.controller("InventoryDashboardCtrl", ['$log', '$scope', 'PagesDefiniti
 		};
 
 		var branchdefinition = {
-			"title": "INVENTORY_IN_BRANCH_DASHBOARD",
+			"title": "Inventory In Branch Dashboard",
 			"iconClass": "fa fa-suitcase",
 			"items": [
 				"Page/Engine/loans.individual.InventoryTracking.CaptureInventory",

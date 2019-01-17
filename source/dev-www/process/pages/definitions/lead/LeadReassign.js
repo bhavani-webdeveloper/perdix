@@ -1,8 +1,6 @@
-irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$stateParams", "Lead", "SessionStore",
-    "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "LeadHelper",
+irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$stateParams", "formHelper", "PageHelper", "Utils", "LeadHelper", "irfNavigator","Lead",
 
-    function($log, $state, $stateParams, Lead, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils, PagesDefinition, Queries, LeadHelper) {
+    function($log,$stateParams,formHelper,PageHelper, Utils,LeadHelper,irfNavigator,Lead) {
 
         return {
             "type": "schema-form",
@@ -17,15 +15,37 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                 if ($stateParams.pageData) {
                     var leadarray = $stateParams.pageData;
                     $log.info(leadarray);
-                    model.lead.leads=leadarray;
-                    model.customer.branchName=leadarray[0].branchName;
-                    var branches = formHelper.enum('branch_id').data;
-                    $log.info(branches);
-                    for (var i = 0; i < branches.length; i++) {
-                        if ((branches[i].name) == model.customer.branchName) {
-                            model.customer.branchId = branches[i].value;
+                    for (i in leadarray) {
+                        if (i == 0) {
+                            var leadIdList = "leadIdList=" + leadarray[i].id
+                        } else {
+                            var leadIdList = leadIdList + "&leadIdList=" + leadarray[i].id
                         }
                     }
+                    var leadArray = []
+                    Lead.findLeads({
+                        id: leadIdList
+                    }).$promise.then(
+                        function(res) {
+                            model.leadResponse = res;
+                            for (i in leadarray) {
+                                leadArray[i] = model.leadResponse[i]
+                            }
+                            console.log(leadArray);
+                            model.lead.leads = leadArray;
+                            model.customer.branchName = leadarray[0].branchName;
+                            var branches = formHelper.enum('branch_id').data;
+                            $log.info(branches);
+                            for (var i = 0; i < branches.length; i++) {
+                                if ((branches[i].name) == model.customer.branchName) {
+                                    model.customer.branchId = branches[i].value;
+                                }
+                            }
+                        },
+                        function(err) {
+                            console.log(err);
+                            PageHelper.showError(err);
+                        });
                 }
 
                 /*if ($stateParams.pageId) {
@@ -309,21 +329,32 @@ irf.pageCollection.factory(irf.page("lead.LeadReassign"), ["$log", "$state", "$s
                     };
                     var reqData = _.cloneDeep(model.lead);
 
-                    /*var centres = formHelper.enum('centre').data;
-                    for (var i = 0; i < centres.length; i++) {
-                        if ((centres[i].code) == reqData.centreId) {
-                            reqData.centreName = centres[i].name;
+                    /*  1)req data will now contain leads with same transaction type because of validation 
+                            on assignment pending queue - so no worries with stage on reqdata ie out of lead
+                        2) conditional validation if transaction type is not null and also its type is renewal 
+                           because that lead has to go to followup queue stage instead of default next stage
+                    */
+                    for (i = 0; i < reqData.leads.length; i++) {
+                        reqData.leads[i].branchId = model.customer.branchId;
+                        if(reqData.leads[i].transactionType && reqData.leads[i].transactionType.toLowerCase() == 'renewal'){
+                            reqData.stage = 'Inprocess';
+                            //reqData.centreId = reqData.leads[i].centreId;
+                            reqData.centreId = model.lead.centreId;
+                            reqData.leads[i].leadStatus = 'FollowUp'
                         }
-                    }*/
-                    for(i=0;i<reqData.leads.length;i++)
-                    {
-                       reqData.leads[i].branchId=model.customer.branchId;
-                       $log.info(model.customer.branchId);
+                        $log.info(model.customer.branchId);
                     }
-
-                    LeadHelper.AssignLead(reqData).then(function(resp) {
-                        $state.go('Page.LeadDashboard', null);
-                    });   
+                /* 1)Calling assigncentre api in lead to update centre 
+                   2) goBack() will go to dashboard because from assignmentPending Lead 
+                      queue we have set the backparam to dashboard
+                */
+                     
+                    LeadHelper.AssignLead(reqData).then(function (resp) {
+                        PageHelper.showProgress("Assign-lead", "Done. Lead assigned successfull", 5000);
+                       irfNavigator.goBack();
+                    }, function (err) {
+                        PageHelper.showProgress("Assign-Lead", "Error in assigning lead ", 5000);
+                    });
                 }
             }
 

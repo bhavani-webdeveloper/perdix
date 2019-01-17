@@ -10,13 +10,14 @@ import {LiabilityLoanAccountBookingPolicyFactory}  from "./policy/LiabilityLoanA
 import {LiabilityLoanAccountBookingProcessFactory} from "./LiabilityLoanAccountBookingProcessFactory";
 import LiabilityAccount = require("./LiabilityAccount");
 import {EnrolmentProcess} from "../../customer/EnrolmentProcess";
+import {LiabilityRepay} from "./LiabilityRepay";
 
 declare var liabilityLoanAccountBookingProcessConfig: Object;
 
 export class LiabilityLoanAccountBookingProcess {
 	LiabilityLoanAccountBookingProcessRepo:ILiabilityLoanAccountBookingRepository;
 	liabilityProcessAction: string;
-    
+    public liabilityRepay:LiabilityRepay;
     stage: String;
     liabilityAccount: LiabilityAccount;
     lenderEnrolmentProcess: EnrolmentProcess;
@@ -63,6 +64,17 @@ export class LiabilityLoanAccountBookingProcess {
             }
         );
     }
+
+    static getSchedule (id : number) : Observable<LiabilityLoanAccountBookingProcess>{
+         return LiabilityLoanAccountBookingProcessFactory.getSchedule(id).flatMap(
+                    (loanProcess) => {
+                        let pm: PolicyManager<LiabilityLoanAccountBookingProcess> = new PolicyManager<LiabilityLoanAccountBookingProcess>(loanProcess, LiabilityLoanAccountBookingPolicyFactory.getInstance(), 'onLoad', LiabilityLoanAccountBookingProcess.getProcessConfig());
+                        return pm.applyPolicies();
+                    }
+                );
+       
+    }
+    
 
      static getProcessConfig() {
         return liabilityLoanAccountBookingProcessConfig;

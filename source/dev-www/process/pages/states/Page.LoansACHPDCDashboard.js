@@ -10,7 +10,7 @@ irf.pages.controller("LoansACHPDCDashboardCtrl", ['$log', '$scope', 'PagesDefini
                 "Page/Engine/loans.individual.achpdc.ACHMandateDownload",
                 "Page/Engine/loans.individual.achpdc.ACHMandateQueue",
                 "Page/Engine/loans.individual.achpdc.ACHClose",
-                "Page/Engine/loans.individual.achpdc.PDCRegistration"
+                "Page/Engine/loans.individual.achpdc.PDCRegistration",
             ]
         };
         var achpdcTransactionDefinition = {
@@ -24,7 +24,8 @@ irf.pages.controller("LoansACHPDCDashboardCtrl", ['$log', '$scope', 'PagesDefini
                 "Page/Engine/loans.individual.achpdc.PDCCollections",
                 "Page/Engine/loans.individual.achpdc.DemandDownloads",
                 "Page/Engine/loans.individual.achpdc.BatchMonitoringQueue",
-                "Page/Engine/loans.individual.achpdc.RepaymentBatchMonitoringQueue"
+                "Page/Engine/loans.individual.achpdc.RepaymentBatchMonitoringQueue",
+                "Page/Engine/loans.individual.achpdc.ACHPDCRealizationBatchMonitoring"
             ]
         };
 

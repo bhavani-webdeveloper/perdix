@@ -110,7 +110,7 @@ define({
 						'beneficiaryName': searchOptions.beneficiaryName,
 						'currentStage':"PaymentApproval",
 						'page': pageOpts.pageNo,
-	                    'per_page': pageOpts.itemsPerPage,
+	                    'per_page': pageOpts.itemsPerPage
 					}).$promise;
 				},
 				paginationOptions: {

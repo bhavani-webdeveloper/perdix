@@ -260,6 +260,19 @@ define({
 					"type": "box",
 					"title": "GROUP_MEMBERS",
 					"items": [
+							{
+								"key": "group.jlgGroupMembers[].customerId",
+								"type": "button",
+								"title": "VIEW_CUSTOMER",
+								"onClick": function(model, form, schemaForm, event) {
+									irfNavigator.go({
+										state: "Page.Engine",
+										pageName: "sambandh.customer.IndividualEnrollment2",
+										pageId: model.group.jlgGroupMembers[schemaForm.arrayIndex].customerId
+									});
+								},
+								"condition": "model.siteCode == 'sambandh'"
+							},
 						{
 							"type":"fieldset",
 							"readonly": true,

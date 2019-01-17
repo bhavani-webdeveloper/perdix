@@ -137,7 +137,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                                 model.customer.addressProofNo = aadhaarData.uid;
                                             },
                                             type:"qrcode"
-                                            
+
                                         },
                                     ]
                                 },
@@ -149,7 +149,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                     startEmpty: true,
                                     "items": [
                                         {
-                                            
+
                                             key:"customer.additionalKYCs[].kyc1ProofType",
                                             type:"select",
                                             "enumCode": "identity_proof"
@@ -176,7 +176,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                         {
                                             key:"customer.additionalKYCs[].kyc1ValidUptoDate",
                                             type:"date"
-                                        }   
+                                        }
                                     ]
                                 },
 
@@ -316,7 +316,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                     title: "PREFERRED_LANGUAGE",
                                     type: "select",
                                     enumCode: "language"
-                                },
+                                },                                
                                 {
                                     key: "customer.fatherFirstName",
                                     title: "FATHER_FULL_NAME"
@@ -357,6 +357,16 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                             model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                                         }
                                     }
+                                },
+                                {
+                                    key:"customer.organisation",
+                                    type:"string",
+                                    condition:"model.siteCode == 'IFMRCapital'"                                  
+                                },
+                                {
+                                    key:"customer.designation",
+                                    type:"string",
+                                    condition:"model.siteCode == 'IFMRCapital'"                                  
                                 },
                             ]
             },
@@ -416,7 +426,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                     {
                                       key:"customer.careOf",
                                       //required:true,
-                                      title:"C/O",  
+                                      title:"C/O",
                                     },
                                         "customer.doorNo",
                                         "customer.street",
@@ -573,7 +583,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                      "add": null,
                                      "remove": null,
                                     "items": [
-                                        
+
                                         {
                                             "key": "customer.expenditures[].expenditureSource",
                                             "type": "select",
@@ -600,12 +610,13 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                         }
                                      ]
                                 }
-                              
+
                             ]
             },
             {
                             "type": "box",
                             "title": "FAMILY_DETAILS",
+                            "condition":"model.siteCode != 'IREPDhan'", 
                             "items": [
                                 {
                                     "key": "customer.familyMembers",
@@ -828,6 +839,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
             {
                             "type": "box",
                             "title": "T_HOUSE_VERIFICATION",
+                            "condition":"model.siteCode != 'IREPDhan'", 
                             "items": [
                                 {
                                     type:"fieldset",
@@ -1010,7 +1022,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                         {
                                             key:"customer.customerBankAccounts[].bankStatementDocId",
                                             type:"file",
-                                            required: true,
+                                            // required: false,
                                             title:"BANK_STATEMENT_UPLOAD",
                                             fileType:"application/pdf",
                                             "category": "CustomerEnrollment",
@@ -1061,6 +1073,17 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                                     required:true,
                                                     title: "NO_OF_EMI_CHEQUE_BOUNCED"
                                                 },
+                                                {
+                                                    key: "customer.customerBankAccounts[].bankStatements[].bankStatementPhoto",
+                                                    type: "file",
+                                                    required: true,
+                                                    title: "BANK_STATEMENT_UPLOAD",
+                                                    fileType: "application/pdf",
+                                                    "category": "CustomerEnrollment",
+                                                    "subCategory": "IDENTITYPROOF",
+                                                    using: "scanner"
+                                                }
+
                                             ]
                                         },
                                         {
@@ -1081,11 +1104,12 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
             {
                 "type": "box",
                 "title": "REFERENCES",
+                "condition":"model.siteCode != 'IREPDhan'", 
                 "items": [
                     {
                         key:"customer.verifications",
                         title:"REFERENCES",
-                        type: "array", 
+                        type: "array",
                         items:[
                             {
                                 key:"customer.verifications[].referenceFirstName",
@@ -1149,7 +1173,7 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                 }
                             ]
                             }
-                         ] 
+                         ]
                     },
                 ]
             },
@@ -1347,6 +1371,15 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                     enumCode:"status_scale"
                                     //enumCode: "status_scale"
                                 },
+                                {
+                                    key: "customer.businessSignboardImage",
+                                    title: "SIGN_BOARD",
+                                    "category": "Loan",
+                                    "subCategory": "DOC1",
+                                    type: "file",
+                                    fileType: "application/pdf",
+                                    using: "scanner"
+                                }
 
                             ]
                         },
@@ -1370,6 +1403,14 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                     model.enrollmentAction = "PROCEED";
                     $log.info(model);
                     var reqData = _.cloneDeep(model);
+                    if (reqData.customer.addressProof == 'Aadhar Card' &&
+                        !_.isNull(reqData.customer.addressProofNo)){
+                        reqData.customer.aadhaarNo = reqData.customer.addressProofNo;
+                    }
+                     if (reqData.customer.identityProof == 'Pan Card' &&
+                        !_.isNull(reqData.customer.identityProofNo)){
+                        reqData.customer.panNo = reqData.customer.identityProofNo;
+                    }
                     Enrollment.updateEnrollment(reqData, function (res, headers) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('PROFILE', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);

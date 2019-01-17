@@ -1,5 +1,5 @@
-irf.pageCollection.controller(irf.controller("audit.detail.ProcessCompliance"), ["$log", "$q", "Utils", "$stateParams", "$scope", "PageHelper", "irfNavigator", "Audit",
-    function($log, $q, Utils, $stateParams, $scope, PageHelper, irfNavigator, Audit) {
+irf.pageCollection.controller(irf.controller("audit.detail.ProcessCompliance"), ["$log", "$q", "Utils", "$stateParams", "$scope", "PageHelper", "irfNavigator", "Audit", "filterFilter","SessionStore",
+    function($log, $q, Utils, $stateParams, $scope, PageHelper, irfNavigator, Audit, filterFilter, SessionStore) {
         if (!$stateParams.pageId) {
             irfNavigator.goBack();
             return;
@@ -91,6 +91,62 @@ irf.pageCollection.controller(irf.controller("audit.detail.ProcessCompliance"), 
                 PageHelper.hideLoader();
             })
         }
+
+        var configurableActionBoxHtml =
+        '<div class="col-xs-12 action-box-col"><div class="box no-border"><div class="box-body" style="padding-right:0">\
+            <button ng-repeat="item in form.items"\
+                    class="btn {{item.fieldHtmlClass}}" ng-class="item.style? item.style: \'btn-theme\'" type="button" style="margin-right:10px"\
+                    ng-click="evalExpr(\'buttonClick(event,form)\', {event:$event,form:item})"\
+                    ng-show="!item.condition || evalExpr(item.condition, {form:item})">\
+                <i ng-if="item.icon" class="{{item.icon}}">&nbsp;</i>\
+                {{item.title | translate}}\
+            </button>\
+        </div></div></div>';
+                if ($stateParams.pageData) {
+                    $scope.$readonly = $stateParams.pageData.readonly;
+                }
+        
+                $scope.formName = irf.form($scope.pageName);
+                $scope.initialize = function(model, form, formCtrl) {
+                    model.siteCode = SessionStore.getGlobalSetting('siteCode');
+                };
+                $scope.form = [ {
+                    "type": "section",
+                    "condition": "model.siteCode == 'KGFS'",
+                    "html": configurableActionBoxHtml,
+                    "items": [{
+                        "type": "button",
+                        "condition": "!model._isOnline",
+                        "title": "Downloand Samples",
+                        "icon": "fa fa-download",
+                        "fieldHtmlClass": "pull-right",
+                        "style": "btn-default",
+                        "onClick": "actions.downloadSample(model)"
+                    }]
+                }];
+        
+                $scope.form.push();
+        
+                $scope.schema = {
+                    "$schema": "http://json-schema.org/draft-04/schema#",
+                    "type": "object",
+                    "properties": {
+                        "ai": {
+                            "type": "object",
+                            "properties": {
+                            }
+                        }
+                    }
+                };
+        
+                $scope.actions = {
+                    downloadSample: function(model, sendBack) { 
+                        var biDownloadUrl = irf.BI_BASE_URL+'/kgfs_sample_report.php?audit_id='+$this.auditId;
+                                            $log.info(biDownloadUrl);
+                                            window.open(biDownloadUrl);
+
+                    }
+                };
 
     }
 ]);

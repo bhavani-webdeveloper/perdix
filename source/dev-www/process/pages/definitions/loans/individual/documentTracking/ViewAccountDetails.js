@@ -62,6 +62,10 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.ViewAccou
                         {
                             key: "accountDocumentTracker[0].receiveDate",
                             title: "RECEIVED_DATE"
+                        },
+                        {
+                            key: "accountDocumentTracker[0].remarks",
+                            title: "REMARKS"
                         }
                     ]
                 },

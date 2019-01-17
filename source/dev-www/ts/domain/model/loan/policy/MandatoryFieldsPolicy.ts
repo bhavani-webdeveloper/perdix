@@ -31,7 +31,9 @@ export class MandatoryFieldsPolicy extends IPolicy<LoanProcess> {
     }
 
     run(loanProcess: LoanProcess): Observable<LoanProcess> {
-        loanProcess.loanAccount.nominees = [];
+        if(loanProcess.loanAccount.nominees == null || typeof loanProcess.loanAccount.nominees == "undefined"){
+            loanProcess.loanAccount.nominees = [];
+        }
         return Observable.of(loanProcess);
     }
 

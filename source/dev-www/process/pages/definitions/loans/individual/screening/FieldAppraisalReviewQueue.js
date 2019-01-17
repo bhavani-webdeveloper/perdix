@@ -1,13 +1,13 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalReviewQueue"),
-	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
-	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
+	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator",
+	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
 		
 		return {
 			"type": "search-list",
-			"title": "RISK_REVIEW1",
+			"title": "REGIONAL_RISK_REVIEW_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				model.branch = SessionStore.getCurrentBranch().branchName;
+				model.branch = SessionStore.getCurrentBranch().branchId;
 				model.branchId = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized"); 
 			},
@@ -21,6 +21,25 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
+						'branch': {
+	                    	'title': "BRANCH",
+	                    	"type": ["string", "null"],
+							"x-schema-form": {
+								"type":"userbranch",
+								"screenFilter": true
+							}
+	                    },
+                        "centre": {
+							"title": "CENTRE",
+							"type": ["integer", "null"],
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "centre",
+								"parentEnumCode": "branch",
+								"parentValueExpr": "model.branch",
+								"screenFilter": true
+							}
+						},
 						"applicantName": {
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
@@ -53,20 +72,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
                             "x-schema-form": {
                             	"type": "select"
                             }
-                        },
-                        "centre": {
-							"title": "CENTRE",
-							"type": ["integer", "null"],
-							"x-schema-form": {
-								"type": "select",
-								"enumCode": "centre",
-								"parentEnumCode": "branch",
-								"parentValueExpr": "model.branchId",
-								"screenFilter": true
-							}
-						}
-
-
+                        }
 					},
 					"required": []
 				},
@@ -88,7 +94,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
 					return IndividualLoan.search({
 	                    'stage': 'FieldAppraisalReview',
 	                    'centreCode':  searchOptions.centre,
-	                    'branchName':searchOptions.branch,
+	                    'branchId':searchOptions.branch,
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
@@ -137,6 +143,12 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
 					},
 					getColumns: function() {
 						return [{
+							title: 'ID',
+							data: 'id'
+						}, {
+							title: 'HUB_NAME',
+							data: 'branchName'
+						}, {
 							title: 'SCREENING_DATE',
 							data: 'screeningDate'
 						}, {
@@ -161,16 +173,20 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.FieldAppraisalRe
 					},
 					getActions: function() {
 						return [{
-							name: "RISK_REVIEW1",
+							name: "REGIONAL_RISK_REVIEW",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
 								entityManager.setModel('loans.individual.screening.FieldAppraisalReview', {
 									_request: item
 								});
-								$state.go("Page.Bundle", {
+								irfNavigator.go({
+									state: "Page.Bundle",
 									pageName: "loans.individual.screening.FieldAppraisalReview",
 									pageId: item.loanId
+								}, {
+									state: 'Page.Engine',
+                                    pageName: "loans.individual.screening.FieldAppraisalReviewQueue"
 								});
 							},
 							isApplicable: function(item, index) {

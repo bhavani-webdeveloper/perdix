@@ -24,6 +24,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningInput')
     "Utils",
     "IndividualLoan",
     "BundleManager",
+    "irfNavigator",
 function (
     $log,
     $q,
@@ -48,7 +49,8 @@ function (
     Queries,
     Utils,
     IndividualLoan,
-    BundleManager
+    BundleManager,
+    irfNavigator
 ) {
         	$log.info("Inside LoanBookingBundle");
 /*
@@ -67,57 +69,65 @@ function (
                             title: 'APPLICANT',
                             pageClass: 'applicant',
                             minimum: 1,
-                            maximum: 1
+                            maximum: 1,
+                            order: 10
                         },
                         {
                             pageName: 'customer.IndividualEnrolment2',
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
                             minimum: 0,
-                            maximum: 4
+                            maximum: 4,
+                            order: 20
                         },
                         {
                             pageName: 'customer.IndividualEnrolment2',
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
                             minimum: 0,
-                            maximum: 3
+                            maximum: 3,
+                            order: 30
                         },
                         {
                             pageName: 'customer.EnterpriseEnrolment2',
                             title: 'BUSINESS',
                             pageClass: 'business',
                             minimum: 1,
-                            maximum: 1
+                            maximum: 1,
+                            order: 40
                         },
                         {
                             pageName: 'loans.individual.screening.LoanRequest',
                             title: 'LOAN_REQUEST',
                             pageClass: 'loan-request',
                             minimum: 1,
-                            maximum: 1
+                            maximum: 1,
+                            order: 50
                         },
                         {
                             pageName: 'loans.individual.screening.CBCheck',
                             title: 'CB_CHECK',
                             pageClass: 'cb-check',
                             minimum: 1,
-                            maximum: 1
+                            maximum: 1,
+                            order: 90
                         },
                         {
                             pageName: 'loans.individual.screening.CreditBureauView',
                             title: 'CREDIT_BUREAU',
                             pageClass: 'cbview',
                             minimum: 1,
-                            maximum: 1
+                            maximum: 1,
+                            order: 100
                         },
                         {
                             pageName: 'loans.individual.screening.Review',
                             title: 'REVIEW',
                             pageClass: 'loan-review',
                             minimum: 1,
-                            maximum: 1
-                        }   
+                            maximum: 1,
+                            order: 80
+                        }
                     ]);
                 },
         		"bundlePages": [],
@@ -154,11 +164,18 @@ function (
                                     var business;
                                     var urnNos = [];
 
+                                    if (res.currentStage!= 'Screening'){
+                                        PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
+                                        irfNavigator.goBack();
+                                        return;
+                                    }
+
                                     for (var i=0; i<res.loanCustomerRelations.length; i++) {
                                         var cust = res.loanCustomerRelations[i];
                                         if (cust.relation == 'APPLICANT' || cust.relation == 'Applicant' || cust.relation =='Sole Proprieter'){
                                             applicant = cust;
                                             urnNos.push(cust.urn);
+                                            res.applicantId=cust.customerId;
                                         } else if (cust.relation == 'COAPPLICANT' || cust.relation == 'Co-Applicant') {
                                             coApplicants.push(cust);
                                             urnNos.push(cust.urn);
@@ -206,7 +223,14 @@ function (
                                         }
                                     });
 
-                                    $this.bundlePages.push({
+                                     $this.bundlePages.push({
+                                        pageClass: 'loan-review',
+                                        model: {
+                                            loanAccount: res
+                                        }
+                                    });
+
+                                       $this.bundlePages.push({
                                         pageClass: 'cb-check',
                                         model: {
                                             loanAccount: res
@@ -220,12 +244,8 @@ function (
                                         }
                                     });
 
-                                    $this.bundlePages.push({
-                                        pageClass: 'loan-review',
-                                        model: {
-                                            loanAccount: res
-                                        }
-                                    });
+                                  
+                                   
 
                                     deferred.resolve();
                                 }, function(httpRes){
@@ -266,7 +286,7 @@ function (
                         .then(function(settings){
                             BundleManager.broadcastEvent("cibil-highmark-mandatory-settings", settings);
                         })
-                    
+
                 },
         		eventListeners: {
         			"on-customer-load": function(pageObj, bundleModel, params){

@@ -26,7 +26,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                     "branchId": {
                         "type": ["integer", "null"],
                         "title": "BRANCH_NAME",
-                        "enumCode": "branch_id",
+                        "enumCode": "userbranches",
                         "x-schema-form": {
                             "type": "select"
                         }
@@ -85,6 +85,24 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                                 "value": "No"
                             }]
                         }
+                    },
+                    "udf20": {
+                        "type": ["number", "null"],
+                        "title": "MIGRATED_POPULATION_PERCENT",
+                        "x-schema-form": {
+                            condition: "model.bank_survey.migration == 'Yes'",
+                            "$validators": {
+                                validVaue: function (value) {
+                                    if(value < 0 || value > 100) {
+                                            return false;
+                                    }
+                                    return true;
+                                }
+                            },
+                            "validationMessage": {
+                               "validVaue": "range is between 0 to 100"
+                            }
+                        },
                     },
                     "povertyLevel": {
                         "type": ["string", "null"],
@@ -200,7 +218,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                     },
                     "udf18": {
                         "type": ["number", "null"],
-                        "title": "OTHER_PERCENTAGE",
+                        "title": "OBC_PERCENTAGE",
                         readonly: true,
                         min: 0,
                         max: 100,
@@ -482,6 +500,150 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                         }
 
                     },
+                    "surveyEconomicDetailsList": {
+                        "type": "array",
+                        "title": "ACTIVITY",
+                        "items": {
+                            "type": "object",
+                            "required": [],
+                            "properties": {
+                                "economicActivity": {
+                                    "type": ["string", "null"],
+                                    "title": "ACTIVITY",
+                                }
+                            }
+                        }
+                    },
+                     "surveyCreditSourceList": {
+                        "type": "array",
+                        "title": "SOURCE_OF_CREDIT_IN_THE_VILLAGE/SLUM",
+                        "items": {
+                            "type": "object",
+                            "required": [],
+                            "properties": {
+                                "source": {
+                                    "type": ["string", "null"],
+                                    "title": "SOURCE",
+                                    "x-schema-form": {
+                                        "type": "select",
+                                        "titleMap": [{
+                                            "name": "Bank",
+                                            "value": "Bank"
+                                        }, {
+                                            "name": "MFI",
+                                            "value": "MFI"
+                                        }, {
+                                            "name": "MoneyLender",
+                                            "value": "MoneyLender"
+                                        }, {
+                                            "name": "Wholesaler",
+                                            "value": "Wholesaler"
+                                        }]
+                                    }
+                                },
+                                "instituteName": {
+                                    "type": ["string", "null"],
+                                    "required": true,
+                                    "title": "INSTITUTE_NAME"
+                                },
+                                "sourcingDifficulty": {
+                                    "type": ["string", "null"],
+                                    "title": "DIFFICULTY_SOURCING",
+                                    "x-schema-form": {
+                                        "type": "select",
+                                        "titleMap": [{
+                                            "name": "High",
+                                            "value": "High"
+                                        }, {
+                                            "name": "Medium",
+                                            "value": "Medium"
+                                        }, {
+                                            "name": "Low",
+                                            "value": "Low"
+                                        }]
+                                    }
+                                },
+                                 "minimumLoanSize": {
+                                    "type": ["number", "null"],
+                                    "title": "MINIMUM_LOAN_SIZE",
+                                    "required": true,
+                                    "x-schema-form": {
+                                        "type": "number",
+                                    }
+
+                                },
+                                "maximumLoanSize": {
+                                    "type": ["number", "null"],
+                                    "title": "MAXIMUM_LOAN_SIZE",
+                                    "required": true,
+                                    "x-schema-form": {
+                                        "type": "number",
+                                    }
+                                },
+                                "interestRate": {
+                                    "type": ["number", "null"],
+                                    "title": "INTEREST_RATES",
+                                    "required": true,
+                                    "x-schema-form": {
+                                        "type": "number",
+                                    }
+                                },
+                                "repaymentPeriod": {
+                                    "type": ["number", "null"],
+                                    "title": "REPAYMENT_PERIOD(MONTHS)",
+                                    "required": true,
+                                    "x-schema-form": {
+                                        "type": "number",
+                                    }
+                                },
+                                "repaymentFrequency": {
+                                    "type": ["string", "null"],
+                                    "title": "REPAYMENT_FREQUENCY",
+                                    "x-schema-form": {
+                                        "type": "select",
+                                        "titleMap": [{
+                                            "name": "Daily",
+                                            "value": "Daily"
+                                        }, {
+                                            "name": "Weekly",
+                                            "value": "Weekly"
+                                        }, {
+                                            "name": "Fortnightly",
+                                            "value": "Fortnightly"
+                                        }, {
+                                            "name": "Monthly",
+                                            "value": "Monthly"
+                                        }, {
+                                            "name": "Quarterly",
+                                            "value": "Quarterly"
+                                        }, {
+                                            "name": "Yearly",
+                                            "value": "Yearly"
+                                        }]
+                                    }
+                                },
+                                "collateral": {
+                                    "type": ["string", "null"],
+                                    "title": "COLLATERAL"
+                                },
+                                "pernaltyAction": {
+                                    "type": ["string", "null"],
+                                    "title": "PENALTY_ACTION"
+                                },
+                                "clientBase": {
+                                    "type": ["string", "null"],
+                                    "title": "CLIENT_BASE"
+                                },
+                                "operationSince": {
+                                    "type": ["string", "null"],
+                                    "title": "OPERATION_SINCE",
+                                    "x-schema-form": {
+                                        "type": "date",
+                                    }
+                                },
+                            }
+                        }
+                    },
                     "udf1": {
                         "type": ["string", "null"],
                         "title": "ACTIVITY"
@@ -532,8 +694,8 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                         "title": "GEO_TAG",
                         "x-schema-form": {
                             "type": "geotag",
-                            "latitude": "latitude",
-                            "longitude": "longitude",
+                            "latitude": "bank_survey.latitude",
+                            "longitude": "bank_survey.longitude",
                         }
                     },
                     "longitude": {
@@ -759,7 +921,9 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                             "properties": {
                                 "contactName": {
                                     "type": ["string", "null"],
-                                    "title": "NAME"
+                                    "title": "NAME",
+                                    pattern: "^[a-zA-Z\. ]+$",
+                                    validationMessage: {202 : "Only alphabets and space are allowed."}
                                 },
                                 "mobileNo": {
                                     "type": ["string", "null"],
@@ -772,7 +936,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                     },
                     "surveyFacilityDistance": {
                         "type": "array",
-                        "title": "SURVER_FACILITY_DISTANCE",
+                        "title": "SURVEY_FACILITY_DISTANCE",
                         "items": {
                             "type": "object",
                             "properties": {
@@ -814,6 +978,8 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                                 "facilityDistance": {
                                     "type": ["number", "null"],
                                     "title": "DISTANCE",
+                                    "maximum": 50,
+                                    "minimum": 0,
                                     "x-schema-form": {
                                         "type":"number"
                                     }
@@ -848,7 +1014,7 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
                     "noOfPotentialMember",
                     "motivationRequired",
                     "udf2",
-                    "latitude",
+                   // "latitude",
                 ]
             }
         },
@@ -867,7 +1033,6 @@ irf.models.factory('SurveyInformation', function($resource, formHelper, BASE_URL
             "political_climate",
             "microfinance_village",
             "potential_village",
-            "geo_tag",
             "name",
             "contact"
         ]

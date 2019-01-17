@@ -199,6 +199,7 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
                 "items": [{
                     key:"customer.familyMembers",
                     type:"array",
+                    titleExpr: "(model.customer.familyMembers[arrayIndex].relationShip == 'Self'?'Self':'Family Memeber')",
                     startEmpty: true,
                     items: [
                         {

@@ -132,7 +132,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         orderNo: 160,
                         key: "customer.spouseFirstName",
                         title: "SPOUSE_FULL_NAME",
-                        condition: "model.customer.maritalStatus==='MARRIED' || model.customer.maritalStatus === 'WIDOWER'",
+                        condition: "model.customer.maritalStatus==='MARRIED' || model.customer.maritalStatus === 'WIDOWER' || model.customer.maritalStatus === 'WIDOW'",
                         type: "qrcode",
                         onCapture: function (result, model, form) {
                             $log.info(result); // spouse id proof
@@ -481,6 +481,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     $log.info(result);
                                     var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
                                     model.customer.identityProofNo = aadhaarData.uid;
+                                    model.customer.aadhaarNo = aadhaarData.uid;
                                 }
                             },
                             "identityProofNo1": {
@@ -1456,8 +1457,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         "onChange": "fillGeolocation(modelValue, form)"
                     },
                     "nameOfRo": {
-                        key: "customer.nameOfRo",
-                        readonly: true,
+                        key: "customer.nameOfRo"
                     },
                     "houseVerificationPhoto": {
                         key: "customer.houseVerificationPhoto",
@@ -1507,6 +1507,21 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "place": {
                         key: "customer.place",
+                    },
+                }
+            },
+            "EDF":{
+                "type": "box",
+                "title": "EDF",
+                "items": {
+                    "condition":{
+                        "key": "customer.udf.userDefinedFieldValues.udf40",
+                        title: "Agree with the terms and conditions",
+                        type: "radios",
+                        titleMap: {
+                            "ACCEPT": "ACCEPT",
+                            "REJECT": "REJECT",
+                        }
                     },
                 }
             },
@@ -1926,11 +1941,30 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "submit": {
                         "type": "submit",
                         "title": "SUBMIT"
-                    },
+                    }
+                }
+            },
+            "actionbox1": {
+                "type": "actionbox",
+                orderNo: 141,
+                //"condition": "model.customer.id",
+                "items": {
+                    "saveBasicDetails": {
+                        "type": "button",
+                        "title": "SUBMIT",
+                        "onClick": "actions.saveBasicDetails(model, formCtrl, form, $event)"
+                    }
+                }
+            },
+            "actionbox2": {
+                "type": "actionbox",
+                orderNo: 142,
+                //"condition": "model.customer.id",
+                "items": {
                     "save": {
                         "type": "save",
                         "title": "OFFLINE_SAVE"
-                    },
+                    }
                 }
             }
         };
@@ -2527,7 +2561,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 key: "lead.educationStatus",
                                 type: "select",
                                 enumCode: "education",
-                                required: true
+                                //required: true
                                 /* titleMap: {
                                  "Below SSLC": "Below SSLC",
                                  "ITI/Diploma/Professional Qualification": "ITI/Diploma/ProfessionalQualification",
@@ -2674,7 +2708,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     },
                     "referredBy1": {
                         "key": "lead.referredBy",
-                        "condition": "model.lead.leadSource.toUpperCase() == 'EXISTING CUSTOMER REFERRAL'",
+                        "condition": "model.lead.leadSource.toUpperCase() == 'EXISTING CUSTOMER REFERRAL' && model.siteCode != 'witfin'",
                         "type": "lov",
 
                         "lovonly": true,
@@ -2771,6 +2805,128 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             }
                             var promise = Enrollment.search({
                                 'branchName': branchName || SessionStore.getBranch(),
+                                'firstName': inputModel.firstName,
+                                'centreId': inputModel.centreId,
+                                'customerType': "individual",
+                                'urnNo': inputModel.urnNo
+                            }).$promise;
+                            return promise;
+                        },
+                        getListDisplayItem: function (data, index) {
+                            return [
+                                [data.firstName, data.fatherFirstName].join(' | '),
+                                data.id,
+                                data.urnNo
+                            ];
+                        },
+                        onSelect: function (valueObj, model, context) {
+
+                        }
+
+                    },
+                    "referredBy1": {
+                        "key": "lead.referredBy",
+                        "condition": "model.lead.leadSource.toUpperCase() == 'EXISTING CUSTOMER REFERRAL' && model.siteCode == 'witfin'",
+                        "type": "lov",
+
+                        "lovonly": true,
+                        // initialize: function(model, form, parentModel, context) {
+
+                        //     model.lead.branchId = parentModel.lead.branchId;
+                        //     model.lead.centreId = parentModel.lead.centreId;
+                        //     var centreCode = formHelper.enum('centre').data;
+
+                        //     var centreName = $filter('filter')(centreCode, {value: parentModel.customer.centreId}, true);
+                        //     if(centreName && centreName.length > 0) {
+                        //         model.lead.centreName = centreName[0].name;
+                        //     }
+
+                        // },
+                        "inputMap": {
+                            "firstName": {
+                                "key": "lead.customerFirstName"
+
+                            },
+                            "urnNo": {
+                                "key": "lead.urnNo",
+
+                            },
+                            "branchId": {
+                                "key": "lead.branchId",
+                                "type": "select",
+                                "screenFilter": true,
+                                //"readonly": true
+                            },
+                            "centreName": {
+                                "key": "lead.centreName",
+                                "type": "string",
+                                //"readonly": true,
+
+                            },
+                            "centreId": {
+                                key: "lead.centreId",
+                                type: "select",
+                                title: "CENTRE_NAME",
+                                filter: {
+                                    "parentCode": "branch_id"
+                                },
+                                parentEnumCode: "branch_id",
+                                parentValueExpr: "lead.branchId",
+
+                                /*
+                                type: "lov",
+                                autolov: true,
+                                lovonly: true,
+                                bindMap: {},
+                                searchHelper: formHelper,
+                                search: function (inputModel, form, model, context) {
+                                    var centres = SessionStore.getCentres();
+                                    // $log.info("hi");
+                                    // $log.info(centres);
+
+                                    var centreCode = formHelper.enum('centre').data;
+                                    var out = [];
+                                    if (centres && centres.length) {
+                                        for (var i = 0; i < centreCode.length; i++) {
+                                            for (var j = 0; j < centres.length; j++) {
+                                                if (centreCode[i].value == centres[j].id) {
+
+                                                    out.push({
+                                                        name: centreCode[i].name,
+                                                        id: centreCode[i].value
+                                                    })
+                                                }
+                                            }
+                                        }
+                                    }
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": out.length
+                                        },
+                                        body: out
+                                    });
+                                },
+                                onSelect: function (valueObj, model, context) {
+                                    model.lead.centreId = valueObj.id;
+                                    model.lead.centreName = valueObj.name;
+                                },
+                                getListDisplayItem: function (item, index) {
+                                    return [
+                                        item.name
+                                    ];
+                                }
+                                */
+                            },
+                        },
+                        "outputMap": {
+
+                            "firstName": "lead.referredBy"
+                        },
+                        "searchHelper": formHelper,
+                        "search": function (inputModel, form) {
+                            
+                            var promise = Enrollment.search({
+                                'branchId': inputModel.branchId || SessionStore.getBranch(),
                                 'firstName': inputModel.firstName,
                                 'centreId': inputModel.centreId,
                                 'customerType': "individual",
@@ -5192,7 +5348,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "annualExpenses": {
                                 "key": "customer.expenditures[].annualExpenses",
                                 "type": "amount",
-                                "title": "AMOUNT"
+                                "title": "AMOUNT",
+                                required:true,
                             },
                             "frequency": {
                                 "key": "customer.expenditures[].frequency",

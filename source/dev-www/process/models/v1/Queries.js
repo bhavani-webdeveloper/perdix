@@ -1,6 +1,6 @@
 irf.models.factory('Queries', [
-    "$resource", "SysQueries", "$httpParamSerializer", "BASE_URL", "$q", "$log", "SessionStore",
-    function($resource, SysQueries, $httpParamSerializer, BASE_URL, $q, $log, SessionStore) {
+    "$resource", "SysQueries","formHelper","filterFilter", "$httpParamSerializer", "BASE_URL", "$q", "$log", "SessionStore",
+    function($resource, SysQueries,formHelper,filterFilter, $httpParamSerializer, BASE_URL, $q, $log, SessionStore) {
         var endpoint = BASE_URL + '/api';
 
         var resource = $resource(endpoint, null, {
@@ -21,14 +21,190 @@ irf.models.factory('Queries', [
             }).$promise;
         };
 
-        resource.searchPincodes = function(pincode, district, state) {
+        resource.searchPincodes = function(pincode, district, state, division, region, taluk) {
             var deferred = $q.defer();
             var request = {
                 "pincode": pincode || '',
                 "district": district || '',
-                "state": state || ''
+                "state": state || '',
+                "division": division || '',
+                "region": region || '',
+                "taluk": taluk || '',
             };
             resource.getResult("pincode.list", request, 10).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+          resource.searchMachineDescription = function() {
+            var deferred = $q.defer();
+            var request = {}
+            resource.getResult("machineDescription.list",request).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+
+        resource.searchMachineName = function(machineDescription) {
+            var deferred = $q.defer();
+            var request = {
+                "machineDescription": machineDescription
+            };
+            resource.getResult("machineName.list", request).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+
+         resource.searchMachineType = function(machineDescription, machineName) {
+            var deferred = $q.defer();
+            var request = {
+                "machineDescription": machineDescription,
+                "machineName" : machineName
+            };
+            resource.getResult("machineType.list", request).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+        resource.searchMachineWorkProcess = function(machineDescription, machineName, machineType) {
+            var deferred = $q.defer();
+            var request = {
+                "machineDescription": machineDescription,
+                "machineName" : machineName,
+                "machineType": machineType
+            };
+            resource.getResult("machineWorkProcess.list", request).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+        resource.searchDepreciation = function(machineDescription) {
+            var deferred = $q.defer();
+            var request = machineDescription;
+            
+            resource.getResult("machineDepreciation.list", request).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+         resource.searchMachineMaster = function() {
+            var deferred = $q.defer();
+            var request = {};
+            
+            resource.getResult("machineMaster.list", request).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+        resource.searchMachineModel = function(machineDescription, machineName,machineType,workProcess) {
+            var deferred = $q.defer();
+            var request = {
+                "machineDescription": machineDescription,
+                "machineName" : machineName,
+                "machineType": machineType,
+                "workProcess": workProcess
+            };
+            resource.getResult("machineModel.list", request).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+
+        resource.searchReAssignment = function( branch_name ) {
+            var deferred = $q.defer();
+            var request = {
+                "branch_name": branch_name || ''
+            };
+            resource.getResult("reassignment.list", request, 10).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+
+        resource.searchPincodeMaster = function(pincode, district, state, division, region, taluk) {
+            var deferred = $q.defer();
+            var request = {
+                "pincode": pincode || '',
+                "district": district || '',
+                "state": state || '',
+                "division": division || '',
+                "region": region || '',
+                "taluk": taluk || '',
+            };
+            resource.getResult("pincodeMaster.list", request, 10).then(function(records) {
                 if (records && records.results) {
                     var result = {
                         headers: {
@@ -76,6 +252,21 @@ irf.models.factory('Queries', [
             )
             return deferred.promise;
         }
+        resource.getLoanIdByLoanCollectionId = function(id) {
+            var deferred = $q.defer();
+            resource.getResult('loanIdByloanCollectionId.one', {
+                id : id
+            }).then(
+                function(res) {
+                    if (res && res.results && res.results.length && res.results.length > 0) {
+                        deferred.resolve(res.results[0]);
+                    } else {
+                        deferred.reject(res);
+                    }
+                }, deferred.reject
+            )
+            return deferred.promise;
+        }
 
         resource.getLoanProductDocuments = function(prodCode, process, stage) {
             var deferred = $q.defer();
@@ -98,9 +289,9 @@ irf.models.factory('Queries', [
             return deferred.promise;
         }
 
-        resource.getLoanProductDocumentsRejectReasons = function() {
+        resource.getLoanProductDocumentsRejectReasons = function(processName) {
             var deferred = $q.defer();
-            resource.getResult('loan_doc_reject_reasons.list', {}).then(
+            resource.getResult('loan_doc_reject_reasons.list', {process_name: processName}).then(
                 function(res) {
                     if (res && res.results && res.results.length) {
                         deferred.resolve(res.results);
@@ -159,14 +350,55 @@ irf.models.factory('Queries', [
             return deferred.promise;
         }
 
-        resource.getLoanProductCode = function(productCategory,frequency,partner) {
+        resource.getLoanProductCode = function(productCategory,frequency,partner,bankId) {
             var deferred = $q.defer();
             var request = {};
             request.partner=partner;
             request.productCategory=productCategory;
             request.frequency=frequency;
+            request.bankId = bankId;
 
             resource.getResult("loanProductCode.list", request).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        }
+        resource.getLoanProductDetails = function(loanType,partnerCode,frequency){
+            var deferred  = $q.defer();
+            var request = {};
+            request.partnerCode = partnerCode;
+            request.loanType = loanType;
+            request.frequency = frequency;
+            resource.getResult('loanProductDetails.list',request).then(function(records){
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        }
+        resource.getLoanProductCodeByLoanType = function(productCategory,frequency,partner,loanType) {
+            var deferred = $q.defer();
+            var request = {};
+            request.partner=partner;
+            request.productCategory=productCategory;
+            request.frequency=frequency;
+            request.loanType = loanType;
+ 
+            resource.getResult("loanTypeProductCode.list", request).then(function(records) {
                 if (records && records.results) {
                     var result = {
                         headers: {
@@ -185,7 +417,7 @@ irf.models.factory('Queries', [
             request = {};
             request.partner_code = partnerCode || null;
             // opts = opts || {partner_code: ""};
-            resource.getResult("bankAccountsByPartnerCode.list", request, 10).then(function(records) {
+            resource.getResult("bankAccountsByPartnerCode.list", request, 100).then(function(records) {
                 if (records && records.results) {
                     var result = {
                         headers: {
@@ -199,7 +431,7 @@ irf.models.factory('Queries', [
             return deferred.promise;
         }
 
-        /* If partner code is passed, the Bank accounts of corresponding Partners alone will returned, else 
+        /* If partner code is passed, the Bank accounts of corresponding Partners alone will returned, else
            partner code is NOT PASSED then all the accounts eligible for LOAN REPAYMENT is returned.
          */
         resource.getBankAccountsByPartnerForLoanRepay = function(partnerCode) {
@@ -282,6 +514,17 @@ irf.models.factory('Queries', [
                     deferred.resolve(result);
                 }
             }, deferred.reject);
+            return deferred.promise;
+        }
+
+        resource.getLoanCollectionDepositSum = function(bank_deposit_summary_id) {
+            var deferred = $q.defer();
+            var request = {
+                "bank_deposit_summary_id":bank_deposit_summary_id
+            };
+            resource.getResult("loanCollectionDepositSum.list", request).then(function(response){
+                deferred.resolve(response.results);
+            },deferred.reject);
             return deferred.promise;
         }
 
@@ -370,6 +613,25 @@ irf.models.factory('Queries', [
             resource.getResult("loanpurpose2.list", {
                 "product": product,
                 "purpose1": purpose1
+            }).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+
+        resource.getLoanPurpose3 = function(purpose1,purpose2) {
+            var deferred = $q.defer();
+            resource.getResult("loanpurpose3.list", {
+                "purpose1": purpose1,
+                "purpose2": purpose2
             }).then(function(records) {
                 if (records && records.results) {
                     var result = {
@@ -482,6 +744,60 @@ irf.models.factory('Queries', [
             return deferred.promise;
         }
 
+        resource.getLoanCustomerDetails = function(loanId) {
+            var deferred = $q.defer();
+            var request = {
+                'loanId': loanId
+            };
+            resource.getResult("loanCustomerDetails.list", request)
+                .then(function(records) {
+                    var out = {
+                        'applicant': null,
+                        'coApplicants':[],
+                        'guarantors':[],
+                        'loanCustomer': null
+                    };
+
+                    if (records && records.results) {
+                        _.forEach(records.results, function(value){
+                            if (value.relation == 'Loan Customer') {
+                                out.loanCustomer = value;
+                            } else if (value.relation == 'Applicant') {
+                                out.applicant = value;
+                            } else if (value.relation == 'Co-Applicant') {
+                                out.coApplicants.push(value);
+                            } else if (value.relation == 'Guarantor') {
+                                out.guarantors.push(value);
+                            }
+                        });
+
+                        deferred.resolve(out);
+                    } else {
+                        deferred.resolve(out);
+                    }
+
+                }, deferred.reject);
+
+            return deferred.promise;
+        }
+
+        resource.getNextInstallmentDate = function() {
+            var deferred = $q.defer();
+            var request = {};
+            resource.getResult("nextInstallmentDate", request).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+
         resource.getAllLoanPurpose1 = function() {
             var deferred = $q.defer();
             var request = {};
@@ -503,25 +819,6 @@ irf.models.factory('Queries', [
             var deferred = $q.defer();
             resource.getResult("Allloanpurpose2.list", {
                 "purpose1": purpose1
-            }).then(function(records) {
-                if (records && records.results) {
-                    var result = {
-                        headers: {
-                            "x-total-count": records.results.length
-                        },
-                        body: records.results
-                    };
-                    deferred.resolve(result);
-                }
-            }, deferred.reject);
-            return deferred.promise;
-        };
-
-        resource.getAllLoanPurpose3 = function(purpose1,purpose2) {
-            var deferred = $q.defer();
-            resource.getResult("Allloanpurpose3.list", {
-                "purpose1": purpose1,
-                "purpose2":purpose2
             }).then(function(records) {
                 if (records && records.results) {
                     var result = {
@@ -600,6 +897,18 @@ irf.models.factory('Queries', [
             return deferred.promise;
         };
 
+        resource.getPDCDemands = function(accountNumber) {
+            var deferred = $q.defer();
+            resource.getResult("PDCDemands.list",{
+                "accountNumber": accountNumber.accountNumber
+            }).then(function(records) {
+                if (records && records.results) {
+                    deferred.resolve(records.results);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+
         resource.getFamilyRelations = function(loanId) {
             var deferred = $q.defer();
             resource.getResult("familyMembers.list", {
@@ -617,6 +926,67 @@ irf.models.factory('Queries', [
             }, deferred.reject);
             return deferred.promise;
         };
+
+         resource.getCustomerFamilyRelations = function(customerId) {
+            var deferred = $q.defer();
+            resource.getResult("customerFamilyMembers.list", {
+                "customerId": customerId
+            }).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+
+        resource.getCustomerNomineeRelations = function(customerId,relationShip) {
+            var deferred = $q.defer();
+            resource.getResult("customerNomineeMembers.list", {
+                "customerId": customerId,
+                "relationShip":relationShip
+            }).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+
+        resource.getProductCode = function (bankId, branchId){
+            var deferred = $q.defer();
+            var request = {
+                "bankId" : bankId,
+                "branchId" : branchId
+            };
+            resource.getResult("insuranceProducts.list",request).then(function(records) {
+                if(records && records.results){
+                    var result = {
+                        headers : {
+                             "x-total-count": records.results.length
+                         },
+                         body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+                else{
+                    deferred.reject();
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+
 
         resource.getCibilHighmarkMandatorySettings = function() {
             var deferred = $q.defer();
@@ -713,9 +1083,341 @@ irf.models.factory('Queries', [
             return deferred.promise;
         }
 
-        resource.getCustomerGroups = function(urnNo) {
+
+        resource.getDedupeDetails = function(filter) {
             var deferred = $q.defer();
-            resource.getResult("getCustomerGroups.list",{'urn_no':urnNo}).then(function(records) {
+            var request = {};
+            request.ids = (_.hasIn(filter, 'ids') && filter.ids.length > 0) ? filter.ids : [""];
+            resource.getResult("dedupe.list", request).then(function(records) {
+                if (records && records.results) {
+                    deferred.resolve(records.results);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
+
+        resource.getEnterpriseCustomerId = function(individualCustomerId){
+            var deferred = $q.defer();
+            var request = {};
+            request.individualCustomerId = individualCustomerId;
+            resource.getResult("enterpriseCustomer", request)
+                .then(function(response){
+                    if (response && _.isArray(response.results) && response.results.length > 0) {
+                        deferred.resolve(response.results[0]);
+                    } else {
+                        deferred.resolve(null);
+                    }
+                }, deferred.reject)
+            return deferred.promise;
+        };
+
+
+        resource.getLoanAccountsByUrnAndStage = function(urn, currentStage){
+            var deferred = $q.defer();
+            var request = {};
+            request.urn = urn;
+            request.currentStage = (currentStage && !angular.isArray(currentStage) ) ? [currentStage] : currentStage ;
+            resource.getResult("loanAccountsByUrnAndStage.list", request)
+                .then(function(response){
+                    if (response && _.isArray(response.results) && response.results.length > 0) {
+                        deferred.resolve(response.results);
+                    } else {
+                        deferred.resolve(null);
+                    }
+                }, deferred.reject)
+            return deferred.promise;
+        };
+
+
+        resource.getVehicleDetails = function (){
+            var deferred = $q.defer();
+            var request = {};
+            resource.getResult("vehicleViability.list", request).then(function(response){   
+               deferred.resolve(response);
+            }, deferred.reject);
+            return deferred.promise;
+        };
+    resource.getAllLoanPurposesMapping = function() {
+        var deferred = $q.defer();
+        var request = {};
+        resource.getResult("AllLoanPurposeMapping.list", request).then(function(response) {
+            deferred.resolve(response.results);
+        }, deferred.reject);
+        return deferred.promise;
+    };
+    resource.getLookUpCodeByFrequencyList = function(frequency) {
+        var deferred = $q.defer();
+        var request = {
+            "frequency": frequency
+        };
+        resource.getResult("LookUpCodeByFrequency.list", request).then(function(response) {
+            deferred.resolve(response.results);
+        }, deferred.reject);
+        return deferred.promise;
+    };
+    resource.getAllLoanPurposesMapping = function() {
+        var deferred = $q.defer();
+        var request = {};
+        resource.getResult("AllLoanPurposeMapping.list", request).then(function(response) {
+            deferred.resolve(response.results);
+        }, deferred.reject);
+        return deferred.promise;
+    };
+    resource.getPhysicalAssetsList = function() {
+        var deferred = $q.defer();
+        var request = {};
+        resource.getResult("physicalAssets.list",request).then(function(response) {
+            deferred.resolve(response.results);
+        }, deferred.reject);
+        return deferred.promise;
+    };
+    resource.getProfileSummary = function() {
+        var deferred = $q.defer();
+        var request = {};
+        resource.getResult("profileSummary.list",request).then(function(response){
+            if (response && _.isArray(response.results) && response.results.length > 0) {
+
+                var result = {
+                    headers: {
+                        "x-total-count": response.results.length
+                    },
+                    body: response.results
+                };
+                deferred.resolve(result);
+            } else {
+                var result = {
+                    headers: {
+                        "x-total-count": response.results.length
+                    },
+                    body: response.results
+                };
+                deferred.resolve(result);
+            }
+        }, deferred.reject)
+        return deferred.promise;
+    }
+
+    resource.getActiveLoansCountByProduct = function(customerUrn, applicantUrn, productCode, loanId) {
+        var deferred = $q.defer();
+        var request = {};
+        request.urn_no = customerUrn;
+        request.applicant = applicantUrn;
+        request.product_code = productCode;
+        request.loan_id = loanId
+        resource.getResult("activeLoansCountByProduct", request)
+            .then(function(response) {
+                if (response && _.isArray(response.results) && response.results.length > 0) {
+                    deferred.resolve(response.results[0].count);
+                } else {
+                    deferred.resolve(0);
+                }
+            }, deferred.reject)
+        return deferred.promise;
+    };
+
+    resource.getloanAccountsByLikeAccountNumber = function(accountNo) {
+        var deferred = $q.defer();
+        var request = {
+            "account_number": accountNo
+        };
+        resource.getResult("loanAccountsByLikeAccountNumber.list", request)
+        .then(function(response) {
+            var result = {
+                headers: {
+                    "x-total-count": response.results.length
+                },
+                body: response.results
+            };
+            deferred.resolve(result);
+            console.log(response.results)
+        }, deferred.reject);
+        return deferred.promise;
+    };
+
+    resource.getGroupDetailsByGroupcode = function(groupCode) {
+        var deferred = $q.defer();
+        var groupCodeList = (groupCode && !angular.isArray(groupCode) ) ? [groupCode] : groupCode ;
+        resource.getResult("groupDetailsByGroupCode.list", {
+                "group_code": groupCodeList
+            })
+            .then(function(records) {
+                if (records && records.results) {
+                    deferred.resolve(records.results);
+                }
+            }, deferred.reject)
+        return deferred.promise;
+    };
+    resource.getVehicleSchemeCodes = function(branchName,centreName) {
+        var deferred = $q.defer();
+        var centres = formHelper.enum('centre').data;
+        var branches = formHelper.enum('branch_id').data;
+        var centrevalue = filterFilter(centres, {
+            "value": Number(centreName)
+        }, true)[0].name;
+        var branchvalue = filterFilter(branches, {
+            "value": Number(branchName)
+        }, true)[0].name;
+        
+        resource.getResult("vehicleSchemeCodeDetails.list", {
+                "branch_name": branchvalue,
+                "centre_name":centrevalue
+            })
+            .then(function(response) {
+                var result = {
+                    headers: {
+                        "x-total-count": response.results.length
+                    },
+                    body: response.results
+                };
+                deferred.resolve(result);
+                console.log(response.results)
+            }, deferred.reject);
+        return deferred.promise;
+    };
+    resource.deseaseDetails = function(customerId) {
+        var deferred = $q.defer();
+        var request = {
+            "customer_id":customerId
+        };
+        resource.getResult("deseaseDetails", request).then(function(response) {
+              deferred.resolve(response);           
+        }, deferred.reject);
+        return deferred.promise;
+    };
+    resource.getBankAccountByPartnerForLoanRepay = function(partnerCode) {
+        var deferred = $q.defer();
+        request = {};
+        request.partner_code = (_.isNull(partnerCode) || _.isUndefined(partnerCode)) ? "%" : ("%" + partnerCode + "%");
+        resource.getResult("LoanRepayBankAccountByPartnerCode.list", request, 10).then(function(records) {
+            if (records && records.results) {
+                var result = {
+                    headers: {
+                        "x-total-count": records.results.length
+                    },
+                    body: records.results
+                };
+                deferred.resolve(result);
+            }
+        }, deferred.reject);
+        return deferred.promise;
+    };
+
+    resource.questionnaireDetails = function(moduleCode, process, stage) {
+        var deferred = $q.defer();
+        resource.getResult('questionnaireDetails.list', {
+            module_code: moduleCode,
+            process: process,
+            stage: stage
+        }).then(
+            function(res) {
+                if (res && res.results && res.results.length) {
+
+                    var selectType = _.filter(res.results, function(obj) {
+                        return obj.input_type == 'select';     
+                    });
+
+                    var nonSelectType = _.filter(res.results, function(obj) {
+                        return obj.input_type !== 'select';     
+                    });
+
+                    _.forEach(selectType, function(obj) {
+                        var key = _.findIndex(nonSelectType, {'party_type':obj.party_type, 'question':obj.question});
+                        if(key!==-1) {
+                            nonSelectType[key].select = _.merge(nonSelectType[key].select, {[obj.value]:obj.value});
+                        } else {
+                            obj.select = {[obj.value]:obj.value};
+                            nonSelectType.push(obj);
+                        }
+                    });
+
+                    deferred.resolve(nonSelectType);
+                } else {
+                    deferred.reject(res);
+                }
+            },
+            function(res) {
+                deferred.reject(res.data);
+            }
+        )
+        return deferred.promise;
+    };
+    resource.getReadyToDisburseAccountDetails = function(urn_no) {
+        var deferred = $q.defer();
+        var request = {
+            "urn_no":urn_no
+        };
+        resource.getResult("ReadyToDisburseAccountDetails.list", request).then(function(records) {
+            if (records && records.results) {
+                var result = {
+                    headers: {
+                        "x-total-count": records.results.length
+                    },
+                    body: records.results
+                };
+                deferred.resolve(result);
+            }         
+        }, deferred.reject);
+        return deferred.promise;
+    }
+
+    resource.getLTVValue = function(request) {
+        var deferred = $q.defer();
+        resource.getResult("LTV.list", request).then(function(records) {
+            if (records && records.results) {
+                var result = {
+                    headers: {
+                        "x-total-count": records.results.length
+                    },
+                    body: records.results
+                };
+                deferred.resolve(result);
+            }         
+        }, deferred.reject);
+        return deferred.promise;
+    };
+    resource.getAccountOverridestatus = function(accountNo,urnNo) {
+        var deferred = $q.defer();
+        var request = {
+            "accountNo":accountNo,
+            "urnNo":urnNo,
+        };
+        resource.getResult("accountOverrideStatus.list", request).then(function(response) {
+              deferred.resolve(response);           
+        }, deferred.reject);
+        return deferred.promise;
+    }
+    resource.getGoldRate = function(){
+        var deferred = $q.defer();
+        resource.getResult("goldRateDetails",{}).then(function(value){
+            if(value && value.results.length > 0){
+                deferred.resolve(value.results[0].goldRate);
+            }            
+        },deferred.reject);
+        return deferred.promise;
+    }
+    resource.getCustomerGroups = function(urnNo) {
+        var deferred = $q.defer();
+        resource.getResult("getCustomerGroups.list",{'urn_no':urnNo}).then(function(records) {
+            if (records && records.results) {
+                var result = {
+                    headers: {
+                        "x-total-count": records.results.length
+                    },
+                    body: records.results
+                };
+                deferred.resolve(result);
+            }
+        }, deferred.reject);
+        return deferred.promise;
+    }
+
+    resource.searchCustomerData = function(urnNo,customerName) {
+         var deferred = $q.defer();
+            var request = {
+                "urnNo" : urnNo || '',
+                "customerName":customerName || '',
+            }
+            resource.getResult("customer.list",request).then(function(records) {
                 if (records && records.results) {
                     var result = {
                         headers: {
@@ -727,25 +1429,26 @@ irf.models.factory('Queries', [
                 }
             }, deferred.reject);
             return deferred.promise;
-        }
-        resource.getReadyToDisburseAccountDetails = function(urn_no) {
-            var deferred = $q.defer();
-            var request = {
-                "urn_no":urn_no
-            };
-            resource.getResult("ReadyToDisburseAccountDetails.list", request).then(function(records) {
-                if (records && records.results) {
-                    var result = {
-                        headers: {
-                            "x-total-count": records.results.length
-                        },
-                        body: records.results
-                    };
-                    deferred.resolve(result);
-                }         
-            }, deferred.reject);
-            return deferred.promise;
-        }
-        return resource;
+    }
+    resource.getBankName = function(bankId){
+        var deferred = $q.defer();
+        resource.getResult("getBankName",{"bankId":bankId}).then(function(value){
+            if(value && value.results.length > 0){
+                Object.prototype.toString.call(value.results) == '[object Array]' ? deferred.resolve(value.results[0].bank_name) : deferred.resolve(value.results.bank_name)
+            }            
+        },deferred.reject);
+        return deferred.promise;
+    };
+    resource.getInsuranceFormName = function(productCode){
+        var deferred = $q.defer();
+        resource.getResult("getInsuranceFormName",{"productCode":productCode}).then(function(value){
+            if(value && value.results.length > 0){
+                Object.prototype.toString.call(value.results) == '[object Array]' ? deferred.resolve(value.results[0].FormName) : deferred.resolve(value.results.FormName)
+            }
+        },deferred.reject);
+        return deferred.promise;
+    };
+    return resource;
+    
     }
 ]);

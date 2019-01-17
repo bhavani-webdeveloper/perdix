@@ -5,6 +5,7 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
             "type": "search-list",
             "title": "CREDIT_MONITORING_SCHEDULED_QUEUE",
             initialize: function(model, form, formCtrl) {
+                model.branch = SessionStore.getCurrentBranch().branchId;
                 $log.info("creditMonitoring Schedule Queue got initialized");
             },
             definition: {
@@ -28,7 +29,7 @@ irf.pageCollection.factory(irf.page("loans.individual.creditMonitoring.CreditMon
                         },
                         "centre": {
                             "title": "CENTRE",
-                            "type": "integer",
+                            "type": ["integer", "null"],
                             "enumCode": "centre",
                             "x-schema-form": {
                                 "type": "select",

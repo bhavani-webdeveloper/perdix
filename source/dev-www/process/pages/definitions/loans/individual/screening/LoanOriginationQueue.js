@@ -8,7 +8,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 			"subTitle": "",
 
 			initialize: function(model, form, formCtrl) {
-				
+				model.branch = SessionStore.getCurrentBranch().branchId;
 			},
 
 			definition: {
@@ -30,15 +30,14 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 								"screenFilter": true
 							}
 						},
-						"branch": {
-	                    	"title": "BRANCH",
-	                    	"type": ["string", "null"],
-	                    	"enumCode": "branch",
+						'branch': {
+							'title': "BRANCH",
+							"type": ["string", "null"],
 							"x-schema-form": {
-								"type": "select",
+								"type": "userbranch",
 								"screenFilter": true
 							}
-	                    },
+						},
 						"centre": {
 							"title": "CENTRE",
 							"type": ["integer", "null"],
@@ -46,6 +45,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 								"type": "select",
 								"enumCode": "centre",
 								"parentEnumCode": "branch",
+								"parentValueExpr": "model.branch",
 								"screenFilter": true
 							}
 						},
@@ -55,10 +55,6 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 						},
 						"businessName": {
 							"title": "BUSINESS_NAME",
-							"type": "string"
-						},
-						"customerId": {
-							"title": "CUSTOMER_ID",
 							"type": "string"
 						},
 						"accountNumber": {
@@ -76,15 +72,15 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 						"pincode": {
 							"title": "PIN_CODE",
 							"type": "string"
-						},
-						"status": {
-							"type": "string",
-							"title": "STATUS",
-							"enumCode": "origination_status",
-							"x-schema-form": {
-								"type": "select"
-							}
 						}
+						// "status": {
+						// 	"type": "string",
+						// 	"title": "STATUS",
+						// 	"enumCode": "origination_status",
+						// 	"x-schema-form": {
+						// 		"type": "select"
+						// 	}
+						// }
 					},
 					"required": []
 				},
@@ -97,14 +93,13 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 
 					return IndividualLoan.search({
 	                    'stage': searchOptions.stage,
-	                    'branchName': searchOptions.branch,
-	                    'centreCode': searchOptions.centre,
+	                    'branchId':searchOptions.branch,
+					    'centreCode': searchOptions.centre,
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'accountNumber':searchOptions.accountNumber,
 	                    'area':searchOptions.area,
-	                    'status':searchOptions.status,
-	                    'villageName':searchOptions.villageName,	                    
+	                    'villageName':searchOptions.villageName,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,

@@ -29,8 +29,12 @@ define({
 				if(userRole && userRole.accessLevel && userRole.accessLevel === 5){
 					model.fullAccess = true;
 				}
-				model.partner = "KGFS";
-				model.isPartnerChangeAllowed = false;
+				model.partner = SessionStore.session.partnerCode;
+				model.isPartnerChangeAllowed = GroupProcess.hasPartnerCodeAccess(model.partner);
+				if(model.siteCode =='KGFS'){
+					model.partner = "KGFS";
+					model.isPartnerChangeAllowed = false;
+				}
 				$log.info("Checker1 Queue got initialized");
 			},
 			definition: {

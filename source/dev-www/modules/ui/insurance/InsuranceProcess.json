@@ -1,0 +1,437 @@
+{  
+   "InsurancePolicyInformation":{  
+      "type":"box",
+      "title":"INSURANCE_POLICY_INFORMATION",
+      "orderNo":10,   
+      "items":{  
+         "annuacomelIn":{  
+            "key":"insurancePolicyDetailsDTO.annuacomelIn",
+            "title":"ANNUAL_INCOME",
+            "type":"amount",
+            "autolov":true,
+            "orderNo":60
+         },
+         "assetValue":{  
+            "key":"insurancePolicyDetailsDTO.assetValue",
+            "title":"ASSET_VALUE",
+            "orderNo":65
+         },
+         "bankId":{  
+            "key":"insurancePolicyDetailsDTO.bankId",
+            "title":"BANK_ID",
+            "readonly":true,
+            "type":"number",
+            "orderNo":30
+         },
+         "benificieryFamilyMemberId":{  
+            "key":"insurancePolicyDetailsDTO.benificieryFamilyMemberId",
+            "title":"BENIFICIERY_FAMILY_MEMBER_ID",
+            "type":"string",
+            "readonly":true,
+            "orderNo":56
+         },
+         "benificieryName":{  
+            "key":"insurancePolicyDetailsDTO.benificieryName",
+            "title":"BENIFICIERY_NAME",
+            "type":"string",
+            "orderNo":55
+         },
+         "benificieryRelationship":{  
+            "key":"insurancePolicyDetailsDTO.benificieryRelationship",
+            "title":"INSURANCE_IN_NAME_OF",
+            "type":"lov",
+            "orderNo":50,
+            "resolver":"CustomerFamilyDetailsLOVConfiguration"
+         },
+         "branchId":{  
+            "key":"insurancePolicyDetailsDTO.branchId",
+            "title":"BRANCH_ID",
+            "readonly":true,
+            "type":"number",
+            "order":40
+         },
+         "centreId":{  
+            "key":"insurancePolicyDetailsDTO.centreId",
+            "title":"CENTER_ID",
+            "readonly":true,
+            "type":"number",
+            "order":50
+         },
+         "certificateNo":{  
+            "key":"insurancePolicyDetailsDTO.certificateNo",
+            "title":"CERTIFICATE_NUMBER",
+            "type":"string",
+            "orderNo":60
+         },
+         "contactNumber":{  
+            "key":"insurancePolicyDetailsDTO.contactNumber",
+            "title":"CONTACT_NUMBER",
+            "type":"string",
+            "readonly":true,
+            "orderNo":70
+         },
+         "currentStage":{  
+            "key":"insurancePolicyDetailsDTO.currentStage",
+            "title":"CURRENT_STAGE",
+            "type":"string",
+            "orderNo":75
+         },
+         "customerId":{  
+            "key":"insurancePolicyDetailsDTO.customerId",
+            "type":"number",
+            "readonly":true,
+            "title":"CUSTOMER_ID",
+            "orderNo":10
+         },
+         "dateOfBirth":{  
+            "key":"insurancePolicyDetailsDTO.dateOfBirth",
+            "type":"date",
+            "title":"DATE_OF_BIRTH",
+            "readonly":true,
+            "orderNo":90
+         },
+         "district":{  
+            "key":"insurancePolicyDetailsDTO.district",
+            "type":"string",
+            "readonly":true,
+            "title":"DISTRICT",
+            "orderNo":150
+         },
+         "dscId":{  
+            "key":"insurancePolicyDetailsDTO.dscId",
+            "type":"string",
+            "title":"DSC_ID",
+            "orderNo":110
+         },
+         "fullName":{  
+            "key":"insurancePolicyDetailsDTO.fullName",
+            "title":"FULL_NAME",
+            "type":"string",
+            "readonly":true,
+            "orderNo":20
+         },
+         "gender":{  
+            "key":"insurancePolicyDetailsDTO.gender",
+            "title":"GENDER",
+            "type":"string",
+            "readonly":true,
+            "orderNo":130
+         },
+         "insuranceType":{  
+            "key":"insurancePolicyDetailsDTO.insuranceType",
+            "title":"INSURANCE_TYPE",
+            "type":"string",
+            "readonly" : true,
+            "orderNo":130
+         },
+         "leadId":{  
+            "key":"insurancePolicyDetailsDTO.leadId",
+            "title":"LEAD_ID",
+            "type":"number",
+            "orderNo":130
+         },
+         "maturityDate":{  
+            "key":"insurancePolicyDetailsDTO.maturityDate",
+            "title":"MATURITY_DATE",
+            "type":"date",
+            "orderNo":130
+         },
+         "occupation":{  
+            "key":"insurancePolicyDetailsDTO.occupation",
+            "title":"OCCUPATION",
+            "type":"string",
+            "orderNo":130
+         },
+         "parentPolicyNumber":{  
+            "key":"insurancePolicyDetailsDTO.parentPolicyNumber",
+            "title":"PARENT_POLICY_NUMBER",
+            "type":"string",
+            "orderNo":130
+         },
+         "partnerCode":{  
+            "key":"insurancePolicyDetailsDTO.partnerCode",
+            "title":"PARTNER_CODE",
+            "type":"string",
+            "readonly" : true,
+           
+            "orderNo":130
+         },
+         "pincode":{  
+            "key":"insurancePolicyDetailsDTO.pincode",
+            "title":"PIN_CODE",
+            "type":"lov",
+            "resolver":"PincodeLOVInsuranceConfiguration",
+            "autolov":true,
+            "orderNo":130
+         },
+         "policyNumber":{  
+            "key":"insurancePolicyDetailsDTO.policyNumber",
+            "title":"POLICY_NUMBER",
+            "type":"string",
+            "orderNo":130
+         },
+         "premiumRateCode":{  
+            "key":"insurancePolicyDetailsDTO.premiumRateCode",
+            "title":"PREMIUM_RATE_CODE",
+            "type":"string",
+            "readonly" : true,
+            "orderNo":130
+         },
+         "productCode":{  
+            "key":"insurancePolicyDetailsDTO.productCode",
+            "title":"PRODUCT_CODE",
+            "type":"lov",
+            "orderNo":125
+         },
+         "purchaseDate":{  
+            "key":"insurancePolicyDetailsDTO.purchaseDate",
+            "title":"PURCHASE_DATE",
+            "type":"date",
+            "required" : true,
+            "orderNo":130
+         },
+         "recommendationAmount":{  
+            "key":"insurancePolicyDetailsDTO.recommendationAmount",
+            "title":"RECOMMENDATION_AMOUNT",
+            "type":"amount",
+            "orderNo":135
+         },
+          "recommendationStatus":{  
+            "key":"insurancePolicyDetailsDTO.recommendationStatus",
+            "title":"RECOMMENDATION_STATUS",
+            "type":"string",
+            "orderNo":134
+         },
+         "recommendationOverride":{  
+            "key":"insurancePolicyDetailsDTO.recommendationOverride",
+            "title":"RECOMMENDTAION_OVERRIDE",
+            "type":"checkbox",
+            "schema":{  
+               "default":false
+            },
+            "orderNo":136
+         },
+         "recommendationRemarks":{  
+            "condition":"model.insurancePolicyDetailsDTO.recommendationOverride == true",
+            "key":"insurancePolicyDetailsDTO.recommendationRemarks",
+            "title":"RECOMMENDATION_REMARKS",
+            "type":"select",
+            "enumCode":"recommendation_response",
+            "orderNo":137
+         },
+         "remarks":{  
+            "key":"insurancePolicyDetailsDTO.remarks",
+            "title":"REMARKS",
+            "type":"string",
+            "orderNo":145
+         },
+         
+            "question": {
+            "key":"insurancePolicyDetailsDTO.question",   
+            "required":true,
+            "type":"checkbox",
+            "fullwidth": true,
+            "schema":{
+                "default":false
+            },
+            "title": "Terms and conditions have been explained to customer.",
+            "orderNo" : 146
+        },
+         "startDate":{  
+            "key":"insurancePolicyDetailsDTO.startDate",
+            "title":"START_DATE",
+            "type":"date",
+            "orderNo":143
+         },
+         "state":{  
+            "key":"insurancePolicyDetailsDTO.state",
+            "title":"STATE",
+            "type":"string",
+            "readonly":true,
+            "orderNo":140
+         },
+         "status":{  
+            "key":"insurancePolicyDetailsDTO.status",
+            "title":"STATUS",
+            "type":"string",
+            "orderNo":130
+         },
+         "sumInsured":{  
+            "key":"insurancePolicyDetailsDTO.sumInsured",
+            "title":"SUM_INSURED",
+            "type":"select",
+            "required":true,
+            "enumCode":"insurance_premium_amounts",
+            "orderNo":140
+         },
+         "tenureInYears":{  
+            "key":"insurancePolicyDetailsDTO.tenureInYears",
+            "title":"TENURE_IN_YEARS",
+            "type":"number",
+            "orderNo":130
+         }
+        
+      }
+   },
+   
+   "InsuranceNomineeDetails":{  
+      "type":"box",
+      "title":"INSURANCE_NOMINEE_DETAILS",
+      "orderNo":20,
+      "items":{  
+         "nomineeDetailsDTO":{  
+            "key":"insurancePolicyDetailsDTO.nomineeDetailsDTO",
+            "type" : "array",
+            "view" : "fixed",
+            "remove" : null,
+            "add" : null,
+            "title":"INSURANCE_NOMINEE_DETAILS",
+            "items":{  
+               "nomineeName":{  
+                  "key":"insurancePolicyDetailsDTO.nomineeDetailsDTO[].nomineeName",
+                  "title":"NOMINEE_NAME",
+                  "type":"lov",
+                  "autolov":true,
+                  "orderNo":10
+               },
+               "nomineeRelationship":{  
+                  "key":"insurancePolicyDetailsDTO.nomineeDetailsDTO[].nomineeRelationship",
+                  "title":"NOMINEE_RELATIONSHIP",
+                  "type":"string",
+                  "readonly": true,
+                  "orderNo":20
+               },
+               "nomineeGender":{  
+                  "key":"insurancePolicyDetailsDTO.nomineeDetailsDTO[].nomineeGender",
+                  "title":"NOMINEE_GENDER",
+                  "readonly":true,
+                  "type": "string",
+                  "orderNo":30
+               },
+               "nomineePercentage":{
+                  "key":"insurancePolicyDetailsDTO.nomineeDetailsDTO[].nomineePercentage",
+                  "title":"NOMINEE_PERCENTAGE",
+                  "type":"number",
+                  "readonly":true,
+                  "orderNo":35
+               },
+               "nomineeIsMinor":{  
+                  "key":"insurancePolicyDetailsDTO.nomineeDetailsDTO[].nomineeIsMinor",
+                  "title":"NOMINEE_IS_MINOR",
+                  "type":"checkbox",
+                  "schema":{  
+                     "default":false
+                  },
+                  "orderNo":40
+               },
+               "nomineeMinorDob":{  
+                  "key":"insurancePolicyDetailsDTO.nomineeDetailsDTO[].nomineeMinorDob",
+                  "title":"NOMINEE_MINOR_DATEOFBIRTH",
+                  "condition":"model.insurancePolicyDetailsDTO.nomineeDetailsDTO[arrayIndex].nomineeIsMinor ==  true",
+                  "type":"date",
+                  "autolov":true,
+                  "orderNo":50
+               },
+               "gauridianName":{  
+                  "key":"insurancePolicyDetailsDTO.nomineeDetailsDTO[].gauridianName",
+                  "title":"GAURDIAN_NAME",
+                  "required":true,
+                  "condition":"model.insurancePolicyDetailsDTO.nomineeDetailsDTO[arrayIndex].nomineeIsMinor ==  true",
+                  "type":"string",
+                  "orderNo":60
+               },
+               "gauridianMinorRelationship":{  
+                  "key":"insurancePolicyDetailsDTO.nomineeDetailsDTO[].gauridianMinorRelationship",
+                  "title":"GAURDIAN_RELATIONSHIP",
+                  "type":"select",
+                  "required":true,
+                  "enumCode":"relation",
+                  "condition":"model.insurancePolicyDetailsDTO.nomineeDetailsDTO[arrayIndex].nomineeIsMinor ==  true",
+                  "orderNo":70
+               },
+               "gauridianGender":{  
+                  "key":"insurancePolicyDetailsDTO.nomineeDetailsDTO[].gauridianGender",
+                  "title":"GAURDIAN_GENDER",
+                  "enumCode":"gender",
+                  "required":true,
+                  "type":"select",
+                   "condition":"model.insurancePolicyDetailsDTO.nomineeDetailsDTO[arrayIndex].nomineeIsMinor ==  true",
+                  "orderNo":80
+               }
+            }
+         }
+      }
+   },
+   "InsuranceTransactionDetails":{
+    "type" : "box",
+    "title" : "INSURANCE_TRANSACTION_DETAILS",
+    "order" : 30,
+    "items" : {
+        "insuranceTransactionDetailsDTO" : {
+            "title" : "INSURANCE_TRANSACTION_DETAILS",
+            "type" : "array",
+            "view" : "fixed",
+            "remove" : null,
+            "add" : null,
+            "key" : "insurancePolicyDetailsDTO.insuranceTransactionDetailsDTO",
+            "items" : {
+                
+                "totalPremium" : {
+                    "type" : "amount",
+                    "key" : "insurancePolicyDetailsDTO.insuranceTransactionDetailsDTO[].totalPremium",
+                    "title" : "TOTAL_PREMIUM",
+                    "readonly":true,
+                    "order" : 10
+                },
+                "transactionDate" :{
+                    "type" : "date",
+                    "key" : "insurancePolicyDetailsDTO.insuranceTransactionDetailsDTO[].transactionDate",
+                    "title" : "TRANSACTION_DATE",
+                    "order" : 20
+                }
+               
+            }
+        }
+
+    }
+   },
+   "actionboxBeforeSave":{  
+      "type":"actionbox",
+      "condition": "!model.insurancePolicyDetailsDTO.id" , 
+      "items":{  
+         "save":{
+            "type":"button",
+            "title":"SAVE",
+            "onClick":"actions.save(model, formCtrl, form, $event)"
+         },
+         "OnlinePrint":{
+            "condition": "model.insurancePolicyDetailsDTO.id" , 
+            "type":"button",
+            "title":"Print",
+            "onClick":"actions.OnlinePrint(model, formCtrl, form, $event)"
+         },
+         "Back":{
+            "condition": "model.insurancePolicyDetailsDTO.id" , 
+            "type":"button",
+            "title":"BACK",
+            "onClick":"actions.Back(model, formCtrl, form, $event)"
+         }
+      }
+   },
+   "actionboxAfterSave":{  
+      "type":"actionbox",
+      "condition": "model.insurancePolicyDetailsDTO.id" , 
+      "items":{
+         "OnlinePrint":{
+            "type":"button",
+            "title":"Print",
+            "onClick":"actions.OnlinePrint(model, formCtrl, form, $event)"
+         },
+         "Back":{
+            "type":"button",
+            "title":"BACK",
+            "onClick":"actions.Back(model, formCtrl, form, $event)"
+         }
+      }
+   }
+}

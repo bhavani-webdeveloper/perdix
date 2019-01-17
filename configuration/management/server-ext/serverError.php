@@ -12,8 +12,17 @@
     }
     header("Content-Type: text/html");
     $error = DB::table('email_request')->where('id', $id)->first();
-    $file = DB::table('file_info')->where('file_id', $error->path)->first();
-    $content = file_get_contents($file->path);
+    // $file = DB::table('file_info')->where('file_id', $error->path)->first();
+    $url = getenv(PERDIX_V8_BASE_URL);
+    if (empty($error->path))
+    {   
+        
+        echo("<h4><center>OOPS..SOMETHING WENT WRONG ".json_decode('"\uD83D\uDE3F"')."</center><h4>");
+        
+    }
+    else{
+    $content = file_get_contents(getenv(PERDIX_V8_BASE_URL).'/api/stream/'.$error->path);
+    }
     $previous = $base.'/serverError.php?id='.($id-1);
     $next = $base.'/serverError.php?id='.($id+1);
 ?><!DOCTYPE html>

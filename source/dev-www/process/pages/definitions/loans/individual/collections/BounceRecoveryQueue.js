@@ -69,10 +69,10 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
             },
             paginationOptions: {
                 "getItemsPerPage": function(response, headers){
-                    return 10;
+                    return 100;
                 },
                 "getTotalItemsCount": function(response, headers){
-                    return headers && headers['x-total-count'] || 10;
+                    return headers && headers['x-total-count'];
                 }
             },
             listOptions: {
@@ -93,13 +93,17 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                     if (_.hasIn(item, 'amount2') && _.isString(item['amount2'])){
                         item.amount2 = parseFloat(item['amount2']);
                     }
+                    if (_.hasIn(item, 'part5') && _.isString(item['part5'])){
+                        item.part5 = parseFloat(item['part5']);
+                    }
                     return [
                         item.customerName,
                         "{{'LOAN_ACCOUNT_NUMBER'|translate}}: " + item.accountId,
-                        "{{'TOTAL_AMOUNT_DUE'|translate}}: " + Utils.ceil(item.amount1 + item.amount2 + item.amount3),
+                        "{{'TOTAL_AMOUNT_DUE'|translate}}: " + Utils.ceil(item.amount1 + item.amount2 + item.amount3 + item.part5),
                         "{{'PRINCIPAL_DUE'|translate}}: " + item.part1,         
                         "{{'INTEREST_DUE'|translate}}: " + item.part2,             
-                        "{{'PENAL_INTEREST'|translate}}: " + item.part3,  
+                        "{{'PENAL_INTEREST'|translate}}: " + item.part3,
+                        "{{'BOOKED_NOT_DUE_PENAL_INTEREST'|translate}}:" + item.part5,  
                         "{{'FEES_DUE'|translate}}: " + item.amount2,
                         "{{'UNAPPROVED_AMOUNT'|translate}}: " + item.repaidAmountSum
                     ]

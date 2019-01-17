@@ -164,6 +164,9 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "Lead", "LeadHe
                 return deferred.promise;
             },
             offline: true,
+            offlineStrategy : function(){
+                return window.cordova.platformId =="android" ?  "SQLITE" : undefined
+            },
             getOfflineDisplayItem: function(item, index) {
                 return [
                     item["customer"]["urnNo"],
@@ -201,14 +204,7 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "Lead", "LeadHe
                         };
                     },
                     //"offline": true
-                }, {
-                    key: "customer.centreId",
-                    "required": true,
-                    type: "select",
-                    "enumCode": "centre",
-                    "parentEnumCode": "branch_id",
-                    "parentValueExpr": "model.customer.customerBranchId",
-                }, {
+                },  {
                     key: "customer.enrolledAs",
                     type: "radios"
                 }, {
@@ -221,7 +217,9 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "Lead", "LeadHe
                     "onChange": function(modelValue, form, model) {
                         if (model.customer.age > 0) {
                             if (model.customer.dateOfBirth) {
-                                model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-') + moment(model.customer.dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                            } else {
+                                model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-MM-DD');
                             }
                         }
                     }
@@ -264,7 +262,9 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "Lead", "LeadHe
                     "onChange": function(modelValue, form, model) {
                         if (model.customer.spouseAge > 0) {
                             if (model.customer.spouseDateOfBirth) {
-                                model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                model.customer.spouseDateOfBirth = moment(new Date()).subtract(model.customer.spouseAge, 'years').format('YYYY-') + moment(model.customer.spouseDateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                            } else {
+                                model.customer.spouseDateOfBirth = moment(new Date()).subtract(model.customer.spouseAge, 'years').format('YYYY-MM-DD');
                             }
                         }
                     }
@@ -303,7 +303,16 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "Lead", "LeadHe
                             parentCode: 'model.customer.customerBranchId'
                         },
                         screenFilter: true
-                    }, {
+                    }, 
+                    {
+                        key: "customer.centreId",
+                        "required": true,
+                        type: "select",
+                        "enumCode": "centre",
+                        "parentEnumCode": "branch_id",
+                        "parentValueExpr": "model.customer.customerBranchId",
+                    },
+                    {
                         key: "customer.postOffice",
                         required: true
                     }, {

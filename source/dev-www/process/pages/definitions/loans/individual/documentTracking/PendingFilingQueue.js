@@ -77,7 +77,7 @@ irf.pageCollection.factory(irf.page("loans.individual.documentTracking.PendingFi
                         'accountNumber': searchOptions.account_number,
                         'scheduledDispatchDate': searchOptions.disbursement_date,
                         'page': pageOpts.pageNo,
-                        'itemsPerPage': pageOpts.itemsPerPage
+                        'per_page': pageOpts.itemsPerPage
                     }).$promise;
 
                     return promise;

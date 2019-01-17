@@ -1,9 +1,9 @@
 define({
 	pageUID: "management.ReferenceCodeSearch",
     pageType: "Engine",
-    dependencies: ["$log","formHelper","ReferenceCodeResource","$state","SessionStore","Utils"],
-    $pageFn: 
-    function($log, formHelper, ReferenceCodeResource,$state, SessionStore, Utils){
+    dependencies: ["$log","formHelper","ReferenceCodeResource","$state","SessionStore","Utils", "irfNavigator"],
+    $pageFn:
+    function($log, formHelper, ReferenceCodeResource,$state, SessionStore, Utils, irfNavigator){
 	var branch = SessionStore.getBranch();
 	return {
 		"type": "search-list",
@@ -21,7 +21,7 @@ define({
 			searchSchema: {
 				"type": 'object',
 				"title": 'SearchOptions',
-				"properties": 
+				"properties":
        					{
         					 "classifier": {
            					 "type": ["string", "null"],
@@ -51,6 +51,8 @@ define({
 
 				var promise = ReferenceCodeResource.search({
 					'classifier': searchOptions.classifier,
+					"name": searchOptions.name,
+					"code": searchOptions.code,
 					'per_page': pageOpts.itemsPerPage,
 					'page': pageOpts.pageNo
 				}).$promise;
@@ -94,7 +96,7 @@ define({
 							data: 'name'
 						},
 						{
-							title:'CODE',	
+							title:'CODE',
 							data: 'code'
 						},
 						{
@@ -141,12 +143,35 @@ define({
 							isApplicable: function(item, index){
 									return true;
 							}
-							}
+							},
+                            {
+                                name: "DELETE_REFERENCE_CODE",
+                                desc: "",
+                                icon: "fa fa-user",
+                                fn: function(item, index) {
+                                    var promise =  ReferenceCodeResource.referenceCodesDelete({
+                                        id: item.id
+                                    }).$promise.then(function(response){
+                                        console.log("insider here");
+                                        irfNavigator.go({
+                                            state: "Page.Adhoc",
+                                            pageName: "witfin.loans.LoanOriginationDashboard"
+                                        });
+                                    }, function(err){
+                                        console.log("error here");
+                                        console.log(err);
+                                    });
+
+                                },
+                                isApplicable: function(item, index) {
+                                    return true;
+                                }
+                            }
 						];
 				}
 			}
 		}
 	};
 }
-   
+
 })

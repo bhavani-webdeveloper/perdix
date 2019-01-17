@@ -39,6 +39,49 @@ function(
 
 	if ($scope.page.offline) {
 		if (angular.isFunction($scope.page.getOfflineDisplayItem)) {
+			var items = OfflineManager.retrieveItems_v2($scope.pageName, $scope.page.offlineStrategy);
+			$log.info(items);
+			items.then(function(items){
+                var offlineItems = [],
+                    displayItems = [];
+                var idx = 0;
+                _.forEach(items, function(item, key) {
+                	var jsonItem;
+                	if ($scope.page.offlineStrategy == 'SQLITE' && Utils.isCordova){
+                     jsonItem = JSON.parse(item);
+                	}else{
+                		jsonItem =item;
+                	}
+                    offlineItems[idx] = jsonItem;
+                    jsonItem.bundleModel.offlineKey = key;
+                    try {
+                        displayItems[idx] = $scope.page.getOfflineDisplayItem(jsonItem, idx);
+                    } catch (e) {
+                        displayItems[idx] = ['PARSING_ERROR', e.message];
+                    }
+                    for (var i = 0; i < displayItems[idx].length; i++) {
+                        if (angular.isNumber(displayItems[idx][i]))
+                            displayItems[idx][i] = displayItems[idx][i].toString();
+                    };
+                    idx++;
+                });
+                $scope.offlineItems = offlineItems;
+                $scope.displayItems = displayItems;
+            },
+            function(error) {
+            	$log.info(error);
+
+            })
+		} else {
+			$scope.error = "Display items not defined. Caanot view offline records. Contact admin";
+		}
+	} else {
+		$log.error("Offline not supported for " + $scope.pageName);
+		$scope.loadPage(null);
+	}
+
+	/*if ($scope.page.offline) {
+		if (angular.isFunction($scope.page.getOfflineDisplayItem)) {
 			var items = OfflineManager.retrieveItems($scope.pageName);
 
 			var offlineItems = [], displayItems = [];
@@ -66,7 +109,7 @@ function(
 		$log.error("Offline not supported for " + $scope.pageName);
 		$scope.loadPage(null);
 	}
-
+*/
 	$scope.offlineListInfo = {
 		actions: [{
 			name: "Open",
@@ -86,7 +129,8 @@ function(
 					_.pullAt($scope.displayItems, index);
 					_.pullAt($scope.offlineItems, index);
 					$log.warn(item.$$STORAGE_KEY$$);
-					OfflineManager.removeItem($scope.pageName, item.$$STORAGE_KEY$$);
+					//OfflineManager.removeItem($scope.pageName, item.$$STORAGE_KEY$$);
+					OfflineManager.removeItem_v2($scope.pageName, item.$$STORAGE_KEY$$, $scope.page.offlineStrategy);
 				});
 			},
 			isApplicable: function(item, index){

@@ -1,5 +1,5 @@
-irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHelper", "$state", "$q", "Utils", 'PagesDefinition', 'SessionStore', "entityManager", "IndividualLoan", "LoanBookingCommons",
-    function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionStore, entityManager, IndividualLoan, LoanBookingCommons) {
+irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHelper", "$state", "$q", "Utils", 'PagesDefinition', 'SessionStore', "entityManager", "IndividualLoan","Messaging",
+    function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionStore, entityManager, IndividualLoan, Messaging) {
         $log.info("Page.LoanOriginationDashboard.html loaded");
 
         var currentBranch = SessionStore.getCurrentBranch();
@@ -11,16 +11,22 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
             "items": [
                 "Page/Bundle/loans.individual.screening.ScreeningInput",
                 "Page/Engine/loans.individual.screening.ScreeningQueue",
+                "Page/Engine/loans.individual.screening.DedupeQueue",
                 "Page/Engine/loans.individual.screening.ScreeningReviewQueue",
                 "Page/Engine/loans.individual.screening.ApplicationQueue",
                 "Page/Engine/loans.individual.screening.ApplicationReviewQueue",
                 "Page/Engine/loans.individual.screening.FieldAppraisalQueue",
                 "Page/Engine/loans.individual.screening.FieldAppraisalReviewQueue",
+                "Page/Engine/loans.individual.screening.ZonalRiskReviewQueue",
                 "Page/Engine/loans.individual.screening.CentralRiskReviewQueue",
                 "Page/Engine/loans.individual.screening.CreditCommitteeReviewQueue",
                 "Page/Engine/loans.individual.screening.LoanSanctionQueue",
                 "Page/Engine/loans.individual.screening.RejectedQueue",
-                "Page/Engine/loans.individual.screening.RejectedAdminQueue"
+                "Page/Engine/loans.individual.screening.RejectedAdminQueue",
+                "Page/Engine/loans.individual.screening.BranchNewConversationQueue",
+                "Page/Engine/loans.individual.screening.BranchRepliedConversationQueue",
+                "Page/Engine/loans.individual.screening.SpokeNewConversationQueue",
+                "Page/Engine/loans.individual.screening.SpokeRepliedConversationQueue"
             ]
         };
 
@@ -34,9 +40,52 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
 
             if (sqMenu) {
                 sqMenu.data = 0;
-                _.forEach(centres, function(centre) {
+                    _.forEach(centres, function(centre) {
+                        IndividualLoan.search({
+                            'stage': 'Screening',
+                            'enterprisePincode': '',
+                            'applicantName': '',
+                            'area': '',
+                            'villageName': '',
+                            'customerName': '',
+                            'page': 1,
+                            'per_page': 1,
+                            'centreCode': centre.centreCode
+                        }).$promise.then(function(response, headerGetter) {
+                            sqMenu.data = sqMenu.data + Number(response.headers['x-total-count']);
+                        }, function() {
+                            sqMenu.data = '-';
+                        });
+                    });   
+            }
+
+
+            var dqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.DedupeQueue"];
+
+            if (dqMenu) {
+                dqMenu.data = 0;
+                if(centres.length){
+                    _.forEach(centres, function(centre) {
+                        IndividualLoan.search({
+                            'stage': 'Dedupe',
+                            'enterprisePincode': '',
+                            'applicantName': '',
+                            'area': '',
+                            'villageName': '',
+                            'customerName': '',
+                            'page': 1,
+                            'per_page': 1,
+                            'centreCode': centre.centreCode
+                        }).$promise.then(function(response, headerGetter) {
+                            dqMenu.data = dqMenu.data + Number(response.headers['x-total-count']);
+                        }, function() {
+                            dqMenu.data = '-';
+                        });
+                    });
+
+                }else{
                     IndividualLoan.search({
-                        'stage': 'Screening',
+                        'stage': 'Dedupe',
                         'enterprisePincode': '',
                         'applicantName': '',
                         'area': '',
@@ -44,15 +93,16 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                         'customerName': '',
                         'page': 1,
                         'per_page': 1,
-                        'branchName': currentBranch.branchName,
-                        'centreCode': centre.centreCode
                     }).$promise.then(function(response, headerGetter) {
-                        sqMenu.data = sqMenu.data + Number(response.headers['x-total-count']);
+                        dqMenu.data = Number(response.headers['x-total-count']);
                     }, function() {
-                        sqMenu.data = '-';
+                        dqMenu.data = '-';
                     });
-                });
+
+                }
+                
             }
+
 
             var srqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.ScreeningReviewQueue"];
             if (srqMenu) {
@@ -94,7 +144,28 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
 
             if (aqMenu) {
                 aqMenu.data = 0;
-                _.forEach(centres, function(centre) {
+                $log.info("centres");
+                $log.info(centres);
+                if(centres.length){
+                    _.forEach(centres, function(centre) {
+                        IndividualLoan.search({
+                            'stage': 'Application',
+                            'enterprisePincode': '',
+                            'applicantName': '',
+                            'area': '',
+                            'villageName': '',
+                            'customerName': '',
+                            'page': 1,
+                            'per_page': 1,
+                            'centreCode': centre.centreCode
+                        }).$promise.then(function(response, headerGetter) {
+                            aqMenu.data = aqMenu.data + Number(response.headers['x-total-count']);
+                        }, function() {
+                            aqMenu.data = '-';
+                        });
+                    });
+
+                }else{
                     IndividualLoan.search({
                         'stage': 'Application',
                         'enterprisePincode': '',
@@ -103,15 +174,14 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                         'villageName': '',
                         'customerName': '',
                         'page': 1,
-                        'per_page': 1,
-                        'branchName': currentBranch.branchName,
-                        'centreCode': centre.centreCode
+                        'per_page': 1
                     }).$promise.then(function(response, headerGetter) {
-                        aqMenu.data = aqMenu.data + Number(response.headers['x-total-count']);
+                        aqMenu.data = Number(response.headers['x-total-count']);
                     }, function() {
                         aqMenu.data = '-';
                     });
-                });
+                }
+                
             }
 
 
@@ -125,8 +195,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'villageName': '',
                     'customerName': '',
                     'page': 1,
-                    'per_page': 1,
-                    'branchName': currentBranch.branchName
+                    'per_page': 1
                 }).$promise.then(function(response, headerGetter) {
                     arqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
@@ -144,8 +213,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'villageName': '',
                     'customerName': '',
                     'page': 1,
-                    'per_page': 1,
-                    'branchName': currentBranch.branchName
+                    'per_page': 1
                 }).$promise.then(function(response, headerGetter) {
                     faqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
@@ -163,12 +231,29 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'villageName': '',
                     'customerName': '',
                     'page': 1,
-                    'per_page': 1,
-                    'branchName': currentBranch.branchName
+                    'per_page': 1
                 }).$promise.then(function(response, headerGetter) {
                     farqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     farqMenu.data = '-';
+                });
+            }
+
+            var zrrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.ZonalRiskReviewQueue"];
+            if (zrrqMenu) {
+                IndividualLoan.search({
+                    'stage': 'ZonalRiskReview',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1
+                }).$promise.then(function(response, headerGetter) {
+                    zrrqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    zrrqMenu.data = '-';
                 });
             }
 
@@ -182,8 +267,7 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     'villageName': '',
                     'customerName': '',
                     'page': 1,
-                    'per_page': 1,
-                    'branchName': currentBranch.branchName
+                    'per_page': 1
                 }).$promise.then(function(response, headerGetter) {
                     crrqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
@@ -260,6 +344,71 @@ irf.pages.controller("LoanOriginationDashboardCtrl", ['$log', '$scope', "formHel
                     lrq1Menu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     lrq1Menu.data = '-';
+                });
+            }
+
+            var bncqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.BranchNewConversationQueue"];
+            if (bncqMenu) {
+                Messaging.findConversation({
+                    'replied':  'false',
+                    'page': 1,
+                    'per_page': 1
+                }).$promise.then(function(response, headerGetter) {
+                    bncqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    bncqMenu.data = '-';
+                });
+            }
+
+            var brcqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.BranchRepliedConversationQueue"];
+            if (brcqMenu) {
+                Messaging.findConversation({
+                    'replied':  'true',
+                    'page': 1,
+                    'per_page': 1
+                }).$promise.then(function(response, headerGetter) {
+                    brcqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    brcqMenu.data = '-';
+                });
+            }
+
+            var sncqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.SpokeNewConversationQueue"];
+            if (sncqMenu) {
+                var centreCode = [];
+                _.forEach(centres, function(centre) {
+                    centreCode.push(centre.centreCode);
+                });
+                centreCode = _.join(centreCode, ',');
+                $log.info(centreCode);
+                Messaging.findConversation({
+                    'replied':  'false',
+                    'page': 1,
+                    'per_page': 1,
+                    'centreCode': centreCode
+                }).$promise.then(function(response, headerGetter) {
+                    sncqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    sncqMenu.data = '-';
+                });
+            }
+
+            var srcqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.SpokeRepliedConversationQueue"];
+            if (srcqMenu) {
+                var centreCode = [];
+                _.forEach(centres, function(centre) {
+                    centreCode.push(centre.centreCode);
+                });
+                centreCode = _.join(centreCode, ',');
+                Messaging.findConversation({
+                    'replied':  'true',
+                    'page': 1,
+                    'per_page': 1,
+                    'centreCode': centreCode
+                }).$promise.then(function(response, headerGetter) {
+                    srcqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    srcqMenu.data = '-';
                 });
             }
 

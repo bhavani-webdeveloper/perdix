@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal'),
 	["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
         ,"IndividualLoan", "Lead", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan", "BundleManager", "Message",
-        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,IndividualLoan, Lead, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager, Message) {
+        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan", "BundleManager", "Message", "irfNavigator",
+        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,IndividualLoan, Lead, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager, Message, irfNavigator) {
         	$log.info("Inside LoanBookingBundle");
 
         	return {
@@ -16,56 +16,79 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                         title: 'SUMMARY',
                         pageClass: 'summary',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order:5
                     },
                     {
                         pageName: 'customer.IndividualEnrolment2',
                         title: 'APPLICANT',
                         pageClass: 'applicant',
                         minimum: 1,
-                        maximum: 0
+                        maximum: 0,
+                        order:10
                     },
                     {
                         pageName: 'customer.IndividualEnrolment2',
                         title: 'CO_APPLICANT',
                         pageClass: 'co-applicant',
                         minimum: 5,
-                        maximum: 0
+                        maximum: 0,
+                        order:20
                     },
                     {
                         pageName: 'customer.IndividualEnrolment2',
                         title: 'GUARANTOR',
                         pageClass: 'guarantor',
                         minimum: 5,
-                        maximum: 0
+                        maximum: 0,
+                        order:30
                     },
                     {
                         pageName: 'customer.EnterpriseEnrolment2',
                         title: 'BUSINESS',
                         pageClass: 'business',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order:40
+                    },
+                    {
+                        pageName: 'loans.individual.screening.PersonalDiscussion',
+                        title: 'PERSONAL_DISCUSSION',
+                        pageClass: 'personal-discussion',
+                        minimum: 1,
+                        maximum: 1,
+                        order:42
                     },
                     {
                         pageName: 'loans.individual.screening.LoanRequest',
                         title: 'LOAN_REQUEST',
                         pageClass: 'loan-request',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order:45
                     },
                     {
                         pageName: 'loans.individual.screening.CreditBureauView',
                         title: 'CREDIT_BUREAU',
                         pageClass: 'cbview',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order:50
                     },
                     {
                         pageName: 'loans.individual.screening.Review',
                         title: 'REVIEW',
                         pageClass: 'loan-review',
                         minimum: 1,
-                        maximum: 1
+                        maximum: 1,
+                        order:60
+                    }, {
+                        pageName: 'loans.individual.screening.detail.PortfolioAnalyticsView',
+                        title: 'Portfolio Analytics',
+                        pageClass: 'portfolio-analytics',
+                        minimum: 1,
+                        maximum: 1,
+                        order: 90
                     }
                 ],
                 "bundlePages": [],
@@ -114,6 +137,12 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                                     var urnNos = [];
                                     var loanCustomerId = res.customerId;
 
+                                    if (res.currentStage!= 'FieldAppraisal'){
+                                        PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
+                                        irfNavigator.goBack();
+                                        return;
+                                    }
+
                                     for (var i=0; i<res.loanCustomerRelations.length; i++){
                                         var cust = res.loanCustomerRelations[i];
                                         if (cust.relation == 'APPLICANT' || cust.relation == 'Applicant' || cust.relation =='Sole Proprieter'){
@@ -141,7 +170,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                                             loanAccount: res
                                         }
                                     });
-                                    
+
                                     $this.bundlePages.push({
                                         pageClass: 'applicant',
                                         model: {
@@ -173,12 +202,17 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                                             loanRelation: {customerId: loanCustomerId}
                                         }
                                     })
+                                    var temp_model = {
+                                        loanAccount:res
+                                    }
+                                    $this.bundlePages.push({
+                                        pageClass: 'personal-discussion',
+                                        model: temp_model 
+                                    });
 
                                     $this.bundlePages.push({
                                         pageClass: 'loan-request',
-                                        model: {
-                                            loanAccount: res
-                                        }
+                                        model: temp_model
                                     });
 
                                     $this.bundlePages.push({
@@ -187,7 +221,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                                             loanAccount: res
                                         }
                                     });
-                                    
+                                    $this.bundlePages.push({
+                                        pageClass: 'portfolio-analytics',
+                                        model: {
+                                            loanId: bundleModel.loanId
+                                        }
+                                    });
+
                                     deferred.resolve();
 
                                 }, function(httpRes){
@@ -207,7 +247,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                 },
         		eventListeners: {
         			"on-customer-load": function(pageObj, bundleModel, params){
-                        
+
         			},
                     "customer-loaded": function(pageObj, bundleModel, params){
                         switch (pageObj.pageClass){
@@ -255,7 +295,11 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                         if (enrolmentDetails.customerId){
                             BundleManager.broadcastEvent('remove-customer-relation', enrolmentDetails);
                         }
-                    }
+                    },
+                    "load-personal-discussion-object": function(form, formCtrl, model, bundlePageObj,bundleModel){
+                        BundleManager.broadcastEvent('load-personal-discussion', form, formCtrl, model,bundlePageObj, bundleModel);
+                        //object.initialize(model, form, formCtrl, bundlePageObj, bundleModel);
+                    },
         		}
         	}
         }

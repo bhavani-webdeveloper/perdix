@@ -4,7 +4,13 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollment"),
 "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "irfNavigator",
 function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
     PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, irfNavigator){
-
+ 
+    var siteCode = SessionStore.getGlobalSetting('siteCode');
+    var requiredBySiteCode = {
+        "customer.spouseDateOfBirth": siteCode != 'IREPDhan',
+        "customer.spouseFirstName": siteCode != 'IREPDhan',
+        "customer.spouseAge": siteCode != 'IREPDhan'
+    }
     return {
         "type": "schema-form",
         "title": "INDIVIDUAL_ENROLLMENT", 
@@ -19,6 +25,42 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             model = Utils.removeNulls(model,true);
             //model.customer.kgfsName = SessionStore.getBranch();
             model.customer.customerType = 'Individual';
+        },
+        modelPromise: function(pageId, _model) {
+            var deferred = $q.defer();
+            if(!pageId) {
+                deferred.resolve(_model);
+                return deferred.promise;
+            }
+            PageHelper.showLoader();
+            irfProgressMessage.pop("enrollment-save","Loading Customer Data...");
+            Enrollment.getCustomerById({id:pageId},function(resp,header){
+                model = _model;
+                model.customer = resp;
+                model.customer.addressProofSameAsIdProof=Boolean(model.customer.title);
+                model.customer.customerBranchId = model.customer.customerBranchId || _model.customer.customerBranchId;
+                model.customer.kgfsBankName = model.customer.kgfsBankName || SessionStore.getBankName();
+                model = EnrollmentHelper.fixData(model);
+                if (model.customer.dateOfBirth) {
+                    model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                }
+                if (model.customer.spouseDateOfBirth) {
+                    model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                }
+
+                irfProgressMessage.pop("enrollment-save","Load Complete",2000);
+                deferred.resolve(model);
+                PageHelper.hideLoader();
+            },function(resp){
+                PageHelper.hideLoader();
+                irfProgressMessage.pop("enrollment-save","An Error Occurred. Failed to fetch Data",5000);
+                $stateParams.confirmExit = false;
+                $state.go("Page.Engine",{
+                    pageName:"CustomerSearch",
+                    pageId:null
+                });
+            });
+            return deferred.promise;
         },
         offline: false,
         getOfflineDisplayItem: function(item, index){
@@ -35,7 +77,8 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 {
                     key: "customer.customerBranchId",
                     title:"BRANCH_NAME",
-                    type: "select"
+                    type: "select",
+                    enumCode: "userbranches",
                 },
                 {
                     key:"customer.centreId",
@@ -43,8 +86,9 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                     /*filter: {
                         "parentCode": "branch_id"
                     },*/
-                    parentEnumCode:"branch_id",
-                    screenFilter: true
+                    parentEnumCode:"userbranches",
+                    parentValueExpr: "model.customer.customerBranchId",
+                    // screenFilter: true
                 },
                 {
                     key: "customer.oldCustomerId",
@@ -110,10 +154,25 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 {
                     key:"customer.religion",
                     type:"select"
+                },               
+                {
+                    key:"customer.organisation",
+                    type:"string",
+                    condition:"model.siteCode == 'IFMRCapital'"                                  
+                },
+                {
+                    key:"customer.designation",
+                    type:"string",
+                    condition:"model.siteCode == 'IFMRCapital'"                                  
                 },
                 {
                     key: "customer.fatherFirstName",
                     title: "FATHER_FULL_NAME"
+                },
+                {
+                    key: "customer.motherName",
+                    title: "MOTHER_NAME",
+                    condition:"model.siteCode == 'IFMRCapital'"
                 },
                 {
                     key:"customer.maritalStatus",
@@ -122,7 +181,8 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 {
                     key: "customer.spouseFirstName",
                     title: "SPOUSE_FULL_NAME",
-                    condition:"model.customer.maritalStatus==='MARRIED'",
+                    required: requiredBySiteCode['customer.spouseFirstName'],
+                    condition :  "model.customer.maritalStatus === 'MARRIED'",
                     type:"qrcode",
                     onCapture: function(result, model, form) {
                         $log.info(result); // spouse id proof
@@ -140,7 +200,8 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 {
                     key:"customer.spouseDateOfBirth",
                     type:"date",
-                    condition:"model.customer.maritalStatus==='MARRIED'",
+                    required: requiredBySiteCode['customer.spouseDateOfBirth'],
+                    condition :  "model.customer.maritalStatus === 'MARRIED'",
                     "onChange": function(modelValue, form, model) {
                         if (model.customer.spouseDateOfBirth) {
                             model.customer.spouseAge = moment().diff(moment(model.customer.spouseDateOfBirth, SessionStore.getSystemDateFormat()), 'years');
@@ -150,8 +211,9 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 {
                     key:"customer.spouseAge",
                     title: "SPOUSE_AGE",
+                    required: requiredBySiteCode['customer.spouseAge'],
+                    condition :  "model.customer.maritalStatus === 'MARRIED'",
                     type:"number",
-                    condition:"model.customer.maritalStatus==='MARRIED'",
                     "onChange": function(modelValue, form, model) {
                         if (model.customer.spouseAge > 0) {
                             if (model.customer.spouseDateOfBirth) {
@@ -161,7 +223,7 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                             }
                         }
                     }
-                },
+                }
                 
             ]
         },
@@ -171,6 +233,10 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
             "items": [
                 "customer.mobilePhone",
                 "customer.landLineNo",
+                {                   
+                    "key": "customer.email",
+                    condition:"model.siteCode == 'IFMRCapital'" 
+                },
                 {
                     type: "fieldset",
                     title: "CUSTOMER_RESIDENTIAL_ADDRESS",
@@ -191,6 +257,12 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 },
                                 "state": {
                                     key: "customer.state"
+                                },
+                                "division": {
+                                    key: "customer.division"
+                                },
+                                "region": {
+                                    key: "customer.region"
                                 }
                             },
                             outputMap: {
@@ -212,7 +284,9 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 return Queries.searchPincodes(
                                     inputModel.pincode,
                                     inputModel.district,
-                                    inputModel.state
+                                    inputModel.state,
+                                    inputModel.division,
+                                    inputModel.region
                                 );
                             },
                             getListDisplayItem: function(item, index) {
@@ -253,13 +327,21 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 },
                                 "mailingState": {
                                     key: "customer.mailingState"
+                                },
+                                "mailingDivision": {
+                                    key: "customer.mailingDivision"
+                                },
+                                "mailingRegion": {
+                                    key: "customer.mailingRegion"
                                 }
                             },
                             outputMap: {
                                 "mailingDivision": "customer.mailingLocality",
                                 "mailingPincode": "customer.mailingPincode",
                                 "mailingDistrict": "customer.mailingDistrict",
-                                "mailingState": "customer.mailingState"
+                                "mailingState": "customer.mailingState",
+                                "mailingRegion": "customer.mailingRegion"
+
                             },
                             searchHelper: formHelper,
                             initialize: function(inputModel) {
@@ -273,7 +355,9 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 return Queries.searchPincodes(
                                     inputModel.mailingPincode,
                                     inputModel.mailingDistrict,
-                                    inputModel.mailingState
+                                    inputModel.mailingState,
+                                    inputModel.mailingDivision,
+                                    inputModel.mailingRegion
                                 );
                             },
                             getListDisplayItem: function(item, index) {

@@ -135,8 +135,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                     "getListDisplayItem": function(item, index) {
                         return [
                             '{{"ACCOUNT_NUMBER"|translate}}: ' + item.accountNumber,
-                            '<i class="fa fa-rupee"></i> ' + item.demandAmount,
-                            '{{"ENTITY_NAME"|translate}}: ' + item.customerName
+                            '<i class="fa fa-rupee"></i> ' + item.demandAmount
+                        //    '{{"ENTITY_NAME"|translate}}: ' + item.customerName
                         ];
                     },
                     "onSelect": function(result, model, context) {
@@ -306,7 +306,8 @@ irf.pageCollection.factory(irf.page("loans.individual.achpdc.ACHClearingCollecti
                         PageHelper.clearErrors();
                         PageHelper.showLoader();
                         model.bankAccountNumber = '';
-                        var accountDetailPromise = Queries.getBankAccountsByPartnerForLoanRepay("Kinara").then(function(res){
+                        var accountDetailPromise = Queries.getBankAccountsByPartnerForLoanRepay(
+                            SessionStore.getGlobalSetting("mainPartner") || "Kinara").then(function(res){
 
                             var records = res.body;
 

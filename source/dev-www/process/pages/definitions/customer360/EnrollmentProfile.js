@@ -5,6 +5,35 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
     PageHelper, Utils, BiometricService,CustomerBankBranch){
         // userAllowedPages["Page/Engine/customer360.EnrollmentProfile"]
     var branch = SessionStore.getBranch();
+    var mapCustomerToSelfFamilyMemeber = function(model){
+        var temp = model.customer.familyMembers;
+        if(temp.length > 0){
+            var isThere = false;
+            for (var i=0;i<1;i++){
+                if(temp[i].relationShip == "Self"){
+                    isThere =false;
+                    temp[i].customerId = model.customer.id;
+                    temp[i].dateOfBirth = model.customer.dateOfBirth;
+                    temp[i].gender = model.customer.gender;
+                    temp[i].maritalStatus = model.customer.maritalStatus;
+                    temp[i].familyMemberFirstName = model.customer.firstName;
+                    temp[i].age = model.customer.age;
+                }
+            }
+            // if(!isThere){
+            //     temp.push({
+            //         relationShip: "Self",
+            //         customerId:model.customer.id,
+            //         dateOfBirth:model.customer.dateOfBirth,
+            //         gender:model.customer.gender,
+            //         maritalStatus:model.customer.maritalStatus,
+            //         familyMemberFirstName:model.customer.firstName
+            //     })
+            // }
+            model.customer.familyMembers = temp;
+            return model.customer.familyMembers;
+        }
+    }
 
     var initData = function(model) {
         var branch1 = formHelper.enum('branch_id').data;
@@ -28,6 +57,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
         "subTitle": "",
         initialize: function (model, form, formCtrl) {
             $log.info("Profile Page got initialized");
+            console.log(model);
             initData(model);
             console.log("TEst");
             console.log(model.customer);
@@ -2905,6 +2935,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                         return false;
                     }
                     if (!( EnrollmentHelper.validateDate(model))) {
+                        PageHelper.hideLoader();
                         return false;
                     }
                     if(model.customer.latitude == "0") {
@@ -2915,7 +2946,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                     }
                     var reqData = _.cloneDeep(model);
                     EnrollmentHelper.fixData(reqData);
-
+                    reqData.customer.familyMembers = mapCustomerToSelfFamilyMemeber(reqData);
                     if (reqData.customer.currentStage == 'Completed'){ 
                         reqData['enrollmentAction'] = 'PROCEED';
                     } else {

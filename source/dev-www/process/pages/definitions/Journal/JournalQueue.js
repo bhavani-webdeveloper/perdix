@@ -8,21 +8,146 @@ define({
 
         return {
             "type": "search-list",
-            "title": "JOURNAL_QUEUE",
+            "title": "BRANCH_POSTING_JOURNAL_SEARCH",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 $log.info("Journal Queue got initialized");
             },
             definition: {
-                title: "SEARCH_JOURNAL",
+                title: "SEARCH_BRANCH_JOURNAL",
                 searchForm: [
-                    "*"
+                    "transactionName",
+                   
+                    "transactionDescription",
+                    {   
+                        key: 'debitGLNo',
+                        title: "DEBIT_GL_NO",
+
+                        "type": "lov",
+                        searchHelper: formHelper,
+                        lovonly: true,
+                        "inputMap": {
+                            "productCode": {
+                                "key": "productCode",
+                                "title": "PRODUCT_CODE",
+                                "type": "string"
+                                
+                            },
+                            "glName": {
+                                "key": "glName",
+                                "title": "GL_NAME",
+                                "type": "string"
+                                
+                            },
+                            "category": {
+                                "key": "category",
+                                "title": "CATEGORY",
+                                "type": "select",
+                                "enumCode":"gl_category"
+                            }
+                        },
+                        "outputMap": {
+                            "debitGLNo": "productCode",
+                        },
+                        "searchHelper": formHelper,
+                        "search": function(inputModel, form,model) {
+                            var ret = [];
+                            var defered = $q.defer();
+                            Journal.listAccountCode({
+                                'productCode': inputModel.productCode,
+                                'glName': inputModel.glName,
+                                'category': inputModel.category,
+                                'glType': 'LEDGER'
+                            }).$promise.then(function(response){
+                                defered.resolve(response);
+                            });
+                            return defered.promise;
+                        },
+                        getListDisplayItem: function(data, index) {
+                            return [
+                                data.category,
+                                data.productCode,
+                                data.glType
+                            ];
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            model.debitGLNo = valueObj.productCode;
+                        }
+                    
+                    },
+                   
+                    {   
+                        key: 'creditGLNo',
+                        title: "CREDIT_GL_NO",
+                        "type": "lov",
+                        searchHelper: formHelper,
+                        lovonly: true,
+                        "inputMap": {
+                            "productCode": {
+                                "key": "productCode",
+                                "title": "PRODUCT_CODE",
+                                "type": "string"
+                                
+                            },
+                            "glName": {
+                                "key": "glName",
+                                "title": "GL_NAME",
+                                "type": "string"
+                                
+                            },
+                            "category": {
+                                "key": "category",
+                                "title": "CATEGORY",
+                                "type": "select",
+                                "enumCode":"gl_category"
+                            }
+                        },
+                        "outputMap": {
+                            "creditGLNo": "productCode",
+                        },
+                        "searchHelper": formHelper,
+                        "search": function(inputModel, form,model) {
+                            var ret = [];
+                            var defered = $q.defer();
+                            Journal.listAccountCode({
+                                'productCode': inputModel.productCode,
+                                'glName': inputModel.glName,
+                                'category': inputModel.category,
+                                'glType': 'LEDGER'
+                            }).$promise.then(function(response){
+                                defered.resolve(response);
+                            });
+                            return defered.promise;
+                        },
+                        getListDisplayItem: function(data, index) {
+                            return [
+                                data.category,
+                                data.productCode,
+                                data.glType
+                            ];
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            model.creditGLNo = valueObj.productCode;
+                        }
+                    
+                    },
+
                 ],
                 autoSearch: true,
                 searchSchema: {
                     "type": 'object',
                     "title": 'SearchOptions',
                     "properties": {
+                        productCode:{
+                            "key": "productCode"
+                            
+                        },
+                        glName:{
+                            "key": "glName"
+                        },
+                        category:{
+                            "key": "category"
+                        },
                         "transactionName": {
                             "title": "TRANSACTION_NAME",
                             "type": "string"
@@ -31,25 +156,13 @@ define({
                             "title": "TRANSACTION_DESCRIPTION",
                             "type": "string"
                         },
-                        "debitGLNo": {
-                            "title": "DEBIT_GL_NO",
-                            "type": "string",
+                        "debitGLNo":{
+                            "key": "debitGLNo"
                         },
-                        "creditGLNo": {
-                            "title": "CREDIT_GL_NO",
-                            "type": "string",   
-                        },
-                        "isApplicable": {
-                            "title": "IS_APPLICABLE",
-                            "type": "string",
-                            "x-schema-form": {
-                                "type": "select",
-                                "titleMap":{
-                                    0:"NO",
-                                    1:"YES"
-                                }
-                            }
-                        },
+                        "creditGLNo":{
+                            "key": "creditGLNo"
+                        }
+                       
 
                     },
                     "required": []
@@ -65,8 +178,7 @@ define({
                         'debitGLNo': searchOptions.debitGLNo,
                         'creditGLNo': searchOptions.creditGLNo,
                         'page': pageOpts.pageNo,
-                        'per_page': pageOpts.itemsPerPage,
-                        'isApplicable': searchOptions.isApplicable,
+                        'per_page': pageOpts.itemsPerPage
                     }).$promise;
                     return promise;
                 },
@@ -126,9 +238,6 @@ define({
                         }, {
                             title: 'CREDIT_GL_NO',
                             data: 'creditGLNo'
-                        }, {
-                            title: 'IS_APPLICABLE',
-                            data: 'isApplicable'
                         }]
                     },
                     getActions: function() {

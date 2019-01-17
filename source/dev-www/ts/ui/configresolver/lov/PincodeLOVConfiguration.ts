@@ -3,7 +3,10 @@ import {NGHelper} from "../../../infra/helpers/NGHelper";
 import AngularResourceService = require("../../../infra/api/AngularResourceService");
 export class PincodeLOVConfiguration extends LOVElementConfiguration {
     inputMap: Object = {
-        "pincode": "customer.pincode",
+        "pincode":{
+             key:"customer.pincode",
+             required : true
+        },
         "district": {
             key: "customer.district"
         },

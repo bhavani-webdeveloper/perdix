@@ -1,10 +1,8 @@
 define({
     pageUID: "management.ReceiptPrint",
     pageType: "Engine",
-    dependencies: ["$log","Pages_ManagementHelper","PagesDefinition","Queries","Lead","Enrollment","BranchCreationResource", "$q",'PageHelper', 'formHelper','irfProgressMessage',
-        'SessionStore', "$state", "$stateParams", "Masters", "Utils"],
-    $pageFn: function($log,Pages_ManagementHelper,PagesDefinition,Queries,Lead,Enrollment,BranchCreationResource, $q, PageHelper, formHelper, irfProgressMessage,
-        SessionStore, $state, $stateParams, Masters, Utils) {
+    dependencies: ["$log","Lead",'PageHelper',"$stateParams","Utils"],
+    $pageFn: function($log,Lead, PageHelper, $stateParams,Utils) {
 
         var webPrintStyle = '<style>@media print { body * { visibility: hidden; } .web-print-wrapper, .web-print-wrapper * { visibility: visible } .web-print-wrapper { position: absolute; top: 0; left: 0;} html, body {height: 100%;}}</style>';
         

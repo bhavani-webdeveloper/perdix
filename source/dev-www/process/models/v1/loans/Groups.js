@@ -46,6 +46,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource, $q, irfSimpleMo
             method:'POST',
             url:endpoint+'/:service/:action'
         },
+        overrideDsc:{
+            method:'POST',
+            url:endpoint+'/overridedsc'
+        },
         dscQuery:{
             method:'POST',
             url:endpoint+'/grouploandsc',
