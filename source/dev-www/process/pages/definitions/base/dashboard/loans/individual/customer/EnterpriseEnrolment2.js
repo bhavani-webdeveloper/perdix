@@ -336,7 +336,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "BankAccounts.customerBankAccounts.bankStatements": {
                         "titleExpr": "moment(model.customer.customerBankAccounts[arrayIndexes[0]].bankStatements[arrayIndexes[1]].startMonth).format('MMMM YYYY') + ' ' + ('STATEMENT_DETAILS' | translate)",
                         "titleExprLocals": {moment: window.moment},
-                    },                         
+                    },    
+                    "EnterpriseInformation.businessHistory": {
+                        "required": true
+                    },                     
                }
             }
             var repositoryAdditions = function(bundlePageObj){
