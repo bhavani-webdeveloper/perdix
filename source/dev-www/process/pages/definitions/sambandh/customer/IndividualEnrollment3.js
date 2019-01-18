@@ -2005,7 +2005,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "Telecalling": {
                                 type: "box",
                                 colClass: "col-sm-6",
-                                title: "Questionnaire Details",
+                                title: "PPI_INDICATORS",
                                 "orderNo": 70,
                                 items: {
                                     "questionnaire": {
