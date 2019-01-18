@@ -233,8 +233,12 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                         }).$promise.then(function() {
 
                                         }, function(err) {
-                                            irfProgressMessage.pop("Locking",err.data.error, 6000);
-                                            irfNavigator.goBack();
+                                            Utils.alert(err.data.error).finally(function(){
+                                                Utils.alert(err.data.error).finally(function () {
+                                                    irfNavigator.goBack();
+                                                    deferred.reject();
+                                                });
+                                            });
                                         });
                                     })
                             } else {
