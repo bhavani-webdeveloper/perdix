@@ -292,10 +292,10 @@ irf.models.factory('GroupProcess',
         mywindow.document.write('</body>' + '<div style="text-align : center">' + '<p>' + "" + '</p>' + '</div>' + '</html>');
         mywindow.document.write('</body>' + '<div style="text-align : center">' + '<p>' + repaymentInfo.partnerCode + repaymentInfo.productCode + '</p>' + '</div>' + '</html>');
         mywindow.document.write('</body>' + '<div style="font-size:17px;margin-left:11em;">' + '<p>' + "Branch Code :" + '<span style= "margin-left : 40px">' + opts.branch_code+ '</span>'+ '</p>' + '</div>' + '</html>');
-        mywindow.document.write('</body>' + '<div style="font-size:17px;margin-left:11em">' + '<p>' + "Customer Id :"  + '<span style= "margin-left : 44px">'+ repaymentInfo.customerId + '</span>'+'</p>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="font-size:17px;margin-left:11em">' + '<p>' + "Customer Id :"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.customerId + '</span>'+'</p>' + '</div>' + '</html>');
         mywindow.document.write('</body>' + '<div style="font-size:17px;margin-left:11em">' + '<p>' + "Customer URN :"  + '<span style= "margin-left : 28px">'+ repaymentInfo.customerURN + '</span>'+'</p>' + '</div>' + '</html>');
         mywindow.document.write('</body>' + '<div style="font-size:17px;margin-left:11em">' + '<p>' + "Customer Name :" + '<span style= "margin-left : 28px">' + repaymentInfo.customerName + '</span>'+'</p>' + '</div>' + '</html>');
-        mywindow.document.write('</body>' + '<div style="font-size:17px;margin-left:11em">' + '<p>' + "Loan A/C No :"  + '<span style= "margin-left : 44px">'+ repaymentInfo.accountNumber + '</span>'+'</p>' + '</div>' + '</html>');
+        mywindow.document.write('</body>' + '<div style="font-size:17px;margin-left:11em">' + '<p>' + "Loan A/C No :"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.accountNumber + '</span>'+'</p>' + '</div>' + '</html>');
         mywindow.document.write('</body>' + '<div style="font-size:17px;margin-left:11em">' + '<p>' + "Transaction Type :"  + '<span style= "margin-left : 27px">'+ repaymentInfo.transactionType + '</span>'+'</p>' + '</div>' + '</html>');
         mywindow.document.write('</body>' + '<div style="font-size:17px;margin-left:11em">' + '<p>' + "Transaction ID :"  + '<span style= "margin-left : 37px">'+ repaymentInfo.transactionID + '</span>'+'</p>' + '</div>' + '</html>');
         mywindow.document.write('</body>' + '<div style="font-size:17px;margin-left:11em">' + '<p>' + "Loan Amount :"  + '<span style= "margin-left : 45px">'+ repaymentInfo.loanAmount + '</span>'+'</p>' + '</div>' + '</html>');
@@ -318,6 +318,57 @@ irf.models.factory('GroupProcess',
         mywindow.print();
         mywindow.close();
         return true;
+    }
+
+    resource.generateWebReceipt = function(repaymentInfo,opts,value) {
+        // var mywindow = window.open('', 'my div', 'height=400,width=600');
+        var curTime = moment();
+        var curTimeStr = curTime.local().format("DD-MM-YYYY HH:MM:SS");
+        var receiptData = 
+        '<div style="text-align : center">' + '<h4><b>' + "DISBURSE RECEIPT" + '</b></h3>' + '</div>' + 
+        '<div style="text-align : center">' + '<h5><b>' + opts.entity_name + '</b></p>' + '</div>' + 
+        '<div style="text-align : center">' + '<h6><b>' + opts.branch + '</b></h4>' + '</div>' + 
+        '<div style="text-align : center">' + '<p>' + "Date:" + curTimeStr + '</p>' + '</div>' + 
+        '<div style="text-align : center">' + '<p><b>' + opts.ReceiptName + '</b></p>' + '</div>' + 
+        '<div style="text-align : center">' + '<p>' + "" + '</p>' + '</div>' + 
+        '<div style="text-align : center">' + '<p>' + repaymentInfo.productCode + '</p>' + '</div>' + 
+        '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Branch Code :" + '<span style="border-bottom: 1px solid black; width: 100%;">' + opts.branch_code+ '</span>'+ '</p>' + '</div>' + 
+        '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Customer Id :" + '<span style="border-bottom: 1px solid black; width: 100%;">'+ repaymentInfo.customerId + '</span>'+'</p>' + '</div>' + 
+        '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Customer URN :"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.customerURN + '</span>'+'</p>' + '</div>' + 
+        '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Customer Name :" + '<span style="border-bottom: 1px solid black;">' + repaymentInfo.customerName + '</span>'+'</p>' + '</div>' + 
+        '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Loan A/C No :"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.accountNumber + '</span>'+'</p>' + '</div>' + 
+        '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Transaction Type :"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.transactionType + '</span>'+'</p>' + '</div>' + 
+        '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Transaction ID :"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.transactionID + '</span>'+'</p>' + '</div>';
+
+        if(value == 1) {
+
+            var addition = '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Demand Amount :"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.demandAmount + '</span>'+'</p>' + '</div>' + 
+            '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Amount paid:"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.amountPaid + '</span>'+'</p>' + '</div>' + 
+            '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Processing Fee :"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.processingFee + '</span>'+'</p>' + '</div>' + 
+            '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Service Tax Fee :"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.serviceTaxFee + '</span>'+'</p>' + '</div>'+
+            '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Total PayOff Amount :"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.totalPayOffAmount + '</span>'+'</p>' + '</div>' 
+        }
+        if (value == 0){
+           var addition = '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Loan Amount :"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.loanAmount + '</span>'+'</p>' + '</div>' + 
+            '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Disbursed Amount :"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.disbursedamount + '</span>'+'</p>' + '</div>'
+        }
+
+        var fotter = '<div style="font-size:12px;">' + '<p>' + "------------------------" + '</p>' + '</div>' + 
+        '<div style="font-size:12px;">' + '<p>' + opts.company_name + '</p>' + '</div>' + 
+        '<div style="font-size:12px;">' + '<p>' + "CIN :"+ opts.cin + '</p>' + '</div>' + 
+        '<div style="font-size:12px;">' + '<p>' + "Address :"+ opts.address1 + '</p>' + '</div>' + 
+        '<div style="font-size:12px;">' + '<p>' + opts.address2 + '</p>' + '</div>' + 
+        '<div style="font-size:12px;">' + '<p>' + opts.address3 + '</p>' + '</div>' + 
+        '<div style="font-size:12px;">' + '<p>' + "Website :"+ opts.website + '</p>' + '</div>' + 
+        '<div style="font-size:12px;">' + '<p>' + "HelpLine No"+ opts.helpline + '</p>' + '</div>' + 
+        '<div style="font-size:12px;">' + '<p>'  + "" + '</p>' + '</div>' + 
+        '<div style="font-size:12px;">' + '<p>'  + "" + '</p>' + '</div>' + 
+        '<div style="font-size:12px;text-align : center;">' + '<p>'  + "Signature not required as this is an" + '</p>' + '</div>' + 
+        '<div style="font-size:12px;text-align : center;">' + '<p>'  + "electronically generated receipt." + '</p>' + '</div>' + 
+        '<div style="font-size:12px;">' + '<p>'  + "------------------------------------" + '</p>' + '</div>' 
+
+        return receiptData+addition+fotter;
+
     }
 
     resource.getLoanPrint = function(repaymentInfo, opts) {

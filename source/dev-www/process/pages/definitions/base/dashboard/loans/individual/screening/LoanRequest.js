@@ -145,7 +145,8 @@ define([],function(){
                                 "NomineeDetails.nominees.nomineeButton",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
-                                "LoanRecommendation"          
+                                "LoanRecommendation",
+                                "CollateralDetails"          
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -233,7 +234,8 @@ define([],function(){
                                 "LoanSanction",
                                 "DeductionsFromLoan",
                                 "LoanMitigants",
-                                "LoanMitigants.deviationParameter"              
+                                "LoanMitigants.deviationParameter",
+                                "CollateralDetails"              
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -378,7 +380,8 @@ define([],function(){
                                 "LoanMitigants",
                                 "LoanRecommendation.udf8",
                                 "LoanRecommendation.udf3",
-                                "LoanMitigants.deviationParameter"             
+                                "LoanMitigants.deviationParameter",
+                                "CollateralDetails"             
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -422,7 +425,8 @@ define([],function(){
                                 "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
-                                "NomineeDetails.nominees.nomineeButton"                  
+                                "NomineeDetails.nominees.nomineeButton",
+                                "CollateralDetails"                  
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -466,7 +470,8 @@ define([],function(){
                                 "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
-                                "NomineeDetails.nominees.nomineeButton"                  
+                                "NomineeDetails.nominees.nomineeButton",
+                                "CollateralDetails"                  
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -627,7 +632,8 @@ define([],function(){
                                 "AdditionalLoanInformation",
                                // "NomineeDetails.nominees.nomineeButton",
                                 "LoanRecommendation.securityEmiRequired",
-                                "LoanMitigants.loanMitigantsByParameter",               
+                                "LoanMitigants.loanMitigantsByParameter",
+                                "CollateralDetails"               
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -642,7 +648,7 @@ define([],function(){
                                 },
                                 "LoanCustomerRelations": {
                                     "orderNo": 2,
-                                    "readonly": false
+                                    "readonly": true
                                 },
                                 "LoanMitigants": {
                                     "orderNo": 4
@@ -657,6 +663,9 @@ define([],function(){
                                 "CollateralDetails": {
                                     "orderNo": 7,
                                     "readonly": false
+                                },
+                                "PreliminaryInformation.expectedPortfolioInsurancePremium": {
+                                    "readonly": true
                                 },
                                 // "NomineeDetails": {
                                 //     "orderNo": 8,
@@ -691,7 +700,8 @@ define([],function(){
                                 "AdditionalLoanInformation",
                                 "NomineeDetails.nominees.nomineeButton"   ,
                                 "LoanRecommendation.securityEmiRequired",
-                                "LoanMitigants.loanMitigantsByParameter",               
+                                "LoanMitigants.loanMitigantsByParameter",
+                                "CollateralDetails"               
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -829,7 +839,10 @@ define([],function(){
                                 },
                                 "NomineeDetails.nominees.nomineePincode":{
                                     "required":true
-                                }
+                                },
+                                "LoanCustomerRelations": {
+                                    "readonly": true
+                                },
                             }
                         },
                         "FieldAppraisal":{
@@ -862,16 +875,42 @@ define([],function(){
                                 },
                                 "NomineeDetails.nominees.nomineePincode":{
                                     "required":true
+                                },
+                                "DeductionsFromLoan":{
+                                    "readonly":true,
+                                },
+                                "PreliminaryInformation":{
+                                    "readonly":true,
+                                },
+                                "LoanCustomerRelations":{
+                                    "readonly":true,
+                                },
+                                "LoanMitigants":{
+                                    "readonly":true,
                                 }
+
                             }
                         },
                         "SanctionInput":{
-
+                            "overrides":{
+                                "LoanCustomerRelations": {
+                                    "readonly": true
+                                },
+                            }
                         },
                         "ZonalRiskReview":{
                             "excludes":[
-                                "LoanRecommendation.securityEmiRequired"
-                            ]
+                                "LoanRecommendation.securityEmiRequired",
+                                "LoanMitigants.loanMitigantsByParameter",
+                            ],
+                            "overrides":{
+                                "AdditionalLoanInformation": {
+                                    "readonly": true
+                                },
+                                "CollateralDetails":{
+                                    "readonly":true
+                                }
+                            }
                         },
                         "FieldAppraisalReview":{
                             "excludes":[
@@ -888,16 +927,26 @@ define([],function(){
                                 "AdditionalLoanInformation": {
                                     "readonly": true
                                 },
+                                "CollateralDetails":{
+                                    "readonly":true
+                                }
                             }
                         },
                         "CentralRiskReview":{
-
+                            "overrides":{
+                                "CollateralDetails":{
+                                    "readonly":true
+                                }
+                            }
                         },
                         "Rejected":{
                             "overrides":{
                                 "AdditionalLoanInformation": {
                                     "readonly": true
                                 },
+                                "CollateralDetails":{
+                                    "readonly":true
+                                }
                             }
                         },
                         "loanView":{
@@ -905,22 +954,16 @@ define([],function(){
                                 "AdditionalLoanInformation": {
                                     "readonly": true
                                 },
-                            }
-                        },
-                        "ZonalRiskReview":{
-                            "excludes":[
-                                "LoanMitigants.loanMitigantsByParameter",
-                            ],
-                            "overrides":{
-                                "AdditionalLoanInformation": {
-                                    "readonly": true
-                                },
+                                "CollateralDetails":{
+                                    "readonly":true
+                                }
                             }
                         },
                         "Dedupe":{
                             "excludes": [
                                 "LoanRecommendation.securityEmiRequired",
-                                "LoanMitigants.loanMitigantsByParameter",                
+                                "LoanMitigants.loanMitigantsByParameter",  
+                                "CollateralDetails"              
                             ],
                         }
                     }
@@ -1016,6 +1059,20 @@ define([],function(){
                 }
    
             };
+            var populateDisbursementSchedule=function (value,form,model){
+                PageHelper.showProgress("loan-create","Verify Disbursement Schedules",5000);
+                model.loanAccount.disbursementSchedules=[];
+                for(var i=0;i<value;i++){
+                    model.loanAccount.disbursementSchedules.push({
+                        trancheNumber:""+(i+1),
+                        disbursementAmount:0
+                    });
+                }
+                if (value ==1){
+                    model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmount;
+                }
+        
+            }
              var overridesFields = function (bundlePageObj) {
                 return {
                         "PreliminaryInformation.linkedAccountNumber": {
@@ -1062,13 +1119,20 @@ define([],function(){
                             "enumCode": "customerinfo_colctn_Pymt_type"
                         },
                         //over ride for ticket
+                        "LoanSanction.numberOfDisbursements": {
+                           // key:"loanAccount.numberOfDisbursements",
+                            title:"NUM_OF_DISBURSEMENTS",
+                            onChange:function(value,form,model){
+                                populateDisbursementSchedule(value,form,model);
+                            }
+                        },
                         "LoanSanction.disbursementSchedules.tranchCondition": {
                             type: "lov",
                             autolov: true,
                             title: "TRANCHE_CONDITION",
                             bindMap: {
                             },
-                            searchHelper: formHelper,
+                            searchHelper: formHelper,//Verify Disbursement Schedules
                             search: function (inputModel, form, model, context) {
 
                                 var trancheConditions = formHelper.enum('tranche_conditions').data;
@@ -1140,12 +1204,6 @@ define([],function(){
                             "orderNo":70,
                         },
 
-                       
-                        "AdditionalLoanInformation":{
-                            "title":"ADDITIONAL_LOAN_INFORMATION",
-                           // "condition": "model.currentStage=='Sanction' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'||model.currentStage == 'ZonalRiskReview'",
-                          //  readonly:true
-                        },
                         "AdditionalLoanInformation":{
                             "title":"ADDITIONAL_LOAN_INFORMATION",
                            // "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal' || model.currentStage == 'SanctionInput'||model.currentStage == 'ZonalRiskReview'",
@@ -1190,7 +1248,8 @@ define([],function(){
                             "required": true
                         },
                         "NomineeDetails.nominees.nomineeFirstName":{
-                            "orderNo":10
+                            "orderNo":10,
+                            "resolver": "NomineeFirstNameLOVConfiguration"
                         },
                         "NomineeDetails.nominees.nomineeGender": {
                             "orderNo": 20
@@ -1199,27 +1258,82 @@ define([],function(){
                             "orderNo": 30
                         },
                         "NomineeDetails.nominees.nomineeRelationship": {
-                            "orderNo": 40
+                            "orderNo": 100
                         },
                         "NomineeDetails.nominees.nomineePincode": {
-                            "resolver": "PincodeLOVConfiguration",
-                            "orderNo":50
+                            "resolver": "NomineePincodeLOVConfiguration",
+                            "orderNo":70
                         },
                         "NomineeDetails.nominees.nomineeDoorNo": {
-                            "orderNo": 60
+                            "orderNo": 40
                         },
                         "NomineeDetails.nominees.nomineeStreet":{
-                            "orderNo": 70
+                            "orderNo": 60
                         },
                         "NomineeDetails.nominees.nomineeLocality": {
-                            "orderNo":80
+                            "orderNo":50
                         },
                         "NomineeDetails.nominees.nomineeDistrict":{
-                            "orderNo":90
+                            "orderNo":80
                         },
                         "NomineeDetails.nominees.nomineeState":{
+                            "orderNo":90
+                        },
+                        "CollateralDetails":{
+                            "condition": "model.loanAccount.loanPurpose1=='Asset Purchase'"
+                        },  
+                        "CollateralDetails.collateral.collateralDescription": {
+                            "required": true,
+                            "orderNo":10
+                        },
+                        "CollateralDetails.collateral.collateralValue": {
+                            "required": true,
+                            "orderNo":20
+                        },
+                        "CollateralDetails.collateral.expectedIncome": {
+                            "required": true,
+                            "orderNo":30
+                        },
+                        "CollateralDetails.collateral.collateralType": {
+                            "required": true,
+                            "orderNo":40
+                        },
+                        "CollateralDetails.collateral.manufacturer": {
+                            "required": true,
+                            "orderNo":50
+                        },
+                        "CollateralDetails.collateral.modelNo": {
+                            "required": true,
+                            "orderNo":60
+                        },
+                        "CollateralDetails.collateral.serialNo": {
+                            "orderNo":70
+                        },
+                        "CollateralDetails.collateral.expectedPurchaseDate": {
+                            "required": true,
+                            "orderNo":80
+                        },
+                        "CollateralDetails.collateral.machineAttachedToBuilding": {
+                            "required": true,
+                            "orderNo":90
+                        },
+                        "CollateralDetails.collateral.hypothecatedToBank": {
+                            "title":"HYPOTHECATED_TO_MAITREYA",
+                            "required": true,
                             "orderNo":100
-                        }
+                        },
+                        "CollateralDetails.collateral.electricityAvailable": {
+                            "required": true,
+                            "orderNo":110
+                        },
+                        "CollateralDetails.collateral.spaceAvailable": {
+                            "required": true,
+                            "orderNo":120
+                        },
+                        "CollateralDetails.collateral.collateral1FilePath": {
+                            //"required": true,
+                            "orderNo":130
+                        },
  
                     }
                 }
@@ -1306,21 +1420,21 @@ define([],function(){
                     "AdditionalLoanInformation.percentageIncreasedIncome",
                     "AdditionalLoanInformation.percentageInterestSaved",
 
-                    // "CollateralDetails",
-                    // "CollateralDetails.collateral",
-                    // "CollateralDetails.collateral.collateralDescription",
-                    // "CollateralDetails.collateral.collateralValue",
-                    // "CollateralDetails.collateral.expectedIncome",
-                    // "CollateralDetails.collateral.collateralType",
-                    // "CollateralDetails.collateral.manufacturer",
-                    // "CollateralDetails.collateral.modelNo",
-                    // "CollateralDetails.collateral.serialNo",
-                    // "CollateralDetails.collateral.expectedPurchaseDate",
-                    // "CollateralDetails.collateral.machineAttachedToBuilding",
-                    // "CollateralDetails.collateral.hypothecatedToBank",
-                    // "CollateralDetails.collateral.electricityAvailable",
-                    // "CollateralDetails.collateral.spaceAvailable",
-                    // "CollateralDetails.collateral.collateral1FilePath",
+                    "CollateralDetails",
+                    "CollateralDetails.collateral",
+                    "CollateralDetails.collateral.collateralDescription",
+                    "CollateralDetails.collateral.collateralValue",
+                    "CollateralDetails.collateral.expectedIncome",
+                    "CollateralDetails.collateral.collateralType",
+                    "CollateralDetails.collateral.manufacturer",
+                    "CollateralDetails.collateral.modelNo",
+                    "CollateralDetails.collateral.serialNo",
+                    "CollateralDetails.collateral.expectedPurchaseDate",
+                    "CollateralDetails.collateral.machineAttachedToBuilding",
+                    "CollateralDetails.collateral.hypothecatedToBank",
+                    "CollateralDetails.collateral.electricityAvailable",
+                    "CollateralDetails.collateral.spaceAvailable",
+                    "CollateralDetails.collateral.collateral1FilePath",
 
                     "NomineeDetails",                    
                     "NomineeDetails.nominees",
@@ -1448,7 +1562,7 @@ define([],function(){
                                             "expectedEmi": {
                                                 "key": "loanAccount.expectedEmi",
                                                 "title": "ESTIMATED_KINARA_EMI",
-                                                "orderNo": 9,
+                                                "orderNo": 91,
                                                 type: "number",
                                                 "readonly": true
                                             }
@@ -1798,6 +1912,9 @@ define([],function(){
                         if (model.loanProcess.remarks==null || model.loanProcess.remarks ==""){
                             PageHelper.showProgress("update-loan", "Remarks is mandatory", 3000);
                             return false;
+                        }
+                        if (!validateForm(formCtrl)){
+                            return;
                         }
                         // var trancheTotalAmount=0;
                         // if(model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length){

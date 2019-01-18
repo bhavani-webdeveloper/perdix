@@ -1618,7 +1618,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title:"MACHINE_MODEL",
                                 type: "lov",
                                 autolov: true,
-                                lovonly:true,
                                 searchHelper: formHelper,
                                 
                                 outputMap: {

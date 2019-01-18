@@ -1157,8 +1157,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             },  
                             "ScreeningReview":{
                                 "excludes": [
-                                    "currentAssets",
+                                    "CurrentAssets",
                                     "EnterpriseAssets",
+                                    "BuyerDetails",
+                                    "ProxyIndicators",
+                                    "SuppliersDeatils",
+                                    "Machinery"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -1207,7 +1211,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ProxyIndicators"
                                 ],
                                 "overrides": {
-                                    "EnterpriseInformation": {
+                                    "EnterpriseInformation.customerBranchId": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.centreId": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.oldCustomerId": {
                                         "readonly": true
                                     },
                                     "EnterpriseInformation.rentLeaseStatus": {
@@ -1230,16 +1240,28 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.incomeThroughSales": {
                                         "title": "SALES_INFO_DETAILS"
                                     },
-                                    "Liabilities": {
+                                    // "Liabilities": {
+                                    //     "readonly": true
+                                    // },
+                                    // "EnterpriseAssets": {
+                                    //     "readonly": true
+                                    // },
+                                    "BankAccounts.customerBankAccounts.customerBankName": {
                                         "readonly": true
                                     },
-                                    "EnterpriseAssets": {
+                                    "BankAccounts.customerBankAccounts.customerBankBranchName": {
                                         "readonly": true
                                     },
-                                    "BankAccounts": {
+                                    "ContactInformation.locality": {
                                         "readonly": true
                                     },
-                                    "ContactInformation": {
+                                    "ContactInformation.villageName": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation.district": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation.state": {
                                         "readonly": true
                                     },
                                     "EnterpriseReferences": {
@@ -1301,7 +1323,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                              "Screening":{
                                 "excludes": [
                                     "CommercialCBCheck",
-                                    "ProxyIndicators"
+                                    "ProxyIndicators",
+                                    "BuyerDetails",
+                                    "CurrentAssets",
+                                    "EnterpriseAssets",
+                                    "SuppliersDeatils",
+                                    "Machinery"
                                 ],
                                 "overrides": {
                                         
@@ -1502,7 +1529,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         "Sanction":
                         {
                             "excludes": [
-                                "ProxyIndicators"
+                                //"ProxyIndicators"
                                 // "EnterpriseFinancials.otherBusinessIncomes",
                                 // "EnterpriseReferences",
                                 // "EnterpriseFinancials.expenditures",
@@ -1514,6 +1541,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                              ],
                             "overrides": {
                                 "Machinery":{
+                                    "readonly":true
+                                },
+                                "ProxyIndicators":{
                                     "readonly":true
                                 },
                                 "SuppliersDeatils":{
