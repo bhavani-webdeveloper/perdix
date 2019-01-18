@@ -1562,7 +1562,7 @@ define([],function(){
                                             "expectedEmi": {
                                                 "key": "loanAccount.expectedEmi",
                                                 "title": "ESTIMATED_KINARA_EMI",
-                                                "orderNo": 9,
+                                                "orderNo": 91,
                                                 type: "number",
                                                 "readonly": true
                                             }
