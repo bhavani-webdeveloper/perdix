@@ -1,0 +1,40 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "required": [],
+    "properties": {
+        "approveDeathDetails": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": ["string", "null"],
+                    "title": "APPROVE_DEATH_NAME"
+                },
+                "urnNo": {
+                    "type": ["string", "null"],
+                    "title": "APPROVE_DEATH_URN"
+                },
+                "customer": {
+                    "type": ["string", "null"],
+                    "title": "APPROVE_DEATH_CUSTOMER_OR_MEMBER"
+                },
+                "natureOfDeath": {
+                    "type": ["string", "null"],
+                    "title": "APPROVE_DEATH_NATURE_OF_DEATH"
+                },
+                "dateOfIncident": {
+                    "type": ["string", "null"],
+                    "title": "APPROVE_DEATH_DATE_OF_INCIDENT"
+                },
+                "details": {
+                    "type": ["string", "null"],
+                    "title": "APPROVE_DEATH_DETAILS"
+                },
+                "comments": {
+                    "type": ["string", "null"],
+                    "title": "APPROVE_DEATH_COMMENTS"
+                    }
+            }
+        }
+    }
+}

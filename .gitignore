@@ -2,5 +2,5 @@
 source/www
 configuration/management/server-ext/vendor
 source/prepare
-source/dev-www/process/
+source/dev-www/process/config/
 source/dev-www/tsjs/

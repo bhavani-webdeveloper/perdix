@@ -1,0 +1,31 @@
+<!-- <div>
+    <section class="content">
+        <div class="row">
+            <irf-dashboard-box definition="leadDashboardDefinition"></irf-dashboard-box>
+        </div>
+        <div class="row">
+            <irf-dashboard-box definition="loanDashboardDefinition"></irf-dashboard-box>
+        </div>
+    </section>
+</div> -->
+
+ <section class="content">
+    <div ng-switch="page.type" class="row page-row">
+        <irf-sf ng-switch-when="schema-form"
+            initialize="initialize(model, form, formCtrl)"
+            irf-schema="schema"
+            irf-form="page.form"
+            irf-actions="page.actions"
+            irf-model="model"
+            irf-helper="formHelper"
+            irf-form-name="formName"
+            irf-form-options="page.formOptions"
+            class="page-form">
+            <div class="cantina-loader-wrapper"><div classs="cantina-loader"></div></div>
+        </irf-sf>
+        <irf-resource-search-wrapper ng-switch-when="search-list"
+            definition="page.definition"
+            initialize="page.initialize(model, form, formCtrl)"
+            irf-model="model"></irf-resource-search-wrapper>
+    </div>
+</section>

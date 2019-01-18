@@ -1,0 +1,443 @@
+irf.pageCollection.controller(irf.controller("pahal.loans.LoanOriginationDashboard"), ['$log', '$scope', "formHelper", "$state", "$q", "Utils", 'PagesDefinition', 'SessionStore', "entityManager", "IndividualLoan", "LoanBookingCommons", "Lead",
+    function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionStore, entityManager, IndividualLoan, LoanBookingCommons, Lead) {
+        $log.info("Page.LoanOriginationDashboard.html loaded");
+        $scope.$templateUrl = "process/pages/templates/Page.LoanOriginationDashboard.html";
+        var currentBranch = SessionStore.getCurrentBranch();
+
+        var leadDefinition = {
+            "title": "Lead",
+            "iconClass": "fa fa-users",
+            "items": [
+                "Page/Engine/pahal.lead.LeadGeneration",
+                "Page/Engine/pahal.lead.IncompleteLeadQueue",
+                "Page/Engine/pahal.lead.LeadFollowUpQueue",
+                "Page/Engine/pahal.lead.LeadBulkUpload",
+                "Page/Engine/pahal.lead.LeadAssignmentPendingQueue",
+                "Page/Engine/pahal.lead.LeadRejectedQueue",
+            ]
+        };
+        var loanDefinition = {
+            "title": "Loan",
+            "iconClass": "fa fa-users",
+            "items": [
+                "Page/Engine/pahal.lead.ReadyForScreeningQueue",
+                "Page/Engine/pahal.loans.individual.screening.ScreeningQueue",
+                "Page/Engine/pahal.loans.individual.screening.TeleVerification1Queue",
+                "Page/Engine/pahal.loans.individual.screening.FieldInvestigation1Queue",
+                "Page/Engine/pahal.loans.individual.screening.FieldInvestigation2Queue",
+                "Page/Engine/pahal.loans.individual.screening.FieldInvestigation3Queue",
+                "Page/Engine/pahal.loans.individual.screening.GoNoGoApproval1Queue",
+                "Page/Engine/pahal.loans.individual.screening.ApplicationQueue",
+                "Page/Engine/pahal.loans.individual.screening.ApplicationReviewQueue",
+                "Page/Engine/pahal.loans.individual.screening.TeleVerification2Queue",
+                "Page/Engine/pahal.loans.individual.screening.VehicleValuationQueue",
+                "Page/Engine/pahal.loans.individual.screening.CreditAppraisalQueue",
+                "Page/Engine/pahal.loans.individual.screening.CreditApprovalQueue",
+                "Page/Engine/pahal.loans.individual.screening.RejectedQueue"            
+            ]
+        };
+
+
+        PagesDefinition.getUserAllowedDefinition(leadDefinition).then(function(resp) {
+            $scope.leadDashboardDefinition = resp;
+            var branchId = SessionStore.getBranchId();
+            var branchName = SessionStore.getBranch();
+            var centres = SessionStore.getCentres();
+
+            var lapqMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/pahal.lead.LeadAssignmentPendingQueue"];
+            var lfuqMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/pahal.lead.LeadFollowUpQueue"];
+            var ilqMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/pahal.lead.IncompleteLeadQueue"];
+
+            var rMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/pahal.lead.LeadRejectedQueue"];
+
+            if (rMenu) rMenu.data = 0;
+            if (lapqMenu) lapqMenu.data = 0;
+            if (lfuqMenu) lfuqMenu.data = 0;
+            if (ilqMenu) ilqMenu.data = 0;
+
+
+               _.forEach(centres, function(centre) {
+
+
+                if (lfuqMenu) {
+                    Lead.search({
+                        'branchName': branchName,
+                        'currentStage': "Inprocess",
+                        'leadStatus': "FollowUp",
+                        'leadName': '',
+                        'area': '',
+                        'cityTownVillage': '',
+                        'businessName': '',
+                        'page': 1,
+                        'per_page': 1,
+                        'centreName': centre.centreName
+                    }).$promise.then(function(response, headerGetter) {
+                        if (!_.isNumber(lfuqMenu.data)) {
+                            lfuqMenu.data = 0;
+                        }
+                        lfuqMenu.data = lfuqMenu.data + Number(response.headers['x-total-count']);
+                    }, function() {
+                        lfuqMenu.data = '-';
+                    });
+                }
+
+                if (ilqMenu) {
+                    Lead.search({
+                        'branchName': branchName,
+                        'currentStage': "Incomplete",
+                        'leadName': '',
+                        'area': '',
+                        'cityTownVillage': '',
+                        'businessName': '',
+                        'page': 1,
+                        'per_page': 1,
+                        'centreName': centre.centreName
+                    }).$promise.then(function(response, headerGetter) {
+                        if (!_.isNumber(ilqMenu.data)) {
+                            ilqMenu.data = 0;
+                        }
+                        ilqMenu.data = ilqMenu.data + Number(response.headers['x-total-count']);
+                    }, function() {
+                        ilqMenu.data = '-';
+                    });
+                }
+
+                if (rMenu) {
+                    Lead.search({
+                        'branchName': branchName,
+                        'currentStage': "Inprocess",
+                        'leadStatus': "Reject",
+                        'leadName': '',
+                        'area': '',
+                        'cityTownVillage': '',
+                        'businessName': '',
+                        'page': 1,
+                        'per_page': 1,
+                        'centreName': centre.centreName
+                    }).$promise.then(function(response, headerGetter) {
+                        if (!_.isNumber(rMenu.data)) {
+                            rMenu.data = 0;
+                        }
+                        rMenu.data = rMenu.data + Number(response.headers['x-total-count']);
+                    }, function() {
+                        rMenu.data = '-';
+                    });
+                }
+            })
+
+
+            if (lapqMenu) {
+                Lead.search({
+                    'branchName': branchName,
+                    'currentStage': "Assignment Pending",
+                    'leadName': '',
+                    'area': '',
+                    'cityTownVillage': '',
+                    'businessName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    lapqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    lapqMenu.data = '-';
+                });
+            }
+
+
+        });
+        PagesDefinition.getUserAllowedDefinition(loanDefinition).then(function(resp) {
+
+            $scope.loanDashboardDefinition = resp;
+            var branchId = SessionStore.getBranchId();
+            var branchName = SessionStore.getBranch();
+            var centres = SessionStore.getCentres();
+
+            var rfqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.lead.ReadyForScreeningQueue"];
+            if (rfqMenu) rfqMenu.data = 0;
+            _.forEach(centres, function(centre) {
+                if (rfqMenu) {
+                    Lead.search({
+                        'currentStage': "ReadyForScreening",
+                        'leadName': '',
+                        'area': '',
+                        'cityTownVillage': '',
+                        'businessName': '',
+                        'page': 1,
+                        'per_page': 1,
+                        'centreName': centre.centreName
+                    }).$promise.then(function(response, headerGetter) {
+                        if (!_.isNumber(rfqMenu.data)) {
+                            rfqMenu.data = 0;
+                        }
+                        rfqMenu.data = rfqMenu.data + Number(response.headers['x-total-count']);
+                    }, function() {
+                        rfqMenu.data = '-';
+                    });
+                }
+
+            });
+
+            var sqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.ScreeningQueue"];
+
+            if (sqMenu) {
+                sqMenu.data = 0;
+                _.forEach(centres, function(centre) {
+                    IndividualLoan.search({
+                        'stage': 'Screening',
+                        'enterprisePincode': '',
+                        'applicantName': '',
+                        'area': '',
+                        'villageName': '',
+                        'customerName': '',
+                        'page': 1,
+                        'per_page': 1,
+                        'centreCode': centre.centreCode
+                    }).$promise.then(function(response, headerGetter) {
+                        sqMenu.data = sqMenu.data + Number(response.headers['x-total-count']);
+                    }, function() {
+                        sqMenu.data = '-';
+                    });
+                });
+            }
+
+            var tvq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.TeleVerification1Queue"];
+            
+            if (tvq1Menu) {
+                tvq1Menu.data = 0;
+                IndividualLoan.search({
+                    'stage': 'TeleVerification1',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1
+                }).$promise.then(function(response, headerGetter) {
+                    tvq1Menu.data = tvq1Menu.data + Number(response.headers['x-total-count']);
+                }, function() {
+                    tvq1Menu.data = '-';
+                });
+            }
+
+            var fiq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.FieldInvestigation1Queue"];
+            if (fiq1Menu) {
+                fiq1Menu.data = 0 ;
+                IndividualLoan.search({
+                    'stage': 'FieldInvestigation1',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                    'branchName': currentBranch.branchName
+                }).$promise.then(function(response, headerGetter) {
+                    fiq1Menu.data = fiq1Menu.data + Number(response.headers['x-total-count']);
+                }, function() {
+                    fiq1Menu.data = '-';
+                });
+            }
+
+            var fiq2Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.FieldInvestigation2Queue"];
+            if (fiq2Menu) {
+                fiq2Menu.data = 0;
+                IndividualLoan.search({
+                    'stage': 'FieldInvestigation2',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                    'branchName': currentBranch.branchName
+                }).$promise.then(function(response, headerGetter) {
+                    fiq2Menu.data = fiq2Menu.data +Number(response.headers['x-total-count']);
+                }, function() {
+                    fiq2Menu.data = '-';
+                });
+            }
+
+            var fiq3Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.FieldInvestigation3Queue"];
+            if (fiq3Menu) {
+                fiq3Menu.data = 0;
+                IndividualLoan.search({
+                    'stage': 'FieldInvestigation3',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    fiq3Menu.data = fiq3Menu.data + Number(response.headers['x-total-count']);
+                }, function() {
+                    fiq3Menu.data = '-';
+                });
+            }
+
+            var gng1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.GoNoGoApproval1Queue"];
+            if (gng1Menu) {
+                gng1Menu.data = 0;
+                IndividualLoan.search({
+                    'stage': 'GoNoGoApproval1',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    gng1Menu.data = gng1Menu.data + Number(response.headers['x-total-count']);
+                }, function() {
+                    gng1Menu.data = '-';
+                });
+            }
+
+
+            var appMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.ApplicationQueue"];
+            if (appMenu) {
+                appMenu.data = 0;
+                _.forEach(centres, function(centre) {    
+                        IndividualLoan.search({
+                            'stage': 'Application',
+                            'enterprisePincode': '',
+                            'applicantName': '',
+                            'area': '',
+                            'villageName': '',
+                            'customerName': '',
+                            'page': 1,
+                            'per_page': 1,
+                            'centreCode': centre.centreCode
+                        }).$promise.then(function(response, headerGetter) {
+                            appMenu.data = appMenu.data + Number(response.headers['x-total-count']);
+                        }, function() {
+                            appMenu.data = '-';
+                        });
+                    });      
+            }
+
+            var apprMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.ApplicationReviewQueue"];
+            if (apprMenu) {
+                apprMenu.data = 0;
+                IndividualLoan.search({
+                    'stage': 'ApplicationReview',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                    'branchName': currentBranch.branchName
+                }).$promise.then(function(response, headerGetter) {
+                    apprMenu.data = apprMenu.data + Number(response.headers['x-total-count']);
+                }, function() {
+                    apprMenu.data = '-';
+                });
+            }
+
+            var tvq2Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.TeleVerification2Queue"];
+            if (tvq2Menu) {
+                tvq2Menu.data = 0;
+                IndividualLoan.search({
+                    'stage': 'TeleVerification2',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    tvq2Menu.data = tvq2Menu.data + Number(response.headers['x-total-count']);
+                }, function() {
+                    tvq2Menu.data = '-';
+                });
+            }
+
+
+            var prqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.VehicleValuationQueue"];
+            if (prqMenu) {
+                prqMenu.data = 0;
+                IndividualLoan.search({
+                    'stage': 'VehicleValuation',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    prqMenu.data = prqMenu.data + Number(response.headers['x-total-count']);
+                }, function() {
+                    prqMenu.data = '-';
+                });
+            }
+
+            var caqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.CreditAppraisalQueue"];
+            if (caqMenu) {
+                caqMenu.data = 0;
+                IndividualLoan.search({
+                    'stage': 'CreditAppraisal',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    caqMenu.data = caqMenu.data + Number(response.headers['x-total-count']);
+                }, function() {
+                    caqMenu.data = '-';
+                });
+            }
+
+            var caq2Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.CreditApprovalQueue"];
+
+            if (caq2Menu) {
+                caq2Menu.data = 0;
+                IndividualLoan.search({
+                    'stage': 'CreditApproval',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    caq2Menu.data = caq2Menu.data + Number(response.headers['x-total-count']);
+                }, function() {
+                    caq2Menu.data = '-';
+                });
+            }
+
+            var rjqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/pahal.loans.individual.screening.RejectedQueue"];
+            if (rjqMenu) {
+                rjqMenu.data = 0;
+                IndividualLoan.search({
+                    'stage': 'Rejected',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    rjqMenu.data = rjqMenu.data + Number(response.headers['x-total-count']);
+                }, function() {
+                    rjqMenu.data = '-';
+                });
+            }
+
+        });
+    }
+]);

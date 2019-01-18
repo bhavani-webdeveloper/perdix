@@ -1,0 +1,229 @@
+define({
+    pageUID: "loans.individual.collections.RepaymentReminderQueue",
+    pageType: "Engine",
+    dependencies: ["$log", "formHelper", "LUC", "$state", "SessionStore", "Utils", "irfNavigator", "RepaymentReminder", "Queries"],
+    $pageFn: function($log, formHelper, LUC, $state, SessionStore, Utils, irfNavigator, RepaymentReminder, Queries) {
+        return {
+            "type": "search-list",
+            "title": "REPAYMENT_REMINDER",
+            "subTitle": "",
+            initialize: function(model, form, formCtrl) {
+                $log.info("Repayment Reminder Schedule Queue got initialized");
+                model.branch = SessionStore.getCurrentBranch().branchId;
+                Queries.getNextInstallmentDate()
+                .then(function(response){
+                    $log.info(response);
+                    if (response.body[0].min_date != null) {
+                        model.demandDate = response.body[0].min_date;
+                    }
+                });
+            },
+            definition: {
+                title: "SEARCH",
+                searchForm: [
+                    "*"
+                ],
+                autoSearch: false,
+                searchSchema: {
+                    "type": 'object',
+                    "title": 'SearchOptions',
+                    "properties": {
+                        "applicantName": {
+                            "title": "APPLICANT_NAME",
+                            "type": "string"
+                        },
+                        "businessName": {
+                            "title": "BUSINESS_NAME",
+                            "type": "string"
+                        },
+                        "branch": {
+                            'title': "BRANCH",
+                            "type": ["string", "null"],
+                            "x-schema-form": {
+                                "type":"userbranch",
+                                "screenFilter": true
+                            }
+                        },
+                        "centre": {
+                            "title": "CENTRE",
+                            "type": ["integer", "null"],
+                            "x-schema-form": {
+                                "type": "select",
+                                "enumCode": "centre",
+                                "parentEnumCode": "branch_id",
+                                "parentValueExpr": "model.branch",
+                                "screenFilter": true
+                            }
+                        },
+                        "customerUrn": {
+                            "title": "CUSTOMER_URN",
+                            "type": "string"
+                        },
+                        "area": {
+                            "title": "AREA",
+                            "type": "string"
+                        },
+                        "city": {
+                            "title": "CITY/_VILLAGE/_TOWN",
+                            "type": "string"
+                        },
+                        "demandDate": {
+                            "title": "DEMAND_DATE",
+                            "type": ["string", "null"],
+                            "required": true,
+                            "x-schema-form": {
+                                "type": "date",
+                                "screenFilter": true
+                            }
+                        },
+                        "reminderStatus": {
+                            "title": "REMINDER_STATUS",
+                            "type": ["string", "null"],
+                            "enumCode": "repayment_call_status",
+                            "x-schema-form": {
+                                "type": "select",
+                                "screenFilter": true
+                            }
+                        },
+                    },
+                    "required": []
+                },
+
+                getSearchFormHelper: function() {
+                    return formHelper;
+                },
+                getResultsPromise: function(searchOptions, pageOpts) {
+                    var branches = formHelper.enum('branch_id').data;
+                    var branchName = null;
+                    for (var i = 0; i < branches.length; i++) {
+                        var branch = branches[i];
+                        if (branch.code == searchOptions.branch) {
+                            branchName = branch.name;
+                        }
+                    }
+                    var centres = formHelper.enum('centre').data;
+                    var centreName = null;
+                    for (var i = 0; i < centres.length; i++) {
+                        var centre = centres[i];
+                        if (centre.code == searchOptions.centre) {
+                            centreName = centre.name;
+                        }
+                    }
+
+                    var promise = RepaymentReminder.query({
+                        'customerUrn': searchOptions.customerUrn,
+                        'branchId': searchOptions.branch,
+                        'centreName': centreName,
+                        'businessName': searchOptions.businessName,
+                        'applicantName': searchOptions.applicantName,
+                        'area': searchOptions.area,
+                        'city': searchOptions.city,
+                        'demandDate': searchOptions.demandDate,
+                        'reminderStatus': searchOptions.reminderStatus
+                    }).$promise;
+
+                    return promise;
+                },
+                paginationOptions: {
+                    "getItemsPerPage": function(response, headers) {
+                        return 100;
+                    },
+                    "getTotalItemsCount": function(response, headers) {
+                        return headers['x-total-count']
+                    }
+                },
+                listOptions: {
+                    selectable: false,
+                    expandable: true,
+                    listStyle: "table",
+                    itemCallback: function(item, index) {},
+                    getItems: function(response, headers) {
+                        if (response != null && response.length && response.length != 0) {
+                            return response;
+                        }
+                        return [];
+                    },
+                    getListItem: function(item) {
+                        return [
+                            item.id
+                        ]
+                    },
+                    getTableConfig: function() {
+                        return {
+                            "serverPaginate": true,
+                            "paginate": true,
+                            "pageLength": 10
+                        };
+                    },
+                    getColumns: function() {
+                        return [
+                        {
+                            title: 'ID',
+                            data: 'id'
+                        },
+                        {
+                            title: 'BRANCH_NAME',
+                            data: 'branchName'
+                        },
+                        {
+                            title: 'SPOKE_NAME',
+                            data: 'centreName'
+                        },
+                        {
+                            title: 'BUSINESS_NAME',
+                            data: 'customerName'
+                        }, 
+                        {
+                            title: 'DUE_DATE',
+                            data: 'installmentDate'
+                        }, 
+                        {
+                            title: 'DEMAND_AMOUNT',
+                            data: 'installmentAmount'
+                        },
+                        {
+                            title: 'PHONE_NUMBER',
+                            data: 'mobilePhone'
+                        },
+                        {
+                            title: 'AREA',
+                            data: 'area'
+                        },
+                        {
+                            title: "LOAN_ACCOUNT_NO",
+                            data: "accountNumber"
+                        },
+                        {
+                            title: "P2P_DATE",
+                            data: "promiseToPayDate"
+                        }
+                        ]
+                    },
+                    getActions: function() {
+                        return [{
+                            name: "View Repayment Data",
+                            desc: "",
+                            icon: "fa fa-pencil-square-o",
+                            fn: function(item, index) {
+                                irfNavigator.go({
+                                    state: "Page.Engine",
+                                    pageName: "loans.individual.collections.RepaymentReminderData",
+                                    pageId: item.id,
+                                    pageData: {_lucCompleted : true}
+                                },
+                                {
+                                    state: "Page.Engine",
+                                    pageName: "loans.individual.collections.RepaymentReminderQueue",
+                                });
+                            },
+                            isApplicable: function(item, index) {
+
+                                return true;
+                            }
+                        }];
+                    }
+                }
+            }
+        };
+    }
+})

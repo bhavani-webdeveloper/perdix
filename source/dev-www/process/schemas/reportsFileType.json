@@ -1,0 +1,63 @@
+{
+"file_type":[  
+      {
+         "name":"all_ledger_report_xlsx",
+         "value":"all_ledger_report_xlsx"
+      },
+      {  
+         "name":"csv",
+         "value":"csv"
+      },
+      {  
+         "name":"customer_statement_pdf",
+         "value":"customer_statement_pdf"
+      },
+	   {  
+         "name":"customer_statement_xlsx",
+         "value":"customer_statement_xlsx"
+      },
+      {  
+         "name":"ifmr_report",
+         "value":"ifmr_report"
+      },
+      {  
+         "name":"preclosure_pdf",
+         "value":"preclosure_pdf"
+      },
+      {  
+         "name":"preclosure_xlsx",
+         "value":"preclosure_xlsx"
+      },
+      {  
+         "name":"tally_xml",
+         "value":"tally_xml"
+      },
+      {  
+         "name":"xlsx",
+         "value":"xlsx"
+      },
+      {  
+         "name":"pdf",
+         "value":"pdf"
+      }
+   ],
+
+"file_extension":[  
+      {
+         "name":"xlsx",
+         "value":"xlsx"
+      },
+      {  
+         "name":"csv",
+         "value":"csv"
+      },
+      {  
+         "name":"pdf",
+         "value":"pdf"
+      },
+      {  
+         "name":"xml",
+         "value":"xml"
+      }
+   ]
+}

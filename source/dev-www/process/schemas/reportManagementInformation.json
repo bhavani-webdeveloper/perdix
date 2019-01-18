@@ -1,0 +1,70 @@
+{
+    "type": "object",
+    "required": ["report"],
+    "properties": {
+        "report": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["group", "report_display_name", "query", "is_header_less", "is_active"],
+                "properties": {
+                    "group": {
+                        "type": "select",
+                        "title": "REPORT_GROUP"
+                    },
+                    "report_display_name": {
+                        "type": ["string", "null"],
+                        "maxLength": 100,
+                        "title": "REPORT_DISPLAY_NAME"
+                    },
+                    "query": {
+                        "type": ["string", "null"],
+                        "title": "QUERY"
+                    },
+                    "query_2": {
+                        "type": ["string", "null"],
+                        "title": "QUERY_2"
+                    },
+                    "query_3": {
+                        "type": ["string", "null"],
+                        "title": "QUERY_3"
+                    },
+                    "where_replace": {
+                        "type": ["string", "null"],
+                        "title": "WHERE_REPLACE"
+                    },
+                    "group_by": {
+                        "type": ["string", "null"],
+                        "title": "GROUP_BY"
+                    },
+                    "group_by_2": {
+                        "type": ["string", "null"],
+                        "title": "GROUP_BY_2"
+                    },
+                    "group_by_3": {
+                        "type": ["string", "null"],
+                        "title": "GROUP_BY_3"
+                    },
+                    "file_type": {
+                        "type": "select",
+                        "title": "FILE_TYPE"
+                    },
+                    "file_extension": {
+                        "type": "select",
+                        "title": "FILE_TYPE"
+                    },
+                    "is_header_less": {
+                        "type": ["integer", "null"],
+                        "maxLength": 4,
+                        "title": "IS_HEADER_LESS"
+                    },
+                    "is_active": {
+                        "type": ["integer", "null"],
+                        "maxLength": 4,
+                        "title": "IS_ACTIVE"
+                    }
+                }
+            }
+        }
+    }
+}

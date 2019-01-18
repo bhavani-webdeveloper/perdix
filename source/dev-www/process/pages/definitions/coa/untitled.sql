@@ -1,0 +1,2 @@
+INSERT INTO `pages` (`uri`, `title`, `short_title`, `icon_class`, `direct_access`, `offline`, `state`, `page_name`, `page_id`, `addl_params`) VALUES ('Page/ChartOfAccountDashboard', 'CHART_OF_ACCOUNT_DASHBOARD', '', '', '1', '0', 'Page.ChartOfAccountDashboard', '', '', '');
+INSERT INTO `pages` (`uri`, `title`, `short_title`, `icon_class`, `direct_access`, `offline`, `state`, `page_name`, `page_id`, `addl_params`) VALUES ('Page/Engine/coa.ListOfAccount', 'LIST_OF_ACCOUNT', '', 'fa fa-tasks', '1', '0', 'Page.Engine', 'coa.ListOfAccount', '', '');

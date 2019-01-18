@@ -1,0 +1,602 @@
+irf.pageCollection.factory(irf.page("workflow.CustomerApprovalApprove"),
+    ["$window", "$log", "formHelper", "filterFilter", "Enrollment","Workflow", "Queries", "$q", "$state", "SessionStore", "Utils", "PagesDefinition", "irfNavigator", "User", "SchemaResource", "$stateParams", "PageHelper", "irfProgressMessage",
+        function ($window, $log, formHelper, filterFilter, Enrollment,Workflow, Queries, $q, $state, SessionStore, Utils, PagesDefinition, irfNavigator, User, SchemaResource, $stateParams, PageHelper, irfProgressMessage) {
+            var branch = SessionStore.getBranch();
+            var getCustomer = function (result, model){
+                Enrollment.EnrollmentById({ id: result.id }, function (resp, header) {
+                    PageHelper.hideLoader();
+                    model.customer = _.cloneDeep(resp);
+                    model.customer.fullAddress = model.customer.doorNo + " " + model.customer.street + " " + model.customer.locality + " " + model.customer.villageName + " "
+                    model.customer.isDateOfBirthChanged = "NO";
+                    model.customer.isMobileChanged = "NO";
+                    model.customer.isGenderChanged = "NO";
+                    model.customer.isOwnershipChanged = "NO";
+                    model.customer.isAddressChanged = "NO";
+
+                    if(model.customer.customerType=="Enterprise")
+                        model.customer.ownership=model.customer.enterprise.ownership;
+
+                    irfProgressMessage.pop("cust-load", "Load Complete", 2000);
+                }, function (resp) {
+                    PageHelper.hideLoader();
+                    irfProgressMessage.pop("cust-load", "An Error Occurred. Failed to fetch Data", 5000);
+
+                });
+            }
+
+
+            var update = function(model, workflowId) {
+                Workflow.getByID({ id: workflowId }, function (resp, header) {
+
+                    model.workflow = _.cloneDeep(resp);
+                    model.UpdatedWorkflow = JSON.parse(model.workflow.temporary);
+
+                    model.customer = model.workflow.customer;
+                    model.customer.fullAddress = model.customer.doorNo + " ," + model.customer.street + "  ," + model.customer.locality + "  ," + model.customer.villageName + " ,"+model.customer.pincode+" ,"+model.customer.district+" ,"+ model.customer.state+" - "+model.customer.pincode
+                    //model.customer : NEW
+                    //model.workflow.customer : updated
+                    if(model.customer.dateOfBirth == model.UpdatedWorkflow.customer.dateOfBirth) {
+                        model.customer.isDateOfBirthChanged="NO";
+                    }else {
+                        model.customer.isDateOfBirthChanged="YES";
+                        model.customer.ageProofImageId =model.UpdatedWorkflow.customer.ageProofImageId ;
+                        model.customer.newDateOfBirth=model.UpdatedWorkflow.customer.dateOfBirth;
+                    }
+
+                    if(model.customer.mobilePhone == model.UpdatedWorkflow.customer.mobilePhone) {
+                        model.customer.isMobileChanged="NO";
+                    }else {
+                        model.customer.isMobileChanged="YES";
+                        model.customer.newMobilePhone=model.UpdatedWorkflow.customer.mobilePhone;
+                        model.customer.mobileProofImageId=model.UpdatedWorkflow.proof.mobileProofImageId;
+                    }
+
+
+                    if(model.customer.customerType=="Enterprise")
+                    {
+                        if(model.customer.enterprise.ownership == model.UpdatedWorkflow.customer.enterprise.ownership) {
+                            model.customer.isOwnershipChanged="NO";
+                        }else {
+                            model.customer.isOwnershipChanged="YES";
+                            model.customer.newOwnership=model.UpdatedWorkflow.customer.enterprise.ownership;
+                        }
+                        model.customer.ownership = model.customer.enterprise.ownership;
+                    }else if(model.customer.customerType=="Individual")
+                    {
+                        if(model.customer.ownership == model.UpdatedWorkflow.customer.ownership) {
+                            model.customer.isOwnershipChanged="NO";
+                        }else {
+                            model.customer.isOwnershipChanged="YES";
+                            model.customer.newOwnership=model.UpdatedWorkflow.customer.ownership;
+                        }
+                    }
+
+
+                    if(model.customer.gender == model.UpdatedWorkflow.customer.gender) {
+                        model.customer.isGenderChanged="NO";
+                    }else {
+                        model.customer.isGenderChanged="YES";
+                        model.customer.newGender=model.UpdatedWorkflow.customer.gender;
+                    }
+
+                    if(model.customer.doorNo == model.UpdatedWorkflow.customer.doorNo &&
+                        model.customer.street == model.UpdatedWorkflow.customer.street &&
+                        model.customer.locality == model.UpdatedWorkflow.customer.locality &&
+                        model.customer.villageName == model.UpdatedWorkflow.customer.villageName &&
+                        model.customer.postOffice == model.UpdatedWorkflow.customer.postOffice &&
+                        model.customer.pincode == model.UpdatedWorkflow.customer.pincode &&
+                        model.customer.state == model.UpdatedWorkflow.customer.state &&
+                        model.customer.district == model.UpdatedWorkflow.customer.district &&
+                        model.customer.stdCode == model.UpdatedWorkflow.customer.stdCode &&
+                        model.customer.landLineNo == model.UpdatedWorkflow.customer.landLineNo &&
+                        model.customer.landmark == model.UpdatedWorkflow.customer.landmark){
+                        model.customer.isAddressChanged="NO";
+                    }
+                    else {
+                        model.customer.isAddressChanged="YES";
+                        model.customer.addressProofImageId =model.UpdatedWorkflow.customer.addressProofImageId ;
+                        model.customer.doorNo =model.UpdatedWorkflow.customer.doorNo ;
+                        model.customer.street = model.UpdatedWorkflow.customer.street ;
+                        model.customer.locality = model.UpdatedWorkflow.customer.locality ;
+                        model.customer.villageName = model.UpdatedWorkflow.customer.villageName ;
+                        model.customer.postOffice = model.UpdatedWorkflow.customer.postOffice;
+                        model.customer.pincode = model.UpdatedWorkflow.customer.pincode ;
+                        model.customer.state = model.UpdatedWorkflow.customer.state ;
+                        model.customer.district = model.UpdatedWorkflow.customer.district ;
+                        model.customer.stdCode = model.UpdatedWorkflow.customer.doorNo ;
+                        model.customer.landLineNo = model.UpdatedWorkflow.customer.landLineNo ;
+                        model.customer.landmark = model.UpdatedWorkflow.customer.landmark ;
+                    }
+
+                    irfProgressMessage.pop("cust-load", "Load Complete", 2000);
+                    PageHelper.hideLoader();
+                }, function (resp) {
+                    irfProgressMessage.pop("cust-load", "An Error Occurred. Failed to fetch Data", 5000);
+                    PageHelper.hideLoader();
+                });
+            }
+
+            return {
+                "name": "APPROVAL_CUSTOMER",
+                "type": "schema-form",
+                "title": "APPROVAL_CUSTOMER",
+                initialize: function (model, form, formCtrl) {
+                    $log.info("User Maintanance loaded");
+                    var workflowId = $stateParams.pageId;
+                    $log.info("Loading data for Cust ID " + workflowId);
+
+
+                    model._screenMode = 'VIEW';
+                    PageHelper.showLoader();
+                    irfProgressMessage.pop("cust-load", "Loading Customer Data...");
+
+                    if (workflowId != undefined || workflowId != null) {
+                        update(model, workflowId);
+                        PageHelper.hideLoader();
+                        $window.scrollTo(0, 0);
+                    }else {
+                        PageHelper.hideLoader();
+                    }
+                },
+
+                form: [
+                    {
+                        type: "box",
+                        title: "USER_INFORMATION",
+                        items: [
+                            {
+                                key: "customer.firstName",
+                                title: "FULL_NAME",
+                                readonly: true
+                            },
+                            {
+                                key: "customer.fullAddress",
+                                title: "ADDRESS",
+                                type : "html",
+                                readonly: true
+                            },
+                            {
+                                key: "customer.isAddressChanged",
+                                type: "radios",
+                                title: "UPDATE",
+                                "titleMap": {
+                                    "YES": "YES",
+                                    "NO": "NO"
+                                },
+                                readonly: true
+                            },
+                            {
+                                type: "fieldset",
+                                title: "DATE_OF_BIRTH",
+                                "items": [{
+                                    key: "customer.dateOfBirth",
+                                    title: "DATE_OF_BIRTH",
+                                    type: "date",
+                                    readonly: true
+                                },
+                                    {
+                                        key: "customer.isDateOfBirthChanged",
+                                        type: "radios",
+                                        title: "UPDATE",
+                                        "titleMap": {
+                                            "YES": "YES",
+                                            "NO": "NO"
+                                        },
+                                        readonly: true
+                                    },
+                                    {
+                                        key: "customer.newDateOfBirth",
+                                        type: "date",
+                                        title: "UPDATE_DATE_OF_BIRTH",
+                                        condition: "model.customer.isDateOfBirthChanged=='YES'",
+                                        readonly: true
+                                    },
+                                    {
+                                        key: "customer.ageProofImageId",
+                                        type: "file",
+                                        title: "AGE_PROOF",
+                                        fileType: "file/*",
+                                        "category": "Customer",
+                                        "subCategory": "AGEPROOF",
+                                        "offline": true,
+                                        condition: "model.customer.isDateOfBirthChanged=='YES'",
+                                        readonly: true
+                                    }]
+                            },
+                            {
+                                type: "fieldset",
+                                title: "MOBILE_PHONE",
+                                "items": [{
+                                    key: "customer.mobilePhone",
+                                    title: "MOBILE_PHONE",
+                                    readonly: true
+                                },
+                                    {
+                                        key: "customer.isMobileChanged",
+                                        type: "radios",
+                                        title: "UPDTAE",
+                                        "titleMap": {
+                                            "YES": "YES",
+                                            "NO": "NO"
+                                        },
+                                        readonly: true
+                                    },
+                                    {
+                                        key: "customer.newMobilePhone",
+                                        title: "UPDATE_MOBILE_PHONE",
+                                        condition: "model.customer.isMobileChanged=='YES'",
+                                        readonly: true
+                                    },
+                                    {
+                                        key: "customer.mobileProofImageId",
+                                        type: "file",
+                                        title: "MOBILE_PROOF",
+                                        fileType: "file/*",
+                                        "category": "Customer",
+                                        "subCategory": "ADDRESSPROOF",
+                                        "offline": true,
+                                        condition: "model.customer.isMobileChanged=='YES'",
+                                        readonly: true
+                                    }]
+                            },
+
+                            {
+                                type: "fieldset",
+                                title: "GENDER",
+                                "items": [{
+                                    key: "customer.gender",
+                                    title: "GENDER",
+                                    readonly: true
+                                },
+                                    {
+                                        key: "customer.isGenderChanged",
+                                        type: "radios",
+                                        title: "UPDTAE",
+                                        "titleMap": {
+                                            "YES": "YES",
+                                            "NO": "NO"
+                                        },
+                                        readonly: true
+                                    },
+                                    {
+                                        key: "customer.newGender",
+                                        type: "radios",
+                                        title: "UPDATE_GENDER",
+                                        "titleMap": {
+                                            "MALE": "MALE",
+                                            "FEMALE": "FEMALE",
+                                            "Un-Specified": "Un-Specified"
+                                        },
+                                        condition: "model.customer.isGenderChanged=='YES'",
+                                        readonly: true
+
+                                    }]
+                            },
+                            {
+                                type: "fieldset",
+                                title: "OWNERSHIP",
+                                "items": [{
+                                    key: "customer.ownership",
+                                    title: "OWNERSHIP",
+                                    readonly: true
+                                }, {
+                                    key: "customer.isOwnershipChanged",
+                                    type: "radios",
+                                    title: "UPDATE",
+                                    "titleMap": {
+                                        "YES": "YES",
+                                        "NO": "NO"
+                                    },
+                                    readonly: true
+                                },
+                                    {
+                                        key: "customer.newOwnership",
+                                        title: "UPDATE_OWNERSHIP",
+                                        condition: "model.customer.isOwnershipChanged=='YES'",
+                                        readonly: true
+                                    }]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "title": "CONTACT_INFORMATION",
+                        condition: "model.customer.isAddressChanged=='YES'",
+                        readonly: true,
+                        "items": [
+                            {
+                                type: "fieldset",
+                                title: "CUSTOMER_RESIDENTIAL_ADDRESS",
+                                condition: "model.customer.isAddressChanged=='YES'",
+                                items: [
+                                    "customer.doorNo",
+                                    "customer.street",
+                                    "customer.postOffice",
+                                    "customer.landmark",
+                                    {
+                                        key: "customer.pincode",
+                                        type: "striing",
+                                        fieldType: "number"
+                                    },
+                                    {
+                                        key: "customer.locality",
+                                        readonly: true
+                                    },
+                                    {
+                                        key: "customer.villageName",
+                                        readonly: true
+                                    },
+                                    {
+                                        key: "customer.district",
+                                        readonly: true
+                                    },
+                                    {
+                                        key: "customer.state",
+                                        readonly: true,
+                                    }
+                                ]
+                            },
+                            {
+                                key: "customer.addressProofImageId",
+                                type: "file",
+                                title: "ADDRESS_PROOF",
+                                fileType: "file/*",
+                                "category": "Customer",
+                                "subCategory": "ADDRESSPROOF",
+                                "offline": true,
+                                condition: "model.customer.isAddressChanged=='YES'"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        colClass: "col-sm-12",
+                        "title": "REVIEW",
+                        "items": [
+                            {
+                                key: "action",
+                                type: "radios",
+                                title: "UPDATE",
+                                "titleMap": {
+                                    "PROCEED": "PROCEED",
+                                    "REJECT": "REJECT",
+                                    "SENDBACK": "SEND_BACK"
+                                },
+                                required: true
+                            },
+                            {
+                                key: "customer.remark",
+                                title: "REMARK"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "actionbox",
+                        "items": [{
+                            "type": "submit",
+                            "title": "SAVE"
+                        }]
+                    }
+                ],
+
+                schema: {
+                    "type": "object",
+                    "properties": {
+                        "customer": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "number",
+                                    "title": "CUSTOMER_ID"
+                                },
+                                "urnNo": {
+                                    "type": "string",
+                                    "title": "URNNO"
+                                },
+                                "firstName": {
+                                    "type": "string",
+                                    "title": "FIRST_NAME"
+                                },
+                                "branchName": {
+                                    "type": "string",
+                                    "title": "BRANCHNAME"
+                                },
+                                "customerType": {
+                                    "type": "string",
+                                    "title": "CUSTOMER_TYPE"
+                                },
+                                "lastName": {
+                                    "type": "string",
+                                    "title": "LAST_NAME"
+                                },
+                                "doorNo": {
+                                    "type": ["string","null"],
+                                    "title": "DOOR_NO",
+                                    "captureStages": ["Init"]
+                                },
+                                "street": {
+                                    "type": ["string","null"],
+                                    "title": "STREET",
+                                    "captureStages": ["Init"]
+                                },
+                                "postOffice": {
+                                    "type": ["string","null"],
+                                    "title": "POST_OFFICE",
+                                    "captureStages": ["Init"]
+                                },
+                                "landmark": {
+                                    "type": ["string","null"],
+                                    "title": "LANDMARK",
+                                    "captureStages": ["Init"]
+                                },
+                                "pincode": {
+                                    "type": ["number","null"],
+                                    "title": "PIN_CODE",
+                                    "minimum": 100000,
+                                    "maximum": 999999,
+                                    "captureStages": ["Init"]
+                                },
+                                "locality": {
+                                    "type": ["string","null"],
+                                    "title": "LOCALITY",
+                                    "captureStages": ["Init"]
+                                },
+                                "villageName": {
+                                    "type": ["string","null"],
+                                    "title": "VILLAGE_NAME",
+                                    "enumCode": "village",
+                                    "captureStages": ["Init"]
+                                },
+                                "district": {
+                                    "type": ["string","null"],
+                                    "title": "DISTRICT",
+                                    "enumCode": "district",
+                                    "captureStages": ["Init"]
+                                },
+                                "state": {
+                                    "type": ["string","null"],
+                                    "title": "STATE",
+                                    "enumCode": "state_master",
+                                    "captureStages": ["Init"]
+                                },
+                                "mailingDoorNo": {
+                                    "type": ["string","null"],
+                                    "title": "DOOR_NO",
+                                    "captureStages": ["Init"]
+                                },
+                                "mailingStreet": {
+                                    "type": ["string","null"],
+                                    "title": "STREET",
+                                    "captureStages": ["Init"]
+                                },
+                                "mailingPostoffice": {
+                                    "type": ["string","null"],
+                                    "title": "POST_OFFICE",
+                                    "captureStages": ["Init"]
+                                },
+                                "mailingPincode": {
+                                    "type": ["string","null"],
+                                    "title": "PIN_CODE",
+                                    "captureStages": ["Init"]
+                                },
+                                "mailingLocality": {
+                                    "type": ["string","null"],
+                                    "title": "LOCALITY",
+                                    "captureStages": ["Init"]
+                                },
+                                "mailingDistrict": {
+                                    "type": ["string","null"],
+                                    "title": "DISTRICT",
+                                    "enumCode": "district",
+                                    "captureStages": ["Init"]
+                                },
+                                "mailingState": {
+                                    "type": ["string","null"],
+                                    "title": "STATE",
+                                    "enumCode": "state_master",
+                                    "captureStages": ["Init"]
+                                },
+                                "dateOfBirth": {
+                                    "type": ["string","null"],
+                                    "title": "DATE_OF_BIRTH",
+                                    "format": "date",
+                                    "captureStages": ["Init"]
+                                },
+                                "mobilePhone": {
+                                    "type": ["string","null"],
+                                    "title": "MOBILE_PHONE",
+                                    "minLength": 10,
+                                    "maxLength": 10,
+                                    "captureStages": ["Init"]
+                                },
+                                "landLineNo": {
+                                    "type": ["string","null"],
+                                    "title": "LANDLINE_NO",
+                                    "minLength": 5,
+                                    "maxLength": 15,
+                                    "captureStages": ["Init"]
+                                },
+                                "gender": {
+                                    "type": ["string","null"],
+                                    "title": "GENDER",
+                                    "enumCode": "gender",
+                                    "captureStages": ["Init"]
+                                },
+                                "ownership": {
+                                    "type": ["string","null"],
+                                    "title": "OWNERSHIP",
+                                    "enumCode": "ownership",
+                                    "captureStages": ["Init"]
+                                }
+                            }
+                        }
+                    },
+                    "required": [
+                        "customer"
+                    ]
+                },
+                actions: {
+                    submit: function (model, form, formName) {
+                        if (window.confirm("Update - Are You Sure?")) {
+                            PageHelper.showLoader();
+                            irfProgressMessage.pop('cust-update', 'Working...');
+
+                            var updatedModel= _.cloneDeep(model);
+                            var proof ={};
+                            if(model.customer.isAddressChanged=='YES'){
+                                proof["addressProofImageId"]=model.customer.addressProofImageId;
+                                if(model.customer.customerType=="Enterprise"){
+                                    updatedModel.customer.enterprise.landmark=updatedModel.customer.landmark;
+                                }
+                            }
+                            if(model.customer.isDateOfBirthChanged=='YES'){
+                                updatedModel.customer.dateOfBirth=updatedModel.customer.newDateOfBirth;
+                                proof["ageProofImageId"]=model.customer.ageProofImageId;
+                            }
+                            if(model.customer.isMobileChanged=='YES'){
+                                updatedModel.customer.mobilePhone=updatedModel.customer.newMobilePhone;
+                                proof["mobileProofImageId"]=model.customer.mobileProofImageId;
+                            }
+                            if(model.customer.isGenderChanged=='YES'){
+                                updatedModel.customer.gender=updatedModel.customer.newGender;
+                            }
+                            if(model.customer.isOwnershipChanged=='YES'){
+                                updatedModel.customer.ownership=updatedModel.customer.newOwnership;
+                                if(model.customer.customerType=="Enterprise"){
+                                    updatedModel.customer.enterprise.ownership=updatedModel.customer.newOwnership;
+                                }
+                            }
+
+                            var requestData = {
+                                "id" : updatedModel.workflow.id,
+                                "version" : updatedModel.workflow.version,
+                                "processType": updatedModel.workflow.processType,
+                                "processName": updatedModel.workflow.processName,
+                                "currentStage": updatedModel.workflow.currentStage,
+                                "customer": updatedModel.customer,
+                                "proof" : proof,
+                                "action" :  updatedModel.action,
+                                "referenceKey" : updatedModel.workflow.customer.id,
+
+                            };
+
+                            if(updatedModel.action=="SENDBACK")
+                                requestData.sendbackStage="Init"
+
+                            Workflow.save(requestData, function (res, headers) {
+                                PageHelper.hideLoader();
+                                irfProgressMessage.pop('cust-update', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
+                                irfNavigator.goBack();
+                            }, function (res, headers) {
+                                PageHelper.hideLoader();
+                                irfProgressMessage.pop('cust-update', 'Oops. Some error.', 2000);
+                                $window.scrollTo(0, 0);
+                                PageHelper.showErrors(res);
+                            })
+                        }
+                    }
+                }
+            };
+
+        }]);
+

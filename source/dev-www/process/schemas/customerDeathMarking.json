@@ -1,0 +1,46 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "required": [],
+    "properties": {
+        "deathMarking": {
+            "type": "object",
+            "properties": {
+                "familyMemberName": {
+                    "type": ["string","null"],
+                    "title": "Family member  Name"
+                },
+                "familyMemberRelation": {
+                    "type": ["string","null"],
+                    "title": "Family member relation"
+                },
+                "familyMemberId": {
+                    "type": "number",
+                    "title": "Family member  ID"
+                },
+                "dateOfBirth": {
+                   "type": ["string","null"],
+                    "title": "DOB",
+                    "format": "date"
+                },
+                "dateOfDeath":{
+                    "type": "date",
+                    "title": "Date of Death"
+                },
+                "reasonForDeath": {
+                    "type": ["string","null"],
+                    "title": "Reason For Death"
+                    
+                },
+                "furtherDetails": {
+                    "type": ["string","null"],
+                    "title": "Further Details"
+                },
+                "comments":{
+                    "type": "textarea",
+                    "title": "Comments"
+                }
+            }
+        }     
+    }
+}    
