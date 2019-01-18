@@ -68,6 +68,9 @@ return {
         var self = this;
         model.review = model.review || {};
         model.siteCode = SessionStore.getGlobalSetting('siteCode');
+        model.additions = {};
+        model.additions.isLoadComplete = false;
+        model.additions.loaderTitleHtml = "<p><centre>Loading Customer Data...</centre><p>"
         if ($stateParams.pageId) {
             var groupId = $stateParams.pageId;
             PageHelper.showLoader();
@@ -127,7 +130,10 @@ return {
                         for (i in errors) {
                             PageHelper.showErrors(errors[i]);
                         }
+                    }).finally(function(){
+                        // PageHelper.hideLoader();
                     }),
+                
                     $q.all(dscPromises).then(function(data) {
                         for (i in data) {
                             var r = data[i].responseMessage;
@@ -138,6 +144,9 @@ return {
                         for (i in errors) {
                             PageHelper.showErrors(errors[i]);
                         }
+                    }).finally(function(){
+                        
+                    // irfProgressMessage.pop("checker1", "Loading Customer Completed...",4000);
                     }),
                     Queries.getGroupLoanRemarksHistoryById(model.group.id).then(function(resp){
                         for(i=0;i<resp.length;i++){
@@ -147,12 +156,19 @@ return {
                         }
                         model.group.remarksHistory = resp;
                     })
-                ]).finally(PageHelper.hideLoader);
+        
+                ]).finally(function(resp){
+                    PageHelper.hideLoader()
+                    model.additions.isLoadComplete = true;
+                    irfProgressMessage.pop("checker1", "Loading Customer Completed...",4000);
+                    // model.additions.isLoadComplete = true;
+                });
             }, function(error) {
                 PageHelper.showErrors(error);
                 PageHelper.hideLoader();
                 irfProgressMessage.pop("checker1", "Oops. An error occurred", 2000);
             });
+            PageHelper.hideLoader();
         } else {
             irfNavigator.goBack();
         }
@@ -190,7 +206,7 @@ return {
             {
                 type: "section",
                 "htmlClass": "row",
-                title: "MEMBER_DETAILS",
+                title: "MEMBER_DETAILSS",
                 "items": [{
                     "type": "section",
                     "htmlClass": "col-sm-12",
@@ -232,8 +248,24 @@ return {
                 }]
             },
             {
+                "type":"section",
+                "condition":"!model.additions.isLoadComplete",
+                "items":[
+                    {
+                        "type":"html",
+                        "key":"model.additions.loaderTitleHtml",
+                    },
+                    {
+                        "type":"section",
+                        "html":'<div class="lds-css"><div style="width:100%;height:100%" class="lds-ripple"><div ng-style="{"border-color:#ffffff"}"></div><div ng-style="bc"></div></div><style type="text/css">.lds-css{width:200px;height:150px;margin:auto;transform:scale(.5)}@-webkit-keyframes lds-ripple{0%{top:90px;left:90px;width:0;height:0;opacity:1;}100%{top:15px;left:15px;width:150px;height:150px;opacity:0;}}@keyframes lds-ripple{0%{top:90px;left:90px;width:0;height:0;opacity:1;}100%{top:15px;left:15px;width:150px;height:150px;opacity:0;}}.lds-ripple{position:relative;}.lds-ripple div{box-sizing:content-box;position:absolute;border-width:10px;border-style:solid;opacity:1;border-radius:50%;-webkit-animation:lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;animation:lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;}.lds-ripple div:nth-child(2){-webkit-animation-delay:-0.5s;animation-delay:-0.5s;}</style></div>',
+                    }
+                ]
+                // "html":"model.additions.riperLoaderHtml",
+                
+            },
+            {
                 "type": "array",
-                "condition": "model.siteCode == 'KGFS'",
+                "condition": "model.siteCode == 'KGFS' && model.additions.isLoadComplete",
                 "key": "group.jlgGroupMembers",
                 "titleExpr": "model.group.jlgGroupMembers[arrayIndex].loanAccount.accountNumber",
                 "add": null,

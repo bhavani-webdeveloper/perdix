@@ -26,10 +26,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          "title": "HYPOTHECATED_TO_IREP"
 
                     },
-                    "EnterpriseInformation.businessHistory": {
-                         "title": "BUSINESSINFO_BUSINESS_OWNERSHIP",
-                         "enumCode": "businessinfo_business_ownershi"
-                    },
+                    // "EnterpriseInformation.businessHistory": {
+                    //      "title": "BUSINESSINFO_BUSINESS_OWNERSHIP",
+                    //      "enumCode": "businessinfo_business_ownershi"
+                    // },
                     "EnterpriseInformation.enterpriseRegistrations.registrationType": {
                          "enumCode": "business_registration_type",
                          "required": false
@@ -39,6 +39,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     },
                     "EnterpriseInformation.enterpriseRegistrations.registrationNumber":{
                         "required": false
+                    },
+                    "EnterpriseInformation.enterpriseRegistrations.documentId":{
+                        "required":true
+                    },
+                    "EnterpriseInformation.isGSTAvailable": {
+                        "required": true
+                    },
+                    "EnterpriseInformation.referredBy":{
+                        "required":true
                     },
                     //over ride for mandatory 
                     
@@ -53,6 +62,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     },                    
                     "EnterpriseAssets.enterpriseAssets.valueOfAsset":{
                         "title": "Present Value"
+                    },
+                    "CurrentAssets":{
+                        "orderNo":100
+                    },
+                    "EnterpriseAssets":{
+                        "orderNo":110 
+                    },
+                    "BuyerDetails":{
+                        "orderNo":120 
+                    },
+                    "SuppliersDeatils":{
+                        "orderNo":130 
+                    },
+                    "Machinery":{
+                        "orderNo":140 
                     },
                     //
                 //    "currentAssets": {
@@ -132,9 +156,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.businessActivity":{
                         "required": true
                     },
-                    "EnterpriseInformation.businessSector":{
-                        "required": true
-                    },
                     "EnterpriseInformation.businessSubsector":{
                         "required": true,
                         "resolver":"BusinessSubsectorLOVConfiguration"
@@ -181,10 +202,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          "orderNo":142
                     },
                     "EnterpriseInformation.businessSector":{
+                        "required": true,
                         onChange: function(modelValue, form, model) {
                             model.customer.enterprise.businessSubsector=null;
                         }
                     },
+                    // "EnterpriseAssets":{
+                    //     "title":"ENTERPRICE_ASSETS"
+                    // },
                     "EnterpriseFinancials": {
                         "orderNo": 50
                     },
@@ -307,12 +332,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          "type": "string",
                          "title": "CONFIRMED_ACCOUNT_NUMBER",
                          "required": true
-                    }                         
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatements": {
+                        "titleExpr": "moment(model.customer.customerBankAccounts[arrayIndexes[0]].bankStatements[arrayIndexes[1]].startMonth).format('MMMM YYYY') + ' ' + ('STATEMENT_DETAILS' | translate)",
+                        "titleExprLocals": {moment: window.moment},
+                    },                         
                }
             }
             var repositoryAdditions = function(bundlePageObj){
                return {
-                    // "EnterpriseInformation": {
+                                    // "EnterpriseInformation": {
                     //      "items": {
                     //           "lastFiledItr": {
                     //                "key": "customer.udf.userDefinedDateFieldValues.udfDate2",
@@ -361,7 +390,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.entityId",
                     "EnterpriseInformation.urnNo",
                     "EnterpriseInformation.centreId",
-                    //"EnterpriseInformation.oldCustomerId",
+                    "EnterpriseInformation.oldCustomerId",
                     "EnterpriseInformation.firstName",
                     "EnterpriseInformation.referredBy",
                     "EnterpriseInformation.referredName",
@@ -371,7 +400,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.photoImageId",
                     "EnterpriseInformation.ownership",                    
                     "EnterpriseInformation.businessConstitution",
-                    //"EnterpriseInformation.businessHistory",
+                    "EnterpriseInformation.businessHistory",
                     //"EnterpriseInformation.noOfPartners",
                     "EnterpriseInformation.anyPartnerOfPresentBusiness",
                     "EnterpriseInformation.partnershipDissolvedDate",
@@ -463,7 +492,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "Liabilities.liabilities.interestOnly",
                     "Liabilities.liabilities.interestRate",
                     "Liabilities.liabilities.proofDocuments",
-
+                    
                     "EnterpriseFinancials",
                     "EnterpriseFinancials.monthlyTurnover",
                     "EnterpriseFinancials.monthlyBusinessExpenses",
@@ -1128,6 +1157,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             },  
                             "ScreeningReview":{
                                 "excludes": [
+                                    "CurrentAssets",
+                                    "EnterpriseAssets",
+                                    "BuyerDetails",
+                                    "ProxyIndicators",
+                                    "SuppliersDeatils",
+                                    "Machinery"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -1148,7 +1183,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "CommercialCBCheck": {
                                         "orderNo": 11,
-                                        "readonly": true
+                                        "readonly": false
                                     },
                                     "EnterpriseFinancials.incomeThroughSales": {
                                         "title": "SALES_INFO_DETAILS"
@@ -1170,10 +1205,74 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     }
                                     
                                 }
-                            },   
+                            },  
+                            "Application": {
+                                "excludes": [
+                                    "ProxyIndicators"
+                                ],
+                                "overrides": {
+                                    "EnterpriseInformation.customerBranchId": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.centreId": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.oldCustomerId": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseInformation.rentLeaseStatus": {
+                                        "schema": {
+                                             "enumCode": "rent_lease_status"
+                                        },
+                                        "required": true,
+                                        "condition": "model.customer.enterprise.ownership.toLowerCase() =='rental' || model.customer.enterprise.ownership.toLowerCase() =='leased' "
+                                    },
+                                    "EnterpriseInformation.rentLeaseAgreement": {
+                                        "condition": "model.customer.udf.userDefinedFieldValues.udf1 == 'Available' ",
+                                        "orderNo":142,
+                                        "required": true
+
+                                    },
+                                    "CommercialCBCheck": {
+                                        "orderNo": 11,
+                                        "readonly": true
+                                    },
+                                    "EnterpriseFinancials.incomeThroughSales": {
+                                        "title": "SALES_INFO_DETAILS"
+                                    },
+                                    // "Liabilities": {
+                                    //     "readonly": true
+                                    // },
+                                    // "EnterpriseAssets": {
+                                    //     "readonly": true
+                                    // },
+                                    "BankAccounts.customerBankAccounts.customerBankName": {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts.customerBankAccounts.customerBankBranchName": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation.locality": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation.villageName": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation.district": {
+                                        "readonly": true
+                                    },
+                                    "ContactInformation.state": {
+                                        "readonly": true
+                                    },
+                                    "EnterpriseReferences": {
+                                        "readonly": true
+                                    }
+                                    
+                                }
+                            }, 
                             "ApplicationReview":{
                                 "excludes": [
-                                    
+                                    "ProxyIndicators"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -1203,6 +1302,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "EnterpriseAssets": {
+                                        "readonly": true
+                                    },
+                                    "currentAssets": {
                                         "readonly": true
                                     },
                                     "BankAccounts": {
@@ -1221,7 +1323,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                              "Screening":{
                                 "excludes": [
                                     "CommercialCBCheck",
-                                    "ProxyIndicators"
+                                    "ProxyIndicators",
+                                    "BuyerDetails",
+                                    "CurrentAssets",
+                                    "EnterpriseAssets",
+                                    "SuppliersDeatils",
+                                    "Machinery"
                                 ],
                                 "overrides": {
                                         
@@ -1239,15 +1346,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 // "EnterpriseFinancials.marginDetails",                        
                                 // "EnterpriseFinancials.rawMaterialExpenses"
                              ],
-                            "overrides": {//EnterpriseAssets
+                            "overrides": {
                                 "ProxyIndicators":{
-                                    "readonly":true
+                                    "readonly":false,
+                                    "orderNo": 100
                                 },
                                 "Machinery":{
                                     "readonly":true
                                 },
                                 "CommercialCBCheck":{
-                                    "readonly":true
+                                    "readonly":true,
+                                    "orderNo": 90
                                 },
                                 "BuyerDetails":{
                                     "readonly":true
@@ -1417,8 +1526,219 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 }
                             }
                         },
+                        "Sanction":
+                        {
+                            "excludes": [
+                                //"ProxyIndicators"
+                                // "EnterpriseFinancials.otherBusinessIncomes",
+                                // "EnterpriseReferences",
+                                // "EnterpriseFinancials.expenditures",
+                                // "EnterpriseFinancials.incomeThroughSales",
+                                // "EnterpriseFinancials.enterpriseMonthlySales",
+                                // "EnterpriseFinancials.dailySales",
+                                // "EnterpriseFinancials.marginDetails",                        
+                                // "EnterpriseFinancials.rawMaterialExpenses"
+                             ],
+                            "overrides": {
+                                "Machinery":{
+                                    "readonly":true
+                                },
+                                "ProxyIndicators":{
+                                    "readonly":true
+                                },
+                                "SuppliersDeatils":{
+                                    "readonly":true
+                                },
+                                "CurrentAssets":{
+                                    "readonly":true
+                                },
+                                "CurrentAssets.currentAssets":{
+                                    "readonly":true
+                                },
+                                "EnterpriseAssets":{
+                                    "readonly":true
+                                },
+                                "CommercialCBCheck":{
+                                    "readonly":true
+                                },
+                                "BuyerDetails":{
+                                    "readonly":true
+                                },
+                                "EnterpriseInformation": {
+                                    "orderNo": 10,
+                                    "readonly":true
+                                },                                   
+                                "ContactInformation": {
+                                    "orderNo": 20,
+                                    "readonly":true
+                                },
+                                "EnterpriseFinancials.incomeThroughSales": {
+                                    "title": "SALES_INFO_DETAILS",
+                                    "readonly":true
+                                },
+                                "BankAccounts": {
+                                    "orderNo": 30,
+                                    "readonly":true
+                                },
+                                "Liabilities": {
+                                    "orderNo": 40,
+                                     "title": "BUSINESS_LIABILITIES",
+                                     "readonly":true
+                                },
+                                "IndividualInformation.centreId" :{
+                                    "resolver": "CentreLovConfiguration",
+                                    "readonly":true
+                                },
+                                "EmployeeDetails": {
+                                    "orderNo": 50,
+                                    "readonly":true
+                                },
+                                "EnterpriseFinancials": {
+                                    "orderNo": 60,
+                                    "readonly":true
+                                },
+                                "EnterpriseInformation.customerBranchId": {
+                                    "readonly": true
+                                },
+                                "EnterpriseInformation.urnNo": {
+                                    "condition": "model.customer.urnNo",
+                                    "readonly": true
+                                },
+                                "EnterpriseInformation.oldCustomerId": {
+                                    "condition": "model.customer.oldCustomerId",
+                                    "readonly": true
+                                },
+                                "EnterpriseInformation.referredBy": {
+                                    "required": true
+                                },
+                                "EnterpriseInformation.referredName": {
+                                    "condition": "model.customer.enterprise.referredBy == 'Channel Partner'||model.customer.enterprise.referredBy =='Peer Referral'||model.customer.enterprise.referredBy =='Known supply chain'"
+                                },
+                                "EnterpriseInformation.companyOperatingSince": {
+                                    "required": true
+                                },
+                                "EnterpriseInformation.photoImageId": {
+                                    "required": true
+                                },
+                                "EnterpriseInformation.ownership": {
+                                    "required": true
+                                },
+                                "EnterpriseInformation.rentLeaseStatus": {
+                                    "schema": {
+                                         "enumCode": "rent_lease_status"
+                                    },
+                                    "required": true,
+                                    "condition": "model.customer.enterprise.ownership.toLowerCase() =='rental' || model.customer.enterprise.ownership.toLowerCase() =='leased' "
+                                },
+                                "EnterpriseInformation.rentLeaseAgreement": {
+                                    "condition": "model.customer.udf.userDefinedFieldValues.udf1 == 'Available' ",
+                                    "orderNo":142,
+                                    "required": true
+
+                                },
+                                "EnterpriseInformation.businessHistory": {
+                                    "required": true
+                                },
+                                "EnterpriseInformation.noOfPartners": {
+                                    "condition": "model.customer.enterprise.businessConstitution=='Partnership'"
+                                },
+                                "EnterpriseInformation.partnershipDissolvedDate": {
+                                    "condition": "model.customer.enterprise.anyPartnerOfPresentBusiness=='YES'"
+                                },
+                                "EnterpriseInformation.companyRegistered": {
+                                    "required": true
+                                },
+                                "EnterpriseInformation.isGSTAvailable": {
+                                    "required": true
+                                },
+                                "EnterpriseInformation.enterpriseRegistrations": {
+                                    "condition": "model.customer.enterprise.companyRegistered === 'YES' || model.customer.enterprise.isGSTAvailable === 'YES'"
+                                },
+                                "EnterpriseInformation.enterpriseRegistrations.documentId": {
+                                    "required": true
+                                },
+                                "EnterpriseInformation.businessActivity": {
+                                    "required": true
+                                },
+                                "EnterpriseInformation.businessSector": {
+                                    "required": true
+                                },
+                                "EnterpriseInformation.businessSubsector": {
+                                    "required": true,
+                                    "resolver": "BusinessSubsectorLOVConfiguration"
+                                },
+                                "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId": {
+                                     readonly : true
+                                },
+                                "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerName": {
+                                    "readonly": true
+                                },
+                                "EnterpriseInformation.enterpriseCustomerRelations.experienceInBusiness": {
+                                    "required": true
+                                },
+                                "EnterpriseInformation.enterpriseCustomerRelations.businessInvolvement": {
+                                    "required": true
+                                },
+                                "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosed": {
+                                    "condition": "model.customer.enterpriseCustomerRelations[arrayIndex].partnerOfAnyOtherCompany == 'YES'"
+                                },
+                                "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosureDate": {
+                                    "condition": "model.customer.enterpriseCustomerRelations[arrayIndex].otherBusinessClosed == 'YES'"
+                                },
+                                "ContactInformation.locality": {
+                                    "readonly": true
+                                },
+                                "ContactInformation.villageName": {
+                                    "readonly": true
+                                },
+                                "ContactInformation.district": {
+                                    "readonly": true
+                                },
+                                "ContactInformation.state": {
+                                    "readonly": true
+                                },
+                                "ContactInformation.businessInPresentAreaSince": {
+                                    "required": true
+                                },
+                                "ContactInformation.businessInCurrentAddressSince": {
+                                    "required": true
+                                },
+                                "ContactInformation.pincode": {
+                                    "required": true,
+                                    "resolver": "PincodeLOVConfiguration"
+                                },
+                                "BankAccounts.customerBankAccounts.ifscCode": {
+                                    "required": true,
+                                    "resolver": "IFSCCodeLOVConfiguration"
+                                },
+                                "BankAccounts.customerBankAccounts.customerBankName": {
+                                    "readonly": true
+                                },
+                                "BankAccounts.customerBankAccounts.customerBankBranchName": {
+                                    "readonly": true
+                                },
+                                "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced": {
+                                    "required": true
+                                },
+                                "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced": {
+                                    "required": true
+                                },
+                                "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
+                                    "required": true
+                                },
+                                "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
+                                    "required": true
+                                },
+                                "EnterpriseFinancials.monthlyTurnover": {
+                                    "required": true
+                                },
+                                "EmployeeDetails.avgMonthlySalary": {
+                                    "condition": "model.customer.enterprise.noOfFemaleEmployees > 0 ||model.customer.enterprise.noOfMaleEmployees > 0 "
+                                }
+                            }
+                        },
                             // "Televerification": {
-                            
+                           
 
                         }
 
@@ -1443,16 +1763,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
 
                     /* Setting data for the form */
-                    if( model.currentStage=="FieldAppraisal"){
+                    // if( model.currentStage=="FieldAppraisal"){
 
-                    }else{
+                    // }else{
                     model.customer = model.enrolmentProcess.customer;
                     var branchId = SessionStore.getBranchId();
                     if(branchId && !model.customer.customerBranchId)
                         {
                             model.customer.customerBranchId = branchId;
                     };
-                }
+                //}
                     /* End of setting data for the form */
                     console.log("model information");
                     console.log(model);
@@ -1466,19 +1786,33 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "additions": [
                                     {
                                         "type": "actionbox",
+                                       // "condition": "model.customer.currentStage == 'Application'",
+                                       "condition": "model.customer.id && !(model.currentStage=='ApplicationReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'||model.currentStage == 'Rejected'||model.currentStage == 'loanView')",
+                                        "orderNo": 220,
+                                        "items": [
+                                            {
+                                                "type": "button",
+                                                "title": "COMPLETE_ENROLMENT",//PROCEED
+                                                "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "actionbox",
                                         "condition": "!model.customer.currentStage",
-                                        "orderNo": 1200,
+                                        "orderNo": 220,
                                         "items": [
                                             {
                                                 "type": "submit",
                                                 "title": "SUBMIT"
+                                               
                                             }
                                         ]
                                     },
                                     {
                                         "type": "actionbox",
                                         "condition": "model.customer.currentStage && (model.currentStage=='KYC' || model.currentStage == 'Appraisal' || model.currentStage=='Screening')",
-                                        "orderNo": 1300,
+                                        "orderNo": 220,
                                         "items": [
                                             {
                                                 "type": "button",
@@ -1556,7 +1890,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     }
                 },
                 form: [
-
+                   
                 ],
                 schema: function() {
                     return Enrollment.getSchema().$promise;

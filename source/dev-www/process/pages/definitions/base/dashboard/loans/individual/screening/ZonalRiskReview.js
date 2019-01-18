@@ -1,11 +1,12 @@
-irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskReview'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-    "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "Message", "irfNavigator","Scoring",
-    function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, Message, irfNavigator,Scoring) {
+irf.pageCollection.factory(irf.page('base.dashboard.loans.individual.screening.ZonalRiskReview'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
+    "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager","Scoring",
+    function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager,Scoring) {
         $log.info("Inside LoanBookingBundle");
+
 
         return {
             "type": "page-bundle",
-            "title": "VP_CREDIT_RISK_REVIEW",
+            "title": "ZONAL_RISK_REVIEW",
             "subTitle": "",
             "readonly": true,
             "bundleDefinition": [{
@@ -56,7 +57,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                 pageClass: 'portfolio-analysis',
                 minimum: 1,
                 maximum: 1,
-                order: 52
+                order: 55
             },{
                 pageName: 'loans.individual.screening.detail.LoanApplicationView',
                 title: 'Loan Recommendation',
@@ -92,16 +93,14 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                 minimum: 1,
                 maximum: 1,
                 order: 80
-            },
-            // {
-            //     pageName: 'loans.individual.screening.detail.PortfolioAnalyticsView',
-            //     title: 'Portfolio Analytics',
-            //     pageClass: 'portfolio-analytics',
-            //     minimum: 1,
-            //     maximum: 1,
-            //     order: 90
-            // }
-            ],
+            }, {
+                pageName: 'loans.individual.screening.detail.PortfolioAnalyticsView',
+                title: 'Portfolio Analytics',
+                pageClass: 'portfolio-analytics',
+                minimum: 1,
+                maximum: 1,
+                order: 90
+            }],
             "bundlePages": [],
             "offline": true,
             "getOfflineDisplayItem": function(value, index) {
@@ -117,21 +116,11 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                 return out;
             },
 
-            bundleActions: [{
-                name: "Conversation",
-                desc: "",
-                icon: "fa fa-comment",
-                fn: function(bundleModel) {
-                    Message.openOrCreateConversation("Loan", $stateParams.pageId);
-                },
-                isApplicable: function(bundleModel) {
-                    return true;
-                }
-            }],
+            bundleActions: [],
 
             "pre_pages_initialize": function(bundleModel) {
                 $log.info("Inside pre_page_initialize");
-                bundleModel.currentStage = "CentralRiskReview";
+                bundleModel.currentStage = "ZonalRiskReview";
                 var deferred = $q.defer();
 
                 var $this = this;
@@ -169,12 +158,12 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                                 guarantors: []
                             };
 
-
-                            if (res.currentStage != 'CentralRiskReview') {
-                                PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
-                                irfNavigator.goBack();
-                                return;
-                            }
+                            /*
+                                                            if (res.currentStage != 'ZonalRiskReview') {
+                                                                PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
+                                                                irfNavigator.goBack();
+                                                                return;
+                                                            }*/
 
                             for (var i = 0; i < res.loanCustomerRelations.length; i++) {
                                 var cust = res.loanCustomerRelations[i];
@@ -258,7 +247,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                                     customerId: res.customerId
                                 }
                             });
-
+                            
                             $this.bundlePages.push({
                                 pageClass: 'personal-discussion',
                                 model: {
@@ -267,6 +256,14 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                             });
 
                             $this.bundlePages.push({
+                                pageClass: 'portfolio-analytics',
+                                model: {
+                                    loanId: bundleModel.loanId
+                                }
+                            });
+
+                            
+                                $this.bundlePages.push({
                                     pageClass: 'portfolio-analysis',
                                     model: {
                                         customerUrn: res.urnNo,
@@ -278,7 +275,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                                         }
                                         
                                     }
-                            }); 
+                                });
 
                             $this.bundlePages.push({
                                 pageClass: 'loan-recommendation',
@@ -294,19 +291,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                                 }
                             });
 
-                             $this.bundlePages.push({
+                            $this.bundlePages.push({
                                 pageClass: 'cbview',
                                 model: {
                                     loanAccount: res
                                 }
                             });
 
-                            // $this.bundlePages.push({
-                            //     pageClass: 'portfolio-analytics',
-                            //     model: {
-                            //         loanId: bundleModel.loanId
-                            //     }
-                            // });
 
 
                             deferred.resolve();
@@ -320,13 +311,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                     .finally(function() {
                         PageHelper.hideLoader();
                     })
-                  
+                    
                 }
                 return deferred.promise;
             },
             "post_pages_initialize": function(bundleModel) {
                 $log.info("Inside post_page_initialize");
-                BundleManager.broadcastEvent('origination-stage', 'CentralRiskReview');
+                BundleManager.broadcastEvent('origination-stage', 'FieldAppraisalReview');
 
             },
             eventListeners: {

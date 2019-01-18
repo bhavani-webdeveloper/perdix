@@ -650,12 +650,14 @@ irf.commons.service('irfPrinter',["$log","PageHelper","Utils","irfSimpleModal",f
 		self.data = printData;
 		if (Utils.isCordova && self.data.thermalReceipt) {
 			self.thermalReceipt = generateThermelPrint(data.thermalReceipt);
-			self.previewHtml = self.thermalReceipt.html;
+			// self.previewHtml = self.thermalReceipt.html;
+			self.previewHtml = '<div class="web-print-wrapper">' + self.webPrintStyle + self.thermalReceipt.html + '</div>'
 		} else if (self.data.paperReceipt) {
 			self.previewHtml = '<div class="web-print-wrapper">' + self.webPrintStyle + printData.paperReceipt + '</div>'
 		}
 		self.thermalReceipt = generateThermelPrint(self.data.thermalReceipt);
-		self.previewHtml = self.thermalReceipt.html;
+		// self.previewHtml = self.thermalReceipt.html;
+		// self.previewHtml = '<div class="web-print-wrapper">' + self.webPrintStyle + self.thermalReceipt.html + '</div>'
 		self.previewHtml = mapButtonToHtml(self.previewHtml);
 		irfSimpleModal('Print Preview', self.previewHtml, {
 			print: function() {
@@ -673,7 +675,14 @@ irf.commons.service('irfPrinter',["$log","PageHelper","Utils","irfSimpleModal",f
 						console.log("errr callback");
 					}, self.thermalReceipt.data);
 				} else if (self.data.paperReceipt) {
+					// var restorepage = document.body.innerHTML;
+					// var printcontent = document.getElementsByClassName("web-print-wrapper")
+					// $('body').empty().html(printcontent.innerHTML);
+					// document.body.innerHTML = printcontent[0].innerHTML;
 					window.print();
+					// document.body.innerHTML = restorepage;
+					// window.print();
+					// $("#web-print-wrapper").printElement();
 				} else {
 					PageHelper.clearErrors();
 					PageHelper.setError({message: 'No Data To Print'});
@@ -741,5 +750,5 @@ irf.commons.service('irfPrinter',["$log","PageHelper","Utils","irfSimpleModal",f
 			html: html + '</div>'
 		};
 	}
-	self.webPrintStyle = '<style>@media print { body * { visibility: hidden; } .web-print-wrapper, .web-print-wrapper * { visibility: visible } .web-print-wrapper { position: absolute; top: 0; left: 0;} html, body {height: 100%;}}</style>';
+	self.webPrintStyle = '<style>@media print { body * { visibility: hidden; } .web-print-wrapper, .web-print-wrapper * { visibility: visible } .web-print-wrapper { position: absolute; top: 0; left: 0;} .web-print-wrapper > div {page-break-after:auto;} html, body {height: 100%;}}</style>';
 }])

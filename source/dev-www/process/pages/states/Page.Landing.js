@@ -112,6 +112,8 @@ function($log, $scope, SessionStore, PagesDefinition, irfSimpleModal, $sce, Comm
 				}, {},function (resp) {
 					if (resp && resp.thoughtOfTheDay) {
 						$scope.tipOfTheDay = tipsCache[resp.thoughtDate] = resp.thoughtOfTheDay;
+					} else {
+						$scope.tipOfTheDay = '<br><center><i class="fa fa-bolt">&nbsp;</i> {{"NO_TIPS"|translate}}</center><br>';
 					}
 				}, function () {
 					$scope.tipOfTheDay = '<br><center><i class="fa fa-bolt">&nbsp;</i> {{"NO_TIPS"|translate}}</center><br>';

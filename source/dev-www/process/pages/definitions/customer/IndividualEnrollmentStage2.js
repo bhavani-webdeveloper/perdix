@@ -355,69 +355,73 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                 return {
                    "CustomerInformation.download":{},
                    
+                   "CustomerInformation":{
+                       "readonly":false
+                   },
                     "CustomerInformation.photoImageId":{
-                        "readonly": customReadonly
+                        //"readonly": customReadonly
                     },
                     "CustomerInformation.gender":{
-                        "readonly": customReadonly
+                        //"readonly": customReadonly
                     },
                     "CustomerInformation.age":{
-                        "readonly": customReadonly
+                        //"readonly": customReadonly
                     },
                     "CustomerInformation.dateOfBirth":{
-                        "readonly": customReadonly
+                        //"readonly": customReadonly
                     },
                     "CustomerInformation.maritalStatus":{
-                        "readonly": customReadonly
+                       // "readonly": customReadonly
                     },
                     "CustomerInformation.fatherFirstName":{
-                        "readonly": customReadonly
+                        "readonly": false
                     },
                     "CustomerInformation.spouseFirstName":{
-                        "readonly": customReadonly
+                       // "readonly": customReadonly
                     },
                     "CustomerInformation.spouseDateOfBirth":{
-                        "readonly": customReadonly
+                        //"readonly": customReadonly
                     },
                     "CustomerInformation.religion":{
-                        "readonly": customReadonly
+                        //"readonly": customReadonly
                     },
                     "CustomerInformation.caste":{
-                        "readonly": customReadonly
+                        //"readonly": customReadonly
                     },
                     "CustomerInformation.dateOfBirth":{
-                        "readonly": customReadonly
+                        //"readonly": customReadonly
                     },
                     "CustomerInformation.area":{
-                        "readonly": customReadonly
+                        //"readonly": customReadonly
                     },
                     "CustomerInformation.download":{},
                   
                     "ContactInformation": {
-                        "readonly": customReadonly
+                       // "readonly": customReadonly
                     },
                     "KYC": {
-                        "readonly": customReadonly,
+                        //"readonly": customReadonly,
                         "orderNo":15
                     },
                     "AdditionalKYC": {
-                        "readonly": customReadonly
+                        //"readonly": customReadonly
                     },
                     "loanInformation": {
-                        "readonly": customReadonly
+                        //"readonly": customReadonly
                     },
                     "CustomerInformation.centreId": {
                         "title": "CENTRE",
-                        "readonly": true,
+                        //"readonly": true,
                         "condition":"model.customer.currentStage.toLowerCase()=='completed'"
                     },
                     "CustomerInformation.centreId": {
                         "title": "CENTRE",
-                        "condition":"model.customer.currentStage.toLowerCase()!='completed'"
+                        "condition":"model.customer.currentStage.toLowerCase()!='completed'",
+                        //"readonly": true
                     },
                     "CustomerInformation.firstName": {
                         "type": "string",
-                        "readonly":true,
+                        "readonly":false,
                         "schema": {
                             "pattern": "^[a-zA-Z\. ]+$",
                         },
@@ -427,7 +431,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     },
                     "CustomerInformation.fatherFirstName": {
                         "type": "string",
-                        "readonly":true,
+                        "readonly":false,
                         "schema": {
                             "pattern": "^[a-zA-Z\. ]+$",
                         },
@@ -437,7 +441,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     },
                     "CustomerInformation.spouseFirstName": {
                         "required": true,
-                        "readonly":true,
+                        "readonly":false,
                         "type": "string",
                         "schema": {
                             "pattern": "^[a-zA-Z\. ]+$",
@@ -448,7 +452,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                     },
                     "CustomerInformation.spouseDateOfBirth": {
                         "required": true,
-                        "readonly":true
+                        "readonly":false
                     },
                     "ContactInformation.mobilePhone": {
                         "required": false,
@@ -868,19 +872,7 @@ irf.pageCollection.factory(irf.page("customer.IndividualEnrollmentStage2"), ["$l
                         }
                     },
                     "HouseVerification.HouseDetails.durationOfStay": {
-                        // title: "What Toilet facility does your family use?",
-                        // key:"customer.verifications[0].toiletFacilityType",
-                        // required: true,
-                        // "type": "radios",
-                        // order: 100,
-                        // "titleMap": {
-                        //     "Own toilet": "Own toilet",
-                        //     "Shared/public": "Shared/public",
-                        //     "None/open space": "None/open space",
-                        // },
-                        // schema: {
-                        //     "type": ["string", "null"],
-                        // }
+                       
                     },
                     "HouseVerification.houseVerificationPhoto": {
                        

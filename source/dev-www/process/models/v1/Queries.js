@@ -44,29 +44,28 @@ irf.models.factory('Queries', [
             }, deferred.reject);
             return deferred.promise;
         };
-          resource.searchMachineDescription = function() {
-            var deferred = $q.defer();
-            var request = {}
-            resource.getResult("machineDescription.list",request).then(function(records) {
-                if (records && records.results) {
-                    var result = {
-                        headers: {
-                            "x-total-count": records.results.length
-                        },
-                        body: records.results
-                    };
-                    deferred.resolve(result);
-                }
-            }, deferred.reject);
-            return deferred.promise;
-        };
-
-        resource.searchMachineName = function(machineDescription) {
+        //   resource.searchMachineDescription = function() {
+        //     var deferred = $q.defer();
+        //     var request = {}
+        //     resource.getResult("machineDescription.list",request).then(function(records) {
+        //         if (records && records.results) {
+        //             var result = {
+        //                 headers: {
+        //                     "x-total-count": records.results.length
+        //                 },
+        //                 body: records.results
+        //             };
+        //             deferred.resolve(result);
+        //         }
+        //     }, deferred.reject);
+        //     return deferred.promise;
+        // };
+        resource.searchMachineName = function(machineName) {
             var deferred = $q.defer();
             var request = {
-                "machineDescription": machineDescription
+                "machineName": machineName || ""
             };
-            resource.getResult("machineName.list", request).then(function(records) {
+            resource.getResult("machineName.list", request,10).then(function(records) {
                 if (records && records.results) {
                     var result = {
                         headers: {
@@ -79,11 +78,28 @@ irf.models.factory('Queries', [
             }, deferred.reject);
             return deferred.promise;
         };
+        // resource.searchMachineName = function(machineDescription) {
+        //     var deferred = $q.defer();
+        //     var request = {
+        //         "machineDescription": machineDescription
+        //     };
+        //     resource.getResult("machineName.list", request).then(function(records) {
+        //         if (records && records.results) {
+        //             var result = {
+        //                 headers: {
+        //                     "x-total-count": records.results.length
+        //                 },
+        //                 body: records.results
+        //             };
+        //             deferred.resolve(result);
+        //         }
+        //     }, deferred.reject);
+        //     return deferred.promise;
+        // };
 
-         resource.searchMachineType = function(machineDescription, machineName) {
+         resource.searchMachineType = function( machineName) {
             var deferred = $q.defer();
             var request = {
-                "machineDescription": machineDescription,
                 "machineName" : machineName
             };
             resource.getResult("machineType.list", request).then(function(records) {
@@ -99,10 +115,9 @@ irf.models.factory('Queries', [
             }, deferred.reject);
             return deferred.promise;
         };
-        resource.searchMachineWorkProcess = function(machineDescription, machineName, machineType) {
+        resource.searchMachineWorkProcess = function( machineName, machineType) {
             var deferred = $q.defer();
             var request = {
-                "machineDescription": machineDescription,
                 "machineName" : machineName,
                 "machineType": machineType
             };
@@ -153,10 +168,9 @@ irf.models.factory('Queries', [
             }, deferred.reject);
             return deferred.promise;
         };
-        resource.searchMachineModel = function(machineDescription, machineName,machineType,workProcess) {
+        resource.searchMachineModel = function( machineName,machineType,workProcess) {
             var deferred = $q.defer();
             var request = {
-                "machineDescription": machineDescription,
                 "machineName" : machineName,
                 "machineType": machineType,
                 "workProcess": workProcess

@@ -6,6 +6,7 @@ irf.models
 		'fileDeleteUrl': irf.BASE_URL + '/api/files/upload',
 		'fileStreamUrl': irf.BASE_URL + '/api/stream',
 		'responseSelector': 'fileId',
+		'docScannerPackage': irf.appConfig.DOC_SCANNER_PACKAGE,
 		'compressionRatio': 80,
 		'imageCompressionRatio': 75
 	})

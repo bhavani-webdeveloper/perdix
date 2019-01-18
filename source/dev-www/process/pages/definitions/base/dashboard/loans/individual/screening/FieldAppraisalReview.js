@@ -288,7 +288,8 @@ irf.pageCollection.factory(irf.page('base.dashboard.loans.individual.screening.F
                             $this.bundlePages.push({
                                 pageClass: 'loan-recommendation',
                                 model: {
-                                    customerId: res.customerId
+                                    customerId: res.customerId,
+                                    loanAccount:res
                                 }
                             });
 

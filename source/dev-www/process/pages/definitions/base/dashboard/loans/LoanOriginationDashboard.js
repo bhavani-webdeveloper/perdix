@@ -17,7 +17,10 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             "Page/Engine/base.dashboard.loans.individual.screening.ApplicationReviewQueue", 
             "Page/Engine/base.dashboard.loans.individual.screening.FieldAppraisalQueue",
             "Page/Engine/base.dashboard.loans.individual.screening.FieldAppraisalReviewQueue",
+            "Page/Engine/base.dashboard.loans.individual.screening.ZonalRiskReviewQueue",
+            "Page/Engine/base.dashboard.loans.individual.screening.CentralRiskReviewQueue",
             // "Page/Engine/base.dashboard.loans.individual.screening.FieldAppraisalReview",
+            "Page/Engine/base.dashboard.loans.individual.screening.CreditCommitteeReviewQueue",
             "Page/Engine/base.dashboard.loans.individual.screening.LoanSanctionQueue",
             "Page/Engine/base.dashboard.loans.individual.screening.RejectedQueue",
             "Page/Engine/base.dashboard.loans.individual.screening.BranchNewConversationQueue",
@@ -34,6 +37,75 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
         var branchName = SessionStore.getBranch();
         var centres = SessionStore.getCentres();
 
+        var crrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.CentralRiskReviewQueue"];
+        if (crrqMenu) {
+            IndividualLoan.search({
+                'stage':'CentralRiskReview',
+                'enterprisePincode': '',
+                'applicantName': '',
+                'area': '',
+                'villageName': '',
+                'customerName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response, headerGetter) {
+                crrqMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                crrqMenu.data = '-';
+            });
+        }
+        var zrrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.ZonalRiskReviewQueue"];
+        if (zrrqMenu) {
+            IndividualLoan.search({
+                'stage': 'ZonalRiskReview',
+                'enterprisePincode': '',
+                'applicantName': '',
+                'area': '',
+                'villageName': '',
+                'customerName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response, headerGetter) {
+                zrrqMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                zrrqMenu.data = '-';
+            });
+        }
+        var ccrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.CreditCommitteeReviewQueue"];
+        if (ccrqMenu) {
+            IndividualLoan.search({
+                'stage': 'CreditCommitteeReview',
+                'enterprisePincode': '',
+                'applicantName': '',
+                'area': '',
+                'villageName': '',
+                'customerName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response, headerGetter) {
+                ccrqMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                ccrqMenu.data = '-';
+            });
+        }
+
+        var lsqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.LoanSanctionQueue"];
+        if (lsqMenu) {
+            IndividualLoan.search({
+                'stage':  'Sanction',
+                'enterprisePincode': '',
+                'applicantName': '',
+                'area': '',
+                'villageName': '',
+                'customerName': '',
+                'page': 1,
+                'per_page': 1,
+            }).$promise.then(function(response, headerGetter) {
+                lsqMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                lsqMenu.data = '-';
+            });
+        }
        var rfqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.ReadyForScreeningQueue"];
         
        if (rfqMenu) rfqMenu.data = 0;

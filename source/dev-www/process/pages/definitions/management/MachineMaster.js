@@ -59,11 +59,6 @@ define({
                 },
                 getColumns: function(){
                     return [
-
-                        {
-                            title:'MACHINE_DESCRIPTION',   
-                            data: 'machineDescription'
-                        },
                         {
                             title:'MANUFACTURER_NAME',
                             data: 'machineName'

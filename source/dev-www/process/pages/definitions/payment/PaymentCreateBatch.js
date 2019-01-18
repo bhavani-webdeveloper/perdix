@@ -131,7 +131,8 @@ $pageFn: function($log, elementsConfig, Enrollment, SessionStore, formHelper, $q
                                             var filename = headers["content-disposition"].split('filename=')[1];
                                             link.download = filename.replace(/"/g, "");
                                         } else {
-                                            link.download = SessionStore.getLoginname() + '_' + model.selectedReport.name + '_' + moment().format('YYYYMMDDhhmmss');
+                                            //link.download = SessionStore.getLoginname() + '_' + model.selectedReport.name + '_' + moment().format('YYYYMMDDhhmmss');
+                                            link.download = SessionStore.getLoginname() + '_icici_integration_ircs_' + moment().format('YYYYMMDDhhmmss');
                                         }
                                         link.click();
                                         irfProgressMessage.pop("Reports", "Report downloaded.", 5000);

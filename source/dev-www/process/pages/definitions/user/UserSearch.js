@@ -22,7 +22,7 @@ irf.pageCollection.factory(irf.page("user.UserSearch"),
                 }
 			},
 			definition: {
-				title: "SEARCH_LOAN",
+				title: "SEARCH_USER",
                 searchForm: [{
                         "type": "section",
                         "items": [{

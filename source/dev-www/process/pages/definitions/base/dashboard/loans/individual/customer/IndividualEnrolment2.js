@@ -47,7 +47,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
                                 "PhysicalAssets",
-                                "IndividualReferences"
+                                "IndividualReferences",
+                                "References"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -178,7 +179,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
                                 "PhysicalAssets",
-                                "IndividualReferences"
+                                "IndividualReferences",
+                                "References"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -366,7 +368,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification.date",
                                 "HouseVerification.place",
                                 "PhysicalAssets",
-                                "IndividualReferences"
+                                "IndividualReferences",
+                                "References"
                             ]
                         },
                         "Appraisal": {
@@ -376,7 +379,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences",
                                 "FamilyDetails.familyMembers.noOfDependents",
                                 "PhysicalAssets",
-                                "IndividualFinancials"
+                                "IndividualFinancials",
+                                "References"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -547,7 +551,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences.verifications.ReferenceCheck",
                                 "IndividualReferences",
                                 "PhysicalAssets",
-                                "IndividualFinancials"
+                                "IndividualFinancials",
+                                "References"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -609,7 +614,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences.verifications.ReferenceCheck",
                                 "IndividualReferences",
                                 "PhysicalAssets",
-                                "IndividualFinancials"
+                                "IndividualFinancials",
+                                "References"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -675,7 +681,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences.verifications.ReferenceCheck",
                                 "IndividualReferences",
                                 "PhysicalAssets",
-                                "IndividualFinancials"
+                                "IndividualFinancials",
+                                "References"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -742,7 +749,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences",
                                 "FamilyDetails.familyMembers.noOfDependents",
                                 "PhysicalAssets",
-                                "IndividualFinancials"
+                                "IndividualFinancials",
+                                "References"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -817,7 +825,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences.verifications.ReferenceCheck",
                                 "IndividualReferences",
                                 "PhysicalAssets",
-                                "IndividualFinancials"
+                                "IndividualFinancials",
+                                "References"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -907,14 +916,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "BankAccounts.customerBankAccounts":{
                                     "readonly": true
-                                }
+                                },
+                                "References": {
+                                    "readonly": true
+                                },
                             }
                         },
                         "Sanction": {
                             "excludes": [
                                 "ContactInformation.whatsAppMobileNoOption",
-                                "IndividualReferences.verifications.ReferenceCheck",
-                                "IndividualReferences",
+                                //"IndividualReferences.verifications.ReferenceCheck",
+                                //"IndividualReferences",
                                 "IndividualFinancials"
                             ],
                             "overrides": {
@@ -957,7 +969,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "BankAccounts.customerBankAccounts":{
                                     "readonly": true
-                                }
+                                },
+                                "References": {
+                                    "readonly": true
+                                },
                             }
                         },
                         "Rejected": {
@@ -1155,6 +1170,37 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "IndividualReferences.verifications.customerResponse": {
                                     "required": true
+                                },
+                                "References": {
+                                    "readonly": true
+                                },
+                            }
+                        },
+                        "FieldAppraisalReview":{
+                            "overrides":{
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "CentralRiskReview":{
+                            "overrides":{
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "CreditCommitteeReview":{
+                            "overrides":{
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "loanView":{
+                            "overrides":{
+                                "PhysicalAssets": {
+                                    "readonly": true
                                 }
                             }
                         }
@@ -1183,6 +1229,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "IndividualReferences": {
                                     "readonly": false
+                                },
+                                "References": {
+                                    "readonly": true
                                 },
                                 "TrackDetails": {
                                     "readonly": false
@@ -1421,6 +1470,30 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     // "IndividualInformation.caste": {
                     //     "enumCode": "caste"
                     // },
+                    "Liabilities.liabilities.startDate":{
+                        "onChange":function(modelValue, form, model, formCtrl, $event){
+                            var index;
+                            if(moment(modelValue).isAfter(new Date())){
+                                modelValue=null;
+                                index=form.key[2];
+                                model.customer.liabilities[index].startDate=null;
+                                PageHelper.showProgress("pre-save-validation", "Start date can not be a future date.", 3000);
+                                return false;
+                            }
+                        }
+                    },
+                    "Liabilities.liabilities.maturityDate":{
+                        "onChange":function(modelValue, form, model, formCtrl, event){
+                            var index;
+                            if(moment(modelValue).isBefore(new Date())){
+                                modelValue=null;
+                                index=form.key[2];
+                                model.customer.liabilities[index].maturityDate=null;
+                                PageHelper.showProgress("pre-save-validation", "Maturity date can not be a past date.", 3000);
+                                return false;
+                            }
+                        }
+                    },
                     "HouseVerification.rentLeaseStatus": {
                         "schema": {
                             "enumCode": "rent_lease_status"
@@ -1462,7 +1535,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "condition": "!model.customer.mailSameAsResidence",
                         "readonly": true
                     },
-                
+                    "FamilyDetails.familyMembers.incomes.incomeEarned":{
+                        "title":"INCOME_EARNED",
+                        "key": "customer.familyMembers[].incomes[].incomeEarned",
+                        "type":"amount"
+                    },
+                    "PhysicalAssets.physicalAssets.nameOfOwnedAsset":{
+                        "title": "ASSET_TYPE",
+                        "type": "select",
+                        "enumCode": "asset_type"
+                    },
+                    "PhysicalAssets.physicalAssets.vehicleModel":{
+                        "condition": "model.customer.physicalAssets[].assetType=='Two wheeler' || model.customer.physicalAssets[].assetType=='Four wheeler'"
+                    },
+
                 }
             }
             var getIncludes = function (model) {
@@ -1612,20 +1698,39 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "PhysicalAssets.physicalAssets.vehicleModel",
                     "PhysicalAssets.physicalAssets.registeredOwner",
                     "PhysicalAssets.physicalAssets.ownedAssetValue",
-                    "PhysicalAssets.physicalAssets.unit",
+                    //"PhysicalAssets.physicalAssets.unit",
 
-                    "IndividualReferences",
-                    "IndividualReferences.verifications",
-                    "IndividualReferences.verifications.referenceFirstName",
-                    "IndividualReferences.verifications.mobileNo",
-                    "IndividualReferences.verifications.occupation",
-                    "IndividualReferences.verifications.address",
-                    "IndividualReferences.verifications.ReferenceCheck",
-                    "IndividualReferences.verifications.ReferenceCheck.knownSince",
-                    "IndividualReferences.verifications.ReferenceCheck.relationship",
-                    "IndividualReferences.verifications.ReferenceCheck.opinion",
-                    "IndividualReferences.verifications.ReferenceCheck.financialStatus",
-                    "IndividualReferences.verifications.ReferenceCheck.customerResponse"
+                    // "IndividualReferences",
+                    // "IndividualReferences.verifications",
+                    // "IndividualReferences.verifications.referenceFirstName",
+                    // "IndividualReferences.verifications.mobileNo",
+                    // "IndividualReferences.verifications.occupation",
+                    // "IndividualReferences.verifications.address",
+                    // "IndividualReferences.verifications.ReferenceCheck",
+                    // "IndividualReferences.verifications.ReferenceCheck.knownSince",
+                    // "IndividualReferences.verifications.ReferenceCheck.relationship",
+                    // "IndividualReferences.verifications.ReferenceCheck.opinion",
+                    // "IndividualReferences.verifications.ReferenceCheck.financialStatus",
+                    // "IndividualReferences.verifications.ReferenceCheck.customerResponse",
+
+                    "References",
+                    "References.verifications",
+                    "References.verifications.relationship",
+                    "References.verifications.businessName",
+                    "References.verifications.referenceFirstName",
+                    "References.verifications.mobileNo",
+                    "References.verifications.address",
+                    "References.verifications.ReferenceCheck",
+                    "References.verifications.ReferenceCheck.knownSince",
+                    "References.verifications.ReferenceCheck.goodsSold",
+                    "References.verifications.ReferenceCheck.goodsBought",
+                    "References.verifications.ReferenceCheck.paymentTerms",
+                    "References.verifications.ReferenceCheck.modeOfPayment",
+                    "References.verifications.ReferenceCheck.outstandingPayable",
+                    "References.verifications.ReferenceCheck.outstandingReceivable",
+                    "References.verifications.ReferenceCheck.customerResponse",
+
+
                 ];
 
             }
@@ -1663,13 +1768,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.loanCustomerRelationType =getLoanCustomerRelation(bundlePageObj.pageClass);
                     model.pageClass = bundlePageObj.pageClass;
                     model.currentStage = bundleModel.currentStage;
-                    if( model.currentStage=="FieldAppraisal"){
+                    // if( model.currentStage=="FieldAppraisal"){
 
-                    }else{
+                    // }else{
 
                         model.enrolmentProcess.currentStage =  model.currentStage;
                         model.customer = model.enrolmentProcess.customer;
-                    }
+                   // }
                     /* End of setting data recieved from Bundle */
         
                     /* Setting data for the form */
@@ -1744,13 +1849,133 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "title":"RENT_LEASE_AGREEMENT_VALID_TILL"
                                         }
                                     }
-                                }
+                                },
+                                "References":{
+                                    "type": "box",
+                                    "title": "REFERENCES",
+                                    "orderNo":2500,
+                                    //"condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
+                                    "items": {
+                                        "verifications" : {
+                                            key:"customer.verifications",
+                                            title:"REFERENCES",
+                                            type: "array",
+                                            items:{
+                                                "relationship" : {
+                                                    key:"customer.verifications[].relationship",
+                                                    title:"REFERENCE_TYPE",
+                                                    type:"select",
+                                                    required:"true",
+                                                    enumCode: "business_reference_type"
+                                                },
+                                                "businessName" : {
+                                                    key:"customer.verifications[].businessName",
+                                                    title:"BUSINESS_NAME",
+                                                    type:"string"
+                                                },
+                                                "referenceFirstName" : {
+                                                    key:"customer.verifications[].referenceFirstName",
+                                                    title:"CONTACT_PERSON_NAME",
+                                                    type:"string"
+                                                },
+                                                "mobileNo" : {
+                                                    key:"customer.verifications[].mobileNo",
+                                                    title:"CONTACT_NUMBER",
+                                                    type:"string",
+                                                    inputmode: "number",
+                                                    numberType: "tel",
+                                                    "schema": {
+                                                         "pattern": "^[0-9]{10}$"
+                                                    }
+                                                }/*,
+                                                {
+                                                    key:"customer.verifications[].businessSector",
+                                                    title:"BUSINESS_SECTOR",
+                                                    type:"select",
+                                                    enumCode: "businessSector"
+                                                },
+                                                {
+                                                    key:"customer.verifications[].businessSubSector",
+                                                    title:"BUSINESS_SUBSECTOR",
+                                                    type:"select",
+                                                    enumCode: "businessSubSector",
+                                                    parentEnumCode: "businessSector"
+                                                },
+                                                {
+                                                    key:"customer.verifications[].selfReportedIncome",
+                                                    title:"SELF_REPORTED_INCOME",
+                                                    type:"number"
+                                                }*/,
+                                                "address" : {
+                                                    key:"customer.verifications[].address",
+                                                    type:"textarea"
+                                                },
+                                                "ReferenceCheck" : {
+                                                type: "fieldset",
+                                                title: "REFERENCE_CHECK",
+                                                //"condition": "model.currentStage=='FieldAppraisal'",
+                                                items: {
+                                                    /*,
+                                                    {
+                                                        key:"customer.verifications[].remarks",
+                                                        title:"REMARKS",
+                                                    },*/
+                                                    "knownSince" : {
+                                                        key:"customer.verifications[].knownSince",
+                                                        required:true
+                                                    },
+                                                    "goodsSold" : {
+                                                        key:"customer.verifications[].goodsSold",
+                                                        "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
+                                                    },
+                                                    "goodsBought" : {
+                                                        key:"customer.verifications[].goodsBought",
+                                                        "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
+                                                    },
+                                                    "paymentTerms" : {
+                                                        key:"customer.verifications[].paymentTerms",
+                                                        type:"select",
+                                                        "title":"payment_tarms",
+                                                        enumCode: "payment_terms"
+                                                    },
+                                                    "modeOfPayment" : {
+                                                        key:"customer.verifications[].modeOfPayment",
+                                                        type:"select",
+                                                        enumCode: "payment_mode"
+                                                    },
+                                                    "outstandingPayable" : {
+                                                        key:"customer.verifications[].outstandingPayable",
+                                                        "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
+                                                    },
+                                                    "outstandingReceivable" : {
+                                                        key:"customer.verifications[].outstandingReceivable",
+                                                        "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
+                                                    },
+                                                    "customerResponse" : {
+                                                        key:"customer.verifications[].customerResponse",
+                                                        title:"CUSTOMER_RESPONSE",
+                                                        type:"select",
+                                                        required:true,
+                                                        titleMap: [{
+                                                                        value: "positive",
+                                                                        name: "positive"
+                                                                    },{
+                                                                        value: "Negative",
+                                                                        name: "Negative"
+                                                                    }]
+                                                    }
+                                                }
+                                                }
+                                            }
+                                        },
+                                    }
+                                },
                             },
                             "additions": [
                                 {
                                     "type": "actionbox",
                                     "condition": "!model.customer.currentStage",
-                                    "orderNo": 1000,
+                                    "orderNo": 2700,
                                     "items": [
                                         {
                                             "type": "submit",
@@ -1760,12 +1985,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 {
                                     "type": "actionbox",
-                                    "condition": "model.customer.id",
-                                    "orderNo": 1200,
+                                    "condition": "(model.customer.id && model.currentStage!=='ScreeningReview')",
+                                    "orderNo": 2800,
                                     "items": [
                                         {
                                             "type": "button",
-                                            "title": "UPDATE_ENROLMENT",
+                                            "title": "UPDATE",
                                             "onClick": "actions.proceed(model, formCtrl, form, $event)"
                                         }
                                     ]

@@ -829,7 +829,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 // "titleMap":{
                                 //     "New Loan":"New Loan"
                                 // },
-                                "condition": "model.siteCode == 'kinara' && !model.loanAccount.linkedAccountNumber",
+                                "condition": "(model.siteCode == 'kinara' || model.siteCode == 'maitreya') && !model.loanAccount.linkedAccountNumber",
                                 onChange:function(value,form,model){
                                     if(_.hasIn(model, 'loanAccount') && model.loanAccount.transactionType == 'New Loan') {
                                         model.loanAccount.linkedAccountNumber = null;
@@ -846,7 +846,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 //     "Internal Foreclosure":"Internal Foreclosure"
                                 // },
                                 "title":"TRANSACTION_TYPE",
-                                "condition": "model.siteCode == 'kinara' && model.loanAccount.linkedAccountNumber && model.loanAccount.transactionType.toLowerCase() != 'renewal'",
+                                "condition": "(model.siteCode == 'kinara' || model.siteCode == 'maitreya') && model.loanAccount.linkedAccountNumber && model.loanAccount.transactionType.toLowerCase() != 'renewal'",
                                 onChange:function(value,form,model){
                                     if(_.hasIn(model, 'loanAccount') && model.loanAccount.transactionType == 'New Loan') {
                                         model.loanAccount.linkedAccountNumber = null;
@@ -3291,7 +3291,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 return false;
                             }
                             if (model.loanAccount.interestRate > model.additional.product.maxInterestRate){
-                                PageHelper.showProgress("loan-create","Loan Amount requested should be in the range [" + model.additional.product.minInterestRate + "% - " + model.additional.product.maxInterestRate + "%]",5000);
+                                PageHelper.showProgress("loan-create","Interest Rate should be in the range [" + model.additional.product.minInterestRate + "% - " + model.additional.product.maxInterestRate + "%]",5000);
                                 return false;
                             }
                         }
