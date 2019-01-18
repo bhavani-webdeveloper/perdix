@@ -146,7 +146,8 @@ define([],function(){
                                 "NomineeDetails.nominees.nomineeButton",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
-                                "LoanRecommendation"          
+                                "LoanRecommendation",
+                                "CollateralDetails"          
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -234,7 +235,8 @@ define([],function(){
                                 "LoanSanction",
                                 "DeductionsFromLoan",
                                 "LoanMitigants",
-                                "LoanMitigants.deviationParameter"              
+                                "LoanMitigants.deviationParameter",
+                                "CollateralDetails"              
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -379,7 +381,8 @@ define([],function(){
                                 "LoanMitigants",
                                 "LoanRecommendation.udf8",
                                 "LoanRecommendation.udf3",
-                                "LoanMitigants.deviationParameter"             
+                                "LoanMitigants.deviationParameter",
+                                "CollateralDetails"             
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -423,7 +426,8 @@ define([],function(){
                                 "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
-                                "NomineeDetails.nominees.nomineeButton"                  
+                                "NomineeDetails.nominees.nomineeButton",
+                                "CollateralDetails"                  
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -467,7 +471,8 @@ define([],function(){
                                 "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
-                                "NomineeDetails.nominees.nomineeButton"                  
+                                "NomineeDetails.nominees.nomineeButton",
+                                "CollateralDetails"                  
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -628,7 +633,8 @@ define([],function(){
                                 "AdditionalLoanInformation",
                                // "NomineeDetails.nominees.nomineeButton",
                                 "LoanRecommendation.securityEmiRequired",
-                                "LoanMitigants.loanMitigantsByParameter",               
+                                "LoanMitigants.loanMitigantsByParameter",
+                                "CollateralDetails"               
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -695,7 +701,8 @@ define([],function(){
                                 "AdditionalLoanInformation",
                                 "NomineeDetails.nominees.nomineeButton"   ,
                                 "LoanRecommendation.securityEmiRequired",
-                                "LoanMitigants.loanMitigantsByParameter",               
+                                "LoanMitigants.loanMitigantsByParameter",
+                                "CollateralDetails"               
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -894,8 +901,17 @@ define([],function(){
                         },
                         "ZonalRiskReview":{
                             "excludes":[
-                                "LoanRecommendation.securityEmiRequired"
-                            ]
+                                "LoanRecommendation.securityEmiRequired",
+                                "LoanMitigants.loanMitigantsByParameter",
+                            ],
+                            "overrides":{
+                                "AdditionalLoanInformation": {
+                                    "readonly": true
+                                },
+                                "CollateralDetails":{
+                                    "readonly":true
+                                }
+                            }
                         },
                         "FieldAppraisalReview":{
                             "excludes":[
@@ -912,16 +928,26 @@ define([],function(){
                                 "AdditionalLoanInformation": {
                                     "readonly": true
                                 },
+                                "CollateralDetails":{
+                                    "readonly":true
+                                }
                             }
                         },
                         "CentralRiskReview":{
-
+                            "overrides":{
+                                "CollateralDetails":{
+                                    "readonly":true
+                                }
+                            }
                         },
                         "Rejected":{
                             "overrides":{
                                 "AdditionalLoanInformation": {
                                     "readonly": true
                                 },
+                                "CollateralDetails":{
+                                    "readonly":true
+                                }
                             }
                         },
                         "loanView":{
@@ -929,22 +955,16 @@ define([],function(){
                                 "AdditionalLoanInformation": {
                                     "readonly": true
                                 },
-                            }
-                        },
-                        "ZonalRiskReview":{
-                            "excludes":[
-                                "LoanMitigants.loanMitigantsByParameter",
-                            ],
-                            "overrides":{
-                                "AdditionalLoanInformation": {
-                                    "readonly": true
-                                },
+                                "CollateralDetails":{
+                                    "readonly":true
+                                }
                             }
                         },
                         "Dedupe":{
                             "excludes": [
                                 "LoanRecommendation.securityEmiRequired",
-                                "LoanMitigants.loanMitigantsByParameter",                
+                                "LoanMitigants.loanMitigantsByParameter",  
+                                "CollateralDetails"              
                             ],
                         }
                     }
@@ -1185,12 +1205,6 @@ define([],function(){
                             "orderNo":70,
                         },
 
-                       
-                        "AdditionalLoanInformation":{
-                            "title":"ADDITIONAL_LOAN_INFORMATION",
-                           // "condition": "model.currentStage=='Sanction' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'||model.currentStage == 'ZonalRiskReview'",
-                          //  readonly:true
-                        },
                         "AdditionalLoanInformation":{
                             "title":"ADDITIONAL_LOAN_INFORMATION",
                            // "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal' || model.currentStage == 'SanctionInput'||model.currentStage == 'ZonalRiskReview'",
@@ -1265,7 +1279,62 @@ define([],function(){
                         },
                         "NomineeDetails.nominees.nomineeState":{
                             "orderNo":90
-                        }
+                        },
+                        "CollateralDetails":{
+                            "condition": "model.loanAccount.loanPurpose1=='Asset Purchase'"
+                        },  
+                        "CollateralDetails.collateral.collateralDescription": {
+                            "required": true,
+                            "orderNo":10
+                        },
+                        "CollateralDetails.collateral.collateralValue": {
+                            "required": true,
+                            "orderNo":20
+                        },
+                        "CollateralDetails.collateral.expectedIncome": {
+                            "required": true,
+                            "orderNo":30
+                        },
+                        "CollateralDetails.collateral.collateralType": {
+                            "required": true,
+                            "orderNo":40
+                        },
+                        "CollateralDetails.collateral.manufacturer": {
+                            "required": true,
+                            "orderNo":50
+                        },
+                        "CollateralDetails.collateral.modelNo": {
+                            "required": true,
+                            "orderNo":60
+                        },
+                        "CollateralDetails.collateral.serialNo": {
+                            "orderNo":70
+                        },
+                        "CollateralDetails.collateral.expectedPurchaseDate": {
+                            "required": true,
+                            "orderNo":80
+                        },
+                        "CollateralDetails.collateral.machineAttachedToBuilding": {
+                            "required": true,
+                            "orderNo":90
+                        },
+                        "CollateralDetails.collateral.hypothecatedToBank": {
+                            "title":"HYPOTHECATED_TO_MAITREYA",
+                            "required": true,
+                            "orderNo":100
+                        },
+                        "CollateralDetails.collateral.electricityAvailable": {
+                            "required": true,
+                            "orderNo":110
+                        },
+                        "CollateralDetails.collateral.spaceAvailable": {
+                            "required": true,
+                            "orderNo":120
+                        },
+                        "CollateralDetails.collateral.collateral1FilePath": {
+                            //"required": true,
+                            "orderNo":130
+                        },
  
                     }
                 }
@@ -1352,21 +1421,21 @@ define([],function(){
                     "AdditionalLoanInformation.percentageIncreasedIncome",
                     "AdditionalLoanInformation.percentageInterestSaved",
 
-                    // "CollateralDetails",
-                    // "CollateralDetails.collateral",
-                    // "CollateralDetails.collateral.collateralDescription",
-                    // "CollateralDetails.collateral.collateralValue",
-                    // "CollateralDetails.collateral.expectedIncome",
-                    // "CollateralDetails.collateral.collateralType",
-                    // "CollateralDetails.collateral.manufacturer",
-                    // "CollateralDetails.collateral.modelNo",
-                    // "CollateralDetails.collateral.serialNo",
-                    // "CollateralDetails.collateral.expectedPurchaseDate",
-                    // "CollateralDetails.collateral.machineAttachedToBuilding",
-                    // "CollateralDetails.collateral.hypothecatedToBank",
-                    // "CollateralDetails.collateral.electricityAvailable",
-                    // "CollateralDetails.collateral.spaceAvailable",
-                    // "CollateralDetails.collateral.collateral1FilePath",
+                    "CollateralDetails",
+                    "CollateralDetails.collateral",
+                    "CollateralDetails.collateral.collateralDescription",
+                    "CollateralDetails.collateral.collateralValue",
+                    "CollateralDetails.collateral.expectedIncome",
+                    "CollateralDetails.collateral.collateralType",
+                    "CollateralDetails.collateral.manufacturer",
+                    "CollateralDetails.collateral.modelNo",
+                    "CollateralDetails.collateral.serialNo",
+                    "CollateralDetails.collateral.expectedPurchaseDate",
+                    "CollateralDetails.collateral.machineAttachedToBuilding",
+                    "CollateralDetails.collateral.hypothecatedToBank",
+                    "CollateralDetails.collateral.electricityAvailable",
+                    "CollateralDetails.collateral.spaceAvailable",
+                    "CollateralDetails.collateral.collateral1FilePath",
 
                     "NomineeDetails",                    
                     "NomineeDetails.nominees",
@@ -1826,6 +1895,9 @@ define([],function(){
                         if (model.loanProcess.remarks==null || model.loanProcess.remarks ==""){
                             PageHelper.showProgress("update-loan", "Remarks is mandatory", 3000);
                             return false;
+                        }
+                        if (!validateForm(formCtrl)){
+                            return;
                         }
                         // var trancheTotalAmount=0;
                         // if(model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length){
