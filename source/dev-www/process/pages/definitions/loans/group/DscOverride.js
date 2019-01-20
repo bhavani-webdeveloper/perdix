@@ -469,15 +469,23 @@ return {
     actions: {
         preSave: function(model, formCtrl, formName) {},
         reject: function(model, formCtrl, form) {
+			PageHelper.showLoader();
             $log.info("Inside submit()");
-            if(!validateForm(formCtrl)) 
-                return;
-            doDSCOverride(model, "reject");
+            if(!validateForm(formCtrl)){
+				PageHelper.hideLoader();
+				return;
+			}
+			doDSCOverride(model, "reject");
+			PageHelper.hideLoader();
         },
         approve: function(model, formCtrl, form) {
-            if(!validateForm(formCtrl)) 
-                return;
-            doDSCOverride(model, "approve");
+			PageHelper.showLoader();
+            if(!validateForm(formCtrl)) {
+				PageHelper.hideLoader();
+				return;
+			}
+			doDSCOverride(model, "approve");
+			PageHelper.hideLoader();
         }
     }
 }}});
