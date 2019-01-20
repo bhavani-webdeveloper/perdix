@@ -1702,10 +1702,13 @@ return {
             })
         },
         saveGroup: function(model, formCtrl, form) {
-            $log.info("Inside submit()");
-            if(!validateForm(formCtrl)) 
-                return;
             PageHelper.showLoader();
+            $log.info("Inside submit()");
+            if(!validateForm(formCtrl))
+            {
+                PageHelper.hideLoader();
+                return;
+            }
             var reqData = _.cloneDeep(model);
             reqData.groupAction = 'SAVE';
             PageHelper.clearErrors();
@@ -1721,11 +1724,12 @@ return {
             });
         },
         sendBack: function(model, form, formName) {
+            PageHelper.showLoader();
             if (!model.review.targetStage){
+                PageHelper.hideLoader();
                 irfProgressMessage.pop('Send Back', "Send to Stage is mandatory", 2000);
                 return false;
             }
-            PageHelper.showLoader();
             irfProgressMessage.pop('Send Back', 'Working...');
             PageHelper.clearErrors();
             model.groupAction = "PROCEED";  
@@ -1743,10 +1747,13 @@ return {
             });   
         },
         reject: function(model, formCtrl, form) {
+            PageHelper.showLoader();
             $log.info("Inside submit()");
             if(!validateForm(formCtrl)) 
+            {
+                PageHelper.hideLoader();
                 return;
-            PageHelper.showLoader();
+            }
             model.group.endTime= new Date();
             model.group.checkerTransactionHistoryDTO.status="REJECT";
             model.group.checkerTransactionHistoryDTO.remarks=model.group.groupRemarks;
@@ -1767,14 +1774,17 @@ return {
             });
         },
         approve: function(model, formCtrl, form) {
-            if(!validateForm(formCtrl)) 
+            PageHelper.showLoader();
+            if(!validateForm(formCtrl)) {
+                PageHelper.hideLoader();
                 return;
+            }
             if(model.group.partnerCode == "AXIS" && model.group.verify.fieldVerificationReq == 'true' && model.group.verify.fieldVerificationDone != 'true')
             {
+                PageHelper.hideLoader();
                 irfProgressMessage.pop('CHECKER-proceed', 'Can not proceed further, since field verification is not marked as completed.', 5000);
                 return;
             }
-            PageHelper.showLoader();
             irfProgressMessage.pop('CHECKER-proceed', 'Working...');
             PageHelper.clearErrors();
             model.group.endTime= new Date();

@@ -1160,10 +1160,12 @@ define({
                 })
             },
             saveGroup: function(model, formCtrl, form) {
-                $log.info("Inside submit()");
-                if(!validateForm(formCtrl)) 
-                    return;
                 PageHelper.showLoader();
+                $log.info("Inside submit()");
+                if(!validateForm(formCtrl)){ 
+                    PageHelper.hideLoader();
+                    return;
+                }
                 var reqData = _.cloneDeep(model);
                 reqData.groupAction = 'SAVE';
                 PageHelper.clearErrors();
@@ -1179,11 +1181,12 @@ define({
                 });
             },
             sendBack: function(model, form, formName) {
+                PageHelper.showLoader();
                 if (!model.review.targetStage){
+                    PageHelper.hideLoader();
                     irfProgressMessage.pop('Send Back', "Send to Stage is mandatory", 2000);
                     return false;
                 }
-                PageHelper.showLoader();
                 irfProgressMessage.pop('Send Back', 'Working...');
                 PageHelper.clearErrors();
                 model.group.endTime= new Date();
@@ -1201,10 +1204,12 @@ define({
                 });   
             },
             reject: function(model, formCtrl, form) {
-                $log.info("Inside submit()");
-                if(!validateForm(formCtrl)) 
-                    return;
                 PageHelper.showLoader();
+                $log.info("Inside submit()");
+                if(!validateForm(formCtrl)) {
+                    PageHelper.hideLoader();
+                    return;
+                }
                 model.group.checkerTransactionHistoryDTO.status="REJECT";
                 model.group.checkerTransactionHistoryDTO.remarks=model.group.groupRemarks;
                 model.group.endTime= new Date();
@@ -1225,9 +1230,11 @@ define({
                 });
             },
             approve: function(model, formCtrl, form) {
-                if(!validateForm(formCtrl)) 
-                    return;
                 PageHelper.showLoader();
+                if(!validateForm(formCtrl)) {
+                    PageHelper.hideLoader();
+                    return;
+                }
                 irfProgressMessage.pop('CHECKER-proceed', 'Working...');
                 PageHelper.clearErrors();
                 model.group.checkerTransactionHistoryDTO.status="ACCEPT";
