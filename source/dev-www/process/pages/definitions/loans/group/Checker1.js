@@ -75,18 +75,23 @@ return {
             var groupId = $stateParams.pageId;
             PageHelper.showLoader();
             irfProgressMessage.pop("checker1", "Loading, Please Wait...");
-            GroupProcess.getGroup({
+            GroupProcess.getCheckerGroup({
                 groupId: groupId
             }, function(response) {
                 model.group = response;
                 model.group.groupRemarks = null;                           
                 model.group.members=[];
                 fixData(model);
-                var customerPromises = [], dscPromises = [];
+                
                 for (i in model.group.jlgGroupMembers) {
                     var member = model.group.jlgGroupMembers[i];
-                    customerPromises.push(Enrollment.get({"id": member.customerId}).$promise);
-                    dscPromises.push(Groups.getDSCData({"dscId": member.dscId}).$promise);
+                    var r = member.dscResponseMessage;
+                    model.group.jlgGroupMembers[i].dscData  = '<strong>DSC</strong>' + r.substr(r.indexOf('<br>'));
+                    
+                    var customer = enrichCustomer(member.customer,member);
+                    model.group.members.push(customer.member);
+                    model.group.jlgGroupMembers[i].customer = customer;
+                    model.group.jlgGroupMembers[i].customerCalledDate = model.group.jlgGroupMembers[i].customerCalledDate || moment().format(SessionStore.getSystemDateFormat());
                             model.group.checkerTransactionHistoryDTO = {
                                 "branchId": model.group.branchId,
                                 "statusUpDatedBy": SessionStore.getUsername(),
@@ -119,35 +124,8 @@ return {
                             }
                 }
                 $q.all([
-                    $q.all(customerPromises).then(function(data) {
-                        for (i in data) {
-                            var customer = enrichCustomer(data[i],model.group.jlgGroupMembers[i]);
-                            model.group.members.push(customer.member);
-                            model.group.jlgGroupMembers[i].customer = customer;
-                            model.group.jlgGroupMembers[i].customerCalledDate = model.group.jlgGroupMembers[i].customerCalledDate || moment().format(SessionStore.getSystemDateFormat());
-                        }
-                    }, function(errors) {
-                        for (i in errors) {
-                            PageHelper.showErrors(errors[i]);
-                        }
-                    }).finally(function(){
-                        // PageHelper.hideLoader();
-                    }),
+                    
                 
-                    $q.all(dscPromises).then(function(data) {
-                        for (i in data) {
-                            var r = data[i].responseMessage;
-                            data[i].responseMessageHtml = '<strong>DSC</strong>' + r.substr(r.indexOf('<br>'));
-                            model.group.jlgGroupMembers[i].dscData = data[i];
-                        }
-                    }, function(errors) {
-                        for (i in errors) {
-                            PageHelper.showErrors(errors[i]);
-                        }
-                    }).finally(function(){
-                        
-                    // irfProgressMessage.pop("checker1", "Loading Customer Completed...",4000);
-                    }),
                     Queries.getGroupLoanRemarksHistoryById(model.group.id).then(function(resp){
                         for(i=0;i<resp.length;i++){
                             $log.info("hi");
@@ -919,7 +897,7 @@ return {
                         }, {
                             "notitle": true,
                             "readonly": true,
-                            "key": "group.jlgGroupMembers[].dscData.responseMessageHtml",
+                            "key": "group.jlgGroupMembers[].dscData",
                             "type": "html"
                         }, {
                             "type": "section",
@@ -1325,7 +1303,7 @@ return {
                     }, {
                         "notitle": true,
                         "readonly":true,
-                        "key": "group.jlgGroupMembers[].dscData.responseMessageHtml",
+                        "key": "group.jlgGroupMembers[].dscData",
                         "type": "html"
                     }, {
                         "type": "section",

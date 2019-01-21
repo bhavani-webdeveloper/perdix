@@ -11,6 +11,10 @@ irf.models.factory('GroupProcess',
             method:'GET',
             url:endpoint+"/:groupId"
         },
+        getCheckerGroup:{
+            method:'GET',
+            url:endpoint+'/getGroupDetailsForChecker'+"/:groupId"
+        },
         save: {
             method: 'POST',
             url: endpoint
