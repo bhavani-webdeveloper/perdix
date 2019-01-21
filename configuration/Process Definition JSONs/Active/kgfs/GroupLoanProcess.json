@@ -918,9 +918,7 @@
               "type": "string",
               "captureStages": [
 			      "GroupCreation",
-               "ApplicationPending",
-               "AgreementUploadPending",
-               "Checker1",
+              
 			   "Completed"
               ]
             },
