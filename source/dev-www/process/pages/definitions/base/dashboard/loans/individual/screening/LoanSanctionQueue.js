@@ -27,7 +27,7 @@ define({
 	                    	"type": ["string", "null"],
 	                    	"enumCode": "branch",
 							"x-schema-form": {
-								"type": "select",
+								"type": "userbranch",
 								"screenFilter": true
 							}
 	                    },
