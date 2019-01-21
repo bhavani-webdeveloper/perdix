@@ -1214,6 +1214,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ProxyIndicators"
                                 ],
                                 "overrides": {
+                                    "EnterpriseAssets":{
+                                        "title":"ENTERPRISE_ASSETS"
+                                    },
                                     "EnterpriseInformation.customerBranchId": {
                                         "readonly": true
                                     },
@@ -1305,6 +1308,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "EnterpriseAssets": {
+                                        "title":"ENTERPRISE_ASSETS",
                                         "readonly": true
                                     },
                                     "currentAssets": {
