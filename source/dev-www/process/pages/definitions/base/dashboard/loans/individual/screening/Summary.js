@@ -846,6 +846,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         form.push({
              type: "box",
             colClass: "col-sm-12 table-box",
+            condition: "model.currentStage!='ScreeningReview'",
             title: model.cashFlowDetails.title,
             items: [
                 {
@@ -861,6 +862,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         form.push({
              type: "box",
             colClass: "col-sm-12 table-box",
+            condition: "model.currentStage!='ScreeningReview'",
             title: model.purchaseDetails.title,
             items: [
                 {
@@ -914,6 +916,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         form.push({
              type: "box",
             colClass: "col-sm-12 table-box",
+            condition: "model.currentStage!='ScreeningReview'",
             title: model.machineryDetails.title,
             items: [
                 {
@@ -929,6 +932,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         form.push({
              type: "box",
             colClass: "col-sm-12 table-box",
+            condition: "model.currentStage!='ScreeningReview'",
             title: model.stockDetails.title,
             items: [
                 {
@@ -944,6 +948,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         form.push({
              type: "box",
             colClass: "col-sm-12 table-box",
+            condition: "model.currentStage!='ScreeningReview'",
             title: model.nonMachineryDetails.title,
             items: [
                 {
