@@ -970,7 +970,7 @@ define({
                 },
                 eventListeners: {
                     "financial-summary": function(bundleModel, model, params) {
-                        model.customer = model.enrolmentProcess.customer;
+                        //model.customer = model.enrolmentProcess.customer;
                         model.bankDetails = params[10].BankAccounts;
                         var liability = params[19].subgroups;
                         model._scores = params;
@@ -1049,8 +1049,10 @@ define({
     
                             }
                         })
-    
-                        model.UIUDF.family_fields.total_household_income = model.household[0].income;
+                            if (model.household) {
+
+                                model.UIUDF.family_fields.total_household_income = model.household[0].income;
+                            }
     
     
                         /*Psychometric details*/

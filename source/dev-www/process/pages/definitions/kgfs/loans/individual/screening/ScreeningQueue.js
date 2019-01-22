@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningQueue"), 
+irf.pageCollection.factory(irf.page("kgfs.loans.individual.screening.ScreeningQueue"), 
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
         var branch = SessionStore.getBranch();
@@ -201,16 +201,16 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.ScreeningQueue")
                             desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
-                                entityManager.setModel('loans.individual.screening.ScreeningInput', {
+                                entityManager.setModel('kgfs.loans.individual.screening.ScreeningInput', {
                                     _request: item
                                 });
 								irfNavigator.go({
 									state: "Page.Bundle",
-                                    pageName: "loans.individual.screening.ScreeningInput",
+                                    pageName: "kgfs.loans.individual.screening.ScreeningInput",
                                     pageId: item.loanId
 								}, {
 									state: 'Page.Engine',
-                                    pageName: "loans.individual.screening.ScreeningQueue"
+                                    pageName: "kgfs.loans.individual.screening.ScreeningQueue"
                                 });
                             },
                             isApplicable: function(item, index) {

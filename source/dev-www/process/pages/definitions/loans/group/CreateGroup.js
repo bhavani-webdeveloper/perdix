@@ -622,8 +622,10 @@ define({
                 preSave: function(model, form, formName) {},
 
                 submit: function(model, form, formName) {
+                    PageHelper.showLoader();
                     $log.info("Inside submit()");
                     if(!validateForm(form)) {
+                        PageHelper.hideLoader();
                         return;
                     }
                     // var centres = formHelper.enum('centre').data;
@@ -638,6 +640,7 @@ define({
                     }
                     PageHelper.clearErrors();
                     var reqData = _.cloneDeep(model);
+                    PageHelper.hideLoader();
                     Utils.confirm("Please Verify customer/spouse DOB in the system with actual ID Proof. DOB change request will not be allowed afterwards").then(function(){
                         PageHelper.showLoader();
                         if (reqData.group.id) {

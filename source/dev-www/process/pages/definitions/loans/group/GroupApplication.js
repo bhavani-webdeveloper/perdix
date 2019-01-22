@@ -765,21 +765,23 @@ define({
             actions: {
                 preSave: function(model, form, formName) {},
                 submit: function(model, formCtrl, form) {
+                    PageHelper.showLoader();
                     // if(!validateForm(formCtrl)) 
                     //     return;
                     if(model.siteCode == 'saija') {
                         var cbsdate = SessionStore.getCBSDate();
                         if (model.group.scheduledDisbursementDate && moment(model.group.scheduledDisbursementDate, SessionStore.getSystemDateFormat()).diff(cbsdate, "days") <0) {
+                            PageHelper.hideLoader();
                             PageHelper.showProgress("loan-create", "Scheduled disbursement date should be greater than or equal to system date", 5000);
                             return false;
                         }
 
                         if (model.group.firstRepaymentDate && moment(model.group.firstRepaymentDate, SessionStore.getSystemDateFormat()).diff(model.group.scheduledDisbursementDate, "days") <=0) {
+                            PageHelper.hideLoader();
                             PageHelper.showProgress("loan-create", "Repayment date should be greater than disbursement date", 5000);
                             return false;
                         }
                     }
-                    PageHelper.showLoader();
                     irfProgressMessage.pop('Application-proceed', 'Working...');
                     PageHelper.clearErrors();
                     model.group.endTime= new Date();
@@ -796,15 +798,17 @@ define({
                     });
                 },
                 sendBack: function(model, form, formName) {
+                    PageHelper.showLoader();
                     if (!model.review.targetStage){
+                        PageHelper.hideLoader();
                         irfProgressMessage.pop('Send Back', "Send to Stage is mandatory", 2000);
                         return false;
                     }
                     if (!model.group.groupRemarks){
+                        PageHelper.hideLoader();
                         irfProgressMessage.pop('Send Back', "Remarks is mandatory", 2000);
                         return false;
                     }
-                    PageHelper.showLoader();
                     irfProgressMessage.pop('Send Back', 'Working...');
                     PageHelper.clearErrors();
                     model.group.endTime= new Date();
@@ -822,15 +826,17 @@ define({
                     });   
                 },
                 reject: function(model, form, formName) {
+                    PageHelper.showLoader();
                     if (!model.review.rejectStage){
+                        PageHelper.hideLoader();
                         irfProgressMessage.pop('Reject', "Send to Stage is mandatory", 2000);
                         return false;
                     }
                     if (!model.group.groupRemarks){
+                        PageHelper.hideLoader();
                         irfProgressMessage.pop('Reject', "Remarks is mandatory", 2000);
                         return false;
                     }
-                    PageHelper.showLoader();
                     irfProgressMessage.pop('Reject', 'Working...');
                     PageHelper.clearErrors();
                     model.group.endTime= new Date();

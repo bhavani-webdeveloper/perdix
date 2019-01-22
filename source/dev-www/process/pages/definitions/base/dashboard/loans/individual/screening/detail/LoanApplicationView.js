@@ -31,7 +31,7 @@ define({
                         });
                     if (model.currentStage == 'Dedupe')
                         $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.DedupeQueue',
+                            pageName: 'base.dashboard.loans.individual.screening.DedupeQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'ScreeningReview')
@@ -66,12 +66,12 @@ define({
                         });
                     if (model.currentStage == 'CentralRiskReview')
                         $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.CentralRiskReviewQueue',
+                            pageName: 'base.dashboard.loans.individual.screening.CentralRiskReviewQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'ZonalRiskReview')
                         $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.ZonalRiskReviewQueue',
+                            pageName: 'base.dashboard.loans.individual.screening.ZonalRiskReviewQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'Sanction')
@@ -388,7 +388,7 @@ define({
                             "title": "Expected Interest Rate",
                         }, {
                             "key": "loanAccount.estimatedEmi",
-                            "title": "EXPECTED_KINARA_EMI",
+                            "title": "EXPECTED_MAITREYA_EMI",
                             "type": "amount"
                         }, {
                             "key": "loanAccount.emiRequested",

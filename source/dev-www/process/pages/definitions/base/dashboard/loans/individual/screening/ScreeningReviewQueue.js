@@ -42,7 +42,7 @@ irf.pageCollection.factory(irf.page("base.dashboard.loans.individual.screening.S
 	                    	"type": ["string", "null"],
 	                    	"enumCode": "branch",
 							"x-schema-form": {
-								"type": "select",
+								"type": "userbranch",
 								"screenFilter": true
 							}
 	                    },

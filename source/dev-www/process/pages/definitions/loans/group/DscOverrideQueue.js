@@ -18,12 +18,44 @@ define({
             },
             definition: {
                 title: "DSC QUEUE",
+                searchForm: ["*"],
+				
+				searchSchema: {
+					"type": 'object',
+					"title": 'SearchOptions',
+					"properties": {
+                        "bankId":{
+						"title": "BANK_NAME",
+						"type": ["integer", "null"],
+						enumCode: "bank",	
+						"x-schema-form": {
+							"type": "select",
+							"screenFilter": true,
+
+                        }
+                    },
+                    "branch": {
+                        "title": "BRANCH_NAME",
+                        "type": ["integer", "null"],
+                        "enumCode": "branch_id",
+                        "parentEnumCode": "bank",
+                        "parentValueExpr": "model.bankId",
+                        "x-schema-form": {
+                            "type": "select",
+                            "screenFilter": true,
+                        }
+                    },
+					},
+					"required": []
+				},
 
                 getSearchFormHelper: function() {
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
                     return Groups.getDscOverrideList({
+                        'bankId':searchOptions.bankId,
+                        'branchId':searchOptions.branch,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage
                     }).$promise;

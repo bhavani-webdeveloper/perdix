@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningInput'),
+irf.pageCollection.factory(irf.page('kgfs.loans.individual.screening.ScreeningInput'),
 [
     "$log",
     "$q",
@@ -65,7 +65,7 @@ function (
                 "bundleDefinitionPromise": function() {
                     return $q.resolve([
                         {
-                            pageName: 'customer.IndividualEnrolment2',
+                            pageName: 'kgfs.customer.IndividualEnrolment2',
                             title: 'APPLICANT',
                             pageClass: 'applicant',
                             minimum: 1,
@@ -73,7 +73,7 @@ function (
                             order: 10
                         },
                         {
-                            pageName: 'customer.IndividualEnrolment2',
+                            pageName: 'kgfs.customer.IndividualEnrolment2',
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
                             minimum: 0,
@@ -81,7 +81,7 @@ function (
                             order: 20
                         },
                         {
-                            pageName: 'customer.IndividualEnrolment2',
+                            pageName: 'kgfs.customer.IndividualEnrolment2',
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
                             minimum: 0,

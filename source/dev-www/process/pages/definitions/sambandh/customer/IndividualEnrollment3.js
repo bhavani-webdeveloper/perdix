@@ -241,7 +241,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "BankAccounts.customerBankAccounts.customerNameAsInBank",
                 "BankAccounts.customerBankAccounts.accountNumber",
                 "BankAccounts.customerBankAccounts.accountType",
-                "BankAccounts.customerBankAccounts.bankStatementDocId",  
+                "BankAccounts.customerBankAccounts.bankStatementDocId",
+                "Telecalling",
+                "Telecalling.questionnaire"  
             ];
         } 
             var getOverrides = function(model) {
@@ -1997,6 +1999,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 orderNo: 70,
                                             }
                                         }
+                                    }
+                                }
+                            },
+                            "Telecalling": {
+                                type: "box",
+                                colClass: "col-sm-6",
+                                title: "PPI_INDICATORS",
+                                "orderNo": 70,
+                                items: {
+                                    "questionnaire": {
+                                        type: "section",
+                                        htmlClass: "row",
+                                        html: '<irf-questionnaire telecalling-detail="model.telecallingDetail"></irf-questionnaire>'
                                     }
                                 }
                             },
