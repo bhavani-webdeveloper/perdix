@@ -295,11 +295,12 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 								}
 								model.collectionDemandSummary.collectionExist = true;
 								_.each(centreDemands, function(v,k){
-									v.amountPaid = v.installmentAmount;
-									if (v.totalToBeCollected > v.installmentAmount) {
-										v.amountPaid = v.totalToBeCollected;
+									v.amountPaid = v.totalToBeCollected;
+									v.overdueAmount = v.totalToBeCollected - v.installmentAmount;
+									if (v.overdueAmount > 0) {
 										v.overdue = true;
-										v.overdueAmount = v.amountPaid - v.installmentAmount;
+									} else {
+										v.overdueAmount = 0;
 									}
 									totalToBeCollected += v.amountPaid;
 									if (!v.groupCode) v.groupCode = 'Individual Loans';
