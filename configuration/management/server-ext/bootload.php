@@ -84,6 +84,7 @@ $settings = [
         'password' => getenv('PERDIX_PASSWORD'),
         'disbursement_base_dir' => getenv('DISBURSEMENT_BASE_DIR'),
         'customer_upload_path' => getenv('CUSTOMER_UPLOAD_BASE_DIR'),
+        'loan_collection_upload_path' => getenv('COLLECTION_UPLOAD_BASE_DIR'),
         'partner_upload_path' => getenv('PARTNER_UPLOAD_BASE_DIR'),
         'kyc_upload_path' => getenv('KYC_UPLOAD_BASE_DIR'),
         'individual_loan_upload_path' => getenv('LOAN_UPLOAD_BASE_DIR'),

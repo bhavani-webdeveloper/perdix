@@ -1,99 +1,100 @@
-{  
-   "type":"object",
-   "properties":{  
-      "groupMemeberDetails":{  
-         "type":"array",
-         "minItems":0,
-         "properties":{  
-            "firstName":{  
-               "type":[  
-                  "string",
-                  "null"
-               ]
-            },
-            "fatherFirstName":{  
-               "type":[  
-                  "string",
-                  "null"
-               ]
-            },
-            "urnNo":{  
-               "type":[  
-                  "string",
-                  "null"
-               ]
-            },
-            "dateOfBirth":{  
-               "type":[  
-                  "string",
-                  "null"
-               ],
-               "format":"date"
-            },
-            "gender":{  
-               "type":[  
-                  "date",
-                  "null"
-               ]
-            },
-            "familyMembers":{  
-               "type":"array",
-               "minItems":2,
-               "properties":{  
-                  "familyMemberFirstName":{  
-                     "type":[  
+{
+    "type": "object",
+    "properties": {
+        "groupMemeberDetails": {
+            "type": "object",
+            "minItems": 0,
+            "properties": {
+                "firstName": {
+                    "type": [
                         "string",
-                        null
-                     ]
-                  },
-                  "relationShip":{  
-                     "type":[  
+                        "null"
+                    ]
+                },
+                "fatherFirstName": {
+                    "type": [
                         "string",
-                        null
-                     ]
-                  },
-                  "gender":{  
-                     "type":[  
+                        "null"
+                    ]
+                },
+                "urnNo": {
+                    "type": [
                         "string",
-                        null
-                     ]
-                  },
-                  "dateOfBirth":{  
-                     "type":[  
+                        "null"
+                    ]
+                },
+                "dateOfBirth": {
+                    "type": [
                         "string",
-                        null
-                     ]
-                  },
-"verifications":{
-"type":"object"
-               },
-               "required":[  
-                  "familyMemberFirstName",
-                  "relationShip",
-"verifications"
-               ]
-            },
-            "required":[  
-               "firstName",
-               "fatherFirstName",
-               "urnNo",
-               "dateOfBirth",
-               "gender"
-            ]
-         },
-         "group":{  
-            "type":"object",
-            "properties":{  
+                        "null"
+                    ],
+                    "format": "date"
+                },
+                "gender": {
+                    "type": [
+                        "date",
+                        "null"
+                    ]
+                },
+                "familyMembers": {
+                    "type": "array",
+                    "minItems": 2,
+                    "properties": {
+                        "familyMemberFirstName": {
+                            "type": [
+                                "string",
+                                null
+                            ]
+                        },
+                        "relationShip": {
+                            "type": [
+                                "string",
+                                null
+                            ]
+                        },
+                        "gender": {
+                            "type": [
+                                "string",
+                                null
+                            ]
+                        },
+                        "dateOfBirth": {
+                            "type": [
+                                "string",
+                                null
+                            ]
+                        },
+                        "verifications": {
+                            "type": "object"
+                        },
+                        "required": [
+                            "familyMemberFirstName",
+                            "relationShip",
+                            "verifications"
+                        ]
+                    },
+                    "required": [
+                        "firstName",
+                        "fatherFirstName",
+                        "urnNo",
+                        "dateOfBirth",
+                        "gender"
+                    ]
+                },
+                "group": {
+                    "type": "object",
+                    "properties": {
 
-            },
-            "required":[  
+                    },
+                    "required": [
 
-            ]
-         }
-      }
-   },
-   "required":[  
-      "groupMemeberDetails",
-      "group"
-   ]
+                    ]
+                }
+            }
+        },
+        "required": [
+            "groupMemeberDetails",
+            "group"
+        ]
+    }
 }

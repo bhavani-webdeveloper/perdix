@@ -13,17 +13,75 @@ define({
             "title": "DSC Override Queue",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
-                $log.info("DSC Queue got initialized");
-                model.siteCode = SessionStore.getGlobalSetting('siteCode');
+                model.Audits = model.Audits || {};
+                // model.branch_id = SessionStore.getCurrentBranch().branchId;
+                var bankName = SessionStore.getBankName();
+                var banks = formHelper.enum('bank').data;
+                for (var i = 0; i < banks.length; i++) {
+                    if (banks[i].name == bankName) {
+                        model.bankId = banks[i].value;
+                        model.bankName = banks[i].name;
+                    }
+                }
+                localFormController = formCtrl;
+                syncCheck = false;
+                
+                var userRole = SessionStore.getUserRole();
+                if (userRole && userRole.accessLevel && userRole.accessLevel === 5) {
+                    model.fullAccess = true;
+                }
+               
             },
             definition: {
                 title: "DSC QUEUE",
+                searchForm: [{
+                    key: "bankId",
+                    readonly: true,
+                    condition: "!model.fullAccess"
+                }, {
+                    key: "bankId",
+                    condition: "model.fullAccess"
+                },
+               "branch"
+            ],
+				
+				searchSchema: {
+					"type": 'object',
+					"title": 'SearchOptions',
+					"properties": {
+                        "bankId": {
+                            "title": "BANK_NAME",
+                           
+                            "type": ["integer", "null"],
+                            "enumCode": "bank",
+                            "x-schema-form": {
+                                "type": "select",
+                                "screenFilter": true,
+
+                            }
+                        },
+                    "branch": {
+                        "title": "BRANCH_NAME",
+                        "type": ["integer", "null"],
+                        "enumCode": "branch_id",
+                        "parentEnumCode": "bank",
+                        "parentValueExpr": "model.bankId",
+                        "x-schema-form": {
+                            "type": "select",
+                            "screenFilter": true,
+                        }
+                    },
+					},
+					"required": ["bankId"]
+				},
 
                 getSearchFormHelper: function() {
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
                     return Groups.getDscOverrideList({
+                        'bankId':searchOptions.bankId,
+                        'branchId':searchOptions.branch,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage
                     }).$promise;

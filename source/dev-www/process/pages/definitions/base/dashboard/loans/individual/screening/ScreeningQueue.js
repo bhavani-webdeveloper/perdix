@@ -106,6 +106,15 @@ define({
                             "title": "PIN_CODE",
                             "type": "string"
                         },
+                        "status":
+	                    {
+                            "type":"string",
+                            "title":"STATUS",
+                            "enumCode": "origination_status",
+                            "x-schema-form": {
+                            	"type": "select"
+                            }
+                        }
                     },
                     "required": []
                 },

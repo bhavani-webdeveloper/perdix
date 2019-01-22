@@ -420,7 +420,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "KYC.identityProof": {
                             "key": "customer.identityProof",
                             orderNo: 30,
-                            "type": "select"
+                            "type": "select",
+                            "onChange": function (modelValue, form, model) {
+                                model.customer.identityProofNo = null;
+                            }
                         },
                         "KYC.identityProofImageId": {
                             orderNo: 40,
@@ -434,6 +437,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "KYC.identityProofNo": {
                             "key": "customer.identityProofNo",
+                            condition: "model.customer.identityProof != 'Aadhar Card'",
                             orderNo: 50,
                             "type": "barcode"
                         },
@@ -1007,7 +1011,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             required: true,
                         },
                         "HouseVerification.houseDetailsFieldSet.landLordName": {
-                            key:"customer.verifications.drinkingWater",
+                            key: "customer.verifications[0].drinkingWater",
                             title: "DRINKING_WATER",
                             required: true,
                             "type": "select",
@@ -1018,7 +1022,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             }
                         },
                         "HouseVerification.houseDetailsFieldSet.HouseVerification": {
-                            key:"customer.verifications.waterFilter",
+                            key: "customer.verifications[0].waterFilter",
                             title: "WATER_FILTER",
                             required: true,
                             "type": "select",
@@ -1028,7 +1032,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             }
                         },
                         "HouseVerification.houseDetailsFieldSet.durationOfStay": {
-                            key:"customer.verifications.toiletFacility",
+                            key: "customer.verifications[0].toiletFacilityType",
                             title: "TYPE_OF_TOILET_FAMILY_USE",
                             required: true,
                             "type": "select",
@@ -1485,6 +1489,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             },
                             "KYC":{
                                     "items":{
+                                        "identityProofNo1": {
+                                            "key": "customer.identityProofNo", 
+                                            condition: "model.customer.identityProof == 'Aadhar Card'",
+                                            orderNo: 50,
+                                            "type": "barcode",
+                                            schema: {
+                                                "pattern": "^[2-9]{1}[0-9]{11}$",
+                                                "type": ["string", "null"],
+                                            },
+                                            onCapture: function (result, model, form) {
+                                                $log.info(result);
+                                                model.customer.identityProofNo = result.text;
+                                            }
+                                        },
                                         "addressProofSameAsIdProof": {
                                             orderNo: 80,
                                             key: "customer.addressProofSameAsIdProof",
@@ -1763,7 +1781,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "gender":{
                                                 key: "customer.familyMembers[].gender",
                                                 orderNo: 40,
-                                                readonly: true,
+                                                // readonly: true,
                                                 condition: "model.customer.familyMembers[arrayIndex].relationShip != 'self'",
                                                 type: "radios",
                                                 title: "T_GENDER"

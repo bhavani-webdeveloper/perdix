@@ -1666,8 +1666,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "HouseVerification.houseVerificationPhoto",
                     "HouseVerification.date",
                     "HouseVerification.place",
-                    "HouseVerification.rentLeaseStatus",
-                    "HouseVerification.rentLeaseAgreement",
+                    //"HouseVerification.rentLeaseStatus",
+                    //"HouseVerification.rentLeaseAgreement",
 
                     "BankAccounts",
                     "BankAccounts.customerBankAccounts",

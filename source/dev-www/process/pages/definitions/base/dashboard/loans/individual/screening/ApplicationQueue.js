@@ -93,11 +93,24 @@ define({
 	                    "area": {
 	                        "title": "AREA",
 	                        "type": "string"
+						},
+						"pincode": {
+	                        "title": "PIN_CODE",
+	                        "type": "string"
 	                    },
 	                    "cityTownVillage": {
 	                        "title": "CITY_TOWN_VILLAGE",
 	                        "type": "string"
-	                    }
+						},
+						"status":
+	                    {
+                            "type":"string",
+                            "title":"STATUS",
+                            "enumCode": "origination_status",
+                            "x-schema-form": {
+                            	"type": "select"
+                            }
+                        }
 					},
 					"required": []
 				},
