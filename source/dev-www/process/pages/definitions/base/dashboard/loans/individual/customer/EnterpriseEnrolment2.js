@@ -26,6 +26,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          "title": "HYPOTHECATED_TO_IREP"
 
                     },
+                    "EnterpriseReferences.verifications.relationship":{
+                        "required":true
+                    },
                     // "EnterpriseInformation.businessHistory": {
                     //      "title": "BUSINESSINFO_BUSINESS_OWNERSHIP",
                     //      "enumCode": "businessinfo_business_ownershi"
@@ -468,9 +471,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "BankAccounts.customerBankAccounts.bankStatementDocId",
                     "BankAccounts.customerBankAccounts.bankStatements",
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth",
-                    "BankAccounts.customerBankAccounts.bankStatements.openingBalance",
-                    "BankAccounts.customerBankAccounts.bankStatements.closingBalance",
-                    "BankAccounts.customerBankAccounts.bankStatements.emiAmountdeducted",
+                   // "BankAccounts.customerBankAccounts.bankStatements.openingBalance",
+                    //"BankAccounts.customerBankAccounts.bankStatements.closingBalance",
+                   // "BankAccounts.customerBankAccounts.bankStatements.emiAmountdeducted",
                     "BankAccounts.customerBankAccounts.bankStatements.totalDeposits",
                     "BankAccounts.customerBankAccounts.bankStatements.totalWithdrawals",
                     "BankAccounts.customerBankAccounts.bankStatements.balanceAsOn15th",
@@ -594,6 +597,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "ProxyIndicators.stockMaterialManagement",
                     "ProxyIndicators.customerWalkinToBusiness",
                     "ProxyIndicators.businessSignboardImage",
+
+                    "EnterpriseReferences",
+                    "EnterpriseReferences.verifications",
+                    "EnterpriseReferences.verifications.relationship",
+                    "EnterpriseReferences.verifications.businessName",
+                    "EnterpriseReferences.verifications.referenceFirstName",
+                    "EnterpriseReferences.verifications.mobileNo",
+                    "EnterpriseReferences.verifications.address",
+                   // "EnterpriseReferences.verifications.knownSince",
+                    //"EnterpriseReferences.verifications.goodsSold",
+                    //"EnterpriseReferences.verifications.goodsBought",
+                    //"EnterpriseReferences.verifications.paymentTerms",
+                    //"EnterpriseReferences.verifications.modeOfPayment",
+                    //"EnterpriseReferences.verifications.outstandingPayable",
+                    //"EnterpriseReferences.verifications.outstandingReceivable",
+                    //"EnterpriseReferences.verifications.customerResponse"
                 ];
             }
             
@@ -1154,6 +1173,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "EnterpriseReferences": {
                                         "readonly": true
+                                    },
+                                    "EnterpriseReferences":{
+                                        "readonly": true
+                                    },
+                                    "EnterpriseReferences.verifications":{
+                                        "readonly": true
                                     }
                                     
                                 }
@@ -1165,7 +1190,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "BuyerDetails",
                                     "ProxyIndicators",
                                     "SuppliersDeatils",
-                                    "Machinery"
+                                    "Machinery",
+                                    "EnterpriseReferences",
+                                    "EnterpriseReferences.verifications"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -1214,6 +1241,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ProxyIndicators"
                                 ],
                                 "overrides": {
+                                    "EnterpriseReferences":{
+
+                                    },
                                     "EnterpriseAssets":{
                                         "title":"ENTERPRISE_ASSETS"
                                     },
@@ -1271,7 +1301,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                         "readonly": true
                                     },
                                     "EnterpriseReferences": {
-                                        "readonly": true
+                                        "readonly": false
                                     }
                                     
                                 }
@@ -1281,7 +1311,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ProxyIndicators"
                                 ],
                                 "overrides": {
-                                    "EnterpriseInformation": {
+                                    "EnterpriseReferences.EnterpriseReferences.verifications":
+                                     {
                                         "readonly": true
                                     },
                                     "EnterpriseInformation.rentLeaseStatus": {
@@ -1335,7 +1366,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "CurrentAssets",
                                     "EnterpriseAssets",
                                     "SuppliersDeatils",
-                                    "Machinery"
+                                    "Machinery",
+                                    "EnterpriseReferences",
+                                    "EnterpriseReferences.verifications",
                                 ],
                                 "overrides": {
                                         
@@ -1744,6 +1777,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 },
                                 "EmployeeDetails.avgMonthlySalary": {
                                     "condition": "model.customer.enterprise.noOfFemaleEmployees > 0 ||model.customer.enterprise.noOfMaleEmployees > 0 "
+                                },
+                                "EnterpriseReferences":{
+                                    "required": true
+                                },
+                                "EnterpriseReferences.verifications":{
+                                    "required": true
                                 }
                             }
                         },
