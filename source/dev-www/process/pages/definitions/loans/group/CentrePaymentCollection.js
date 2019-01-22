@@ -316,11 +316,12 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 									PageHelper.showLoader();
 
 									_.each(v, function(v,k){
-										v.amountPaid = v.installmentAmount;
-										if (v.totalToBeCollected > v.installmentAmount) {
-											v.amountPaid = v.totalToBeCollected;
+										v.amountPaid = v.totalToBeCollected;
+										v.overdueAmount = v.amountPaid - v.installmentAmount;
+										if (v.overdueAmount > 0) {
 											v.overdue = true;
-											v.overdueAmount = v.amountPaid - v.installmentAmount;
+										} else {
+											v.overdueAmount = 0;
 										}
 										groupName = v.groupName;
 										grouptobecollected += v.amountPaid;
@@ -396,11 +397,12 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 									_.each(model.individualCollectionDemand, function(value, key) {
 										if(value.groupCode == valueObj.groupCode){
 											_.each(value.collectiondemand, function(v, k) {
-												v.amountPaid = v.installmentAmount;
-												if (v.totalToBeCollected > v.installmentAmount) {
-													v.amountPaid = v.totalToBeCollected;
+												v.amountPaid = v.totalToBeCollected;
+												v.overdueAmount = v.amountPaid - v.installmentAmount;
+												if (v.overdueAmount > 0) {
 													v.overdue = true;
-													v.overdueAmount = v.amountPaid - v.installmentAmount;
+												} else {
+													v.overdueAmount = 0;
 												}
 												totalToBeCollected += v.amountPaid;
 											});
