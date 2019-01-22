@@ -13,27 +13,57 @@ define({
             "title": "DSC Override Queue",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
-                $log.info("DSC Queue got initialized");
-                model.siteCode = SessionStore.getGlobalSetting('siteCode');
+                model.Audits = model.Audits || {};
+                // model.branch_id = SessionStore.getCurrentBranch().branchId;
+                var bankName = SessionStore.getBankName();
+                var banks = formHelper.enum('bank').data;
+                for (var i = 0; i < banks.length; i++) {
+                    if (banks[i].name == bankName) {
+                        model.bankId = banks[i].value;
+                        model.bankName = banks[i].name;
+                    }
+                }
+                localFormController = formCtrl;
+                syncCheck = false;
+                if ($stateParams.pageData && $stateParams.pageData.page) {
+                    returnObj.definition.listOptions.tableConfig.page = $stateParams.pageData.page;
+                } else {
+                    returnObj.definition.listOptions.tableConfig.page = 0;
+                }
+                var userRole = SessionStore.getUserRole();
+                if (userRole && userRole.accessLevel && userRole.accessLevel === 5) {
+                    model.fullAccess = true;
+                }
+                Queries.getGlobalSettings("audit.auditor_role_id").then(function(value) {
+                    model.auditor_role_id = Number(value);
+                }, PageHelper.showErrors);
             },
             definition: {
                 title: "DSC QUEUE",
-                searchForm: ["*"],
+                searchForm: [{
+                    key: "bankId",
+                    readonly: true,
+                    condition: "!model.fullAccess"
+                }, {
+                    key: "bankId",
+                    condition: "model.fullAccess"
+                }
+            ],
 				
 				searchSchema: {
 					"type": 'object',
 					"title": 'SearchOptions',
 					"properties": {
-                        "bankId":{
-						"title": "BANK_NAME",
-						"type": ["integer", "null"],
-						enumCode: "bank",	
-						"x-schema-form": {
-							"type": "select",
-							"screenFilter": true,
+                        "bankId": {
+                            "title": "BANK_NAME",
+                            "type": ["integer", "null"],
+                            "enumCode": "bank",
+                            "x-schema-form": {
+                                "type": "select",
+                                "screenFilter": true,
 
-                        }
-                    },
+                            }
+                        },
                     "branch": {
                         "title": "BRANCH_NAME",
                         "type": ["integer", "null"],
