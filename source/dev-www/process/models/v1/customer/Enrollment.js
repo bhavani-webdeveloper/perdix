@@ -4,6 +4,7 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
     var snapshotTo  = 'snapshotIdTo=';
     var managementEndPoint= irf.MANAGEMENT_BASE_URL;
     var endpoint1 = BASE_URL +'/api/creditbureau/verification'; 
+    var telecallingdetails = BASE_URL + '/api/telecallingdetails';
     var transformResponse = function(customer){
         if (_.hasIn(customer, "customerBankAccounts") && _.isArray(customer.customerBankAccounts)){
             _.forEach(customer.customerBankAccounts, function(bankAccount){
@@ -190,6 +191,22 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
         modifyBlockedStatus: {
             method:'GET',
             url: endpoint + '/modifyBlockedStatus'
+        },
+        getTelecallingById: {
+            method:'GET',
+            url: telecallingdetails + '/:id'
+        },
+        getTelecallingByProcessType: {
+            method:'GET',
+            url: telecallingdetails + '/CUSTOMER/:id'
+        },
+        createTelecalling: {
+            method: 'POST',
+            url : telecallingdetails
+        },
+        updateTelecalling: {
+            method:'PUT',
+            url: telecallingdetails
         }
     });
 });

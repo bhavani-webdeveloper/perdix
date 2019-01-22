@@ -1282,12 +1282,49 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {
                     model.siteCode = SessionStore.getGlobalSetting('siteCode');
+                    model.telecallingDetail = {};
+                    model.telecallingDetail.processType = 'CUSTOMER';
+                    model.telecallingDetail.telecallingQuestionnaireList = [];
+                    model.questionnaireDetails = [];
+                    Queries.questionnaireDetails('TELECALLING', 'Enrollment', 'Stage02').then(
+                    function(res) {
+                        model.questionnaireDetails = res;
+                        if(!$stateParams.pageId) {
+                            model.telecallingDetail.telecallingQuestionnaireList = model.questionnaireDetails;
+                        }
+                    }, function(error) {
+                        PageHelper.showErrors(error);
+                    });
+
                     if($stateParams.pageId) {
                         var customerId = $stateParams.pageId;
                         EnrolmentProcess.fromCustomerID(customerId)
                             .subscribe(function(resp){
                                 model.EnrolmentProcess = resp;
                                 model.customer = resp.customer;
+                                
+                                Enrollment.getTelecallingByProcessType({id: model.customer.id}, function(respo) {
+                                    if(respo.customerId) {
+                                        model.telecallingDetail = respo;
+
+                                        if(model.telecallingDetail.telecallingQuestionnaireList.length>0 && model.questionnaireDetails.length>0) {
+                                            model.questionnaireDetails.forEach(function(data) {
+                                                var pos = _.findIndex(model.telecallingDetail.telecallingQuestionnaireList, {'question':data.question});
+                                                if(pos!= -1) {
+                                                    _.merge(model.telecallingDetail.telecallingQuestionnaireList[pos], data);
+                                                }
+                                            });
+                                        } else {
+                                            model.telecallingDetail.telecallingQuestionnaireList = model.questionnaireDetails;
+                                        }
+                                    } else {
+                                        model.telecallingDetail.customerId = model.customer.id;
+                                        model.telecallingDetail.telecallingQuestionnaireList = model.questionnaireDetails;
+                                    }
+                                }, function(error) {
+                                    PageHelper.showErrors(error);
+                                });
+
                                 if (_.hasIn($stateParams.pageData, 'currentStage') && $stateParams.pageData.currentStage != model.customer.currentStage) {
                                     irfProgressMessage.pop("enrollment", "Customer data is in different stage", 5000);
                                     $state.go("Page.Engine", {
@@ -1377,7 +1414,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             .subscribe(function(repo){
                                 model.EnrolmentProcess = repo;
                                 model.customer = repo.customer;
-  
                             });
 
                     }
@@ -2011,7 +2047,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "questionnaire": {
                                         type: "section",
                                         htmlClass: "row",
-                                        html: '<irf-questionnaire telecalling-detail="model.telecallingDetail"></irf-questionnaire>'
+                                        html: '<irf-questionnaire telecalling-detail="model.telecallingDetail" questionnaire-details="model.questionnaireDetails"></irf-questionnaire>'
                                     }
                                 }
                             },
@@ -2142,10 +2178,26 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 })
                                 .subscribe(function(leadProcess){
                                     PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                    $state.go('Page.Adhoc', {
-                                        pageName: 'sambandh.customer.EnrollmentDashboard'
-                                    });
 
+                                    if(!reqData.telecallingDetail.customerId || _.isNull(reqData.telecallingDetail.customerId)) {
+                                        reqData.telecallingDetail.customerId = customer.id;
+                                        Enrollment.createTelecalling(reqData, function(res) {
+                                            $state.go('Page.Adhoc', {
+                                                pageName: 'sambandh.customer.EnrollmentDashboard'
+                                            });
+                                        }, function(err) {
+                                            PageHelper.showErrors(err);
+                                        });
+                                    } else {
+                                        Enrollment.updateTelecalling(reqData, function(res) {
+                                            console.log(res);
+                                            $state.go('Page.Adhoc', {
+                                                pageName: 'sambandh.customer.EnrollmentDashboard'
+                                            });
+                                        }, function(err) {
+                                            PageHelper.showErrors(err);
+                                        });
+                                    }
                                 }, function(err) {
                                     PageHelper.showErrors(err);
                                     PageHelper.hideLoader();
@@ -2223,8 +2275,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             })
                             .subscribe(function(EnrolmentProcess){
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                $state.go('Page.Adhoc', {
-                                    pageName: 'sambandh.customer.EnrollmentDashboard'
+                                reqData.telecallingDetail.customerId = customer.id;
+                                Enrollment.createTelecalling(reqData, function(res) {
+                                    $state.go('Page.Adhoc', {
+                                        pageName: 'sambandh.customer.EnrollmentDashboard'
+                                    });
+                                }, function(err) {
+                                    PageHelper.showErrors(err);
                                 });
                             }, function(err) {
                                 PageHelper.showErrors(err);
