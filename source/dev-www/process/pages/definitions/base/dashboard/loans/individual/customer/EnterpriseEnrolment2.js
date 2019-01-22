@@ -1551,7 +1551,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "readonly":true
                                 },
                                 "ProxyIndicators":{
-                                    "readonly":true
+                                    "readonly":true,
+                                    "orderNo": 100
+
                                 },
                                 "SuppliersDeatils":{
                                     "readonly":true
@@ -1566,7 +1568,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "readonly":true
                                 },
                                 "CommercialCBCheck":{
-                                    "readonly":true
+                                    "readonly":true,
+                                    "orderNo": 90
                                 },
                                 "BuyerDetails":{
                                     "readonly":true
