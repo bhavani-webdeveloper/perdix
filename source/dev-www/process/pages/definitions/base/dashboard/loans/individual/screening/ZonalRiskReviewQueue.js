@@ -177,11 +177,11 @@ irf.pageCollection.factory(irf.page("base.dashboard.loans.individual.screening.Z
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('loans.individual.screening.ZonalRiskReview', {
+								entityManager.setModel('base.dashboard.loans.individual.screening.ZonalRiskReview', {
 									_request: item
 								});
 								$state.go("Page.Bundle", {
-									pageName: "loans.individual.screening.ZonalRiskReview",
+									pageName: "base.dashboard.loans.individual.screening.ZonalRiskReview",
 									pageId: item.loanId
 								});
 							},

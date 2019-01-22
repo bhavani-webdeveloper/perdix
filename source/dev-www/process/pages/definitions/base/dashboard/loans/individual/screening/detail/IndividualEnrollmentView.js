@@ -1049,8 +1049,10 @@ define({
     
                             }
                         })
-    
-                        model.UIUDF.family_fields.total_household_income = model.household[0].income;
+                            if (model.household) {
+
+                                model.UIUDF.family_fields.total_household_income = model.household[0].income;
+                            }
     
     
                         /*Psychometric details*/
