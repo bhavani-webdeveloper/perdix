@@ -744,7 +744,7 @@ define({
                         }]
             },{
                 "type": "box",
-                "title": "Expected turover",
+                "title": "Expected Turnover",
                 "readOnly": true,
                 "colClass": "col-sm-12",
                 "items":[{
@@ -779,7 +779,7 @@ define({
                                 "render": currencyRightRender
                             },
                             {
-                                "title": "Kinara Exposure To Annual Turnover",
+                                "title": "Exposure To Annual Turnover",
                                 "data": "kinaraExposureToAnnualTurover"
                             }
                         ];

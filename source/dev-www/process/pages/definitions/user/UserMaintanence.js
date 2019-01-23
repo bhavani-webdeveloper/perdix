@@ -2,8 +2,8 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
     ["$log","$q", 'Pages_ManagementHelper','PageHelper','formHelper','Utils',
         'SessionStore',"$state","$stateParams","Masters","authService", "User", "SchemaResource","Queries",
         function($log, $q, ManagementHelper, PageHelper, formHelper,Utils,
-                 SessionStore,$state,$stateParams,Masters,authService, User, SchemaResource,Queries){
-            
+            SessionStore,$state,$stateParams,Masters,authService, User, SchemaResource,Queries){
+
             return {
                 "name":"USER_MAINTANENCE",
                 "type": "schema-form",
@@ -34,6 +34,7 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                             "bankName":model.bankName,
                             "validUntil": "2010-05-26",
                             "accessType": "BRANCH",
+                            "imeiNumber":"",
                             "userRoles": [
                             ],
                             "userBranches": [
@@ -170,6 +171,16 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                 type: "select",
                                 title: "PARTNER_CODE",
                                 enumCode: "partner"
+                            },
+                            {
+                                key: "user.imeiNumber",
+                                type: "string",
+                                schema:{
+                                    pattern: "^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$",
+                                },
+                                title: "MAC Address",   
+                                validationMessage: { 202: "Only Valid Mac address is Allowed." }
+
                             }
                         ]
                     },
@@ -238,60 +249,60 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                         try {
                             Queries.getBankName(model.bankId).then(function(data){
                                 model.user.bankName = data;
-                            // PageHelper.showLoader();
-                            PageHelper.showProgress("user-update", 'Working...');
-                            Utils.confirm("Are you sure?")
-                                .then(function(){
-                                    if (_.has(model.user, 'id') && !_.isNull(model.user.id)){
-                                        /* Existing User */
-                                        User.update(model.user)
-                                            .$promise
-                                            .then(function(response){
-                                                PageHelper.showProgress("user-update", 'Done', 5000);
-                                                model.user = response;
-                                                var branches = formHelper.enum('branch_id').data;
-                                                for (var i = 0; i < branches.length; i++) {
-                                                    var branch = branches[i];
-                                                    if (branch.name == model.user.branchName) {
-                                                        model.user.branchId = branch.value;
+                                // PageHelper.showLoader();
+                                PageHelper.showProgress("user-update", 'Working...');
+                                Utils.confirm("Are you sure?")
+                                    .then(function(){
+                                        if (_.has(model.user, 'id') && !_.isNull(model.user.id)){
+                                            /* Existing User */
+                                            User.update(model.user)
+                                                .$promise
+                                                .then(function(response){
+                                                    PageHelper.showProgress("user-update", 'Done', 5000);
+                                                    model.user = response;
+                                                    var branches = formHelper.enum('branch_id').data;
+                                                    for (var i = 0; i < branches.length; i++) {
+                                                        var branch = branches[i];
+                                                        if (branch.name == model.user.branchName) {
+                                                            model.user.branchId = branch.value;
+                                                        }
                                                     }
-                                                }
-                                            }, function(httpResponse){
-                                                PageHelper.showProgress("user-update", 'Failed.', 5000);
-                                                PageHelper.showErrors(httpResponse);
-                                            })
-                                            .finally(function(){
-                                                PageHelper.hideLoader();
-                                            })
-                                    } else {
-                                        /* New User */
-                                        model.user.changePasswordOnLogin = true;
-                                        User.create(model.user)
-                                            .$promise
-                                            .then(function(response){
-                                                PageHelper.showProgress("user-update", 'Done', 5000);
-                                                model.user = response;
-                                                $state.go("Page.Engine", {pageName: 'user.UserMaintanence'}, {reload: true});
-                                            }, function(httpResponse){
-                                                PageHelper.showProgress("user-update", 'Failed.', 5000);
-                                                PageHelper.showErrors(httpResponse);
-                                            })
-                                            .finally(function(){                                    
-                                                PageHelper.hideLoader();
-                                            })
-    
-                                    }
-                                    
+                                                }, function(httpResponse){
+                                                    PageHelper.showProgress("user-update", 'Failed.', 5000);
+                                                    PageHelper.showErrors(httpResponse);
+                                                })
+                                                .finally(function(){
+                                                    PageHelper.hideLoader();
+                                                })
+                                        } else {
+                                            /* New User */
+                                            model.user.changePasswordOnLogin = true;
+                                            User.create(model.user)
+                                                .$promise
+                                                .then(function(response){
+                                                    PageHelper.showProgress("user-update", 'Done', 5000);
+                                                    model.user = response;
+                                                    $state.go("Page.Engine", {pageName: 'user.UserMaintanence'}, {reload: true});
+                                                }, function(httpResponse){
+                                                    PageHelper.showProgress("user-update", 'Failed.', 5000);
+                                                    PageHelper.showErrors(httpResponse);
+                                                })
+                                                .finally(function(){
+                                                    PageHelper.hideLoader();
+                                                })
+
+                                        }
+
+                                    })
+
                             })
-    
-                        })
                         }
                         catch(e){
                             PageHelper.hideLoader();
                             console.log(e);
                             PageHelper.showProgress("","Error while calling query service",2000);
                         }
-                      
+
                     }
                 }
             };

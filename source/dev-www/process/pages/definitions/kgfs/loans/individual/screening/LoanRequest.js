@@ -365,23 +365,32 @@ define([], function() {
                               "PreliminaryInformation": {
                                 "items": {
                                     "partner": {
+                                        "key":"loanAccount.partnerCode",
                                         "title": "PARTNER",
                                         "type": "select",
+                                        "enumCode":"partner",
                                         "orderNo": 9
                                     },
                                     "productType": {
+                                        "key":"loanAccount.loanType",
                                         "title": "PRODUCT_TYPE",
                                         "type": "select",
+                                        "enumCode":"booking_loan_type",
                                         "orderNo": 9
                                     },
                                     "frequency": {
+                                        "key":"loanAccount.frequency",
                                         "title": "FREQUENCY",
                                         "type": "string",
                                         "orderNo": 9
                                     },
                                     "loanProduct": {
+                                        "key":"loanAccount.productCode",
                                         "title": "LOAN_PRODUCT",
-                                        "type": "string",
+                                        "type": "select",
+                                        "enumCode":"loan_product",
+                                        "parentEnumCode":"booking_loan_type",
+                                        "parentValueExpr":"model.loanAccount.loanType",
                                         "orderNo": 9
                                     },
                                     "comfortableEMI": {
@@ -390,8 +399,10 @@ define([], function() {
                                         "orderNo": 140
                                     },
                                     "modeOfDisbursement": {
+                                        "key":"loanAccount.modeOfDisbursement",
                                         "title": "MODE_OF_DISBURSEMENT",
                                         "type": "select",
+                                        "enumCode":"mode_of_disbursement",
                                         "orderNo": 150
                                     }
                                 }
@@ -399,6 +410,7 @@ define([], function() {
                             "LoanRecommendation":{
                                 "items":{
                                     "loanAmountRecommended":{
+                                        "key":"loanAccount.loanAmount",
                                         "title":"LOAN_AMOUNT_RECOMMENDED",
                                         "type":"string",
                                         "orderNo":20
@@ -423,11 +435,11 @@ define([], function() {
                                             },
                                             "marketValueOfAsset":{
                                                 "title":"MARKET_VALUE_OF_ASSET",
-                                                "type":"string"
+                                                "type":"numeric"
                                             },
                                             "timeSinceTheAssetIsOwned":{
                                                 "title":"TIME_SINCE_THE_ASSET_IS_OWNED",
-                                                "type":"string"
+                                                "type":"numeric"
                                             },
                                             "collateralDocuments":{
                                                 "title":"COLLATERAL_DOCUMENTS",
@@ -656,6 +668,7 @@ define([], function() {
                 "subTitle": "BUSINESS",
                 initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                                  
+                     model.loanAccount.partnerCode='KGFS';            
                     var self = this;
                    
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;

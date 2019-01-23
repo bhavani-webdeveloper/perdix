@@ -76,17 +76,31 @@ return {
         var self = this;
         model.review = model.review || {};
         model.siteCode = SessionStore.getGlobalSetting('siteCode');
-        if ($stateParams.pageData && $stateParams.pageData.jlgGroup && $stateParams.pageData.jlgGroupMember) {
-            var groupId = $stateParams.pageId;
+        if ($stateParams.pageData && $stateParams.pageData.jlgGroupId && $stateParams.pageData.jlgGroupMemberId) {
+			var dscId = $stateParams.pageId;
+			var dscData = {};
+			var customerData = {};
             PageHelper.showLoader();
-            irfProgressMessage.pop("checker1", "Loading, Please Wait...");
-            model.jlgGroupMember = $stateParams.pageData.jlgGroupMember || {};
-            model.group = $stateParams.pageData.jlgGroup || {};
-            var customerPromise = Enrollment.get({"id": model.jlgGroupMember.customerId}).$promise;
-            var dscdataPromise = Groups.getDSCData({"dscId": model.jlgGroupMember.dscId}).$promise;
+			irfProgressMessage.pop("checker1", "Loading, Please Wait...");
+			var groupPromise = GroupProcess.getGroup({groupId: $stateParams.pageData.jlgGroupId}).$promise;
+			
+           	
+            //model.group = $stateParams.pageData.jlgGroupsData || {};
+            var customerPromise = Enrollment.get({"id": $stateParams.pageData.customerId}).$promise;
+            var dscdataPromise = Groups.getDSCData({"dscId": dscId}).$promise;
             $q.all([
+				groupPromise.then(function(data) {
+					model.group = data;
+					data.jlgGroupMembers.forEach(function(val) {
+						if(val.id == $stateParams.pageData.jlgGroupMemberId){
+							model.jlgGroupMember = val;
+						}
+					})
+	            }, function(errors) {
+	                PageHelper.showErrors(errors);
+	            }),
             	customerPromise.then(function(data) {
-	                model.jlgGroupMember.customer = enrichCustomer(data);
+	                customerData = enrichCustomer(data);
 	            }, function(errors) {
 	                PageHelper.showErrors(errors);
 	            }),
@@ -94,7 +108,7 @@ return {
 	                for (i in data) {
 	                    var r = data.responseMessage;
 	                    data.responseMessageHtml = '<strong>DSC</strong>' + r.substr(r.indexOf('<br>'));
-	                    model.jlgGroupMember.dscData = data;
+	                    dscData = data;
 	                }
 	            }, function(errors) {
 	                for (i in errors) {
@@ -102,9 +116,12 @@ return {
 	                }
 	            }),
             ]).then(function(){
-            	model.group.jlgGroupMembers = [];
+				model.group.jlgGroupMembers = [];
+				model.jlgGroupMember.dscData = dscData;
+				model.jlgGroupMember.customer = customerData;
                 model.group.jlgGroupMembers.push(model.jlgGroupMember)
-            }).finally(PageHelper.hideLoader)
+			}).finally(PageHelper.hideLoader)
+			model.jlgGroupMember = {};
         } else {
             irfNavigator.goBack();
         }
