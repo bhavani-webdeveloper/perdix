@@ -175,7 +175,7 @@ define({
                     },
                     getActions: function() {
                         return [
-                             {
+                            {
                             name: "Do DSC Override",
                             desc: "",
                             fn: function(item, index) {
@@ -194,7 +194,7 @@ define({
                                 });   
                             },
                             isApplicable: function(item, model) {
-                                return model.siteCode != "KGFS";
+                                return true;
                             }
                         }, {
                             name: "View DSC Response",
