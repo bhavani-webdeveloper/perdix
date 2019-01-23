@@ -79,6 +79,7 @@ return {
         if ($stateParams.pageData && $stateParams.pageData.jlgGroupId && $stateParams.pageData.jlgGroupMemberId) {
 			var dscId = $stateParams.pageId;
 			var dscData = {};
+			var customerData = {};
             PageHelper.showLoader();
 			irfProgressMessage.pop("checker1", "Loading, Please Wait...");
 			var groupPromise = GroupProcess.getGroup({groupId: $stateParams.pageData.jlgGroupId}).$promise;
@@ -99,7 +100,7 @@ return {
 	                PageHelper.showErrors(errors);
 	            }),
             	customerPromise.then(function(data) {
-	                model.jlgGroupMember.customer = enrichCustomer(data);
+	                customerData = enrichCustomer(data);
 	            }, function(errors) {
 	                PageHelper.showErrors(errors);
 	            }),
@@ -116,7 +117,8 @@ return {
 	            }),
             ]).then(function(){
 				model.group.jlgGroupMembers = [];
-				model.jlgGroupMember.data = dscData;
+				model.jlgGroupMember.dscData = dscData;
+				model.jlgGroupMember.customer = customerData;
                 model.group.jlgGroupMembers.push(model.jlgGroupMember)
 			}).finally(PageHelper.hideLoader)
 			model.jlgGroupMember = {};
