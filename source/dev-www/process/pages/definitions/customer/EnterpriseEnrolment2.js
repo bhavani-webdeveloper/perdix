@@ -472,6 +472,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.centreId",
                         condition: "!model.customer.id",
                         type: "lov",
+                        required: true,
                         autolov: true,
                         lovonly: true,
                         bindMap: {},
