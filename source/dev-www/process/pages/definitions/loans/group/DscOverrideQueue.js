@@ -79,7 +79,7 @@ define({
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    return Groups.getDscOverrideList({
+                    return Groups.getDcsOverrideViewList({
                         'bankId':searchOptions.bankId,
                         'branchId':searchOptions.branch,
                         'page': pageOpts.pageNo,
@@ -103,7 +103,7 @@ define({
                         if (response != null && response.length && response.length != 0) {
                             var temp = [];
                             for (var i=0;i<response.length;i++){
-                                if(response[i].jlgGroup == null || typeof response[i].jlgGroup == 'undefined')
+                                if(response[i] == null || typeof response[i] == 'undefined')
                                 // temp.push({
                                 //     "urnNo":response[i].jlgGroupMember.urnNo,
                                 //     "id":response[i].jlgGroup.id
@@ -139,37 +139,27 @@ define({
                         }
                         return [{
                             title: 'URN',
-                            data: 'jlgGroupMember.urnNo'
+                            data: 'urnNo'
                         }, {
                             title: 'Group ID',
-                            data: 'jlgGroup.id'
+                            data: 'groupId'
                         }, {
                             title: 'GROUP_CODE',
-                            data: 'jlgGroup.groupCode'
+                            data: 'groupCode'
                         }, {
                             title: 'Group Name',
-                            data: 'jlgGroup.groupName'
+                            data: 'groupName'
                         }, {
                             title: 'BRANCH_NAME',
-                            data: 'jlgGroup.branchId',
+                            data: 'branchId',
                             render: function(data, type, full, meta) {
-                                if(data){
-                                    return branches[data];
-                                }
-                                else{
-                                   return data; 
-                                }
+                                return (data && branches[data])? branches[data]: data;
                             }
                         }, {
                             title: 'CENTRE_CODE',
-                            data: 'jlgGroupMember.centreCode',
+                            data: 'centreCode',
                             render: function(data, type, full, meta) {
-                                if(data){
-                                    return centres[data];
-                                }
-                                else{
-                                   return data; 
-                                }
+                                return (data && centres[data])? centres[data]: data;
                             }
                         }]
                     },
@@ -179,51 +169,14 @@ define({
                             name: "Do DSC Override",
                             desc: "",
                             fn: function(item, index) {
-                                PageHelper.showLoader();
-                                irfProgressMessage.pop("dsc-override", "Performing DSC Override");
-                                var remarks = window.prompt("Enter Remarks", "");
-                                if (remarks) {
-                                    Groups.post({
-                                        service: "overridedsc",
-                                        urnNo: item.jlgGroupMember.urnNo,
-                                        groupCode: item.jlgGroup.groupCode,
-                                        productCode: item.jlgGroup.productCode,
-                                        remarks: remarks
-                                    }, {}, function(resp, headers) {
-                                        $log.info(resp);
-                                        PageHelper.hideLoader();
-                                        irfProgressMessage.pop("dsc-override", "Override Succeeded", 2000);
-                                        $state.go('Page.Engine', {
-                                            pageName: "loans.group.DscOverrideQueue"
-                                        },{
-                                            reload: true,
-                                            inherit: false,
-                                            notify: true
-                                        });
-                                    }, function(resp) {
-                                        $log.error(resp);
-                                        PageHelper.hideLoader();
-                                        irfProgressMessage.pop("dsc-override", "An error occurred. Please Try Again", 2000);
-                                        PageHelper.showErrors(resp);
-                                    });
-                                } else {
-                                    PageHelper.hideLoader();
-                                }
-                            },
-                            isApplicable: function(item, model) {
-                                return model.siteCode === "KGFS";
-                            }
-                        }, {
-                            name: "Do DSC Override",
-                            desc: "",
-                            fn: function(item, index) {
                                 irfNavigator.go({
                                     state: "Page.Engine",
                                     pageName: "loans.group.DscOverride",
-                                    pageId: item.dscIntegration.id,
+                                    pageId: item.dscId,
                                     pageData: {
-                                        jlgGroup: item.jlgGroup,
-                                        jlgGroupMember: item.jlgGroupMember,
+                                        jlgGroupId: item.groupId,
+                                        jlgGroupMemberId: item.id,
+                                        customerId:item.customerId
                                     }, 
                                 }, {
                                     state: "Page.Engine",
@@ -231,13 +184,13 @@ define({
                                 });   
                             },
                             isApplicable: function(item, model) {
-                                return model.siteCode != "KGFS";
+                                return true;
                             }
                         }, {
                             name: "View DSC Response",
                             desc: "",
                             fn: function(item, index) {
-                                Groups.showDscDataPopup(item.jlgGroupMember.dscId);
+                                Groups.showDscDataPopup(item.dscId);
                             },
                             isApplicable: function(item, index) {
                                 return true;
