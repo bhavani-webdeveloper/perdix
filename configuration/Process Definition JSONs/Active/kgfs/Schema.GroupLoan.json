@@ -1,11 +1,22 @@
 {
     "type": "object",
+    "required": [
+        "groupMemeberDetails",
+        "group"
+    ],
     "properties": {
         "groupMemeberDetails": {
             "type": "array",
-            "minItems": 0,
-            "items" : {
+            "minItems": 1,
+            "items": {
                 "type": "object",
+                "required": [
+                    "firstName",
+                    "fatherFirstName",
+                    "urnNo",
+                    "dateOfBirth",
+                    "gender"
+                ],
                 "properties": {
                     "firstName": {
                         "type": [
@@ -34,70 +45,62 @@
                     },
                     "gender": {
                         "type": [
-                            "date",
+                            "string",
                             "null"
                         ]
                     },
                     "familyMembers": {
                         "type": "array",
                         "minItems": 2,
-                        "properties": {
-                            "familyMemberFirstName": {
-                                "type": [
-                                    "string",
-                                    null
-                                ]
-                            },
-                            "relationShip": {
-                                "type": [
-                                    "string",
-                                    null
-                                ]
-                            },
-                            "gender": {
-                                "type": [
-                                    "string",
-                                    null
-                                ]
-                            },
-                            "dateOfBirth": {
-                                "type": [
-                                    "string",
-                                    null
-                                ]
-                            },
-                            "verifications": {
-                                "type": "object"
-                            },
+                        "items": {
+                            "type": "object",
                             "required": [
                                 "familyMemberFirstName",
                                 "relationShip",
                                 "verifications"
-                            ]
-                        },
-                        "required": [
-                            "firstName",
-                            "fatherFirstName",
-                            "urnNo",
-                            "dateOfBirth",
-                            "gender"
-                        ]
-                    },
-                    "group": {
-                        "type": "object",
-                        "properties": {
-
-                        },
-                        "required": [
-
-                        ]
+                            ],
+                            "properties": {
+                                "familyMemberFirstName": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                },
+                                "relationShip": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                },
+                                "gender": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                },
+                                "dateOfBirth": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                },
+                                "verifications": {
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
         },
-        "required": [
-            "groupMemeberDetails",
-            "group"
-        ]
+        "group": {
+            "type": "object",
+            "properties": {
+
+            },
+            "required": [
+
+            ]
+        }
     }
 }
