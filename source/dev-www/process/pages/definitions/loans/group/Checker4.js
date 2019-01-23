@@ -62,7 +62,7 @@ define({
                 var groupId = $stateParams.pageId;
                 PageHelper.showLoader();
                 irfProgressMessage.pop("Checker4", "Loading, Please Wait...");
-                GroupProcess.getGroup({
+                GroupProcess.getCheckerGroup({
                     groupId: groupId
                 }, function(response) {
                     model.group = response;
@@ -78,8 +78,13 @@ define({
                     var customerPromises = [], dscPromises = [];
                     for (i in model.group.jlgGroupMembers) {
                         var member = model.group.jlgGroupMembers[i];
-                        customerPromises.push(Enrollment.get({"id": member.customerId}).$promise);
-                        dscPromises.push(Groups.getDSCData({"dscId": member.dscId}).$promise);
+                        var r = member.dscResponseMessage;
+                        model.group.jlgGroupMembers[i].dscData  = '<strong>DSC</strong>' + r.substr(r.indexOf('<br>'));
+                        
+                        var customer = enrichCustomer(member.customer,member);
+                        model.group.members.push(customer.member);
+                        model.group.jlgGroupMembers[i].customer = customer;
+                        model.group.jlgGroupMembers[i].customerCalledDate = model.group.jlgGroupMembers[i].customerCalledDate || moment().format(SessionStore.getSystemDateFormat());
                         model.group.checkerTransactionHistoryDTO = {
                             "branchId": model.group.branchId,
                             "statusUpDatedBy": SessionStore.getUsername(),
@@ -112,29 +117,7 @@ define({
                         }
                     }
                     $q.all([
-                        $q.all(customerPromises).then(function(data) {
-                            for (i in data) {
-                                var customer = enrichCustomer(data[i],model.group.jlgGroupMembers[i]);
-                                model.group.members.push(customer.member);
-                                model.group.jlgGroupMembers[i].customer = customer;
-                                model.group.jlgGroupMembers[i].customerCalledDate = model.group.jlgGroupMembers[i].customerCalledDate || moment().format(SessionStore.getSystemDateFormat());
-                            }
-                        }, function(errors) {
-                            for (i in errors) {
-                                PageHelper.showErrors(errors[i]);
-                            }
-                        }),
-                        $q.all(dscPromises).then(function(data) {
-                            for (i in data) {
-                                var r = data[i].responseMessage;
-                                data[i].responseMessageHtml = '<strong>DSC</strong>' + r.substr(r.indexOf('<br>'));
-                                model.group.jlgGroupMembers[i].dscData = data[i];
-                            }
-                        }, function(errors) {
-                            for (i in errors) {
-                                PageHelper.showErrors(errors[i]);
-                            }
-                        }),
+                       
                         Queries.getGroupLoanRemarksHistoryById(model.group.id).then(function(resp){
                                 for (i = 0; i < resp.length; i++) {
                                     $log.info("hi");
@@ -776,7 +759,7 @@ define({
                         }, {
                             "notitle": true,
                             "readonly": true,
-                            "key": "group.jlgGroupMembers[].dscData.responseMessageHtml",
+                            "key": "group.jlgGroupMembers[].dscData",
                             "type": "html"
                         }, {
                             "type": "section",
@@ -1160,10 +1143,12 @@ define({
                 })
             },
             saveGroup: function(model, formCtrl, form) {
-                $log.info("Inside submit()");
-                if(!validateForm(formCtrl)) 
-                    return;
                 PageHelper.showLoader();
+                $log.info("Inside submit()");
+                if(!validateForm(formCtrl)){ 
+                    PageHelper.hideLoader();
+                    return;
+                }
                 var reqData = _.cloneDeep(model);
                 reqData.groupAction = 'SAVE';
                 PageHelper.clearErrors();
@@ -1179,11 +1164,12 @@ define({
                 });
             },
             sendBack: function(model, form, formName) {
+                PageHelper.showLoader();
                 if (!model.review.targetStage){
+                    PageHelper.hideLoader();
                     irfProgressMessage.pop('Send Back', "Send to Stage is mandatory", 2000);
                     return false;
                 }
-                PageHelper.showLoader();
                 irfProgressMessage.pop('Send Back', 'Working...');
                 PageHelper.clearErrors();
                 model.group.endTime= new Date();
@@ -1201,10 +1187,12 @@ define({
                 });   
             },
             reject: function(model, formCtrl, form) {
-                $log.info("Inside submit()");
-                if(!validateForm(formCtrl)) 
-                    return;
                 PageHelper.showLoader();
+                $log.info("Inside submit()");
+                if(!validateForm(formCtrl)) {
+                    PageHelper.hideLoader();
+                    return;
+                }
                 model.group.checkerTransactionHistoryDTO.status="REJECT";
                 model.group.checkerTransactionHistoryDTO.remarks=model.group.groupRemarks;
                 model.group.endTime= new Date();
@@ -1225,9 +1213,11 @@ define({
                 });
             },
             approve: function(model, formCtrl, form) {
-                if(!validateForm(formCtrl)) 
-                    return;
                 PageHelper.showLoader();
+                if(!validateForm(formCtrl)) {
+                    PageHelper.hideLoader();
+                    return;
+                }
                 irfProgressMessage.pop('CHECKER-proceed', 'Working...');
                 PageHelper.clearErrors();
                 model.group.checkerTransactionHistoryDTO.status="ACCEPT";

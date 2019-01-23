@@ -291,6 +291,7 @@
                   "key":"insurancePolicyDetailsDTO.nomineeDetailsDTO[].nomineeName",
                   "title":"NOMINEE_NAME",
                   "type":"lov",
+                  "required":true,
                   "autolov":true,
                   "orderNo":10
                },

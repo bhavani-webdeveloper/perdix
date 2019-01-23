@@ -63,7 +63,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         maximum: 1,
                         order: 100
                     }, {
-                        pageName: 'loans.individual.screening.Review',
+                        pageName: 'base.dashboard.loans.individual.screening.Review',
                         title: 'REVIEW',
                         pageClass: 'loan-review',
                         minimum: 1,
@@ -77,9 +77,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                         maximum: 1,
                         order: 90
                     }];
-                    if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan') {
+                    if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'maitreya') {
                         definition.push({
-                            pageName: 'irep.loans.individual.origination.detail.SummaryView',
+                            pageName: 'base.dashboard.loans.individual.screening.detail.SummaryView',
                             title: 'SummaryView',
                             pageClass: 'summaryView',
                             minimum: 1,

@@ -650,18 +650,55 @@ irf.commons.service('irfPrinter',["$log","PageHelper","Utils","irfSimpleModal",f
 		self.data = printData;
 		if (Utils.isCordova && self.data.thermalReceipt) {
 			self.thermalReceipt = generateThermelPrint(data.thermalReceipt);
-			self.previewHtml = self.thermalReceipt.html;
+			// self.previewHtml = self.thermalReceipt.html;
+			self.previewHtml = '<div class="web-print-wrapper">'  +self.webPrintStyle+ self.thermalReceipt.html + '</div>'
 		} else if (self.data.paperReceipt) {
-			self.previewHtml = '<div class="web-print-wrapper">' + self.webPrintStyle + printData.paperReceipt + '</div>'
+			self.previewHtml = '<div class="web-print-wrapper">' +self.webPrintStyle+ printData.paperReceipt + '</div>'
 		}
 		self.thermalReceipt = generateThermelPrint(self.data.thermalReceipt);
-		self.previewHtml = self.thermalReceipt.html;
+		// var tempfix = '<div id="printerTest" style="display:block; position:absolute !important; left:10000px; height:100%;">' + printData.paperReceipt  + '</div>';
+		// self.previewHtml = self.thermalReceipt.html;
+		// self.previewHtml = '<div class="web-print-wrapper">' + self.webPrintStyle + self.thermalReceipt.html + '</div>'
+		// var hiddenPrinter = document.getElementById("hidden-printer")
+		// if (hiddenPrinter){
+		// 	hiddenPrinter.innerHTML = "";
+		// 	hiddenPrinter.innerHTML = self.previewHtml;
+		// }
+		// else{
+		// 	document.body.innerHTML += "<div id='hidden-printer'><style .hidden-printer {display:none;} @media print {body * { visibility: hidden;} .hidden-printer * { visibility: visible} .hidden-printer { position: absolute; top: 0; left: 0;} html, body {margin-top: 0%;display:block; height: 100%;}} @media not print {.hidden-printer {display:none; position:absolute;left:10000px;}}></style>" + self.previewHtml + "</div>"
+		// }
 		self.previewHtml = mapButtonToHtml(self.previewHtml);
 		irfSimpleModal('Print Preview', self.previewHtml, {
-			print: function() {
-				self.print();
-			}
+				// offsetHeight  document.getElementsByClassName('web-print-wrapper').offsetHeight
+				print: function() {
+					self.print();
+				}
 		});
+		
+
+		// var body = document.getElementsByTagName('body');
+		// document.body.innerHTML += tempfix
+		// var offsetHeight= document.getElementById('printerTest');
+		// temp = offsetHeight.offsetHeight;
+		// console.log("fsfhsfhhsfhs");
+		// console.log(offsetHeight);
+		// offsetHeight.innerHTML = "";
+		// var setHeight= document.getElementsByClassName('web-print-wrapper');
+		// for (var i =0;i<setHeight.length;i++){
+		// 	setHeight[i].style.height = temp+"px";
+		// }
+
+
+		// var height = offsetHeight[0].offsetHeight;
+		// var setHeight = document.getElementsByClassName('web-print-wrapper');
+		// setHeight[0].style.height = height+"px";
+		// console.log(setHeight);
+		// irfSimpleModal('Print Preview', self.previewHtml, {
+		// 	offsetHeight  document.getElementsByClassName('web-print-wrapper').offsetHeight
+		// 	print: function() {
+		// 		self.print();
+		// 	}
+		// });
 	}
 	self.print = function(){
 			try {
@@ -741,5 +778,5 @@ irf.commons.service('irfPrinter',["$log","PageHelper","Utils","irfSimpleModal",f
 			html: html + '</div>'
 		};
 	}
-	self.webPrintStyle = '<style>@media print { body * { visibility: hidden; } .web-print-wrapper, .web-print-wrapper * { visibility: visible } .web-print-wrapper { position: absolute; top: 0; left: 0;} html, body {height: 100%;}}</style>';
+	self.webPrintStyle = '<style class="computedHeight"> @media print { body * { visibility: hidden; } .web-print-wrapper, .web-print-wrapper * { visibility: visible} .web-print-wrapper { position: ; top: 0; left: 0; height:10px;} html, body {margin-top: 0%;display:block; height: 100%;}}</style>';
 }])

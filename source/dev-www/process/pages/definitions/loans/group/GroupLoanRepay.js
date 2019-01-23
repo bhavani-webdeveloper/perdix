@@ -794,6 +794,7 @@ function($log, $q, SessionStore, $state, formHelper, $stateParams, LoanAccount, 
                 return deferred.promise;
             },
             submit: function(model, formCtrl, formName) {
+                PageHelper.showLoader();
                 $log.info("Inside submit");
                 console.log(formCtrl);
                 var reqData = _.cloneDeep(model);
@@ -835,6 +836,7 @@ function($log, $q, SessionStore, $state, formHelper, $stateParams, LoanAccount, 
                             try {
                                 if (typeof reqData.repayments[i].additional.accountBalance !== "undefined") {
                                     if (Number(reqData.repayments[i].amount) > reqData.repayments[i].additional.accountBalance) {
+                                        PageHelper.hideLoader();
                                         msg = "For URN " + reqData.repayments[i].urnNo;
                                         msg += " Payable amount is larger than account balance."
                                         Utils.alert(msg);
@@ -842,15 +844,16 @@ function($log, $q, SessionStore, $state, formHelper, $stateParams, LoanAccount, 
                                     }
                                 }
                             } catch (err) {
-
+                                PageHelper.hideLoader();
                             }
                         }
                     }
                 }
-
+                PageHelper.hideLoader();
                 if (window.confirm(msg + "Are you Sure?")) {
                     PageHelper.showLoader();
                     LoanAccount.groupRepayment(reqData, function(resp, headers) {
+                            PageHelper.hideLoader();
                             model.repaymentResponse = resp;
                             model.ui.submissionDone = true;
                             //delete model.repayments;
@@ -860,6 +863,7 @@ function($log, $q, SessionStore, $state, formHelper, $stateParams, LoanAccount, 
                                 irfNavigator.goBack();
                             }
                     }, function(resp) {
+                        PageHelper.hideLoader();
                         console.error(resp);
                         PageHelper.showProgress("group-repay", "Oops. An Error Occurred", 3000);
                     }).$promise.finally(function() {

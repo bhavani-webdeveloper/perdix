@@ -298,7 +298,7 @@ irf.pageCollection.factory(irf.page('loans.group.GroupLoanRepaymentQueue'), ["$l
                                 fn: function(item, index) {
                                     irfNavigator.go({
                                         state: "Page.Engine",
-                                        pageName: 'loans.groups.GroupLoanRepay',
+                                        pageName: 'loans.group.GroupLoanRepay',
                                         pageId:[item.partnerCode, item.groupCode, false].join(".")
                                     }, {
                                         state: "Page.Engine",

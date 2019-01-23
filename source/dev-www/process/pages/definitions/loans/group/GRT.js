@@ -1178,6 +1178,7 @@ define({
                     });   
                 },
                 sendBack: function(model, form, formName) {
+                    PageHelper.showLoader();
                     if (!model.review.targetStage){
                         irfProgressMessage.pop('Send Back', "Send to Stage is mandatory", 2000);
                         return false;
@@ -1186,7 +1187,6 @@ define({
                         irfProgressMessage.pop('Reject', "Remarks is mandatory", 2000);
                         return false;
                     }
-                    PageHelper.showLoader();
                     irfProgressMessage.pop('Send Back', 'Working...');
                     PageHelper.clearErrors();
                     model.groupAction = "PROCEED";                    
@@ -1204,6 +1204,7 @@ define({
                     });   
                 },
                 reject: function(model, form, formName) {
+                    PageHelper.showLoader();
                     if (!model.review.rejectStage){
                         irfProgressMessage.pop('Reject', "Send to Stage is mandatory", 2000);
                         return false;
@@ -1212,7 +1213,6 @@ define({
                         irfProgressMessage.pop('Reject', "Remarks is mandatory", 2000);
                         return false;
                     }
-                    PageHelper.showLoader();
                     irfProgressMessage.pop('Reject', 'Working...');
                     PageHelper.clearErrors();
                     model.groupAction = "PROCEED";
