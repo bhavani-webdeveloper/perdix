@@ -153,23 +153,13 @@ define({
                             title: 'BRANCH_NAME',
                             data: 'branchId',
                             render: function(data, type, full, meta) {
-                                if(data){
-                                    return branches[data];
-                                }
-                                else{
-                                   return data; 
-                                }
+                                return (data && branches[data])? branches[data]: data;
                             }
                         }, {
                             title: 'CENTRE_CODE',
                             data: 'centreCode',
                             render: function(data, type, full, meta) {
-                                if(data){
-                                    return centres[data];
-                                }
-                                else{
-                                   return data; 
-                                }
+                                return (data && centres[data])? centres[data]: data;
                             }
                         }]
                     },
