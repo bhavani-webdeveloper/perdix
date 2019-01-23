@@ -3,12 +3,12 @@ define({
     pageType: "Engine",
     dependencies: ["$log", "irfSimpleModal", "Groups", "GroupProcess", "Enrollment", "CreditBureau",
         "Journal", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-        "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator"
+        "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator","Scoring","AuthTokenHelper"
     ],
 
     $pageFn: function($log, irfSimpleModal, Groups, GroupProcess, Enrollment, CreditBureau,
         Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
+        PageHelper, Utils, PagesDefinition, Queries, irfNavigator,Scoring,AuthTokenHelper) {
 
         var nDays = 15;
         var fixData = function(model) {
@@ -405,7 +405,8 @@ define({
                             }, {
                             "type": "submit",
                             condition:"model.action == 'PROCEED'",
-                            "title": "PROCEED"
+                            "title": "PROCEED",
+                            onClick: "actions.submit(model, formCtrl, form, $event)"
                         }]
                     }
                 ]
@@ -460,16 +461,31 @@ define({
                             model.group.jlgGroupMembers[i].firstRepaymentDate = model.group.firstRepaymentDate;
                         }
                     }
+
                     var reqData = _.cloneDeep(model);
                     GroupProcess.updateGroup(reqData, function(res) {
-                        PageHelper.hideLoader();
-                        irfProgressMessage.pop('proceed', 'Operation Succeeded.Done.', 5000);
-                        irfNavigator.goBack();
+                        //Call Score API for group
+                        var ScoreDetails = Scoring.getGroupScore({
+                            //auth_token: AuthTokenHelper.getAuthData().access_token,
+                            GroupId: $stateParams.pageId,
+                            ScoreName: 'PPIScore'
+                        }).$promise.then(function(response){
+                            // console.log(response);
+                            PageHelper.hideLoader();
+                            irfProgressMessage.pop('proceed', 'Operation Succeeded.Done.', 5000);
+                            irfNavigator.goBack();
+                        },function(err){
+                            //console.log(err);
+                            PageHelper.hideLoader();
+                            irfProgressMessage.pop('proceed', 'Oops. Some error.', 2000);
+                            PageHelper.showErrors(err);
+                        });
                     }, function(res) {
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('proceed', 'Oops. Some error.', 2000);
                         PageHelper.showErrors(res);
                     });
+                  
                 },
                 sendBack: function(model, form, formName) {
                     if (!model.review.targetStage){

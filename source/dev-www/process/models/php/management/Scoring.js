@@ -20,6 +20,10 @@ irf.models.factory('Scoring',function($resource,$httpParamSerializer, searchReso
             method: "GET",
             url: irf.BI_BASE_URL + "/financial_summary_snapshot.php",
             isArray: true  
+        },
+        getGroupScore: {
+            method:'GET',
+            url:endpoint + '/getGroupScoreDetails.php' 
         }
     });
 });
