@@ -79,7 +79,7 @@ define({
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    return Groups.getDscOverrideList({
+                    return Groups.getDcsOverrideViewList({
                         'bankId':searchOptions.bankId,
                         'branchId':searchOptions.branch,
                         'page': pageOpts.pageNo,
@@ -103,7 +103,7 @@ define({
                         if (response != null && response.length && response.length != 0) {
                             var temp = [];
                             for (var i=0;i<response.length;i++){
-                                if(response[i].jlgGroup == null || typeof response[i].jlgGroup == 'undefined')
+                                if(response[i] == null || typeof response[i] == 'undefined')
                                 // temp.push({
                                 //     "urnNo":response[i].jlgGroupMember.urnNo,
                                 //     "id":response[i].jlgGroup.id
@@ -139,19 +139,19 @@ define({
                         }
                         return [{
                             title: 'URN',
-                            data: 'jlgGroupMember.urnNo'
+                            data: 'urnNo'
                         }, {
                             title: 'Group ID',
-                            data: 'jlgGroup.id'
+                            data: 'groupId'
                         }, {
                             title: 'GROUP_CODE',
-                            data: 'jlgGroup.groupCode'
+                            data: 'groupCode'
                         }, {
                             title: 'Group Name',
-                            data: 'jlgGroup.groupName'
+                            data: 'groupName'
                         }, {
                             title: 'BRANCH_NAME',
-                            data: 'jlgGroup.branchId',
+                            data: 'branchId',
                             render: function(data, type, full, meta) {
                                 if(data){
                                     return branches[data];
@@ -162,7 +162,7 @@ define({
                             }
                         }, {
                             title: 'CENTRE_CODE',
-                            data: 'jlgGroupMember.centreCode',
+                            data: 'centreCode',
                             render: function(data, type, full, meta) {
                                 if(data){
                                     return centres[data];
@@ -185,9 +185,9 @@ define({
                                 if (remarks) {
                                     Groups.post({
                                         service: "overridedsc",
-                                        urnNo: item.jlgGroupMember.urnNo,
-                                        groupCode: item.jlgGroup.groupCode,
-                                        productCode: item.jlgGroup.productCode,
+                                        urnNo: item.urnNo,
+                                        groupCode: item.groupCode,
+                                        productCode: item.productCode,
                                         remarks: remarks
                                     }, {}, function(resp, headers) {
                                         $log.info(resp);
@@ -220,10 +220,11 @@ define({
                                 irfNavigator.go({
                                     state: "Page.Engine",
                                     pageName: "loans.group.DscOverride",
-                                    pageId: item.dscIntegration.id,
+                                    pageId: item.dscId,
                                     pageData: {
-                                        jlgGroup: item.jlgGroup,
-                                        jlgGroupMember: item.jlgGroupMember,
+                                        jlgGroupId: item.groupId,
+                                        jlgGroupMemberId: item.id,
+                                        customerId:item.customerId
                                     }, 
                                 }, {
                                     state: "Page.Engine",
@@ -237,7 +238,7 @@ define({
                             name: "View DSC Response",
                             desc: "",
                             fn: function(item, index) {
-                                Groups.showDscDataPopup(item.jlgGroupMember.dscId);
+                                Groups.showDscDataPopup(item.dscId);
                             },
                             isApplicable: function(item, index) {
                                 return true;
