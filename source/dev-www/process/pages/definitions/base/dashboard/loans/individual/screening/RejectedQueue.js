@@ -27,6 +27,25 @@ define({
                     "type": 'object',
                     "title": 'SEARCH_OPTIONS',
                     "properties": {
+                        'branch': {
+	                    	'title': "BRANCH",
+	                    	"type": ["string", "null"],
+							"x-schema-form": {
+								"type":"userbranch",
+								"screenFilter": true
+							}
+	                    },
+						"centre": {
+							"title": "CENTRE",
+							"type": ["integer", "null"],
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "centre",
+								"parentEnumCode": "branch_id",
+								"parentValueExpr": "model.branch",
+								"screenFilter": true
+							}
+						},
                         "applicantName": {
                             "title": "APPLICANT_NAME",
                             "type": "string"
@@ -35,6 +54,10 @@ define({
                             "title": "BUSINESS_NAME",
                             "type": "string"
                         },
+                        "customerId": {
+	                        "title": "CUSTOMER_ID",
+	                        "type": "string"
+	                    },
                         "urn": {
                             "title": "URN",
                             "type": "string"
@@ -54,7 +77,21 @@ define({
                             "x-schema-form": {
                                 "type": "date"
                             }
+                        },
+                        "pincode": {
+	                        "title": "PIN_CODE",
+	                        "type": "string"
+						},
+						"status":
+	                    {
+                            "type":"string",
+                            "title":"STATUS",
+                            "enumCode": "origination_status",
+                            "x-schema-form": {
+                            	"type": "select"
+                            }
                         }
+
 
                     },
                     "required": []

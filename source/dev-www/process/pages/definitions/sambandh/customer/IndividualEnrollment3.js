@@ -241,7 +241,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "BankAccounts.customerBankAccounts.customerNameAsInBank",
                 "BankAccounts.customerBankAccounts.accountNumber",
                 "BankAccounts.customerBankAccounts.accountType",
-                "BankAccounts.customerBankAccounts.bankStatementDocId",  
+                "BankAccounts.customerBankAccounts.bankStatementDocId",
+                "Telecalling",
+                "Telecalling.questionnaire"  
             ];
         } 
             var getOverrides = function(model) {
@@ -418,7 +420,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "KYC.identityProof": {
                             "key": "customer.identityProof",
                             orderNo: 30,
-                            "type": "select"
+                            "type": "select",
+                            "onChange": function (modelValue, form, model) {
+                                model.customer.identityProofNo = null;
+                            }
                         },
                         "KYC.identityProofImageId": {
                             orderNo: 40,
@@ -432,6 +437,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "KYC.identityProofNo": {
                             "key": "customer.identityProofNo",
+                            condition: "model.customer.identityProof != 'Aadhar Card'",
                             orderNo: 50,
                             "type": "barcode"
                         },
@@ -1005,7 +1011,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             required: true,
                         },
                         "HouseVerification.houseDetailsFieldSet.landLordName": {
-                            key:"customer.verifications.drinkingWater",
+                            key: "customer.verifications[0].drinkingWater",
                             title: "DRINKING_WATER",
                             required: true,
                             "type": "select",
@@ -1016,7 +1022,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             }
                         },
                         "HouseVerification.houseDetailsFieldSet.HouseVerification": {
-                            key:"customer.verifications.waterFilter",
+                            key: "customer.verifications[0].waterFilter",
                             title: "WATER_FILTER",
                             required: true,
                             "type": "select",
@@ -1026,7 +1032,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             }
                         },
                         "HouseVerification.houseDetailsFieldSet.durationOfStay": {
-                            key:"customer.verifications.toiletFacility",
+                            key: "customer.verifications[0].toiletFacilityType",
                             title: "TYPE_OF_TOILET_FAMILY_USE",
                             required: true,
                             "type": "select",
@@ -1280,12 +1286,49 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {
                     model.siteCode = SessionStore.getGlobalSetting('siteCode');
+                    model.telecallingDetail = {};
+                    model.telecallingDetail.processType = 'CUSTOMER';
+                    model.telecallingDetail.telecallingQuestionnaireList = [];
+                    model.questionnaireDetails = [];
+                    Queries.questionnaireDetails('TELECALLING', 'Enrollment', 'Stage02').then(
+                    function(res) {
+                        model.questionnaireDetails = res;
+                        if(!$stateParams.pageId) {
+                            model.telecallingDetail.telecallingQuestionnaireList = model.questionnaireDetails;
+                        }
+                    }, function(error) {
+                        PageHelper.showErrors(error);
+                    });
+
                     if($stateParams.pageId) {
                         var customerId = $stateParams.pageId;
                         EnrolmentProcess.fromCustomerID(customerId)
                             .subscribe(function(resp){
                                 model.EnrolmentProcess = resp;
                                 model.customer = resp.customer;
+                                
+                                Enrollment.getTelecallingByProcessType({id: model.customer.id}, function(respo) {
+                                    if(respo.customerId) {
+                                        model.telecallingDetail = respo;
+
+                                        if(model.telecallingDetail.telecallingQuestionnaireList.length>0 && model.questionnaireDetails.length>0) {
+                                            model.questionnaireDetails.forEach(function(data) {
+                                                var pos = _.findIndex(model.telecallingDetail.telecallingQuestionnaireList, {'question':data.question});
+                                                if(pos!= -1) {
+                                                    _.merge(model.telecallingDetail.telecallingQuestionnaireList[pos], data);
+                                                }
+                                            });
+                                        } else {
+                                            model.telecallingDetail.telecallingQuestionnaireList = model.questionnaireDetails;
+                                        }
+                                    } else {
+                                        model.telecallingDetail.customerId = model.customer.id;
+                                        model.telecallingDetail.telecallingQuestionnaireList = model.questionnaireDetails;
+                                    }
+                                }, function(error) {
+                                    PageHelper.showErrors(error);
+                                });
+
                                 if (_.hasIn($stateParams.pageData, 'currentStage') && $stateParams.pageData.currentStage != model.customer.currentStage) {
                                     irfProgressMessage.pop("enrollment", "Customer data is in different stage", 5000);
                                     $state.go("Page.Engine", {
@@ -1375,7 +1418,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             .subscribe(function(repo){
                                 model.EnrolmentProcess = repo;
                                 model.customer = repo.customer;
-  
                             });
 
                     }
@@ -1447,6 +1489,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             },
                             "KYC":{
                                     "items":{
+                                        "identityProofNo1": {
+                                            "key": "customer.identityProofNo", 
+                                            condition: "model.customer.identityProof == 'Aadhar Card'",
+                                            orderNo: 50,
+                                            "type": "barcode",
+                                            schema: {
+                                                "pattern": "^[2-9]{1}[0-9]{11}$",
+                                                "type": ["string", "null"],
+                                            },
+                                            onCapture: function (result, model, form) {
+                                                $log.info(result);
+                                                model.customer.identityProofNo = result.text;
+                                            }
+                                        },
                                         "addressProofSameAsIdProof": {
                                             orderNo: 80,
                                             key: "customer.addressProofSameAsIdProof",
@@ -1725,7 +1781,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "gender":{
                                                 key: "customer.familyMembers[].gender",
                                                 orderNo: 40,
-                                                readonly: true,
+                                                // readonly: true,
                                                 condition: "model.customer.familyMembers[arrayIndex].relationShip != 'self'",
                                                 type: "radios",
                                                 title: "T_GENDER"
@@ -2000,6 +2056,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     }
                                 }
                             },
+                            "Telecalling": {
+                                type: "box",
+                                colClass: "col-sm-6",
+                                title: "PPI_INDICATORS",
+                                "orderNo": 70,
+                                items: {
+                                    "questionnaire": {
+                                        type: "section",
+                                        htmlClass: "row",
+                                        html: '<irf-questionnaire telecalling-detail="model.telecallingDetail" questionnaire-details="model.questionnaireDetails"></irf-questionnaire>'
+                                    }
+                                }
+                            },
                             "actionbox": {
                                     "type": "actionbox",
                                     "orderNo": 140,
@@ -2127,10 +2196,26 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 })
                                 .subscribe(function(leadProcess){
                                     PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                    $state.go('Page.Adhoc', {
-                                        pageName: 'sambandh.customer.EnrollmentDashboard'
-                                    });
 
+                                    if(!reqData.telecallingDetail.customerId || _.isNull(reqData.telecallingDetail.customerId)) {
+                                        reqData.telecallingDetail.customerId = customer.id;
+                                        Enrollment.createTelecalling(reqData, function(res) {
+                                            $state.go('Page.Adhoc', {
+                                                pageName: 'sambandh.customer.EnrollmentDashboard'
+                                            });
+                                        }, function(err) {
+                                            PageHelper.showErrors(err);
+                                        });
+                                    } else {
+                                        Enrollment.updateTelecalling(reqData, function(res) {
+                                            console.log(res);
+                                            $state.go('Page.Adhoc', {
+                                                pageName: 'sambandh.customer.EnrollmentDashboard'
+                                            });
+                                        }, function(err) {
+                                            PageHelper.showErrors(err);
+                                        });
+                                    }
                                 }, function(err) {
                                     PageHelper.showErrors(err);
                                     PageHelper.hideLoader();
@@ -2208,8 +2293,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             })
                             .subscribe(function(EnrolmentProcess){
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                $state.go('Page.Adhoc', {
-                                    pageName: 'sambandh.customer.EnrollmentDashboard'
+                                reqData.telecallingDetail.customerId = customer.id;
+                                Enrollment.createTelecalling(reqData, function(res) {
+                                    $state.go('Page.Adhoc', {
+                                        pageName: 'sambandh.customer.EnrollmentDashboard'
+                                    });
+                                }, function(err) {
+                                    PageHelper.showErrors(err);
                                 });
                             }, function(err) {
                                 PageHelper.showErrors(err);

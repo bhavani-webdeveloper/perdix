@@ -27,7 +27,7 @@ define({////base.dashboard.loans.individual.screening.FieldAppraisal
 	                    	"type": ["string", "null"],
 	                    	"enumCode": "branch",
 							"x-schema-form": {
-								"type": "select",
+								"type": "userbranch",
 								"screenFilter": true
 							}
 	                    },
@@ -90,7 +90,7 @@ define({////base.dashboard.loans.individual.screening.FieldAppraisal
 						'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
-	                    'villageName':searchOptions.villageName,
+	                    'villageName':searchOptions.villageName,	
 	                    'branchName': searchOptions.branch,
 	                    'status':searchOptions.status,
 	                    'centreCode': searchOptions.centre,

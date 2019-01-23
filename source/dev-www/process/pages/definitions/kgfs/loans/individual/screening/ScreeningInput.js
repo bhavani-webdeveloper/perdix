@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page('loans.individual.screening.ScreeningInput'),
+irf.pageCollection.factory(irf.page('kgfs.loans.individual.screening.ScreeningInput'),
 [
     "$log",
     "$q",
@@ -65,7 +65,7 @@ function (
                 "bundleDefinitionPromise": function() {
                     return $q.resolve([
                         {
-                            pageName: 'customer.IndividualEnrolment2',
+                            pageName: 'kgfs.customer.IndividualEnrolment2',
                             title: 'APPLICANT',
                             pageClass: 'applicant',
                             minimum: 1,
@@ -73,7 +73,7 @@ function (
                             order: 10
                         },
                         {
-                            pageName: 'customer.IndividualEnrolment2',
+                            pageName: 'kgfs.customer.IndividualEnrolment2',
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
                             minimum: 0,
@@ -81,7 +81,7 @@ function (
                             order: 20
                         },
                         {
-                            pageName: 'customer.IndividualEnrolment2',
+                            pageName: 'kgfs.customer.IndividualEnrolment2',
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
                             minimum: 0,
@@ -97,36 +97,20 @@ function (
                             order: 40
                         },
                         {
-                            pageName: 'loans.individual.screening.LoanRequest',
-                            title: 'LOAN_REQUEST',
-                            pageClass: 'loan-request',
-                            minimum: 1,
-                            maximum: 1,
-                            order: 50
-                        },
-                        {
-                            pageName: 'loans.individual.screening.CBCheck',
-                            title: 'CB_CHECK',
-                            pageClass: 'cb-check',
-                            minimum: 1,
-                            maximum: 1,
-                            order: 90
-                        },
-                        {
                             pageName: 'loans.individual.screening.CreditBureauView',
                             title: 'CREDIT_BUREAU',
                             pageClass: 'cbview',
                             minimum: 1,
                             maximum: 1,
-                            order: 100
+                            order: 50
                         },
                         {
-                            pageName: 'loans.individual.screening.Review',
-                            title: 'REVIEW',
-                            pageClass: 'loan-review',
+                            pageName: 'kgfs.loans.individual.screening.LoanRequest',
+                            title: 'LOAN_REQUEST',
+                            pageClass: 'loan-request',
                             minimum: 1,
                             maximum: 1,
-                            order: 80
+                            order: 60
                         }
                     ]);
                 },
@@ -223,30 +207,12 @@ function (
                                         }
                                     });
 
-                                     $this.bundlePages.push({
-                                        pageClass: 'loan-review',
-                                        model: {
-                                            loanAccount: res
-                                        }
-                                    });
-
-                                       $this.bundlePages.push({
-                                        pageClass: 'cb-check',
-                                        model: {
-                                            loanAccount: res
-                                        }
-                                    });
-
                                     $this.bundlePages.push({
                                         pageClass: 'cbview',
                                         model: {
                                             loanAccount: res
                                         }
                                     });
-
-                                  
-                                   
-
                                     deferred.resolve();
                                 }, function(httpRes){
                                     deferred.reject();

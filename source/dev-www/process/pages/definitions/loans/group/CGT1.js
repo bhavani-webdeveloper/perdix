@@ -554,11 +554,12 @@ define({
 
                 },
                 submit: function(model, form, formName) {
+                    PageHelper.showLoader();
                     if(!model.group.cgtEndDate1) {
+                        PageHelper.hideLoader();
                         irfProgressMessage.pop('CGT-proceed', 'Please End CGT before proceeding.', 3000);
                         return;
                     }
-                    PageHelper.showLoader();
                     irfProgressMessage.pop('CGT1-proceed', 'Working...');
                     PageHelper.clearErrors();
                     model.groupAction = "PROCEED";
@@ -592,15 +593,17 @@ define({
                     });
                 },
                 sendBack: function(model, form, formName) {
+                    PageHelper.showLoader();
                     if (!model.review.targetStage){
+                        PageHelper.hideLoader();
                         irfProgressMessage.pop('Send Back', "Send to Stage is mandatory", 2000);
                         return false;
                     }
                     if (!model.group.groupRemarks){
+                        PageHelper.hideLoader();
                         irfProgressMessage.pop('Reject', "Remarks is mandatory", 2000);
                         return false;
                     }
-                    PageHelper.showLoader();
                     irfProgressMessage.pop('Send Back', 'Working...');
                     PageHelper.clearErrors();
                     model.groupAction = "PROCEED";                    
@@ -618,15 +621,17 @@ define({
                     });   
                 },
                 reject: function(model, form, formName) {
+                    PageHelper.showLoader();
                     if (!model.review.rejectStage){
+                        PageHelper.hideLoader();
                         irfProgressMessage.pop('Reject', "Send to Stage is mandatory", 2000);
                         return false;
                     }
                     if (!model.group.groupRemarks){
+                        PageHelper.hideLoader();
                         irfProgressMessage.pop('Reject', "Remarks is mandatory", 2000);
                         return false;
                     }
-                    PageHelper.showLoader();
                     irfProgressMessage.pop('Reject', 'Working...');
                     PageHelper.clearErrors();
                     model.groupAction = "PROCEED";

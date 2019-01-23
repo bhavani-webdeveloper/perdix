@@ -31,7 +31,7 @@ define({
                         });
                     if (model.currentStage == 'Dedupe')
                         $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.DedupeQueue',
+                            pageName: 'base.dashboard.loans.individual.screening.DedupeQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'ScreeningReview')
@@ -66,12 +66,12 @@ define({
                         });
                     if (model.currentStage == 'CentralRiskReview')
                         $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.CentralRiskReviewQueue',
+                            pageName: 'base.dashboard.loans.individual.screening.CentralRiskReviewQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'ZonalRiskReview')
                         $state.go('Page.Engine', {
-                            pageName: 'loans.individual.screening.ZonalRiskReviewQueue',
+                            pageName: 'base.dashboard.loans.individual.screening.ZonalRiskReviewQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'Sanction')
@@ -744,7 +744,7 @@ define({
                         }]
             },{
                 "type": "box",
-                "title": "Expected turover",
+                "title": "Expected Turnover",
                 "readOnly": true,
                 "colClass": "col-sm-12",
                 "items":[{
@@ -779,7 +779,7 @@ define({
                                 "render": currencyRightRender
                             },
                             {
-                                "title": "Kinara Exposure To Annual Turnover",
+                                "title": "Exposure To Annual Turnover",
                                 "data": "kinaraExposureToAnnualTurover"
                             }
                         ];

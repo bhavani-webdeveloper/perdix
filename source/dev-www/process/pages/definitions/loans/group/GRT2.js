@@ -570,11 +570,12 @@ define({
                     
                 },
                 endGRT: function(model, form) {
+                    PageHelper.showLoader();
                     if(!model.group.cgtDate3) {
+                        PageHelper.hideLoader();
                         irfProgressMessage.pop('GRT-End', 'GRT is not yet started.', 3000);
                         return;
                     }
-                    PageHelper.showLoader();
                     $timeout(function() {
                         model.group.cgtEndDate3 =SessionStore.getSystemDate();
                         irfProgressMessage.pop('group-save', 'Done.', 5000);
@@ -583,8 +584,9 @@ define({
                     
                 },
                 submit: function(model, form, formName) {
-
+                    PageHelper.showLoader();
                     if(!model.group.cgtEndDate3) {
+                        PageHelper.hideLoader();
                         irfProgressMessage.pop('GRT-proceed', 'Please End GRT before proceeding with the action.', 3000);
                         return;
                     }
@@ -592,17 +594,18 @@ define({
                     if(model.siteCode == 'saija') {
                         var cbsdate = SessionStore.getCBSDate();
                         if (model.group.scheduledDisbursementDate && moment(model.group.scheduledDisbursementDate, SessionStore.getSystemDateFormat()).diff(cbsdate, "days") <0) {
+                            PageHelper.hideLoader();
                             PageHelper.showProgress("loan-create", "Scheduled disbursement date should be greater than or equal to system date", 5000);
                             return false;
                         }
 
                         if (model.group.firstRepaymentDate && moment(model.group.firstRepaymentDate, SessionStore.getSystemDateFormat()).diff(model.group.scheduledDisbursementDate, "days") <=0) {
+                            PageHelper.hideLoader();
                             PageHelper.showProgress("loan-create", "Repayment date should be greater than disbursement date", 5000);
                             return false;
                         }
                     }
 
-                    PageHelper.showLoader();
                     irfProgressMessage.pop('GRT-proceed', 'Working...');
                     PageHelper.clearErrors();
                     model.groupAction = "PROCEED";
@@ -626,15 +629,17 @@ define({
                     });   
                 },
                 sendBack: function(model, form, formName) {
+                    PageHelper.showLoader();
                     if (!model.review.targetStage){
+                        PageHelper.hideLoader();
                         irfProgressMessage.pop('Send Back', "Send to Stage is mandatory", 2000);
                         return false;
                     }
                     if (!model.group.groupRemarks){
+                        PageHelper.hideLoader();
                         irfProgressMessage.pop('Reject', "Remarks is mandatory", 2000);
                         return false;
                     }
-                    PageHelper.showLoader();
                     irfProgressMessage.pop('Send Back', 'Working...');
                     PageHelper.clearErrors();
                     model.groupAction = "PROCEED";                    
@@ -652,15 +657,17 @@ define({
                     });   
                 },
                 reject: function(model, form, formName) {
+                    PageHelper.showLoader();
                     if (!model.review.rejectStage){
+                        PageHelper.hideLoader();
                         irfProgressMessage.pop('Reject', "Send to Stage is mandatory", 2000);
                         return false;
                     }
                     if (!model.group.groupRemarks){
+                        PageHelper.hideLoader();
                         irfProgressMessage.pop('Reject', "Remarks is mandatory", 2000);
                         return false;
                     }
-                    PageHelper.showLoader();
                     irfProgressMessage.pop('Reject', 'Working...');
                     PageHelper.clearErrors();
                     model.groupAction = "PROCEED";

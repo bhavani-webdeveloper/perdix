@@ -23,6 +23,9 @@ define({
             model.subSecName = res[0].data[0]['Sub-Sector'];
             model.scoreDetails = [res[1], res[2], res[3], res[4]];
             model.c = res[25].summary;
+            model.business = {};
+            model.business.kgfsName =  res[0].data[0]['Hub Name'];
+            model.business.centreName = res[0].data[0]['Spoke Name'];
             if(res[26]){
                 model.fullScoringDetails = res[26].data;
             }

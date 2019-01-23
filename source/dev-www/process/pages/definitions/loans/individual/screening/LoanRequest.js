@@ -1111,7 +1111,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 "items": [
                     {
                         key:"loanAccount.linkedAccountNumber",
-                        condition: "model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction' && model.loanAccount.transactionType.toLowerCase() != 'renewal' && model.loanAccount.transactionType.toLowerCase() != 'New Loan'",
+                        condition: "model.currentStage !='FieldAppraisal' && model.currentStage !='Sanction' && model.loanAccount.transactionType.toLowerCase() != 'renewal' && model.loanAccount.transactionType != 'New Loan'",
                         title:"LINKED_ACCOUNT_NUMBER",
                         type: "lov",
                         lovonly: true,
@@ -1142,7 +1142,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     {
                         key:"loanAccount.linkedAccountNumber",
                         title:"LINKED_ACCOUNT_NUMBER",
-                        condition: "(model.loanAccount.transactionType != 'New Loan' && model.loanAccount.transactionType.toLowerCase() != 'renewal' && (model.currentStage =='FieldAppraisal'|| model.currentStage =='Sanction' ) )",
+                        condition: "(model.loanAccount.transactionType != 'New Loan' && model.loanAccount.transactionType.toLowerCase() != 'renewal' && (model.currentStage =='FieldAppraisal' ) )",
                         type: "lov",
                         lovonly: true,
                         autolov: true,
@@ -1196,7 +1196,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         title:"LINKED_ACCOUNT_NUMBER",
                         readonly:true,
                         required: false,
-                        condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                        condition: "(model.currentStage =='Sanction' && model.loanAccount.transactionType != 'New Loan') || model.loanAccount.transactionType.toLowerCase() == 'renewal'"
                     },
                     {
                         key: "loanAccount.baseLoanAccount",
@@ -1211,7 +1211,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                          title: "TRANSACTION_TYPE",
                          readonly:true,
                          required: false,
-                         condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                         condition: "model.currentStage =='Sanction' || model.loanAccount.transactionType.toLowerCase() == 'renewal'"
                      },
                      {
                         key: "loanAccount.transactionType",
@@ -1224,7 +1224,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             "Loan Restructure":"Loan Restructure",
                             "Internal Foreclosure":"Internal Foreclosure"
                         },
-                        condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal'",
+                        condition: "model.currentStage !='Sanction' && model.loanAccount.transactionType.toLowerCase() != 'renewal'",
                         onChange:function(value,form,model){
                             if(_.hasIn(model, 'loanAccount') && model.loanAccount.transactionType == 'New Loan') {
                                 model.loanAccount.linkedAccountNumber = null;
@@ -3103,6 +3103,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
             },
 
             proceed: function(model, formCtrl, form, $event){
+                PageHelper.showLoader();
                 var DedupeEnabled = SessionStore.getGlobalSetting("DedupeEnabled") || 'N';
                 $log.info(DedupeEnabled);
 
@@ -3118,6 +3119,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 error: 'Linked Account Number is mandatory'
                             }
                         };
+                        PageHelper.hideLoader();
                         PageHelper.showErrors(res)
                         return;
                     }
@@ -3134,6 +3136,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                 error: 'RequestedLoanAmount or recommended loan amount should be greater than or equal current loan amount' +"  "+ model.linkedLoanAmount 
                             }
                         };
+                        PageHelper.hideLoader();
                         PageHelper.showErrors(res)
                         return;
                     }
@@ -3142,6 +3145,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             PageHelper.setError({
                                 message: "first Schedule disbursementAmount" + " " +model.loanAccount.disbursementSchedules[0].disbursementAmount+ " "+ "should  be greater then Linked Account Disbursed Amount" +"  " + model.linkedAccount.totalDisbursed
                             });
+                            PageHelper.hideLoader();
                            return;
                         }
 
@@ -3149,14 +3153,17 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 }
 
                 if (!validateForm(formCtrl)){
+                    PageHelper.hideLoader();
                     return;
                 }
                 if(!validateAndPopulateMitigants(model)){
+                    PageHelper.hideLoader();
                     return;
                 }
 
                 if(model.currentStage=='Screening'){
                     if(!validateCibilHighmark(model)){
+                        PageHelper.hideLoader();
                         return;
                     }
 
@@ -3172,14 +3179,17 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 if (model.currentStage == 'FieldAppraisal'){
                     if (!_.hasIn(model.enterprise, 'stockMaterialManagement') || _.isNull(model.enterprise.stockMaterialManagement)) {
                         PageHelper.showProgress('enrolment', 'Proxy Indicators are not input. Please check.')
+                        PageHelper.hideLoader();
                         return;
                     }
                     if (!_.hasIn(model.enterprise, 'verifications') || _.isNull(model.enterprise.verifications[0].relationship)) {
                         PageHelper.showProgress('enrolment', 'References are not input. Please check.')
+                        PageHelper.hideLoader();
                         return;
                     }
                     if (!_.hasIn(model.enterprise, 'verifications') || model.enterprise.verifications.length < 2) {
                         PageHelper.showProgress('enrolment', 'please entre two refernces')
+                        PageHelper.hideLoader();
                         return;
                     }
 
@@ -3227,12 +3237,14 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                             for (var i = model.enterprise.customerBankAccounts.length - 1; i >= 0; i--) {
                                 if(model.enterprise.customerBankAccounts[i].accountType == 'OD' || model.enterprise.customerBankAccounts[i].accountType == 'CC' ){
                                     PageHelper.showProgress("enrolment","Commercial bureau check fields are mandatory",5000);
+                                    PageHelper.hideLoader();
                                     return false;
                                 }
                             }
                         }
                         if(model.loanAccount.loanAmountRequested > parseInt(SessionStore.getGlobalSetting("MinLoanAmountForCommercialCB")) || model.enterprise.enterprise.businessConstitution == 'Private'){
                                 PageHelper.showProgress("enrolment","Commercial bureau check fields are mandatory",5000);
+                                PageHelper.hideLoader();
                                 return false;
                         }
 
@@ -3242,6 +3254,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                     &&model.enterprise.enterpriseCustomerRelations[i].partnerOfAnyOtherCompany == 'YES')
                                     && model.enterprise.enterpriseCustomerRelations[i].linkedToCustomerId ==model.applicant.id){
                                     PageHelper.showProgress("enrolment","Commercial bureau check fields are mandatory",5000);
+                                    PageHelper.hideLoader();
                                     return false;
                                 }
                             }
@@ -3254,6 +3267,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                 }
 
                 if (!preLoanSaveOrProceed(model)){
+                    PageHelper.hideLoader();
                     return;
                 }
 
