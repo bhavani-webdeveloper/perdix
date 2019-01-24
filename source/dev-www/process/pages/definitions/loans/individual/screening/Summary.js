@@ -492,7 +492,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             form.push({
                 type: "box",
                 colClass: "col-sm-12 table-box",
-                title: "SCORES - ScoreName - "+ model.fullScoringDetails.ScoreCalculationDetails.ScoreName,
+                title: "SCORES - "+ model.fullScoringDetails.ScoreCalculationDetails.ScoreName,
                 items: [
                     {
                         "type": "section",
