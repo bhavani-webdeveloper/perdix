@@ -44,14 +44,16 @@ irf.pageCollection.factory(irf.page('base.dashboard.loans.individual.screening.Z
                 minimum: 1,
                 maximum: 1,
                 order: 50
-            }, {
-                pageName: 'loans.individual.screening.PersonalDiscussion',
-                title: 'PERSONAL_DISCUSSION',
-                pageClass: 'personal-discussion',
-                minimum: 1,
-                maximum: 1,
-                order: 52
-            }, {
+            }, 
+            // {
+            //     pageName: 'loans.individual.screening.PersonalDiscussion',
+            //     title: 'PERSONAL_DISCUSSION',
+            //     pageClass: 'personal-discussion',
+            //     minimum: 1,
+            //     maximum: 1,
+            //     order: 52
+            // },
+             {
                 pageName: 'loans.individual.screening.detail.PortfolioAnalysis',
                 title: 'CUSTOMER HISTORY',
                 pageClass: 'portfolio-analysis',
@@ -249,12 +251,12 @@ irf.pageCollection.factory(irf.page('base.dashboard.loans.individual.screening.Z
                                 }
                             });
                             
-                            $this.bundlePages.push({
-                                pageClass: 'personal-discussion',
-                                model: {
-                                    loanAccount: res
-                                }
-                            });
+                            // $this.bundlePages.push({
+                            //     pageClass: 'personal-discussion',
+                            //     model: {
+                            //         loanAccount: res
+                            //     }
+                            // });
 
                             $this.bundlePages.push({
                                 pageClass: 'portfolio-analytics',
