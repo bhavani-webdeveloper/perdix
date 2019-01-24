@@ -94,6 +94,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "FamilyDetails.familyMembers.familyMemberFirstName",
                 "FamilyDetails.familyMembers.relationShip",
                 "FamilyDetails.familyMembers.memberIncome",
+                "FamilyDetails.familyMembers.occupation",
+                "FamilyDetails.familyMembers.educationLevel",
+                "FamilyDetails.familyMembers.incomeDetails",
                 "HouseHoldExpenses",
                 "HouseHoldExpenses.ExpenseDetails",
                 "HouseHoldExpenses.ExpenseDetails.expenseType",
@@ -109,6 +112,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
         } 
             var getOverrides = function(model) {
                     return {
+                        "IndividualReferences":{
+                            title:"REFERENCE"
+                        },
+                        "IndividualReferences.verifications":{
+                            title:"REFERENCE"
+                        },
                         "IndividualReferences.verifications.referenceFirstName":{
                             orderNo:10,
                             title:"NAME",
@@ -177,10 +186,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             enumCode: "userbranches"
                         }, 
                         "IndividualInformation.customerId": {
-                            orderNo: 20
+                            orderNo: 20,
+                            "readonly":true
+
                         },
                         "IndividualInformation.urnNo" : {
-                            orderNo: 30
+                            orderNo: 30,
+                            "readonly":true
+
                         },
                         "IndividualInformation.photoImageId":{
                             "orderNo": 40,
@@ -491,7 +504,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "type": "date"
                         },
                         "ContactInformation.mobilePhone":{
-                            "required": true
+                            "required": true,
+                            "title":"MOBILE_NO"
+
+                        },
+                        "ContactInformation.landLineNo":{
+                            "required": true,
+                            "title":"ALTERNATE_MOBILE_NO"
+
                         },
                         "ContactInformation.email":{
                             "title":"EMAIL_ID"
@@ -626,7 +646,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             condition: "!model.customer.mailSameAsResidence"
                         },
                         "ContactInformation.mailingDoorNo":{
-                            title:"DOOR/BULIDING",
+                            title:"DOOR_BUILDING",
                             condition: "!model.customer.mailSameAsResidence"
                         },
                         "ContactInformation.mailingStreet":{
@@ -919,6 +939,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             enumCode: "house_ownership",
                         },
                         "FamilyDetails.familyMembers": {
+                            "title":"FAMILY_DETAILS",
                             onArrayAdd: function(value, form, model, formCtrl, event) {
                                 if ((model.customer.familyMembers.length - 1) === 0) {
                                     model.customer.familyMembers[0].relationShip = 'self';
@@ -1189,6 +1210,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                                 }
                             }
+                        },
+                        "HouseHoldExpenses.ExpenseDetails":{
+                            "title":"ADD_HOUSEHOLD_EXPENSES"
                         }
 
                     }            
@@ -1357,6 +1381,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         }
                                     },
                                     "spouseAadharNumber":{
+                                        "key":"customer.aadhaarNo",
                                         "title": "SPOUSE_AADHAR_NUMBER",
                                         condition: "model.customer.maritalStatus==='MARRIED'",
                                         "type": "string",
@@ -1397,8 +1422,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "familyMembers":{
                                         "items":{
                                             "memberIncome":{
-                                                "title": "FAMILY_MEMBER_INCOME",
+                                                "title": "MEMBER_INCOME",
                                                 "type":"amount"
+                                            },
+                                            "occupation":{
+                                                "title":"OCCUPATION",
+                                                "type":"string"
+                                            },
+                                            "educationLevel":{
+                                                "title":"EDUCATION_LEVEL",
+                                                "type":"string"
+                                            },
+                                            "incomeDetails":{
+                                                "title":"INCOME_DETAILS",
+                                                "type":"string",
+
                                             }
                                         }
                                     }
