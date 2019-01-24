@@ -25,6 +25,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             var machineCost = model.customer.fixedAssetsMachinaries[model.arrayIndex].purchasePrice;
             var depreciationPercentage = model.customer.fixedAssetsMachinaries[model.arrayIndex].depreciationPercentage;
             var amount = machineCost - (machineCost*Math.ceil(new Date().getFullYear() - model.customer.fixedAssetsMachinaries[model.arrayIndex].machinePurchasedYear)*(depreciationPercentage/100));
+            if(amount < (machineCost*0.1)){
+                amount = machineCost*0.1;
+            }
             model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice = amount;
         }
     }

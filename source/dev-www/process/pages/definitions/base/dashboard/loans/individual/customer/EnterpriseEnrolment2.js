@@ -1783,6 +1783,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 },
                                 "EnterpriseReferences.verifications":{
                                     "required": true
+                                },
+                                "EnterpriseReferences":{
+                                    "readonly": true
+                                },
+                                 "EnterpriseReferences.verifications":{
+                                    "readonly": true
                                 }
                             }
                         },
