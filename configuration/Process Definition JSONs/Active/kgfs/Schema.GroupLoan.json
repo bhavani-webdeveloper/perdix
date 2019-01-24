@@ -89,7 +89,7 @@
                 },
                 "verifications":{  
                    "type":"array",
-                   "minItems":0,
+                   "minItems":1,
                    "items":{  
                       "type":"object",
                       "required":[  
