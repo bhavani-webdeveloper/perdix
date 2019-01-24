@@ -1290,7 +1290,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.telecallingDetail.processType = 'CUSTOMER';
                     model.telecallingDetail.telecallingQuestionnaireList = [];
                     model.questionnaireDetails = [];
-                    Queries.questionnaireDetails('TELECALLING', 'Enrollment', 'Stage02').then(
+                    var promises = [];
+                    PageHelper.showLoader();
+                    var questionairePromise = Queries.questionnaireDetails('TELECALLING', 'Enrollment', 'Stage02').then(
                     function(res) {
                         model.questionnaireDetails = res;
                         if(!$stateParams.pageId) {
@@ -1299,15 +1301,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     }, function(error) {
                         PageHelper.showErrors(error);
                     });
+                    promises.push(questionairePromise);
 
                     if($stateParams.pageId) {
                         var customerId = $stateParams.pageId;
-                        EnrolmentProcess.fromCustomerID(customerId)
+                        var enrolmentPromise = EnrolmentProcess.fromCustomerID(customerId)
                             .subscribe(function(resp){
                                 model.EnrolmentProcess = resp;
                                 model.customer = resp.customer;
                                 
-                                Enrollment.getTelecallingByProcessType({id: model.customer.id}, function(respo) {
+                                var telecallingPromise = Enrollment.getTelecallingByProcessType({id: model.customer.id}, function(respo) {
                                     if(respo.customerId) {
                                         model.telecallingDetail = respo;
 
@@ -1328,6 +1331,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }, function(error) {
                                     PageHelper.showErrors(error);
                                 });
+                                promises.push(telecallingPromise);
 
                                 if (_.hasIn($stateParams.pageData, 'currentStage') && $stateParams.pageData.currentStage != model.customer.currentStage) {
                                     irfProgressMessage.pop("enrollment", "Customer data is in different stage", 5000);
@@ -1413,14 +1417,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
 
                             });
+
+                        promises.push(enrolmentPromise);
                     } else {
-                        EnrolmentProcess.createNewProcess()
+                        var enrolmentPromise = EnrolmentProcess.createNewProcess()
                             .subscribe(function(repo){
                                 model.EnrolmentProcess = repo;
                                 model.customer = repo.customer;
                             });
+                            promises.push(enrolmentPromise);
 
                     }
+                    $q.all(promises).finally(function() {
+                        PageHelper.hideLoader();
+                    });
                     model.customer = model.customer || {};
                     model.siteCode = SessionStore.getGlobalSetting('siteCode');
                     model.customer.customerBranchId = model.customer.customerBranchId || SessionStore.getCurrentBranch().branchId;
@@ -2148,11 +2158,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     submit: function (model, form, formName) {
                         $log.info("Inside submit()");
-                        
-
                         var reqData = _.cloneDeep(model);
-
-
                         if (reqData.customer.id) {
                             if (!model.customer.familyMembers || model.customer.familyMembers.length < 0) {
                                 irfProgressMessage.pop('enrollment-submit', 'Please add Family Details information to proceed.', 5000);
@@ -2194,11 +2200,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 .finally(function(){
                                     PageHelper.hideLoader();
                                 })
-                                .subscribe(function(leadProcess){
+                                .subscribe(function(enrolmentProcess){
                                     PageHelper.showProgress('enrolment', 'Done.', 5000);
 
                                     if(!reqData.telecallingDetail.customerId || _.isNull(reqData.telecallingDetail.customerId)) {
-                                        reqData.telecallingDetail.customerId = customer.id;
+                                        reqData.telecallingDetail.customerId = enrolmentProcess.customer.id;
                                         Enrollment.createTelecalling(reqData, function(res) {
                                             $state.go('Page.Adhoc', {
                                                 pageName: 'sambandh.customer.EnrollmentDashboard'
@@ -2291,9 +2297,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         .finally(function(){
                                 PageHelper.hideLoader();
                             })
-                            .subscribe(function(EnrolmentProcess){
+                            .subscribe(function(enrolmentProcess){
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                reqData.telecallingDetail.customerId = customer.id;
+                                reqData.telecallingDetail.customerId = enrolmentProcess.customer.id;
                                 Enrollment.createTelecalling(reqData, function(res) {
                                     $state.go('Page.Adhoc', {
                                         pageName: 'sambandh.customer.EnrollmentDashboard'
