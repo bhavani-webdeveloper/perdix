@@ -518,8 +518,8 @@
                     "pincode": {
                         "title": "Pincode",
                         "type": "number",
-                        "minimum": 100000,
-                        "maximum": 999999,
+                        "minimum": 6,
+                        "maximum": 6,
                         "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "stdCode": {
@@ -1528,8 +1528,8 @@
                     "udf10": {
                         "title": "BUSINESS_PINCODE",
                         "type": "number",
-                        "minimum": 100000,
-                        "maximum": 999999,
+                        "minimum": 6,
+                        "maximum": 6,
                         "captureStages": ["Stage02", "Completed"]
                     },
                     "udf11": {
@@ -1859,8 +1859,8 @@
                     "pincode": {
                         "title": "pincode",
                         "type": "string",
-                        "minimum": 100000,
-                        "maximum": 999999,
+                        "minimum": 6,
+                        "maximum": 6,
                         "captureStages": ["Stage01", "Stage02", "EDF", "Completed"]
                     },
                     "verified": {
@@ -2192,8 +2192,8 @@
                     "pincode": {
                         "title": "pincode",
                         "type": "string",
-                        "minimum": 100000,
-                        "maximum": 999999,
+                        "minimum": 6,
+                        "maximum": 6,
                         "captureStages": ["Stage01", "Stage02", "EDF", "Completed"]
                     },
                     "businessLandline1": {

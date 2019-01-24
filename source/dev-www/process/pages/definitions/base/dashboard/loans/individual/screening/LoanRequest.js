@@ -650,6 +650,9 @@ define([],function(){
                                     "orderNo": 2,
                                     "readonly": true
                                 },
+                                "DeductionsFromLoan": {
+                                    "orderNo": 3,
+                                },
                                 "LoanMitigants": {
                                     "orderNo": 4
                                 },

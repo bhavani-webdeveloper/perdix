@@ -56,8 +56,7 @@
                       "type":"object",
                       "required":[  
                          "familyMemberFirstName",
-                         "relationShip",
-                         "verifications"
+                         "relationShip"
                       ],
                       "properties":{  
                          "familyMemberFirstName":{  
@@ -89,14 +88,151 @@
                 },
                 "verifications":{  
                    "type":"array",
-                   "minItems":0,
+                   "minItems":1,
                    "items":{  
                       "type":"object",
                       "required":[  
  
                       ],
                       "properties":{  
- 
+                         "referenceFirstName":{  
+                            "type":[  
+                               "string",
+                               "null"
+                            ]
+                         },
+                         "referenceMiddleName":{  
+                            "type":[  
+                               "string",
+                               "null"
+                            ]
+                         },
+                         "referenceLastName":{  
+                            "type":[  
+                                "string",
+                                "null"
+                             ]
+                         },
+                         "relationship":{  
+                            "type":[  
+                               "string",
+                               "null"
+                            ]
+                         },
+                         "occupation":{  
+                            "type":[  
+                               "string",
+                               "null"
+                            ]
+                         },
+                         "houseNo":{  
+                            "type":[  
+                               "string",
+                               "null"
+                            ]
+                         },
+                         "businessSector":{  
+                            "type":[  
+                               "string",
+                               "null"
+                            ]
+                         },
+                         "businessSubSector":{  
+                            "type":[  
+                               "string",
+                               "null"
+                            ]
+                         },
+                         "selfReportedIncome":{  
+                            "type":[  
+                               "string",
+                               "null"
+                            ]
+                         },
+                         "businessName":{  
+                            "type":[  
+                               "string",
+                               "null"
+                            ]
+                         },
+                         "mobileNo":{  
+                            "type":[  
+                               "string",
+                               "null"
+                            ]
+                         },
+                         "customerResponse":{  
+                            "type":[  
+                               "string",
+                               "null"
+                            ]
+                         },
+                         "remarks":{  
+                            "type":[  
+                               "string",
+                               "null"
+                            ]
+                         },
+                         "address":{  
+                            "type":[  
+                               "string",
+                               "null"
+                            ]
+                         },
+                         "knownSince":{  
+                            "type":[  
+                               "string",
+                               "null"
+                            ]
+                         },
+                         "opinion":{  
+                            "type":[  
+                               "string",
+                               "null"
+                            ]
+                         },
+                         "financialStatus":{  
+                            "type":[  
+                               "string",
+                               "null"
+                            ]
+                         },
+                         "goodsSold":{  
+                            "type":[  
+                               "string",
+                               "null"
+                            ]
+                         },
+                         "goodsBought":{  
+                            "type":[  
+                               "string",
+                               "null"
+                            ]
+                         },
+                         "paymentTerms":{  
+                            "type":[  
+                               "string",
+                               "null"
+                            ]
+                         },
+                         "modeOfPayment":{  
+                            "type":[  
+                               "string",
+                               "null"
+                            ]
+                         },
+                         "outstandingPayable":{  
+                            "type":[  
+                               "string",
+                               "null"
+                            ]
+                         },
+                         "outstandingReceivable":{  
+                            "type":[  
+                               "string",
+                               "null"
+                            ]
+                         }
                       }
                    }
                 }

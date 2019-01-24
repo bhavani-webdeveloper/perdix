@@ -23,7 +23,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         "required": false
                     },
                     "Machinery.fixedAssetsMachinaries.hypothecatedToUs": {
-                         "title": "HYPOTHECATED_TO_IREP"
+                         "title": "HYPOTHECATED_TO_MAITREYA"
 
                     },
                     "EnterpriseReferences.verifications.relationship":{
@@ -79,7 +79,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         "orderNo":130 
                     },
                     "Machinery":{
-                        "orderNo":140 
+                        "orderNo":140,
+                    },
+                    "Machinery.fixedAssetsMachinaries":{
+                        "title": "MACHINERY"
                     },
                     //
                 //    "currentAssets": {
@@ -1371,6 +1374,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseReferences.verifications",
                                 ],
                                 "overrides": {
+                                    "EnterpriseInformation": {
+                                        "orderNo": 10
+                                    },                                   
+                                    "ContactInformation": {
+                                        "orderNo": 20
+                                    },
+                                    "BankAccounts": {
+                                        "orderNo": 30
+                                    },
+                                    "Liabilities": {
+                                        "orderNo": 40
+                                    },
+                                    "EmployeeDetails": {
+                                        "orderNo": 60
+                                    },
+                                    "EnterpriseFinancials": {
+                                        "orderNo": 50
+                                    },
+
                                         
                                 }
                         },
@@ -1783,6 +1805,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 },
                                 "EnterpriseReferences.verifications":{
                                     "required": true
+                                },
+                                "EnterpriseReferences":{
+                                    "readonly": true
+                                },
+                                 "EnterpriseReferences.verifications":{
+                                    "readonly": true
                                 }
                             }
                         },

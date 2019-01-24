@@ -97,10 +97,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             if (model.loanAccount.guarantors && model.loanAccount.guarantors.length) {
                 for (var i in model.loanAccount.guarantors) {
                     var gua = model.loanAccount.guarantors[i];
-                    if (gua.urn || gua.customerId) {
+                    if (gua.guaUrnNo || gua.guaCustomerId) {
                         gua.relation = 'Guarantor';
                         gua.urn = gua.guaUrnNo;
-                        gua.customerId = gua.customerId;
+                        gua.customerId = gua.guaCustomerId;
                         model.loanAccount.loanCustomerRelations.push(gua);
                     }
                 }
@@ -267,7 +267,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     //model.loanAccount.partnerCode = model.loanAccount.partnerCode || "Kinara";
                     model.loanAccount.loanCustomerRelations = model.loanAccount.loanCustomerRelations || [];
                     model.loanAccount.coBorrowers = model.loanAccount.coBorrowers ||[];
-                    model.loanAccount.guarantors = model.loanAccount.guarantors ||[];
+                    model.loanAccount.guarantors = [];
                     model.showLoanBookingDetails = showLoanBookingDetails;
 
                     if(model.siteCode == 'IREPDhan'){
@@ -289,29 +289,25 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         //stateParams
                     });
                     //model.loanAccount.guarantors = [];
-                    for (var i = 0; i < model.loanAccount.loanCustomerRelations.length; i++) {
+                   for (var i = 0; i < model.loanAccount.loanCustomerRelations.length; i++) {
                         if (model.loanAccount.loanCustomerRelations[i].relation === 'APPLICANT' ||
                             model.loanAccount.loanCustomerRelations[i].relation === 'Applicant') {
                             model.loanAccount.applicantId = model.loanAccount.loanCustomerRelations[i].customerId;
                         }
                         else if (model.loanAccount.loanCustomerRelations[i].relation === 'COAPPLICANT' ||
                             model.loanAccount.loanCustomerRelations[i].relation === 'Co-Applicant') {
-                            if(!model.loanAccount.coBorrowers.length){
                                 model.loanAccount.coBorrowers.push({
                                 coBorrowerUrnNo:model.loanAccount.loanCustomerRelations[i].urn,
                                 customerId:model.loanAccount.loanCustomerRelations[i].customerId
                             });
-                            }  
                         }
                         else if(model.loanAccount.loanCustomerRelations[i].relation === 'GUARANTOR' ||
                             model.loanAccount.loanCustomerRelations[i].relation === 'Guarantor'){
-                            if(!model.loanAccount.guarantors.length){
                                 model.loanAccount.guarantors.push({
                                 guaUrnNo:model.loanAccount.loanCustomerRelations[i].urn,
-                                customerId:model.loanAccount.loanCustomerRelations[i].customerId
+                                guaCustomerId:model.loanAccount.loanCustomerRelations[i].customerId,
                                 });
-                            }
-                        }
+                            } 
                     }
                     /*for (var i in model.loanAccount.loanCustomerRelations) {
                         var lcR = model.loanAccount.loanCustomerRelations[i];
@@ -1966,7 +1962,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         "outputMap": {
                                             "urnNo": "loanAccount.guarantors[arrayIndex].guaUrnNo",
                                             "firstName":"loanAccount.guarantors[arrayIndex].guaFirstName",
-                                            "id":"loanAccount.guarantors[arrayIndex].customerId"
+                                            "id":"loanAccount.guarantors[arrayIndex].guaCustomerId"
                                         },
                                         "searchHelper": formHelper,
                                         "search": function(inputModel, form) {
@@ -3072,7 +3068,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
                     }
                     
-                    populateLoanCustomerRelations(model);
+                   populateLoanCustomerRelations(model);
                     Utils.confirm("Are You Sure?")
                     .then(function(){
                         var diffDays = 0;
