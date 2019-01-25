@@ -114,7 +114,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         model.repayment.bookedNotDueNormalInterest = Utils.roundToDecimal(data.bookedNotDueNormalInterest);
                         model.repayment.bookedNotDuePenalInterest = Utils.roundToDecimal(data.bookedNotDuePenalInterest);
                         model.repayment.securityDeposit = Utils.roundToDecimal(data.securityDeposit);
-                        model.repayment.netPayoffAmount = Utils.roundToDecimal(data.payOffAmount + data.preclosureFee);
+                        model.repayment.netPayoffAmount = Utils.roundToDecimal(data.payOffAmount + data.preclosureFee - data.securityDeposit);
                         model.repayment.totalPayoffAmountToBePaid = Utils.roundToDecimal(data.payOffAndDueAmount + data.preclosureFee - data.securityDeposit);
                         model.repayment.totalSecurityDepositDue = Utils.roundToDecimal(data.totalSecurityDepositDue);
                         if (!_.isNull(pageData) && pageData.onlyDemandAllowed == true) {
@@ -883,12 +883,12 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         }
 
                         if (model.repayment.transactionName == 'Pre-closure' && Math.round(model.repayment.netPayoffAmount) > Math.round(model.repayment.amount)) {
-                            PageHelper.showProgress("loan-repay", "Preclosure not allowed. Still " + (model.repayment.netPayoffAmount - model.repayment.amount) + " due is there", 5000);
+                            PageHelper.showProgress("loan-repay", "Preclosure not allowed. Still " + model.repayment.netPayoffAmount - model.repayment.amount + " due is there", 5000);
                             return false;
                         }
 
                         if (model.repayment.transactionName == 'Pre-closure' && Math.round(model.repayment.netPayoffAmount) < Math.round(model.repayment.amount)) {
-                            PageHelper.showProgress("loan-repay", "Preclosure not allowed. Execess of " + (model.repayment.amount - model.repayment.netPayoffAmount) + " amount paying", 5000);
+                            PageHelper.showProgress("loan-repay", "Preclosure not allowed. Execess of " + model.repayment.amount - model.repayment.netPayoffAmount + " amount paying", 5000);
                             return false;
                         }
 
