@@ -882,13 +882,8 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             return false;
                         }
 
-                        if (model.repayment.transactionName == 'Pre-closure' && Math.round(model.repayment.netPayoffAmount) > Math.round(model.repayment.amount)) {
-                            PageHelper.showProgress("loan-repay", "Preclosure not allowed. Still " + model.repayment.netPayoffAmount - model.repayment.amount + " due is there", 5000);
-                            return false;
-                        }
-
-                        if (model.repayment.transactionName == 'Pre-closure' && Math.round(model.repayment.netPayoffAmount) < Math.round(model.repayment.amount)) {
-                            PageHelper.showProgress("loan-repay", "Preclosure not allowed. Execess of " + model.repayment.amount - model.repayment.netPayoffAmount + " amount paying", 5000);
+                        if (model.repayment.transactionName == 'Pre-closure' && model.repayment.totalDemandDue > 0){
+                            PageHelper.showProgress("loan-repay", "Preclosure not allowed. Demand of " + model.repayment.totalDemandDue + " is due.", 5000);
                             return false;
                         }
 
