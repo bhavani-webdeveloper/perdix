@@ -58,10 +58,10 @@ define({
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"
 	                    },
-                        "urn": {
-                            "title": "URN",
-                            "type": "string"
-                        },
+                        // "urn": {
+                        //     "title": "URN",
+                        //     "type": "string"
+                        // },
                         "area": {
                             "title": "AREA",
                             "type": "string"
@@ -70,14 +70,14 @@ define({
                             "title": "CITY_TOWN_VILLAGE",
                             "type": "string"
                         },
-                        "screeningDate":
-                        {
-                            "title": "SCREENING_DATE",
-                            "type": "string",
-                            "x-schema-form": {
-                                "type": "date"
-                            }
-                        },
+                        // "screeningDate":
+                        // {
+                        //     "title": "SCREENING_DATE",
+                        //     "type": "string",
+                        //     "x-schema-form": {
+                        //         "type": "date"
+                        //     }
+                        // },
                         "pincode": {
 	                        "title": "PIN_CODE",
 	                        "type": "string"

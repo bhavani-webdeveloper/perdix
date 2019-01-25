@@ -124,9 +124,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
                 'branchId': branchId,
                 'partner': userPartner,
                 'groupStatus': true,
-                'currentStage': "GroupCreation",
-                'page': 1,
-                'per_page': 1
+                'currentStage': "GroupCreation"
             }, function(response) {
                 edtGrpMenu.data = Number(response.headers['x-total-count']) || 0;
             });
@@ -138,9 +136,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
                 'branchId': branchId,
                 'partner': userPartner,
                 'groupStatus': true,
-                'currentStage': "DSC",
-                'page': 1,
-                'per_page': 1
+                'currentStage': "DSC"
             }, function(response) {
                 dscMenu.data = Number(response.headers['x-total-count']) || 0;
             });
@@ -153,8 +149,6 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
                 'partner': userPartner,
                 'groupStatus': true,
                 'currentStage': "CGT1",
-                'page': 1,
-                'per_page': 1
             }, function(response) {
                 cgtone.data = Number(response.headers['x-total-count']) || 0;
             });
@@ -167,9 +161,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
                 'branchId': branchId,
                 'partner': userPartner,
                 'groupStatus': true,
-                'currentStage': "CGT2",
-                'page': 1,
-                'per_page': 1
+                'currentStage': "CGT2"
             }, function(response) {
                 cgttwo.data = Number(response.headers['x-total-count']) || 0;
             });
@@ -182,9 +174,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
                 'branchId': branchId,
                 'partner': userPartner,
                 'groupStatus': true,
-                'currentStage': "CGT3",
-                'page': 1,
-                'per_page': 1
+                'currentStage': "CGT3"
             }, function(response) {
                 cgtthree.data = Number(response.headers['x-total-count']) || 0;
             });
@@ -196,9 +186,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
                 'branchId': branchId,
                 'partner': userPartner,
                 'groupStatus': true,
-                'currentStage': "LoanBooking",
-                'page': 1,
-                'per_page': 1
+                'currentStage': "LoanBooking"
             }, function(response) {
                 book.data = Number(response.headers['x-total-count']) || 0;
             });
@@ -211,9 +199,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
                 'branchId': branchId,
                 'partner': userPartner,
                 'groupStatus': true,
-                'currentStage': "GRT",
-                'page': 1,
-                'per_page': 1
+                'currentStage': "GRT"
             }, function(response) {
                 grt.data = Number(response.headers['x-total-count']) || 0;
             });
@@ -225,9 +211,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
                 'branchId': branchId,
                 'partner': userPartner,
                 'groupStatus': true,
-                'currentStage': "GRT2",
-                'page': 1,
-                'per_page': 1
+                'currentStage': "GRT2"
             }, function(response) {
                 grt2q.data = Number(response.headers['x-total-count']) || 0;
             });
@@ -240,9 +224,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
                 'branchId': branchId,
                 'partner': userPartner,
                 'groupStatus': true,
-                'currentStage': "ApplicationPending",
-                'page': 1,
-                'per_page': 1
+                'currentStage': "ApplicationPending"
             }, function(response) {
                 application.data = Number(response.headers['x-total-count']) || 0;
             });
@@ -254,9 +236,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
                 'branchId': branchId,
                 'partner': userPartner,
                 'groupStatus': true,
-                'currentStage': "Checker1",
-                'page': 1,
-                'per_page': 1
+                'currentStage': "Checker1"
             }, function(response) {
                 checker1.data = Number(response.headers['x-total-count']) || 0;
             });
@@ -268,9 +248,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
                 'branchId': branchId,
                 'partner': userPartner,
                 'groupStatus': true,
-                'currentStage': "Checker2",
-                'page': 1,
-                'per_page': 1
+                'currentStage': "Checker2"
             }, function(response) {
                 checker2.data = Number(response.headers['x-total-count']) || 0;
             });
@@ -282,9 +260,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
                 'bankId': bankId,
                 'partner': "KGFS",
                 'groupStatus': true,
-                'currentStage': "Checker1",
-                'page': 1,
-                'per_page': 1
+                'currentStage': "Checker1"
             }, function(response) {
                 checker1.data = Number(response.headers['x-total-count']) || 0;
             });
@@ -295,9 +271,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             GroupProcess.search({
                 'partner': "AXIS",
                 'groupStatus': true,
-                'currentStage': "Checker2",
-                'page': 1,
-                'per_page': 1
+                'currentStage': "Checker2"
             }, function(response) {
                 checker2.data = Number(response.headers['x-total-count']) || 0;
             });
@@ -308,9 +282,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             GroupProcess.search({
                 'partner': "AXIS",
                 'groupStatus': true,
-                'currentStage': "Checker1",
-                'page': 1,
-                'per_page': 1
+                'currentStage': "Checker1"
             }, function(response) {
                 checkerGamma1.data = Number(response.headers['x-total-count']) || 0;
             });
@@ -321,9 +293,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             GroupProcess.search({
                 'partner': "KGFS",
                 'groupStatus': true,
-                'currentStage': "Checker2",
-                'page': 1,
-                'per_page': 1
+                'currentStage': "Checker2"
             }, function(response) {
                 checkerGamma2.data = Number(response.headers['x-total-count']) || 0;
             });
@@ -335,9 +305,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
                 'branchId': branchId,
                 'partner': userPartner,
                 'groupStatus': true,
-                'currentStage': "AgreementUploadPending",
-                'page': 1,
-                'per_page': 1
+                'currentStage': "AgreementUploadPending"
             }, function(response) {
                 agmtUpldPendingq.data = Number(response.headers['x-total-count']) || 0;
             });
@@ -349,9 +317,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
                 'branchId': branchId,
                 'partner': userPartner,
                 'groupStatus': true,
-                'currentStage': "Checker3",
-                'page': 1,
-                'per_page': 1
+                'currentStage': "Checker3"
             }, function(response) {
                 checker3.data = Number(response.headers['x-total-count']) || 0;
             });
@@ -363,9 +329,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
                 'branchId': branchId,
                 'partner': userPartner,
                 'groupStatus': true,
-                'currentStage': "Checker4",
-                'page': 1,
-                'per_page': 1
+                'currentStage': "Checker4"
             }, function(response) {
                 checker4.data = Number(response.headers['x-total-count']) || 0;
             });
@@ -376,9 +340,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             GroupProcess.search({
                 'partner': "AXIS",
                 'groupStatus': true,
-                'currentStage': "Checker3",
-                'page': 1,
-                'per_page': 1
+                'currentStage': "Checker3"
             }, function(response) {
                 checker3.data = Number(response.headers['x-total-count']) || 0;
             });
@@ -389,9 +351,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             GroupProcess.search({
                 'partner': "AXIS",
                 'groupStatus': true,
-                'currentStage': "Checker4",
-                'page': 1,
-                'per_page': 1
+                'currentStage': "Checker4"
             }, function(response) {
                 checker4.data = Number(response.headers['x-total-count']) || 0;
             });
@@ -403,9 +363,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
                 'branchId': branchId,
                 'partner': userPartner,
                 'groupStatus': true,
-                'currentStage': "LoanDisbursement",
-                'page': 1,
-                'per_page': 1
+                'currentStage': "LoanDisbursement"
             }, function(response) {
                 disbursement.data = Number(response.headers['x-total-count']) || 0;
             });
@@ -416,9 +374,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             GroupProcess.search({
                 'branchId': branchId,
                 'groupStatus': true,
-                'partner': userPartner,
-                'page': 1,
-                'per_page': 1
+                'partner': userPartner
             }, function(response) {
                 close.data = Number(response.headers['x-total-count']) || 0;
             });
@@ -428,7 +384,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             dscoverrideMenu.data = '-';
             Groups.getDscOverrideList({
                 'page': 1,
-                'per_page': 1
+                'per_page': 100
             }, function(response) {
                 dscoverrideMenu.data = Number(response.headers['x-total-count']) || 0;
             });

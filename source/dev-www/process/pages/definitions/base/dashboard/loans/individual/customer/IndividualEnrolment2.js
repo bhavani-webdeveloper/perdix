@@ -40,6 +40,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             var configFile = function () {
                 return {
                     "loanProcess.loanAccount.currentStage": {
+                        "Application":
+                        {
+                            "excludes":[
+                                "KYC.firstName"
+                            ]
+                        },
                         "Screening":{
                             "excludes": [
                                 "IndividualFinancials",                               
@@ -48,7 +54,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification.date",
                                 "PhysicalAssets",
                                 "IndividualReferences",
-                                "References"
+                                "References",
+                                "KYC.firstName"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -826,7 +833,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences",
                                 "PhysicalAssets",
                                 "IndividualFinancials",
-                                "References"
+                                "References",
+                                "HouseVerification.latitude",
+                                "HouseVerification.houseVerificationPhoto",
+                                "HouseVerification.date",
+                                "HouseVerification.place",
+                                "KYC.customerId"
+                    
+
                             ],
                             "overrides": {
                                 "KYC": {
@@ -875,6 +889,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "excludes": [
                                 "ContactInformation.whatsAppMobileNoOption",
                                 "IndividualReferences.verifications.ReferenceCheck",
+                                "KYC.customerId"
+
                             ],
                             "overrides": {
                                 "KYC": {
@@ -1556,6 +1572,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 return [
                     "KYC",
                     "KYC.customerId",
+                    "KYC.firstName",
                     "KYC.identityProofFieldSet",
                     "KYC.identityProof",
                     "KYC.identityProofImageId",
@@ -1822,6 +1839,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "orderNo": 181
                                         }
                                     }
+                                },
+                                "KYC":{
+                                    "items": {
+                                        "firstName": {
+                                            "key": "customer.firstName",
+                                            "title": "CUSTOMER_NAME",
+                                            "type": "string",
+                                            "orderNo": 1,
+                                       //     "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='ScreeningReview'",
+                                            
+                                        },
+                                    }
+
                                 },
                                 "FamilyDetails": {
                                     "items": {
