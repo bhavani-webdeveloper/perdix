@@ -520,7 +520,9 @@
                         "type": "number",
                         "minLength": 1,
                         "maxLength": 6,
-                        "captureStages": ["Stage01","Stage02" ,"Completed"]
+                        "captureStages": [
+                            "Stage01","Stage02" ,"Completed"
+                        ]
                     },
                     "stdCode": {
                         "title": "STD CODE",
