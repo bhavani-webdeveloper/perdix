@@ -350,7 +350,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
             }
             var repositoryAdditions = function(bundlePageObj){
                return {
-                                    // "EnterpriseInformation": {
+                                "EnterpriseInformation": {
+                                    "items" : {
+                                        "customerName": {
+                                           "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='ScreeningReview'", 
+                                            "key": "customer.firstName",
+                                            "title": "CUSTOMER_NAME",
+                                            "orderNo": 1
+                                        }
+                                    }
+                                }    // "EnterpriseInformation": {
                     //      "items": {
                     //           "lastFiledItr": {
                     //                "key": "customer.udf.userDefinedDateFieldValues.udfDate2",
@@ -394,6 +403,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
             var getIncludes = function (model) {
                 return [
                     "EnterpriseInformation",
+                    "EnterpriseInformation.customerName",
                     "EnterpriseInformation.customerId",
                     "EnterpriseInformation.customerBranchId",
                     "EnterpriseInformation.entityId",
@@ -1195,7 +1205,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "SuppliersDeatils",
                                     "Machinery",
                                     "EnterpriseReferences",
-                                    "EnterpriseReferences.verifications"
+                                    "EnterpriseReferences.verifications",
+                                    "EnterpriseInformation.customerId"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -1311,7 +1322,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             }, 
                             "ApplicationReview":{
                                 "excludes": [
-                                    "ProxyIndicators"
+                                    "ProxyIndicators",
+                                     "EnterpriseInformation.customerId"
+                                    
                                 ],
                                 "overrides": {
                                     "EnterpriseReferences.EnterpriseReferences.verifications":
