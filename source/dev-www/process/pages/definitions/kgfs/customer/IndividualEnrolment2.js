@@ -59,6 +59,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "KYC.additionalKYCs.kyc1IssueDate",
                 "KYC.additionalKYCs.kyc1ValidUptoDate",
                 "ContactInformation",
+                "ContactInformation.contactDetailsAlsoBusinessContactDetails",
                 "ContactInformation.residentialAddressFieldSet",
                 "ContactInformation.doorNo",
                 "ContactInformation.street",
@@ -72,13 +73,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "ContactInformation.landLineNo",
                 "ContactInformation.mobilePhone",
                 "ContactInformation.email",
+                "ContactInformation.residentialAddressAlsoBusinessAddress",
                 "ContactInformation.mailSameAsResidence",
                 "ContactInformation.permanentAddressFieldSet",
                 "ContactInformation.mailingDoorNo",
                 "ContactInformation.mailingStreet",
-                "ContactInformation.mailinglandmark",
                 "ContactInformation.mailingLocality",
-                "ContactInformation.mailingVillageName",
                 "ContactInformation.mailingPostoffice",
                 "ContactInformation.mailingDistrict",
                 "ContactInformation.mailingPincode",
@@ -97,11 +97,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "FamilyDetails.familyMembers.occupation",
                 "FamilyDetails.familyMembers.educationLevel",
                 "FamilyDetails.familyMembers.incomeDetails",
-                "HouseHoldExpenses",
-                "HouseHoldExpenses.ExpenseDetails",
-                "HouseHoldExpenses.ExpenseDetails.expenseType",
-                "HouseHoldExpenses.ExpenseDetails.frequency",
-                "HouseHoldExpenses.ExpenseDetails.amount",
+                "IndividualFinancials",
+                "IndividualFinancials.expenditures",
+                "IndividualFinancials.expenditures.expenditureSource",
+                "IndividualFinancials.expenditures.frequency",
+                "IndividualFinancials.expenditures.annualExpenses",
                 "IndividualReferences",
                 "IndividualReferences.verifications",
                 "IndividualReferences.verifications.referenceFirstName",
@@ -139,16 +139,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "IndividualReferences.verifications.address":{
                             required:true
                         },
-                        "IndividualFinancials.expenditures.expenditureSource":{
-                            "title": "EXPENDITURE_SOURCE",
-                            required:true
-                        },
                         "HouseVerification.houseDetailsFieldSet":{
                             orderNo:70
-                        },
-                        "IndividualFinancials.expenditures":{
-                            view: "fixed",
-                            titleExpr: "model.customer.expenditures[arrayIndex].expenditureSource | translate"
                         },
                         "FamilyDetails": {
                             "condition" : "model.customer.currentStage == 'Stage02' || model.customer.currentStage == 'Completed'"
@@ -163,11 +155,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "PhysicalAssets":{
                             "orderNo": 90,
                             "title" :"T_ASSETS",
-                            "condition" : "model.customer.currentStage == 'Stage02' || model.customer.currentStage == 'Completed'"
-                        },                      
-                        "IndividualFinancials":{
-                            orderNo: 60,
-                            "title": "EXPENDITURES",
                             "condition" : "model.customer.currentStage == 'Stage02' || model.customer.currentStage == 'Completed'"
                         },
                         "BusinessOccupationDetails":{
@@ -256,6 +243,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "required": true
                         },
                         "IndividualInformation.fatherFirstName": {
+                            "title":"FATHERS_FULL_NAME",
                             "type": "string",
                             "schema": {
                                 "pattern": "^[a-zA-Z\. ]+$",
@@ -264,6 +252,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 202: "Only alphabets and space are allowed."
                             },
                             "required": false
+                        },
+                        "IndividualInformation.motherName":{
+                            "title":"MOTHERS_NAME"
                         },
                         "IndividualInformation.spouseDateOfBirth": {
                             "title":"SPOUSE_DOB",
@@ -509,6 +500,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                         },
                         "ContactInformation.landLineNo":{
+                            "key":"customer.landLineNo",
                             "required": true,
                             "title":"ALTERNATE_MOBILE_NO"
 
@@ -641,6 +633,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "ContactInformation.locality":{
                             title:"LOCALITY"
+                        },
+                        "ContactInformation.permanentAddressFieldSet": {
+                            condition: "!model.customer.residentialAddressAlsoBusinessAddress"
                         },
                         "ContactInformation.permanentAddressFieldSet": {
                             condition: "!model.customer.mailSameAsResidence"
@@ -1211,8 +1206,23 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             }
                         },
-                        "HouseHoldExpenses.ExpenseDetails":{
+                        "IndividualFinancials":{
+                            "title":"HOUSEHOLD_EXPENSES"
+                        },
+                        "IndividualFinancials.expenditures":{
                             "title":"ADD_HOUSEHOLD_EXPENSES"
+                        },                        
+                        "IndividualFinancials.expenditures.expenditureSource":{
+                            "required":true,
+                            "orderNo":10
+                        },                        
+                        "IndividualFinancials.expenditures.frequency":{
+                            "required":true,
+                            "orderNo":20
+                        },                        
+                        "IndividualFinancials.expenditures.annualExpenses":{
+                            "required":true,
+                            "orderNo":30
                         }
 
                     }            
@@ -1326,16 +1336,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 model.customer.udf = customer.udf
                             }
                         }
-                         var expenditures = formHelper.enum('expenditure').data;
-                        if (expenditures && expenditures.length != 0) {
-                            for (i = 0; i < expenditures.length - 1; i++) {
-                                model.customer.expenditures.push({
-                                    'expenditureSource': expenditures[i].name,
-                                    'frequency': 'Monthly'
-                                });
-                            }
-                        }       
-
 
                             });
                     } else {
@@ -1373,7 +1373,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "area": {
                                         orderNo: 50,
                                         key: "customer.area",
-                                        "title": "Area",
+                                        "title": "LOCALITY",
                                         "type": "select",
                                         "titleMap": {
                                             "Rural": "Rural",
@@ -1397,13 +1397,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         key: "customer.stdCode",
                                         title:"STD_CODE"
                                     },
-                                    "mailinglandmark":{
-                                        orderNo:180,
-                                        title:"LANDMARK"
+                                    "contactDetailsAlsoBusinessContactDetails":{
+                                        title:"CONTACT_DETAILS_ALSO_BUSINESS_CONTACT_DETAILS",
+                                        type:"checkbox",
+                                        orderNo:50,
+                                        "schema":{  
+                                           "default":false
+                                        }
                                     },
-                                    "mailingVillageName":{
-                                        title:"VILLAGE_NAME",
-                                        orderNo:205
+                                    "residentialAddressAlsoBusinessAddress":{
+                                        title:"RESIDENTIAL_ADDRESS_ALSO_BUSINESS_ADDRESS",
+                                        type:"checkbox",
+                                        orderNo:149,
+                                        "schema":{  
+                                           "default":false
+                                        }
                                     }
                                 }
                             },
@@ -1422,50 +1430,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "familyMembers":{
                                         "items":{
                                             "memberIncome":{
+                                                "key": "customer.familyMembers[].udfId1",
                                                 "title": "MEMBER_INCOME",
                                                 "type":"amount"
                                             },
                                             "occupation":{
+                                                "key": "customer.familyMembers[].udfId2",
                                                 "title":"OCCUPATION",
                                                 "type":"string"
                                             },
                                             "educationLevel":{
+                                                "key": "customer.familyMembers[].udfId3",
                                                 "title":"EDUCATION_LEVEL",
                                                 "type":"string"
                                             },
                                             "incomeDetails":{
+                                                "key": "customer.familyMembers[].udfId4",
                                                 "title":"INCOME_DETAILS",
                                                 "type":"string",
 
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            "HouseHoldExpenses": {
-                                "type": "box",
-                                "title": "HOUSEHOLD_EXPENSES",
-                                "orderNo": 50,
-                                "items": {
-                                    "ExpenseDetails": {
-                                        "title":"HOUSEHOLD_EXPENSES",
-                                        "type": "array",
-                                        "startEmpty": true,
-                                        "items": {
-                                            "expenseType":{
-                                                title:"EXPENSE_TYPE",
-                                                type:"select",
-                                                required:true
-                                            },
-                                            "frequency":{
-                                                title:"FREQUENCY",
-                                                type:"select",
-                                                required:true
-                                            },
-                                            "amount":{
-                                                title:"AMOUNT",
-                                                type:"amount",
-                                                required:true
                                             }
                                         }
                                     }
@@ -1586,10 +1569,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     irfProgressMessage.pop('enrollment-submit', 'Please add customer Spouse information in Family Details section also to proceed.', 5000);
                                     return false;
                                 }
-                            }
-                            if(!model.customer.expenditures || model.customer.expenditures.length == 0) {
-                                irfProgressMessage.pop('enrollment-submit', 'Please add expenditure details in Expenditure section to proceed.', 5000);
-                                return false;
                             }
                             PageHelper.showLoader();
                             model.EnrolmentProcess.proceed()
