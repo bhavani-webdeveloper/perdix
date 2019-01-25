@@ -216,14 +216,8 @@ define({
 							title: 'CENTRE_ID',
 							data: 'centreCode',
 							render: function(data, type, full, meta) {
-	                            if (data) {
-	                                var centrevalue = filterFilter(centres, {
-	                                    "value": full.centreCode
-	                                }, true);
-	                                data = centrevalue[0].name;
-	                            }
-	                            return data;
-							}
+                                return (data && centres[data])? centres[data]: data;
+                            }
 						}, {
 							title: 'GROUP_CODE',
 							data: 'groupCode'
