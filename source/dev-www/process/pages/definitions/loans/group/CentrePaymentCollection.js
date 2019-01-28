@@ -899,10 +899,8 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 					'website': "http://ruralchannels.ifmr.co.in/",
 					'helpline': '18001029370',
 				};
-
 				var print={};
 				print.paperReceipt= LoanProcess.getWebHeader(opts);
-				var finalArray = [];
 				for (i in requestObj.collectionDemands){
 					var cd=requestObj.collectionDemands[i];
 					var repaymentInfo={};
@@ -915,6 +913,9 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 					repaymentInfo.notcollected=cd.notcollected;
 					print.paperReceipt= print.paperReceipt + LoanProcess.getWebReceipt(repaymentInfo);
 				}
+				print.paperReceipt= print.paperReceipt + LoanProcess.getWebFooter(opts);
+
+				var finalArray = [];
 				for (i in requestObj.collectionDemands){
 					var opts = [];
 					// Printer Configuration //
@@ -960,8 +961,6 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 					]
 					finalArray = finalArray.concat(opts);
 				}
-				
-				print.paperReceipt= print.paperReceipt + LoanProcess.getWebFooter(opts);
 				print.thermalReceipt = finalArray;
 					
 
