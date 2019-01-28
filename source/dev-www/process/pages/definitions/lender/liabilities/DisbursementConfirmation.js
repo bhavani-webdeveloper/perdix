@@ -13,6 +13,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                 return {
                 }   
             }
+            
             var overridesFields = function (bundlePageObj) {
                 return {
                     "DisbursementConfirmation": {
@@ -25,7 +26,11 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "required": true 
                     },
                     "DisbursementConfirmation.referenceNumber": {
-                        "required": true
+                        "required": true,
+                         "schema":{
+                           "pattern":"[A-Za-z0-9]"
+                        },
+                        'validationMessage': { 202: "UTR Number should be ALPHANUMERIC." }
                     }
 
                 }
