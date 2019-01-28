@@ -1,7 +1,7 @@
-irf.pageCollection.factory("IrfFormToggler", ['$log', '$filter', 'Enrollment', "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+irf.pageCollection.factory("irfFormToggler", ['$log', '$filter', 'Enrollment', "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
     "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "jsonPath", "BundleManager", "CustomerBankBranch", "User",
     function ($log, $filter, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, PageHelper, Utils, BiometricService, PagesDefinition, Queries, jsonPath, BundleManager, CustomerBankBranch, User) {
-        var formToggler=function(title, forms, commonForm, model){
+        var prepareToggleForm=function(title, forms, commonForm, model){
             var toggleKey = '__FT__' + Utils.generateUUID();
             model[toggleKey] = false;
             var finalform=[];
@@ -107,7 +107,7 @@ irf.pageCollection.factory("IrfFormToggler", ['$log', '$filter', 'Enrollment', "
             return finalform;
         }
         return {
-            formToggler:formToggler
+            prepareToggleForm:prepareToggleForm
         }
     }
 ]);

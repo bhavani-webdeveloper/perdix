@@ -4,11 +4,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
     return {
         pageUID: "base.dashboard.loans.individual.customer.Enrolment",
         pageType: "Engine",
-        dependencies: ["$log", "$q","LoanAccount","LoanProcess", 'Scoring','IrfFormToggler', 'Enrollment','EnrollmentHelper', 'AuthTokenHelper', 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
+        dependencies: ["$log", "$q","LoanAccount","LoanProcess", 'Scoring','irfFormToggler', 'Enrollment','EnrollmentHelper', 'AuthTokenHelper', 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
             'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
             "BundleManager", "PsychometricTestService", "LeadHelper", "Message", "$filter", "Psychometric", "IrfFormRequestProcessor","UIRepository", "$injector", "irfNavigator"],
  
-        $pageFn: function($log, $q, LoanAccount,LoanProcess, Scoring,IrfFormToggler, Enrollment,EnrollmentHelper, AuthTokenHelper, SchemaResource, PageHelper,formHelper,elementsUtils,
+        $pageFn: function($log, $q, LoanAccount,LoanProcess, Scoring,irfFormToggler, Enrollment,EnrollmentHelper, AuthTokenHelper, SchemaResource, PageHelper,formHelper,elementsUtils,
                           irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
                           BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository, $injector, irfNavigator) {
             var overridesFields_businessbasic = function(bundlePageObj){
@@ -3809,7 +3809,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "title":"Business Financials",
                                 })}));
                     $q.all(generateChildForms).then(function(){
-                        form=IrfFormToggler.formToggler('BUSINESS', self.forms, formaction, model);
+                        form=irfFormToggler.prepareToggleForm('BUSINESS', self.forms, formaction, model);
                         console.log(form);
                         self.form=form;
                     });
