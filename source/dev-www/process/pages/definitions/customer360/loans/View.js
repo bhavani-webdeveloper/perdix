@@ -1,6 +1,25 @@
 irf.pageCollection.factory(irf.page('customer360.loans.View'),
-    ["PagesDefinition", "$log", "formHelper", "LoanAccount", "$state", "SessionStore", "LoanAccount", "$stateParams","PageHelper",
-        function(PagesDefinition, $log, formHelper, LoanAccount, $state, SessionStore, LoanAccount, $stateParams, PageHelper){
+    ["PagesDefinition", "$log", "formHelper", "LoanAccount", "$state", "SessionStore", "LoanAccount", "$stateParams","PageHelper","$q",
+        function(PagesDefinition, $log, formHelper, LoanAccount, $state, SessionStore, LoanAccount, $stateParams, PageHelper,$q){
+            var pageConfig = {};
+            var isPageConfigResolve = false;
+            var isApplicableValue = function(param){
+                var value = pageConfig != null ? (Object.keys(pageConfig).length > 0 ? ((pageConfig[param] != null) ? pageConfig[param] : false) : false ): false;
+                return value;
+            }
+            var getRolePageConfig = function(param){
+                var deferred = $q.defer();
+                if(isPageConfigResolve){
+                    var value = pageConfig != null ? (Object.keys(pageConfig).length > 0 ? ((pageConfig[param] != null) ? pageConfig[param] : false) : false ): true;
+                      deferred.resolve(value);
+                }
+                getRolePageConfig(param).then(function(resp){
+                    if(resp)
+                        deferred.resolve(resp);
+                })
+                return deferred.promise;
+            }
+            
             return {
                 "type": "search-list",
                 "title": "VIEW_LOANS",
@@ -31,9 +50,16 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                         return formHelper;
                     },
                     getResultsPromise: function(searchOptions, pageOpts){      /* Should return the Promise */
+                        var deferred = $q.defer();
                         var promise = LoanAccount.viewLoans({urn: $stateParams.pageId}).$promise;
-                        //var urnNo = $stateParams.pageId;
-                        return promise;
+                        promise.then(function(resp){
+                            var data = resp;
+                            PagesDefinition.getRolePageConfig("Page/Engine/customer360.loans.View").then(function(value){
+                                pageConfig = value;
+                                deferred.resolve(data);
+                            })
+                        })
+                        return deferred.promise;
                     },
                     paginationOptions: {
                         "viewMode": "page",
@@ -45,17 +71,14 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                         }
                     },
                     listOptions: {
+                        selectable: false,
+                        expandable: true,
+                        listStyle: "table",
                         itemCallback: function(item, index) {
 
                         },
                         getItems: function(response, headers){
                             if (response!=null && response.length && response.length!=0){
-                                //var arrLength = response.length;
-                                //for (var i=0; i<arrLength; i++){
-                                //    if (!_.isNull(response[i]) && _.isObject(response[i])){
-                                //        _.remove()
-                                //    }
-                                //}
                                 _.pullAll(response, [null]);
                                 return response;
                             }
@@ -65,6 +88,38 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                             return [
                                 item.accountNumber,
                                 'Type: ' + item.loanType + ', Partner: ' + item.partner + ', Product: ' + item.productCode
+                            ]
+                        },
+                        getTableConfig: function() {
+                            return {
+                                "serverPaginate": true,
+                                "paginate": true,
+                                "pageLength": 10
+                            };
+                        },
+                        getColumns: function(){
+                            var centres = formHelper.enum('centre').data;
+                            return [
+                                {
+                                    title:'NAME',
+                                    data: 'accountNumber',
+                                },
+                                {
+                                    title:'Type',
+                                    data: 'loanType'
+                                },
+                                {
+                                    title:'Partner',	
+                                    data: 'partner'
+                                },
+                                {
+                                    title:'Product',
+                                    data: 'productCode'
+                                },
+                                {
+                                    title:'Application Status',
+                                    data: 'applicationStatus',
+                                }
                             ]
                         },
                         getActions: function(){
@@ -121,9 +176,27 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                         return true;
                                     }
                                 },
-                                 {
+                                { 
+                                    name: "Payer Datails",
+                                    desc: "",
+                                    fn: function(item, index){
+                                        $state.go('Page.Engine', {
+                                            pageName: 'loans.PayersDetails',
+                                            pageId: [item.accountNumber,item.urnNo].join(".")
+                                        })
+                                    },
+                                    isApplicable: function(item, index){
+                                        var siteCode = SessionStore.getGlobalSetting('siteCode');
+                                        if(siteCode == 'witfin') { 
+                                            return true
+                                        }else{
+                                            return false
+                                        }
+                                    }
+                                },
+                                 { 
                                     name: "Unmark NPA",
-                                    // desc: "",
+                                    desc: "",
                                     fn: function(item, index){
                                         $state.go('Page.Engine', {
                                             pageName: 'loans.UnmarkNPA',
@@ -148,7 +221,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                             return false
                                         };
                                     }
-                                }, {
+                                }, { 
                                     name: "FREEZE_ACCOUNT",
                                     fn: function(item, index){
                                         $state.go('Page.Engine', {
@@ -157,7 +230,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                         })
                                     },
                                     isApplicable: function(item, index){
-                                        return true;
+                                        return isApplicableValue('isFreezeAccountAccess');
                                     }
                                 },
                                 {
@@ -165,15 +238,22 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                     fn: function(item, index){
                                         var siteCode = SessionStore.getGlobalSetting('siteCode');
                                         if(siteCode == 'witfin') {
-                                        $state.go('Page.Bundle', {
-                                            pageName: 'witfin.loans.individual.screening.LoanView',
-                                            pageId: item.accountId
-                                        })
-                                        } else {
-                                        $state.go('Page.Bundle', {
-                                            pageName: 'loans.individual.screening.LoanViewList',
-                                            pageId: item.accountId
-                                        })
+                                            $state.go('Page.Bundle', {
+                                                pageName: 'witfin.loans.individual.screening.LoanView',
+                                                pageId: item.accountId
+                                            })
+                                        } 
+                                        else if (siteCode == 'pahal') {
+                                            $state.go('Page.Bundle', {
+                                                pageName: 'pahal.loans.individual.screening.LoanView',
+                                                pageId: item.accountId
+                                            })
+                                        }   
+                                        else {
+                                            $state.go('Page.Bundle', {
+                                                pageName: 'loans.individual.screening.LoanViewList',
+                                                pageId: item.accountId
+                                            })
                                         }
                                     },
                                     isApplicable: function(item, index){
