@@ -471,9 +471,9 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
 
                          if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
                             model.lead.leadStatus = "Reject";
-                        } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy.toUpperCase() == 'NOW') {
+                        } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this week') {
                             model.lead.leadStatus = "Screening";
-                        } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy.toUpperCase() == 'LATER' ) {
+                        } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this month' || model.lead.productRequiredBy == 'Next 2 -3 months' || model.lead.productRequiredBy == 'Next 4-6 months' ) {
                             model.lead.leadStatus = "FollowUp";
                         } else {
                             model.lead.leadStatus = "Incomplete";

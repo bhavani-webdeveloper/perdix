@@ -87,8 +87,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageName: 'base.dashboard.loans.individual.screening.Review',
                             title: 'REVIEW',
                             pageClass: 'loan-review',
-                            minimum: 1,
-                            maximum: 1,
+                            minimum: 0,
+                            maximum: 0,
                             order:80
                         }
                     ]);
