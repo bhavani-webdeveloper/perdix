@@ -20,7 +20,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     "bundleDefinitionPromise": function() {
                         return $q.resolve([
                             {
-                                pageName: 'base.dashboard.loans.individual.customer.IndividualEnrollment2',
+                                pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'APPLICANT',
                                 pageClass: 'applicant',
                                 minimum: 1,
@@ -28,7 +28,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:10
                             },
                             {
-                                pageName: 'base.dashboard.loans.individual.customer.IndividualEnrollment2',
+                                pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'CO_APPLICANT',
                                 pageClass: 'co-applicant',
                                 minimum: 0,
@@ -36,7 +36,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:20
                             },
                             {
-                                pageName: 'base.dashboard.loans.individual.customer.IndividualEnrollment2',
+                                pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'GUARANTOR',
                                 pageClass: 'guarantor',
                                 minimum: 0,
@@ -59,24 +59,24 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 maximum: 1,
                                 order:50
                             },
+                            // {
+                            //     pageName: 'base.dashboard.loans.individual.screening.VehicleDetails',
+                            //     title: 'VEHICLE_DETAILS',
+                            //     pageClass: 'vehicle-details',
+                            //     minimum: 1,
+                            //     maximum: 1,
+                            //     order:55
+                            // },
+                            // {
+                            //     pageName: 'base.dashboard.loans.individual.screening.vehiclevaluation.VehicleValuation',
+                            //     title: 'VEHICLE_VALUATION',
+                            //     pageClass: 'vehicle-valuation',
+                            //     minimum: 1,
+                            //     maximum: 1,
+                            //     order:57
+                            // },
                             {
-                                pageName: 'base.dashboard.loans.individual.screening.VehicleDetails',
-                                title: 'VEHICLE_DETAILS',
-                                pageClass: 'vehicle-details',
-                                minimum: 1,
-                                maximum: 1,
-                                order:55
-                            },
-                            {
-                                pageName: 'base.dashboard.loans.individual.screening.vehiclevaluation.VehicleValuation',
-                                title: 'VEHICLE_VALUATION',
-                                pageClass: 'vehicle-valuation',
-                                minimum: 1,
-                                maximum: 1,
-                                order:57
-                            },
-                            {
-                                pageName: 'base.dashboard.loans.individual.screening.CBCheck',
+                                pageName: 'loans.individual.screening.CBCheck',
                                 title: 'CB_CHECK',
                                 pageClass: 'cb-check',
                                 minimum: 1,
@@ -84,7 +84,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:60
                             },
                             {
-                                pageName: 'base.dashboard.loans.individual.screening.CreditBureauView',
+                                pageName: 'loans.individual.screening.CreditBureauView',
                                 title: 'CREDIT_BUREAU',
                                 pageClass: 'cbview',
                                 minimum: 1,
@@ -215,19 +215,19 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-                                $this.bundlePages.push({
-                                    pageClass: 'vehicle-details',
-                                    model: {
-                                        loanProcess: loanProcess
-                                    }
-                                });
+                                // $this.bundlePages.push({
+                                //     pageClass: 'vehicle-details',
+                                //     model: {
+                                //         loanProcess: loanProcess
+                                //     }
+                                // });
 
-                                $this.bundlePages.push({
-                                    pageClass: 'vehicle-valuation',
-                                    model: {
-                                        loanProcess: loanProcess
-                                    }
-                                });
+                                // $this.bundlePages.push({
+                                //     pageClass: 'vehicle-valuation',
+                                //     model: {
+                                //         loanProcess: loanProcess
+                                //     }
+                                // });
 
                                 $this.bundlePages.push({
                                     pageClass: 'loan-request',

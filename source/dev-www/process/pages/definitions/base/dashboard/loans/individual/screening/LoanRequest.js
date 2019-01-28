@@ -703,7 +703,7 @@ define([],function(){
                                 "NomineeDetails.nominees",
                                 "AdditionalLoanInformation",
                                 "NomineeDetails.nominees.nomineeButton"   ,
-                                "LoanRecommendation.securityEmiRequired",
+                                //"LoanRecommendation.securityEmiRequired",
                                 "LoanMitigants.loanMitigantsByParameter",
                                 "CollateralDetails"               
                             ],
@@ -1201,7 +1201,7 @@ define([],function(){
                         "LoanRecommendation.securityEmiRequired":{
                             "title":"SECURITY_EMI_REQUIRED",
                             "orderNo":80,
-                            "condition": "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'||model.currentStage == 'Rejected'||model.currentStage == 'loanView' || model.currentStage=='Sanction'",
+                            "condition": "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview'||model.currentStage == 'Rejected'||model.currentStage == 'loanView' || model.currentStage=='Sanction' || model.currentStage=='ScreeningReview'",
                         },
                         "LoanRecommendation.commercialCibilCharge":{
                             "title":"COMMERCIAL_CIBIL_CHARGE",
