@@ -2434,5 +2434,41 @@
                 }
             }
         }
+    },
+    "IncomeThroughSales":{
+        "type": "box",
+        "colClass": "col-sm-12",
+        "title": "INCOME_THROUGH_SALES",
+        "items":{
+            "incomeThroughSales":{
+                "key": "customer.incomeThroughSales",
+                "type": "datatable",
+                "resolver":"BusinessIncomeThroughSalesDTElementConfiguration"
+            }
+        }
+    },
+    "Expenditures":{
+        "type": "box",
+        "colClass": "col-sm-12",
+        "title": "EXPENSES",
+        "items":{
+            "expenditures":{
+                "key": "customer.expenditures",
+                "type": "datatable", 
+                "resolver":"BusinessExpendituresDTElementConfiguration"
+            }  
+        }
+    },
+    "RawMaterialExpenses":{
+        "type": "box",
+        "colClass": "col-sm-12",
+        "title": "PURCHASES",
+        "items":{
+            "rawMaterialExpenses":{
+                "key": "customer.rawMaterialExpenses",
+                "type": "datatable",
+                "resolver":"BusinessPurchasesDTElementConfiguration"
+            }
+        }
     }
 }

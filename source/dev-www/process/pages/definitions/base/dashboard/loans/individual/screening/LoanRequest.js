@@ -633,7 +633,8 @@ define([],function(){
                                // "NomineeDetails.nominees.nomineeButton",
                                 "LoanRecommendation.securityEmiRequired",
                                 "LoanMitigants.loanMitigantsByParameter",
-                                "CollateralDetails"               
+                                "CollateralDetails",
+                                "CBCheck",               
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -1080,11 +1081,11 @@ define([],function(){
                 return {
                         "PreliminaryInformation.linkedAccountNumber": {
                             "resolver": "LinkedAccountNumberLOVConfiguration",
-                            "condition":"model.loanAccount.transactionType!=='New Loan'"
+                            "condition": "model.loanAccount.transactionType.toLowerCase() != 'renewal' && model.loanAccount.transactionType != 'New Loan'",
                         },
-                        "PreliminaryInformation.transactionType": {
-                            "title": "TRANSACTION_TYPE",
-                        },
+                        // "PreliminaryInformation.transactionType": {
+                        //     "title": "TRANSACTION_TYPE",
+                        // },
                         "LoanRecommendation.udf8": {
                             "title": "ELIGIBLE_DISPOSABLE_INCOME",
                             "onChange": function(modelValue, form, model, formCtrl, event) {                                
@@ -1337,6 +1338,18 @@ define([],function(){
                             //"required": true,
                             "orderNo":130
                         },
+                        "DeductionsFromLoan.estimatedEmi":{
+                            "title": "EXPECTED_SECURITY_EMI",
+                        },
+                        "DeductionsFromLoan":{
+                            "orderNo" : 30
+                        },
+                        "LoanMitigants":{
+                            "orderNo" : 40
+                        },
+                        "LoanDocuments":{
+                            "orderNo": 50
+                        }
  
                     }
                 }
@@ -1346,7 +1359,11 @@ define([],function(){
                 return [
                     "PreliminaryInformation",
                     "PreliminaryInformation.transactionType",
+                    "PreliminaryInformation.transactionType2",
                     "PreliminaryInformation.linkedAccountNumber",
+                    "PreliminaryInformation.linkedAccountNumber1",
+                    "PreliminaryInformation.baseLoanAccount",
+                    "PreliminaryInformation.npa",
                     "PreliminaryInformation.loan",
                     "PreliminaryInformation.loanPurpose1",
                     "PreliminaryInformation.loanPurpose2",
@@ -1360,6 +1377,8 @@ define([],function(){
                     "PreliminaryInformation.emiPaymentDateRequested",
                     "PreliminaryInformation.collectionPaymentType",
                     "PreliminaryInformation.expectedPortfolioInsurancePremium",
+                    "PreliminaryInformation.BusinessSaveWarning",
+                    "PreliminaryInformation.MedicalTestWarning",
                     //"PreliminaryInformation.actualAmountRequired",
                     //"PreliminaryInformation.fundsFromDifferentSources",
                    
@@ -1561,6 +1580,12 @@ define([],function(){
                                                     "Internal Foreclosure": "Internal Foreclosure"
                                                 },
                                                 "orderNo": 1,
+                                                condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal'",
+                                                onChange:function(value,form,model){
+                                                    if(_.hasIn(model, 'loanAccount') && model.loanAccount.transactionType == 'New Loan') {
+                                                        model.loanAccount.linkedAccountNumber = null;
+                                                    }
+                                                }
                                             },
                                             "expectedEmi": {
                                                 "key": "loanAccount.expectedEmi",
@@ -1568,6 +1593,40 @@ define([],function(){
                                                 "orderNo": 91,
                                                 type: "number",
                                                 "readonly": true
+                                            },
+                                            "linkedAccountNumber1":{
+                                                key:"loanAccount.linkedAccountNumber",
+                                                title:"LINKED_ACCOUNT_NUMBER",
+                                                readonly:true,
+                                                required: false,
+                                                condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                                            },
+                                            "baseLoanAccount":{
+                                                key: "loanAccount.baseLoanAccount",
+                                                title: "BASE_LOAN_ACCOUNT",
+                                                readonly:true,
+                                                required: false,
+                                                condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                        
+                                             },
+                                             "transactionType2":{
+                                                key: "loanAccount.transactionType",
+                                                title: "TRANSACTION_TYPE",
+                                                readonly:true,
+                                                required: false,
+                                                condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                                             },
+                                             "BusinessSaveWarning":{
+                                                "type": "section",
+                                                "htmlClass": "alert alert-warning",
+                                                "condition": "!model.loanAccount.customerId",
+                                                "html":"<h4><i class='icon fa fa-warning'></i>Business not yet enrolled.</h4> Kindly save the business details before proceed."
+                                            },
+                                            "MedicalTestWarning":{
+                                                "type": "section",
+                                                "htmlClass": "alert alert-warning",
+                                                "condition": "model.applicant.age1 >= 41 && model.applicant.age1 <= 60 && model.loanAccount.loanAmountRequested >= 2000001 && model.loanAccount.loanAmountRequested <= 3000000 || model.applicant.age1 >= 61 && model.applicant.age1 <= 65 && model.loanAccount.loanAmountRequested < 3000000",
+                                                "html":"<h4><i class='icon fa fa-warning'></i>Medical Test is Mandatory</h4>"
                                             }
                                         }
                                       

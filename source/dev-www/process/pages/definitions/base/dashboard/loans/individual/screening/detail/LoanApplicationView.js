@@ -87,7 +87,14 @@ define({
                 var stageName = $filter('translate')(stageCode) || stageCode;
                 return stageName;
             };
-
+            var validateForm = function(formCtrl){
+                formCtrl.scope.$broadcast('schemaFormValidate');
+                if (formCtrl && formCtrl.$invalid) {
+                    PageHelper.showProgress("enrolment","Your form have errors. Please fix them.", 5000);
+                    return false;
+                }
+                return true;
+            };
         var preLoanSaveOrProceed = function(model){
         var loanAccount = model.loanAccount;
 
@@ -1306,7 +1313,9 @@ define({
                     PageHelper.clearErrors();
                     var nextStage = null;
                     var dedupeCustomerIdArray = [];
-
+                    if (!validateForm(formCtrl)){
+                        return;
+                    }
                     /*if (!validateForm(formCtrl)){
                     return;
                 }
