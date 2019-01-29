@@ -308,6 +308,9 @@ define([], function () {
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianState",
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianRelationship",
 
+                    "UDFFields",
+                    "UDFFields.boomBoxReferenceNumber",
+
                     "JewelDetails",
                     "JewelDetails.jewelPouchNo",
                     "JewelDetails.ornamentDetails",
@@ -428,6 +431,7 @@ define([], function () {
             };
             var overridesFields = function (model) {
                 return {
+                   
                     "LoanDetails": {
                         "orderNo": 1
                     },
@@ -987,6 +991,19 @@ define([], function () {
                                 "excludes": [],
                                 "options": {
                                     "repositoryAdditions": {
+                                        "UDFFields":{
+                                            "type":"box",
+                                            "title":"UDF Fields",
+                                            "orderNo":"10",
+                                            "items":{
+                                                "boomBoxReferenceNumber":{
+                                                    "title":"BOOM_BOX_REFERENCE_NUMBER",
+                                                    "type":"string",
+                                                    "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf10"
+
+                                                }
+                                            }
+                                        },
                                         "LoanDetails": {
                                             "orderNo": 7,
                                             "items": {
