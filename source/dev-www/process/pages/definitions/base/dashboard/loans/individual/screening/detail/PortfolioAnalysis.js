@@ -580,7 +580,7 @@ define({
                                     "data": "no_of_kinara_cheque_bounces"
                                 },                                
                                 {
-                                    "title": "ABB to Kinara EMI",
+                                    "title": "ABB_TO_KINARA_EMI",
                                     "data": "ABB_to_Kinara_EMI",
                                     render: function(data, type, full, meta) {
                                         return irfCurrencyFilter(data, null, null, "decimal")
