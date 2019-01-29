@@ -228,6 +228,10 @@ irf.models.factory('LoanAccount', function($resource, $httpParamSerializer, BASE
             method: 'GET',
             url: endpoint + '/findtransactionforreversal/{accountNo}'
         },
+        repaymentScheduleDownload:{
+            method: 'GET',
+            url: irf.MANAGEMENT_BASE_URL + '/server-ext/individual_loan_schedule.php'
+        }
     });
 
     resource.getRepaymentScheduleDownloadURL = function(accountNumber) {

@@ -15,15 +15,15 @@ irf.models.factory("Misc",["$resource", "$httpParamSerializer", "BASE_URL","sear
         },
         res.formDownload = function(opts){
             return irf.FORM_DOWNLOAD_URL+'?form_name='+opts.formName+'&record_id='+opts.recordId;
-        },
-        res.formDownloadStatic = function(opts){
-            if(opts.siteCode.toLowerCase() == "kgfs"){
-                return "http://kgfsuat2.perdix.co.in:8080/perdix7/ims/coiPolicyDownloadReport.htm?idStr=349873&urnNoStr=1711286984417001"
-            }
-            else{
-                return "http://sit.perdix.co.in:8080/sit_kgfs_perdix7/ims/coiPolicyDownloadReport.htm?idStr=349873&urnNoStr=1711286984417001"
-            }
         }
+        // res.formDownloadStatic = function(opts){
+        //     if(opts.siteCode.toLowerCase() == "kgfs"){
+        //         return "http://kgfsuat2.perdix.co.in:8080/perdix7/ims/coiPolicyDownloadReport.htm?idStr=349873&urnNoStr=1711286984417001"
+        //     }
+        //     else{
+        //         return "http://sit.perdix.co.in:8080/sit_kgfs_perdix7/ims/coiPolicyDownloadReport.htm?idStr=349873&urnNoStr=1711286984417001"
+        //     }
+        // }
         return res;
     }
 ])
