@@ -666,7 +666,7 @@ function($log, $q, SessionStore, $state, formHelper, $stateParams, LoanAccount, 
                                     repaymentInfo.customerName=r.customerName;
                                     repaymentInfo.demandAmount=r.demandAmount;
                                     repaymentInfo.amountPaid=r.amount;
-                                    repaymentInfo.payOffAmount= r.payOffAmount;
+                                    repaymentInfo.payOffAmount= r.demandAmount - r.amount;
                                     repaymentInfo.accountName=r.accountName;
                                     repaymentInfo.demandsPaidAndPending=r.totalSatisfiedDemands + " / " + r.pendingInstallment;
                                     repaymentInfo.productCode=r.productCode;
@@ -755,7 +755,7 @@ function($log, $q, SessionStore, $state, formHelper, $stateParams, LoanAccount, 
                                     'demandAmount': r.demandAmount,
                                     'transactionType':r.transactionType,
                                     'amountPaid': r.amount,
-                                    'payOffAmount': r.payOffAmount,
+                                    'payOffAmount': r.demandAmount - r.amount,
                                     'accountName': r.accountName,
                                     'demandsPaidAndPending': r.totalSatisfiedDemands + " / " + r.pendingInstallment,
                                     'productCode': r.productCode
