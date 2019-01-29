@@ -28,7 +28,7 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "DisbursementConfirmation.referenceNumber": {
                         "required": true,
                          "schema":{
-                           "pattern":"[A-Za-z0-9]"
+                            "pattern": "^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]+$"
                         },
                         'validationMessage': { 202: "UTR Number should be ALPHANUMERIC." }
                     }
