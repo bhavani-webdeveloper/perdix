@@ -1160,7 +1160,7 @@ define([],function(){
                     },
                     proceed: function(model, formCtrl, form, $event){
                         var trancheTotalAmount=0;
-                        if(model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length){
+                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == 'Sanction' && model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length){
                             
                             for (var i = model.loanAccount.disbursementSchedules.length - 1; i >= 0; i--) {
                                 model.loanAccount.disbursementSchedules[i].modeOfDisbursement = "CASH";

@@ -3410,7 +3410,8 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                                                 loanToValue: machine.presentValue,
                                                 machineOld: !_.isNull(machine.isTheMachineNew)?(machine.isTheMachineNew.toUpperCase() == "YES"?false:true):null,
                                                 quantity: machine.quantity || 1,
-                                                udf1 : "Adhoc"
+                                                udf1 : "Adhoc",
+                                                udf2: machine.finalPrice
                                             };
                                             c.totalValue = c.quantity * c.loanToValue;
                                             reqData.loanAccount.collateral.push(c)

@@ -40,6 +40,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             var configFile = function () {
                 return {
                     "loanProcess.loanAccount.currentStage": {
+                        "Application":
+                        {
+                            "excludes":[
+                                "KYC.firstName"
+                            ]
+                        },
                         "Screening":{
                             "excludes": [
                                 "IndividualFinancials",                               
@@ -48,7 +54,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification.date",
                                 "PhysicalAssets",
                                 "IndividualReferences",
-                                "References"
+                                "References",
+                                "KYC.firstName",
+                                "FamilyDetails.familyMembers.relationShip1",
+                                "FamilyDetails.familyMembers.familyMemberFirstName",
+                                "FamilyDetails.familyMembers.anualEducationFee",
+                                "FamilyDetails.familyMembers.salary",
+                                "FamilyDetails.familyMembers.incomes",
+                                "FamilyDetails.familyMembers.incomes.incomeSource",
+                                "FamilyDetails.familyMembers.incomes.incomeEarned",
+                                "FamilyDetails.familyMembers.incomes.frequency",
+                                "FamilyDetails.familyMembers.noOfDependents",
                             ],
                             "overrides": {
                                 "KYC": {
@@ -169,7 +185,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails.familyMembers": {
                                     "view": "fixed"
-                                }
+                                },
+                                "BankAccounts.customerBankAccounts.accountNumber":{
+                                    required:false
+                                },
+                                "BankAccounts.customerBankAccounts.isDisbersementAccount":{
+                                    "type":"checkbox"
+                                },
                             }
                         },
                         "KYC": {
@@ -826,7 +848,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences",
                                 "PhysicalAssets",
                                 "IndividualFinancials",
-                                "References"
+                                "References",
+                                "HouseVerification.latitude",
+                                "HouseVerification.houseVerificationPhoto",
+                                "HouseVerification.date",
+                                "HouseVerification.place",
+                                "KYC.customerId"
+                    
+
                             ],
                             "overrides": {
                                 "KYC": {
@@ -875,6 +904,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "excludes": [
                                 "ContactInformation.whatsAppMobileNoOption",
                                 "IndividualReferences.verifications.ReferenceCheck",
+                                "KYC.customerId"
+
                             ],
                             "overrides": {
                                 "KYC": {
@@ -1472,22 +1503,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     // },
                     "Liabilities.liabilities.startDate":{
                         "onChange":function(modelValue, form, model, formCtrl, $event){
-                            var index;
-                            if(moment(modelValue).isAfter(new Date())){
+                            var index = form.key[2];
+                            if(moment(modelValue).isAfter(new Date().toDateString())){
                                 modelValue=null;
-                                index=form.key[2];
                                 model.customer.liabilities[index].startDate=null;
                                 PageHelper.showProgress("pre-save-validation", "Start date can not be a future date.", 3000);
                                 return false;
+                            }
+                            if(model.customer.liabilities[index].maturityDate){
+                                if(moment(model.customer.liabilities[index].maturityDate).isBefore(model.customer.liabilities[index].startDate)){
+                                    model.customer.liabilities[index].maturityDate=null;
+                                    PageHelper.showProgress("pre-save-validation", "Maturity date can not be less than start date", 3000);
+                                    return false;
+                                } 
                             }
                         }
                     },
                     "Liabilities.liabilities.maturityDate":{
                         "onChange":function(modelValue, form, model, formCtrl, event){
-                            var index;
-                            if(moment(modelValue).isBefore(new Date())){
+                            var index = form.key[2];
+                            if(model.customer.liabilities[index].startDate && moment(modelValue).isBefore(model.customer.liabilities[index].startDate)){
                                 modelValue=null;
-                                index=form.key[2];
                                 model.customer.liabilities[index].maturityDate=null;
                                 PageHelper.showProgress("pre-save-validation", "Maturity date can not be a past date.", 3000);
                                 return false;
@@ -1546,7 +1582,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "enumCode": "asset_type"
                     },
                     "PhysicalAssets.physicalAssets.vehicleModel":{
-                        "condition": "model.customer.physicalAssets[].assetType=='Two wheeler' || model.customer.physicalAssets[].assetType=='Four wheeler'"
+                        "condition": "model.customer.physicalAssets[arrayIndex].assetType=='Two wheeler' || model.customer.physicalAssets[arrayIndex].assetType=='Four wheeler'"
                     },
 
                 }
@@ -1556,6 +1592,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 return [
                     "KYC",
                     "KYC.customerId",
+                    "KYC.firstName",
                     "KYC.identityProofFieldSet",
                     "KYC.identityProof",
                     "KYC.identityProofImageId",
@@ -1644,7 +1681,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                     "Liabilities",
                     "Liabilities.liabilities",
-                    "Liabilities.liabilities.loanType",
+                    //"Liabilities.liabilities.loanType",
                     "Liabilities.liabilities.loanSource",
                     "Liabilities.liabilities.loanAmountInPaisa",
                     "Liabilities.liabilities.installmentAmountInPaisa",
@@ -1700,35 +1737,35 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "PhysicalAssets.physicalAssets.ownedAssetValue",
                     //"PhysicalAssets.physicalAssets.unit",
 
-                    // "IndividualReferences",
-                    // "IndividualReferences.verifications",
-                    // "IndividualReferences.verifications.referenceFirstName",
-                    // "IndividualReferences.verifications.mobileNo",
-                    // "IndividualReferences.verifications.occupation",
-                    // "IndividualReferences.verifications.address",
-                    // "IndividualReferences.verifications.ReferenceCheck",
-                    // "IndividualReferences.verifications.ReferenceCheck.knownSince",
-                    // "IndividualReferences.verifications.ReferenceCheck.relationship",
-                    // "IndividualReferences.verifications.ReferenceCheck.opinion",
-                    // "IndividualReferences.verifications.ReferenceCheck.financialStatus",
-                    // "IndividualReferences.verifications.ReferenceCheck.customerResponse",
+                    "IndividualReferences",
+                    "IndividualReferences.verifications",
+                    "IndividualReferences.verifications.referenceFirstName",
+                    "IndividualReferences.verifications.mobileNo",
+                    "IndividualReferences.verifications.occupation",
+                    "IndividualReferences.verifications.address",
+                    "IndividualReferences.verifications.ReferenceCheck",
+                    "IndividualReferences.verifications.ReferenceCheck.knownSince",
+                    "IndividualReferences.verifications.ReferenceCheck.relationship",
+                    "IndividualReferences.verifications.ReferenceCheck.opinion",
+                    "IndividualReferences.verifications.ReferenceCheck.financialStatus",
+                    "IndividualReferences.verifications.ReferenceCheck.customerResponse",
 
-                    "References",
-                    "References.verifications",
-                    "References.verifications.relationship",
-                    "References.verifications.businessName",
-                    "References.verifications.referenceFirstName",
-                    "References.verifications.mobileNo",
-                    "References.verifications.address",
-                    "References.verifications.ReferenceCheck",
-                    "References.verifications.ReferenceCheck.knownSince",
-                    "References.verifications.ReferenceCheck.goodsSold",
-                    "References.verifications.ReferenceCheck.goodsBought",
-                    "References.verifications.ReferenceCheck.paymentTerms",
-                    "References.verifications.ReferenceCheck.modeOfPayment",
-                    "References.verifications.ReferenceCheck.outstandingPayable",
-                    "References.verifications.ReferenceCheck.outstandingReceivable",
-                    "References.verifications.ReferenceCheck.customerResponse",
+                    // "References",
+                    // "References.verifications",
+                    // "References.verifications.relationship",
+                    // "References.verifications.businessName",
+                    // "References.verifications.referenceFirstName",
+                    // "References.verifications.mobileNo",
+                    // "References.verifications.address",
+                    // "References.verifications.ReferenceCheck",
+                    // "References.verifications.ReferenceCheck.knownSince",
+                    // "References.verifications.ReferenceCheck.goodsSold",
+                    // "References.verifications.ReferenceCheck.goodsBought",
+                    // "References.verifications.ReferenceCheck.paymentTerms",
+                    // "References.verifications.ReferenceCheck.modeOfPayment",
+                    // "References.verifications.ReferenceCheck.outstandingPayable",
+                    // "References.verifications.ReferenceCheck.outstandingReceivable",
+                    // "References.verifications.ReferenceCheck.customerResponse",
 
 
                 ];
@@ -1822,6 +1859,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "orderNo": 181
                                         }
                                     }
+                                },
+                                "KYC":{
+                                    "items": {
+                                        "firstName": {
+                                            "key": "customer.firstName",
+                                            "title": "CUSTOMER_NAME",
+                                            "type": "string",
+                                            "orderNo": 1,
+                                       //     "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='ScreeningReview'",
+                                            
+                                        },
+                                    }
+
                                 },
                                 "FamilyDetails": {
                                     "items": {

@@ -19,18 +19,6 @@
          ]
       },
       {
-         "order":2,
-         "code":"Dedupe",
-         "name":"Dedupe",
-         "stageType":"CAPTURE",
-         "sendSms":"No",
-         "smsCategory":"LoanBooking",
-         "isAccountOpening":false,
-         "allowedRoles":[
-            "WM"
-         ]
-      },
-      {
          "order":3,
          "code":"ScreeningReview",
          "name":"Screening Review",
@@ -1034,7 +1022,7 @@
                   "title": "estimatedEmi",
                   "type": "number",
                   "captureStages": [
-                      "Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","SanctionInput", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation", "FieldAppraisal"
+                      "Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","SanctionInput", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation", "FieldAppraisal","Completed"
                   ]
                },
                "expectedPortfolioInsurancePremium": {

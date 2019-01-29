@@ -11,9 +11,11 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             "Page/Engine/base.dashboard.lead.LeadGeneration",
             "Page/Engine/base.dashboard.lead.IncompleteLeadQueue",
             "Page/Engine/base.dashboard.lead.LeadFollowUpQueue",
+            "Page/Engine/base.dashboard.lead.ReadyForScreeningQueue",
             "Page/Engine/base.dashboard.lead.LeadBulkUpload",
             "Page/Engine/base.dashboard.lead.LeadAssignmentPendingQueue",
             "Page/Engine/base.dashboard.lead.LeadRejectedQueue",
+
         ]
        
     };
@@ -29,9 +31,11 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
         var lfuqMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.LeadFollowUpQueue"];
         var ilqMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.IncompleteLeadQueue"];
         var rMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.LeadRejectedQueue"];
+        var rsMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.ReadyForScreeningQueue"];
 
        
         if (rMenu) rMenu.data = 0;
+        if (rsMenu) rsMenu.data = 0;
         if (lapqMenu) lapqMenu.data = 0;
         if (lfuqMenu) lfuqMenu.data = 0;
         if (ilqMenu) ilqMenu.data = 0;
@@ -121,6 +125,25 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             });
         }
 
+        if (rsMenu) {
+            Lead.search({
+                'branchName': branchName,
+                'currentStage': "ReadyForScreening",
+                'leadName': '',
+                'area': '',
+                'cityTownVillage': '',
+                'businessName': '',
+                'page': 1,
+                'per_page': 1,
+                'centreName': centre.centreName
+            }).
+            $promise.then(function(response, headerGetter) {
+                rsMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                rsMenu.data = '-';
+            });
+            
+        }
 
     });
    

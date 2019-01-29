@@ -33,6 +33,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     //      "title": "BUSINESSINFO_BUSINESS_OWNERSHIP",
                     //      "enumCode": "businessinfo_business_ownershi"
                     // },
+                    "EnterpriseInformation.entityId":{
+                        "condition": "model.customer.id",
+                    },
+                    "EnterpriseInformation.referredName":{
+                        "condition": "model.customer.enterprise.referredBy == 'Channel Partner'||model.customer.enterprise.referredBy =='Peer Referral'||model.customer.enterprise.referredBy =='Known supply chain'",
+                    },
+                    "EnterpriseInformation.partnershipDissolvedDate":{
+                        "condition": "model.customer.enterprise.anyPartnerOfPresentBusiness=='YES'",
+                    },
+                    "EnterpriseInformation.enterpriseRegistrations":{
+                        "condition": "model.customer.enterprise.companyRegistered === 'YES' || model.customer.enterprise.isGSTAvailable === 'YES'", 
+                    },
+                    "EnterpriseInformation.oldCustomerId":{
+                        "condition": "model.customer.oldCustomerId"
+                    },
+                    "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId":{
+                        "readonly": true
+                    },
                     "EnterpriseInformation.enterpriseRegistrations.registrationType": {
                          "enumCode": "business_registration_type",
                          "required": false
@@ -219,6 +237,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseFinancials": {
                         "orderNo": 50
                     },
+                    "ContactInformation": {
+                        "orderNo": 20
+                    },
+                    "BankAccounts": {
+                        "orderNo": 30
+                    },
+                    "EmployeeDetails": {
+                        "orderNo": 60
+                    },
                     "EnterpriseFinancials.monthlyTurnover": {
                          "orderNo": 10,
                          "required":true
@@ -343,14 +370,34 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         "titleExpr": "moment(model.customer.customerBankAccounts[arrayIndexes[0]].bankStatements[arrayIndexes[1]].startMonth).format('MMMM YYYY') + ' ' + ('STATEMENT_DETAILS' | translate)",
                         "titleExprLocals": {moment: window.moment},
                     },    
+                    "BankAccounts.customerBankAccounts.sanctionedAmount": {
+                        required : true, 
+                        condition:"model.customer.customerBankAccounts[arrayIndex].accountType =='OD'||model.customer.customerBankAccounts[arrayIndex].accountType =='CC'"
+                    },    
                     "EnterpriseInformation.businessHistory": {
                         "required": true
-                    },                     
+                    },  
+                    "Liabilities":{
+                        "title":"BUSINESS_LIABILITIES",
+                        "orderNo": 40
+                    },    
+                    "Liabilities.liabilities.installmentAmountInPaisa":{
+                        "title": "INSTALLEMENT_AMOUNT",
+                    }              
                }
             }
             var repositoryAdditions = function(bundlePageObj){
                return {
-                                    // "EnterpriseInformation": {
+                                "EnterpriseInformation": {
+                                    "items" : {
+                                        "customerName": {
+                                           "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='ScreeningReview'", 
+                                            "key": "customer.firstName",
+                                            "title": "CUSTOMER_NAME",
+                                            "orderNo": 1
+                                        }
+                                    }
+                                },    // "EnterpriseInformation": {
                     //      "items": {
                     //           "lastFiledItr": {
                     //                "key": "customer.udf.userDefinedDateFieldValues.udfDate2",
@@ -389,16 +436,196 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     //           },
                     //      }
                     // }
+                    "References":{
+                        "type": "box",
+                        "title": "REFERENCES",
+                        "orderNo":180,
+                        "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
+                        "items": {
+                            "verifications" : {
+                                key:"customer.verifications",
+                                title:"REFERENCES",
+                                type: "array",
+                                items:{
+                                    "relationship" : {
+                                        key:"customer.verifications[].relationship",
+                                        title:"REFERENCE_TYPE",
+                                        type:"select",
+                                        required:"true",
+                                        enumCode: "business_reference_type"
+                                    },
+                                    "businessName" : {
+                                        key:"customer.verifications[].businessName",
+                                        title:"BUSINESS_NAME",
+                                        type:"string"
+                                    },
+                                    "referenceFirstName" : {
+                                        key:"customer.verifications[].referenceFirstName",
+                                        title:"CONTACT_PERSON_NAME",
+                                        type:"string"
+                                    },
+                                    "mobileNo" : {
+                                        key:"customer.verifications[].mobileNo",
+                                        title:"CONTACT_NUMBER",
+                                        type:"string",
+                                        inputmode: "number",
+                                        numberType: "tel",
+                                        "schema": {
+                                             "pattern": "^[0-9]{10}$"
+                                        }
+                                    }/*,
+                                    {
+                                        key:"customer.verifications[].businessSector",
+                                        title:"BUSINESS_SECTOR",
+                                        type:"select",
+                                        enumCode: "businessSector"
+                                    },
+                                    {
+                                        key:"customer.verifications[].businessSubSector",
+                                        title:"BUSINESS_SUBSECTOR",
+                                        type:"select",
+                                        enumCode: "businessSubSector",
+                                        parentEnumCode: "businessSector"
+                                    },
+                                    {
+                                        key:"customer.verifications[].selfReportedIncome",
+                                        title:"SELF_REPORTED_INCOME",
+                                        type:"number"
+                                    }*/,
+                                    "address" : {
+                                        key:"customer.verifications[].address",
+                                        type:"textarea"
+                                    },
+                                    "ReferenceCheck" : {
+                                    type: "fieldset",
+                                    title: "REFERENCE_CHECK",
+                                    "condition": "model.currentStage=='FieldAppraisal'",
+                                    items: {
+                                        /*,
+                                        {
+                                            key:"customer.verifications[].remarks",
+                                            title:"REMARKS",
+                                        },*/
+                                        "knownSince" : {
+                                            key:"customer.verifications[].knownSince",
+                                            required:true
+                                        },
+                                        "goodsSold" : {
+                                            key:"customer.verifications[].goodsSold",
+                                            "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
+                                        },
+                                        "goodsBought" : {
+                                            key:"customer.verifications[].goodsBought",
+                                            "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
+                                        },
+                                        "paymentTerms" : {
+                                            key:"customer.verifications[].paymentTerms",
+                                            type:"select",
+                                            "title":"payment_tarms",
+                                            enumCode: "payment_terms"
+                                        },
+                                        "modeOfPayment" : {
+                                            key:"customer.verifications[].modeOfPayment",
+                                            type:"select",
+                                            enumCode: "payment_mode"
+                                        },
+                                        "outstandingPayable" : {
+                                            key:"customer.verifications[].outstandingPayable",
+                                            "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
+                                        },
+                                        "outstandingReceivable" : {
+                                            key:"customer.verifications[].outstandingReceivable",
+                                            "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
+                                        },
+                                        "customerResponse" : {
+                                            key:"customer.verifications[].customerResponse",
+                                            title:"CUSTOMER_RESPONSE",
+                                            type:"select",
+                                            required:true,
+                                            titleMap: [{
+                                                            value: "positive",
+                                                            name: "positive"
+                                                        },{
+                                                            value: "Negative",
+                                                            name: "Negative"
+                                                        }]
+                                        }
+                                    }
+                                    }
+                                }
+                            },
+                        }
+                    },
+                    "EnterpriseInformation":{
+                        "items":{
+                            "SpokeID":{
+                                title: "CENTRE_ID",
+                                key: "customer.centreId",
+                                orderNo:55,
+                                condition: "!model.customer.id",
+                                type: "lov",
+                                required: true, 
+                                autolov: true,
+                                lovonly: true,
+                                bindMap: {},
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model, context) {
+                                    var centres = SessionStore.getCentres();
+                                    // $log.info("hi");
+                                    // $log.info(centres);
+        
+                                    var centreCode = formHelper.enum('centre').data;
+                                    var out = [];
+                                    if (centres && centres.length) {
+                                        for (var i = 0; i < centreCode.length; i++) {
+                                            for (var j = 0; j < centres.length; j++) {
+                                                if (centreCode[i].value == centres[j].id) {
+                                                    out.push({
+                                                        name: centreCode[i].name,
+                                                        id:centreCode[i].value
+                                                    })
+                                                }
+                                            }
+                                        }
+                                    }
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": out.length
+                                        },
+                                        body: out
+                                    });
+                                },
+                                onSelect: function(valueObj, model, context) {
+                                    model.customer.centreId = valueObj.id;
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.name
+                                    ];
+                                }
+                            },
+                            "SpokeID2":{
+                                title: "CENTRE_ID",
+                                key: "customer.centreId",
+                                orderNo:55,
+                                condition: "model.customer.id",
+                                readonly: true
+                            },
+                        }
+                    }
                }
             }
             var getIncludes = function (model) {
                 return [
                     "EnterpriseInformation",
+                    "EnterpriseInformation.customerName",
                     "EnterpriseInformation.customerId",
                     "EnterpriseInformation.customerBranchId",
                     "EnterpriseInformation.entityId",
                     "EnterpriseInformation.urnNo",
                     "EnterpriseInformation.centreId",
+                    "EnterpriseInformation.SpokeID",
+                    "EnterpriseInformation.SpokeID2",
                     "EnterpriseInformation.oldCustomerId",
                     "EnterpriseInformation.firstName",
                     "EnterpriseInformation.referredBy",
@@ -448,7 +675,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "ContactInformation.landLineNo",
                     "ContactInformation.doorNo",
                     "ContactInformation.street",
-                    "ContactInformation.postOffice",
+                    //"ContactInformation.postOffice",
                     "ContactInformation.landmark",
                     "ContactInformation.pincode",
                     "ContactInformation.locality",
@@ -471,7 +698,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "BankAccounts.customerBankAccounts.bankingSince",
                     "BankAccounts.customerBankAccounts.netBankingAvailable",
                     "BankAccounts.customerBankAccounts.sanctionedAmount",
-                    "BankAccounts.customerBankAccounts.bankStatementDocId",
+                    //"BankAccounts.customerBankAccounts.bankStatementDocId",
+                    "BankAccounts.customerBankAccounts.limit",
                     "BankAccounts.customerBankAccounts.bankStatements",
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth",
                    // "BankAccounts.customerBankAccounts.bankStatements.openingBalance",
@@ -616,6 +844,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     //"EnterpriseReferences.verifications.outstandingPayable",
                     //"EnterpriseReferences.verifications.outstandingReceivable",
                     //"EnterpriseReferences.verifications.customerResponse"
+                    "References",
+                    "References.verifications",
+                    "References.verifications.relationship",
+                    "References.verifications.businessName",
+                    "References.verifications.referenceFirstName",
+                    "References.verifications.mobileNo",
+                    "References.verifications.address",
+                    "References.verifications.ReferenceCheck",
+                    "References.verifications.ReferenceCheck.knownSince",
+                    "References.verifications.ReferenceCheck.goodsSold",
+                    "References.verifications.ReferenceCheck.goodsBought",
+                    "References.verifications.ReferenceCheck.paymentTerms",
+                    "References.verifications.ReferenceCheck.modeOfPayment",
+                    "References.verifications.ReferenceCheck.outstandingPayable",
+                    "References.verifications.ReferenceCheck.outstandingReceivable",
+                    "References.verifications.ReferenceCheck.customerResponse",
                 ];
             }
             
@@ -638,8 +882,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.enterpriseMonthlySales",
                                     "EnterpriseFinancials.dailySales",
                                     "EnterpriseFinancials.marginDetails",                        
-                                    "EnterpriseFinancials.rawMaterialExpenses"
-
+                                    "EnterpriseFinancials.rawMaterialExpenses",
+                                    "References"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -823,7 +1067,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials.rawMaterialExpenses",
                                     "EnterpriseFinancials.dailySales",
                                     "CommercialCBCheck",                   
-                                   "EnterpriseFinancials.marginDetails"                   
+                                    "EnterpriseFinancials.marginDetails",
+                                    "References"                   
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -902,7 +1147,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseReferences.verifications.modeOfPayment",
                                     "EnterpriseReferences.verifications.outstandingPayable",
                                     "EnterpriseReferences.verifications.outstandingReceivable",
-                                    "EnterpriseReferences.verifications.customerResponse",
+                                    "EnterpriseReferences.verifications.customerResponse",,
+                                    "References"
 
                                 ],
                                 "overrides": {
@@ -1136,7 +1382,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             },
                             "AppraisalReview": {
                                 "excludes": [
-                                    "ProxyIndicators"
+                                    "ProxyIndicators",
+                                    "References"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -1195,7 +1442,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "SuppliersDeatils",
                                     "Machinery",
                                     "EnterpriseReferences",
-                                    "EnterpriseReferences.verifications"
+                                    "EnterpriseReferences.verifications",
+                                    "EnterpriseInformation.customerId",
+                                    "References"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -1241,7 +1490,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             },  
                             "Application": {
                                 "excludes": [
-                                    "ProxyIndicators"
+                                    "ProxyIndicators",
+                                    "BankAccounts",
+                                    "EnterpriseFinancials"
                                 ],
                                 "overrides": {
                                     "EnterpriseReferences":{
@@ -1311,7 +1562,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             }, 
                             "ApplicationReview":{
                                 "excludes": [
-                                    "ProxyIndicators"
+                                    "ProxyIndicators",
+                                     "EnterpriseInformation.customerId"
+                                    
                                 ],
                                 "overrides": {
                                     "EnterpriseReferences.EnterpriseReferences.verifications":
@@ -1356,7 +1609,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "EnterpriseReferences": {
                                         "readonly": true
-                                    }
+                                    },
+                                    "References": {
+                                        "readonly": true
+                                    },
                                     
                                 }
                             }, 
@@ -1372,6 +1628,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "Machinery",
                                     "EnterpriseReferences",
                                     "EnterpriseReferences.verifications",
+                                    "References"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -1392,8 +1649,26 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "EnterpriseFinancials": {
                                         "orderNo": 50
                                     },
-
-                                        
+                                    "BankAccounts.customerBankAccounts.accountNumber": {
+                                        "required": false
+                                   },
+                                   "BankAccounts.customerBankAccounts.confirmedAccountNumber": {
+                                       "title": "CONFIRMED_ACCOUNT_NUMBER",
+                                       "required": false
+                                    },
+                                    "BankAccounts.customerBankAccounts.ifscCode": {
+                                        "required": true,
+                                        "resolver": "IFSCCodeLOVConfiguration"
+                                    },
+                                    "BankAccounts.customerBankAccounts.isDisbersementAccount":{
+                                        "type":"checkbox"
+                                    },
+                                    "BankAccounts.customerBankAccounts.bankStatements.startMonth":{
+                                        "required":false
+                                    },
+                                    "EmployeeDetails.avgMonthlySalary": {
+                                        "condition": "model.customer.enterprise.noOfFemaleEmployees > 0 ||model.customer.enterprise.noOfMaleEmployees > 0 "
+                                    }   
                                 }
                         },
                         "FieldAppraisal":{
@@ -1809,11 +2084,49 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 "EnterpriseReferences":{
                                     "readonly": true
                                 },
-                                 "EnterpriseReferences.verifications":{
+                                "EnterpriseReferences.verifications":{
+                                    "readonly": true
+                                },
+                                "References": {
+                                    "readonly": true
+                                },
+                            }
+                        },
+                        "FieldAppraisalReview":{
+                            "overrides":{
+                                "References": {
                                     "readonly": true
                                 }
                             }
                         },
+                        "CentralRiskReview":{
+                            "overrides":{
+                                "References": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "CreditCommitteeReview":{
+                            "overrides":{
+                                "References": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "loanView":{
+                            "overrides":{
+                                "References": {
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "Rejected":{
+                            "overrides":{
+                                "References": {
+                                    "readonly": true
+                                }
+                            }
+                        }
                             // "Televerification": {
                            
 
@@ -2027,6 +2340,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         if(PageHelper.isFormInvalid(form)) {
                             return false;
                         }
+                        
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
                         model.enrolmentProcess.proceed()
