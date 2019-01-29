@@ -667,33 +667,32 @@ define([], function() {
                 "title": "LOAN_REQUEST",
                 "subTitle": "BUSINESS",
                 initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
-                                 
+                    model.loanAccount = model.loanProcess.loanAccount;
                      model.loanAccount.partnerCode='KGFS';            
                     var self = this;
-                   
-                    var p1 = UIRepository.getLoanProcessUIRepository().$promise;
 
-                    p1.then(function(repo) {
-                        self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest(model), configFile(), model);
-                    }, function(err) {
-                        console.log(err);
-
+                     var p1 =UIRepository.getLoanProcessUIRepository().$promise
+                    .then(function(repo){
+                        return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest(model),configFile(), model)
                     })
-
-                },
+                    .then(function(form){
+                        self.form = form;
+                    });
+                   
+                 },
                 offlineInitialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                     model.loanProcess = bundleModel.loanProcess;
                     if(_.hasIn(model.loanProcess, 'loanAccount')) {
                         model.loanAccount = model.loanProcess.loanAccount;
                     }
                     var self = this;
-                    var p1 = UIRepository.getLoanProcessUIRepository().$promise;
-                    p1.then(function(repo) {
-                        self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest(model), configFile(), model);
-                    }, function(err) {
-                        console.log(err);
-
-                    }) 
+                    var p1 =UIRepository.getLoanProcessUIRepository().$promise
+                    .then(function(repo){
+                        return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest(model),configFile(), model)
+                    })
+                    .then(function(form){
+                        self.form = form;
+                    }); 
                 },
                 offline: false,
                 getOfflineDisplayItem: function(item, index) {

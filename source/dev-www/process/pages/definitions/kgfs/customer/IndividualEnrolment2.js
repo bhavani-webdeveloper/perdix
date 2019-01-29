@@ -4,114 +4,44 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
         pageUID: "kgfs.customer.IndividualEnrolment2",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
-            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfProgressMessage"],
+            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository"],
 
         $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
-                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,irfProgressMessage) {
+                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository) {
 
-            var self;
             AngularResourceService.getInstance().setInjector($injector);
             var branch = SessionStore.getBranch();
-            var pageParams = {
+           /* var pageParams = {
                 readonly: true
-            };
-            var configFile = function () {
-                
-                
-                return {
+            };*/
+            var preSaveOrProceed = function (reqData) {
+                if (_.hasIn(reqData, 'customer.familyMembers') && _.isArray(reqData.customer.familyMembers)) {
+                    var selfExist = false
+                    for (var i = 0; i < reqData.customer.familyMembers.length; i++) {
+                        var f = reqData.customer.familyMembers[i];
+                        if (_.isString(f.relationShip) && f.relationShip.toUpperCase() == 'SELF') {
+                            selfExist = true;
+                            break;
+                        }
+                    }
+                    if (selfExist == false) {
+                        PageHelper.showProgress("pre-save-validation", "Self Relationship is Mandatory", 5000);
+                        return false;
+                    }
+                } else {
+                    PageHelper.showProgress("pre-save-validation", "Family Members section is missing. Self Relationship is Mandatory", 5000);
+                    return false;
+                }
+                return true;
             }
-        }
 
-        var getIncludes = function(model) {
-            return [
-                "IndividualInformation",
-                "IndividualInformation.customerBranchId",
-                "IndividualInformation.customerId",
-                "IndividualInformation.title",
-                "IndividualInformation.urnNo",
-                "IndividualInformation.firstName",
-                "IndividualInformation.photoImageId",
-                "IndividualInformation.gender",
-                "IndividualInformation.dateOfBirth",
-                "IndividualInformation.religion",
-                "IndividualInformation.language",
-                "IndividualInformation.maritalStatus",
-                "IndividualInformation.fatherFirstName",
-                "IndividualInformation.motherName",
-                "IndividualInformation.spouseFirstName",
-                "IndividualInformation.spouseDateOfBirth",
-                "IndividualInformation.spouseAadharNumber",
-                "KYC",
-                "KYC.identityProofFieldSet",
-                "KYC.identityProof",
-                "KYC.identityProofImageId",
-                "KYC.identityProofNo",
-                "KYC.addressProofFieldSet",
-                "KYC.addressProof",
-                "KYC.addressProofImageId",
-                "KYC.addressProofIssueDate",
-                "KYC.addressProofValidUptoDate",
-                "KYC.addressProofNo",
-                "KYC.additionalKYCs",
-                "KYC.additionalKYCs.kyc1ProofType",
-                "KYC.additionalKYCs.kyc1ProofNumber",
-                "KYC.additionalKYCs.kyc1ImagePath",
-                "KYC.additionalKYCs.kyc1IssueDate",
-                "KYC.additionalKYCs.kyc1ValidUptoDate",
-                "ContactInformation",
-                "ContactInformation.contactDetailsAlsoBusinessContactDetails",
-                "ContactInformation.residentialAddressFieldSet",
-                "ContactInformation.doorNo",
-                "ContactInformation.street",
-                "ContactInformation.locality",
-                "ContactInformation.villageName",
-                "ContactInformation.postOffice",
-                "ContactInformation.district",
-                "ContactInformation.landmark",
-                "ContactInformation.pincode",
-                "ContactInformation.state",
-                "ContactInformation.landLineNo",
-                "ContactInformation.mobilePhone",
-                "ContactInformation.email",
-                "ContactInformation.residentialAddressAlsoBusinessAddress",
-                "ContactInformation.mailSameAsResidence",
-                "ContactInformation.permanentAddressFieldSet",
-                "ContactInformation.mailingDoorNo",
-                "ContactInformation.mailingStreet",
-                "ContactInformation.mailingLocality",
-                "ContactInformation.mailingPostoffice",
-                "ContactInformation.mailingDistrict",
-                "ContactInformation.mailingPincode",
-                "ContactInformation.mailingState",
-                "loanInformation",
-                "loanInformation.requestedLoanAmount",
-                "loanInformation.requestedLoanPurpose",
-                "actionbox",
-                "actionbox.submit",
-                "actionbox.save",
-                "FamilyDetails",
-                "FamilyDetails.familyMembers",
-                "FamilyDetails.familyMembers.familyMemberFirstName",
-                "FamilyDetails.familyMembers.relationShip",
-                "FamilyDetails.familyMembers.memberIncome",
-                "FamilyDetails.familyMembers.occupation",
-                "FamilyDetails.familyMembers.educationLevel",
-                "FamilyDetails.familyMembers.incomeDetails",
-                "IndividualFinancials",
-                "IndividualFinancials.expenditures",
-                "IndividualFinancials.expenditures.expenditureSource",
-                "IndividualFinancials.expenditures.frequency",
-                "IndividualFinancials.expenditures.annualExpenses",
-                "IndividualReferences",
-                "IndividualReferences.verifications",
-                "IndividualReferences.verifications.referenceFirstName",
-                "IndividualReferences.verifications.relationship",
-                "IndividualReferences.verifications.mobileNo",
-                "IndividualReferences.verifications.address"
-            ];
-        } 
-            var getOverrides = function(model) {
-                    return {
+            var configFile = function () {
+                return {
+                   
+                }
+            }
+            var overridesFields = function (bundlePageObj) {
+                return {
                         "IndividualReferences":{
                             title:"REFERENCE"
                         },
@@ -126,7 +56,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "IndividualReferences.verifications.relationship":{
                             orderNo:20,
-                            title:"RELATION",
+                            title:"RELATION1",
                             required:true,
                             type:"string"
                         },
@@ -142,19 +72,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "HouseVerification.houseDetailsFieldSet":{
                             orderNo:70
                         },
-                        "FamilyDetails": {
-                            "condition" : "model.customer.currentStage == 'Stage02' || model.customer.currentStage == 'Completed'"
-                        },
                         "HouseVerification":{
-                            "condition" : "model.customer.currentStage == 'Stage02' || model.customer.currentStage == 'Completed'"
-                        },
-                        "Liabilities":{
-                            orderNo: 110,
-                            "condition" : "model.customer.currentStage == 'Stage02' || model.customer.currentStage == 'Completed'"
-                        },
-                        "PhysicalAssets":{
-                            "orderNo": 90,
-                            "title" :"T_ASSETS",
                             "condition" : "model.customer.currentStage == 'Stage02' || model.customer.currentStage == 'Completed'"
                         },
                         "BusinessOccupationDetails":{
@@ -632,7 +550,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             }
                         },
                         "ContactInformation.locality":{
-                            title:"LOCALITY"
+                            title:"LOCALITY1"
                         },
                         "ContactInformation.permanentAddressFieldSet": {
                             condition: "!model.customer.residentialAddressAlsoBusinessAddress"
@@ -648,7 +566,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             condition: "!model.customer.mailSameAsResidence"
                         },
                         "ContactInformation.mailingLocality":{
-                            title:"LOCALITY",
+                            title:"LOCALITY1",
                             condition: "!model.customer.mailSameAsResidence"
                         },
                         "ContactInformation.mailingVillageName":{
@@ -665,26 +583,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "ContactInformation.mailingState":{
                             condition: "!model.customer.mailSameAsResidence"
-                        },
-                        "Liabilities.liabilities":{
-                            "title" :"FINANCIAL_LIABILITIES"
-                        },
-                        "PhysicalAssets.physicalAssets.ownedAssetValue":{
-                            "title" :"OWNED_ASSET_VALUE"
-                        },
-                        "FamilyDetails.familyMembers.maritalStatus":{
-                            orderNo: 80,
-                            condition: "model.customer.familyMembers[arrayIndex].relationShip != 'self'"
-                        },
-                        "FamilyDetails.familyMembers.educationStatus":{
-                            orderNo: 70,
-                        },
-                        "FamilyDetails.familyMembers.incomes.incomeSource":{
-                            title:"OCCUPATION"
-                        },
-                        "FamilyDetails.familyMembers.incomes.incomeEarned":{
-                            title:"CASH_INFLOW",
-                            type: "amount",
                         },
                         "BankAccounts.customerBankAccounts": {
                             "onArrayAdd": function (modelValue, form, model, formCtrl, $event) {
@@ -934,16 +832,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             enumCode: "house_ownership",
                         },
                         "FamilyDetails.familyMembers": {
-                            "title":"FAMILY_DETAILS",
-                            onArrayAdd: function(value, form, model, formCtrl, event) {
-                                if ((model.customer.familyMembers.length - 1) === 0) {
-                                    model.customer.familyMembers[0].relationShip = 'self';
-                                    model.customer.familyMembers[0].gender = model.customer.gender;
-                                    model.customer.familyMembers[0].dateOfBirth = model.customer.dateOfBirth;
-                                    model.customer.familyMembers[0].age = model.customer.age;
-                                    model.customer.familyMembers[0].maritalStatus = model.customer.maritalStatus;
-                                }
-                            }
+                            "title":"FAMILY_DETAILS"
                         },
                         "FamilyDetails.familyMembers.familyMemberFirstName": {
                             schema: {
@@ -953,9 +842,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             validationMessage: {
                                 202: "Only alphabets and space are allowed."
                             },
-                        },
-                        "FamilyDetails.familyMembers.incomes.monthsPerYear": {
-                            required: true,
                         },
                         "HouseVerification.houseDetailsFieldSet.buildType": {
                             required: true,
@@ -999,60 +885,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "HouseVerification.houseDetailsFieldSet.diaryAnimals":{
                             inputmode: "number",
                             numberType: "tel"
-                        },
-                        "PhysicalAssets.physicalAssets":{
-                            titleExpr: "model.customer.physicalAssets[arrayIndex].ownedAssetDetails | translate",
-                            remove:null,
-                            add: null
-                        },
-                        "PhysicalAssets.physicalAssets.assetType":{
-                            "type":"string",
-                            "readonly":true
-                        },
-                        "PhysicalAssets.physicalAssets.ownedAssetDetails":{
-                            "type":"string",
-                            "readonly":true
-                        },
-                        "PhysicalAssets.financialAssets.instrumentType": {
-                            required: false,
-                        },
-                        "PhysicalAssets.financialAssets.nameOfInstitution": {
-                            "title":"NAME_OF_INSTITUTION",
-                            required: false,
-                        },
-                        "PhysicalAssets.financialAssets.instituteType": {
-                            required: false,
-                        },
-                        "PhysicalAssets.financialAssets.amount": {
-                            type: "amount",
-                            title:"AMOUNT",
-                            required: false,
-                        },
-                        "PhysicalAssets.financialAssets.frequencyOfDeposite": {
-                            title:"FREQUENCY_OF_DEPOSIT",
-                            required: false,
-                        },
-                        "Liabilities.liabilities.loanType": {
-                            required: false,
-                        },
-                        "Liabilities.liabilities.loanSource": {
-                            required: false,
-                        },
-                        "Liabilities.liabilities.loanAmountInPaisa": {
-                            required: false,
-                        },
-                        "Liabilities.liabilities.installmentAmountInPaisa": {
-                            "type": "amount",
-                            title: "INSTALLMENT_AMOUNT",
-                            required: false,
-                        },
-                        "Liabilities.liabilities.frequencyOfInstallment": {
-                            required: false,
-                        },
-                        "Liabilities.liabilities.liabilityLoanPurpose": {
-                            "type": "select",
-                            enumCode: "liability_loan_purpose",
-                            required: false,
                         },
                         "FamilyDetails.familyMembers.customerId": {
                             key: "customer.familyMembers[].customerId",
@@ -1123,89 +955,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "FamilyDetails.familyMembers.familyMemberFirstName":{
                             orderNo:10,
                             title:"FAMILY_MEMBER_NAME"
-                        },
-                        "FamilyDetails.familyMembers.relationShip":{
-                            orderNo:20,
-                            "title": "T_RELATIONSHIP",
-                            "onChange": function (modelValue, form, model, formCtrl, event) {
-                                if (model.customer.familyMembers[form.arrayIndex].relationShip == 'self') {
-    
-                                    for (var index = 0; index < model.customer.familyMembers.length; index++) {
-                                        if(index != form.arrayIndex && model.customer.familyMembers[index].relationShip == 'self'){
-                                            model.customer.familyMembers[form.arrayIndex].relationShip = undefined;
-                                            Utils.alert("self relationship is already selected");
-                                            return;
-                                        }
-                                    }
-                                }
-                                if (model.customer.familyMembers[form.arrayIndex].relationShip == 'self') {
-                                    model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
-                                    model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
-                                    model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
-                                    model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
-                                    model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
-                                }
-                                else {
-                                    if (model.customer.familyMembers[form.arrayIndex].customerId)
-                                        return;
-    
-                                    model.customer.familyMembers[form.arrayIndex].dateOfBirth = undefined;
-                                    model.customer.familyMembers[form.arrayIndex].age = undefined;
-                                    model.customer.familyMembers[form.arrayIndex].maritalStatus = undefined;
-                                    model.customer.familyMembers[form.arrayIndex].gender = undefined;
-                                    model.customer.familyMembers[form.arrayIndex].mobilePhone = undefined;
-                                    if (model.customer.familyMembers[form.arrayIndex].relationShip == 'Father' || model.customer.familyMembers[form.arrayIndex].relationShip == 'Father-In-Law') {
-                                        model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.fatherFirstName;
-                                    }
-                                    else if (model.customer.familyMembers[form.arrayIndex].relationShip == "Husband" || model.customer.familyMembers[form.arrayIndex].relationShip == "Wife") {
-                                        model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.spouseFirstName;
-                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.spouseDateOfBirth;
-                                        model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.spouseDateOfBirth), 'years');
-                                    }
-                                    else {
-                                        model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = undefined;
-                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = undefined;
-                                        model.customer.familyMembers[form.arrayIndex].age = undefined;
-                                    }
-                                }
-                            }
-                        },
-                        "FamilyDetails.familyMembers.age": {
-                            "onChange": function (modelValue, form, model, formCtrl, event) {
-                            if (model.customer.familyMembers[form.arrayIndex].age > 0) {
-                                if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
-                                    model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-') + moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
-                                } else {
-                                    model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-MM-DD');
-                                }
-                            }
-                        }
-                        },
-                        "FamilyDetails.familyMembers.dateOfBirth": {
-                            "onChange": function (modelValue, form, model, formCtrl, event) {
-                                if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
-                                    model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                                }
-                            }
-                        },
-                        "FamilyDetails.familyMembers.age_readonly": {
-                            "onChange": function (modelValue, form, model, formCtrl, event) {
-                                if (model.customer.familyMembers[form.arrayIndex].age > 0) {
-                                    if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
-                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-') + moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
-                                    } else {
-                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-MM-DD');
-                                    }
-                                }
-                            }
-                        },
-                        "FamilyDetails.familyMembers.dateOfBirth_readonly": {
-                            "onChange": function (modelValue, form, model, formCtrl, event) {
-                                if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
-                                    model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                                }
-                            }
-                        },
+                        },                       
                         "IndividualFinancials":{
                             "title":"HOUSEHOLD_EXPENSES"
                         },
@@ -1224,156 +974,165 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "required":true,
                             "orderNo":30
                         }
-
-                    }            
-            }
-            
-
-                var populatePhysicalAssets = function (model) {
-                    if (!model.customer.physicalAssets || model.customer.physicalAssets.length == 0) {
-                        PageHelper.showLoader();
-                        var physicalAssets=[];
-                        Queries.getPhysicalAssetsList().then(function(res){
-                            $log.info(res);
-                            if(res && res.length && res.length>0){
-                                for(i in res){
-                                    var obj={};
-                                    obj.assetType= res[i].asset;
-                                    obj.ownedAssetDetails=res[i].asset_details;
-                                    obj.numberOfOwnedAsset=1;
-                                    physicalAssets.push(obj);   
-                                }
-                              model.customer.physicalAssets=physicalAssets;
-                            }
-                            PageHelper.hideLoader();
-                        },function(err){
-                            $log.info(err);
-                            PageHelper.hideLoader();
-                        });
-                    }
                 }
+            }
+            var getIncludes = function (model) {
+
+                   return [
+                "IndividualInformation",
+                "IndividualInformation.customerBranchId",
+                "IndividualInformation.customerId",
+                "IndividualInformation.title",
+                "IndividualInformation.urnNo",
+                "IndividualInformation.firstName",
+                "IndividualInformation.photoImageId",
+                "IndividualInformation.gender",
+                "IndividualInformation.dateOfBirth",
+                "IndividualInformation.religion",
+                "IndividualInformation.language",
+                "IndividualInformation.maritalStatus",
+                "IndividualInformation.fatherFirstName",
+                "IndividualInformation.motherName",
+                "IndividualInformation.spouseFirstName",
+                "IndividualInformation.spouseDateOfBirth",
+                "IndividualInformation.spouseAadharNumber",
+                "KYC",
+                "KYC.identityProofFieldSet",
+                "KYC.identityProof",
+                "KYC.identityProofImageId",
+                "KYC.identityProofNo",
+                "KYC.addressProofFieldSet",
+                "KYC.addressProof",
+                "KYC.addressProofImageId",
+                "KYC.addressProofIssueDate",
+                "KYC.addressProofValidUptoDate",
+                "KYC.addressProofNo",
+                "KYC.additionalKYCs",
+                "KYC.additionalKYCs.kyc1ProofType",
+                "KYC.additionalKYCs.kyc1ProofNumber",
+                "KYC.additionalKYCs.kyc1ImagePath",
+                "KYC.additionalKYCs.kyc1IssueDate",
+                "KYC.additionalKYCs.kyc1ValidUptoDate",
+                "ContactInformation",
+                "ContactInformation.contactDetailsAlsoBusinessContactDetails",
+                "ContactInformation.residentialAddressFieldSet",
+                "ContactInformation.doorNo",
+                "ContactInformation.street",
+                "ContactInformation.locality",
+                "ContactInformation.villageName",
+                "ContactInformation.postOffice",
+                "ContactInformation.district",
+                "ContactInformation.landmark",
+                "ContactInformation.pincode",
+                "ContactInformation.state",
+                "ContactInformation.landLineNo",
+                "ContactInformation.mobilePhone",
+                "ContactInformation.email",
+                "ContactInformation.residentialAddressAlsoBusinessAddress",
+                "ContactInformation.mailSameAsResidence",
+                "ContactInformation.permanentAddressFieldSet",
+                "ContactInformation.mailingDoorNo",
+                "ContactInformation.mailingStreet",
+                "ContactInformation.mailingLocality",
+                "ContactInformation.mailingPostoffice",
+                "ContactInformation.mailingDistrict",
+                "ContactInformation.mailingPincode",
+                "ContactInformation.mailingState",
+                "loanInformation",
+                "loanInformation.requestedLoanAmount",
+                "loanInformation.requestedLoanPurpose",
+                "actionbox",
+                "actionbox.submit",
+                "actionbox.save",
+                "FamilyDetails",
+                "FamilyDetails.familyMembers",
+                "FamilyDetails.familyMembers.familyMemberFirstName",
+                "FamilyDetails.familyMembers.relationShip",
+                "FamilyDetails.familyMembers.memberIncome",
+                "FamilyDetails.familyMembers.occupation",
+                "FamilyDetails.familyMembers.educationLevel",
+                "FamilyDetails.familyMembers.incomeDetails",
+                "IndividualFinancials",
+                "IndividualFinancials.expenditures",
+                "IndividualFinancials.expenditures.expenditureSource",
+                "IndividualFinancials.expenditures.frequency",
+                "IndividualFinancials.expenditures.annualExpenses",
+                "IndividualReferences",
+                "IndividualReferences.verifications",
+                "IndividualReferences.verifications.referenceFirstName",
+                "IndividualReferences.verifications.relationship",
+                "IndividualReferences.verifications.mobileNo",
+                "IndividualReferences.verifications.address"
+            ];
+
+            }
+
+            function getLoanCustomerRelation(pageClass){
+                switch (pageClass){
+                    case 'applicant':
+                        return 'Applicant';
+                        break;
+                    case 'co-applicant':
+                        return 'Co-Applicant';
+                        break;
+                    case 'guarantor':
+                        return 'Guarantor';
+                        break;
+                    default:
+                        return null;
+                }
+            }
             return {
                 "type": "schema-form",
-                "title": "INDIVIDUAL_ENROLLMENT_3",
+                "title": "INDIVIDUAL_ENROLLMENT_2",
                 "subTitle": "",
-                initialize: function (model, form, formCtrl) {
-                    model.siteCode = SessionStore.getGlobalSetting('siteCode');
-                    if($stateParams.pageId) {
-                        var customerId = $stateParams.pageId;
-                        EnrolmentProcess.fromCustomerID(customerId)
-                            .subscribe(function(resp){
-                                model.EnrolmentProcess = resp;
-                                model.customer = resp.customer;
-                                if (_.hasIn($stateParams.pageData, 'currentStage') && $stateParams.pageData.currentStage != model.customer.currentStage) {
-                                    irfProgressMessage.pop("enrollment", "Customer data is in different stage", 5000);
-                                    $state.go("Page.Engine", {
-                                        pageName: "CustomerSearch",
-                                        pageId: null
-                                    });
-                                }
-                                if (model.customer.age > 0) {
-                                    if (model.customer.dateOfBirth) {
-                                        model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-') + moment(model.customer.dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
-                                    } else {
-                                        model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-MM-DD');
-                                    }
-                                }
-                                if (model.customer.dateOfBirth) {
-                                    model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                                }
-            
-                                for (var idx = 0; idx < model.customer.familyMembers.length; idx++) {
-                                    if (model.customer.familyMembers[idx].dateOfBirth) {
-                                        model.customer.familyMembers[idx].age = moment().diff(moment(model.customer.familyMembers[idx].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                                    }
-                                }
-                                if (model.customer.udf && model.customer.udf.userDefinedFieldValues &&
-                                    model.customer.udf.userDefinedFieldValues.udf1) {
-                                    model.customer.udf.userDefinedFieldValues.udf1 =
-                                        model.customer.udf.userDefinedFieldValues.udf1 === true ||
-                                        model.customer.udf.userDefinedFieldValues.udf1 === 'true';
-                                }
-                                populatePhysicalAssets(model);
-                        if (model.customer.dateOfBirth) {
-                            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                        }
-    
-                        for (var idx = 0; idx < model.customer.familyMembers.length; idx++) {
-                            if (model.customer.familyMembers[idx].dateOfBirth) {
-                                model.customer.familyMembers[idx].age = moment().diff(moment(model.customer.familyMembers[idx].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                            }
-                        }
-                        if (model.customer.udf && model.customer.udf.userDefinedFieldValues &&
-                            model.customer.udf.userDefinedFieldValues.udf1) {
-                            model.customer.udf.userDefinedFieldValues.udf1 =
-                                model.customer.udf.userDefinedFieldValues.udf1 === true ||
-                                model.customer.udf.userDefinedFieldValues.udf1 === 'true';
-                        }
-    
-                        if (model.customer.udf && model.customer.udf.userDefinedFieldValues && model.customer.currentStage == "Stage02") {
-                                model.customer.udf.userDefinedFieldValues.udf38 = "No";
-                                model.customer.udf.userDefinedFieldValues.udf39 = "No";
-                                model.customer.udf.userDefinedFieldValues.udf40 = "No";
-                                model.customer.udf.userDefinedFieldValues.udf5 = "Good";
-                        }
-                        else {
-                            var customer= {
-                                "udf" : {
-                                "userDefinedFieldValues": {
-                                    
-                                }}
-                            };
-                            customer.udf.userDefinedFieldValues.udf38 = "No";
-                            customer.udf.userDefinedFieldValues.udf39 = "No";
-                            customer.udf.userDefinedFieldValues.udf40 = "No";
-                            customer.udf.userDefinedFieldValues.udf5 = "Good";
-                            if(model.customer.udf != null){
-                                model.customer.udf.userDefinedFieldValues.udf38 = customer.udf.userDefinedFieldValues.udf38;
-                                model.customer.udf.userDefinedFieldValues.udf39 = customer.udf.userDefinedFieldValues.udf39;
-                                model.customer.udf.userDefinedFieldValues.udf40 = customer.udf.userDefinedFieldValues.udf40;
-                            }
-                            else{
-                                model.customer.udf = customer.udf
-                            }
-                        }
+                initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+                    // $log.info("Inside initialize of IndividualEnrolment2 -SPK " + formCtrl.$name);
+                    if (bundlePageObj) {
+                        model._bundlePageObj = _.cloneDeep(bundlePageObj);
+                    };
+                    model.UIUDF = {
+                        'family_fields': {}
+                    };
 
-                            });
-                    } else {
-                        EnrolmentProcess.createNewProcess()
-                            .subscribe(function(repo){
-                                model.EnrolmentProcess = repo;
-                                model.customer = repo.customer;
-  
-                            });
+                    /* Setting data recieved from Bundle */
+                    model.loanCustomerRelationType =getLoanCustomerRelation(bundlePageObj.pageClass);
+                    model.pageClass = bundlePageObj.pageClass;
+                    model.currentStage = bundleModel.currentStage;
+                    model.enrolmentProcess.currentStage =  model.currentStage;
+                    /* End of setting data recieved from Bundle */
 
-                    }
-                    model.customer = model.customer || {};
-                    model.siteCode = SessionStore.getGlobalSetting('siteCode');
-                    model.customer.customerBranchId = model.customer.customerBranchId || SessionStore.getCurrentBranch().branchId;
-                    model.customer.date = model.customer.date || Utils.getCurrentDate();
-                    model.customer.nameOfRo = model.customer.nameOfRo || SessionStore.getLoginname();
-                    model = Utils.removeNulls(model, true);
-                    model.customer.kgfsName = model.customer.kgfsName || SessionStore.getCurrentBranch().branchName;
-                    model.customer.gender = model.customer.gender || 'FEMALE';
-                    var centres = SessionStore.getCentres();
-                    if (centres && centres.length > 0) {
-                        model.customer.centreId = model.customer.centreId || centres[0].id;
-                    }
+                    /* Setting data for the form */
+                    model.customer = model.enrolmentProcess.customer;
+                    var branchId = SessionStore.getBranchId();
+                    if(branchId && !model.customer.customerBranchId)
+                        {
+                            model.customer.customerBranchId = branchId;
+                    };
+
+                    /* End of setting data for the form */
+                    model.UIUDF.family_fields.dependent_family_member = 0;
+                     _.each(model.customer.familyMembers, function(member) {
+                        if (member.incomes && member.incomes.length == 0)
+                            model.UIUDF.family_fields.dependent_family_member++;
+                    });
+
+                    /* Form rendering starts */
                     var self = this;
                     var formRequest = {
-                        "overrides": getOverrides(model),
+                        "overrides": overridesFields(model),
                         "includes": getIncludes(model),
                         "excludes": [
-                            //"KYC.addressProofSameAsIdProof",
+                            "KYC.addressProofSameAsIdProof",
                         ],
-                        "options": {
+                       "options": {
                             "repositoryAdditions": {
                                 "IndividualInformation":{
                                     "items": {
                                     "area": {
                                         orderNo: 50,
                                         key: "customer.area",
-                                        "title": "LOCALITY",
+                                        "title": "LOCALITY1",
                                         "type": "select",
                                         "titleMap": {
                                             "Rural": "Rural",
@@ -1430,22 +1189,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "familyMembers":{
                                         "items":{
                                             "memberIncome":{
-                                                "key": "customer.familyMembers[].udfId1",
+                                                "key": "customer.familyMembers[].salary",
                                                 "title": "MEMBER_INCOME",
                                                 "type":"amount"
                                             },
                                             "occupation":{
-                                                "key": "customer.familyMembers[].udfId2",
+                                                "key": "customer.familyMembers[].udfId1",
                                                 "title":"OCCUPATION",
                                                 "type":"string"
                                             },
                                             "educationLevel":{
-                                                "key": "customer.familyMembers[].udfId3",
+                                                "key": "customer.familyMembers[].educationStatus",
                                                 "title":"EDUCATION_LEVEL",
                                                 "type":"string"
                                             },
                                             "incomeDetails":{
-                                                "key": "customer.familyMembers[].udfId4",
+                                                "key": "customer.familyMembers[].udfId2",
                                                 "title":"INCOME_DETAILS",
                                                 "type":"string",
 
@@ -1471,23 +1230,101 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             }
                         }
                     };
+
                     UIRepository.getEnrolmentProcessUIRepository().$promise
-                    .then(function(repo){
-                        return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest,configFile(), model)
-                    })
-                    .then(function(form){
-                        self.form = form;
-                    });
+                        .then(function(repo){
+                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
+                        })
+                        .then(function(form){
+                            self.form = form;
+                        });
+
+                    /* Form rendering ends */
                 },
 
-                offline: true,
-                getOfflineDisplayItem: function(item, index) {
-                    return [
-                        item.customer.urnNo,
-                        Utils.getFullName(item.customer.firstName, item.customer.middleName, item.customer.lastName),
-                        item.customer.villageName
-                    ]
+                preDestroy: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+                    // console.log("Inside preDestroy");
+                    // console.log(arguments);
+                    if (bundlePageObj) {
+                        var enrolmentDetails = {
+                            'customerId': model.customer.id,
+                            'customerClass': bundlePageObj.pageClass,
+                            'firstName': model.customer.firstName
+                        }
+                        // BundleManager.pushEvent('new-enrolment',  {customer: model.customer})
+                        BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails);
+                        model.loanProcess.removeRelatedEnrolmentProcess(model.enrolmentProcess, model.loanCustomerRelationType);
+                    }
+                    return $q.resolve();
                 },
+                eventListeners: {
+                    "lead-loaded": function (bundleModel, model, obj) {
+              
+                        return $q.when()
+                            .then(function(){
+                                if (obj.applicantCustomerId){
+                                    return EnrolmentProcess.fromCustomerID(obj.applicantCustomerId).toPromise();
+                                } else {
+                                    return null;
+                                }
+                            })
+                            .then(function(enrolmentProcess){
+                                if (enrolmentProcess!=null){
+                                    model.enrolmentProcess = enrolmentProcess;
+                                    model.customer = enrolmentProcess.customer;
+                                    model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, model.loanCustomerRelationType);
+                                    BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
+                                }
+                                if(obj.leadCategory == 'Existing' || obj.leadCategory == 'Return') {
+                                    model.customer.existingLoan = 'YES';
+                                } else {
+                                    model.customer.existingLoan = 'NO';
+                                }
+                                model.customer.mobilePhone = obj.mobileNo;
+                                model.customer.gender = obj.gender;
+                                model.customer.firstName = obj.leadName;
+                                model.customer.maritalStatus = obj.maritalStatus;
+                                model.customer.customerBranchId = obj.branchId;
+                                model.customer.centreId = obj.centreId;
+                                model.customer.centreName = obj.centreName;
+                                model.customer.street = obj.addressLine2;
+                                model.customer.doorNo = obj.addressLine1;
+                                model.customer.pincode = obj.pincode;
+                                model.customer.district = obj.district;
+                                model.customer.state = obj.state;
+                                model.customer.locality = obj.area;
+                                model.customer.villageName = obj.cityTownVillage;
+                                model.customer.landLineNo = obj.alternateMobileNo;
+                                model.customer.dateOfBirth = obj.dob;
+                                model.customer.age = moment().diff(moment(obj.dob, SessionStore.getSystemDateFormat()), 'years');
+                                model.customer.gender = obj.gender;
+                                model.customer.referredBy = obj.referredBy;
+                                model.customer.landLineNo = obj.alternateMobileNo;
+                                model.customer.landmark = obj.landmark;
+                                model.customer.postOffice = obj.postOffice;
+
+                                for (var i = 0; i < model.customer.familyMembers.length; i++) {
+                                    // $log.info(model.customer.familyMembers[i].relationShip);
+                                    // model.customer.familyMembers[i].educationStatus = obj.educationStatus;
+                                    if (model.customer.familyMembers[i].relationShip.toUpperCase() == "SELF") {
+                                        model.customer.familyMembers[i].educationStatus=obj.educationStatus;
+                                     }
+                                }
+                            })
+
+
+
+
+
+
+
+
+                    },
+                    "origination-stage": function (bundleModel, model, obj) {
+                        model.currentStage = obj
+                    }
+                },
+                offline: false,
                 getOfflineDisplayItem: function (item, index) {
                     return [
                         item.customer.urnNo,
@@ -1501,171 +1338,93 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     return Enrollment.getSchema().$promise;
                 },
                 actions: {
-                    setProofs: function (model) {
-                        model.customer.addressProofNo = model.customer.aadhaarNo;
-                        model.customer.identityProofNo = model.customer.aadhaarNo;
-                        model.customer.identityProof = 'Aadhar card';
-                        model.customer.addressProof = 'Aadhar card';
-                        model.customer.addressProofSameAsIdProof = true;
-                        if (model.customer.yearOfBirth) {
-                            model.customer.dateOfBirth = model.customer.yearOfBirth + '-01-01';
+                    save: function (model, formCtrl, form, $event) {
+                        PageHelper.clearErrors();
+                        if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
                         }
-                    },
-                    preSave: function (model, form, formName) {
-                        var deferred = $q.defer();
-                        if (model.customer.firstName) {
-                            deferred.resolve();
-                        } else {
-                            PageHelper.showProgress('enrollment-save', 'Customer Name is required', 3000);
-                            deferred.reject();
+                        formCtrl.scope.$broadcast('schemaFormValidate');
+
+                        if (formCtrl && formCtrl.$invalid) {
+                            PageHelper.showProgress("enrolment", "Your form have errors. Please fix them.", 5000);
+                            return false;
                         }
-                        return deferred.promise;
-                    },
-                    reload: function (model, formCtrl, form, $event) {
-                        $state.go("Page.Engine", {
-                            pageName: 'customer.IndividualEnrollment3',
-                            pageId: model.customer.id
-                        }, {
-                            reload: true,
-                            inherit: false,
-                            notify: true
-                        });
-                    },
-                    submit: function (model, form, formName) {
-                        $log.info("Inside submit()");
-                        
 
-                        var reqData = _.cloneDeep(model);
-
-
-                        if (reqData.customer.id) {
-                            if (!model.customer.familyMembers || model.customer.familyMembers.length < 0) {
-                                irfProgressMessage.pop('enrollment-submit', 'Please add Family Details information to proceed.', 5000);
-                                return false;
-                            } else {
-                                var selfAvailable = false;
-                                for (var idx = 0; idx < model.customer.familyMembers.length; idx++) {
-                                    if (model.customer.familyMembers[idx].relationShip == "self") {
-                                        selfAvailable = true;
-                                        break;
-                                    }
-                                }
-                                if (!selfAvailable) {
-                                    irfProgressMessage.pop('enrollment-submit', 'Self information in Family Details section is mandatory to proceed.', 5000);
-                                    return false;
-                                }
-                            }
-                            if (model.customer.maritalStatus && model.customer.maritalStatus.toUpperCase() == 'MARRIED') {
-                                var spouseInfoReq = true;
-                                for (var idx = 0; idx < model.customer.familyMembers.length; idx++) {
-                                    if (model.customer.familyMembers[idx].relationShip == "Husband" ||
-                                        model.customer.familyMembers[idx].relationShip == "Wife") {
-                                        spouseInfoReq = false;
-                                        break;
-                                    }
-                                }
-        
-                                if (spouseInfoReq) {
-                                    irfProgressMessage.pop('enrollment-submit', 'Please add customer Spouse information in Family Details section also to proceed.', 5000);
-                                    return false;
-                                }
-                            }
-                            PageHelper.showLoader();
-                            model.EnrolmentProcess.proceed()
-                                .finally(function(){
-                                    PageHelper.hideLoader();
-                                })
-                                .subscribe(function(leadProcess){
-                                    PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                    $state.go('Page.Adhoc', {
-                                        pageName: 'sambandh.customer.EnrollmentDashboard'
-                                    });
-
-                                }, function(err) {
-                                    PageHelper.showErrors(err);
-                                    PageHelper.hideLoader();
-                                });
-                        } else {
-                            
-                            try {
-                                var liabilities = reqData['customer']['liabilities'];
-                                if (liabilities && liabilities != null && typeof liabilities.length == "number" && liabilities.length > 0) {
-                                    for (var i = 0; i < liabilities.length; i++) {
-                                        var l = liabilities[i];
-                                        l.loanAmountInPaisa = l.loanAmountInPaisa * 100;
-                                        l.installmentAmountInPaisa = l.installmentAmountInPaisa * 100;
-                                    }
-                                }
-                                var financialAssets = reqData['customer']['financialAssets'];
-                                if (financialAssets && financialAssets != null && typeof financialAssets.length == "number" && financialAssets.length > 0) {
-                                    for (var i = 0; i < financialAssets.length; i++) {
-                                        var f = financialAssets[i];
-                                        f.amountInPaisa = f.amountInPaisa * 100;
-                                    }
-                                }
-                            } catch (e) {
-                                $log.info("Error trying to change amount info.");
-                            }
-        
-                            reqData['enrollmentAction'] = 'PROCEED';
-        
-                            irfProgressMessage.pop('enrollment-submit', 'Working... Please wait.', 5000);
-                            reqData.customer.verified = true;
-                            try {
-                                if (reqData.customer.familyMembers) {
-                                    for (var i = 0; i < reqData.customer.familyMembers.length; i++) {
-                                        var incomes = reqData.customer.familyMembers[i].incomes;
-                                        for (var j = 0; j < incomes.length; j++) {
-                                            switch (incomes[i].frequency) {
-                                                case 'M':
-                                                    incomes[i].monthsPerYear = 12;
-                                                    break;
-                                                case 'Monthly':
-                                                    incomes[i].monthsPerYear = 12;
-                                                    break;
-                                                case 'D':
-                                                    incomes[i].monthsPerYear = 365;
-                                                    break;
-                                                case 'Daily':
-                                                    incomes[i].monthsPerYear = 365;
-                                                    break;
-                                                case 'W':
-                                                    incomes[i].monthsPerYear = 52;
-                                                    break;
-                                                case 'Weekly':
-                                                    incomes[i].monthsPerYear = 52;
-                                                    break;
-                                                case 'F':
-                                                    incomes[i].monthsPerYear = 26;
-                                                    break;
-                                                case 'Fornightly':
-                                                    incomes[i].monthsPerYear = 26;
-                                                    break;
-                                                case 'Fortnightly':
-                                                    incomes[i].monthsPerYear = 26;
-                                                    break;
-                                            }
-                                        }
-                                    }
-                                }
-                            } catch (err) {
-                                console.error(err);
-                            }
-                            PageHelper.showLoader();
-                        model.EnrolmentProcess.proceed()
-                        .finally(function(){
+                        // $q.all start
+                        model.enrolmentProcess.save()
+                            .finally(function () {
                                 PageHelper.hideLoader();
                             })
-                            .subscribe(function(EnrolmentProcess){
-                                PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                $state.go('Page.Adhoc', {
-                                    pageName: 'sambandh.customer.EnrollmentDashboard'
-                                });
-                            }, function(err) {
+                            .subscribe(function (value) {
+                                formHelper.resetFormValidityState(formCtrl);
+                                Utils.removeNulls(value, true);
+                                PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
+                                PageHelper.clearErrors();
+                                BundleManager.pushEvent()
+                            }, function (err) {
                                 PageHelper.showErrors(err);
+                                PageHelper.showProgress('enrolment', 'Oops. Some error1.', 5000);
+                                
                                 PageHelper.hideLoader();
                             });
-                        } 
+                    },
+                    proceed: function(model, form, formName){
+                        PageHelper.clearErrors();
+                        if(PageHelper.isFormInvalid(form)) {
+                            return false;
+                        }
+                        PageHelper.showProgress('enrolment', 'Updating Customer');
+                        PageHelper.showLoader();
+                        model.enrolmentProcess.proceed()
+                            .finally(function () {
+                                console.log("Inside hideLoader call");
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function (enrolmentProcess) {
+                                formHelper.resetFormValidityState(form);
+                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                PageHelper.clearErrors();
+                                BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
+                                BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer});
+
+                            }, function (err) {
+                                PageHelper.showErrors(err);
+                                PageHelper.showProgress('enrolment', 'Oops. Some error2.', 5000);
+                                
+                            });
+                    },
+                    submit: function (model, form, formName) {
+                                                debugger;
+
+                        PageHelper.clearErrors();
+                        if(PageHelper.isFormInvalid(form)) {
+                            return false;
+                        }
+                        PageHelper.showProgress('enrolment', 'Updating Customer');
+                        PageHelper.showLoader();
+                        model.enrolmentProcess.save()
+                            .finally(function () {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function (enrolmentProcess) {
+                                formHelper.resetFormValidityState(form);
+                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                PageHelper.clearErrors();
+                                BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
+                                BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer});
+
+                                model.enrolmentProcess.proceed()
+                                .subscribe(function(enrolmentProcess) {
+                                    PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                }, function(err) {
+                                    PageHelper.showErrors(err);
+                                    PageHelper.showProgress('enrolment', 'Oops. Some error3.', 5000);
+                                })
+                            }, function (err) {
+                                PageHelper.showErrors(err);
+                                PageHelper.showProgress('enrolment', 'Oops. Some error4.', 5000);                                
+                                PageHelper.hideLoader();
+                            });
                     }
                 }
             };
