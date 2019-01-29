@@ -713,7 +713,8 @@ define([],function(){
                                     "readonly": true
                                 },
                                 "DeductionsFromLoan":{
-                                    "readonly": true
+                                    "readonly": true,
+                                    "orderNo":3
                                 },
                                 "LoanRecommendation.udf8":{
                                     "readonly": true

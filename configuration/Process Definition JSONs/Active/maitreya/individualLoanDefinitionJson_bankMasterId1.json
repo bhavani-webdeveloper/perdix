@@ -110,7 +110,7 @@
          "code":"CreditCommitteeReview",
          "name":"Credit Committee Review",
          "stageType":"CAPTURE",
-         "authorizationCount":2,
+         "authorizationCount":1,
          "sendSms":"Yes",
          "smsCategory":"Approval",
          "isAccountOpening":false,
