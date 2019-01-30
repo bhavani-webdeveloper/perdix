@@ -235,7 +235,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     //     "title":"ENTERPRICE_ASSETS"
                     // },
                     "EnterpriseFinancials": {
-                        "orderNo": 50
+                        "orderNo": 50,
                     },
                     "ContactInformation": {
                         "orderNo": 20
@@ -257,19 +257,23 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          "orderNo": 30
                     },
                     "EnterpriseFinancials.otherBusinessIncomes": {
-                         "orderNo": 40
+                         "orderNo": 40,
+                         "condition":"model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                     },
                     "EnterpriseFinancials.otherBusinessIncomes.incomeSource": {
-                         "orderNo": 10
+                         "orderNo": 10,
+                         "required":true
                     },
                     "EnterpriseFinancials.otherBusinessIncomes.amount":{
-                         "orderNo": 20
+                         "orderNo": 20,
+                         "required":true
                     },
                     "EnterpriseFinancials.otherBusinessIncomes.otherBusinessIncomeDate":{
                          "orderNo": 30
                     },
                     "EnterpriseFinancials.incomeThroughSales": {
-                         "orderNo": 50
+                         "orderNo": 50,
+                         "condition":"model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                     },
                     "EnterpriseFinancials.incomeThroughSales.buyerName":{
                          "orderNo": 10,
@@ -279,7 +283,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     },
                     "EnterpriseFinancials.incomeThroughSales.incomeType":{
                          "orderNo": 20,
-                         "enumCode": "salesinfo_income_type"
+                         //"enumCode": "salesinfo_income_type"
                     },
                     "EnterpriseFinancials.incomeThroughSales.invoiceType": {
                          "orderNo": 30
@@ -291,7 +295,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          "orderNo": 50
                     },
                     "EnterpriseFinancials.incomeThroughSales.invoiceDocId": {
-                         "orderNo": 60
+                        "orderNo": 60,
+                        "required": true,
+                        "condition": "model.customer.incomeThroughSales[arrayIndex].incomeType != 'Cash'",
                     },
                     "EnterpriseFinancials.dailySales": {
                          "orderNo": 70
@@ -339,7 +345,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          "orderNo": 40
                     },
                     "EnterpriseFinancials.rawMaterialExpenses":{
-                         "orderNo": 120
+                         "orderNo": 120,
+                         "condition":"model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                     },
                     "EnterpriseFinancials.rawMaterialExpenses.vendorName":{
                          "orderNo": 10,
@@ -348,18 +355,23 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          "resolver": "VendorNameLOVConfiguration"
                     },                   
                     "EnterpriseFinancials.rawMaterialExpenses.rawMaterialType": {
-                         "enumCode" : "purchase_income_type",
+                         //"enumCode" : "purchase_income_type",
                          "orderNo": 15
                     },
                     "EnterpriseFinancials.rawMaterialExpenses.amount":{
                          "orderNo": 20
+                    },
+                    "EnterpriseFinancials.rawMaterialExpenses.rawMaterialDate":{
+                         "orderNo": 30
                     },
                     "EnterpriseFinancials.rawMaterialExpenses.freequency":{
                          "orderNo": 30,
                          "enumCode": "enterprise_purchase_frequency"
                     },                    
                     "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId":{
-                         "orderNo": 50
+                        "orderNo": 50,
+                        "required":true,
+                        "condition":"model.customer.rawMaterialExpenses[arrayIndex].rawMaterialType != 'Cash'",
                     },
                     "BankAccounts.customerBankAccounts.confirmedAccountNumber": {
                          "type": "string",
@@ -612,7 +624,40 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 readonly: true
                             },
                         }
+                    },
+                    "EnterpriseFinancials":{
+                        "items":{
+                            "rawMaterialExpenses":{
+                                "items":{
+                                    "invoiceDocId1":{
+                                        key: "customer.rawMaterialExpenses[].invoiceDocId",
+                                        title: "PURCHASE_BILLS",
+                                        "condition":"model.customer.rawMaterialExpenses[arrayIndex].rawMaterialType == 'Cash'",
+                                        "category": "Loan",
+                                        "subCategory": "DOC1",
+                                        type: "file",
+                                        fileType: "application/pdf",
+                                        using: "scanner"
+                                    }
+                                }
+                            },
+                            "incomeThroughSales":{
+                                "items":{
+                                    "invoiceDocId1": {
+                                        key: "customer.incomeThroughSales[].invoiceDocId",
+                                        type: "file",
+                                        "condition": "model.customer.incomeThroughSales[arrayIndex].incomeType =='Cash'",
+                                        title: "INVOICE_DOCUMENT",
+                                        fileType: "application/pdf",
+                                        "category": "CustomerEnrollment",
+                                        "subCategory": "IDENTITYPROOF",
+                                        using: "scanner"
+                                    }
+                                }
+                            }
+                        }
                     }
+                    
                }
             }
             var getIncludes = function (model) {
@@ -734,6 +779,30 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseFinancials.monthlyTurnover",
                     "EnterpriseFinancials.monthlyBusinessExpenses",
                     "EnterpriseFinancials.avgMonthlyNetIncome",
+                    "EnterpriseFinancials.otherBusinessIncomes",
+                    "EnterpriseFinancials.otherBusinessIncomes.incomeSource",
+                    "EnterpriseFinancials.otherBusinessIncomes.amount",
+                    "EnterpriseFinancials.otherBusinessIncomes.otherBusinessIncomeDate",
+                    "EnterpriseFinancials.incomeThroughSales",
+                    "EnterpriseFinancials.incomeThroughSales.buyerName",
+                    "EnterpriseFinancials.incomeThroughSales.incomeType",
+                    "EnterpriseFinancials.incomeThroughSales.invoiceType",
+                    "EnterpriseFinancials.incomeThroughSales.amount",
+                    "EnterpriseFinancials.incomeThroughSales.incomeSalesDate",
+                    "EnterpriseFinancials.incomeThroughSales.invoiceDocId",
+                    "EnterpriseFinancials.incomeThroughSales.invoiceDocId1",
+                    "EnterpriseFinancials.expenditures",
+                    "EnterpriseFinancials.expenditures.expenditureSource",
+                    "EnterpriseFinancials.expenditures.annualExpenses",
+                    "EnterpriseFinancials.expenditures.frequency",
+                    "EnterpriseFinancials.expenditures.billDocId",
+                    "EnterpriseFinancials.rawMaterialExpenses",
+                    "EnterpriseFinancials.rawMaterialExpenses.vendorName",
+                    "EnterpriseFinancials.rawMaterialExpenses.rawMaterialType",
+                    "EnterpriseFinancials.rawMaterialExpenses.amount",
+                    "EnterpriseFinancials.rawMaterialExpenses.rawMaterialDate",
+                    "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId",
+                    "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId1",
                    
 
                     "EmployeeDetails",
@@ -1716,9 +1785,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ContactInformation": {
                                         "orderNo": 20
                                     },
-                                    "EnterpriseFinancials.incomeThroughSales": {
-                                        "title": "SALES_INFO_DETAILS"
-                                    },
+                                    // "EnterpriseFinancials.incomeThroughSales": {
+                                    //     "title": "SALES_INFO_DETAILS"
+                                    // },
                                     "BankAccounts": {
                                         "orderNo": 30
                                     },
