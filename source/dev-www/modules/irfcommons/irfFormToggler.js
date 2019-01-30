@@ -1,4 +1,4 @@
-irf.pageCollection.factory("irfFormToggler", ['$log', '$filter', 'Enrollment', "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
+irf.commons.factory("irfFormToggler", ['$log', '$filter', 'Enrollment', "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
     "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "jsonPath", "BundleManager", "CustomerBankBranch", "User",
     function ($log, $filter, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, PageHelper, Utils, BiometricService, PagesDefinition, Queries, jsonPath, BundleManager, CustomerBankBranch, User) {
         var prepareToggleForm=function(title, forms, commonForm, model){

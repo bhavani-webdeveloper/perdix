@@ -2411,6 +2411,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                  "BankAccounts.customerBankAccounts.ifscCode":{
                      required:true
                  },
+                 "BankAccounts.customerBankAccounts":{
+                    onArrayAdd: function (modelValue, form, model, formCtrl, $event) {
+                        modelValue.bankStatements = [];
+                        var CBSDateMoment = moment(SessionStore.getCBSDate(), SessionStore.getSystemDateFormat());
+                        var noOfMonthsToDisplay = 6;
+                        var statementStartMoment = CBSDateMoment.subtract(noOfMonthsToDisplay, 'months').startOf('month');
+                        for (var i = 0; i < noOfMonthsToDisplay; i++) {
+                            modelValue.bankStatements.push({
+                                startMonth: statementStartMoment.format(SessionStore.getSystemDateFormat())
+                            });
+                            statementStartMoment = statementStartMoment.add(1, 'months').startOf('month');
+                        }
+                    }
+                 },
                  "BankAccounts.customerBankAccounts.accountNumber":{
                      required:false,
                      type: "password",
@@ -2428,6 +2442,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                      required: true,
                  },
                  "BankAccounts.customerBankAccounts.bankStatements":{
+                    "key": "customer.customerBankAccounts[].bankStatements",
                      type: "datatable",
                      startEmpty: true,
                      resolver:"BusinessBankStatementsDTElementConfiguration"

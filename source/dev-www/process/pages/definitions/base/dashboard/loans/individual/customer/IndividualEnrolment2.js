@@ -46,6 +46,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.firstName"
                             ]
                         },
+                        "FieldAppraisal":
+                        {
+                            "excludes":[
+                                "IndividualReferences"
+                            ],
+                        },
                         "Screening":{
                             "excludes": [
                                 "IndividualFinancials",                               
@@ -1750,22 +1756,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualReferences.verifications.ReferenceCheck.financialStatus",
                     "IndividualReferences.verifications.ReferenceCheck.customerResponse",
 
-                    // "References",
-                    // "References.verifications",
-                    // "References.verifications.relationship",
-                    // "References.verifications.businessName",
-                    // "References.verifications.referenceFirstName",
-                    // "References.verifications.mobileNo",
-                    // "References.verifications.address",
-                    // "References.verifications.ReferenceCheck",
-                    // "References.verifications.ReferenceCheck.knownSince",
-                    // "References.verifications.ReferenceCheck.goodsSold",
-                    // "References.verifications.ReferenceCheck.goodsBought",
-                    // "References.verifications.ReferenceCheck.paymentTerms",
-                    // "References.verifications.ReferenceCheck.modeOfPayment",
-                    // "References.verifications.ReferenceCheck.outstandingPayable",
-                    // "References.verifications.ReferenceCheck.outstandingReceivable",
-                    // "References.verifications.ReferenceCheck.customerResponse",
+                    "References",
+                    "References.verifications",
+                    "References.verifications.relationship",
+                    "References.verifications.businessName",
+                    "References.verifications.referenceFirstName",
+                    "References.verifications.mobileNo",
+                    "References.verifications.address",
+                    "References.verifications.ReferenceCheck",
+                    "References.verifications.ReferenceCheck.knownSince",
+                    "References.verifications.ReferenceCheck.goodsSold",
+                    "References.verifications.ReferenceCheck.goodsBought",
+                    "References.verifications.ReferenceCheck.paymentTerms",
+                    "References.verifications.ReferenceCheck.modeOfPayment",
+                    "References.verifications.ReferenceCheck.outstandingPayable",
+                    "References.verifications.ReferenceCheck.outstandingReceivable",
+                    "References.verifications.ReferenceCheck.customerResponse",
 
 
                 ];
@@ -1904,7 +1910,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "type": "box",
                                     "title": "REFERENCES",
                                     "orderNo":2500,
-                                    //"condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
+                                    "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                                     "items": {
                                         "verifications" : {
                                             key:"customer.verifications",
@@ -2040,7 +2046,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "items": [
                                         {
                                             "type": "button",
-                                            "title": "UPDATE",
+                                            "title": "SUBMIT",
                                             "onClick": "actions.proceed(model, formCtrl, form, $event)"
                                         }
                                     ]
