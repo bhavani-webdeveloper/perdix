@@ -38,7 +38,7 @@ irf.pageCollection.factory(irf.page('base.dashboard.loans.individual.screening.Z
                 maximum: 1,
                 order: 40
             }, {
-                pageName: 'base.dashboard.loans.individual.screening.detail.EnterpriseEnrollmentView',
+                pageName: 'base.dashboard.loans.individual.screening.detail.EnterpriseFinancialView',
                 title: 'Business Financials',
                 pageClass: 'business-finance',
                 minimum: 1,

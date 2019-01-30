@@ -333,13 +333,13 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                                                                     "items": {
                                                                         "documentName": {
                                                                             "key": "liabilityAccount.liabilityLenderDocuments[].documentName",
-                                                                            "condition": "model.liabilityAccount.liabilityLenderDocuments[arrayIndex].documentName!='Other'",
+                                                                            "condition": "model.liabilityAccount.liabilityLenderDocuments[arrayIndex].documentName!='Others'",
                                                                             "notitle": true,
                                                                             "readonly": true
                                                                         },
                                                                         "otherDocumentName": {
                                                                             "key": "liabilityAccount.liabilityLenderDocuments[].otherDocumentName",
-                                                                            "condition": "model.liabilityAccount.liabilityLenderDocuments[arrayIndex].documentName=='Other'",
+                                                                            "condition": "model.liabilityAccount.liabilityLenderDocuments[arrayIndex].documentName=='Others'",
                                                                             "notitle": true,
                                                                             "readonly": true
                                                                         }
