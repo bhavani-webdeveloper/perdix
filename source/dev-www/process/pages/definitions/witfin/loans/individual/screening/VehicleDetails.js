@@ -1059,7 +1059,8 @@ define(
                         },
                         "NewVehicleDetails.registrationNumber": {
                             "orderNo": 110,
-                            "required": true
+                            "required": true,
+                            "condition":"model.loanAccount.vehicleLoanDetails.vehicleType == 'Used'"
                         },
                         "NewVehicleDetails.originalInvoiceValue": {
                             "orderNo": 120,
