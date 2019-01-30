@@ -998,6 +998,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "FamilyDetails.familyMembers.maritalStatus": {
                         "condition": "model.customer.familyMembers[arrayIndex].relationShip.toUpperCase() != 'SELF'"
                     },
+                    "FamilyDetails.familyMembers.salary":{
+                        "title":"NET_ANNUAL_SALARY"
+                    },
                     "ContactInformation.locality": {
                         "readonly" : true
                     },

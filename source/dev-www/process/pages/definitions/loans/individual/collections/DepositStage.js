@@ -209,6 +209,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 type: "lov",
                 "title":"CASH_DEPOSIT_BRANCH_IFSC_CODE",
                 lovonly: true,
+                required:true,
                 inputMap: {
                     "ifscCode": {
                         "key": "bankDepositSummary.ifscCode"
@@ -244,7 +245,8 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
             },
             {
                 "key":"bankDepositSummary.bankBranchDetails",
-                "title":"DEPOSITED_BANK_BRANCH"
+                "title":"DEPOSITED_BANK_BRANCH",
+                required:true
             }
             ]
         },{

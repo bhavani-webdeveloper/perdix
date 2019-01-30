@@ -789,6 +789,7 @@ define([], function() {
                             }
                         },
                         "PreliminaryInformation.tenureRequested": {
+                            "title":"TENURE_REQUESETED_IN_MONTHS",
                             "required": true,
                             onChange: function(modelValue, form, model) {
                                 model.loanAccount.estimatedEmi = null;
