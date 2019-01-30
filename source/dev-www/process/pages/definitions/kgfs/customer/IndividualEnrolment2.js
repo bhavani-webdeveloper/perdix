@@ -14,6 +14,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
            /* var pageParams = {
                 readonly: true
             };*/
+
             var preSaveOrProceed = function (reqData) {
                 if (_.hasIn(reqData, 'customer.familyMembers') && _.isArray(reqData.customer.familyMembers)) {
                     var selfExist = false
@@ -37,7 +38,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
             var configFile = function () {
                 return {
-                   
+              
                 }
             }
             var overridesFields = function (bundlePageObj) {
@@ -213,6 +214,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "KYC.customerId":{
                             orderNo:10,
+                            condition:"!model.customer.customerId",
                             initialize: function(model, form, parentModel, context) {
                                 model.customerBranchId = parentModel.customer.customerBranchId;
                                 model.centreId = parentModel.customer.centreId;
@@ -997,6 +999,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "IndividualInformation.spouseDateOfBirth",
                 "IndividualInformation.spouseAadharNumber",
                 "KYC",
+                "KYC.customerId",
                 "KYC.identityProofFieldSet",
                 "KYC.identityProof",
                 "KYC.identityProofImageId",
@@ -1101,6 +1104,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.currentStage = bundleModel.currentStage;
                     model.enrolmentProcess.currentStage =  model.currentStage;
                     /* End of setting data recieved from Bundle */
+         
 
                     /* Setting data for the form */
                     model.customer = model.enrolmentProcess.customer;
@@ -1363,7 +1367,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 BundleManager.pushEvent()
                             }, function (err) {
                                 PageHelper.showErrors(err);
-                                PageHelper.showProgress('enrolment', 'Oops. Some error1.', 5000);
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 
                                 PageHelper.hideLoader();
                             });
@@ -1389,14 +1393,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                             }, function (err) {
                                 PageHelper.showErrors(err);
-                                PageHelper.showProgress('enrolment', 'Oops. Some error2.', 5000);
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 
                             });
                     },
                     submit: function (model, form, formName) {
-                                                debugger;
-
-                        PageHelper.clearErrors();
+                           PageHelper.clearErrors();
                         if(PageHelper.isFormInvalid(form)) {
                             return false;
                         }
@@ -1418,11 +1420,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 }, function(err) {
                                     PageHelper.showErrors(err);
-                                    PageHelper.showProgress('enrolment', 'Oops. Some error3.', 5000);
+                                    PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 })
                             }, function (err) {
                                 PageHelper.showErrors(err);
-                                PageHelper.showProgress('enrolment', 'Oops. Some error4.', 5000);                                
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);                                
                                 PageHelper.hideLoader();
                             });
                     }
