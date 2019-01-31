@@ -97,3 +97,4 @@ insuranceProducts.list = select distinct im.product_code as `productCode`, im.pa
 customerLoanAccount.list=SELECT account_number from loan_accounts where customer_id = :customer_id
 getBankName = SELECT bank_name from bank_master where id =:bankId
 getInsuranceFormName = SELECT product_code, document_code as `FormName`,is_mandatory from insurance_documents_master where product_code = :productCode
+getTelecallingSnapshotId = SELECT max(telecalling_details_id) as `telecalling_id` from telecalling_details_snapshot where process_type = 'CUSTOMER' and customer_id = :customer_id

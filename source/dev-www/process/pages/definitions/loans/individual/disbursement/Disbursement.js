@@ -10,6 +10,17 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
             var readonly = {
                 "scheduledDisbursementDate": siteCode == 'KGFS'
             };
+            var test = function(code,model){
+                let temp = formHelper.enum('loan_product').data;
+                for (var i=0; i< temp.length;i++){
+                    if (code == temp[i].value)
+                        {
+                            model.additional.productName = temp[i].name;
+                            break;
+                        }
+                        continue;
+                }
+            }
             return {
                 "type": "schema-form",
                 "title": "DISBURSE_LOAN",
@@ -54,6 +65,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             model.additional.customerId = resp[0].customerId;
                             model.additional.numberOfDisbursements = resp[0].numDisbursements;
                             model.additional.productCode = resp[0].productCode;
+                            test(model.additional.productCode,model);
                             model.additional.urnNo = resp[0].urnNo;
                             model.additional.fees = [];
                             model.additional.tempfees = resp[0].fees;
@@ -384,7 +396,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         },
                         {
                             "type": "actions",
-                            condition : "!model.additional.isDisbursementDone",
+                            condition : "model.additional.isDisbursementDone",
                             "items": [
                                 {
                                     "type": "button",
@@ -402,7 +414,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         },
                         {
                             "type":"actions",
-                            condition:"model.additional.isDisbursementDone",
+                            condition:"!model.additional.isDisbursementDone",
                             "items":[
                                 {
                                 "title": "Print Preview",
@@ -411,7 +423,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                 "type": "button",
                                 "onClick": function (model, formCtrl, form, $event) {
                                     var printData = {};
-                                    printData.paperReceipt = "";
                                     var finalArray = [];
                                     var repaymentInfo = {
                                         'customerURN': model.additional.urnNo,
@@ -420,7 +431,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                         'accountNumber': model.additional.accountNumber,
                                         'transactionType': "Disbursment",
                                         'transactionID': model.additional.transactionId,
-                                        'productCode': model.additional.productCode,
+                                        'productCode': model.additional.productName,
                                         'loanAmount': model.additional.loanamount,
                                         'disbursedamount': model.additional.netDisbursementAmount,
                                         'partnerCode': model.additional.partnerCode,
@@ -445,7 +456,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                             [1,4,SessionStore.getBranch()],
                                             [1,3,"Date:"+moment().local().format("DD-MM-YYYY HH:MM:SS")],
                                             [1,2,"DISBURSMENT"],
-                                            [1,2,model.additional.productCode],
+                                            [1,4,model.additional.productName],
                                             [3," "],
                                             [0,3,"Branch Code",SessionStore.getBranchCode()],
                                             [0,3,"Customer Id",model.additional.customerId],
@@ -476,6 +487,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                             [3," "],
                                     ]
                                     finalArray = finalArray.concat(thermalReceiptArray);
+                                    printData.paperReceipt = '<div class="receipt-container"> <style> .receipt-container {display:grid;grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); grid-column-gap:1em;} .single-receipt {margin:0px 12px 0px;}.single-receipt p {margin-bottom:2px;} .key-container p {display:grid;grid-template-columns:minmax(1px,1fr) minmax(1px,1.3fr);}</style>';
                                     printData.paperReceipt += GroupProcess.generateWebReceipt(repaymentInfo, opts,0);
                                     for (var i=0;i<model.additional.feeamount.length;i++){
                                         var repaymentInfo = {
@@ -485,12 +497,12 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                             'accountNumber': model.additional.accountNumber,
                                             'transactionType': model.additional.feeamount[i].param1,
                                             'transactionID': model.additional.transactionId,
-                                            'productCode': model.additional.productCode,
-                                            'demandAmount': "nil",
+                                            'productCode': model.additional.productName,
+                                            'demandAmount': model.additional.demandAmount,
                                             'amountPaid': model.additional.feeamount[i].amount1,
                                             'processingFee' : 0,
                                             'serviceTaxFee': model.additional.feeamount[i].amount1,
-                                            'totalPayOffAmount': model.additional.loanamount, 
+                                            'totalPayOffAmount': model.additional.payOffAmount, 
                                             'partnerCode':"",
                                         };
                                         var opts = {
@@ -513,8 +525,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                             [1,4,SessionStore.getBankName()+" KGFS"],
                                             [1,4,SessionStore.getBranch()],
                                             [1,3,"Date:"+moment().local().format("DD-MM-YYYY HH:MM:SS")],
-                                            [1,2,"DISBURSMENT"],
-                                            [1,4,model.additional.productCode],
+                                            [1,2,"Loan Repayment"],
+                                            [1,4,model.additional.productName],
                                             [3," "],
                                             [0,3,"Branch Code",SessionStore.getBranchCode()],
                                             [0,3,"Customer Id",model.additional.customerId],
@@ -529,7 +541,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                             [0,3,"Amount Paid",model.additional.feeamount[i].amount1],
                                             [0,3,"Processing Fee",0],
                                             [0,3,"Service Tax Fee",model.additional.feeamount[i].amount1],
-                                            [0,3,"Total PayOff Amount",model.additional.loanamount],
+                                            [0,3,"Total PayOff Amount",model.additional.payOffAmount],
                                             [3," "],
                                             [3,"-"],
                                             [1,3,"IFMR Rural Channels and Services Pvt. Ltd."],
@@ -547,6 +559,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                     ]
                                         finalArray = finalArray.concat(thermalReceiptArray);
                                     }
+                                    print.paperReceipt += "</div>";
                                     printData.thermalReceipt = finalArray;
                                     irfPrinter.printPreview(printData);
                                     // var opts = {
@@ -689,11 +702,13 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                             function (data) {
                                                 PageHelper.showProgress('disbursement', 'Disbursement done', 2000);
                                                 model.additional.disbursementDone = true;
-                                                LoanAccount.get({
+                                                IndividualLoan.get({
                                                     accountId: model.additional.accountNumber
                                                 }).$promise.then(function (resp) {
                                                     PageHelper.hideLoader();
                                                     model.additional.isDisbursementDone = true;
+                                                    model.additional.payOffAmount = resp.payOffAmount;
+                                                    model.additional.demandAmount = resp.totalDemandRaised;
                                                     // model.loanacount.customer1FirstName = resp.customer1FirstName;
                                                     for (i = 0; i < resp.transactions.length; i++) {
                                                         if (resp.transactions[i].transactionName == "Disbursement") {

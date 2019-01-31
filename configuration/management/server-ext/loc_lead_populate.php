@@ -38,7 +38,7 @@ applicant.village_name AS city_town_village,
 applicant.pincode, 
 applicant.state, 
 applicant.district, 
-applicant.locality AS location, 
+applicant.latitude AS location, 
 applicant.centre_id, 
 applicant.gender, 
 applicant.mobile_phone AS mobile_no,
@@ -103,7 +103,8 @@ HAVING (EMICount = gl.value AND gl.value-3 <= paidEMI)");
 foreach($customers as $customer){
 	unset($customer->EMICount);
 	unset($customer->paidEMI);
-	unset($customer->value);
+	unset($customer->value);
+
 	$customer = (array)$customer;
 	$leadinsert = Leads::create($customer);
 	

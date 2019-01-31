@@ -575,6 +575,18 @@ define(["perdix/domain/model/loan/LoanProcess",
                             if (enrolmentDetails.customerId){
                                 BundleManager.broadcastEvent('remove-customer-relation', enrolmentDetails);
                             }
+                        },
+                        "deviation-loaded": function(pageObj, bundleModel, params) {
+                            BundleManager.broadcastEvent("load-deviation", params);
+                        },
+                        "financialSummary": function(pageObj, bundleModel, params) {
+                            BundleManager.broadcastEvent("financial-summary", params);
+                        },
+                        "customer-history-data": function(pageObj, bundleModel, params){
+                            BundleManager.broadcastEvent("customer-history-fin-snap", params);
+                        },
+                        "business": function(pageObj, bundleModel, params) {
+                            BundleManager.broadcastEvent("business-customer", params);
                         }
                     }
                 }

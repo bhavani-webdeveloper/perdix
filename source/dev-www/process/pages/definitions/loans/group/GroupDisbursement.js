@@ -81,6 +81,25 @@ define({
                         model.group = _.cloneDeep(response);
                         model.group.groupRemarks = null;
                         fixData(model);
+                        var dscPromises = [];
+                        for (i in model.group.jlgGroupMembers) {
+							var member = model.group.jlgGroupMembers[i];
+							dscPromises.push(Groups.getDSCData({"dscId": member.dscId}).$promise);
+
+                        }
+                        	$q.all(dscPromises).then(function(data) {
+								for (i in data) {
+									var r = data[i].responseMessage;
+									data[i].responseMessageHtml = '<strong>DSC</strong>' + r.substr(r.indexOf('<br>'));
+									model.group.jlgGroupMembers[i].dscData = data[i];
+								}
+							}, function(errors) {
+								for (i in errors) {
+									PageHelper.showErrors(errors[i]);
+								}
+							}).finally(PageHelper.hideLoader);
+						
+					
                         if (model.group.jlgGroupMembers.length > 0) {
                             fillNames(model).then(function(m) {
                                 model = m;
@@ -174,7 +193,7 @@ define({
                         "key": "group.firstRepaymentDate",
                         "title": "FIRST_REPAYMENT_DATE",
                         "readonly": true,
-                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'||model.siteCode == 'KGFS'",
+                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                         "type": "date",
                     }, {
                         "key": "group.groupPhotoFileId",
@@ -221,6 +240,25 @@ define({
                             "title": "LOAN_AMOUNT",
                             "type": "amount",
                         }, {
+                            "title": "LOAN_CYCLE",
+                            "readonly": true,
+                            "key": "group.jlgGroupMembers[].loanCycle" // TODO: loan appl. date, loan tenure, loan appl. file, 
+                        },{
+                            "title": "ACCOUNT_NUMBER",
+                            "readonly": true,
+                            "key": "group.jlgGroupMembers[].loanAccount.accountNumber", // TODO: loan appl. date, loan tenure, loan appl. file, 
+                            "type": "string"
+                        },{
+                            "title": "TENURE",
+                            "readonly": true,
+                            "key": "group.jlgGroupMembers[].loanAccount.tenure",
+                        }, {
+                            "key": "group.jlgGroupMembers[].loanAccount.frequency",
+                            "type": "select",
+                            "readonly": true,
+                            "title": "FREQUENCY",
+                            "enumCode": "loan_product_frequency"
+                        },{
                             "key": "group.jlgGroupMembers[].loanPurpose1",
                             "readonly": true,
                             "title": "LOAN_PURPOSE_1",
@@ -282,6 +320,27 @@ define({
                                 };
                                 GroupProcess.getLoanPrint(repaymentInfo,opts);
                             }
+                        },{
+                            "type":"fieldset",
+                            "title":"DSC Details",
+                            "items":[
+                                {
+                                    "title": "DSC_STATUS",
+                                    "readonly": true,
+                                    "key": "group.jlgGroupMembers[].dscStatus",
+                                    "type": "text"
+                                }, {
+                                    "key": "group.jlgGroupMembers[].dscOverrideRemarks",
+                                    "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDDEN'",
+                                    "title": "DSC_OVERRIDE_REMARKS",
+                                    "readonly": true
+                                },{
+                                    "notitle": true,
+                                    "readonly": true,
+                                    "key": "group.jlgGroupMembers[].dscData.responseMessageHtml",
+                                    "type": "html"
+                                },
+                            ]
                         }]
                     }]
                 }, {

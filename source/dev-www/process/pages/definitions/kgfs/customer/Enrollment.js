@@ -256,6 +256,46 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             fileType: "image/*",
                             offline: false,
                         },
+                        "KYC.IdentityProof1.idProofIssueDate":{
+                            onChange: function (value, form, model, event) {
+                                if(model.customer.idProofIssueDate){
+                                    model.customer.idProofValidUptoDate = "";
+                                }
+                            }
+                        },
+                        "KYC.IdentityProof1.idProofValidUptoDate":{
+                            onChange: function (value, form, model, event) {
+                                if(model.customer.idProofValidUptoDate){
+                                    var idProof1IssueDate = moment(model.customer.idProofIssueDate, SessionStore.getSystemDateFormat());
+                                    var idProof1ValidUptoDate = moment(model.customer.idProofValidUptoDate, SessionStore.getSystemDateFormat());
+                                    if (idProof1ValidUptoDate <= idProof1IssueDate) {
+                                        model.customer.idProofValidUptoDate = null;
+                                        PageHelper.showProgress("pre-save-validation", "ID Proof ValidUptoDate always more than ID Proof Valid ToDate", 5000);
+                                        
+                                    }
+                                }
+                            }
+                        },
+                        "KYC.addressProof1.addressProofIssueDate":{
+                            onChange: function (value, form, model, event) {
+                                if(model.customer.addressProofIssueDate){
+                                    model.customer.addressProofValidUptoDate = "";
+                                }
+                            }
+                        },
+                        "KYC.addressProof1.idProofValidUptoDate":{
+                            onChange: function (value, form, model, event) {
+                                if(model.customer.addressProofValidUptoDate){
+                                    var addressProof1IssueDate = moment(model.customer.addressProofIssueDate, SessionStore.getSystemDateFormat());
+                                    var addressProof1ValidUptoDate = moment(model.customer.addressProofValidUptoDate, SessionStore.getSystemDateFormat());
+                                    if (addressProof1ValidUptoDate <= addressProof1IssueDate) {
+                                        model.customer.addressProof1ValidUptoDate = null;
+                                        PageHelper.showProgress("pre-save-validation", "Address Proof ValidUptoDate always more than Address Proof Valid ToDate", 5000);
+                                        
+                                    }
+                                }
+                            }
+                        },                        
                         "KYC.spouseIdProof.udf34": {
                             "viewParams": function(modelValue, form, model) {
                                 return {
@@ -600,6 +640,26 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         },
                         "assets.physicalAssets.ownedAssetValue": {
                             "title": "OWNED_ASSET_VALUE"
+                        },
+                        "assets.financialAssets.startDate":{
+                            onChange: function (value, form, model, event) {
+                                if(model.customer.financialAssets[form.arrayIndex].startDate){
+                                    model.customer.financialAssets[form.arrayIndex].maturityDate = "";
+                                }
+                            }
+                        },
+                        "assets.financialAssets.maturityDate":{
+                            onChange: function (value, form, model, event) {
+                                if(model.customer.financialAssets[form.arrayIndex].maturityDate){
+                                    var financialAssetsStartDate = moment(model.customer.financialAssets[form.arrayIndex].startDate, SessionStore.getSystemDateFormat());
+                                    var financialAssetsMaturityDateDate = moment(model.customer.financialAssets[form.arrayIndex].maturityDate, SessionStore.getSystemDateFormat());
+                                    if (financialAssetsMaturityDateDate <= financialAssetsStartDate) {
+                                        model.customer.financialAssets[form.arrayIndex].maturityDate = null;
+                                        PageHelper.showProgress("pre-save-validation", "Financial Asset Maturity Date always more than Financial Asset Start Date", 5000);
+                                        
+                                    }
+                                }
+                            }
                         },
                         "HouseVerification.caste": {
                             // "required": true
