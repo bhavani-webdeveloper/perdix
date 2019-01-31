@@ -2901,74 +2901,36 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key:"customer.fixedAssetsMachinaries[].machineDescription",
                                 title:"MACHINE_DESCRIPTION",
                                 required: true,
-                                type: "lov",
-                                autolov: true,
-                                lovonly:true,
-                                searchHelper: formHelper,
-                                
-                                 outputMap: {
-                                
-                                "machineDescription": "customer.fixedAssetsMachinaries[arrayIndex].machineDescription"
-                                 },
-                                initialize: function(inputModel) {
-                                    $log.warn('in machine description initialize');
-                                    $log.info(inputModel);
-                                },
-                                search: function(inputModel, form, model) {
-                                    
-                                    return Queries.searchMachineDescription(
-                                    );
-                                },
-                                getListDisplayItem: function(item, index) {
-                                return [
-                                    item.machineDescription
-                                ];
-                            },
-                                onSelect: function(result, model, context) {
-                                   if(model.customer.fixedAssetsMachinaries[context.arrayIndex].manufacturerName){
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].manufacturerName=null;                                  
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].machineType=null;                                  
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].workProcess=null;                                  
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].depreciationPercentage=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
-
-                                   }
-                                   $log.info(result);
-                                }
+                                type: "string",
                             }, 
 
                             {
                                 key:"customer.fixedAssetsMachinaries[].manufacturerName",
-                                title:"MANUFACTURER_NAME",
                                 type: "lov",
-                                autolov: true,
-                                lovonly:true,
-                                searchHelper: formHelper,
+                                autolov:true,
+                                required: true,
+                                inputMap: {
+                                    "machineName": {
+                                        "key": "customer.fixedAssetsMachinaries[].manufacturerName",
+                                        "title": "MANUFACTURER_NAME"
+                                    },
+
+                                },
                                 
                                 outputMap: {
-                                     "machineName": "customer.fixedAssetsMachinaries[arrayIndex].manufacturerName"
-                                 },
-                                search: function(inputModel, form, model) {
-                                    
-                                    return Queries.searchMachineName(model.customer.fixedAssetsMachinaries[model.arrayIndex].machineDescription);
+                                    "machineName": "customer.fixedAssetsMachinaries[arrayIndex].manufacturerName"
+                              },
+                              searchHelper: formHelper,
+                                search: function (inputModel, form, model) {
+                                    if (!inputModel.machineName) {
+                                        return $q.reject();
+                                    }
+                                    return Queries.searchMachineName(inputModel.machineName);
                                 },
                                 getListDisplayItem: function(item, index) {
                                     return [
                                         item.machineName
                                     ];
-                                },
-                                onSelect: function(result, model, context) {
-                                   if(model.customer.fixedAssetsMachinaries[context.arrayIndex].machineType){
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].machineType=null;                                  
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].workProcess=null;                                  
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].depreciationPercentage=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
-                                   }
-                                    $log.info(result);
                                 }
                             }, 
                             {
@@ -2985,7 +2947,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                  },
                                 search: function(inputModel, form, model) {
                                     
-                                    return Queries.searchMachineType(model.customer.fixedAssetsMachinaries[model.arrayIndex].machineDescription,
+                                    return Queries.searchMachineType(
                                         model.customer.fixedAssetsMachinaries[model.arrayIndex].manufacturerName);
                                 },
                                 getListDisplayItem: function(item, index) {
@@ -3019,7 +2981,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                  },
                                 search: function(inputModel, form, model) {
                                     
-                                    return Queries.searchMachineWorkProcess(model.customer.fixedAssetsMachinaries[model.arrayIndex].machineDescription,
+                                    return Queries.searchMachineWorkProcess(
                                         model.customer.fixedAssetsMachinaries[model.arrayIndex].manufacturerName,
                                         model.customer.fixedAssetsMachinaries[model.arrayIndex].machineType);
                                 },
@@ -3052,7 +3014,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                  },
                                 search: function(inputModel, form, model) {
                                     
-                                    return Queries.searchMachineModel(model.customer.fixedAssetsMachinaries[model.arrayIndex].machineDescription,
+                                    return Queries.searchMachineModel(
                                         model.customer.fixedAssetsMachinaries[model.arrayIndex].manufacturerName,
                                         model.customer.fixedAssetsMachinaries[model.arrayIndex].machineType,
                                         model.customer.fixedAssetsMachinaries[model.arrayIndex].workProcess);
