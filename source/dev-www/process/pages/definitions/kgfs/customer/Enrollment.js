@@ -335,6 +335,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                 };
                             },
                         },
+                        "AdditionalKYC.additionalKYCs.kyc1ProofType":{
+                            required: true    
+                        },
                         "familyDetails.familyMembers": {
                             "startEmpty":true,
                             titleExpr: "(model.customer.familyMembers[arrayIndex].relationShip == 'Self'?'Self':'Family Memeber')",
@@ -743,8 +746,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         "EDF":{
                             orderNo: 140
                         },
+                        "bankAccounts.customerBankAccounts.accountNumber":{
+                            "required": true
+                        },
                         "bankAccounts.customerBankAccounts.confirmedAccountNumber":{
-                            "title":"Confirm Account Number"
+                            "title":"Confirm Account Number",
+                            "required": true
                         },
                         "actionbox":{
                             "condition":"model.customer.udf.userDefinedFieldValues.udf40=='ACCEPT'"
