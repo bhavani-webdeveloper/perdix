@@ -97,8 +97,8 @@ export class IndividualCustomerIDLOVConfiguration extends LOVElementConfiguratio
     };
 
     initialize: Function = function(model, form, parentModel, context) {
-        // let formHelper = AngularResourceService.getInstance().getNGService("formHelper");
-        // let $filter = AngularResourceService.getInstance().getNGService("$filter");
+        let formHelper = AngularResourceService.getInstance().getNGService("formHelper");
+        let $filter = AngularResourceService.getInstance().getNGService("$filter");
         // model.customerBranchId = parentModel.customer.customerBranchId;
         // model.centreId = parentModel.customer.centreId;
         // let centreCode = formHelper.enum('centre').data;
@@ -107,7 +107,14 @@ export class IndividualCustomerIDLOVConfiguration extends LOVElementConfiguratio
         // if(centreName && centreName.length > 0) {
         //     model.centreName = centreName[0].name;
         // }
+        model.customerBranchId = parentModel.customer.customerBranchId;
+        model.centreId = parentModel.customer.centreId;
+        var centreCode = formHelper.enum('centre').data;
 
+        var centreName = $filter('filter')(centreCode, {value: parentModel.customer.centreId}, true);
+        if(centreName && centreName.length > 0) {
+            model.centreName = centreName[0].name;
+        }
     };
 
     inputMap: Object = {
@@ -119,6 +126,19 @@ export class IndividualCustomerIDLOVConfiguration extends LOVElementConfiguratio
             "key": "customer.urnNo",
             "title": "URN_NO",
             "type": "string"
+        },
+        "customerBranchId": {
+            "key": "customer.customerBranchId",
+            "type": "select",
+            "screenFilter": true,
+            "readonly": true
+        },
+        "centreName": {
+            "key": "customer.place",
+            "title":"CENTRE_NAME",
+            "type": "string",
+            "readonly": true,
+
         },
         "centreId":{
             "key": "customer.centreId",

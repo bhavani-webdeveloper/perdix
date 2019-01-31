@@ -25,7 +25,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         "required": false
                     },
                     "Machinery.fixedAssetsMachinaries.hypothecatedToUs": {
-                        "title": "HYPOTHECATED_TO_IREP"
+                        "title": "HYPOTHECATED_TO_MAITREYA"
 
                     },
                     // "EnterpriseInformation.businessHistory": {
@@ -398,7 +398,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     },
                     "Machinery.fixedAssetsMachinaries.manufacturerName":{
                         "required":true
-                    }
+                    },
+                    "ContactInformation.distanceFromBranch":{
+                        "enumCode": "distance_from_branch",
+                    }  
                     
             }
             }
@@ -1536,140 +1539,147 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          
                                                      "manufacturerName":{
                                                         key: "customer.fixedAssetsMachinaries[].manufacturerName",
-                                                        type: "lov",
-                                                        autolov: true,
+                                                        type:"string",
                                                         required:true,
                                                         "orderNo":20,
-                                                        inputMap: {
-                                                            "machineName": {
-                                                            "key": "customer.fixedAssetsMachinaries[].manufacturerName",
-                                                            "title": "MANUFACTURER_NAME"
-                                                        },
+                                                        // type: "lov",
+                                                       // autolov: true,
+                                                        // inputMap: {
+                                                        //     "machineName": {
+                                                        //     "key": "customer.fixedAssetsMachinaries[].manufacturerName",
+                                                        //     "title": "MANUFACTURER_NAME"
+                                                        // },
                         
                                                     },
-                                                        outputMap: {
-                                                             "machineName": "customer.fixedAssetsMachinaries[arrayIndex].manufacturerName",
-                                                        },
-                                                        searchHelper: formHelper,
-                                                        search: function(inputModel, form, model) {
-                                                            if (!inputModel.machineName) {
-                                                                return $q.reject();
-                                                            }
-                                                            return Queries.searchMachineName(inputModel.machineName);
-                                                        },
-                                                        getListDisplayItem: function(item, index) {
-                                                            return [
-                                                                item.machineName
-                                                            ];
-                                                        }
-                                                     }, 
+                                                    //     outputMap: {
+                                                    //          "machineName": "customer.fixedAssetsMachinaries[arrayIndex].manufacturerName",
+                                                    //     },
+                                                    //     searchHelper: formHelper,
+                                                    //     search: function(inputModel, form, model) {
+                                                    //         if (!inputModel.machineName) {
+                                                    //             return $q.reject();
+                                                    //         }
+                                                    //         return Queries.searchMachineName(inputModel.machineName);
+                                                    //     },
+                                                    //     getListDisplayItem: function(item, index) {
+                                                    //         return [
+                                                    //             item.machineName
+                                                    //         ];
+                                                    //     }
+                                                    //  }, 
                                                      "machineType":{
                                                         key:"customer.fixedAssetsMachinaries[].machineType",
                                                         title:"MACHINE_TYPE",
-                                                        type: "lov",
-                                                        autolov: true,
-                                                        lovonly:true,
-                                                        searchHelper: formHelper,
                                                         "orderNo":30,
-                                                        outputMap: {
-                                                             "machineType": "customer.fixedAssetsMachinaries[arrayIndex].machineType",
-                                                             "depreciationPercentage": "customer.fixedAssetsMachinaries[arrayIndex].depreciationPercentage"
-                                                         },
-                                                        search: function(inputModel, form, model) {
+                                                        type:"string"
+                                                        //type: "lov",
+                                                       // autolov: true,
+                                                        //lovonly:true,
+                                                        //searchHelper: formHelper,
+                                                        
+                                                    //     outputMap: {
+                                                    //          "machineType": "customer.fixedAssetsMachinaries[arrayIndex].machineType",
+                                                    //          "depreciationPercentage": "customer.fixedAssetsMachinaries[arrayIndex].depreciationPercentage"
+                                                    //      },
+                                                    //     search: function(inputModel, form, model) {
                                                             
-                                                            return Queries.searchMachineType(
-                                                                model.customer.fixedAssetsMachinaries[model.arrayIndex].manufacturerName);
-                                                        },
-                                                        getListDisplayItem: function(item, index) {
-                                                            return [
-                                                                item.machineType,
-                                                                item.depreciationPercentage
-                                                            ];
-                                                        },
-                                                        onSelect: function(result, model, context) {
+                                                    //         return Queries.searchMachineType(
+                                                    //             model.customer.fixedAssetsMachinaries[model.arrayIndex].manufacturerName);
+                                                    //     },
+                                                    //     getListDisplayItem: function(item, index) {
+                                                    //         return [
+                                                    //             item.machineType,
+                                                    //             item.depreciationPercentage
+                                                    //         ];
+                                                    //     },
+                                                    //     onSelect: function(result, model, context) {
                                                             
-                                                           if(model.customer.fixedAssetsMachinaries[context.arrayIndex].workProcess){                                                                         
-                                                                model.customer.fixedAssetsMachinaries[context.arrayIndex].workProcess=null;                                  
-                                                                model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
+                                                    //        if(model.customer.fixedAssetsMachinaries[context.arrayIndex].workProcess){                                                                         
+                                                    //             model.customer.fixedAssetsMachinaries[context.arrayIndex].workProcess=null;                                  
+                                                    //             model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
                                                                
-                                                                model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
-                                                                model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
-                                                           }
-                                                            $log.info(result);
-                                                        }
-                                                     }, 
+                                                    //             model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
+                                                    //             model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
+                                                    //        }
+                                                    //         $log.info(result);
+                                                    //     }
+                                                    }, 
                                                      "workProcess":{
                                                         key:"customer.fixedAssetsMachinaries[].workProcess",
                                                         title:"WORK_PROCESS",
-                                                        type: "lov",
-                                                        autolov: true,
-                                                        lovonly:true,
-                                                        searchHelper: formHelper,
-                                                        "orderNo":40,
-                                                        outputMap: {
-                                                             "workProcess": "customer.fixedAssetsMachinaries[arrayIndex].workProcess"
-                                                         },
-                                                        search: function(inputModel, form, model) {
+                                                        type:"string",
+                                                        "orderNo":40
+                                                       // type: "lov",
+                                                        // autolov: true,
+                                                        // lovonly:true,
+                                                        // searchHelper: formHelper,
+                                                        
+                                                        // outputMap: {
+                                                        //      "workProcess": "customer.fixedAssetsMachinaries[arrayIndex].workProcess"
+                                                        //  },
+                                                        // search: function(inputModel, form, model) {
                                                             
-                                                            return Queries.searchMachineWorkProcess(
-                                                                model.customer.fixedAssetsMachinaries[model.arrayIndex].manufacturerName,
-                                                                model.customer.fixedAssetsMachinaries[model.arrayIndex].machineType);
-                                                        },
-                                                        getListDisplayItem: function(item, index) {
-                                                            return [
-                                                                item.workProcess
-                                                            ];
-                                                        },
-                                                        onSelect: function(result, model, context) {
-                                                           if(model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel){
-                                                                model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
-                                                                model.customer.fixedAssetsMachinaries[context.arrayIndex].depreciationPercentage=null;
-                                                                model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
-                                                                model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
-                                                           }
-                                                            $log.info(result);
-                                                        }
+                                                        //     return Queries.searchMachineWorkProcess(
+                                                        //         model.customer.fixedAssetsMachinaries[model.arrayIndex].manufacturerName,
+                                                        //         model.customer.fixedAssetsMachinaries[model.arrayIndex].machineType);
+                                                        // },
+                                                        // getListDisplayItem: function(item, index) {
+                                                        //     return [
+                                                        //         item.workProcess
+                                                        //     ];
+                                                        // },
+                                                        // onSelect: function(result, model, context) {
+                                                        //    if(model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel){
+                                                        //         model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
+                                                        //         model.customer.fixedAssetsMachinaries[context.arrayIndex].depreciationPercentage=null;
+                                                        //         model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
+                                                        //         model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
+                                                        //    }
+                                                        //     $log.info(result);
+                                                        // }
                                                      }, 
                                                     
                                                      "machineModel":{
                                                         key: "customer.fixedAssetsMachinaries[].machineModel",
                                                         title:"MACHINE_MODEL",
-                                                        type: "lov",
-                                                        autolov: true,
-                                                        searchHelper: formHelper,
-                                                        "orderNo":50,
-                                                        outputMap: {
-                                                             "machineModel": "customer.fixedAssetsMachinaries[arrayIndex].machineModel"
-                                                         },
-                                                        search: function(inputModel, form, model) {
+                                                        type:"string",
+                                                        "orderNo":50
+                                                        // type: "lov",
+                                                        // autolov: true,
+                                                        // searchHelper: formHelper,
+                                                       
+                                                        // outputMap: {
+                                                        //      "machineModel": "customer.fixedAssetsMachinaries[arrayIndex].machineModel"
+                                                        //  },
+                                                        // search: function(inputModel, form, model) {
                                                             
-                                                            return Queries.searchMachineModel(
-                                                                model.customer.fixedAssetsMachinaries[model.arrayIndex].manufacturerName,
-                                                                model.customer.fixedAssetsMachinaries[model.arrayIndex].machineType,
-                                                                model.customer.fixedAssetsMachinaries[model.arrayIndex].workProcess);
-                                                        },
-                                                        getListDisplayItem: function(item, index) {
-                                                            return [
-                                                                item.machineModel
-                                                            ];
-                                                        },
-                                                        onSelect: function(result, model, context) {
-                                                            //model.customer.fixedAssetsMachinaries[context.arrayIndex].manufacturerName=result.machineName;
-                                                            priceCalculation(null, null, model);
-                                                            if (model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice && model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue) {
-                                                                if(model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice <=0 && model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue > 0) {
-                                                                    model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = Math.round(model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue);
-                                                                }                                        
-                                                                else if(model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice > 0 && model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue <=0){
-                                                                    model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = Math.round(model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice);
-                                                                }                                        
-                                                                else{
-                                                                 model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = Math.round(((model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue+model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice) /2)*100)/100;
-                                                                }    
-                                                            } else {
-                                                                model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = null;
-                                                            }
-                                                        }
+                                                        //     return Queries.searchMachineModel(
+                                                        //         model.customer.fixedAssetsMachinaries[model.arrayIndex].manufacturerName,
+                                                        //         model.customer.fixedAssetsMachinaries[model.arrayIndex].machineType,
+                                                        //         model.customer.fixedAssetsMachinaries[model.arrayIndex].workProcess);
+                                                        // },
+                                                        // getListDisplayItem: function(item, index) {
+                                                        //     return [
+                                                        //         item.machineModel
+                                                        //     ];
+                                                        // },
+                                                        // onSelect: function(result, model, context) {
+                                                        //     //model.customer.fixedAssetsMachinaries[context.arrayIndex].manufacturerName=result.machineName;
+                                                        //     priceCalculation(null, null, model);
+                                                        //     if (model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice && model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue) {
+                                                        //         if(model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice <=0 && model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue > 0) {
+                                                        //             model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = Math.round(model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue);
+                                                        //         }                                        
+                                                        //         else if(model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice > 0 && model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue <=0){
+                                                        //             model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = Math.round(model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice);
+                                                        //         }                                        
+                                                        //         else{
+                                                        //          model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = Math.round(((model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue+model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice) /2)*100)/100;
+                                                        //         }    
+                                                        //     } else {
+                                                        //         model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = null;
+                                                        //     }
+                                                        // }
                                                      },
                                                      "serialNumber":{
                                                          key: "customer.fixedAssetsMachinaries[].serialNumber",
@@ -1721,26 +1731,26 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                                             }
                                                         }
                                                      },
-                                                     "depreciationPercentage":{
-                                                         key: "customer.fixedAssetsMachinaries[].depreciationPercentage",
-                                                         readonly:true,
-                                                         title:"DEPRECIATION_PERCENTAGE",
-                                                         "orderNo":100,
+                                                    //  "depreciationPercentage":{
+                                                    //      key: "customer.fixedAssetsMachinaries[].depreciationPercentage",
+                                                    //      readonly:true,
+                                                    //      title:"DEPRECIATION_PERCENTAGE",
+                                                    //      "orderNo":100,
                          
-                                                     },
-                                                     "marketPrice":{
-                                                         key: "customer.fixedAssetsMachinaries[].marketPrice",
-                                                         readonly:true,
-                                                         title:"MARKET_PRICE",
-                                                         "orderNo":110,
+                                                    //  },
+                                                    //  "marketPrice":{
+                                                    //      key: "customer.fixedAssetsMachinaries[].marketPrice",
+                                                    //      readonly:true,
+                                                    //      title:"MARKET_PRICE",
+                                                    //      "orderNo":110,
                          
-                                                     },
-                                                     "finalPrice":{
-                                                         key: "customer.fixedAssetsMachinaries[].finalPrice",
-                                                         readonly:true,
-                                                         title:"FINAL_PRICE",
-                                                         "orderNo":120,
-                                                     },
+                                                    //  },
+                                                    //  "finalPrice":{
+                                                    //      key: "customer.fixedAssetsMachinaries[].finalPrice",
+                                                    //      readonly:true,
+                                                    //      title:"FINAL_PRICE",
+                                                    //      "orderNo":120,
+                                                    //  },
                                                      "isTheMachineNew":{
                                                          key: "customer.fixedAssetsMachinaries[].isTheMachineNew",
                                                          title:"IS_THE_MACHINE_NEW",
