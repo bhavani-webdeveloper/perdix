@@ -50,7 +50,96 @@ define([],function(){
                 }
             };
 
+            var computeEstimatedEMI = function(model){
+                var fee = 0;
+                if(model.loanAccount.commercialCibilCharge)
+                    if(!_.isNaN(model.loanAccount.commercialCibilCharge))
+                        fee+=model.loanAccount.commercialCibilCharge;
+                $log.info(model.loanAccount.commercialCibilCharge);
 
+                // Get the user's input from the form. Assume it is all valid.
+                // Convert interest from a percentage to a decimal, and convert from
+                // an annual rate to a monthly rate. Convert payment period in years
+                // to the number of monthly payments.
+
+                if(model.loanAccount.loanAmountRequested == '' || model.loanAccount.expectedInterestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenureRequested == '')
+                    return;
+
+                var principal = model.loanAccount.loanAmountRequested;
+                var interest = model.loanAccount.expectedInterestRate / 100 / 12;
+                var payments;
+                if (model.loanAccount.frequencyRequested == 'Yearly')
+                    payments = model.loanAccount.tenureRequested * 12;
+                else if (model.loanAccount.frequencyRequested == 'Monthly')
+                    payments = model.loanAccount.tenureRequested;
+
+                // Now compute the monthly payment figure, using esoteric math.
+                var x = Math.pow(1 + interest, payments);
+                var monthly = (principal*x*interest)/(x-1);
+
+                // Check that the result is a finite number. If so, display the results.
+                if (!isNaN(monthly) &&
+                    (monthly != Number.POSITIVE_INFINITY) &&
+                    (monthly != Number.NEGATIVE_INFINITY)) {
+
+                    model.loanAccount.estimatedEmi = round(monthly);
+                    //document.loandata.total.value = round(monthly * payments);
+                    //document.loandata.totalinterest.value = round((monthly * payments) - principal);
+                }
+                // Otherwise, the user's input was probably invalid, so don't
+                // display anything.
+                else {
+                    model.loanAccount.estimatedEmi  = "";
+                    //document.loandata.total.value = "";
+                    //document.loandata.totalinterest.value = "";
+                }
+
+            };
+
+        var computeEMI = function(model){
+
+            // Get the user's input from the form. Assume it is all valid.
+            // Convert interest from a percentage to a decimal, and convert from
+            // an annual rate to a monthly rate. Convert payment period in years
+            // to the number of monthly payments.
+
+            if(model.loanAccount.loanAmount == '' || model.loanAccount.interestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenure == '')
+                return;
+
+            var principal = model.loanAccount.loanAmount;
+            var interest = model.loanAccount.interestRate / 100 / 12;
+            var payments;
+            if (model.loanAccount.frequencyRequested == 'Yearly')
+                payments = model.loanAccount.tenure * 12;
+            else if (model.loanAccount.frequencyRequested == 'Monthly')
+                payments = model.loanAccount.tenure;
+
+            // Now compute the monthly payment figure, using esoteric math.
+            var x = Math.pow(1 + interest, payments);
+            var monthly = (principal*x*interest)/(x-1);
+
+            // Check that the result is a finite number. If so, display the results.
+            if (!isNaN(monthly) &&
+                (monthly != Number.POSITIVE_INFINITY) &&
+                (monthly != Number.NEGATIVE_INFINITY)) {
+
+                model.loanAccount.emiRequested = round(monthly);
+                //document.loandata.total.value = round(monthly * payments);
+                //document.loandata.totalinterest.value = round((monthly * payments) - principal);
+            }
+            // Otherwise, the user's input was probably invalid, so don't
+            // display anything.
+            else {
+                model.loanAccount.emiRequested  = "";
+                //document.loandata.total.value = "";
+                //document.loandata.totalinterest.value = "";
+            }
+
+        };
+            // This simple method rounds a number to two decimal places.
+                function round(x) {
+                  return Math.ceil(x);
+                }
 
             var configFile = function() {
                 return {
@@ -64,10 +153,26 @@ define([],function(){
                            "title":"LOAN_AMOUNT_REQUEST",
                             "orderNo":10,
                             "required":true,
-                            "readonly":true
+                            "readonly":true,
+                            onChange:function(value,form,model){
+                                computeEMI(model);
+                            }
                         },
                         "LoanRecommendation.loanAmountRecommended": {
-                            "required":true
+                            "required":true,
+                            onChange:function(value,form,model){
+                                computeEMI(model);
+                            }
+                        },
+                        "LoanRecommendation.tenure": {
+                            onChange:function(value,form,model){
+                                computeEMI(model);
+                            }
+                        },
+                        "LoanRecommendation.interestRate": {
+                            onChange:function(value,form,model){
+                                computeEMI(model);
+                            }
                         },
                         "LoanRecommendation.expectedEmi": {
                             "required":true,
@@ -85,8 +190,8 @@ define([],function(){
                             "condition": "model.loanAccount.securityEmiRequired == 'YES'"
                         },                            
                         "PreliminaryInformation.loanAmountRequested": {
-                            onChange: function(modelValue, form, model) {
-                                model.loanAccount.estimatedEmi = null;
+                            onChange:function(value,form,model){
+                                computeEstimatedEMI(model);
                             }
                         },
                         "PreliminaryInformation.estimatedEmi": {
@@ -95,25 +200,20 @@ define([],function(){
                         },
                         "PreliminaryInformation.frequencyRequested": {
                             "required": true,
-                            onChange: function(modelValue, form, model) {
-                                model.loanAccount.estimatedEmi = null;
-                                model.loanAccount.expectedInterestRate = null;
-                                model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
+                            onChange:function(value,form,model){
+                                computeEstimatedEMI(model);
                             }
                         },
                         "PreliminaryInformation.udf5": {
                             "required": true,
-                            onChange: function(modelValue, form, model) {
-                                model.loanAccount.estimatedEmi = null;
-                                model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
-                                model.loanAccount.expectedInterestRate = null;
+                            onChange:function(value,form,model){
+                                computeEstimatedEMI(model);
                             }
                         },
                         "PreliminaryInformation.tenureRequested": {
                             "required": true,
-                            onChange: function(modelValue, form, model) {
-                                model.loanAccount.estimatedEmi = null;
-                                model.loanAccount.expectedInterestRate = null;
+                            onChange:function(value,form,model){
+                                computeEstimatedEMI(model);
                             }
                         },
                         
@@ -232,6 +332,7 @@ define([],function(){
                     "LoanDocuments.loanDocuments",
                     "LoanDocuments.loanDocuments.document",
                     "LoanDocuments.loanDocuments.documentId",
+
                     "LoanRecommendation",
                     "LoanRecommendation.loanAmountRecommended",
                     "LoanRecommendation.loanAmount",
@@ -240,8 +341,9 @@ define([],function(){
                     "LoanRecommendation.expectedEmi",
 
                     "LoanMitigants",
-                    "LoanMitigants.deviationParameter.mitigants",
-                    "LoanMitigants.deviationParameter.mitigants",
+                    "LoanMitigants.deviations",
+                    "LoanMitigants.deviations.deviation",
+                    "LoanMitigants.deviations.mitigation",
 
                     "PostReview",
                     "PostReview.action",
@@ -267,6 +369,18 @@ define([],function(){
                 "subTitle": "BUSINESS",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                     // AngularResourceService.getInstance().setInjector($injector);
+
+                    if(model.currentStage=='Screening' || model.currentStage=='ScreeningReview'|| model.currentStage=='Application') {
+                        if(model.loanAccount.estimatedEmi){
+                            model.loanAccount.estimatedEmi = model.loanAccount.estimatedEmi;
+                        } else {
+                            if(model.currentStage=='ScreeningReview') {
+                                computeEMI(model);
+                            } else {
+                                computeEstimatedEMI(model);
+                            }
+                        }
+                    }
 
                     /* Setting data recieved from Bundle */
                     model.loanAccount = model.loanProcess.loanAccount;
@@ -358,12 +472,13 @@ define([],function(){
                                         "orderNo": 9
                                     },
                                     "comfortableEMI": {
+                                        "key":"loanAccount.estimatedEmi",
                                         "title": "COMFORTABLE_EMI",
                                         "type": "string",
                                         "orderNo": 140
                                     },
                                     "modeOfDisbursement": {
-                                        "key":"loanAccount.modeOfDisbursement",
+                                        "key":"loanAccount.udf2",
                                         "title": "MODE_OF_DISBURSEMENT",
                                         "type": "select",
                                         "enumCode":"mode_of_disbursement",
@@ -376,7 +491,7 @@ define([],function(){
                                     "loanAmountRecommended":{
                                         "key":"loanAccount.loanAmount",
                                         "title":"LOAN_AMOUNT_RECOMMENDED",
-                                        "type":"numeric",
+                                        "type":"amount",
                                         "orderNo":20
                                     },
                                     "expectedEmi":{
@@ -422,6 +537,31 @@ define([],function(){
                                         }
                                     }
                                 }
+                            },
+                            "LoanMitigants":{
+                                    "items":{
+                                        "deviations":{
+                                            "key":"loanAccount.loanMitigants",
+                                            "title":"ADD",
+                                            "type":"array",
+                                            "startEmpty": true,
+                                            "items":{
+                                                "deviation":{
+                                                    "key":"loanAccount.loanMitigants[].mitigant",
+                                                    "title":"DEVIATION",
+                                                    "type":"string",
+                                                    "readonly":true
+                                                },
+                                                "mitigation":{
+                                                    "key":"loanAccount.loanMitigants[].parameter",
+                                                    "title":"MITIGATION",
+                                                    "type":"string",
+                                                    "readonly":true
+                                                }
+                                            }
+                                        }
+
+                                    }
                             },
                             "PostReview": {
                                         "type": "box",
