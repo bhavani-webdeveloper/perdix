@@ -43,7 +43,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "Application":
                         {
                             "excludes":[
-                                "KYC.firstName"
+                                "KYC.firstName",
+                                "References.verifications.ReferenceCheck",
+                                "IndividualReferences",
                             ],
                             "overrides":{
                             "ContactInformation.locality":{
@@ -1776,16 +1778,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "References.verifications.businessName",
                     "References.verifications.referenceFirstName",
                     "References.verifications.mobileNo",
+                    "References.verifications.occupation",
                     "References.verifications.address",
                     "References.verifications.ReferenceCheck",
+                    "References.verifications.ReferenceCheck.relationship",
+                    "References.verifications.ReferenceCheck.opinion",
+                    "References.verifications.ReferenceCheck.financialStatus",
                     "References.verifications.ReferenceCheck.knownSince",
-                    "References.verifications.ReferenceCheck.goodsSold",
-                    "References.verifications.ReferenceCheck.goodsBought",
-                    "References.verifications.ReferenceCheck.paymentTerms",
-                    "References.verifications.ReferenceCheck.modeOfPayment",
-                    "References.verifications.ReferenceCheck.outstandingPayable",
-                    "References.verifications.ReferenceCheck.outstandingReceivable",
-                    "References.verifications.ReferenceCheck.customerResponse",
+                    //"References.verifications.ReferenceCheck.goodsSold",
+                    // "References.verifications.ReferenceCheck.goodsBought",
+                    // "References.verifications.ReferenceCheck.paymentTerms",
+                    // "References.verifications.ReferenceCheck.modeOfPayment",
+                    // "References.verifications.ReferenceCheck.outstandingPayable",
+                    // "References.verifications.ReferenceCheck.outstandingReceivable",
+                     "References.verifications.ReferenceCheck.customerResponse",
 
 
                 ];
@@ -1931,27 +1937,29 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             title:"REFERENCES",
                                             type: "array",
                                             items:{
-                                                "relationship" : {
-                                                    key:"customer.verifications[].relationship",
-                                                    title:"REFERENCE_TYPE",
-                                                    type:"select",
-                                                    required:"true",
-                                                    enumCode: "business_reference_type"
-                                                },
-                                                "businessName" : {
-                                                    key:"customer.verifications[].businessName",
-                                                    title:"BUSINESS_NAME",
-                                                    type:"string"
-                                                },
+                                                // "relationship" : {
+                                                //     key:"customer.verifications[].relationship",
+                                                //     title:"REFERENCE_TYPE",
+                                                //     type:"select",
+                                                //     required:"true",
+                                                //     enumCode: "business_reference_type"
+                                                // },
+                                                // "businessName" : {
+                                                //     key:"customer.verifications[].businessName",
+                                                //     title:"BUSINESS_NAME",
+                                                //     type:"string"
+                                                // },
                                                 "referenceFirstName" : {
                                                     key:"customer.verifications[].referenceFirstName",
                                                     title:"CONTACT_PERSON_NAME",
+                                                    required:"true",
                                                     type:"string"
                                                 },
                                                 "mobileNo" : {
                                                     key:"customer.verifications[].mobileNo",
                                                     title:"CONTACT_NUMBER",
                                                     type:"string",
+                                                    required:"true",
                                                     inputmode: "number",
                                                     numberType: "tel",
                                                     "schema": {
@@ -1976,6 +1984,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     title:"SELF_REPORTED_INCOME",
                                                     type:"number"
                                                 }*/,
+                                                "occupation":{
+                                                    key:"customer.verifications[].occupation",
+                                                    title:"OCCUPATION",
+                                                    type:"select",
+                                                    "enumCode": "occupation",
+                                                },
                                                 "address" : {
                                                     key:"customer.verifications[].address",
                                                     type:"textarea"
@@ -1994,33 +2008,49 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                         key:"customer.verifications[].knownSince",
                                                         required:true
                                                     },
-                                                    "goodsSold" : {
-                                                        key:"customer.verifications[].goodsSold",
-                                                        "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
-                                                    },
-                                                    "goodsBought" : {
-                                                        key:"customer.verifications[].goodsBought",
-                                                        "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
-                                                    },
-                                                    "paymentTerms" : {
-                                                        key:"customer.verifications[].paymentTerms",
+                                                    "relationship":{
+                                                        key:"customer.verifications[].relationship",
+                                                        title:"REFERENCE_TYPE1",
                                                         type:"select",
-                                                        "title":"payment_tarms",
-                                                        enumCode: "payment_terms"
+                                                        required:true,
+                                                        titleMap: {
+                                                            "Neighbour": "Neighbour",
+                                                            "Relative/friend": "Relative/friend"
+                                                        }
                                                     },
-                                                    "modeOfPayment" : {
-                                                        key:"customer.verifications[].modeOfPayment",
-                                                        type:"select",
-                                                        enumCode: "payment_mode"
+                                                    "opinion":{
+                                                        key:"customer.verifications[].opinion"
                                                     },
-                                                    "outstandingPayable" : {
-                                                        key:"customer.verifications[].outstandingPayable",
-                                                        "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
+                                                    "financialStatus":{
+                                                        key:"customer.verifications[].financialStatus"
                                                     },
-                                                    "outstandingReceivable" : {
-                                                        key:"customer.verifications[].outstandingReceivable",
-                                                        "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
-                                                    },
+                                                    // "goodsSold" : {
+                                                    //     key:"customer.verifications[].goodsSold",
+                                                    //     "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
+                                                    // },
+                                                    // "goodsBought" : {
+                                                    //     key:"customer.verifications[].goodsBought",
+                                                    //     "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
+                                                    // },
+                                                    // "paymentTerms" : {
+                                                    //     key:"customer.verifications[].paymentTerms",
+                                                    //     type:"select",
+                                                    //     "title":"payment_tarms",
+                                                    //     enumCode: "payment_terms"
+                                                    // },
+                                                    // "modeOfPayment" : {
+                                                    //     key:"customer.verifications[].modeOfPayment",
+                                                    //     type:"select",
+                                                    //     enumCode: "payment_mode"
+                                                    // },
+                                                    // "outstandingPayable" : {
+                                                    //     key:"customer.verifications[].outstandingPayable",
+                                                    //     "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
+                                                    // },
+                                                    // "outstandingReceivable" : {
+                                                    //     key:"customer.verifications[].outstandingReceivable",
+                                                    //     "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
+                                                    // },
                                                     "customerResponse" : {
                                                         key:"customer.verifications[].customerResponse",
                                                         title:"CUSTOMER_RESPONSE",
