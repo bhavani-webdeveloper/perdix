@@ -461,6 +461,9 @@ define({
                                 for (var i = 0; i < targetstage.length; i++) {
                                     var t = targetstage[i];
                                     if (t.name == stage1 && 'default' == t.field2) {
+                                        if(model.group.partnerCode != "AXIS" && (t.field1 == "Checker3" || t.field1 == "Checker4")){
+                                            continue;
+                                        }
                                         model.review.targetStage = t.field1;
                                         model.review.rejectStage = "Rejected";
                                         break;
@@ -495,6 +498,9 @@ define({
                                     for (var i = 0; i < targetstage.length; i++) {
                                         var t = targetstage[i];
                                         if (t.name == stage1 && 'reject' != t.field2) {
+                                            if(model.group.partnerCode != "AXIS" && (t.field1 == "Checker3" || t.field1 == "Checker4")){
+                                                continue;
+                                            }
                                             out.push({
                                                 name: t.field1,
                                             })
