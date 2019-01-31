@@ -24,14 +24,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 title: 'APPLICANT',
                                 pageClass: 'applicant',
                                 minimum: 1,
-                                maximum: 1,
+                                maximum: 0,
                                 order:10
                             },
                             {
                                 pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'CO_APPLICANT',
                                 pageClass: 'co-applicant',
-                                minimum: 0,
+                                minimum: 1,
                                 maximum: 0,
                                 order:20
                             },
@@ -39,7 +39,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'GUARANTOR',
                                 pageClass: 'guarantor',
-                                minimum: 0,
+                                minimum: 1,
                                 maximum: 0,
                                 order:30
                             },
@@ -178,7 +178,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     model: {
                                         enrolmentProcess: loanProcess.applicantEnrolmentProcess,
                                         loanProcess: loanProcess
-                                    }
+                                    }   
                                 });
 
                                 if(_.hasIn(loanAccount, 'coApplicantsEnrolmentProcesses')) {
