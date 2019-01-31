@@ -209,7 +209,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         "required": true
                     },
                     "BankAccounts.customerBankAccounts.isDisbersementAccount":{
-                        "title": "Is Disbursement"
+                        //"title": "Is Disbursement"
                     },
                     "BankAccounts.customerBankAccounts.accountNumber": {
                          "type": "password",
@@ -395,6 +395,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     },    
                     "Liabilities.liabilities.installmentAmountInPaisa":{
                         "title": "INSTALLEMENT_AMOUNT",
+                    },
+                    "ContactInformation.distanceFromBranch":{
+                        "enumCode": "distance_from_branch",
                     }              
                }
             }
@@ -511,7 +514,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "ReferenceCheck" : {
                                     type: "fieldset",
                                     title: "REFERENCE_CHECK",
-                                    "condition": "model.currentStage=='FieldAppraisal'",
+                                    "condition": "model.currentStage=='FieldAppraisal' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
                                     items: {
                                         /*,
                                         {

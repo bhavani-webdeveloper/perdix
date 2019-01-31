@@ -78,15 +78,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences",
                                 "References",
                                 "KYC.firstName",
-                                "FamilyDetails.familyMembers.relationShip1",
-                                "FamilyDetails.familyMembers.familyMemberFirstName",
-                                "FamilyDetails.familyMembers.anualEducationFee",
-                                "FamilyDetails.familyMembers.salary",
-                                "FamilyDetails.familyMembers.incomes",
-                                "FamilyDetails.familyMembers.incomes.incomeSource",
-                                "FamilyDetails.familyMembers.incomes.incomeEarned",
-                                "FamilyDetails.familyMembers.incomes.frequency",
-                                "FamilyDetails.familyMembers.noOfDependents",
                             ],
                             "overrides": {
                                 "KYC": {
@@ -171,9 +162,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualInformation.spouseDateOfBirth": {
                                     "condition": "model.customer.maritalStatus==='MARRIED'"
                                 },
-                                "FamilyDetails.familyMembers.relationShip": {
-                                    "readonly": true
-                                },
+                                // "FamilyDetails.familyMembers.relationShip": {
+                                //     "readonly": true
+                                // },
                                 "HouseVerification.ownership": {
                                     "required": true
                                 },
@@ -205,9 +196,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
                                     "required": true
                                 },
-                                "FamilyDetails.familyMembers": {
-                                    "view": "fixed"
-                                },
+                                // "FamilyDetails.familyMembers": {
+                                //     "view": "fixed"
+                                // },
                                 "BankAccounts.customerBankAccounts.accountNumber":{
                                     required:false
                                 },
@@ -309,9 +300,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualInformation.spouseDateOfBirth": {
                                     "condition": "model.customer.maritalStatus==='MARRIED'"
                                 },
-                                "FamilyDetails.familyMembers.relationShip": {
-                                    "readonly": true
-                                },
+                                // "FamilyDetails.familyMembers.relationShip": {
+                                //     "readonly": true
+                                // },
                                 "HouseVerification.ownership": {
                                     "required": true
                                 },
@@ -343,9 +334,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
                                     "required": true
                                 },
-                                "FamilyDetails.familyMembers": {
-                                    "view": "fixed"
-                                }
+                                // "FamilyDetails.familyMembers": {
+                                //     "view": "fixed"
+                                // }
                             }
                         },
                         "KYCReview": {
@@ -399,13 +390,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             },
                              "excludes": [
                                 "IndividualFinancials",
-                                "FamilyDetails.familyMembers.familyMemberFirstName",
-                                "FamilyDetails.familyMembers.anualEducationFee",
-                                "FamilyDetails.familyMembers.salary",
-                                "FamilyDetails.familyMembers.incomes",
-                                "FamilyDetails.familyMembers.incomes.incomeSource",
-                                "FamilyDetails.familyMembers.incomes.incomeEarned",
-                                "FamilyDetails.familyMembers.incomes.frequency",
+                                // "FamilyDetails.familyMembers.familyMemberFirstName",
+                                // "FamilyDetails.familyMembers.anualEducationFee",
+                                // "FamilyDetails.familyMembers.salary",
+                                // "FamilyDetails.familyMembers.incomes",
+                                // "FamilyDetails.familyMembers.incomes.incomeSource",
+                                // "FamilyDetails.familyMembers.incomes.incomeEarned",
+                                // "FamilyDetails.familyMembers.incomes.frequency",
                                 "ContactInformation.whatsAppMobileNoOption",
                                 "HouseVerification.latitude",
                                 "HouseVerification.houseVerificationPhoto",
@@ -527,9 +518,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ContactInformation.mailingState": {
                                     "condition": "!model.customer.mailSameAsResidence",
                                 },
-                                "FamilyDetails.familyMembers.relationShip": {
-                                    "readonly": true
-                                },
+                                // "FamilyDetails.familyMembers.relationShip": {
+                                //     "readonly": true
+                                // },
                                 "HouseVerification.ownership": {
                                     "required": true
                                 },
@@ -560,9 +551,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
                                     "required": true
                                 },
-                                "FamilyDetails.familyMembers": {
-                                    "view": "fixed"
-                                },
+                                // "FamilyDetails.familyMembers": {
+                                //     "view": "fixed"
+                                // },
                                 "ContactInformation.locality":{
                                     "readonly": true
                                 },
@@ -584,9 +575,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualFinancials.expenditures.expenditureSource": {
                                     "required": true
                                 },
-                                "FamilyDetails.familyMembers.familyMemberFirstName": {
-                                    "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
-                                }
+                                // "FamilyDetails.familyMembers.familyMemberFirstName": {
+                                //     "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
+                                // }
                             }
                         },
                         "AppraisalReview": {
@@ -806,9 +797,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ContactInformation.locality":{
                                     "readonly": true
                                 },
-                                "FamilyDetails.familyMembers.familyMemberFirstName": {
-                                    "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
-                                },
+                                // "FamilyDetails.familyMembers.familyMemberFirstName": {
+                                //     "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
+                                // },
                                 "ContactInformation.villageName":{
                                     "readonly": true
                                 },
@@ -1072,6 +1063,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "orderNo": 9,
                                     "readonly":true
                                 },
+                                "References": {
+                                    "orderNo": 9,
+                                    "readonly":true
+                                },
                                 "PhysicalAssets": {
                                     "orderNo": 10,
                                     "readonly":true
@@ -1164,9 +1159,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "condition": "!model.customer.mailSameAsResidence",
                                     "readonly": true
                                 },
-                                "FamilyDetails.familyMembers.relationShip": {
-                                    "readonly": true
-                                },
+                                // "FamilyDetails.familyMembers.relationShip": {
+                                //     "readonly": true
+                                // },
                                 "HouseVerification.ownership": {
                                     "required": true
                                 },
@@ -1198,11 +1193,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
                                     "required": true
                                 },
-                                "FamilyDetails.familyMembers": {
-                                    "add": null,
-                                    "remove": null,
-                                    "view": "fixed"
-                                },
+                                // "FamilyDetails.familyMembers": {
+                                //     "add": null,
+                                //     "remove": null,
+                                //     "view": "fixed"
+                                // },
                                 "IndividualReferences.verifications.referenceFirstName": {
                                     "required": true
                                 },
@@ -1212,9 +1207,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualFinancials.expenditures.expenditureSource": {
                                     "required": true
                                 },
-                                "FamilyDetails.familyMembers.familyMemberFirstName": {
-                                    "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
-                                },
+                                // "FamilyDetails.familyMembers.familyMemberFirstName": {
+                                //     "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
+                                // },
                                 "IndividualReferences.verifications.knownSince": {
                                     "required": true
                                 },
@@ -1231,30 +1226,54 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "FieldAppraisalReview":{
                             "overrides":{
+                                "References": {
+                                    "readonly": true
+                                },
                                 "PhysicalAssets": {
                                     "readonly": true
-                                }
+                                },
+                                "FamilyDetails": {
+                                    "readonly": true
+                                },
                             }
                         },
                         "CentralRiskReview":{
                             "overrides":{
+                                "References": {
+                                    "readonly": true
+                                },
                                 "PhysicalAssets": {
                                     "readonly": true
-                                }
+                                },
+                                "FamilyDetails": {
+                                    "readonly": true
+                                },
                             }
                         },
                         "CreditCommitteeReview":{
                             "overrides":{
+                                "References": {
+                                    "readonly": true
+                                },
                                 "PhysicalAssets": {
                                     "readonly": true
-                                }
+                                },
+                                "FamilyDetails": {
+                                    "readonly": true
+                                },
                             }
                         },
                         "loanView":{
                             "overrides":{
+                                "References": {
+                                    "readonly": true
+                                },
                                 "PhysicalAssets": {
                                     "readonly": true
-                                }
+                                },
+                                "FamilyDetails": {
+                                    "readonly": true
+                                },
                             }
                         }
                     },
@@ -1323,7 +1342,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "title": "EXISTING_LOAN"
                     },
                     "BankAccounts.customerBankAccounts.isDisbersementAccount":{
-                        "title": "Is Disbursement"
+                        //"title": "Is Disbursement"
                     },
                     "BankAccounts.customerBankAccounts.bankStatements.totalDeposits":{
                         "required": true
@@ -1338,7 +1357,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "required": true
                     },
                      "IndividualInformation.centreId": {
-                        "resolver": "CentreLOVConfiguration"
+                        "resolver": "CentreLOVConfiguration",
+                        "title": "CENTRE_ID",
                     },
                     "IndividualInformation.spouseFirstName":{
                         "condition": "model.customer.maritalStatus==='MARRIED'" 
@@ -1458,68 +1478,68 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
                         "enumCode": "asset_type"
                     },
-                    "FamilyDetails.familyMembers.relationShip": {
-                        "condition":"(model.customer.familyMembers[arrayIndex].relationShip).toUpperCase() =='SELF'",
-                        "onChange": function(modelValue, form, model, formCtrl, event) {
-                            if (modelValue && modelValue.toLowerCase() === 'self') {
-                                if (model.customer.id)
-                                    model.customer.familyMembers[form.arrayIndex].customerId = model.customer.id;
-                                if (model.customer.firstName)
-                                    model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.firstName;
-                                if (model.customer.gender)
-                                    model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
-                                model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
-                                if (model.customer.dateOfBirth)
-                                    model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
-                                if (model.customer.maritalStatus)
-                                    model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
-                                if (model.customer.mobilePhone)
-                                    model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
-                            } else if (modelValue && modelValue.toLowerCase() === 'spouse') {
-                                if (model.customer.spouseFirstName)
-                                    model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.spouseFirstName;
-                                if (model.customer.gender)
-                                    model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender == 'MALE' ? 'MALE' :
-                                        (model.customer.gender == 'FEMALE' ? 'FEMALE': model.customer.gender);
-                                model.customer.familyMembers[form.arrayIndex].age = model.customer.spouseAge;
-                                if (model.customer.spouseDateOfBirth)
-                                    model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.spouseDateOfBirth;
-                                if (model.customer.maritalStatus)
-                                    model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
-                            }
-                        }
-                    },
-                    "FamilyDetails.familyMembers.relationShip1": {
-                        "condition":"(model.customer.familyMembers[arrayIndex].relationShip).toUpperCase() !=='SELF'",
-                        "onChange": function(modelValue, form, model, formCtrl, event) {
-                            if (modelValue && modelValue.toLowerCase() === 'self') {
-                                if (model.customer.id)
-                                    model.customer.familyMembers[form.arrayIndex].customerId = model.customer.id;
-                                if (model.customer.firstName)
-                                    model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.firstName;
-                                if (model.customer.gender)
-                                    model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
-                                model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
-                                if (model.customer.dateOfBirth)
-                                    model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
-                                if (model.customer.maritalStatus)
-                                    model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
-                                if (model.customer.mobilePhone)
-                                    model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
-                            } else if (modelValue && modelValue.toLowerCase() === 'spouse') {
-                                if (model.customer.spouseFirstName)
-                                    model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.spouseFirstName;
-                                if (model.customer.gender)
-                                    model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender == 'MALE' ? 'MALE' :
-                                        (model.customer.gender == 'FEMALE' ? 'FEMALE': model.customer.gender);
-                                model.customer.familyMembers[form.arrayIndex].age = model.customer.spouseAge;
-                                if (model.customer.spouseDateOfBirth)
-                                    model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.spouseDateOfBirth;
-                                if (model.customer.maritalStatus)
-                                    model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
-                            }
-                        }
-                    },
+                    // "FamilyDetails.familyMembers.relationShip": {
+                    //     "condition":"(model.customer.familyMembers[arrayIndex].relationShip).toUpperCase() =='SELF'",
+                    //     "onChange": function(modelValue, form, model, formCtrl, event) {
+                    //         if (modelValue && modelValue.toLowerCase() === 'self') {
+                    //             if (model.customer.id)
+                    //                 model.customer.familyMembers[form.arrayIndex].customerId = model.customer.id;
+                    //             if (model.customer.firstName)
+                    //                 model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.firstName;
+                    //             if (model.customer.gender)
+                    //                 model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
+                    //             model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
+                    //             if (model.customer.dateOfBirth)
+                    //                 model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
+                    //             if (model.customer.maritalStatus)
+                    //                 model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                    //             if (model.customer.mobilePhone)
+                    //                 model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
+                    //         } else if (modelValue && modelValue.toLowerCase() === 'spouse') {
+                    //             if (model.customer.spouseFirstName)
+                    //                 model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.spouseFirstName;
+                    //             if (model.customer.gender)
+                    //                 model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender == 'MALE' ? 'MALE' :
+                    //                     (model.customer.gender == 'FEMALE' ? 'FEMALE': model.customer.gender);
+                    //             model.customer.familyMembers[form.arrayIndex].age = model.customer.spouseAge;
+                    //             if (model.customer.spouseDateOfBirth)
+                    //                 model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.spouseDateOfBirth;
+                    //             if (model.customer.maritalStatus)
+                    //                 model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                    //         }
+                    //     }
+                    // },
+                    // "FamilyDetails.familyMembers.relationShip1": {
+                    //     "condition":"(model.customer.familyMembers[arrayIndex].relationShip).toUpperCase() !=='SELF'",
+                    //     "onChange": function(modelValue, form, model, formCtrl, event) {
+                    //         if (modelValue && modelValue.toLowerCase() === 'self') {
+                    //             if (model.customer.id)
+                    //                 model.customer.familyMembers[form.arrayIndex].customerId = model.customer.id;
+                    //             if (model.customer.firstName)
+                    //                 model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.firstName;
+                    //             if (model.customer.gender)
+                    //                 model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
+                    //             model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
+                    //             if (model.customer.dateOfBirth)
+                    //                 model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
+                    //             if (model.customer.maritalStatus)
+                    //                 model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                    //             if (model.customer.mobilePhone)
+                    //                 model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
+                    //         } else if (modelValue && modelValue.toLowerCase() === 'spouse') {
+                    //             if (model.customer.spouseFirstName)
+                    //                 model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.spouseFirstName;
+                    //             if (model.customer.gender)
+                    //                 model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender == 'MALE' ? 'MALE' :
+                    //                     (model.customer.gender == 'FEMALE' ? 'FEMALE': model.customer.gender);
+                    //             model.customer.familyMembers[form.arrayIndex].age = model.customer.spouseAge;
+                    //             if (model.customer.spouseDateOfBirth)
+                    //                 model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.spouseDateOfBirth;
+                    //             if (model.customer.maritalStatus)
+                    //                 model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                    //         }
+                    //     }
+                    // },
                     // "IndividualInformation.caste": {
                     //     "enumCode": "caste"
                     // },
@@ -1633,6 +1653,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualInformation",
                     "IndividualInformation.customerBranchId",
                     "IndividualInformation.centreId",
+                    "IndividualInformation.centreId1",
                     "IndividualInformation.customerId",
                     "IndividualInformation.urnNo",
                     "IndividualInformation.photoImageId",
@@ -1690,16 +1711,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "FamilyDetails",
                     "FamilyDetails.familyMembers",
                     "FamilyDetails.familyMembers.relationShip",
-                    "FamilyDetails.familyMembers.relationShip1",
-                    "FamilyDetails.familyMembers.educationStatus",
+                    "FamilyDetails.familyMembers.customerId",
                     "FamilyDetails.familyMembers.familyMemberFirstName",
-                    "FamilyDetails.familyMembers.anualEducationFee",
-                    "FamilyDetails.familyMembers.salary",
+                    "FamilyDetails.familyMembers.gender",
+                    "FamilyDetails.familyMembers.dateOfBirth",
+                    "FamilyDetails.familyMembers.age",
+                    "FamilyDetails.familyMembers.educationStatus",
+                    "FamilyDetails.familyMembers.maritalStatus",
+                    "FamilyDetails.familyMembers.mobilePhone",
+                    "FamilyDetails.familyMembers.healthStatus",
                     "FamilyDetails.familyMembers.incomes",
                     "FamilyDetails.familyMembers.incomes.incomeSource",
                     "FamilyDetails.familyMembers.incomes.incomeEarned",
                     "FamilyDetails.familyMembers.incomes.frequency",
-                    "FamilyDetails.familyMembers.noOfDependents",
 
                     "Liabilities",
                     "Liabilities.liabilities",
@@ -1899,19 +1923,196 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     }
 
                                 },
-                                "FamilyDetails": {
+                                "FamilyDetails":{
+                                    "type": "box",
+                                    "title": "T_FAMILY_DETAILS",
                                     "items": {
-                                        "familyMembers": {
-                                            "items": {
-                                                "relationShip1": {
-                                                    "key": "customer.familyMembers[].relationShip",
-                                                    "type": "select",
-                                                    "title": "T_RELATIONSHIP"
+                                        "familyMembers":{
+                                        key:"customer.familyMembers",
+                                        type:"array",
+                                        startEmpty: true,
+                                        items: {
+                                            "relationShip":{
+                                                key:"customer.familyMembers[].relationShip",
+                                                type:"select",
+                                                "orderNo":1,
+                                                onChange: function(modelValue, form, model, formCtrl, event) {
+                                                    if (modelValue && modelValue.toLowerCase() === 'self') {
+                                                        if (model.customer.id)
+                                                            model.customer.familyMembers[form.arrayIndex].customerId = model.customer.id;
+                                                        if (model.customer.firstName)
+                                                            model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.firstName;
+                                                        if (model.customer.gender)
+                                                            model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
+                                                        model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
+                                                        if (model.customer.dateOfBirth)
+                                                            model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
+                                                        if (model.customer.maritalStatus)
+                                                            model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                                                        if (model.customer.mobilePhone)
+                                                            model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
+                                                    } else if (modelValue && modelValue.toLowerCase() === 'spouse') {
+                                                        if (model.customer.spouseFirstName)
+                                                            model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.spouseFirstName;
+                                                        if (model.customer.gender)
+                                                            model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender == 'MALE' ? 'MALE' :
+                                                                (model.customer.gender == 'FEMALE' ? 'FEMALE': model.customer.gender);
+                                                        model.customer.familyMembers[form.arrayIndex].age = model.customer.spouseAge;
+                                                        if (model.customer.spouseDateOfBirth)
+                                                            model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.spouseDateOfBirth;
+                                                        if (model.customer.maritalStatus)
+                                                            model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                                                    }
+                                                },
+                                                title: "T_RELATIONSHIP"
+                                            },
+                                            "customerId":{
+                                                "orderNo":2,
+                                                key:"customer.familyMembers[].customerId",
+                                                condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                                                type:"lov",
+                                                "inputMap": {
+                                                    "firstName": {
+                                                        "key": "customer.firstName",
+                                                        "title": "CUSTOMER_NAME"
+                                                    },
+                                                    "branchName": {
+                                                        "key": "customer.kgfsName",
+                                                        "type": "select"
+                                                    },
+                                                    "centreId": {
+                                                        "key": "customer.centreId",
+                                                        "type": "select"
+                                                    }
+                                                },
+                                                "outputMap": {
+                                                    "id": "customer.familyMembers[arrayIndex].customerId",
+                                                    "firstName": "customer.familyMembers[arrayIndex].familyMemberFirstName"
+                    
+                                                },
+                                                "searchHelper": formHelper,
+                                                "search": function(inputModel, form) {
+                                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                                    var promise = Enrollment.search({
+                                                        'branchName': SessionStore.getBranch() || inputModel.branchName,
+                                                        'firstName': inputModel.first_name,
+                                                        'centreId': inputModel.centreId,
+                                                    }).$promise;
+                                                    return promise;
+                                                },
+                                                getListDisplayItem: function(data, index) {
+                                                    return [
+                                                        [data.firstName, data.fatherFirstName].join(' '),
+                                                        data.id
+                                                    ];
                                                 }
+                                            },
+                                            "familyMemberFirstName":{
+                                                "orderNo":3,
+                                                key:"customer.familyMembers[].familyMemberFirstName",
+                                                condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                                                title:"FAMILY_MEMBER_FULL_NAME"
+                                            },
+                                            "gender":{
+                                                "orderNo":4,
+                                                key: "customer.familyMembers[].gender",
+                                                condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                                                type: "radios",
+                                                title: "T_GENDER"
+                                            },
+                                            "dateOfBirth":{
+                                                "orderNo":5,
+                                                key: "customer.familyMembers[].dateOfBirth",
+                                                condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                                                type:"date",
+                                                title: "T_DATEOFBIRTH",
+                                                "onChange": function(modelValue, form, model, formCtrl, event) {
+                                                    if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                                                        model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                                    }
+                                                }
+                                            },
+                                            "age":{
+                                                "orderNo":6,
+                                                key:"customer.familyMembers[].age",
+                                                condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                                                title: "AGE",
+                                                type:"number",
+                                                "onChange": function(modelValue, form, model, formCtrl, event) {
+                                                    if (model.customer.familyMembers[form.arrayIndex].age > 0) {
+                                                        if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                                                            model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-') + moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                                                        } else {
+                                                            model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-MM-DD');
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            "educationStatus":{
+                                                "orderNo":7,
+                                                key:"customer.familyMembers[].educationStatus",
+                                                type:"select",
+                                                title: "T_EDUCATION_STATUS"
+                                            },
+                                            "maritalStatus":{
+                                                "orderNo":8,
+                                                key:"customer.familyMembers[].maritalStatus",
+                                                condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                                                type:"select",
+                                                title: "T_MARITAL_STATUS"
+                                            },
+                                            "mobilePhone":{
+                                                "orderNo":9,
+                                                key: "customer.familyMembers[].mobilePhone",
+                                                condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
+                                            },
+                                            "healthStatus":{
+                                                "orderNo":10,
+                                                key:"customer.familyMembers[].healthStatus",
+                                                type:"radios",
+                                                titleMap:{
+                                                    "GOOD":"GOOD",
+                                                    "BAD":"BAD"
+                                                },
+                    
+                                            },
+                                            "incomes":{
+                                                "orderNo":11,
+                                                key:"customer.familyMembers[].incomes",
+                                                type:"array",
+                                                startEmpty: true,
+                                                items:{
+                                                    "incomeSource":{
+                                                        key: "customer.familyMembers[].incomes[].incomeSource",
+                                                        type:"select"
+                                                    },
+                                                    "incomeEarned":{
+                                                        key:"customer.familyMembers[].incomes[].incomeEarned",
+                                                    },
+                                                    "frequency":{
+                                                        key: "customer.familyMembers[].incomes[].frequency",
+                                                        type: "select"
+                                                    }
+                    
+                                                }
+                    
                                             }
                                         }
-                                    }
+                                    }}
                                 },
+                                // "FamilyDetails": {
+                                //     "items": {
+                                //         "familyMembers": {
+                                //             "items": {
+                                //                 "relationShip1": {
+                                //                     "key": "customer.familyMembers[].relationShip",
+                                //                     "type": "select",
+                                //                     "title": "T_RELATIONSHIP"
+                                //                 }
+                                //             }
+                                //         }
+                                //     }
+                                // },
                                 "HouseVerification": {
                                     "items": {
                                         "rentLeaseStatus": {
@@ -2070,6 +2271,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         },
                                     }
                                 },
+                                "IndividualInformation":{
+                                    "items":{
+                                        "centreId1":{
+                                            key:"customer.centreId",
+                                            type:"select",
+                                            readonly: true,
+                                            title:"CENTRE_NAME",
+                                            filter: {
+                                                "parentCode": "branch_id"
+                                            },
+                                            parentEnumCode:"branch_id",
+                                            orderNo:12,
+                                            parentValueExpr:"model.customer.customerBranchId",
+                                        }
+                                    }
+                                }
                             },
                             "additions": [
                                 {

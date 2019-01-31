@@ -1542,6 +1542,12 @@ define([],function(){
                     BundleManager.broadcastEvent('loan-account-loaded', {loanAccount: model.loanAccount});                    
  
                      /* Deviations and Mitigations grouping */
+                     if(!_.hasIn(model.loanAccount,'transactionType')|| _.isNull(model.loanAccount.transactionType)){
+                        model.loanAccount.transactionType = "New Loan";
+                    }
+                    if(model.loanAccount.transactionType == 'New Loan') {
+                        model.loanAccount.linkedAccountNumber = null;
+                    }
                     if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
                         var loanMitigantsGrouped = {};
                         for (var i=0; i<model.loanAccount.loanMitigants.length; i++){
@@ -1625,7 +1631,7 @@ define([],function(){
                                                 "key": "loanAccount.expectedEmi",
                                                 "title": "ESTIMATED_KINARA_EMI",
                                                 "orderNo": 91,
-                                                type: "number",
+                                                type: "amount",
                                                 "readonly": true
                                             },
                                             "linkedAccountNumber1":{
@@ -1633,6 +1639,7 @@ define([],function(){
                                                 title:"LINKED_ACCOUNT_NUMBER",
                                                 readonly:true,
                                                 required: false,
+                                                "orderNo":11,
                                                 condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
                                             },
                                             "baseLoanAccount":{
@@ -1640,6 +1647,7 @@ define([],function(){
                                                 title: "BASE_LOAN_ACCOUNT",
                                                 readonly:true,
                                                 required: false,
+                                                "orderNo":12,
                                                 condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
                         
                                              },
@@ -1648,6 +1656,7 @@ define([],function(){
                                                 title: "TRANSACTION_TYPE",
                                                 readonly:true,
                                                 required: false,
+                                                "orderNo":13,
                                                 condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
                                              },
                                              "BusinessSaveWarning":{

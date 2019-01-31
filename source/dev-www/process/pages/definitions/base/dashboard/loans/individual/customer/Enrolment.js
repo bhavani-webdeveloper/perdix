@@ -398,7 +398,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     },
                     "Machinery.fixedAssetsMachinaries.manufacturerName":{
                         "required":true
-                    }
+                    },
+                    "ContactInformation.distanceFromBranch":{
+                        "enumCode": "distance_from_branch",
+                    }  
                     
             }
             }
