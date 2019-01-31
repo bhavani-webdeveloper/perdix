@@ -92,14 +92,16 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                 minimum: 1,
                 maximum: 1,
                 order: 80
-            }, {
-                pageName: 'loans.individual.screening.detail.PortfolioAnalyticsView',
-                title: 'Portfolio Analytics',
-                pageClass: 'portfolio-analytics',
-                minimum: 1,
-                maximum: 1,
-                order: 90
-            }],
+            },
+            // {
+            //     pageName: 'loans.individual.screening.detail.PortfolioAnalyticsView',
+            //     title: 'Portfolio Analytics',
+            //     pageClass: 'portfolio-analytics',
+            //     minimum: 1,
+            //     maximum: 1,
+            //     order: 90
+            // }
+            ],
             "bundlePages": [],
             "offline": true,
             "getOfflineDisplayItem": function(value, index) {
@@ -299,12 +301,12 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                                 }
                             });
 
-                            $this.bundlePages.push({
-                                pageClass: 'portfolio-analytics',
-                                model: {
-                                    loanId: bundleModel.loanId
-                                }
-                            });
+                            // $this.bundlePages.push({
+                            //     pageClass: 'portfolio-analytics',
+                            //     model: {
+                            //         loanId: bundleModel.loanId
+                            //     }
+                            // });
 
 
                             deferred.resolve();

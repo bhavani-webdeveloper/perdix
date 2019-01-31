@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"),
-    ["$log", "Enrollment", "BiometricService", "elementsUtils", "SessionStore", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "LoanAccount", "formHelper", "Queries", "LoanAccount", "irfNavigator",
-        function ($log, Enrollment, BiometricService, elementsUtils, SessionStore, $stateParams, PageHelper, IndividualLoan, SchemaResource, LoanAccount, formHelper, Queries, LoanAccount, irfNavigator) {
+    ["$log", "LoanAccount","Enrollment", "BiometricService", "elementsUtils", "SessionStore", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "LoanAccount", "formHelper", "Queries", "LoanAccount", "irfNavigator","irfPrinter","GroupProcess",
+        function ($log, LoanAccount,Enrollment, BiometricService, elementsUtils, SessionStore, $stateParams, PageHelper, IndividualLoan, SchemaResource, LoanAccount, formHelper, Queries, LoanAccount, irfNavigator,irfPrinter,GroupProcess) {
 
             var branch = SessionStore.getBranch();
             var siteCode = SessionStore.getGlobalSetting("siteCode");
@@ -10,6 +10,17 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
             var readonly = {
                 "scheduledDisbursementDate": siteCode == 'KGFS'
             };
+            var test = function(code,model){
+                let temp = formHelper.enum('loan_product').data;
+                for (var i=0; i< temp.length;i++){
+                    if (code == temp[i].value)
+                        {
+                            model.additional.productName = temp[i].name;
+                            break;
+                        }
+                        continue;
+                }
+            }
             return {
                 "type": "schema-form",
                 "title": "DISBURSE_LOAN",
@@ -23,6 +34,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     model.loanAccountDisbursementSchedule = model.loanAccountDisbursementSchedule || {};
                     model.fee = model.fee || {};
                     model.additional = { "branchName": branch };
+                    model.additional.isDisbursementDone = false;
                     model.CBSDate = SessionStore.getCBSDate();
                     model.siteCode = SessionStore.getGlobalSetting("siteCode");
                     model.validateDisbursementDate = function (model) {
@@ -53,6 +65,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             model.additional.customerId = resp[0].customerId;
                             model.additional.numberOfDisbursements = resp[0].numDisbursements;
                             model.additional.productCode = resp[0].productCode;
+                            test(model.additional.productCode,model);
                             model.additional.urnNo = resp[0].urnNo;
                             model.additional.fees = [];
                             model.additional.tempfees = resp[0].fees;
@@ -383,6 +396,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         },
                         {
                             "type": "actions",
+                            condition : "model.additional.isDisbursementDone",
                             "items": [
                                 {
                                     "type": "button",
@@ -391,16 +405,179 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                 },
                                 {
                                     "type": "button",
-                                    "condition": "model.loanAccountDisbursementSchedule.overrideRequested",
+                                    "condition": "model.loanAccountDisbursementSchedule.overrideRequested && !model.additional.isDisbursmentDone",
                                     "title": "DISBURSE",
                                     "icon": "fa fa-money",
                                     "onClick": "actions.disburseLoan(model,formCtrl,form)"
-                                }/*,
-                            {
-                                "type":"button",
-                                "title":"REJECT",
-                                "onClick":"actions.rejectLoan(model,formCtrl,form)"
-                            }*/
+                                }
+                            ]
+                        },
+                        {
+                            "type":"actions",
+                            condition:"!model.additional.isDisbursementDone",
+                            "items":[
+                                {
+                                "title": "Print Preview",
+                                // "condition": "!model.loanAccountDisbursementSchedule.overrideRequested && model.additional.isDisbursmentDone",
+                                // "condition":"1==2",
+                                "type": "button",
+                                "onClick": function (model, formCtrl, form, $event) {
+                                    var printData = {};
+                                    var finalArray = [];
+                                    var repaymentInfo = {
+                                        'customerURN': model.additional.urnNo,
+                                        'customerId': model.additional.customerId,
+                                        'customerName': model.customer.firstName,
+                                        'accountNumber': model.additional.accountNumber,
+                                        'transactionType': "Disbursment",
+                                        'transactionID': model.additional.transactionId,
+                                        'productCode': model.additional.productName,
+                                        'loanAmount': model.additional.loanamount,
+                                        'disbursedamount': model.additional.netDisbursementAmount,
+                                        'partnerCode': model.additional.partnerCode,
+                                    };
+                                    var opts = {
+                                        'branch': SessionStore.getBranch(),
+                                        'entity_name': SessionStore.getBankName() + " KGFS",
+                                        'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
+                                        'cin': 'U74990TN2011PTC081729',
+                                        'address1': 'IITM Research Park, Phase 1, 10th Floor',
+                                        'address2': 'Kanagam Village, Taramani',
+                                        'address3': 'Chennai - 600113, Phone: 91 44 66687000',
+                                        'website': "http://ruralchannels.kgfs.co.in",
+                                        'helpline': '18001029370',
+                                        'branch_id': SessionStore.getBranchId(),
+                                        'branch_code': SessionStore.getBranchCode(),
+                                        'ReceiptName' : "Disbursment"
+                                    };
+                                    var thermalReceiptArray = [
+                                            [1,4,"DUPLICATE RECEIPT"],
+                                            [1,4,SessionStore.getBankName()+" KGFS"],
+                                            [1,4,SessionStore.getBranch()],
+                                            [1,3,"Date:"+moment().local().format("DD-MM-YYYY HH:MM:SS")],
+                                            [1,2,"DISBURSMENT"],
+                                            [1,4,model.additional.productName],
+                                            [3," "],
+                                            [0,3,"Branch Code",SessionStore.getBranchCode()],
+                                            [0,3,"Customer Id",model.additional.customerId],
+                                            [0,3,"Customer Name",model.customer.firstName],
+                                            [0,3,"Loan A/C Number",model.additional.accountNumber],
+                                            [0,3,"Transaction Type","Disbursment"],
+                                            [0,3,"Transaction Id",model.additional.transactionId],
+                                            [0,3,"Loan Amount",model.additional.loanamount],
+                                            [0,3,"Disbursed Amount",model.additional.netDisbursementAmount],
+                                            // [0,3,"Demand Amount",requestObj.collectionDemands[i].installmentAmount],
+                                            // [0,3,"Over Due Amount",requestObj.collectionDemands[i].overdueAmount],
+                                            // [0,3,"Amount Paid",requestObj.collectionDemands[i].amountPaid],
+                                            // [0,3,"Total PayOff Amount",""],
+                                            // [0,3,"Demand Paid/Pending",""],
+                                            [3," "],
+                                            [3,"-"],
+                                            [1,3,"IFMR Rural Channels and Services Pvt. Ltd."],
+                                            [1,3,"CIN:U74990TN2011PTC081729"],
+                                            [1,3,"Address:IITM Research Park, Phase 1, 10th Floor"],
+                                            [1,3,"Kanagam Village, Taramani"],
+                                            [1,3,"Chennai - 600113, Phone: 91 44 66687000"],
+                                            [1,3,"Website:http://ruralchannels.ifmr.co.in/"],
+                                            [1,3,"HelpLine:18001029370"],
+                                            [3," "],
+                                            [1,3,"Signature not required as this is an"],
+                                            [1,3,"electronically generated receipt."],
+                                            [3," "],
+                                            [3," "],
+                                    ]
+                                    finalArray = finalArray.concat(thermalReceiptArray);
+                                    printData.paperReceipt = '<div class="receipt-container"> <style> .receipt-container {display:grid;grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); grid-column-gap:1em;} .single-receipt {margin:0px 12px 0px;}.single-receipt p {margin-bottom:2px;} .key-container p {display:grid;grid-template-columns:minmax(1px,1fr) minmax(1px,1.3fr);}</style>';
+                                    printData.paperReceipt += GroupProcess.generateWebReceipt(repaymentInfo, opts,0);
+                                    for (var i=0;i<model.additional.feeamount.length;i++){
+                                        var repaymentInfo = {
+                                            'customerURN': model.additional.urnNo,
+                                            'customerId': model.additional.customerId,
+                                            'customerName': model.customer.firstName,
+                                            'accountNumber': model.additional.accountNumber,
+                                            'transactionType': model.additional.feeamount[i].param1,
+                                            'transactionID': model.additional.transactionId,
+                                            'productCode': model.additional.productName,
+                                            'demandAmount': model.additional.demandAmount,
+                                            'amountPaid': model.additional.feeamount[i].amount1,
+                                            'processingFee' : 0,
+                                            'serviceTaxFee': model.additional.feeamount[i].amount1,
+                                            'totalPayOffAmount': model.additional.payOffAmount, 
+                                            'partnerCode':"",
+                                        };
+                                        var opts = {
+                                            'branch': SessionStore.getBranch(),
+                                            'entity_name': SessionStore.getBankName() + " KGFS",
+                                            'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
+                                            'cin': 'U74990TN2011PTC081729',
+                                            'address1': 'IITM Research Park, Phase 1, 10th Floor',
+                                            'address2': 'Kanagam Village, Taramani',
+                                            'address3': 'Chennai - 600113, Phone: 91 44 66687000',
+                                            'website': "http://ruralchannels.kgfs.co.in",
+                                            'helpline': '18001029370',
+                                            'branch_id': SessionStore.getBranchId(),
+                                            'branch_code': SessionStore.getBranchCode(),
+                                            'ReceiptName':"Loan Repayment"
+                                        };
+                                        printData.paperReceipt += GroupProcess.generateWebReceipt(repaymentInfo, opts,1);
+                                        var thermalReceiptArray = [
+                                            [1,4,"DUPLICATE RECEIPT"],
+                                            [1,4,SessionStore.getBankName()+" KGFS"],
+                                            [1,4,SessionStore.getBranch()],
+                                            [1,3,"Date:"+moment().local().format("DD-MM-YYYY HH:MM:SS")],
+                                            [1,2,"Loan Repayment"],
+                                            [1,4,model.additional.productName],
+                                            [3," "],
+                                            [0,3,"Branch Code",SessionStore.getBranchCode()],
+                                            [0,3,"Customer Id",model.additional.customerId],
+                                            [0,3,"Customer Name",model.customer.firstName],
+                                            [0,3,"Loan A/C Number",model.additional.accountNumber],
+                                            [0,3,"Transaction Type",model.additional.feeamount[i].param1],
+                                            [0,3,"Transaction Id",model.additional.transactionId],
+                                            // [0,3,"Loan Amount",model.additional.loanAmountRequested],
+                                            // [0,3,"Disbursed Amount",model.additional.loanAmount],
+                                            [0,3,"Demand Amount","nil"],
+                                            // [0,3,"Amount ",requestObj.collectionDemands[i].overdueAmount],
+                                            [0,3,"Amount Paid",model.additional.feeamount[i].amount1],
+                                            [0,3,"Processing Fee",0],
+                                            [0,3,"Service Tax Fee",model.additional.feeamount[i].amount1],
+                                            [0,3,"Total PayOff Amount",model.additional.payOffAmount],
+                                            [3," "],
+                                            [3,"-"],
+                                            [1,3,"IFMR Rural Channels and Services Pvt. Ltd."],
+                                            [1,3,"CIN:U74990TN2011PTC081729"],
+                                            [1,3,"Address:IITM Research Park, Phase 1, 10th Floor"],
+                                            [1,3,"Kanagam Village, Taramani"],
+                                            [1,3,"Chennai - 600113, Phone: 91 44 66687000"],
+                                            [1,3,"Website:http://ruralchannels.ifmr.co.in/"],
+                                            [1,3,"HelpLine:18001029370"],
+                                            [3," "],
+                                            [1,3,"Signature not required as this is an"],
+                                            [1,3,"electronically generated receipt."],
+                                            [3," "],
+                                            [3," "],
+                                    ]
+                                        finalArray = finalArray.concat(thermalReceiptArray);
+                                    }
+                                    print.paperReceipt += "</div>";
+                                    printData.thermalReceipt = finalArray;
+                                    irfPrinter.printPreview(printData);
+                                    // var opts = {
+                                    //     'branch': SessionStore.getBranch(),
+                                    //     'entity_name': SessionStore.getBankName() + " KGFS",
+                                    //     'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
+                                    //     'cin': 'U74990TN2011PTC081729',
+                                    //     'address1': 'IITM Research Park, Phase 1, 10th Floor',
+                                    //     'address2': 'Kanagam Village, Taramani',
+                                    //     'address3': 'Chennai - 600113, Phone: 91 44 66687000',
+                                    //     'website': "http://ruralchannels.kgfs.co.in",
+                                    //     'helpline': '18001029370',
+                                    //     'branch_id': SessionStore.getBranchId(),
+                                    //     'branch_code': SessionStore.getBranchCode()
+                                    // };
+                                    // printData.paperReceipt = GroupProcess.generateWebReceipt(repaymentInfo, opts);
+                                }
+                                }
                             ]
                         }
                     ]
@@ -525,8 +702,24 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                             function (data) {
                                                 PageHelper.showProgress('disbursement', 'Disbursement done', 2000);
                                                 model.additional.disbursementDone = true;
-                                                PageHelper.hideLoader();
-                                                irfNavigator.goBack();
+                                                IndividualLoan.get({
+                                                    accountId: model.additional.accountNumber
+                                                }).$promise.then(function (resp) {
+                                                    PageHelper.hideLoader();
+                                                    model.additional.isDisbursementDone = true;
+                                                    model.additional.payOffAmount = resp.payOffAmount;
+                                                    model.additional.demandAmount = resp.totalDemandRaised;
+                                                    // model.loanacount.customer1FirstName = resp.customer1FirstName;
+                                                    for (i = 0; i < resp.transactions.length; i++) {
+                                                        if (resp.transactions[i].transactionName == "Disbursement") {
+                                                            model.additional.transactionId = resp.transactions[i].transactionId;
+                                                            model.additional.transactionType = resp.transactions[i].instrument;
+                                                        }
+                                                    }
+                                                }),function(err){
+                                                    PageHelper.showProgress('disbursement','Oops. An error occurred...',5000)
+                                                    PageHelper.hideLoader();
+                                                };
                                             },
                                             function (res) {
                                                 PageHelper.showErrors(res);

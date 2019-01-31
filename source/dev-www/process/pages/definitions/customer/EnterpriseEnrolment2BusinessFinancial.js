@@ -15,7 +15,7 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                 "title": "ENTITY_ENROLLMENT",
                 "subTitle": "BUSINESS",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
-
+                
                 },
                 offline: false,
                 getOfflineDisplayItem: function (item, index) {
@@ -581,7 +581,7 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                         var mandatoryExpenses = null;
                         var mandatoryBankStatements = null;
                         var mandatoryIncomeThroughSales = null;
-                        if (model.customer.customerBankAccounts.length > 0 && isError == false && typeof model.customer.customerBankAccounts !="undefined") {
+                        if (typeof model.customer.customerBankAccounts !="undefined" && model.customer.customerBankAccounts.length > 0 && isError == false) {
                             mandatoryBankStatements = _.findIndex(model.customer.customerBankAccounts, function (arr) {
                                 if (arr.bankStatements.length < 6) {
                                     isError = true;
@@ -608,7 +608,7 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                                 })
                             }
                         }
-                        if (model.customer.incomeThroughSales.length > 0 && isError == false && model.customer.incomeThroughSales !="undefined") {
+                        if (model.customer.incomeThroughSales !="undefined" && model.customer.incomeThroughSales.length > 0 && isError == false ) {
                             mandatoryIncomeThroughSales = _.findIndex(model.customer.incomeThroughSales, function (arr) {
                                 if (arr.buyerName != null && arr.incomeType != null && arr.invoiceType != null) {
                                     if (arr.incomeType === "Invoice") {
@@ -626,7 +626,7 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                                 }
                             })
                         };
-                        if (model.customer.rawMaterialExpenses.length > 0 && isError == false && model.customer.rawMaterialExpenses !="undefined") {
+                        if (model.customer.rawMaterialExpenses !="undefined" && model.customer.rawMaterialExpenses.length > 0 && isError == false) {
                             mandatoryPurchases = _.findIndex(model.customer.rawMaterialExpenses, function (arr) {
                                 if (arr.vendorName != null && arr.rawMaterialType != null && arr.amount != null) {
                                     if (arr.rawMaterialType === "Invoice") {

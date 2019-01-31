@@ -536,15 +536,16 @@ define({
                         "searchHelper": formHelper,
                         "search": function(inputModel, form, model, context) {
                             var familyMembers = [];
-                            if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers)
-                            for (var idx = 0; idx < model.group.jlgGroupMembers[context.arrayIndex].familyMembers.length; idx++){
+                            if(model.group.jlgGroupMembers[context.arrayIndex].familyMembers){
+                                var temp = model.group.jlgGroupMembers[context.arrayIndex].familyMembers;
+                            for (var idx = 0; idx < temp.length; idx++){
                                 if( 
                                 (model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].age>=18 &&
                                     model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx].age<=59)
                                 ) {
                                     familyMembers.push(model.group.jlgGroupMembers[context.arrayIndex].familyMembers[idx]);
                                 }
-                            }
+                            }}
                             return $q.resolve({
                                 headers: {
                                     "x-total-count": familyMembers.length
@@ -621,8 +622,10 @@ define({
                 preSave: function(model, form, formName) {},
 
                 submit: function(model, form, formName) {
+                    PageHelper.showLoader();
                     $log.info("Inside submit()");
                     if(!validateForm(form)) {
+                        PageHelper.hideLoader();
                         return;
                     }
                     // var centres = formHelper.enum('centre').data;
@@ -637,6 +640,7 @@ define({
                     }
                     PageHelper.clearErrors();
                     var reqData = _.cloneDeep(model);
+                    PageHelper.hideLoader();
                     Utils.confirm("Please Verify customer/spouse DOB in the system with actual ID Proof. DOB change request will not be allowed afterwards").then(function(){
                         PageHelper.showLoader();
                         if (reqData.group.id) {

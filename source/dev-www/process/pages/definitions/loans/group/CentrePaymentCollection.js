@@ -295,11 +295,12 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 								}
 								model.collectionDemandSummary.collectionExist = true;
 								_.each(centreDemands, function(v,k){
-									v.amountPaid = v.installmentAmount;
-									if (v.totalToBeCollected > v.installmentAmount) {
-										v.amountPaid = v.totalToBeCollected;
+									v.amountPaid = v.totalToBeCollected;
+									v.overdueAmount = v.totalToBeCollected - v.installmentAmount;
+									if (v.overdueAmount > 0) {
 										v.overdue = true;
-										v.overdueAmount = v.amountPaid - v.installmentAmount;
+									} else {
+										v.overdueAmount = 0;
 									}
 									totalToBeCollected += v.amountPaid;
 									if (!v.groupCode) v.groupCode = 'Individual Loans';
@@ -315,11 +316,12 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 									PageHelper.showLoader();
 
 									_.each(v, function(v,k){
-										v.amountPaid = v.installmentAmount;
-										if (v.totalToBeCollected > v.installmentAmount) {
-											v.amountPaid = v.totalToBeCollected;
+										v.amountPaid = v.totalToBeCollected;
+										v.overdueAmount = v.amountPaid - v.installmentAmount;
+										if (v.overdueAmount > 0) {
 											v.overdue = true;
-											v.overdueAmount = v.amountPaid - v.installmentAmount;
+										} else {
+											v.overdueAmount = 0;
 										}
 										groupName = v.groupName;
 										grouptobecollected += v.amountPaid;
@@ -395,11 +397,12 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 									_.each(model.individualCollectionDemand, function(value, key) {
 										if(value.groupCode == valueObj.groupCode){
 											_.each(value.collectiondemand, function(v, k) {
-												v.amountPaid = v.installmentAmount;
-												if (v.totalToBeCollected > v.installmentAmount) {
-													v.amountPaid = v.totalToBeCollected;
+												v.amountPaid = v.totalToBeCollected;
+												v.overdueAmount = v.amountPaid - v.installmentAmount;
+												if (v.overdueAmount > 0) {
 													v.overdue = true;
-													v.overdueAmount = v.amountPaid - v.installmentAmount;
+												} else {
+													v.overdueAmount = 0;
 												}
 												totalToBeCollected += v.amountPaid;
 											});
@@ -896,10 +899,8 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 					'website': "http://ruralchannels.ifmr.co.in/",
 					'helpline': '18001029370',
 				};
-
 				var print={};
 				print.paperReceipt= LoanProcess.getWebHeader(opts);
-				var finalArray = [];
 				for (i in requestObj.collectionDemands){
 					var cd=requestObj.collectionDemands[i];
 					var repaymentInfo={};
@@ -912,6 +913,9 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 					repaymentInfo.notcollected=cd.notcollected;
 					print.paperReceipt= print.paperReceipt + LoanProcess.getWebReceipt(repaymentInfo);
 				}
+				print.paperReceipt= print.paperReceipt + LoanProcess.getWebFooter(opts);
+
+				var finalArray = [];
 				for (i in requestObj.collectionDemands){
 					var opts = [];
 					// Printer Configuration //
@@ -957,8 +961,6 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 					]
 					finalArray = finalArray.concat(opts);
 				}
-				
-				print.paperReceipt= print.paperReceipt + LoanProcess.getWebFooter(opts);
 				print.thermalReceipt = finalArray;
 					
 
@@ -1316,7 +1318,9 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 				return requestObj;
 			},
 			submit: function(model, formCtrl, formName) {
+				PageHelper.showLoader();
 				if (!this.validateCollection(model, formCtrl)) {
+					PageHelper.hideLoader();
 					return;
 				}
 				$log.warn(model);
@@ -1382,6 +1386,7 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 						PM.pop('collection-demand', 'Submitting...');
 						LoanProcess.collectionDemandUpdate(requestObj,
 							function(response){
+								PageHelper.hideLoader();
 								$log.info(response);
 								model.onlineresponse=true;
 								model.onlineresponseData=response;
@@ -1418,11 +1423,13 @@ function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper,
 
 							},
 							function(errorResponse){
+								PageHelper.hideLoader();
 								$log.error(errorResponse);
 								PM.pop('collection-demand', 'Oops. Some error.', 2000);
 								PageHelper.showErrors(errorResponse);
 							});
 					} else {
+						PageHelper.hideLoader();
 						PM.pop('collection-demand', 'Collection demand missing. Try again with correct centre.', 7000);
 					}
 				}

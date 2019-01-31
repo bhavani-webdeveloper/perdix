@@ -650,18 +650,18 @@ irf.commons.service('irfPrinter',["$log","PageHelper","Utils","irfSimpleModal",f
 		self.data = printData;
 		if (Utils.isCordova && self.data.thermalReceipt) {
 			self.thermalReceipt = generateThermelPrint(data.thermalReceipt);
-			self.previewHtml = self.thermalReceipt.html;
+			self.previewHtml = '<div class="web-print-wrapper">'  +self.webPrintStyle+ self.thermalReceipt.html + '</div>'
 		} else if (self.data.paperReceipt) {
-			self.previewHtml = '<div class="web-print-wrapper">' + self.webPrintStyle + printData.paperReceipt + '</div>'
+			self.previewHtml = '<div class="web-print-wrapper">' +self.webPrintStyle+ printData.paperReceipt + '</div>'
 		}
 		self.thermalReceipt = generateThermelPrint(self.data.thermalReceipt);
-		self.previewHtml = self.thermalReceipt.html;
-		self.previewHtml = mapButtonToHtml(self.previewHtml);
-		irfSimpleModal('Print Preview', self.previewHtml, {
-			print: function() {
-				self.print();
-			}
-		});
+		self.previewHtml = '<div class="web-print-wrapper">'  +self.webPrintStyle+ self.thermalReceipt.html + '</div>'
+		// self.previewHtml = mapButtonToHtml(self.previewHtml);
+		irfSimpleModal('<div style="display:grid;grid-template-columns:1fr minmax(100px,1fr);"><div>Print Preview</div> <div class="print-button" style="justify-self:end; padding-right:15px;"> <button class="btn btn-theme" ng-click=model.print()> <i class="fa fa-print"></i> PRINT</button></div><div>', self.previewHtml, {
+				print: function() {
+					self.print();
+				}
+		},{size:'lg'});
 	}
 	self.print = function(){
 			try {
@@ -684,7 +684,7 @@ irf.commons.service('irfPrinter',["$log","PageHelper","Utils","irfSimpleModal",f
 			}
 	}
 	var mapButtonToHtml = function(html){
-		var button = `<br><div><button ng-click=model.print()>PRINT</button></div><br>`;
+		var button = '<div class="print-button"><button ng-click=model.print()>PRINT</button></div>';
 		return html + button;
 	}
 	var generateThermelPrint = function(opts) {
@@ -741,5 +741,5 @@ irf.commons.service('irfPrinter',["$log","PageHelper","Utils","irfSimpleModal",f
 			html: html + '</div>'
 		};
 	}
-	self.webPrintStyle = '<style>@media print { body * { visibility: hidden; } .web-print-wrapper, .web-print-wrapper * { visibility: visible } .web-print-wrapper { position: absolute; top: 0; left: 0;} html, body {height: 100%;}}</style>';
+	self.webPrintStyle = '<style class="computedHeight"> @media print { body * { visibility: hidden; } .web-print-wrapper * { visibility: visible} .modal { position: absolute; top: 0; left: 0;margin: 0; padding: 0; bottom:auto;} .modal-header {display:none;} .modal-footer {display:none;} .print-button {display: none}}</style>';
 }])

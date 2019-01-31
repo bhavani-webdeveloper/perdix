@@ -1,9 +1,10 @@
-irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL, searchResource){
+irf.models.factory('Enrollment',function($resource,$q,Upload,$httpParamSerializer,BASE_URL, searchResource){
     var endpoint = BASE_URL + '/api/enrollments';
     var snapshotFrom = '/snapshotDiff?snapshotIdFrom=';
     var snapshotTo  = 'snapshotIdTo=';
     var managementEndPoint= irf.MANAGEMENT_BASE_URL;
     var endpoint1 = BASE_URL +'/api/creditbureau/verification'; 
+    var telecallingdetails = BASE_URL + '/api/telecallingdetails';
     var transformResponse = function(customer){
         if (_.hasIn(customer, "customerBankAccounts") && _.isArray(customer.customerBankAccounts)){
             _.forEach(customer.customerBankAccounts, function(bankAccount){
@@ -28,7 +29,7 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
      *      /enrollments/1           -> $get({id:1})
      * $post will send data as form data, save will send it as request payload
      */
-    return $resource(endpoint, null, {
+    var resource = $resource(endpoint, null, {
 
         get:{
             method:'GET',
@@ -72,6 +73,10 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
         update:{
             method:'PUT',
             url:endpoint+'/:service'
+        },
+        houseHoldLink:{
+            method:'POST',
+            url:endpoint+'/linkhousehold'
         },
         post:{
             method:'POST',
@@ -190,8 +195,44 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
         modifyBlockedStatus: {
             method:'GET',
             url: endpoint + '/modifyBlockedStatus'
+        },
+        getTelecallingById: {
+            method:'GET',
+            url: telecallingdetails + '/:id'
+        },
+        getTelecallingByProcessType: {
+            method:'GET',
+            url: telecallingdetails + '/CUSTOMER/:id'
+        },
+        createTelecalling: {
+            method: 'POST',
+            url : telecallingdetails
+        },
+        updateTelecalling: {
+            method:'PUT',
+            url: telecallingdetails
         }
     });
+    resource.insuranceUpload = function(file, progress) {
+        var deferred = $q.defer();
+        Upload.upload({
+            url: BASE_URL + "/api/feed/insuranceupload",
+
+            data: {
+                file: file,
+                feedCategory: 'PortfolioInsuranceDetails'
+            }
+        }).then(function(resp) {
+            PageHelper.showProgress("page-init", "successfully uploaded.", 2000);
+            deferred.resolve(resp);
+        }, function(errResp) {
+            PageHelper.showErrors(errResp);
+            deferred.reject(errResp);
+        }, progress);
+        return deferred.promise;
+    };
+
+    return resource;
 });
 
 

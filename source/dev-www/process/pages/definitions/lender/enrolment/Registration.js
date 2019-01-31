@@ -63,25 +63,31 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "orderNo":100
                     },
                     "LenderContactInformation.Address1.villageName": {
-                        "readonly": true,
+                        "readonly": false,
+                        "required": false,
                         "orderNo":110
                     },
                     "LenderContactInformation.Address1.district": {
-                        "readonly": true,
+                        "readonly": false,
+                        "required": false,
                         "orderNo":120
                     },
                     "LenderContactInformation.Address1.state": {
-                        "readonly": true,
+                        "readonly": false,
+                        "required": false,
                         "orderNo":130
                     },
                     "LenderContactInformation.Address2.mailingLocality": {
-                        "readonly": true
+                        "readonly": false,
+                        "required": false
                     },
                     "LenderContactInformation.Address2.mailingDistrict": {
-                        "readonly": true
+                        "readonly": false,
+                        "required": false
                     },
                     "LenderContactInformation.Address2.mailingState": {
-                        "readonly": true
+                        "readonly": false,
+                        "required": false
                     },
                     "BankAccounts.customerBankAccounts.ifscCode": {
                         "resolver": "BankIFSCLOVConfiguration",

@@ -24,41 +24,57 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 title: 'APPLICANT',
                                 pageClass: 'applicant',
                                 minimum: 1,
-                                maximum: 1,
+                                maximum: 0,
                                 order:10
                             },
                             {
                                 pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'CO_APPLICANT',
                                 pageClass: 'co-applicant',
-                                minimum: 0,
-                                maximum: 4,
+                                minimum: 1,
+                                maximum: 0,
                                 order:20
                             },
                             {
                                 pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'GUARANTOR',
                                 pageClass: 'guarantor',
-                                minimum: 0,
-                                maximum: 3,
+                                minimum: 1,
+                                maximum: 0,
                                 order:30
                             },
+                            // {
+                            //     pageName: 'base.dashboard.loans.individual.customer.EnterpriseEnrolment2',
+                            //     title: 'BUSINESS',
+                            //     pageClass: 'business',
+                            //     minimum: 1,
+                            //     maximum: 1,
+                            //     order:40
+                            // },
+                            // {
+                            //     pageName: 'base.dashboard.loans.individual.customer.EnterpriseEnrolmentBusinessFinancial',
+                            //     title: 'Business Financials',
+                            //     pageClass: 'business-financial',
+                            //     minimum: 1,
+                            //     maximum: 1,
+                            //     order:50
+                            // },
                             {
-                                pageName: 'base.dashboard.loans.individual.customer.EnterpriseEnrolment2',
+                                pageName: 'base.dashboard.loans.individual.customer.Enrolment',
                                 title: 'BUSINESS',
                                 pageClass: 'business',
                                 minimum: 1,
                                 maximum: 1,
                                 order:40
                             },
-                            {
-                                pageName: 'base.dashboard.loans.individual.customer.VehicleValuation',
-                                title: 'VEHICLE_VALUATION',
-                                pageClass: 'vehicle_valuation',
-                                minimum: 1,
-                                maximum: 1,
-                                order:40
-                            },
+                            // {
+                            //     pageName: 'base.dashboard.loans.individual.customer.VehicleValuation',
+                            //     title: 'VEHICLE_VALUATION',
+                            //     pageClass: 'vehicle_valuation',
+                            //     minimum: 1,
+                            //     maximum: 1,
+                            //     order:40
+                            // },
                             {
                                 pageName: 'base.dashboard.loans.individual.screening.LoanRequest',
                                 title: 'LOAN_REQUEST',
@@ -67,14 +83,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 maximum: 1,
                                 order:60
                             },
-                            {
-                                pageName: 'base.dashboard.loans.individual.customer.VehicleValuation',
-                                title: 'VEHICLE_VALUATION',
-                                pageClass: 'vehicle-valuation',
-                                minimum: 1,
-                                maximum: 1,
-                                order:50
-                            },
+                            // {
+                            //     pageName: 'base.dashboard.loans.individual.customer.VehicleValuation',
+                            //     title: 'VEHICLE_VALUATION',
+                            //     pageClass: 'vehicle-valuation',
+                            //     minimum: 1,
+                            //     maximum: 1,
+                            //     order:50
+                            // },
                             {
                                 pageName: 'loans.individual.screening.CreditBureauView',
                                 title: 'CREDIT_BUREAU',
@@ -162,32 +178,46 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     model: {
                                         enrolmentProcess: loanProcess.applicantEnrolmentProcess,
                                         loanProcess: loanProcess
-                                    }
+                                    }   
                                 });
 
-                                if(_.hasIn(loanAccount, 'coApplicantCustomers')) {
-                                    for (var i=0;i<loanAccount.coApplicantCustomers.length; i++){
+                                if(_.hasIn(loanAccount, 'coApplicantsEnrolmentProcesses')) {
+                                    for (var i=0;i<loanAccount.coApplicantsEnrolmentProcesses.length; i++){
                                         $this.bundlePages.push({
                                             pageClass: 'co-applicant',
                                             model: {
-                                                loanRelation: loanAccount.coApplicantCustomers[i]
+                                                enrolmentProcess: loanAccount.coApplicantsEnrolmentProcesses[i]
                                             }
                                         });
                                     }
                                 }
 
-                                if(_.hasIn(loanAccount, 'guarantorCustomers')) {
-                                    for (var i=0;i<loanAccount.guarantorCustomers.length; i++){
+                                if(_.hasIn(loanAccount, 'guarantorsEnrolmentProcesses')) {
+                                    for (var i=0;i<loanAccount.guarantorsEnrolmentProcesses.length; i++){
                                         $this.bundlePages.push({
                                             pageClass: 'guarantor',
                                             model: {
-                                                loanRelation: loanAccount.guarantorCustomers[i]
+                                                enrolmentProcess: loanAccount.guarantorsEnrolmentProcesses[i]
                                             }
                                         });
                                     }
                                 }
 
 
+                                // $this.bundlePages.push({
+                                //     pageClass: 'business',
+                                //     model: {
+                                //         enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                //         loanProcess: loanProcess
+                                //     }
+                                // });
+                                // $this.bundlePages.push({
+                                //     pageClass: 'business-financial',
+                                //     model: {
+                                //         enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                //         loanProcess: loanProcess
+                                //     }
+                                // });
                                 $this.bundlePages.push({
                                     pageClass: 'business',
                                     model: {
@@ -234,10 +264,10 @@ define(["perdix/domain/model/loan/LoanProcess",
                     "post_pages_initialize": function(bundleModel){
                         $log.info("Inside post_page_initialize");
                         BundleManager.broadcastEvent('origination-stage', 'Application');
-                        Queries.getVehiclePrice()
-                        .then(function (response) {
-                            BundleManager.broadcastEvent("get-vehicle-price", response);
-                        });
+                        // Queries.getVehiclePrice()
+                        // .then(function (response) {
+                        //     BundleManager.broadcastEvent("get-vehicle-price", response);
+                        // });
                     },
                     eventListeners: {
                         "on-customer-load": function(pageObj, bundleModel, params){

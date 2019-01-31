@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
- ["PagesDefinition","translateFilter","$log","GroupProcess", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal", "irfNavigator", "RepaymentReminder","Misc","$httpParamSerializer",
-    function(PagesDefinition,translateFilter,$log,GroupProcess, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal, irfNavigator, RepaymentReminder,Misc, $httpParamSerializer) {
+ ["PagesDefinition","translateFilter","$log","GroupProcess", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal", "irfNavigator", "RepaymentReminder","Misc","$httpParamSerializer","Misc",
+    function(PagesDefinition,translateFilter,$log,GroupProcess, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal, irfNavigator, RepaymentReminder,Misc, $httpParamSerializer,Misc) {
 
         var transactionDetailHtml = "\
         <irf-simple-summary-table irf-table-def='model.orgTransactionDetails' />\
@@ -2388,8 +2388,16 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         "type": "button",
                         "title": "REPAYMENT_SCHEDULE_REPORT",
                         "onClick": function(model, form, schemaForm, event) {
+                            PageHelper.showLoader();
                             var url = LoanAccount.getRepaymentScheduleDownloadURL(model.cbsLoan.accountId);
-                            Utils.downloadFile(url);
+                            LoanAccount.repaymentScheduleDownload({'account_id':model.cbsLoan.accountId}).$promise.then(function(res){
+                                Utils.downloadFile(Misc.formDownload({'formName':'installment_schedule_loan','recordId':model.cbsLoan.accountId}));
+                                PageHelper.hideLoader();
+                            },function(err){
+                                console.log(err);
+                                PageHelper.hideLoader();
+                            })
+                            
                             // LoanAccount.downloadScheduleInCSV({accountNumber:model.cbsLoan.accountId}).$promise.then(function(responseData){
                             //     Utils.downloadFile(responseData);
                             // });

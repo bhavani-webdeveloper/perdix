@@ -32,7 +32,7 @@ define({
 				model.partner = SessionStore.session.partnerCode;
 				model.isPartnerChangeAllowed = GroupProcess.hasPartnerCodeAccess(model.partner);
 				if(model.siteCode =='KGFS'){
-					model.partner = "AXIS";
+					model.partner = "KGFS";
 					model.isPartnerChangeAllowed = false;
 				}
 				$log.info("Checker1 Queue got initialized");

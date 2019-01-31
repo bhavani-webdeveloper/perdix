@@ -481,6 +481,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     $log.info(result);
                                     var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
                                     model.customer.identityProofNo = aadhaarData.uid;
+                                    model.customer.aadhaarNo = aadhaarData.uid;
                                 }
                             },
                             "identityProofNo1": {

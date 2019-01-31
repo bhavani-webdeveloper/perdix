@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues"), ["$log", "$state", "irfNavigator", "SessionStore", "$stateParams", "$http", "Audit", "PageHelper", "$q", "elementsUtils", "formHelper", "User",
     function($log, $state, irfNavigator, SessionStore, $stateParams, $http, Audit, PageHelper, $q, elementsUtils, formHelper, User) {
         var master = null;
-        var validateKgfs = function(sample) {
+        var validateKgfs = function(sample, status) {
             var tempIssueDetails = [];
             for (i in sample.issue_details) {
                 var id = sample.issue_details[i];
@@ -26,7 +26,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                     return false;
                 }
             }
-            if (tempIssueDetails.length == 0) {
+            if (tempIssueDetails.length == 0 && status != "1") {
                 PageHelper.setError({
                     message: "There are no issues captured."
                 });
@@ -35,7 +35,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
             sample.issue_details = tempIssueDetails;
             return true;
         };
-        var validateKinara = function(sample) {
+        var validateKinara = function(sample, status) {
             var tempIssueDetailsKinara = [];
             for (i in sample.issue_details) {
                 var id = sample.issue_details[i];
@@ -63,7 +63,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                     }
                 }
             }
-            if (tempIssueDetailsKinara.length == 0) {
+            if (tempIssueDetailsKinara.length == 0 && status != "1") {
                 PageHelper.setError({
                     message: "There are no issues captured."
                 });
@@ -680,12 +680,12 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                 submit: function(model, formCtrl, form, $event, status) {
                     PageHelper.clearErrors();
                     if (model.siteCode == "kinara") {
-                        if (!validateKinara(model.sample)) {
+                        if (!validateKinara(model.sample, status)) {
                             return;
                         }
                     }
                     if (model.siteCode == "KGFS") {
-                        if (!validateKgfs(model.sample)) {
+                        if (!validateKgfs(model.sample, status)) {
                             return;
                         }
                     }

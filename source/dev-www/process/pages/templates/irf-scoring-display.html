@@ -18,7 +18,7 @@
     <div ng-repeat="ss in scoringTableData.IndividualScores">
         <div class="row">
             <div class="col-sm-12">
-                <h3 class="heading__subscore-title">
+                <h3>
                     {{ ss.name }} - ({{ ss.Score }})
                 </h3>
                 <table class="table table-condensed">
@@ -46,7 +46,7 @@
         
                     <div class="clearfix" ng-if="$index % 2 == 0"></div>
                     <div class="col-sm-6">
-                        <h3 class="heading__subscore-title"> 
+                        <h3> 
                                 {{ ss.name }} - ({{ ss.Score }})
                         </h3>
                         <table class="table table-condensed">

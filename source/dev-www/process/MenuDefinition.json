@@ -46,6 +46,8 @@
         "Page/Adhoc/witfin.loans.VehicleValuationDashboard",
         "Page/Adhoc/pahal.loans.LoanOriginationDashboard",
         "Page/Adhoc/kgfs.loans.LoanBookingDashboard",
+        "Page/Adhoc/kgfs.loans.LoanOriginationDashboard",
+        "Page/Adhoc/base.dashboard.lead.LeadDashboard",
         "Page/Adhoc/base.dashboard.loans.LoanOriginationDashboard",
         "Page/DocumentTrackingDashboard", {
             "title": "INDIVIDUAL_LOANS",

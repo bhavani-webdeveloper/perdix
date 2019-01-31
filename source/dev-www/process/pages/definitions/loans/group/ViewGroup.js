@@ -95,7 +95,8 @@ define({
 				model.group = model.group || {};
 				model.group.branchName = SessionStore.getCurrentBranch().branchId;
 				$log.info(model.group.branchName);
-                model.close=true;
+				model.close=true;
+				model.siteCode = SessionStore.getGlobalSetting('siteCode');
 				if($stateParams.pageData){
 					model.close= $stateParams.pageData.view;
 				}
@@ -259,25 +260,9 @@ define({
 				{
 					"type": "box",
 					"title": "GROUP_MEMBERS",
-					"items": [{
-							"type": "actionbox",
-							"items": [{
-								"key": "group.jlgGroupMembers[].customerId",
-								"type": "button",
-								"title": "VIEW_CUSTOMER",
-								"onClick": function(model, form, schemaForm, event) {
-									irfNavigator.go({
-										state: "Page.Engine",
-										pageName: "sambandh.customer.IndividualEnrollment2",
-										pageId: model.group.jlgGroupMembers[schemaForm.arrayIndex].customerId
-									});
-								},
-								"condition": "model.siteCode == 'sambandh'"
-							}]
-						},
+					"items": [
 						{
 							"type":"fieldset",
-							"readonly": true,
 							"items":[
 								{
 									"key": "group.jlgGroupMembers",
@@ -291,27 +276,46 @@ define({
 										"type":"fieldset",
 										"items":[
 											{
+												"key": "group.jlgGroupMembers[].customerId",
+												"type": "button",
+												"title": "VIEW_CUSTOMER",
+												"onClick": function(model, form, schemaForm, event) {
+													irfNavigator.go({
+														state: "Page.Engine",
+														pageName: "sambandh.customer.IndividualEnrollment3",
+														pageId: model.group.jlgGroupMembers[schemaForm.arrayIndex].customerId
+													});
+												},
+												"condition": "model.siteCode == 'sambandh'"
+											},
+											{
 												"key": "group.jlgGroupMembers[].urnNo",
 												"title": "URN_NO",
+												"readonly": true
 											}, {
 												"key": "group.jlgGroupMembers[].firstName",
 												"type": "string",
+												"readonly": true,
 												"title": "GROUP_MEMBER_NAME"
 											}, {
 												"key": "group.jlgGroupMembers[].husbandOrFatherFirstName",
+												"readonly": true,
 												"title": "HUSBAND_OR_FATHER_NAME"
 											}, {
 												"key": "group.jlgGroupMembers[].relation",
+												"readonly": true,
 												"title": "RELATION",
 											}, {
 												"key": "group.jlgGroupMembers[].isHouseVerificationDone",
 												"title": "IS_HOUSE_VERIFIED",
 												"type": "checkbox",
+												"readonly": true,
 												 schema: { default:true }
 											}, {
 												"key": "group.jlgGroupMembers[].latitude",
 												"condition": "model.group.jlgGroupMembers[arrayIndex].isHouseVerificationDone==true",
 												"title": "HOUSE_LOCATION",
+												"readonly": true,
 												"type": "geotag",
 												"latitude": "group.jlgGroupMembers[].latitude",
 												"longitude":"group.jlgGroupMembers[].longitude"
@@ -321,52 +325,64 @@ define({
 												"title": "HOUSE_PHOTO",
 												"type": "file",
 												"offline": true,
+												"readonly": true,
 												"category": "Group",
 												"subCategory": "GRTPHOTO",
-												"fileType": "image/*",
+												"fileType": "image/*"
 											}, {
 												"key": "group.jlgGroupMembers[].loanAmount",
 												"title": "LOAN_AMOUNT",
-												"type": "amount",
+												"readonly": true,
+												"type": "amount"
 											}, {
 												"title": "LOAN_CYCLE",
+												"readonly": true,
 												"key": "group.jlgGroupMembers[].loanCycle" // TODO: loan appl. date, loan tenure, loan appl. file, 
 											},{
 												"title": "ACCOUNT_NUMBER",
+												"readonly": true,
 												"key": "group.jlgGroupMembers[].loanAccount.accountNumber", // TODO: loan appl. date, loan tenure, loan appl. file, 
 												"type": "string"
 											},{
 												"title": "TENURE",
+												"readonly": true,
 												"key": "group.jlgGroupMembers[].loanAccount.tenure",
 											}, {
 												"key": "group.jlgGroupMembers[].loanAccount.frequency",
 												"type": "select",
+												"readonly": true,
 												"title": "FREQUENCY",
 												"enumCode": "loan_product_frequency"
 											},{
 												"key": "group.jlgGroupMembers[].loanPurpose1",
 												"title": "LOAN_PURPOSE_1",
+												"readonly": true,
 												"enumCode": "loan_purpose_1",
 												"type": "select",
 											}, {
 												"key": "group.jlgGroupMembers[].loanPurpose2",
 												"type": "string",
+												"readonly": true,
 												"title": "LOAN_PURPOSE_2",
 											}, {
 												"key": "group.jlgGroupMembers[].loanPurpose3",
 												"type": "string",
+												"readonly": true,
 												"title": "LOAN_PURPOSE3",
 											}, {
 												"key": "group.jlgGroupMembers[].witnessFirstName",
 												"title": "WitnessLastName",
+												"readonly": true,
 											}, {
 												"key": "group.jlgGroupMembers[].witnessRelationship",
 												"title": "RELATION",
 												"type": "select",
+												"readonly": true,
 												"enumCode": "relation"
 											},{
 												"title": "LOAN_APPLICATION_DATE",
 												"key": "group.jlgGroupMembers[].loanAccount.loanApplicationDate",
+												"readonly": true,
 												"type": "date"
 											},{
 												"title": "APPLICATION_FILE_DOWNLOAD",
@@ -374,6 +390,7 @@ define({
 												"type": "file",
 												"fileType": "*/*",
 												"category": "Group",
+												"readonly": true,
 												"subCategory": "APPLICATION"
 											},{
 												"title": "CHK1 File Download",
@@ -381,6 +398,7 @@ define({
 												"type": "file",
 												"fileType": "*/*",
 												"category": "Loan",
+												"readonly": true,
 												"subCategory": "DOC1"
 											},{
 												"title": "Agreement File Download",
@@ -389,6 +407,7 @@ define({
 												"type": "file",
 												"fileType": "*/*",
 												"category": "Loan",
+												"readonly": true,
 												"subCategory": "DOC1"
 											}
 										]
@@ -451,12 +470,12 @@ define({
 							"longitude": "group.cgt1Longitude",
 							"readonly": true
 						},{
-							"key": "group.cgtDate11",
+							"key": "group.cgtDate1",
 							"title": "CGT_1_START_DATE",
 							//"type": "date",
 							"readonly": true
 						},{
-							"key": "group.cgtEndDate11",
+							"key": "group.cgtEndDate1",
 							"title": "CGT_1_END_DATE",
 							//"type": "date",
 							"readonly": true
@@ -488,12 +507,12 @@ define({
 							"longitude": "group.cgt2Longitude",
 							"readonly": true
 						},{
-							"key": "group.cgtDate12",
+							"key": "group.cgtDate2",
 							"title": "CGT_2_START_DATE",
 							//"type": "date",
 							"readonly": true
 						},{
-							"key": "group.cgtEndDate12",
+							"key": "group.cgtEndDate2",
 							"title": "CGT_2_END_DATE",
 							//"type": "date",
 							"readonly": true
@@ -525,12 +544,12 @@ define({
 							"longitude": "group.cgt3Longitude",
 							"readonly": true
 						},{
-							"key": "group.cgtDate13",
+							"key": "group.cgtDate3",
 							"title": "CGT_3_START_DATE",
 							//"type": "date",
 							"readonly": true
 						},{
-							"key": "group.cgtEndDate13",
+							"key": "group.cgtEndDate3",
 							"title": "CGT_3_END_DATE",
 							//"type": "date",
 							"readonly": true

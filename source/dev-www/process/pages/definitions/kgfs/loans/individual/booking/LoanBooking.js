@@ -26,8 +26,8 @@ define([], function () {
             var setGoldRate = function(weight,carat,model,index){
                 var dynamicRate = model.additions.goldRatePerCarat * carat;
                 var dynamicMarketValue = dynamicRate * weight;
-                model.loanAccount.ornamentsAppraisals[index].ratePerGramInPaisa = dynamicRate/100+ 0.00;
-                model.loanAccount.ornamentsAppraisals[index].marketValueInPaisa = dynamicMarketValue/100 + 0.00;
+                model.loanAccount.ornamentsAppraisals[index].ratePerGramInPaisa = parseInt(dynamicRate/100 + 0);
+                model.loanAccount.ornamentsAppraisals[index].marketValueInPaisa = parseInt(dynamicMarketValue/100 + 0);
             };
 
             var addressMapCustomertoNominee= function (customer,nominee){
@@ -61,8 +61,8 @@ define([], function () {
             }
             var policyBasedOnLoanType = function(loanType,model){
                 if (loanType == "JEWEL"){
-                    if(model.loanAccount.loanAmountRequested >= (model.loanAccount.ornamentsAppraisals[0].marketValueInPaisa/100)*75){
-                        var errMsg = 'Loan amount should be less then ' + ((model.loanAccount.ornamentsAppraisals[0].marketValueInPaisa/100)*75);
+                    if(model.loanAccount.loanAmountRequested >= (parseInt(model.loanAccount.ornamentsAppraisals[0].marketValueInPaisa/100))*75){
+                        var errMsg = 'Loan amount should be less then ' + ((parseInt(model.loanAccount.ornamentsAppraisals[0].marketValueInPaisa/100))*75);
                         PageHelper.showErrors({data:{error:errMsg}});
                         return false;
                     }
@@ -308,6 +308,9 @@ define([], function () {
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianState",
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianRelationship",
 
+                    "UDFFields",
+                    "UDFFields.boomBoxReferenceNumber",
+
                     "JewelDetails",
                     "JewelDetails.jewelPouchNo",
                     "JewelDetails.ornamentDetails",
@@ -428,6 +431,7 @@ define([], function () {
             };
             var overridesFields = function (model) {
                 return {
+                   
                     "LoanDetails": {
                         "orderNo": 1
                     },
@@ -987,6 +991,19 @@ define([], function () {
                                 "excludes": [],
                                 "options": {
                                     "repositoryAdditions": {
+                                        "UDFFields":{
+                                            "type":"box",
+                                            "title":"UDF Fields",
+                                            "orderNo":"10",
+                                            "items":{
+                                                "boomBoxReferenceNumber":{
+                                                    "title":"BOOM_BOX_REFERENCE_NUMBER",
+                                                    "type":"string",
+                                                    "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf10"
+
+                                                }
+                                            }
+                                        },
                                         "LoanDetails": {
                                             "orderNo": 7,
                                             "items": {
@@ -1438,10 +1455,12 @@ define([], function () {
                         if(!(validateCoGuarantor(model.additions.co_borrower_required,model.additions.number_of_guarantors,'validate',model.loanAccount.loanCustomerRelations,model)))
                             return false;
                         PageHelper.showProgress('loan-process', 'Updating Loan');
-                        if(!savePolicies(model))
-                            return false;
-                        if(!(policyBasedOnLoanType(model.loanAccount.loanType,model)))
-                            return false;
+                        if(!savePolicies(model)){
+                            PageHelper.showProgress('loan-process','Oops Some Error',2000);
+                            return false;}
+                        if(!(policyBasedOnLoanType(model.loanAccount.loanType,model))){
+                            PageHelper.showProgress('loan-process','Oops Some Error',2000);
+                            return false;}
                         model.loanProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
@@ -1508,6 +1527,8 @@ define([], function () {
                         if (model.loanAccount.id){
                             if(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length > 0){
                                 for(i = 0; i< model.loanAccount.loanCustomerRelations.length;i++){
+                                    if(model.loanAccount.loanCustomerRelations[i].relation != "Applicant")
+                                        continue;
                                     if(typeof model.loanAccount.loanCustomerRelations[i].dscStatus == "undefined" || model.loanAccount.loanCustomerRelations[i].dscStatus == ""){
                                         model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = null
                                         break;

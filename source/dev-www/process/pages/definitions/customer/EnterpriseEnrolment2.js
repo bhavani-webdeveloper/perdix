@@ -25,6 +25,9 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             var machineCost = model.customer.fixedAssetsMachinaries[model.arrayIndex].purchasePrice;
             var depreciationPercentage = model.customer.fixedAssetsMachinaries[model.arrayIndex].depreciationPercentage;
             var amount = machineCost - (machineCost*Math.ceil(new Date().getFullYear() - model.customer.fixedAssetsMachinaries[model.arrayIndex].machinePurchasedYear)*(depreciationPercentage/100));
+            if(amount < (machineCost*0.1)){
+                amount = machineCost*0.1;
+            }
             model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice = amount;
         }
     }
@@ -472,6 +475,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         key: "customer.centreId",
                         condition: "!model.customer.id",
                         type: "lov",
+                        required: true,
                         autolov: true,
                         lovonly: true,
                         bindMap: {},
@@ -2885,7 +2889,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"MACHINERY",
-               condition: "model.currentStage == 'Application'",
+               condition: "model.currentStage == 'Application' || model.currentStage == 'FieldAppraisal' ",
                 items:[
                     {
                       key:"customer.fixedAssetsMachinaries",
@@ -2897,74 +2901,36 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key:"customer.fixedAssetsMachinaries[].machineDescription",
                                 title:"MACHINE_DESCRIPTION",
                                 required: true,
-                                type: "lov",
-                                autolov: true,
-                                lovonly:true,
-                                searchHelper: formHelper,
-                                
-                                 outputMap: {
-                                
-                                "machineDescription": "customer.fixedAssetsMachinaries[arrayIndex].machineDescription"
-                                 },
-                                initialize: function(inputModel) {
-                                    $log.warn('in machine description initialize');
-                                    $log.info(inputModel);
-                                },
-                                search: function(inputModel, form, model) {
-                                    
-                                    return Queries.searchMachineDescription(
-                                    );
-                                },
-                                getListDisplayItem: function(item, index) {
-                                return [
-                                    item.machineDescription
-                                ];
-                            },
-                                onSelect: function(result, model, context) {
-                                   if(model.customer.fixedAssetsMachinaries[context.arrayIndex].manufacturerName){
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].manufacturerName=null;                                  
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].machineType=null;                                  
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].workProcess=null;                                  
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].depreciationPercentage=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
-
-                                   }
-                                   $log.info(result);
-                                }
+                                type: "string",
                             }, 
 
                             {
                                 key:"customer.fixedAssetsMachinaries[].manufacturerName",
-                                title:"MANUFACTURER_NAME",
                                 type: "lov",
-                                autolov: true,
-                                lovonly:true,
-                                searchHelper: formHelper,
+                                autolov:true,
+                                required: true,
+                                inputMap: {
+                                    "machineName": {
+                                        "key": "customer.fixedAssetsMachinaries[].manufacturerName",
+                                        "title": "MANUFACTURER_NAME"
+                                    },
+
+                                },
                                 
                                 outputMap: {
-                                     "machineName": "customer.fixedAssetsMachinaries[arrayIndex].manufacturerName"
-                                 },
-                                search: function(inputModel, form, model) {
-                                    
-                                    return Queries.searchMachineName(model.customer.fixedAssetsMachinaries[model.arrayIndex].machineDescription);
+                                    "machineName": "customer.fixedAssetsMachinaries[arrayIndex].manufacturerName"
+                              },
+                              searchHelper: formHelper,
+                                search: function (inputModel, form, model) {
+                                    if (!inputModel.machineName) {
+                                        return $q.reject();
+                                    }
+                                    return Queries.searchMachineName(inputModel.machineName);
                                 },
                                 getListDisplayItem: function(item, index) {
                                     return [
                                         item.machineName
                                     ];
-                                },
-                                onSelect: function(result, model, context) {
-                                   if(model.customer.fixedAssetsMachinaries[context.arrayIndex].machineType){
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].machineType=null;                                  
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].workProcess=null;                                  
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].depreciationPercentage=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
-                                   }
-                                    $log.info(result);
                                 }
                             }, 
                             {
@@ -2981,7 +2947,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                  },
                                 search: function(inputModel, form, model) {
                                     
-                                    return Queries.searchMachineType(model.customer.fixedAssetsMachinaries[model.arrayIndex].machineDescription,
+                                    return Queries.searchMachineType(
                                         model.customer.fixedAssetsMachinaries[model.arrayIndex].manufacturerName);
                                 },
                                 getListDisplayItem: function(item, index) {
@@ -3015,7 +2981,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                  },
                                 search: function(inputModel, form, model) {
                                     
-                                    return Queries.searchMachineWorkProcess(model.customer.fixedAssetsMachinaries[model.arrayIndex].machineDescription,
+                                    return Queries.searchMachineWorkProcess(
                                         model.customer.fixedAssetsMachinaries[model.arrayIndex].manufacturerName,
                                         model.customer.fixedAssetsMachinaries[model.arrayIndex].machineType);
                                 },
@@ -3048,7 +3014,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                  },
                                 search: function(inputModel, form, model) {
                                     
-                                    return Queries.searchMachineModel(model.customer.fixedAssetsMachinaries[model.arrayIndex].machineDescription,
+                                    return Queries.searchMachineModel(
                                         model.customer.fixedAssetsMachinaries[model.arrayIndex].manufacturerName,
                                         model.customer.fixedAssetsMachinaries[model.arrayIndex].machineType,
                                         model.customer.fixedAssetsMachinaries[model.arrayIndex].workProcess);
@@ -3191,7 +3157,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             {
                type:"box",
                title:"MACHINERY",
-               condition: "model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
+               condition: "model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
                readonly:true,
                 items:[
                     {

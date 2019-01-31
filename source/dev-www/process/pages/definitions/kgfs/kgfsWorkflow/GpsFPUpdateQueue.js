@@ -222,47 +222,47 @@ define({
                     },
                     getActions: function(){
                         return [
-                            {
-                                name: "EDIT_CUSTOMER",
-                                desc: "",
-                                icon: "fa fa-pencil",
-                                fn: function(item, model){
-                                    if (item.currentStage === 'Stage01') {
-                                        irfNavigator.go({
-                                            state: "Page.Engine",
-                                            pageName: "ProfileInformation",
-                                            pageId: item.id
-                                        });
-                                    }
-                                    else if (item.currentStage === 'Stage02') {
-                                        irfNavigator.go({
-                                            state: "Page.Engine",
-                                            pageName: "AssetsLiabilitiesAndHealth",
-                                            pageId: item.id
-                                        });
-                                    }
-                                    else if (item.currentStage === 'EDF') {
-                                        irfNavigator.go({
-                                            state: "Page.Engine",
-                                            pageName: "EDF",
-                                            pageId: item.id
-                                        });
-                                    }
-                                    else if (item.currentStage === 'Completed') {
-                                        irfNavigator.go({
-                                            state: "Page.Engine",
-                                            pageName: "CustomerRUD",
-                                            pageId: item.id,
-                                            pageData: {
-                                                intent:'EDIT'
-                                            }
-                                        });
-                                    }
-                                },
-                                isApplicable: function(item, model){
-                                    return model.siteCode === "KGFS";
-                                }
-                            },
+                            // {
+                            //     name: "EDIT_CUSTOMER",
+                            //     desc: "",
+                            //     icon: "fa fa-pencil",
+                            //     fn: function(item, model){
+                            //         if (item.currentStage === 'Stage01') {
+                            //             irfNavigator.go({
+                            //                 state: "Page.Engine",
+                            //                 pageName: "ProfileInformation",
+                            //                 pageId: item.id
+                            //             });
+                            //         }
+                            //         else if (item.currentStage === 'Stage02') {
+                            //             irfNavigator.go({
+                            //                 state: "Page.Engine",
+                            //                 pageName: "AssetsLiabilitiesAndHealth",
+                            //                 pageId: item.id
+                            //             });
+                            //         }
+                            //         else if (item.currentStage === 'EDF') {
+                            //             irfNavigator.go({
+                            //                 state: "Page.Engine",
+                            //                 pageName: "EDF",
+                            //                 pageId: item.id
+                            //             });
+                            //         }
+                            //         else if (item.currentStage === 'Completed') {
+                            //             irfNavigator.go({
+                            //                 state: "Page.Engine",
+                            //                 pageName: "CustomerRUD",
+                            //                 pageId: item.id,
+                            //                 pageData: {
+                            //                     intent:'EDIT'
+                            //                 }
+                            //             });
+                            //         }
+                            //     },
+                            //     isApplicable: function(item, model){
+                            //         return model.siteCode === "KGFS";
+                            //     }
+                            // },
                             {
                                 name: "EDIT_CUSTOMER",
                                 desc: "",

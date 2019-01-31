@@ -792,7 +792,13 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "Lead", "LeadHe
                             using: "scanner",
                             offline:true
                         }]
-                    }]
+                    },
+                    {
+                        "type":"checkbox",
+                        "title":"isDisbursmentAccount",
+                        "key":"customer.customerBankAccounts[].isDisbersementAccount"
+                    }
+                ]
                 }]
             }, 
             {

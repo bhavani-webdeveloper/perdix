@@ -37,6 +37,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource, $q, irfSimpleMo
             method:'GET',
             url:endpoint+"/dscoverridelist"
         }),
+        getDcsOverrideViewList:searchResource({
+            method:'GET',
+            url:endpoint+"/dcsOverrideViewList"
+        }),
         getDscOverrideListHead:{
             method:'HEAD', //@TODO : Should be HEAD, waiting for Serverside fix
             url:endpoint+"/dscoverridelist",

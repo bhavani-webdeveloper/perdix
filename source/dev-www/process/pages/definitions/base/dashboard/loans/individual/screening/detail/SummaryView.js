@@ -23,7 +23,13 @@ define({
             model.subSecName = res[0].data[0]['Sub-Sector'];
             model.scoreDetails = [res[1], res[2], res[3], res[4]];
             model.c = res[25].summary;
-            model.fullScoringDetails = res[26].data;
+            model.business = {};
+            model.business.kgfsName =  res[0].data[0]['Hub Name'];
+            model.business.centreName = res[0].data[0]['Spoke Name'];
+            if(res[26]){
+                model.fullScoringDetails = res[26].data;
+            }
+            
             //model.scoreDetails[3].data.push({Parameter:"Hypothecation Status",color_hexadecimal:model.c.status,"Actual Value" :model.c.ActualValue})
 
 
@@ -175,7 +181,7 @@ define({
             } 
 
            api(params).$promise.then(function(response) {
-                model.ScoreDetails = response.ScoreDetails;
+                model.ScoreDetails = response.ScoreDetails[0];
             }).finally(function() {
                 var onSuccessPromise = Scoring.financialSummary({
                     loan_id: model.cbModel.loanId,

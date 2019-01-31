@@ -1,13 +1,13 @@
-irf.pageCollection.directive("irfSimpleSummaryTable", function(){
+irf.pageCollection.directive("irfBaseSimpleSummaryTable", function(){
 
     return {
 
         restrict: 'E',
         scope: {  tableData : '=irfTableDef'},
         templateUrl: 'process/pages/templates/simple-summary-table.html',
-        controller: 'irfSimpleSummaryTableController'
+        controller: 'irfBaseSimpleSummaryTableController'
     }
-}).controller("irfSimpleSummaryTableController", ["$scope", function($scope){
+}).controller("irfBaseSimpleSummaryTableController", ["$scope", function($scope){//irfBaseSimpleSummaryTable
 
             $scope.getStyleClass = function(column, record){
 
@@ -841,11 +841,12 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             ]
         });
 
-        var cashFlowDetailsTable = "<irf-simple-summary-table irf-table-def='model.cashFlowDetails'></irf-simple-summary-table>";
+        var cashFlowDetailsTable = "<irf-base-simple-summary-table irf-table-def='model.cashFlowDetails'></irf-base-simple-summary-table>";
 
         form.push({
              type: "box",
             colClass: "col-sm-12 table-box",
+            condition: "model.currentStage!='ScreeningReview'",
             title: model.cashFlowDetails.title,
             items: [
                 {
@@ -856,11 +857,12 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             ]
         });
 
-        var purchaseDetailsTable = "<irf-simple-summary-table irf-table-def = 'model.purchaseDetails'></irf-simple-summary-table>";
+        var purchaseDetailsTable = "<irf-base-simple-summary-table irf-table-def = 'model.purchaseDetails'></irf-base-simple-summary-table>";
 
         form.push({
              type: "box",
             colClass: "col-sm-12 table-box",
+            condition: "model.currentStage!='ScreeningReview'",
             title: model.purchaseDetails.title,
             items: [
                 {
@@ -878,7 +880,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                     type: "section",
                     colClass: "col-sm-12",
                     html: '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{model.liabilitiesSummary.subgroups[' + i +'].summary["Name"]}} - {{model.liabilitiesSummary.subgroups[' + i +'].summary["Relation"]}}</h3> \
-                        <irf-simple-summary-table irf-table-def="model.liabilitiesSummary.subgroups[' + i + ']"></irf-simple-summary-table>\
+                        <irf-base-simple-summary-table irf-table-def="model.liabilitiesSummary.subgroups[' + i + ']"></irf-base-simple-summary-table>\
                         <strong>Total EMI </strong> &nbsp; &nbsp; {{model.liabilitiesSummary.subgroups[' + i +'].summary["Total Monthly Installment"] | irfCurrency}} <br />\
                         <strong>Total Outstanding Loan Amount</strong> &nbsp; &nbsp; {{model.liabilitiesSummary.subgroups[' + i +'].summary["Total Outstanding Loan Amount"] | irfCurrency}}\
                         <hr>\
@@ -894,7 +896,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             items: items
         });
 
-        var opexDetailsTable = "<irf-simple-summary-table irf-table-def = 'model.opexDetails'></irf-simple-summary-table>";
+        var opexDetailsTable = "<irf-base-simple-summary-table irf-table-def = 'model.opexDetails'></irf-base-simple-summary-table>";
 
         form.push({
              type: "box",
@@ -909,11 +911,12 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             ]
         });
 
-        var machineryDetailsTable = "<irf-simple-summary-table irf-table-def = 'model.machineryDetails'></irf-simple-summary-table>";
+        var machineryDetailsTable = "<irf-base-simple-summary-table irf-table-def = 'model.machineryDetails'></irf-base-simple-summary-table>";
 
         form.push({
              type: "box",
             colClass: "col-sm-12 table-box",
+            condition: "model.currentStage!='ScreeningReview'",
             title: model.machineryDetails.title,
             items: [
                 {
@@ -924,11 +927,12 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             ]
         });
 
-        var stockDetailsTable = "<irf-simple-summary-table irf-table-def = 'model.stockDetails'></irf-simple-summary-table>";
+        var stockDetailsTable = "<irf-base-simple-summary-table irf-table-def = 'model.stockDetails'></irf-base-simple-summary-table>";
 
         form.push({
              type: "box",
             colClass: "col-sm-12 table-box",
+            condition: "model.currentStage!='ScreeningReview'",
             title: model.stockDetails.title,
             items: [
                 {
@@ -939,11 +943,12 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             ]
         });
 
-        var nonMachineryDetailsTable = "<irf-simple-summary-table irf-table-def = 'model.nonMachineryDetails'></irf-simple-summary-table>";
+        var nonMachineryDetailsTable = "<irf-base-simple-summary-table irf-table-def = 'model.nonMachineryDetails'></irf-base-simple-summary-table>";
 
         form.push({
              type: "box",
             colClass: "col-sm-12 table-box",
+            condition: "model.currentStage!='ScreeningReview'",
             title: model.nonMachineryDetails.title,
             items: [
                 {
@@ -954,7 +959,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             ]
         });
 
-        var businessBankStmtSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.businessBankStmtSummary'></irf-simple-summary-table>";
+        var businessBankStmtSummaryTable = "<irf-base-simple-summary-table irf-table-def = 'model.businessBankStmtSummary'></irf-base-simple-summary-table>";
 
         form.push({
              type: "box",
@@ -969,7 +974,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             ]
         });
 
-        var personalBankStmtSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.personalBankStmtSummary'></irf-simple-summary-table>";
+        var personalBankStmtSummaryTable = "<irf-base-simple-summary-table irf-table-def = 'model.personalBankStmtSummary'></irf-base-simple-summary-table>";
         form.push({
              type: "box",
             colClass: "col-sm-12 table-box",

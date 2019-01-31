@@ -21,7 +21,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     "bundleDefinitionPromise": function() {
                         return $q.resolve([
                             {
-                                pageName: 'irep.loans.individual.origination.Summary',
+                                pageName: 'base.dashboard.loans.individual.screening.Summary',
                                 title: 'SUMMARY',
                                 pageClass: 'summary',
                                 minimum: 1,
@@ -29,7 +29,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:5
                             },
                             {
-                                pageName: 'irep.customer.IndividualEnrolment2',
+                                pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'APPLICANT',
                                 pageClass: 'applicant',
                                 minimum: 1,
@@ -37,7 +37,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:10
                             },
                             {
-                                pageName: 'irep.customer.IndividualEnrolment2',
+                                pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'CO_APPLICANT',
                                 pageClass: 'co-applicant',
                                 minimum: 5,
@@ -45,7 +45,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:20
                             },
                             {
-                                pageName: 'irep.customer.IndividualEnrolment2',
+                                pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'GUARANTOR',
                                 pageClass: 'guarantor',
                                 minimum: 5,
@@ -53,7 +53,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:30
                             },
                             {
-                                pageName: 'irep.customer.EnterpriseEnrolment2',
+                                pageName: 'base.dashboard.loans.individual.customer.EnterpriseEnrolment2',
                                 title: 'BUSINESS',
                                 pageClass: 'business',
                                 minimum: 1,
@@ -61,7 +61,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:40
                             },
                             {
-                                pageName: 'irep.loans.individual.origination.LoanRequest',
+                                pageName: 'base.dashboard.loans.individual.screening.LoanRequest',
                                 title: 'LOAN_REQUEST',
                                 pageClass: 'loan-request',
                                 minimum: 1,
@@ -109,17 +109,19 @@ define(["perdix/domain/model/loan/LoanProcess",
                         return out;
                     },
 
-                    bundleActions: [{
-                        name: "Conversation",
-                        desc: "",
-                        icon: "fa fa-comment",
-                        fn: function(bundleModel) {
-                            Message.openOrCreateConversation("Loan", $stateParams.pageId);
-                        },
-                        isApplicable: function(bundleModel) {
-                            return true;
-                        }
-                    }],
+                    bundleActions: [
+                    //     {
+                    //     name: "Conversation",
+                    //     desc: "",
+                    //     icon: "fa fa-comment",
+                    //     fn: function(bundleModel) {
+                    //         Message.openOrCreateConversation("Loan", $stateParams.pageId);
+                    //     },
+                    //     isApplicable: function(bundleModel) {
+                    //         return true;
+                    //     }
+                    // }
+                ],
                     "onAddNewTab": function(definition, bundleModel){ /* returns model on promise resolution. */
                         var deferred = $q.defer();
                         var model = null;
@@ -168,16 +170,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 var loanAccount = loanProcess;
                                 loanAccount.applicantEnrolmentProcess.customer.customerId = loanProcess.loanAccount.customerId;
 
-                                // $this.bundlePages.push({
-                                //     pageClass: 'summary',
-                                //     model: {
-                                //         cbModel: {
-                                //             customerId:loanProcess.loanAccount.customerId,
-                                //             loanId:bundleModel.loanId,
-                                //             scoreName:'RiskScore3'
-                                //         }
-                                //     }
-                                // });
+                                $this.bundlePages.push({
+                                    pageClass: 'summary',
+                                    model: {
+                                        cbModel: {
+                                            customerId:loanProcess.loanAccount.customerId,
+                                            loanId:bundleModel.loanId,
+                                            scoreName:'RiskScore3'
+                                        }
+                                    }
+                                });
 
                                 $this.bundlePages.push({
                                     pageClass: 'applicant',

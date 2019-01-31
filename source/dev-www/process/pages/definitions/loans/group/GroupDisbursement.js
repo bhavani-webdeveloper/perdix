@@ -81,6 +81,25 @@ define({
                         model.group = _.cloneDeep(response);
                         model.group.groupRemarks = null;
                         fixData(model);
+                        var dscPromises = [];
+                        for (i in model.group.jlgGroupMembers) {
+							var member = model.group.jlgGroupMembers[i];
+							dscPromises.push(Groups.getDSCData({"dscId": member.dscId}).$promise);
+
+                        }
+                        	$q.all(dscPromises).then(function(data) {
+								for (i in data) {
+									var r = data[i].responseMessage;
+									data[i].responseMessageHtml = '<strong>DSC</strong>' + r.substr(r.indexOf('<br>'));
+									model.group.jlgGroupMembers[i].dscData = data[i];
+								}
+							}, function(errors) {
+								for (i in errors) {
+									PageHelper.showErrors(errors[i]);
+								}
+							}).finally(PageHelper.hideLoader);
+						
+					
                         if (model.group.jlgGroupMembers.length > 0) {
                             fillNames(model).then(function(m) {
                                 model = m;
@@ -174,7 +193,7 @@ define({
                         "key": "group.firstRepaymentDate",
                         "title": "FIRST_REPAYMENT_DATE",
                         "readonly": true,
-                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'||model.siteCode == 'KGFS'",
+                        "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
                         "type": "date",
                     }, {
                         "key": "group.groupPhotoFileId",
@@ -221,6 +240,25 @@ define({
                             "title": "LOAN_AMOUNT",
                             "type": "amount",
                         }, {
+                            "title": "LOAN_CYCLE",
+                            "readonly": true,
+                            "key": "group.jlgGroupMembers[].loanCycle" // TODO: loan appl. date, loan tenure, loan appl. file, 
+                        },{
+                            "title": "ACCOUNT_NUMBER",
+                            "readonly": true,
+                            "key": "group.jlgGroupMembers[].loanAccount.accountNumber", // TODO: loan appl. date, loan tenure, loan appl. file, 
+                            "type": "string"
+                        },{
+                            "title": "TENURE",
+                            "readonly": true,
+                            "key": "group.jlgGroupMembers[].loanAccount.tenure",
+                        }, {
+                            "key": "group.jlgGroupMembers[].loanAccount.frequency",
+                            "type": "select",
+                            "readonly": true,
+                            "title": "FREQUENCY",
+                            "enumCode": "loan_product_frequency"
+                        },{
                             "key": "group.jlgGroupMembers[].loanPurpose1",
                             "readonly": true,
                             "title": "LOAN_PURPOSE_1",
@@ -282,6 +320,27 @@ define({
                                 };
                                 GroupProcess.getLoanPrint(repaymentInfo,opts);
                             }
+                        },{
+                            "type":"fieldset",
+                            "title":"DSC Details",
+                            "items":[
+                                {
+                                    "title": "DSC_STATUS",
+                                    "readonly": true,
+                                    "key": "group.jlgGroupMembers[].dscStatus",
+                                    "type": "text"
+                                }, {
+                                    "key": "group.jlgGroupMembers[].dscOverrideRemarks",
+                                    "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDDEN'",
+                                    "title": "DSC_OVERRIDE_REMARKS",
+                                    "readonly": true
+                                },{
+                                    "notitle": true,
+                                    "readonly": true,
+                                    "key": "group.jlgGroupMembers[].dscData.responseMessageHtml",
+                                    "type": "html"
+                                },
+                            ]
                         }]
                     }]
                 }, {
@@ -595,21 +654,25 @@ define({
                 },
 
                 submit: function(model, formCtrl, form) {
-                    if(!validateForm(formCtrl)) 
+                    PageHelper.showLoader();
+                    if(!validateForm(formCtrl)){
+                        PageHelper.hideLoader();
                         return;
-                        if(model.siteCode == 'saija') {
+                    }
+                    if(model.siteCode == 'saija') {
                             var cbsdate = SessionStore.getCBSDate();
                             if (model.group.scheduledDisbursementDate && moment(model.group.scheduledDisbursementDate, SessionStore.getSystemDateFormat()).diff(cbsdate, "days") <0) {
+                                PageHelper.hideLoader();
                                 PageHelper.showProgress("loan-create", "Scheduled disbursement date should be greater than or equal to system date", 5000);
                                 return false;
                             }
     
                             if (model.group.firstRepaymentDate && moment(model.group.firstRepaymentDate, SessionStore.getSystemDateFormat()).diff(model.group.scheduledDisbursementDate, "days") <=0) {
+                                PageHelper.hideLoader();
                                 PageHelper.showProgress("loan-create", "Repayment date should be greater than disbursement date", 5000);
                                 return false;
                             }
-                        }
-                    PageHelper.showLoader();
+                    }
                     irfProgressMessage.pop('Disbursement-proceed', 'Working...');
                     PageHelper.clearErrors();
                     if(model.siteCode == 'saija'||model.siteCode == 'KGFS') {
@@ -649,15 +712,17 @@ define({
                     });
                 },
                 sendBack: function(model, form, formName) {
+                    PageHelper.showLoader();
                     if (!model.review.targetStage){
+                        PageHelper.hideLoader();
                         irfProgressMessage.pop('Send Back', "Send to Stage is mandatory", 2000);
                         return false;
                     }
                     if (!model.group.groupRemarks){
+                        PageHelper.hideLoader();
                         irfProgressMessage.pop('Send Back', "Remarks is mandatory", 2000);
                         return false;
                     }
-                    PageHelper.showLoader();
                     irfProgressMessage.pop('Send Back', 'Working...');
                     PageHelper.clearErrors();
                     model.groupAction = "PROCEED";                    
@@ -674,15 +739,17 @@ define({
                     });   
                 },
                 reject: function(model, form, formName) {
+                    PageHelper.showLoader();
                     if (!model.review.rejectStage){
+                        PageHelper.hideLoader();
                         irfProgressMessage.pop('Reject', "Send to Stage is mandatory", 2000);
                         return false;
                     }
                     if (!model.group.groupRemarks){
+                        PageHelper.hideLoader();
                         irfProgressMessage.pop('Reject', "Remarks is mandatory", 2000);
                         return false;
                     }
-                    PageHelper.showLoader();
                     irfProgressMessage.pop('Reject', 'Working...');
                     PageHelper.clearErrors();
                     model.groupAction = "PROCEED";
