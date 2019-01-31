@@ -470,12 +470,12 @@ define({
 							"longitude": "group.cgt1Longitude",
 							"readonly": true
 						},{
-							"key": "group.cgtDate11",
+							"key": "group.cgtDate1",
 							"title": "CGT_1_START_DATE",
 							//"type": "date",
 							"readonly": true
 						},{
-							"key": "group.cgtEndDate11",
+							"key": "group.cgtEndDate1",
 							"title": "CGT_1_END_DATE",
 							//"type": "date",
 							"readonly": true
@@ -507,12 +507,12 @@ define({
 							"longitude": "group.cgt2Longitude",
 							"readonly": true
 						},{
-							"key": "group.cgtDate12",
+							"key": "group.cgtDate2",
 							"title": "CGT_2_START_DATE",
 							//"type": "date",
 							"readonly": true
 						},{
-							"key": "group.cgtEndDate12",
+							"key": "group.cgtEndDate2",
 							"title": "CGT_2_END_DATE",
 							//"type": "date",
 							"readonly": true
@@ -544,12 +544,12 @@ define({
 							"longitude": "group.cgt3Longitude",
 							"readonly": true
 						},{
-							"key": "group.cgtDate13",
+							"key": "group.cgtDate3",
 							"title": "CGT_3_START_DATE",
 							//"type": "date",
 							"readonly": true
 						},{
-							"key": "group.cgtEndDate13",
+							"key": "group.cgtEndDate3",
 							"title": "CGT_3_END_DATE",
 							//"type": "date",
 							"readonly": true
