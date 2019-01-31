@@ -730,6 +730,7 @@ define(
                     "NewVehicleDetails.assetDetails",
                     "NewVehicleDetails.assetSubDetails",
                     "NewVehicleDetails.registrationNumber",
+                    "NewVehicleDetails.registrationNumber2",
                     "NewVehicleDetails.originalInvoiceValue",
                     "NewVehicleDetails.permitType",
                     "NewVehicleDetails.price",
@@ -1059,8 +1060,7 @@ define(
                         },
                         "NewVehicleDetails.registrationNumber": {
                             "orderNo": 110,
-                            "required": true,
-                            "condition":"model.loanAccount.vehicleLoanDetails.vehicleType == 'Used'"
+                            "condition":"model.loanAccount.vehicleLoanDetails.vehicleType == 'New'"
                         },
                         "NewVehicleDetails.originalInvoiceValue": {
                             "orderNo": 120,
@@ -1243,6 +1243,14 @@ define(
                                         "orderNo":140,
                                         "key":"loanAccount.vehicleLoanDetails.price",
                                         "title": "PURCHASE_PRICE"
+                                    },
+                                    "registrationNumber2":{
+                                        "orderNo": 110,
+                                        "key": "loanAccount.vehicleLoanDetails.registrationNumber",
+                                        "type": "text",
+                                        "title": "REGN_NO",
+                                        "required": true,
+                                        "condition":"model.loanAccount.vehicleLoanDetails.vehicleType == 'Used'"
                                     }
                                 }
                             },
