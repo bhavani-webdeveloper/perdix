@@ -825,7 +825,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                                 category: "Loan",
                                                 subCategory: "DOC1",
                                                 "notitle": true,
-                                                using: "scanner"
+                                                using: "scanner",
+                                                required:true
                                             }]
                                         },
                                 ]
