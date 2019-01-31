@@ -396,7 +396,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         },
                         {
                             "type": "actions",
-                            condition : "model.additional.isDisbursementDone",
+                            condition : "!model.additional.isDisbursementDone",
                             "items": [
                                 {
                                     "type": "button",
@@ -414,7 +414,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         },
                         {
                             "type":"actions",
-                            condition:"!model.additional.isDisbursementDone",
+                            condition:"model.additional.isDisbursementDone",
                             "items":[
                                 {
                                 "title": "Print Preview",
