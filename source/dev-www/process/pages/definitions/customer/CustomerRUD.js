@@ -892,14 +892,11 @@ irf.pageCollection.factory("Pages__CustomerRUD", ["$log", "$q", "Enrollment", "Q
                         key: "customer.customerBankAccounts[].accountNumber",
                         "required":true,
                         type: "password",
-                        inputmode: "number",
-                        numberType: "tel"
                     }, {
                         key: "customer.customerBankAccounts[].confirmedAccountNumber",
                         "required":true,
                         "title": "CONFIRMED_ACCOUNT_NUMBER",
-                        inputmode: "number",
-                        numberType: "tel"
+                        type:"text"
                     }, {
                         key: "customer.customerBankAccounts[].accountType",
                         type: "select"

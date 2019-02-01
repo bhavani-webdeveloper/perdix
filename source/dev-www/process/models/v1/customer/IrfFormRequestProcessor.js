@@ -1701,13 +1701,10 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "accountNumber": {
                                 key: "customer.customerBankAccounts[].accountNumber",
                                 type: "password",
-                                inputmode: "number",
-                                numberType: "tel"
                             },
                             "confirmedAccountNumber": {
                                 key: "customer.customerBankAccounts[].confirmedAccountNumber",
-                                inputmode: "number",
-                                numberType: "tel"
+                                type:"text",
                             },
                             "accountType": {
                                 key: "customer.customerBankAccounts[].accountType",
