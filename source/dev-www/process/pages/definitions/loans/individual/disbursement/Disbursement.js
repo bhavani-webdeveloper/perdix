@@ -396,7 +396,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         },
                         {
                             "type": "actions",
-                            condition : "model.additional.isDisbursementDone",
+                            condition : "!model.additional.isDisbursementDone",
                             "items": [
                                 {
                                     "type": "button",
@@ -414,7 +414,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         },
                         {
                             "type":"actions",
-                            condition:"!model.additional.isDisbursementDone",
+                            condition:"model.additional.isDisbursementDone && model.siteCode='KGFS'",
                             "items":[
                                 {
                                 "title": "Print Preview",
@@ -700,32 +700,39 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
 
                                         IndividualLoan.batchDisburse(reqData,
                                             function (data) {
-                                                PageHelper.showProgress('disbursement', 'Disbursement done', 2000);
                                                 model.additional.disbursementDone = true;
-                                                IndividualLoan.get({
-                                                    accountId: model.additional.accountNumber
-                                                }).$promise.then(function (resp) {
-                                                    PageHelper.hideLoader();
-                                                    model.additional.isDisbursementDone = true;
-                                                    model.additional.payOffAmount = resp.payOffAmount;
-                                                    model.additional.demandAmount = resp.totalDemandRaised;
-                                                    // model.loanacount.customer1FirstName = resp.customer1FirstName;
-                                                    for (i = 0; i < resp.transactions.length; i++) {
-                                                        if (resp.transactions[i].transactionName == "Disbursement") {
-                                                            model.additional.transactionId = resp.transactions[i].transactionId;
-                                                            model.additional.transactionType = resp.transactions[i].instrument;
+                                                if ("KGFS" == model.siteCode){
+                                                    IndividualLoan.get({
+                                                        accountId: model.additional.accountNumber
+                                                    }).$promise.then(function (resp) {
+                                                        PageHelper.hideLoader();
+                                                        model.additional.isDisbursementDone = true;
+                                                        model.additional.payOffAmount = resp.payOffAmount;
+                                                        model.additional.demandAmount = resp.totalDemandRaised;
+                                                        // model.loanacount.customer1FirstName = resp.customer1FirstName;
+                                                        for (i = 0; i < resp.transactions.length; i++) {
+                                                            if (resp.transactions[i].transactionName == "Disbursement") {
+                                                                model.additional.transactionId = resp.transactions[i].transactionId;
+                                                                model.additional.transactionType = resp.transactions[i].instrument;
+                                                            }
                                                         }
-                                                    }
-                                                }),function(err){
-                                                    PageHelper.showProgress('disbursement','Oops. An error occurred...',5000)
+                                                    }),function(err){
+                                                        PageHelper.showProgress('disbursement', 'Disbursement done', 2000);
+                                                        PageHelper.hideLoader();
+                                                        irfNavigator.goBack();
+                                                    };
+                                                }
+                                                else{
+                                                    PageHelper.showProgress('disbursement', 'Disbursement done', 2000);
                                                     PageHelper.hideLoader();
-                                                };
+                                                    irfNavigator.goBack();
+                                                }
                                             },
                                             function (res) {
+                                                PageHelper.hideLoader();
                                                 PageHelper.showErrors(res);
                                                 PageHelper.showProgress('disbursement', 'Disbursement failed', 2000);
                                             }).$promise.finally(function () {
-                                                PageHelper.hideLoader();
                                             }
                                             );
                                     }, function (resp) {

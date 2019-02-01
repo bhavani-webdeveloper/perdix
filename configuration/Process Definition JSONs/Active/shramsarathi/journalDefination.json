@@ -1,0 +1,34 @@
+{
+   "stages":[
+      {
+         "order":1,
+         "code":"multiJournalEntry",
+         "name":"multiJournalEntry",
+         "stageType":"CAPTURE",
+         "journalPostingStage":"No",
+         "allowedRoles":[
+            "WM"
+         ]
+      },
+      {
+         "order":2,
+         "code":"multiJournalPosting",
+         "name":"multiJournalPosting",
+         "stageType":"CAPTURE",
+         "journalPostingStage":"YES",
+         "allowedRoles":[
+            "WM"
+         ]
+      },
+       {
+         "order": 3,
+         "code": "Rejected",
+         "name": "Rejected",
+         "stageType": "ACCOUNTINGPOSTING",
+         "journalPostingStage": "No",
+         "allowedRoles": [
+            "WM"
+         ]
+      }
+   ]
+}

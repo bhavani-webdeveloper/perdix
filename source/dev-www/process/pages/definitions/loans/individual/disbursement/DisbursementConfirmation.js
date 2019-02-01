@@ -142,50 +142,49 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                             "title": "FINANCE_TEAM_REJECTION_REMARKS",
                             "condition": "model.loanAccountDisbursementSchedule.udf1=='Rejected'"
                         },
+                        // {
+                        //     "type": "actionbox",
+                        //     "condition": "model.siteCode=='KGFS'",
+                        //     "items": [{
+                        //         "type": "submit",
+                        //         "title": "Update"
+                        //     }, {
+                        //         "title": "Print Receipt",
+
+                        //         "type": "button",
+                        //         "onClick": function (model, formCtrl, form, $event) {
+                        //             var repaymentInfo = {
+                        //                 'customerURN': model.loanacount.urnNo,
+                        //                 'customerId': model.loanacount.customerId,
+                        //                 'customerName': model.loanacount.customer1FirstName,
+                        //                 'accountNumber': model.loanacount.accountNumber,
+                        //                 'transactionType': "Disbursement",
+                        //                 'transactionID': model.loanacount.transactionId,
+                        //                 'productCode': model.loanacount.productCode,
+                        //                 'loanAmount': model.loanacount.loanAmountRequested,
+                        //                 'disbursedamount': model.loanacount.loanAmount,
+                        //                 'partnerCode': model.loanacount.partnerCode,
+                        //             };
+
+                        //             var opts = {
+                        //                 'branch': SessionStore.getBranch(),
+                        //                 'entity_name': SessionStore.getBankName() + " KGFS",
+                        //                 'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
+                        //                 'cin': 'U74990TN2011PTC081729',
+                        //                 'address1': 'IITM Research Park, Phase 1, 10th Floor',
+                        //                 'address2': 'Kanagam Village, Taramani',
+                        //                 'address3': 'Chennai - 600113, Phone: 91 44 66687000',
+                        //                 'website': "http://ruralchannels.kgfs.co.in",
+                        //                 'helpline': '18001029370',
+                        //                 'branch_id': SessionStore.getBranchId(),
+                        //                 'branch_code': SessionStore.getBranchCode()
+                        //             };
+                        //             GroupProcess.getLoanPrint(repaymentInfo, opts);
+                        //         }
+                        //     }]
+                        // },
                         {
                             "type": "actionbox",
-                            "condition": "model.siteCode=='KGFS'",
-                            "items": [{
-                                "type": "submit",
-                                "title": "Update"
-                            }, {
-                                "title": "Print Receipt",
-
-                                "type": "button",
-                                "onClick": function (model, formCtrl, form, $event) {
-                                    var repaymentInfo = {
-                                        'customerURN': model.loanacount.urnNo,
-                                        'customerId': model.loanacount.customerId,
-                                        'customerName': model.loanacount.customer1FirstName,
-                                        'accountNumber': model.loanacount.accountNumber,
-                                        'transactionType': "Disbursement",
-                                        'transactionID': model.loanacount.transactionId,
-                                        'productCode': model.loanacount.productCode,
-                                        'loanAmount': model.loanacount.loanAmountRequested,
-                                        'disbursedamount': model.loanacount.loanAmount,
-                                        'partnerCode': model.loanacount.partnerCode,
-                                    };
-
-                                    var opts = {
-                                        'branch': SessionStore.getBranch(),
-                                        'entity_name': SessionStore.getBankName() + " KGFS",
-                                        'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
-                                        'cin': 'U74990TN2011PTC081729',
-                                        'address1': 'IITM Research Park, Phase 1, 10th Floor',
-                                        'address2': 'Kanagam Village, Taramani',
-                                        'address3': 'Chennai - 600113, Phone: 91 44 66687000',
-                                        'website': "http://ruralchannels.kgfs.co.in",
-                                        'helpline': '18001029370',
-                                        'branch_id': SessionStore.getBranchId(),
-                                        'branch_code': SessionStore.getBranchCode()
-                                    };
-                                    GroupProcess.getLoanPrint(repaymentInfo, opts);
-                                }
-                            }]
-                        },
-                        {
-                            "type": "actionbox",
-
                             "items": [{
                                 "type": "submit",
                                 "title": "Update"
