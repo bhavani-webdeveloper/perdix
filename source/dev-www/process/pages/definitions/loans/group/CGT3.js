@@ -544,7 +544,7 @@ define({
                         GroupProcess.updateGroup(reqData, function(res) {
                             formHelper.newOffline.deleteOffline($stateParams.pageName, model);
                             PageHelper.hideLoader();
-                            irfProgressMessage.pop('CGT3-proceed', 'Operation Succeeded. Proceeded to GRT.', 5000);
+                            irfProgressMessage.pop('CGT3-proceed', 'Operation Succeeded. Proceeded to ' +res.group.currentStage+'.', 5000);
                             irfNavigator.goBack();
                         }, function(res) {
                             PageHelper.hideLoader();
