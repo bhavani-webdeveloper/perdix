@@ -1,6 +1,6 @@
-irf.models.factory('RolesPages', function($resource, $httpParamSerializer, searchResource) {
+irf.models.factory('RolesPages', function($resource, $httpParamSerializer, searchResource,BASE_URL) {
     var endpoint = irf.MANAGEMENT_BASE_URL + "/user-management";
-
+    var apiEndpoint = BASE_URL + '/api/users';
     var res = $resource(endpoint, null, {
         allRoles: searchResource({
             method: 'GET',
@@ -36,7 +36,7 @@ irf.models.factory('RolesPages', function($resource, $httpParamSerializer, searc
         }),
         updateUserRole: {
             method: 'PUT',
-            url: endpoint + '/updateUserRole.php'
+            url: apiEndpoint
         }
     });
 
