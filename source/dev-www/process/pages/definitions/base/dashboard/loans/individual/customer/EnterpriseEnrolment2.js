@@ -398,7 +398,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     },
                     "ContactInformation.distanceFromBranch":{
                         "enumCode": "distance_from_branch",
-                    }              
+                    },
+                    "EnterpriseInformation.noOfPartners": {
+                        "condition": "model.customer.enterprise.businessConstitution=='Partnership'"
+                    },     
+                    "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosed": {
+                        "condition": "model.customer.enterpriseCustomerRelations[arrayIndex].partnerOfAnyOtherCompany == 'YES'"
+                    },   
+                    "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosureDate": {
+                        "condition": "model.customer.enterpriseCustomerRelations[arrayIndex].otherBusinessClosed == 'YES'"
+                    },      
                }
             }
             var repositoryAdditions = function(bundlePageObj){
@@ -685,7 +694,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.ownership",                    
                     "EnterpriseInformation.businessConstitution",
                     "EnterpriseInformation.businessHistory",
-                    //"EnterpriseInformation.noOfPartners",
+                    "EnterpriseInformation.noOfPartners",
                     "EnterpriseInformation.anyPartnerOfPresentBusiness",
                     "EnterpriseInformation.partnershipDissolvedDate",
                     //"EnterpriseInformation.regularEmployees",
@@ -715,8 +724,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.enterpriseCustomerRelations.experienceInBusiness",
                     "EnterpriseInformation.enterpriseCustomerRelations.businessInvolvement",
                     "EnterpriseInformation.enterpriseCustomerRelations.partnerOfAnyOtherCompany",
-                    //"EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosed",
-                    //"EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosureDate",
+                    "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosed",
+                    "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosureDate",
 
                     "ContactInformation",
                     "ContactInformation.mobilePhone",

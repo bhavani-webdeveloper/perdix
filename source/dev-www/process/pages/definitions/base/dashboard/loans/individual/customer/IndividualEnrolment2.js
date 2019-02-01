@@ -1361,10 +1361,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "title": "CENTRE_ID",
                     },
                     "IndividualInformation.spouseFirstName":{
-                        "condition": "model.customer.maritalStatus==='MARRIED'" 
+                        "condition": "model.customer.maritalStatus==='MARRIED'",
+                        "required":true
                     },
                     "IndividualInformation.spouseDateOfBirth":{
-                        "condition": "model.customer.maritalStatus==='MARRIED'"
+                        "condition": "model.customer.maritalStatus==='MARRIED'",
+                        "required":true
                     },
                     "KYC.identityProofFieldSet": {
                         "orderNo": 20
@@ -1382,7 +1384,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "orderNo": 60
                     },
                     "KYC.addressProof": {
-                        "orderNo": 70
+                        "orderNo": 70,
+                        "required" : false,
+                        "readonly" : true
                     },
                     "KYC.addressProofImageId": {
                         "orderNo": 80
@@ -1624,8 +1628,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "enumCode": "asset_type"
                     },
                     "PhysicalAssets.physicalAssets.vehicleModel":{
-                        "condition": "model.customer.physicalAssets[arrayIndex].assetType=='Two wheeler' || model.customer.physicalAssets[arrayIndex].assetType=='Four wheeler'"
+                        "condition": "model.customer.physicalAssets[arrayIndex].nameOfOwnedAsset=='Two wheeler' || model.customer.physicalAssets[arrayIndex].nameOfOwnedAsset=='Four Wheeler'"
                     },
+                    "IndividualFinancials.expenditures.expenditureSource": {
+                        "required": true
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatements.startMonth":{
+                        "required" : false
+                    }
 
                 }
             }
@@ -2130,7 +2140,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "References":{
                                     "type": "box",
                                     "title": "REFERENCES",
-                                    "orderNo":2500,
+                                    "orderNo":100,
                                     "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
                                     "items": {
                                         "verifications" : {

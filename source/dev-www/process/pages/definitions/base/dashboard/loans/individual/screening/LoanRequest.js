@@ -1475,6 +1475,7 @@ define([],function(){
 
                     "PostReview",
                     "PostReview.action",
+                    "PostReview.action1",
                     "PostReview.proceed",
                     "PostReview.proceed.remarks",
                     "PostReview.proceed.proceedButton",
@@ -1759,9 +1760,20 @@ define([],function(){
                                             "action": {
                                                 "key": "review.action",
                                                 "type": "radios",
+                                                "condition": "model.currentStage !== 'Screening'",
                                                 "titleMap": {
                                                     "REJECT": "REJECT",
                                                     "SEND_BACK": "SEND_BACK",
+                                                    "PROCEED": "PROCEED",
+                                                    "HOLD": "HOLD"
+                                                }
+                                            },
+                                            "action1": {
+                                                "key": "review.action",
+                                                "type": "radios",
+                                                "condition": "model.currentStage == 'Screening'",
+                                                "titleMap": {
+                                                    "REJECT": "REJECT",
                                                     "PROCEED": "PROCEED",
                                                     "HOLD": "HOLD"
                                                 }
