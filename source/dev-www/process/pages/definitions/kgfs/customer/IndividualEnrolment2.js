@@ -37,12 +37,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
 
             var configFile = function () {
-                return {
-              
+                return {                   
                 }
             }
             var overridesFields = function (bundlePageObj) {
-                return {
+               return {
                         "IndividualReferences":{
                             title:"REFERENCE"
                         },
@@ -978,9 +977,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         }
                 }
             }
-            var getIncludes = function (model) {
+            var getIncludes = function (model) {            
 
-                   return [
+                return [
                 "IndividualInformation",
                 "IndividualInformation.customerBranchId",
                 "IndividualInformation.customerId",
@@ -998,6 +997,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "IndividualInformation.spouseFirstName",
                 "IndividualInformation.spouseDateOfBirth",
                 "IndividualInformation.spouseAadharNumber",
+                
                 "KYC",
                 "KYC.customerId",
                 "KYC.identityProofFieldSet",
@@ -1016,6 +1016,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "KYC.additionalKYCs.kyc1ImagePath",
                 "KYC.additionalKYCs.kyc1IssueDate",
                 "KYC.additionalKYCs.kyc1ValidUptoDate",
+               
                 "ContactInformation",
                 "ContactInformation.contactDetailsAlsoBusinessContactDetails",
                 "ContactInformation.residentialAddressFieldSet",
@@ -1041,12 +1042,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "ContactInformation.mailingDistrict",
                 "ContactInformation.mailingPincode",
                 "ContactInformation.mailingState",
+                
                 "loanInformation",
                 "loanInformation.requestedLoanAmount",
                 "loanInformation.requestedLoanPurpose",
-                "actionbox",
-                "actionbox.submit",
-                "actionbox.save",
+                
                 "FamilyDetails",
                 "FamilyDetails.familyMembers",
                 "FamilyDetails.familyMembers.familyMemberFirstName",
@@ -1055,19 +1055,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "FamilyDetails.familyMembers.occupation",
                 "FamilyDetails.familyMembers.educationLevel",
                 "FamilyDetails.familyMembers.incomeDetails",
+                
                 "IndividualFinancials",
                 "IndividualFinancials.expenditures",
                 "IndividualFinancials.expenditures.expenditureSource",
                 "IndividualFinancials.expenditures.frequency",
                 "IndividualFinancials.expenditures.annualExpenses",
+                
                 "IndividualReferences",
                 "IndividualReferences.verifications",
                 "IndividualReferences.verifications.referenceFirstName",
                 "IndividualReferences.verifications.relationship",
                 "IndividualReferences.verifications.mobileNo",
                 "IndividualReferences.verifications.address"
-            ];
-
+                ];
             }
 
             function getLoanCustomerRelation(pageClass){
@@ -1085,6 +1086,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         return null;
                 }
             }
+
             return {
                 "type": "schema-form",
                 "title": "INDIVIDUAL_ENROLLMENT_2",
@@ -1104,7 +1106,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.currentStage = bundleModel.currentStage;
                     model.enrolmentProcess.currentStage =  model.currentStage;
                     /* End of setting data recieved from Bundle */
-         
 
                     /* Setting data for the form */
                     model.customer = model.enrolmentProcess.customer;
@@ -1129,109 +1130,119 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "excludes": [
                             "KYC.addressProofSameAsIdProof",
                         ],
-                       "options": {
+                        "options": {
                             "repositoryAdditions": {
                                 "IndividualInformation":{
                                     "items": {
-                                    "area": {
-                                        orderNo: 50,
-                                        key: "customer.area",
-                                        "title": "LOCALITY1",
-                                        "type": "select",
-                                        "titleMap": {
-                                            "Rural": "Rural",
-                                            "Urban": "Urban"
-                                        }
-                                    },
-                                    "spouseAadharNumber":{
-                                        "key":"customer.aadhaarNo",
-                                        "title": "SPOUSE_AADHAR_NUMBER",
-                                        condition: "model.customer.maritalStatus==='MARRIED'",
-                                        "type": "string",
-                                    }
-
-                                }
-                            },
-                            "ContactInformation":{
-                                "title":"CONTACT_DETAILS",
-                                "items": {
-                                    "stdCode":{
-                                        orderNo: 145,
-                                        key: "customer.stdCode",
-                                        title:"STD_CODE"
-                                    },
-                                    "contactDetailsAlsoBusinessContactDetails":{
-                                        title:"CONTACT_DETAILS_ALSO_BUSINESS_CONTACT_DETAILS",
-                                        type:"checkbox",
-                                        orderNo:50,
-                                        "schema":{  
-                                           "default":false
-                                        }
-                                    },
-                                    "residentialAddressAlsoBusinessAddress":{
-                                        title:"RESIDENTIAL_ADDRESS_ALSO_BUSINESS_ADDRESS",
-                                        type:"checkbox",
-                                        orderNo:149,
-                                        "schema":{  
-                                           "default":false
+                                        "area": {
+                                            orderNo: 50,
+                                            key: "customer.area",
+                                            "title": "LOCALITY1",
+                                            "type": "select",
+                                            "titleMap": {
+                                                "Rural": "Rural",
+                                                "Urban": "Urban"
+                                            }
+                                        },
+                                        "spouseAadharNumber":{
+                                            "key":"customer.aadhaarNo",
+                                            "title": "SPOUSE_AADHAR_NUMBER",
+                                            condition: "model.customer.maritalStatus==='MARRIED'",
+                                            "type": "string",
                                         }
                                     }
-                                }
-                            },
-                            "KYC":{
-                                    "items":{
-                                        "addressProofSameAsIdProof": {
-                                            orderNo: 80,
-                                            key: "customer.addressProofSameAsIdProof",
-                                            title:"ADDRESS_PROOF_SAME_AS_ID",
-                                            condition: "model.customer.identityProof != 'Pan Card'"
+                                },
+                                "ContactInformation":{
+                                    "title":"CONTACT_DETAILS",
+                                    "items": {
+                                        "stdCode":{
+                                            orderNo: 145,
+                                            key: "customer.stdCode",
+                                            title:"STD_CODE"
+                                        },
+                                        "contactDetailsAlsoBusinessContactDetails":{
+                                            title:"CONTACT_DETAILS_ALSO_BUSINESS_CONTACT_DETAILS",
+                                            type:"checkbox",
+                                            orderNo:50,
+                                            "schema":{  
+                                               "default":false
+                                            }
+                                        },
+                                        "residentialAddressAlsoBusinessAddress":{
+                                            title:"RESIDENTIAL_ADDRESS_ALSO_BUSINESS_ADDRESS",
+                                            type:"checkbox",
+                                            orderNo:149,
+                                            "schema":{  
+                                               "default":false
+                                            }
                                         }
                                     }
-                            },
-                            "FamilyDetails":{
-                                "items":{
-                                    "familyMembers":{
+                                },
+                                "KYC":{
                                         "items":{
-                                            "memberIncome":{
-                                                "key": "customer.familyMembers[].salary",
-                                                "title": "MEMBER_INCOME",
-                                                "type":"amount"
-                                            },
-                                            "occupation":{
-                                                "key": "customer.familyMembers[].udfId1",
-                                                "title":"OCCUPATION",
-                                                "type":"string"
-                                            },
-                                            "educationLevel":{
-                                                "key": "customer.familyMembers[].educationStatus",
-                                                "title":"EDUCATION_LEVEL",
-                                                "type":"string"
-                                            },
-                                            "incomeDetails":{
-                                                "key": "customer.familyMembers[].udfId2",
-                                                "title":"INCOME_DETAILS",
-                                                "type":"string",
+                                            "addressProofSameAsIdProof": {
+                                                orderNo: 80,
+                                                key: "customer.addressProofSameAsIdProof",
+                                                title:"ADDRESS_PROOF_SAME_AS_ID",
+                                                condition: "model.customer.identityProof != 'Pan Card'"
+                                            }
+                                        }
+                                },
+                                "FamilyDetails":{
+                                    "items":{
+                                        "familyMembers":{
+                                            "items":{
+                                                "memberIncome":{
+                                                    "key": "customer.familyMembers[].salary",
+                                                    "title": "MEMBER_INCOME",
+                                                    "type":"amount"
+                                                },
+                                                "occupation":{
+                                                    "key": "customer.familyMembers[].udfId1",
+                                                    "title":"OCCUPATION",
+                                                    "type":"string"
+                                                },
+                                                "educationLevel":{
+                                                    "key": "customer.familyMembers[].educationStatus",
+                                                    "title":"EDUCATION_LEVEL",
+                                                    "type":"string"
+                                                },
+                                                "incomeDetails":{
+                                                    "key": "customer.familyMembers[].udfId2",
+                                                    "title":"INCOME_DETAILS",
+                                                    "type":"string",
 
+                                                }
                                             }
                                         }
                                     }
                                 }
                             },
-                            "actionbox": {
+                            "additions": [
+                                {
                                     "type": "actionbox",
-                                    "orderNo": 140,
-                                    "items": {
-                                        "submit": {
+                                    "condition": "!model.customer.currentStage",
+                                    "orderNo": 1000,
+                                    "items": [
+                                        {
                                             "type": "submit",
                                             "title": "SUBMIT"
-                                        },
-                                        "save": {
-                                            "type": "save",
-                                            "title": "OFFLINE_SAVE"
                                         }
-                                    }
+                                    ]
+                                },
+                                {
+                                    "type": "actionbox",
+                                    "condition": "model.customer.currentStage && (model.currentStage=='Screening' || model.currentStage=='Appraisal' || (model.currentStage=='GuarantorAddition' && model.pageClass=='guarantor'))",
+                                    "orderNo": 1200,
+                                    "items": [
+                                        {
+                                            "type": "button",
+                                            "title": "UPDATE_ENROLMENT",
+                                            "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                        }
+                                    ]
                                 }
-                            }
+                            ]
                         }
                     };
 
@@ -1398,7 +1409,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             });
                     },
                     submit: function (model, form, formName) {
-                           PageHelper.clearErrors();
+                        PageHelper.clearErrors();
                         if(PageHelper.isFormInvalid(form)) {
                             return false;
                         }

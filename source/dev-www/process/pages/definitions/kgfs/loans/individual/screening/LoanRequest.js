@@ -341,9 +341,10 @@ define([],function(){
                     "LoanRecommendation.expectedEmi",
 
                     "LoanMitigants",
-                    "LoanMitigants.deviations",
-                    "LoanMitigants.deviations.deviation",
-                    "LoanMitigants.deviations.mitigation",
+                    "LoanMitigants.deviationDetails",
+                    "LoanMitigants.loanMitigants",
+                    "LoanMitigants.loanMitigants.parameter",
+                    "LoanMitigants.loanMitigants.mitigant",
 
                     "PostReview",
                     "PostReview.action",
@@ -538,30 +539,43 @@ define([],function(){
                                     }
                                 }
                             },
-                            "LoanMitigants":{
-                                    "items":{
-                                        "deviations":{
-                                            "key":"loanAccount.loanMitigants",
-                                            "title":"ADD",
-                                            "type":"array",
-                                            "startEmpty": true,
-                                            "items":{
-                                                "deviation":{
-                                                    "key":"loanAccount.loanMitigants[].mitigant",
-                                                    "title":"DEVIATION",
-                                                    "type":"string",
-                                                    "readonly":true
-                                                },
-                                                "mitigation":{
-                                                    "key":"loanAccount.loanMitigants[].parameter",
-                                                    "title":"MITIGATION",
-                                                    "type":"string",
-                                                    "readonly":true
-                                                }
+                            "LoanMitigants": {
+                                "type": "box",
+                                "orderNo": 310,
+                                "colClass": "col-sm-6",
+                                "title": "DEVIATION_AND_MITIGATIONS",
+                                "items": {
+                                    "deviationDetails": {
+                                        "type": "section",
+                                        "colClass": "col-sm-12",
+                                        "html": '<table class="table"><colgroup><col width="20%"><col width="5%"><col width="20%"></colgroup><thead><tr><th>Parameter Name</th><th></th><th>Mitigation</th></tr></thead><tbody>' +
+                                            '<tr ng-repeat="item in model.deviationDetails">' +
+                                            '<td>{{ item["parameter"] }}</td>' +
+                                            '<td>{{ item["deviation"] }}</td>' +
+                                            '<td><ul class="list-unstyled">' +
+                                            '<li ng-repeat="m in item.mitigants " id="{{m.mitigant}}">' +
+                                            '<input type="checkbox"  ng-model="m.selected" ng-checked="m.selected"> {{ m.mitigant }}' +
+                                            '</li></ul></td></tr></tbody></table>'
+                                    },                                    
+                                    "loanMitigants":{
+                                        "key":"loanAccount.loanMitigants",
+                                        "title":"ADD",
+                                        "type":"array",
+                                        "startEmpty": true,
+                                        "items":{
+                                            "parameter":{
+                                               "key":"loanAccount.loanMitigants[].parameter",
+                                               "title":"DEVIATION",
+                                               "type":"string"
+                                            },
+                                            "mitigant":{
+                                               "key":"loanAccount.loanMitigants[].mitigant",
+                                               "title":"MITIGATION",
+                                               "type":"string"
                                             }
                                         }
-
                                     }
+                                }
                             },
                             "PostReview": {
                                         "type": "box",
