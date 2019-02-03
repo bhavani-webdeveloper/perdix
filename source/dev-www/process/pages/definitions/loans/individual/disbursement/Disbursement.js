@@ -414,7 +414,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         },
                         {
                             "type":"actions",
-                            condition:"model.additional.isDisbursementDone && model.siteCode='KGFS'",
+                            condition:"model.additional.isDisbursementDone && model.siteCode=='KGFS'",
                             "items":[
                                 {
                                 "title": "Print Preview",
@@ -698,11 +698,11 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                         reqData.loanAccountDisbursementSchedules = toSendData;
                                         $log.info(reqData);
 
-                                        IndividualLoan.batchDisburse(reqData,
+                                        IndividualLoan.batchDisburse(reqData, 
                                             function (data) {
                                                 model.additional.disbursementDone = true;
                                                 if ("KGFS" == model.siteCode){
-                                                    IndividualLoan.get({
+                                                    LoanAccount.get({
                                                         accountId: model.additional.accountNumber
                                                     }).$promise.then(function (resp) {
                                                         PageHelper.hideLoader();
