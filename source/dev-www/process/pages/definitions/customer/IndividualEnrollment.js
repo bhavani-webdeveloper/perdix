@@ -300,10 +300,22 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                                 $log.info(result);
                             }
                         },
-                        "customer.locality",
-                        "customer.villageName",
-                        "customer.district",
-                        "customer.state",
+                        {
+                        key:"customer.locality",
+                        readonly:true
+                        },
+                        {
+                        key: "customer.villageName",
+                        readonly:true
+                        },
+                        {
+                            key:"customer.district",
+                            readonly:true
+                        },
+                        {
+                        key:"customer.state",
+                        readonly:true
+                        },
                         "customer.mailSameAsResidence"
                     ]
                 },

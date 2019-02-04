@@ -19,6 +19,10 @@ define({
                 model.loanCustomerRel = []
                 Queries.getLoanCustomerDetails(model.bundleModel.loanId).then(function(res) {
                     model.loanCustomerRelation = res;
+                    var result = _.uniqWith(model.loanCustomerRelation.coApplicants, function(arrVal, othVal) {
+                        return arrVal.urn_no === othVal.urn_no;
+                      });
+                      model.loanCustomerRelation.coApplicants = result;
                     _.each(model.loanCustomerRelation.coApplicants, function(coApp) {
                         model.loanCustomerRel.push(coApp);
                     })

@@ -828,7 +828,8 @@ define([],function(){
                             ],
                             "overrides": {
                                 "NomineeDetails.nominees.nomineeFirstName":{
-                                    "required":true
+                                    "required":true,
+                                    "lovonly": false,
                                 },
                                 "NomineeDetails.nominees.nomineeGender":{
                                     "required":true
@@ -845,9 +846,24 @@ define([],function(){
                                 "NomineeDetails.nominees.nomineePincode":{
                                     "required":true
                                 },
-                                "LoanCustomerRelations": {
-                                    "readonly": true
+                                "LoanCustomerRelations.loanCustomerRelations.customerId":
+                                {
+                                    "readonly":true
                                 },
+                                "LoanCustomerRelations.loanCustomerRelations.urn":{
+                                    "readonly":true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.name":{
+                                    "readonly":true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.relation":{
+                                    "readonly":true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
+                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                 }
+                    
+                                
                             }
                         },
                         "FieldAppraisal":{
@@ -1390,7 +1406,7 @@ define([],function(){
                     "LoanCustomerRelations.loanCustomerRelations.urn",
                     "LoanCustomerRelations.loanCustomerRelations.name",
                     "LoanCustomerRelations.loanCustomerRelations.relation",
-                    //"LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant",
+                    "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant",
  
                      "DeductionsFromLoan",
                      "DeductionsFromLoan.expectedProcessingFeePercentage",
@@ -1932,7 +1948,8 @@ define([],function(){
                                                 "onClick": "actions.sendBack(model, formCtrl, form, $event)"
                                             }
                                         }
-                                    },
+                                    }
+                                   
                                 },
                                 
                                 "additions": [

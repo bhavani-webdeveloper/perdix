@@ -1755,7 +1755,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "EmployeeDetails.avgMonthlySalary": {
                                         "condition": "model.customer.enterprise.noOfFemaleEmployees > 0 ||model.customer.enterprise.noOfMaleEmployees > 0 "
-                                    }   
+                                    },
+                                    "ContactInformation.locality":{
+                                        "readonly": true
+                                    },
+                                    "ContactInformation.villageName":{
+                                        "readonly": true
+                                    },
+                                    "ContactInformation.district":{
+                                        "readonly": true
+                                    },
+                                    "ContactInformation.state": {
+                                        "readonly": true
+                                    }  
                                 }
                             },
                             "FieldAppraisal":{
