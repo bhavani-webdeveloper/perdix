@@ -10,7 +10,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
             var readonly = {
                 "scheduledDisbursementDate": siteCode == 'KGFS'
             };
-            var test = function(code,model){
+            var getProductName = function(code,model){
                 let temp = formHelper.enum('loan_product').data;
                 for (var i=0; i< temp.length;i++){
                     if (code == temp[i].value)
@@ -65,7 +65,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             model.additional.customerId = resp[0].customerId;
                             model.additional.numberOfDisbursements = resp[0].numDisbursements;
                             model.additional.productCode = resp[0].productCode;
-                            test(model.additional.productCode,model);
+                            getProductName(model.additional.productCode,model);
                             model.additional.urnNo = resp[0].urnNo;
                             model.additional.fees = [];
                             model.additional.tempfees = resp[0].fees;

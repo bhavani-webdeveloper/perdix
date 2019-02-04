@@ -204,6 +204,10 @@ irf.models.factory('Enrollment',function($resource,$q,Upload,$httpParamSerialize
             method:'GET',
             url: telecallingdetails + '/CUSTOMER/:id'
         },
+        getTelecallingByProcessTypeInsurance: {
+            method:'GET',
+            url: telecallingdetails + '/INSURANCETLI/:id'
+        },
         createTelecalling: {
             method: 'POST',
             url : telecallingdetails

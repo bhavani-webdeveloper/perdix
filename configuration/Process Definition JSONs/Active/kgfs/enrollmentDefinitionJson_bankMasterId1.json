@@ -2657,7 +2657,14 @@
                             "type": "string",
                             "format": "date",
                             "captureStages": ["Completed"]
+                        },
+                        "frequency": {
+                            "title": "Frequency",
+                            "type": "string",
+                            "refCodeCategory": "frequency",
+                            "captureStages": ["Completed"]
                         }
+
                     }
                 }
             },
@@ -2685,6 +2692,12 @@
                             "title": "date",
                             "type": "string",
                             "format": "date",
+                            "captureStages": ["Completed"]
+                        },
+                        "additionalDeatils": {
+                            "title": "additional Deatils",
+                            "type": "string",
+                            "refCodeCategory": "occupation",
                             "captureStages": ["Completed"]
                         }
                     }
@@ -3010,6 +3023,13 @@
                             "minimum": 0,
                             "maximum": 10000000,
                             "captureStages": ["Completed"]
+                        },   
+                         "contactNumber": {
+                            "title": "Contact Number",
+                            "type": "string",
+                            "minLength":1,
+                            "maxLength":100,
+                            "captureStages": ["Completed"]
                         }
                     }
                 }
@@ -3019,7 +3039,7 @@
                 "type": "array",
                 "items": {
                     "type": "object",
-                    "required": ["supplierName", "supplierType", "paymentTerms", "amount"],
+                    "required": ["supplierName", "supplierType", "paymentTerms", "amount", "product", "paymentFrequency", "receivablesOutstanding"],
                     "properties": {
                         "supplierName": {
                             "title": "Supplier Name",
@@ -3039,6 +3059,38 @@
                         "amount": {
                             "title": "Amount",
                             "type": "number",
+                            "captureStages": ["Completed"]
+                        },
+                        "product": {
+                            "title": "Product",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100,
+                            "captureStages": ["Completed"]
+                        },
+                        "customerSince": {
+                            "title": "Customer Since",
+                            "type": "string",
+                            "captureStages": ["Completed"]
+                        },
+                        "paymentFrequency": {
+                            "title": "Payment Frequency",
+                            "type": "string",
+                            "refCodeCategory": "payment_frequency",
+                            "captureStages": ["Completed"]
+                        },
+                        "receivablesOutstanding": {
+                            "title": "Receivables Outstanding",
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 10000000,
+                            "captureStages": ["Completed"]
+                        },   
+                         "contactNumber": {
+                            "title": "Contact Number",
+                            "type": "string",
+                            "minLength":1,
+                            "maxLength":100,
                             "captureStages": ["Completed"]
                         }
                     }
@@ -3090,6 +3142,155 @@
                             "captureStages": ["Completed"]
                         }
                     }
+                }
+            },
+            "enterpriseMonthlySales": {
+                "title": "Enterprise Monthly Sales",
+                "type": "object",
+                "required": ["month","totalSales","seasonType"],
+                "properties": {
+                  "month": {
+                    "title": "month",
+                    "type": "string",
+                    "captureStages": [
+                      "BasicEnrolment",
+                      "Completed"
+                    ]
+                  },
+                  "totalSales": {
+                    "title": "totalSales",
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1000000,
+                    "captureStages": [
+                      "BasicEnrolment",
+                      "Completed"
+                    ]
+                  },
+                  "seasonType": {
+                    "title": "seasonType",
+                    "type": "string",
+                    "minimum": 0,
+                    "maximum": 250,
+                    "captureStages": [
+                      "BasicEnrolment",
+                      "Completed"
+                    ]
+                  },
+                  "udf1": {
+                    "title": "udf1",
+                    "type": "string",
+                    "minimum": 0,
+                    "maximum": 250,
+                    "captureStages": [
+                      "BasicEnrolment",
+                      "Completed"
+                    ]
+                  },
+                  "udf2": {
+                    "title": "udf2",
+                    "type": "string",
+                    "minimum": 0,
+                    "maximum": 250,
+                    "captureStages": [
+                      "BasicEnrolment",
+                      "Completed"
+                    ]
+                  },
+                  "udf3": {
+                    "title": "udf3",
+                    "type": "string",
+                    "minimum": 0,
+                    "maximum": 250,
+                    "captureStages": [
+                      "BasicEnrolment",
+                      "Completed"
+                    ]
+                  },
+                  "udfDate1": {
+                    "title": "udfDate1",
+                    "type": "date",
+                    "captureStages": [
+                      "BasicEnrolment",
+                      "Completed"
+                    ]
+                  }
+                }
+              },
+            "enterpriseDailySales": {
+                "title": "Enterprise Daily Sales",
+                "type": "object",
+                "required": ["day", "totalSales", "salesType"],
+                "properties": {
+                    "day": {
+                        "title": "day",
+                        "type": "string",
+                        "captureStages": [
+                          "BasicEnrolment",
+                          "Completed"
+                        ]
+                      },
+                      "totalSales": {
+                        "title": "totalSales",
+                        "type": "number",
+                        "minimum": 10,
+                        "maximum": 1000000,
+                        "captureStages": [
+                          "BasicEnrolment",
+                          "Completed"
+                        ]
+                      },    
+                    "salesType": {
+                        "title": "salesType",
+                        "type": "string",
+                        "minimum": 0,
+                        "maximum": 250,
+                        "captureStages": [
+                        "BasicEnrolment",
+                        "Completed"
+                        ]
+                    }
+                }
+              },
+                "enterpriseProductSales": {
+                "title": "Enterprise Product Sales",
+                "type": "object",
+                "required": ["productName","salePrice","costPrice","quantity"],
+                "properties": {
+                  "productName": {
+                    "title": "productName",
+                    "type": "string",
+                    "minimum": 0,
+                    "maximum": 250,
+                    "captureStages": [
+                      "BasicEnrolment",
+                      "Completed"
+                    ]
+                  },
+                  "salePrice": {
+                    "title": "salePrice",
+                    "type": "number",
+                    "captureStages": [
+                      "BasicEnrolment",
+                      "Completed"
+                    ]
+                  },
+                  "costPrice": {
+                    "title": "costPrice",
+                    "type": "number",
+                    "captureStages": [
+                      "BasicEnrolment",
+                      "Completed"
+                    ]
+                  },
+                  "quantity": {
+                    "title": "quantity",
+                    "type": "integer",
+                    "captureStages": [
+                      "BasicEnrolment",
+                      "Completed"
+                    ]
+                  }
                 }
             }
         }

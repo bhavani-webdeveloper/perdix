@@ -130,12 +130,20 @@ define({
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								
+								if(item.insuranceType == 'PAI'){
 								irfNavigator.go({
 									state: "Page.Engine",
 									pageName: "insurance.Registration",
 									pageId: item.id
 								});
+							}else if(item.insuranceType == 'TLI'){
+								irfNavigator.go({
+									state: "Page.Engine",
+									pageName: "insurance.RegistrationTLI",
+									pageId: item.id
+								});
+							}
+
 							},
 							isApplicable: function(item, index) {
 

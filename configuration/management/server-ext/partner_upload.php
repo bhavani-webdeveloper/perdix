@@ -89,7 +89,7 @@ function getFileByType($type, $customer){
             $absolutepath =  $path .$identity_proof->get($customer[$type]).".*";
             break;
     }
-    echo "<br/> absolutepath : ".$absolutepath;
+    //echo "<br/> absolutepath : ".$absolutepath;
     $isFormatMissmatch=false;
     foreach(glob($absolutepath) as $filename){
         if(validation($type,$filename)){
@@ -193,16 +193,19 @@ $partners = array_filter(glob($filePath.'/*'), 'is_dir');
 
 foreach ($partners as $partner) {
 
-    echo "<br/> partner :  $partner <br/>";
+    echo "<br/><br/><br/>Parner Name  :  $partner";
 
     if($partner=="Internal")
         continue;
 
     $files = new DirectoryIterator($partner);
 
+    echo "<br/> Search Excel Sheet File ";
     foreach ($files as $file) {
         //echo $partner . $file->getFilename();
+        
         if ($file->isFile()) {
+            echo "File Name : ".$file->getFilename();
             //echo "<br/> temp : ". $tempCompletedDir;
             $source = $partner . DIRECTORY_SEPARATOR . $file->getFilename();
             $dest = $tempWipDir . $file->getFilename();
@@ -215,28 +218,30 @@ foreach ($partners as $partner) {
             copy($source, $dest);
             $do =unlink($source);
             if($do=="1"){ 
-                echo "<br/> The file was deleted successfully. : ".$source; 
+                echo "<br/> The file was deleted successfully. : ".$file->getFilename(); 
             } else { 
-                echo "<br/> There was an error trying to delete the file. : ".$source; 
+                echo "<br/> There was an error trying to delete the file. : ".$file->getFilename(); 
             } 
 
 
             $inputFileName = $tempWipDir . $file->getFilename();
-            echo "<br/>".$file." File Moved to ".$dest;
+            echo "<br/>".$file." File Moved to ".$dest."<br/><br/>";
             //print_r( "<br/>inputFileName : ".$inputFileName);
 
             $ext = pathinfo($inputFileName, PATHINFO_EXTENSION);
 
             if ($ext != "xlsx" ) {
                 $source = $tempWipDir .$file->getFilename();
-                $dest = $tempRejectedDir . date("d-m-Y")."__". $file->getFilename();
+                $dest = $tempRejectedDir . $file->getFilename();
 
                 copy($source, $dest);
                 unlink($source);
-                echo "<br/>".$file." File Moved to ".$dest;
+                echo "<br/><br/>".$file." File Moved to ".$dest;
                 continue;
             }
             try {
+
+                echo "Reading Excel sheet";
                 $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
                 $objReader = PHPExcel_IOFactory::createReader($inputFileType);
 
@@ -245,13 +250,6 @@ foreach ($partners as $partner) {
                 $highestRow = $sheet->getHighestRow();
                 $highestColumn = $sheet->getHighestColumn();
 
-                // if ($highestColumn != "G") {
-                //     $source = $tempWipDir . $file->getFilename();
-                //     $dest = $tempRejectedDir . $file->getFilename();
-                //     copy($source, $dest);
-                //     unlink($source);
-                //     continue;
-                // }
 
                 $kycUploadMaster = new KycUploadMaster();
                 $kycUploadMaster->filename = $inputFileName;
@@ -297,27 +295,36 @@ foreach ($partners as $partner) {
 
                         //echo $customer;
                         $apiCustomer = getCustomer($customer['id']);
-                        //print_r($apiCustomer);
+                        //print_r($customer);
 
-                        echo "<br/><br/> Customer : ".$rowData[1];  
+                        echo "<br/><br/> Customer : ".$customer['id'];
+
                         $content=$content. PHP_EOL . PHP_EOL . "Customer : ".$rowData[1];
                         $path = $partner . DIRECTORY_SEPARATOR .$rowData[1];
                         if(!file_exists($path))
                             throw new PDOException($rowData[1].' Folder not Exist');
 
                         $photoPath = getFileByType("Photo",$customer);
+                        echo "<br/>Customer Photo Path : ".$photoPath;
                         if($photoPath){
                             $apiCustomer->photoImageId = uploadFile($photoPath);
+                            echo "<br/>Customer Photo ID : ".$apiCustomer->photoImageId;
                         }   
           
+                        echo "<br/><br/>Address Proof : ".$customer->address_proof;
                         $address_proof_path = getFileByType("address_proof",$customer);
+                        echo "<br/>Customer Address Proof Path : ".$address_proof_path;
                         if($address_proof_path){
                             $apiCustomer->addressProofImageId =uploadFile($address_proof_path);
+                            echo "<br/>Customer Address Proof ID : ".$apiCustomer->addressProofImageId;
                         }
                 
+                        echo "<br/><br/>Identity Proof : ".$customer->identity_prof;
                         $identityPath = getFileByType("identity_prof",$customer);
+                        echo "<br/>Customer Identity Proof Path : ".$identityPath;
                         if($identityPath){
                             $apiCustomer->identityProofImageId =uploadFile($identityPath);
+                            echo "<br/>Customer Address Proof ID : ".$apiCustomer->identityProofImageId;
                         }
                 
                         saveCustomer($apiCustomer);
@@ -335,7 +342,7 @@ foreach ($partners as $partner) {
     
                     }catch(Exception $e1)
                     {
-                        echo "<br/> error ".$e1->getMessage();
+                        echo "<br/><br/> error ".$e1->getMessage();
                         $kycUploadDetail = new KycUploadDetail();
                         $kycUploadDetail->master_id = $IdGenerated;
                         $kycUploadDetail->customer_id = $customer["customer_partner_number"];
@@ -364,14 +371,14 @@ foreach ($partners as $partner) {
                 }
 
                 $source = $tempWipDir . $file->getFilename();
-                $dest = $tempPartnerCompleteDir .date("d-m-Y")."__".$file->getFilename();
+                $dest = $tempPartnerCompleteDir .$file->getFilename();
                 copy($source, $dest);
                 unlink($source);
-                echo "<br/>".$file." File Moved to ".$dest;
+                echo "<br/><br/>".$file." File Moved to ".$dest;
 
                 $reportFilepath = $partner . DIRECTORY_SEPARATOR . $file->getFilename();    
                 $extension= pathinfo($reportFilepath, PATHINFO_EXTENSION);
-                $reportFileName= str_replace('.'.$extension, '__'.date("Y-m-d--H-i-s").'.txt', $reportFilepath);
+                $reportFileName= str_replace('.'.$extension, '.txt', $reportFilepath);
 
                 $fp = fopen($reportFileName,"w");
                 if ($fp === false) {
@@ -387,7 +394,7 @@ foreach ($partners as $partner) {
                 $dest = $tempRejectedDir . $file->getFilename();
                 copy($source, $dest);
                 unlink($source);
-                echo "<br/>".$file." File Moved to ".$dest;
+                echo "<br/><br/>".$file." File Moved to ".$dest;
                 continue;
                 //throw $e;
             }

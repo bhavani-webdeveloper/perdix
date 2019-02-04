@@ -32,6 +32,10 @@ export class InsuranceProcess {
         return this.insuranceRepo.create(this)
        
     }
+    update(): any {
+        return this.insuranceRepo.update(this)
+       
+    }
     getPremiumAmount():any{
         return this.insuranceRepo.getPremiumAmount(this)
     }

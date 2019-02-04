@@ -1,8 +1,9 @@
 define({
     pageUID: "management.AdminScreen",
     pageType: "Engine",
-    dependencies: ["$q", "$log", "formHelper", "SessionStore", "Utils", "Locking", "PageHelper", 'irfProgressMessage'],
-    $pageFn: function ($q, $log, formHelper, SessionStore, Utils, Locking, PageHelper, irfProgressMessage) {
+    dependencies: ["$q", "$log", "irfNavigator", "formHelper", "entityManager", "IndividualLoan", "$state", "SessionStore", "Utils", "Locking", "PageHelper", 'irfProgressMessage'],
+    $pageFn: function ($q, $log, irfNavigator, formHelper, EntityManager, IndividualLoan, $state, SessionStore, Utils, Locking, PageHelper, irfProgressMessage) {
+        var branch = SessionStore.getBranch();
         return {
             "type": "search-list",
             "title": "ADMIN_UNLOCK_UI_SCREEN",
@@ -202,7 +203,9 @@ define({
                                 fn: function (items) {
                                     Utils.confirm("Are you sure?").then(function () {
                                         Locking.clearlocks({ recordIdList: items.id }, {}, function (resp, headers) {
+
                                             irfProgressMessage.pop("Selected list", "Unlocked", 2000);
+                                            irfNavigator.goBack();
                                         }, function (resp) {
                                             $log.error(resp);
                                             PageHelper.hideLoader();
@@ -235,7 +238,9 @@ define({
                                     console.log(recordIds);
                                     Utils.confirm("Are you sure?").then(function () {
                                         Locking.clearlocks({ recordIdList: recordIds }, {}, function (resp, headers) {
+
                                             irfProgressMessage.pop("Selected list", "List of recordId's Unlocked", 2000);
+                                            irfNavigator.goBack();
                                         }, function (resp) {
                                             $log.error(resp);
                                             PageHelper.hideLoader();
