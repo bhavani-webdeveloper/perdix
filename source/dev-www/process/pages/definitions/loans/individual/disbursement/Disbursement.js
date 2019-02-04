@@ -2,6 +2,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
     ["$log", "LoanAccount","Enrollment", "BiometricService", "elementsUtils", "SessionStore", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "LoanAccount", "formHelper", "Queries", "LoanAccount", "irfNavigator","irfPrinter","GroupProcess",
         function ($log, LoanAccount,Enrollment, BiometricService, elementsUtils, SessionStore, $stateParams, PageHelper, IndividualLoan, SchemaResource, LoanAccount, formHelper, Queries, LoanAccount, irfNavigator,irfPrinter,GroupProcess) {
 
+
             var branch = SessionStore.getBranch();
             var siteCode = SessionStore.getGlobalSetting("siteCode");
             var requires = {
@@ -536,7 +537,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                             [0,3,"Transaction Id",model.additional.transactionId],
                                             // [0,3,"Loan Amount",model.additional.loanAmountRequested],
                                             // [0,3,"Disbursed Amount",model.additional.loanAmount],
-                                            [0,3,"Demand Amount","nil"],
+                                            [0,3,"Demand Amount",model.additional.demandAmount],
                                             // [0,3,"Amount ",requestObj.collectionDemands[i].overdueAmount],
                                             [0,3,"Amount Paid",model.additional.feeamount[i].amount1],
                                             [0,3,"Processing Fee",0],
@@ -690,6 +691,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                     delete reqUpdateDisbData.arrayIndex;
                                     reqUpdateDisbData.disbursementProcessAction = "SAVE";
                                     IndividualLoan.updateDisbursement(reqUpdateDisbData, function (resp, header) {
+                                        PageHelper.showLoader();
                                         var toSendData = [];
                                         toSendData.push(model.loanAccountDisbursementSchedule);
                                         var reqData = {};
@@ -700,12 +702,15 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
 
                                         IndividualLoan.batchDisburse(reqData, 
                                             function (data) {
+                                                PageHelper.showLoader();
                                                 model.additional.disbursementDone = true;
                                                 if ("KGFS" == model.siteCode){
+                                                    PageHelper.showLoader();
                                                     LoanAccount.get({
                                                         accountId: model.additional.accountNumber
                                                     }).$promise.then(function (resp) {
                                                         PageHelper.hideLoader();
+                                                        PageHelper.showProgress('disbursement', 'Disbursement done', 2000);
                                                         model.additional.isDisbursementDone = true;
                                                         model.additional.payOffAmount = resp.payOffAmount;
                                                         model.additional.demandAmount = resp.totalDemandRaised;
