@@ -25,6 +25,10 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, Pag
         method:'POST',
         url: endpoint+'insurancePolicy'
        },
+       update:{
+        method:'PUT',
+        url: endpoint+'insurancePolicy'
+       },
        getPremiumAmount:{
         method : 'GET',
         url:endpoint+'fetchInsurancePremiumDetails',
@@ -50,13 +54,13 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, Pag
         '<div style="text-align : center">' + '<h5><b>' + opts.entityName + '</b></h4>' + '</div>' + 
         '<div style="text-align : center">' + '<h6><b>' + opts.branchName + '</b></h6>' + '</div>' + 
         '<div style="text-align : center">' + '<p>' + "Date:" + curTimeStr + '</p>' + '</div>' + 
-        '<div style="text-align : center">' + '<p><b>' + "PERSONAL ACCIDENT INSURANCE PREMIUM" + '</b></p>' + '</div>' + 
+        '<div style="text-align : center">' + '<p><b>' + opts.policyType + '</b></p>' + '</div>' + 
         '<div style="text-align : center">' + '<p>' + "" + '</p>' + '</div>' +
         '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Branch Name :" +'<span style="border-bottom: 1px solid black; width: 100%;">'+  opts.branchName+ '</span>' + '</p>' + '</div>' + 
         '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Customer Name:"  + '<span style="border-bottom: 1px solid black;">'+opts.benificieryName + '</span>'+'</p>' + '</div>' + 
         '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "URN Number:"  + '<span style="border-bottom: 1px solid black;">'+opts.urnNo + '</span>'+'</p>' + '</div>' + 
         '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Policy Number:"  + '<span style="border-bottom: 1px solid black;">'+opts.policyNumber + '</span>'+'</p>' + '</div>' + 
-        '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Transaction Type:"  + '<span style="border-bottom: 1px solid black;">'+"Personal Accident Insurance Premium" + '</span>'+'</p>' + '</div>' + 
+        '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Transaction Type:"  + '<span style="border-bottom: 1px solid black;">'+opts.policyType + '</span>'+'</p>' + '</div>' + 
         '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Amount Paid(Include GST):"  + '<span style="border-bottom: 1px solid black;">'+opts.premiumCollected + '</span>'+'</p>' + '</div>' + 
         '<div style="font-size:13px;width:95%; margin:auto">' + '<p>' + "Customer Premium:"  + '<span style="border-bottom: 1px solid black;">'+opts.premiumCollected + '</span>'+'</p>' + '</div>' + 
        

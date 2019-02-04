@@ -978,11 +978,12 @@ irf.models.factory('Queries', [
             return deferred.promise;
         };
 
-        resource.getProductCode = function (bankId, branchId){
+        resource.getProductCode = function (bankId, branchId,insuranceType){
             var deferred = $q.defer();
             var request = {
                 "bankId" : bankId,
-                "branchId" : branchId
+                "branchId" : branchId,
+                "insuranceType":insuranceType
             };
             resource.getResult("insuranceProducts.list",request).then(function(records) {
                 if(records && records.results){

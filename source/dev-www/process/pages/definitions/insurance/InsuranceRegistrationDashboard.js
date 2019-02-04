@@ -9,6 +9,7 @@ irf.pageCollection.controller(irf.controller("insurance.InsuranceRegistrationDas
             "iconClass": "fa fa-money",
             "items": [
                 "Page/Engine/insurance.Registration",
+                "Page/Engine/insurance.RegistrationTLI",
                 "Page/Engine/insurance.InsuranceRegistrationQueue"
             ]
         };
