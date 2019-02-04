@@ -543,7 +543,7 @@ define([],function(){
                                 "type": "box",
                                 "orderNo": 310,
                                 "colClass": "col-sm-6",
-                                "title": "DEVIATION_AND_MITIGATIONS",
+                                "title": "DEVIATION_AND_MITIGATION",
                                 "items": {
                                     "deviationDetails": {
                                         "type": "section",
