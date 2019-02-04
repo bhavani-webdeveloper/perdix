@@ -8,7 +8,7 @@ define({
     $pageFn: function($log, irfSimpleModal, Groups,GroupProcess, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
 
-
+       
         var nDays = 15;
         var siteCode = SessionStore.getGlobalSetting('siteCode');
 
@@ -17,16 +17,17 @@ define({
             Groups.getDSCData({
                 dscId: dscId
             }, function(resp, headers) {
+                console.log(resp);
                 PageHelper.hideLoader();
                 var dataHtml = "<table class='table table-striped table-bordered table-responsive'>";
-                dataHtml += "<tr><td>Response : </td><td>" + resp.response + "</td></tr>";
-                dataHtml += "<tr><td>Response Message: </td><td>" + resp.responseMessage + "</td></tr>";
-                dataHtml += "<tr><td>Stop Response: </td><td>" + resp.stopResponse + "</td></tr>";
+                // dataHtml += "<tr><td>Response : </td><td>" + resp.response + "</td></tr>";
+                dataHtml += "<tr><td>Response Message: </td><td>" + resp.responseMessage.split('|').slice(1).join('|') + "</td></tr>";
+                // dataHtml += "<tr><td>Stop Response: </td><td>" + resp.stopResponse + "</td></tr>";
                 dataHtml += "</table>"
                 if(siteCode=='KGFS'){
                     irfSimpleModal('DSC Check Details', dataHtml);
                 }else{
-                    irfSimpleModal('DSC Response', resp.responseMessage);
+                    irfSimpleModal('DSC Response', resp.responseMessage.split('|').slice(1).join('|'));
                 }
                 
             }, function(res) {
