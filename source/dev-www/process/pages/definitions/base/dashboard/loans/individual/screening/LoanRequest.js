@@ -713,7 +713,8 @@ define([],function(){
                                     "readonly": true
                                 },
                                 "DeductionsFromLoan":{
-                                    "readonly": true
+                                    "readonly": true,
+                                    "orderNo":3
                                 },
                                 "LoanRecommendation.udf8":{
                                     "readonly": true
@@ -1474,6 +1475,7 @@ define([],function(){
 
                     "PostReview",
                     "PostReview.action",
+                    "PostReview.action1",
                     "PostReview.proceed",
                     "PostReview.proceed.remarks",
                     "PostReview.proceed.proceedButton",
@@ -1489,7 +1491,14 @@ define([],function(){
                     "PostReview.hold.remarks",
                     "PostReview.hold.holdButton",
                     "CBCheck",
-                    "CBCheck.CBCheckIgnore"
+                    "CBCheck.CBCheckIgnore",
+                    "revertReject",
+                    "revertReject.remarks",
+                    "revertReject.rejectReason",
+                    "revertReject.targetStage",
+                    "revertReject.sendBackButton"
+                    
+
                     // "ProposedUtilizationPlan",
                     // "ProposedUtilizationPlan.loanUtilisationDetail",
                     // "ProposedUtilizationPlan.loanUtilisationDetail.utilisationType",
@@ -1534,6 +1543,12 @@ define([],function(){
                     BundleManager.broadcastEvent('loan-account-loaded', {loanAccount: model.loanAccount});                    
  
                      /* Deviations and Mitigations grouping */
+                     if(!_.hasIn(model.loanAccount,'transactionType')|| _.isNull(model.loanAccount.transactionType)){
+                        model.loanAccount.transactionType = "New Loan";
+                    }
+                    if(model.loanAccount.transactionType == 'New Loan') {
+                        model.loanAccount.linkedAccountNumber = null;
+                    }
                     if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
                         var loanMitigantsGrouped = {};
                         for (var i=0; i<model.loanAccount.loanMitigants.length; i++){
@@ -1555,7 +1570,33 @@ define([],function(){
                         })
                     }
                     /* End of Deviations and Mitigations grouping */
- 
+                    if (_.hasIn(model, 'loanAccount.id') && _.isNumber(model.loanAccount.id)){
+                        $log.info('Printing Loan Account');
+                        IndividualLoan.loanRemarksSummary({id: model.loanAccount.id})
+                        .$promise
+                        .then(function (resp){
+                            model.loanSummary = resp;
+                            if(model.loanSummary && model.loanSummary.length)
+                            {
+                                for(i=0;i<model.loanSummary.length;i++)
+                                {
+                                    if(model.loanSummary[i].postStage=="Rejected" &&
+                                        model.loanSummary[i].preStage != "Rejected")
+                                    {
+                                        if(model.currentStage=='Rejected')
+                                        {
+                                            model.review={};
+                                            model.review.preStage = model.loanSummary[i].preStage;
+                                            model.review.targetStage = model.loanSummary[i].preStage;
+                                        }
+                                    }
+                                }
+                            }
+                        },function (errResp){
+        
+                        });
+                    }
+        
                     self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
                     p1.then(function(repo) {                       
@@ -1591,7 +1632,7 @@ define([],function(){
                                                 "key": "loanAccount.expectedEmi",
                                                 "title": "ESTIMATED_KINARA_EMI",
                                                 "orderNo": 91,
-                                                type: "number",
+                                                type: "amount",
                                                 "readonly": true
                                             },
                                             "linkedAccountNumber1":{
@@ -1599,6 +1640,7 @@ define([],function(){
                                                 title:"LINKED_ACCOUNT_NUMBER",
                                                 readonly:true,
                                                 required: false,
+                                                "orderNo":11,
                                                 condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
                                             },
                                             "baseLoanAccount":{
@@ -1606,6 +1648,7 @@ define([],function(){
                                                 title: "BASE_LOAN_ACCOUNT",
                                                 readonly:true,
                                                 required: false,
+                                                "orderNo":12,
                                                 condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
                         
                                              },
@@ -1614,6 +1657,7 @@ define([],function(){
                                                 title: "TRANSACTION_TYPE",
                                                 readonly:true,
                                                 required: false,
+                                                "orderNo":13,
                                                 condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
                                              },
                                              "BusinessSaveWarning":{
@@ -1710,15 +1754,26 @@ define([],function(){
                                     "PostReview": {
                                         "type": "box",
                                         "title": "POST_REVIEW",
-                                        "condition": "model.loanAccount.id",
+                                        "condition": "model.loanAccount.id && model.currentStage!=='Rejected'",
                                         "orderNo": 600,
                                         "items": {
                                             "action": {
                                                 "key": "review.action",
                                                 "type": "radios",
+                                                "condition": "model.currentStage !== 'Screening'",
                                                 "titleMap": {
                                                     "REJECT": "REJECT",
                                                     "SEND_BACK": "SEND_BACK",
+                                                    "PROCEED": "PROCEED",
+                                                    "HOLD": "HOLD"
+                                                }
+                                            },
+                                            "action1": {
+                                                "key": "review.action",
+                                                "type": "radios",
+                                                "condition": "model.currentStage == 'Screening'",
+                                                "titleMap": {
+                                                    "REJECT": "REJECT",
                                                     "PROCEED": "PROCEED",
                                                     "HOLD": "HOLD"
                                                 }
@@ -1813,8 +1868,73 @@ define([],function(){
                                             }
                                             }
                                         }
-                                    }
+                                    },
+                                    
+                                    "revertReject": {
+                                        "type": "box",
+                                        "title": "REVERT_REJECT",
+                                        "orderNo":600,
+                                        "condition": "model.currentStage=='Rejected'",
+                                        "items": {
+                                            "remarks": {
+                                                title: "REMARKS",
+                                                key: "review.remarks",
+                                                type: "textarea",
+                                                required: true
+                                            },
+                                            "rejectReason": {
+                                                title: "Reject Reason",
+                                                key: "loanAccount.rejectReason",
+                                                readonly: true,
+                                                type: "textarea",
+                                            },
+                                            "targetStage": {
+                                                key: "review.targetStage",
+                                                title: "SEND_BACK_TO_STAGE",
+                                                type: "lov",
+                                                lovonly:true,
+                                                autolov: true,
+                                                required: true,
+                                                searchHelper: formHelper,
+                                                search: function(inputModel, form, model, context) {
+                                                    var stage1 = model.review.preStage;
+                                                    var targetstage = formHelper.enum('targetstage').data;
+                                                    var out = [{'name': stage1, 'value': stage1}];
+                                                    for (var i = 0; i < targetstage.length; i++) {
+                                                        var t = targetstage[i];
+                                                        if (t.field1 == stage1) {
+                                                            out.push({
+                                                                name: t.name,
+                                                            })
+                                                        }
+                                                    }
+                                                    return $q.resolve({
+                                                        headers: {
+                                                            "x-total-count": out.length
+                                                        },
+                                                        body: out
+                                                    });
+                                                },
+                                                onSelect: function(valueObj, model, context) {
+                                                    model.review.targetStage = valueObj.name;
+                                                },
+                                                getListDisplayItem: function(item, index) {
+                                                    return [
+                                                        item.name
+                                                    ];
+                                                }
+
+                                            },
+                                            "sendBackButton": {
+                                                "key": "review.sendBackButton",
+                                                "type": "button",
+                                                "title": "SEND_BACK",
+                                                "onClick": "actions.sendBack(model, formCtrl, form, $event)"
+                                            }
+                                        }
+                                    },
                                 },
+                                
                                 "additions": [
                                     {
                                         "type": "actionbox",

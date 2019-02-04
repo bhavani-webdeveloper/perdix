@@ -1,10 +1,11 @@
 irf.pageCollection.controller(irf.controller("base.dashboard.lead.LeadDashboard"), ['$log', '$scope', "formHelper", "$state", "$q", "Utils", 'PagesDefinition', 'SessionStore', "entityManager", "IndividualLoan", "LoanBookingCommons", "Lead", "Messaging",
 function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionStore, entityManager, IndividualLoan, LoanBookingCommons, Lead, Messaging) {
     $log.info("Dashboard.Page.LoanOriginationDashboard.html loaded");
-    $scope.$templateUrl = "process/pages/templates/Page.LoanOriginationDashboard.html";
+    // $scope.$templateUrl = "process/pages/templates/Page.LoanOriginationDashboard.html";
+    $scope.$templateUrl = "process/pages/templates/Page.Dashboard.html";
     var currentBranch = SessionStore.getCurrentBranch();
 
-    var leadDefinition = {
+    var fullDefinition = {
         "title": "Lead",
         "iconClass": "fa fa-users",
         "items": [
@@ -21,17 +22,17 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
     };
     
 
-    PagesDefinition.getUserAllowedDefinition(leadDefinition).then(function(resp) {
-        $scope.leadDashboardDefinition = resp;
+    PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
+        $scope.dashboardDefinition = resp;
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
         var centres = SessionStore.getCentres();
 
-        var lapqMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.LeadAssignmentPendingQueue"];
-        var lfuqMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.LeadFollowUpQueue"];
-        var ilqMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.IncompleteLeadQueue"];
-        var rMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.LeadRejectedQueue"];
-        var rsMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.ReadyForScreeningQueue"];
+        var lapqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.LeadAssignmentPendingQueue"];
+        var lfuqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.LeadFollowUpQueue"];
+        var ilqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.IncompleteLeadQueue"];
+        var rMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.LeadRejectedQueue"];
+        var rsMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.ReadyForScreeningQueue"];
 
        
         if (rMenu) rMenu.data = 0;

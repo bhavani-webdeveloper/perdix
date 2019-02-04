@@ -16,6 +16,7 @@ define({
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branchId = SessionStore.getCurrentBranch().branchId;
+				model.siteCode = SessionStore.getGlobalSetting("siteCode");
 				var bankName = SessionStore.getBankName();
 				var banks = formHelper.enum('bank').data;
 				for (var i = 0; i < banks.length; i++){

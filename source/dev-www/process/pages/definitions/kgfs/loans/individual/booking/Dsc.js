@@ -119,9 +119,9 @@ define([], function () {
                 }, function(resp, headers) {
                     PageHelper.hideLoader();
                     var dataHtml = "<table class='table table-striped table-bordered table-responsive'>";
-                    dataHtml += "<tr><td>Response : </td><td>" + resp.response + "</td></tr>";
-                    dataHtml += "<tr><td>Response Message: </td><td>" + resp.responseMessage + "</td></tr>";
-                    dataHtml += "<tr><td>Stop Response: </td><td>" + resp.stopResponse + "</td></tr>";
+                    // dataHtml += "<tr><td>Response : </td><td>" + resp.response + "</td></tr>";
+                    dataHtml += "<tr><td>Response Message: </td><td>" + resp.responseMessage.split('|').slice(1).join('|') + "</td></tr>";
+                    // dataHtml += "<tr><td>Stop Response: </td><td>" + resp.stopResponse + "</td></tr>";
                     dataHtml += "</table>"
                     irfSimpleModal('DSC Check Details', dataHtml);
                 }, function(res) {

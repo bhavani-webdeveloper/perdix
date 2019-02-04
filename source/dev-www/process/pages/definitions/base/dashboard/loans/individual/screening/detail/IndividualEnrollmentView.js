@@ -929,6 +929,91 @@ define({
                                     '</table>' + '</div>'
                             }]
                         }]
+                    }, {
+                        "type": "box",
+                        "colClass": "col-sm-12",
+                        "overrideType": "default-view",
+                        "readonly": true,
+                        "title": "Reference Check",
+                        "condition": "model.bundlePageObj.pageClass != 'guarantor' && model.customer.verifications.length !=0",
+                        "items": [{
+                            "type": "grid",
+                            "orientation": "horizontal",
+                            "items": [{
+                                "type": "grid",
+                                "orientation": "vertical",
+                                "items": [{
+                                    "key": "UIUDF.REFERENCE_CHECK_RESPONSE",
+                                    "title": "Reference Check Responses",
+                                }]
+                            }]
+                        }, {
+                            "type": "expandablesection",
+                            "items": [{
+                                "type": "tableview",
+                                "key": "customer.verifications",
+                                "title": "",
+                                "transpose": true,
+                                "selectable": false,
+                                "editable": false,
+                                "tableConfig": {
+                                    "searching": false,
+                                    "paginate": false,
+                                    "pageLength": 10,
+                                },
+                                getColumns: function() {
+                                    return [{
+                                        "title": "Contact Person Name",
+                                        "data": "referenceFirstName"
+                                    }, {
+                                        "title": "Contact Number",
+                                        "data": "mobileNo",
+                                    }, {
+                                        "title": "Occupation",
+                                        "data": "occupation"
+                                    }, {
+                                        "title": "Address",
+                                        "data": "address"
+                                    }];
+                                },
+                                getActions: function() {
+                                    return [];
+                                }
+                            }, {
+                                "type": "tableview",
+                                "key": "customer.verifications",
+                                "title": "Reference Check",
+                                "transpose": true,
+                                "selectable": false,
+                                "editable": false,
+                                "tableConfig": {
+                                    "searching": false,
+                                    "paginate": false,
+                                    "pageLength": 10,
+                                },
+                                getColumns: function() {
+                                    return [{
+                                        "title": "How long have you know the Applicant(years)?",
+                                        "data": "knownSince"
+                                    }, {
+                                        "title": "Relationship with Applicant",
+                                        "data": "relationship"
+                                    }, {
+                                        "title": "Opinion on Applicant's Business",
+                                        "data": "opinion"
+                                    }, {
+                                        "title": "What is the curent financial status of the Applicant?",
+                                        "data": "financialStatus",
+                                    }, {
+                                        "title": "Referer Response",
+                                        "data": "customerResponse"
+                                    }];
+                                },
+                                getActions: function() {
+                                    return [];
+                                }
+                            }]
+                        }]
                     }/*, {
                         "type": "box",
                         "colClass": "col-sm-12",

@@ -10,12 +10,12 @@ export class PincodeLOVConfiguration extends LOVElementConfiguration {
         "state": {
             key: "customer.state"
         },
-        "division": {
-            key: "customer.division"
-        },
-        "region": {
-            key: "customer.region"
-        }
+        // "division": {
+        //     key: "customer.division"
+        // },
+        // "region": {
+        //     key: "customer.region"
+        // }
     };
     outputMap: Object = {
         "division": "customer.locality",

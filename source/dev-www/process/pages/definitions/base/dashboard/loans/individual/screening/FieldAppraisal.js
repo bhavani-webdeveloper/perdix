@@ -101,17 +101,19 @@ define(["perdix/domain/model/loan/LoanProcess",
                         return out;
                     },
 
-                    bundleActions: [{
-                        name: "Conversation",
-                        desc: "",
-                        icon: "fa fa-comment",
-                        fn: function(bundleModel) {
-                            Message.openOrCreateConversation("Loan", $stateParams.pageId);
-                        },
-                        isApplicable: function(bundleModel) {
-                            return true;
-                        }
-                    }],
+                    bundleActions: [
+                    //     {
+                    //     name: "Conversation",
+                    //     desc: "",
+                    //     icon: "fa fa-comment",
+                    //     fn: function(bundleModel) {
+                    //         Message.openOrCreateConversation("Loan", $stateParams.pageId);
+                    //     },
+                    //     isApplicable: function(bundleModel) {
+                    //         return true;
+                    //     }
+                    // }
+                ],
                     "onAddNewTab": function(definition, bundleModel){ /* returns model on promise resolution. */
                         var deferred = $q.defer();
                         var model = null;
@@ -244,7 +246,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     },
                     "post_pages_initialize": function(bundleModel){
                         $log.info("Inside post_page_initialize");
-                        BundleManager.broadcastEvent('origination-stage', 'Application');
+                        BundleManager.broadcastEvent('origination-stage', 'FieldAppraisal');
 
                     },
                     eventListeners: {

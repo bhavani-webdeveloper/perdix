@@ -56,6 +56,7 @@ define({
         "subTitle": "",
         initialize: function(model, form, formCtrl) {
             var self = this;
+            model.siteCode = SessionStore.getGlobalSetting("siteCode");
             model.review = model.review || {};
             if ($stateParams.pageId) {
                 var groupId = $stateParams.pageId;

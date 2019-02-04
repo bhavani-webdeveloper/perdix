@@ -1,0 +1,308 @@
+{
+   "stages": [{
+         "order": 1,
+         "code": "journalEntry",
+         "name": "journalEntry",
+         "stageType": "CAPTURE",
+         "isAccountPosting": false,
+         "allowedRoles": [
+            "WM"
+         ]
+      },{
+         "order": 2,
+         "code": "journalPosting",
+         "name": "journalPosting",
+         "stageType": "ACCOUNTINGPOSTING",
+         "isAccountPosting": true,
+         "allowedRoles": [
+            "WM"
+         ]
+      }
+   ],
+   "schema": {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "title": "Comment",
+      "required": [
+         "journalEntry"
+      ],
+      "properties": {
+         "journalEntry": {
+            "title": "journal Entry",
+            "type": "object",
+            "required": [
+               "transactionName",
+               "transactionType",
+               "transactionAmount",
+               "transactionDate",
+               "valueDate",
+			   "branchId"
+            ],
+            "properties": {
+               "transactionName": {
+                  "title": "Transaction Name",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "relatedAccountNo": {
+                  "title": "Related Account No",
+                  "type": "String",
+                  "minLength": 1,
+                  "maxLength": 30,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+
+               "transactionType": {
+                  "title": "Transaction Type",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 20,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+
+               "transactionAmount": {
+                  "title": "Transaction Amount",
+                  "type": "Integer",
+                  "minimum": 1,
+                  "maximum": 99999999,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "transactionDate": {
+                  "title": "Transaction Date",
+                  "type": "string",
+                  "format": "date",
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+			   "productType": {
+                  "title": "productType",
+                  "type": "string",
+                 
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "entryType": {
+                  "title": "entryType",
+                  "type": "string",
+                 
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "valueDate": {
+                  "title": "Value Date",
+                  "type": "string",
+                  "format": "date",
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "remarks": {
+                  "title": "Remarks",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "instrumentType": {
+                  "title": "InstrumentType",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 20,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "instrumentNumber": {
+                  "title": "InstrumentNumber",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 45,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "instrumentDate": {
+                  "title": "InstrumentDate",
+                  "type": "string",
+                  "format": "date",
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "ifscCode": {
+                  "title": "IfscCode",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 45,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "instrumentBankName": {
+                  "title": "instrumentBankName",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "instrumentBranchName": {
+                  "title": "instrumentBranchName",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "billNumber": {
+                  "title": "bil Number",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "billDate": {
+                  "title": "Bill Date",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "fileId": {
+                  "title": "fileId",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               
+               "udf1": {
+                  "title": "udf 1",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                 "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "udf2": {
+                  "title": "udf 2",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "udf3": {
+                  "title": "udf 3",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "udf4": {
+                  "title": "udf 4",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                 "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "udf5": {
+                  "title": "udf 5",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50,
+                 "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "udfDate1": {
+                  "title": "udf Date1",
+                  "type": "date",
+                 "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "udfDate2": {
+                  "title": "udf Date2",
+                  "type": "date",
+                 "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "udfDate3": {
+                  "title": "udf Date3",
+                  "type": "date",
+                 "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               },
+               "branchId": {
+                  "title": "branchId",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "captureStages": [
+                     "journalEntry",
+                     "journalPosting"
+                  ]
+               }
+            }
+         }
+      }
+   }
+}

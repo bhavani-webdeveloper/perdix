@@ -89,6 +89,7 @@
       "code": "LoanBooking",
       "name": "Loan Booking",
       "isAccountOpening": true,
+      "telecallingIdCapture":"Yes",
       "stageType": "CAPTURE",
       "allowedRoles": [
          "A",

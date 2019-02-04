@@ -136,7 +136,7 @@
                 "addressProof": {
                     "type": ["string","null"],
                     "title": "ADDRESS_PROOF",
-                    "enumCode": "address_proof"
+                    "enumCode": "identity_proof"
                 },
                 "addressProofImageId": {
                     "type": ["string","null"],

@@ -1,4 +1,4 @@
-irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL, searchResource){
+irf.models.factory('Enrollment',function($resource,$q,Upload,$httpParamSerializer,BASE_URL, searchResource){
     var endpoint = BASE_URL + '/api/enrollments';
     var snapshotFrom = '/snapshotDiff?snapshotIdFrom=';
     var snapshotTo  = 'snapshotIdTo=';
@@ -29,7 +29,7 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
      *      /enrollments/1           -> $get({id:1})
      * $post will send data as form data, save will send it as request payload
      */
-    return $resource(endpoint, null, {
+    var resource = $resource(endpoint, null, {
 
         get:{
             method:'GET',
@@ -73,6 +73,10 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
         update:{
             method:'PUT',
             url:endpoint+'/:service'
+        },
+        houseHoldLink:{
+            method:'POST',
+            url:endpoint+'/linkhousehold'
         },
         post:{
             method:'POST',
@@ -209,6 +213,26 @@ irf.models.factory('Enrollment',function($resource,$httpParamSerializer,BASE_URL
             url: telecallingdetails
         }
     });
+    resource.insuranceUpload = function(file, progress) {
+        var deferred = $q.defer();
+        Upload.upload({
+            url: BASE_URL + "/api/feed/insuranceupload",
+
+            data: {
+                file: file,
+                feedCategory: 'PortfolioInsuranceDetails'
+            }
+        }).then(function(resp) {
+            PageHelper.showProgress("page-init", "successfully uploaded.", 2000);
+            deferred.resolve(resp);
+        }, function(errResp) {
+            PageHelper.showErrors(errResp);
+            deferred.reject(errResp);
+        }, progress);
+        return deferred.promise;
+    };
+
+    return resource;
 });
 
 

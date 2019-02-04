@@ -329,6 +329,7 @@ irf.models.factory('GroupProcess',
         var curTime = moment();
         var curTimeStr = curTime.local().format("DD-MM-YYYY HH:MM:SS");
         var receiptData = 
+        '<div class="single-receipt">'+
         '<div style="text-align : center">' + '<h4><b>' + "DISBURSE RECEIPT" + '</b></h3>' + '</div>' + 
         '<div style="text-align : center">' + '<h5><b>' + opts.entity_name + '</b></p>' + '</div>' + 
         '<div style="text-align : center">' + '<h6><b>' + opts.branch + '</b></h4>' + '</div>' + 
@@ -336,41 +337,42 @@ irf.models.factory('GroupProcess',
         '<div style="text-align : center">' + '<p><b>' + opts.ReceiptName + '</b></p>' + '</div>' + 
         '<div style="text-align : center">' + '<p>' + "" + '</p>' + '</div>' + 
         '<div style="text-align : center">' + '<p>' + repaymentInfo.productCode + '</p>' + '</div>' + 
-        '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Branch Code :" + '<span style="border-bottom: 1px solid black; width: 100%;">' + opts.branch_code+ '</span>'+ '</p>' + '</div>' + 
-        '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Customer Id :" + '<span style="border-bottom: 1px solid black; width: 100%;">'+ repaymentInfo.customerId + '</span>'+'</p>' + '</div>' + 
-        '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Customer URN :"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.customerURN + '</span>'+'</p>' + '</div>' + 
-        '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Customer Name :" + '<span style="border-bottom: 1px solid black;">' + repaymentInfo.customerName + '</span>'+'</p>' + '</div>' + 
-        '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Loan A/C No :"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.accountNumber + '</span>'+'</p>' + '</div>' + 
-        '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Transaction Type :"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.transactionType + '</span>'+'</p>' + '</div>' + 
-        '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Transaction ID :"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.transactionID + '</span>'+'</p>' + '</div>';
+        '<div class="key-container" style="font-size:13px; width:95%; margin:auto">' + '<p>' + '<span style=" width: 100%;">'+"Branch Code :" + '</span>'+ '<span style="border-bottom: 1px solid black; width: 100%;">' + opts.branch_code+ '</span>'+ '</p>' + '</div>' + 
+        '<div class="key-container" style="font-size:13px; width:95%; margin:auto">' + '<p>' + '<span style=" width: 100%;">'+"Customer Id :"+ '</span>' + '<span style="border-bottom: 1px solid black; width: 100%;">'+ repaymentInfo.customerId + '</span>'+'</p>' + '</div>' + 
+        '<div class="key-container" style="font-size:13px; width:95%; margin:auto">' + '<p>' + '<span style=" width: 100%;">'+"Customer URN :" + '</span>' + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.customerURN + '</span>'+'</p>' + '</div>' + 
+        '<div class="key-container" style="font-size:13px; width:95%; margin:auto">' + '<p>' + '<span style=" width: 100%;">'+"Customer Name :" + '</span>'+ '<span style="border-bottom: 1px solid black;">' + repaymentInfo.customerName + '</span>'+'</p>' + '</div>' + 
+        '<div class="key-container" style="font-size:13px; width:95%; margin:auto">' + '<p>' + '<span style="width: 100%;">'+"Loan A/C No :" + '</span>' + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.accountNumber + '</span>'+'</p>' + '</div>' + 
+        '<div class="key-container" style="font-size:13px; width:95%; margin:auto">' + '<p>' + '<span style=" width: 100%;">'+"Transaction Type :" + '</span>' + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.transactionType + '</span>'+'</p>' + '</div>' + 
+        '<div class="key-container" style="font-size:13px; width:95%; margin:auto">' + '<p>' + '<span style=" width: 100%;">'+"Transaction ID :" + '</span>' + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.transactionID + '</span>'+'</p>' + '</div>';
 
         if(value == 1) {
 
-            var addition = '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Demand Amount :"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.demandAmount + '</span>'+'</p>' + '</div>' + 
-            '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Amount paid:"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.amountPaid + '</span>'+'</p>' + '</div>' + 
-            '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Processing Fee :"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.processingFee + '</span>'+'</p>' + '</div>' + 
-            '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Service Tax Fee :"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.serviceTaxFee + '</span>'+'</p>' + '</div>'+
-            '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Total PayOff Amount :"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.totalPayOffAmount + '</span>'+'</p>' + '</div>' 
+            var addition = '<div class="key-container" style="font-size:13px; width:95%; margin:auto">' + '<p>' + '<span style="width: 100%;">'+"Demand Amount :" + '</span>' + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.demandAmount + '</span>'+'</p>' + '</div>' + 
+            '<div class="key-container" style="font-size:13px; width:95%; margin:auto">' + '<p>' + '<span style=" width: 100%;">'+"Amount paid:" + '</span>' + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.amountPaid + '</span>'+'</p>' + '</div>' + 
+            '<div class="key-container" style="font-size:13px; width:95%; margin:auto">' + '<p>' + '<span style=" width: 100%;">'+"Processing Fee :" + '</span>' + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.processingFee + '</span>'+'</p>' + '</div>' + 
+            '<div class="key-container" style="font-size:13px; width:95%; margin:auto">' + '<p>' + '<span style=" width: 100%;">'+"Service Tax Fee :" + '</span>' + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.serviceTaxFee + '</span>'+'</p>' + '</div>'+
+            '<div class="key-container" style="font-size:13px; width:95%; margin:auto">' + '<p>' + '<span style=" width: 100%;">'+"Total PayOff Amount :" + '</span>' + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.totalPayOffAmount + '</span>'+'</p>' + '</div>' 
         }
         if (value == 0){
-           var addition = '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Loan Amount :"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.loanAmount + '</span>'+'</p>' + '</div>' + 
-            '<div style="font-size:13px; width:95%; margin:auto">' + '<p>' + "Disbursed Amount :"  + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.disbursedamount + '</span>'+'</p>' + '</div>'
+           var addition = '<div class="key-container" style="font-size:13px; width:95%; margin:auto">' + '<p>' + '<span style=" width: 100%;">'+ "Loan Amount :" + '</span>' + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.loanAmount + '</span>'+'</p>' + '</div>' + 
+            '<div class="key-container" style="font-size:13px; width:95%; margin:auto">' + '<p>' + '<span style=" width: 100%;">'+ "Disbursed Amount :" + '</span>' + '<span style="border-bottom: 1px solid black;">'+ repaymentInfo.disbursedamount + '</span>'+'</p>' + '</div>'
         }
 
-        var fotter = '<div style="font-size:12px;">' + '<p>' + "------------------------" + '</p>' + '</div>' + 
-        '<div style="font-size:12px;">' + '<p>' + opts.company_name + '</p>' + '</div>' + 
-        '<div style="font-size:12px;">' + '<p>' + "CIN :"+ opts.cin + '</p>' + '</div>' + 
-        '<div style="font-size:12px;">' + '<p>' + "Address :"+ opts.address1 + '</p>' + '</div>' + 
-        '<div style="font-size:12px;">' + '<p>' + opts.address2 + '</p>' + '</div>' + 
-        '<div style="font-size:12px;">' + '<p>' + opts.address3 + '</p>' + '</div>' + 
-        '<div style="font-size:12px;">' + '<p>' + "Website :"+ opts.website + '</p>' + '</div>' + 
-        '<div style="font-size:12px;">' + '<p>' + "HelpLine No"+ opts.helpline + '</p>' + '</div>' + 
-        '<div style="font-size:12px;">' + '<p>'  + "" + '</p>' + '</div>' + 
-        '<div style="font-size:12px;">' + '<p>'  + "" + '</p>' + '</div>' + 
-        '<div style="font-size:12px;text-align : center;">' + '<p>'  + "Signature not required as this is an" + '</p>' + '</div>' + 
-        '<div style="font-size:12px;text-align : center;">' + '<p>'  + "electronically generated receipt." + '</p>' + '</div>' + 
-        '<div style="font-size:12px;">' + '<p>'  + "------------------------------------" + '</p>' + '</div>' 
-
+        var fotter = '<div style="font-size:12px;"> </div>' + 
+        '<div style="font-size:12px;text-align : center;">' + '<p>' + opts.company_name + '</p>' + '</div>' + 
+        '<div style="font-size:12px;text-align : center;">' + '<p>' + "CIN :"+ opts.cin + '</p>' + '</div>' + 
+        '<div style="font-size:12px;text-align : center;">' + '<p>' + "Address :"+ opts.address1 + '</p>' + '</div>' + 
+        '<div style="font-size:12px;text-align : center;">' + '<p>' + opts.address2 + '</p>' + '</div>' + 
+        '<div style="font-size:12px;text-align : center;">' + '<p>' + opts.address3 + '</p>' + '</div>' + 
+        '<div style="font-size:12px;text-align : center;">' + '<p>' + "Website :"+ opts.website + '</p>' + '</div>' + 
+        '<div style="font-size:12px;text-align : center;">' + '<p>' + "HelpLine No"+ opts.helpline + '</p>' + '</div>' + 
+        '<div style="font-size:12px;text-align : center;">' + '<p>'  + "" + '</p>' + '</div>' + 
+        '<div style="font-size:12px;text-align : center;">' + '<p>'  + "" + '</p>' + '</div>' + 
+        '<p></p>'+
+        '<div style="font-size:10px;text-align : center;">' + '<p>'  + "Signature not required as this is an" + '</p>' + '</div>' + 
+        '<div style="font-size:10px;text-align : center;">' + '<p>'  + "electronically generated receipt." + '</p>' + '</div>' + 
+        '<div style="font-size:12px;text-align : center;">' + '<p>'  + "------------------------------------------" + '</p>' + '</div>'+ 
+        '</div>'
         return receiptData+addition+fotter;
 
     }
