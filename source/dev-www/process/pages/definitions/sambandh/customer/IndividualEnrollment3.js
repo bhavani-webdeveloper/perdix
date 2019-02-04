@@ -376,7 +376,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "IndividualInformation.spouseDateOfBirth": {
                             "required": true,
-                            "title": "HUSBAND_DOB",
+                            "title": "SPOUSE_DATE_OF_BIRTH",
                             condition: "model.customer.maritalStatus==='MARRIED'",
                             "onChange": function (modelValue, form, model) {   
                                 var selecteddate = model.customer.spouseDateOfBirth;
@@ -394,7 +394,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "IndividualInformation.spouseFirstName": {
                             orderNo: 160,
                             key: "customer.spouseFirstName",
-                            "title": "HUSBAND_FIRST_NAME",
                             condition: "model.customer.maritalStatus==='MARRIED' || model.customer.maritalStatus === 'WIDOWER'",
                             "required": true,
                             "type": "string",
@@ -463,6 +462,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "KYC.idProofValidUptoDate": {
                             "key" : "customer.idProofValidUptoDate",
                             orderNo: 70,
+                            "onChange": function (modelValue, form, model) {
+                                var selecteddate = model.customer.idProofValidUptoDate;
+                                var currentdate = moment(new Date()).format("YYYY-MM-DD");
+                                if(selecteddate > currentdate){
+                                    model.customer.idProofValidUptoDate = null;
+                                    PageHelper.showProgress("Date Error", "Valid UptoDate should not contain future." , 5000);
+                                    return false;
+                                }
+                            },
                             "type" : "date"
                         },
                         "KYC.addressProofFieldSet":{
@@ -505,6 +513,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "KYC.addressProofValidUptoDate": {
                             "key": "customer.addressProofValidUptoDate",
                             orderNo: 140,
+                            "onChange": function (modelValue, form, model) {
+                                var selecteddate = model.customer.addressProofValidUptoDate;
+                                var currentdate = moment(new Date()).format("YYYY-MM-DD");
+                                if(selecteddate > currentdate){
+                                    model.customer.addressProofValidUptoDate = null;
+                                    PageHelper.showProgress("Date Error", "Vaild UptoDate should not contain future." , 5000);
+                                    return false;
+                                }
+                            },
                             condition: "!model.customer.addressProofSameAsIdProof",
                             "type": "date"
                         },
@@ -1016,6 +1033,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     model.customer.familyMembers[0].relationShip = 'self';
                                     model.customer.familyMembers[0].gender = model.customer.gender;
                                     model.customer.familyMembers[0].dateOfBirth = model.customer.dateOfBirth;
+                                    model.customer.familyMembers[0].mobilePhone = model.customer.mobilePhone;
                                     model.customer.familyMembers[0].age = model.customer.age;
                                     model.customer.familyMembers[0].maritalStatus = model.customer.maritalStatus;
                                 }

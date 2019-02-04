@@ -565,7 +565,8 @@ define({
                         "key": "product.moduleConfigMasters[].cmsProductName",
                         "type": "string",
                     }, {
-                        "key": "product.moduleConfigMasters[].moduleStatus"
+                        "key": "product.moduleConfigMasters[].moduleStatus",
+                        "required":true
                     }, {
                         "key": "product.moduleConfigMasters[].smsEnabled"
                     }]
