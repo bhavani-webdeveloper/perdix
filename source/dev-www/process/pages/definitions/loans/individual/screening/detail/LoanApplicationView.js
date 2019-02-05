@@ -1235,7 +1235,7 @@ define({
                         };
                         reqData.loanAccount.status = null;
                         if (model.loanAccount.currentStage == 'CreditCommitteeReview') {
-                            reqData.loanAccount.status = 'REJECTED'
+                            reqData.loanAccount.status = 'SEND BACK'
                         }
 
                         reqData.loanProcessAction = "PROCEED";
