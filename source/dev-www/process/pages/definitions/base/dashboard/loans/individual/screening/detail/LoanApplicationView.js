@@ -1242,7 +1242,7 @@ define({
                         };
                         reqData.loanAccount.status = null;
                         if (model.loanAccount.currentStage == 'CreditCommitteeReview') {
-                            reqData.loanAccount.status = 'SEND BACK'
+                            reqData.loanAccount.status = 'SENT BACK'
                         }
 
                         reqData.loanProcessAction = "PROCEED";
