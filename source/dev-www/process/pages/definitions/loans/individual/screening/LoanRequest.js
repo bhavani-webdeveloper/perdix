@@ -3004,7 +3004,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                     reqData.loanAccount.status = null;
                     if (model.loanAccount.currentStage == 'CreditCommitteeReview') {
-                        reqData.loanAccount.status = 'REJECTED'
+                        reqData.loanAccount.status = 'SENT BACK'
                     }
 
                     reqData.loanProcessAction = "PROCEED";
