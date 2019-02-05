@@ -2412,7 +2412,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                     "individualDetails": {
                         type: "fieldset",
                         title: "INDIVIDUAL_DETAILS",
-                        // condition: "model.lead.customerTypeString === 'Individual'",
+                      //  condition: "model.lead.customerTypeString === 'Individual'",
                         items: {
                             "leadName": {
                                 key: "lead.leadName",
@@ -2428,7 +2428,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 "title": "CHOOSE_EXISTING_APPLICANT",
                                 "type": "lov",
                                 "orderNo": 5,
-                                "condition": "model.lead.customerId==null", /* Dont show if an existing business is selected */
+                               // "condition": "model.lead.customerId==null", /* Dont show if an existing business is selected */
                                 // "autolov": true,
                                 "lovonly": true,
                                 initialize: function(model, form, parentModel, context) {
