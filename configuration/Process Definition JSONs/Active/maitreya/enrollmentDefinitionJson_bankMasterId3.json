@@ -3534,6 +3534,8 @@
           "type": "object",
           "required": [
             "startMonth",
+            "cashDeposits",
+            "nonCashDeposits",
             "totalDeposits",
             "totalWihdrawals",
             "balanceAsOn15th",
@@ -3545,6 +3547,26 @@
               "title": "Start Month",
               "type": "string",
               "format": "date",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "cashDeposits": {
+              "title": "Cash Deposits",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100000000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "nonCashDeposits": {
+              "title": "Non Cash Deposits",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100000000,
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"

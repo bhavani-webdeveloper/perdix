@@ -554,10 +554,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             title:"LOCALITY1"
                         },
                         "ContactInformation.permanentAddressFieldSet": {
-                            condition: "!model.customer.residentialAddressAlsoBusinessAddress"
+                            condition: "!model.customer.residentialAddressAlsoBusinessAddress",
                         },
                         "ContactInformation.permanentAddressFieldSet": {
-                            condition: "!model.customer.mailSameAsResidence"
+                            condition: "!model.customer.mailSameAsResidence",
+                        },
+                        "ContactInformation.mailSameAsResidence":{
+                            "onChange": function (modelValue, form, model) {
+                                BundleManager.pushEvent('load-address', model._bundlePageObj,{customer: model.customer});
+                            }
                         },
                         "ContactInformation.mailingDoorNo":{
                             title:"DOOR_BUILDING",

@@ -44,7 +44,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
                     },
                     {
                         pageName: 'customer.EnterpriseEnrolment2BusinessFinancial',
-                        title: 'Business Financials',
+                        title: 'BUSINESS_FINANCIALS',
                         pageClass: 'businessFinancial',
                         minimum: 1,
                         maximum: 1,

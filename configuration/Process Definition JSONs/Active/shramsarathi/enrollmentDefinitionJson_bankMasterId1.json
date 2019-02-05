@@ -108,6 +108,16 @@
                 "Completed"
               ]
             },
+            "migrantType": {
+              "title": "migrant type",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
             "familyMemberMiddleName": {
               "title": "Middle Name",
               "type": "string",
@@ -275,6 +285,14 @@
           "type": "object",
           "required": [],
           "properties": {
+            "expenseFrom": {
+              "title": "Expenditure From",
+              "type": "number",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
             "expenditureSource": {
               "title": "Expenditure Source",
               "type": "string",
@@ -382,6 +400,56 @@
             },
             "incomeEarned": {
               "title": "Income",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10000000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "workSector": {
+              "title": "workSector",
+              "type": "string",
+              "minimum": 0,
+              "maximum": 10000000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "occupationType": {
+              "title": "occupation Type",
+              "type": "string",
+              "minimum": 0,
+              "maximum": 10000000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "skillLevel": {
+              "title": "occupation Type",
+              "type": "string",
+              "minimum": 0,
+              "maximum": 10000000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "averageTimeSpent": {
+              "title": "average timeSpent",
+              "type": "string",
+              "minimum": 0,
+              "maximum": 10000000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "averageReturn": {
+              "title": "average return",
               "type": "integer",
               "minimum": 0,
               "maximum": 10000000,
@@ -538,6 +606,15 @@
             "loanType": {
               "title": "Loan Type",
               "type": "string",
+              "refCodeCategory": "liability_loan_type",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "mortageAmount": {
+              "title": "mortage amount",
+              "type": "number",
               "refCodeCategory": "liability_loan_type",
               "captureStages": [
                 "BasicEnrolment",
@@ -799,6 +876,36 @@
           "maritalStatus"
         ],
         "properties": {
+          "houseStatus": {
+            "title": "house status",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 1000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "noOfRooms": {
+            "title": "URN",
+            "type": "number",
+            "minLength": 0,
+            "maxLength": 1000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "nickName": {
+            "title": "URN",
+            "type": "string",
+            "minLength": 16,
+            "maxLength": 16,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "urnNo": {
             "title": "URN",
             "type": "string",
@@ -2679,6 +2786,36 @@
           "firstName"
         ],
         "properties": {
+          "houseStatus": {
+            "title": "house status",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 1000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "noOfRooms": {
+            "title": "URN",
+            "type": "number",
+            "minLength": 0,
+            "maxLength": 1000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "nickName": {
+            "title": "URN",
+            "type": "string",
+            "minLength": 16,
+            "maxLength": 16,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "firstName": {
             "title": "First Name",
             "type": "string",
