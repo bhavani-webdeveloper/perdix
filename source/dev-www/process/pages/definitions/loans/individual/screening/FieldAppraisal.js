@@ -52,6 +52,14 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                         order:40
                     },
                     {
+                        pageName: 'customer.EnterpriseEnrolment2BusinessFinancial',
+                        title: 'BUSINESS_FINANCIALS',
+                        pageClass: 'business-financials',
+                        minimum: 1,
+                        maximum: 1,
+                        order:41
+                    },
+                    {
                         pageName: 'loans.individual.screening.PersonalDiscussion',
                         title: 'PERSONAL_DISCUSSION',
                         pageClass: 'personal-discussion',
@@ -195,12 +203,14 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                                             }
                                         });
                                     }
-
+                                    var businessModel = {loanRelation:{customerId: loanCustomerId}};
                                     $this.bundlePages.push({
                                         pageClass: 'business',
-                                        model: {
-                                            loanRelation: {customerId: loanCustomerId}
-                                        }
+                                        model: businessModel
+                                    })
+                                    $this.bundlePages.push({
+                                        pageClass: 'business-financials',
+                                        model: businessModel
                                     })
                                     var temp_model = {
                                         loanAccount:res
