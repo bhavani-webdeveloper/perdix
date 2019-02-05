@@ -8,7 +8,8 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanOriginationDashboar
             "title": "Loan Origination Dashboard",
             "iconClass": "fa fa-users",
             "items": [
-                "Page/Bundle/kgfs.loans.individual.screening.ScreeningInput",
+                "Page/Engine/kgfs.loans.individual.screening.Input",
+               // "Page/Bundle/kgfs.loans.individual.screening.ScreeningInput",
                 "Page/Engine/kgfs.loans.individual.screening.ScreeningQueue",
                 "Page/Engine/kgfs.loans.individual.screening.MELApplicationForm",
                 "Page/Engine/kgfs.loans.individual.screening.ScreeningReviewQueue",

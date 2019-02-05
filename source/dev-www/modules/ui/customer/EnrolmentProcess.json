@@ -665,7 +665,7 @@
                 "readonly": true,
                 "condition": "model.customer.urnNo",
                 "title": "URN_NO",
-                "orderNo": 40
+                "orderNo": 1
             },
             "centreId": {
                 "key": "customer.centreId",
@@ -1237,6 +1237,12 @@
                         "category": "CustomerEnrollment",
                         "subCategory": "IDENTITYPROOF",
                         "using": "scanner"
+                    },
+                    "frequency": {
+                        "key": "customer.incomeThroughSales[].frequency",
+                        "title": "FREQUENCY",
+                        "type": "select",
+                        "enumcode":"frequency"
                     }
                 }
             },
@@ -1277,6 +1283,33 @@
                     },
                     "seasonType": {
                         "key": "customer.enterpriseMonthlySales[].seasonType",
+                        "type": "select",
+                        "title": "SEASON_TYPE",
+                        "enumCode": "enterprise_season_types"
+                    }
+                }
+            },
+            "enterpriseDailySales": {
+                "key": "customer.enterpriseDailySales",
+                "type": "array",
+                "title": "ENTERPRISE_MONTHLY_SALES",
+                "startEmpty": true,
+                "items": {
+                    "month": {
+                        "key": "customer.enterpriseDailySales[].month",
+                        "type": "date",
+                        "title": "START_MONTH",
+                        "dateDisplayFormat": "MMM, YYYY"
+                    },
+                    "totalSales": {
+                        "key": "customer.enterpriseDailySales[].totalSales",
+                        "type": "amount",
+                        "calculator": true,
+                        "creditDebitBook": true,
+                        "title": "TOTAL_SALES"
+                    },
+                    "seasonType": {
+                        "key": "customer.enterpriseDailySales[].seasonType",
                         "type": "select",
                         "title": "SEASON_TYPE",
                         "enumCode": "enterprise_season_types"
@@ -1359,7 +1392,7 @@
                         "title": "AMOUNT",
                         "type": "amount"
                     },
-                    "freequency": {
+                    "frequency": {
                         "key": "customer.rawMaterialExpenses[].frequency",
                         "title": "FREQUENCY",
                         "type": "select",
@@ -2118,6 +2151,11 @@
                         "key": "customer.buyerDetails[].receivablesOutstanding",
                         "title": "RECEIVABLES_OUTSTANDING_CUSTOMER_CREDIT",
                         "type": "number"
+                    },
+                    "contactNumber" :{
+                        "key": "customer.buyerDetails[].contactNumber",
+                        "title": "CONTACT_NUMBER",
+                        "type": "number"
                     }
                 }
             }
@@ -2138,11 +2176,30 @@
                         "title": "SUPPLIERS_NAME",
                         "type": "string"
                     },
-                    "supplierType": {
-                        "key": "customer.supplierDetails[].supplierType",
-                        "title": "TYPE",
-                        "type": "select",
-                        "enumCode": "supplier_type"
+                    "customerSince": {
+                        "key": "customer.supplierDetails[].customerSince",
+                        "title": "CUSTOMER_SINCE",
+                        "type": "string"
+                    },
+                    "paymentFrequency": {
+                        "key": "customer.supplierDetails[].paymentFrequency",
+                        "title": "PAYMENT_FREQUENCY",
+                        "type": "string"
+                    },
+                    "product": {
+                        "key": "customer.supplierDetails[].product",
+                        "title": "PRODUCT",
+                        "type": "string"
+                    },
+                    "receivablesOutstanding": {
+                        "key": "customer.supplierDetails[].receivablesOutstanding",
+                        "title": "AMOUNT_TRANSACTION_PER_FREQUENCY",
+                        "type": "number"
+                    },
+                    "contactNumber": {
+                        "key": "customer.supplierDetails[].contactNumber",
+                        "title": "CONTACT_NUMBER",
+                        "type":"number"
                     },
                     "paymentTerms": {
                         "key": "customer.supplierDetails[].paymentTerms",

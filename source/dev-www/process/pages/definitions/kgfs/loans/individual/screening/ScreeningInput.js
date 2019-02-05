@@ -43,7 +43,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:30
                         },
                         {
-                            pageName: 'customer.EnterpriseEnrolment2',
+                            pageName: 'kgfs.customer.EnterpriseEnrolment2',
                             title: 'BUSINESS',
                             pageClass: 'business',
                             minimum: 1,
@@ -199,6 +199,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                             });
 
                     } else {
+                        if($stateParams.pageData){
+                            var productCategory = $stateParams.pageData.productCategory; 
+                        }
                         LoanProcess.createNewProcess()
                             .subscribe(function(loanProcess){
                                 loanProcess.loanAccount.currentStage = 'Screening';
@@ -218,16 +221,18 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         }
                                     });
                                 }
-
-                                if (loanProcess.loanCustomerEnrolmentProcess) {
-                                    $this.bundlePages.push({
-                                        pageClass: "business",
-                                        model: {
-                                            enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
-                                            loanProcess: loanProcess
-                                        }
-                                    });
+                                if(productCategory == 'MEL'){
+                                    if (loanProcess.loanCustomerEnrolmentProcess) {
+                                        $this.bundlePages.push({
+                                            pageClass: "business",
+                                            model: {
+                                                enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                                loanProcess: loanProcess
+                                            }
+                                        });
+                                    }
                                 }
+                               
 
                                 $this.bundlePages.push({
                                     pageClass: 'loan-request',
@@ -276,6 +281,13 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                 },
                 eventListeners: {
+                    "load-address": function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("load-address-business", params);
+                    },
+                    "load_business": function(pageObj, bundleModel, params){
+                        console.log(params)
+                        model.productCategory = params
+                    },
                     "on-customer-load": function(pageObj, bundleModel, params){
                         BundleManager.broadcastEvent("test-listener", {name: "SHAHAL AGAIN"});
                     },
