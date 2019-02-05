@@ -7,7 +7,12 @@ define({
 
 	$pageFn: function($log, $state, Groups, GroupProcess, Enrollment, CreditBureau, Journal, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
 		PageHelper, Utils, PagesDefinition, Queries, irfNavigator) {
-
+		
+		var udfConversion = function(model){
+			for(var i=1;i<=28;i++){
+				model.group["udf"+i] = model.group['udf'+i] == "true" ? true : model.group["udf"+i] == "false" ? false : model.group["udf"+i];
+			}
+		}
 
 		var fixData = function(model) {
 			model.group.tenure = parseInt(model.group.tenure);
@@ -108,6 +113,7 @@ define({
 						groupId: groupId
 					}, function(response) {
 						model.group = response;
+						udfConversion(model);
 						model.group.groupRemarks = null;
 						model.group.members=[];
 						var centreCode = formHelper.enum('centre').data;

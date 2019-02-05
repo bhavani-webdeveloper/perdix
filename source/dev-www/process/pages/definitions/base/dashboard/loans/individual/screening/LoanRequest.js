@@ -51,6 +51,7 @@ define([],function(){
             };
  
  
+ 
             var configFile = function() {
                 return {
                     "loanAccount.currentStage": {
@@ -828,7 +829,8 @@ define([],function(){
                             ],
                             "overrides": {
                                 "NomineeDetails.nominees.nomineeFirstName":{
-                                    "required":true
+                                    "required":true,
+                                    "lovonly": false,
                                 },
                                 "NomineeDetails.nominees.nomineeGender":{
                                     "required":true
@@ -845,9 +847,24 @@ define([],function(){
                                 "NomineeDetails.nominees.nomineePincode":{
                                     "required":true
                                 },
-                                "LoanCustomerRelations": {
-                                    "readonly": true
+                                "LoanCustomerRelations.loanCustomerRelations.customerId":
+                                {
+                                    "readonly":true
                                 },
+                                "LoanCustomerRelations.loanCustomerRelations.urn":{
+                                    "readonly":true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.name":{
+                                    "readonly":true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.relation":{
+                                    "readonly":true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
+                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                 }
+                    
+                                
                             }
                         },
                         "FieldAppraisal":{
@@ -1390,7 +1407,7 @@ define([],function(){
                     "LoanCustomerRelations.loanCustomerRelations.urn",
                     "LoanCustomerRelations.loanCustomerRelations.name",
                     "LoanCustomerRelations.loanCustomerRelations.relation",
-                    //"LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant",
+                    "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant",
  
                      "DeductionsFromLoan",
                      "DeductionsFromLoan.expectedProcessingFeePercentage",
@@ -1497,8 +1514,8 @@ define([],function(){
                     "revertReject.rejectReason",
                     "revertReject.targetStage",
                     "revertReject.sendBackButton"
-                    
 
+ 
                     // "ProposedUtilizationPlan",
                     // "ProposedUtilizationPlan.loanUtilisationDetail",
                     // "ProposedUtilizationPlan.loanUtilisationDetail.utilisationType",
@@ -1507,7 +1524,7 @@ define([],function(){
                 ];
  
             }
-            
+ 
             return {
                 "type": "schema-form",
                 "title": "LOAN_REQUEST",
@@ -1596,7 +1613,7 @@ define([],function(){
         
                         });
                     }
-        
+ 
                     self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
                     p1.then(function(repo) {                       
@@ -1751,10 +1768,11 @@ define([],function(){
                                            }
                                         }
                                     },
+
                                     "PostReview": {
                                         "type": "box",
                                         "title": "POST_REVIEW",
-                                        "condition": "model.loanAccount.id && model.currentStage!=='Rejected'",
+                                        "condition": "model.loanAccount.id  && model.currentStage!=='Rejected'",
                                         "orderNo": 600,
                                         "items": {
                                             "action": {
@@ -1869,7 +1887,6 @@ define([],function(){
                                             }
                                         }
                                     },
-                                    
                                     "revertReject": {
                                         "type": "box",
                                         "title": "REVERT_REJECT",
@@ -1932,9 +1949,11 @@ define([],function(){
                                                 "onClick": "actions.sendBack(model, formCtrl, form, $event)"
                                             }
                                         }
-                                    },
+
+                                    }
+                                   
+
                                 },
-                                
                                 "additions": [
                                     {
                                         "type": "actionbox",
@@ -2132,13 +2151,13 @@ define([],function(){
                                     }
                                 }
                                 //irfNavigator.goBack();
+
                             }, function (err) {
                                 PageHelper.showErrors(err);
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                
                                 PageHelper.hideLoader();
                             });
-                        
                     },
                     reject: function(model, formCtrl, form, $event){
                         // if(PageHelper.isFormInvalid(formCtrl)) {

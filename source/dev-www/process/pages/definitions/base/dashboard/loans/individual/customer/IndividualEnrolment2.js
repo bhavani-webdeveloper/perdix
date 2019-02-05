@@ -65,8 +65,23 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "FieldAppraisal":
                         {
                             "excludes":[
+                                "KYC.firstName",
                                 "IndividualReferences"
                             ],
+                            "overrides":{
+                            "ContactInformation.locality":{
+                                "readonly": true
+                            },
+                            "ContactInformation.villageName":{
+                                "readonly": true
+                            },
+                            "ContactInformation.district":{
+                                "readonly": true
+                            },
+                            "ContactInformation.state": {
+                                "readonly": true
+                            }
+                        }
                         },
                         "Screening":{
                             "excludes": [

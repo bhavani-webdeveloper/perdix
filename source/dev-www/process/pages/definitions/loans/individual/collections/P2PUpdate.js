@@ -247,7 +247,6 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     {
                         key: "promise.udf1",
                         type: "radios",
-                        required: true,
                         title: "BUSINESS_RUNNING",
                         "titleMap": {
                             "YES": "YES",
@@ -257,7 +256,6 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     {
                         key: "promise.udf2",
                         type: "radios",
-                        required: true,
                         title: "COLLATERAL_AVAILABLE",
                         "titleMap": {
                             "YES": "YES",

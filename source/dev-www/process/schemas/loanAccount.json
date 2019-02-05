@@ -1189,7 +1189,7 @@
                                 "type":["string", "null"]
                             },
                             "grossWeightInGrams": {
-                                "type": ["null", "integer"]
+                                "type": ["null", "number"]
                             },
                             "id": {
                                 "type": ["null", "integer"]
@@ -1201,10 +1201,10 @@
                                 "type": ["null", "integer"]
                             },
                             "marketValueInPaisa": {
-                                "type": ["null", "integer"]
+                                "type": ["null", "number"]
                             },
                             "netWeightInGrams": {
-                                "type": ["null", "integer"]
+                                "type": ["null", "number"]
                             },
                             "noOfArticles": {
                                 "type": ["null", "integer"]
@@ -1216,10 +1216,10 @@
                                 "type": ["null", "integer"]
                             },
                             "ratePerGram22CaratInPaisa": {
-                                "type": ["null", "integer"]
+                                "type": ["null", "number"]
                             },
                             "ratePerGramInPaisa": {
-                                "type": ["null", "integer"]
+                                "type": ["null", "number"]
                             },
                             "stoneDescription": {
                                 "type":["string", "null"]

@@ -268,7 +268,25 @@
                   "captureStages":[
                      "Screening", "LoanInitiation"
                   ]
-               },
+               }, 
+               "groupCode":{
+                "title":"group code",
+                "type":"string",
+                "minLength":1,
+                "maxLength":100,
+                "captureStages":[
+                   "Screening", "LoanInitiation"
+                ]
+             },
+              "groupName":{
+                "title":"group name",
+                "type":"string",
+                "minLength":1,
+                "maxLength":100,
+                "captureStages":[
+                   "Screening", "LoanInitiation"
+                ]
+             },
                "processType":{
                   "title":"Process Type",
                   "type":"string",

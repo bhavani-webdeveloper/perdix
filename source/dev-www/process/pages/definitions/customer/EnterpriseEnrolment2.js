@@ -28,8 +28,191 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             if(amount < (machineCost*0.1)){
                 amount = machineCost*0.1;
             }
-            model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice = amount;
+            model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice = Math.round(amount*100)/100;
+        } else {
+            model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice = null;
         }
+    }
+    function financialSave(model, formCtrl, formName){
+        $log.info("Inside save()");
+        formCtrl.scope.$broadcast('schemaFormValidate');
+
+        var DedupeEnabled = SessionStore.getGlobalSetting("DedupeEnabled") || 'N';
+
+        if (formCtrl && formCtrl.$invalid) {
+            PageHelper.showProgress("enrolment","Your form have errors. Please fix them.", 5000);
+            return false;
+        }
+        if (model.customer.enterprise.isGSTAvailable === "YES"){
+            try
+            {
+                var count = 0;
+                for (var i = 0; i < model.customer.enterpriseRegistrations.length; i++) {
+                    if (model.customer.enterpriseRegistrations[i].registrationType === "GST No"
+                        && model.customer.enterpriseRegistrations[i].registrationNumber != ""
+                        && model.customer.enterpriseRegistrations[i].registrationNumber != null
+                        ) {
+                        count++;
+                    }
+                }
+                if (count < 1) {
+                    PageHelper.showProgress("enrolment","Since GST is applicable so please select Registration type GST No and provide Registration details ",9000);
+                    return false;
+                }
+            }
+            catch(err){
+                console.error(err);
+            }
+        }
+
+        if (model.customer.enterprise.companyRegistered != "YES"){
+            try
+            {
+                delete model.customer.enterpriseRegistrations;
+            }
+            catch(err){
+                console.error(err);
+            }
+        }
+
+        var reqData = _.cloneDeep(model);
+        EnrollmentHelper.fixData(reqData);
+
+        if (!(validateRequest(reqData))){
+            return;
+        }
+        if (model.currentStage == 'ApplicationReview') {
+            PageHelper.showProgress("enrolment","Loan must be saved/updated for psychometric test", 6000);
+        }
+
+        PageHelper.showProgress('enrolment','Saving..');
+        EnrollmentHelper.saveData(reqData).then(function(resp){
+            formHelper.resetFormValidityState(formCtrl);
+            PageHelper.showProgress('enrolment', 'Done.', 5000);
+            Utils.removeNulls(resp.customer, true);
+            model.customer = resp.customer;
+            if (model._bundlePageObj){
+                BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
+            }
+            if (DedupeEnabled == 'Y' && model.currentStage == "Screening") {
+                Dedupe.create({
+                    "customerId": model.customer.id,
+                    "status": "pending"
+                }).$promise;
+            }
+        }, function(httpRes){
+            PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+            PageHelper.showErrors(httpRes);
+        });
+
+    }
+    function financialSubmit(model, form, formName){
+        $log.info("Inside submit()");
+        $log.warn(model);
+
+        var DedupeEnabled = SessionStore.getGlobalSetting("DedupeEnabled") || 'N';
+        var sortFn = function(unordered){
+            var out = {};
+            Object.keys(unordered).sort().forEach(function(key) {
+                out[key] = unordered[key];
+            });
+            return out;
+        };
+        if (model.customer.enterprise.companyRegistered != "YES"){
+            try
+            {
+                delete model.customer.enterpriseRegistrations;
+            }
+            catch(err){
+                console.error(err);
+            }
+        }
+
+        if (model.customer.enterprise.isGSTAvailable === "YES"){
+            try
+            {
+                var count = 0;
+                for (var i = 0; i < model.customer.enterpriseRegistrations.length; i++) {
+                    if (model.customer.enterpriseRegistrations[i].registrationType === "GST No"
+                        && model.customer.enterpriseRegistrations[i].registrationNumber != ""
+                        && model.customer.enterpriseRegistrations[i].registrationNumber != null
+                        && model.customer.enterpriseRegistrations[i].registeredDate != ""
+                        && model.customer.enterpriseRegistrations[i].registeredDate != null) {
+                        count++;
+                    }
+                }
+                if (count < 1) {
+                    PageHelper.showProgress("enrolment","Since GST is applicable so please select Registration type GST No and provide Registration details ",9000);
+                    return false;
+                }
+            }
+            catch(err){
+                console.error(err);
+            }
+        }
+
+        if (model.currentStage == 'Application') {
+            if (model.customer.verifications.length<2){
+                PageHelper.showProgress("enrolment","minimum two references are mandatory",5000);
+                return false;
+            }
+        }
+        if (model.currentStage == 'ApplicationReview') {
+            PageHelper.showProgress("enrolment","Loan must be saved/updated for psychometric test", 6000);
+        }
+        if(model.currentStage=='ScreeningReview'){
+            var commercialCheckFailed = false;
+            if(model.customer.enterpriseBureauDetails && model.customer.enterpriseBureauDetails.length>0){
+                for (var i = model.customer.enterpriseBureauDetails.length - 1; i >= 0; i--) {
+                    if(!model.customer.enterpriseBureauDetails[i].fileId
+                        || !model.customer.enterpriseBureauDetails[i].bureau
+                        || model.customer.enterpriseBureauDetails[i].doubtful==null
+                        || model.customer.enterpriseBureauDetails[i].loss==null
+                        || model.customer.enterpriseBureauDetails[i].specialMentionAccount==null
+                        || model.customer.enterpriseBureauDetails[i].standard==null
+                        || model.customer.enterpriseBureauDetails[i].subStandard==null){
+                        commercialCheckFailed = true;
+                        break;
+                    }
+                }
+            }
+            else
+                commercialCheckFailed = true;
+            if(commercialCheckFailed && model.customer.customerBankAccounts && model.customer.customerBankAccounts.length>0){
+                for (var i = model.customer.customerBankAccounts.length - 1; i >= 0; i--) {
+                    if(model.customer.customerBankAccounts[i].accountType == 'OD' || model.customer.customerBankAccounts[i].accountType == 'CC'){
+                        PageHelper.showProgress("enrolment","Commercial bureau check fields are mandatory",5000);
+                        return false;
+                    }
+                }
+            }
+        }
+        var reqData = _.cloneDeep(model);
+        EnrollmentHelper.fixData(reqData);
+
+        if (!(validateRequest(reqData))){
+            return;
+        }
+
+        PageHelper.showProgress('enrolment','Updating...', 2000);
+        EnrollmentHelper.proceedData(reqData).then(function(resp){
+            formHelper.resetFormValidityState(form);
+            PageHelper.showProgress('enrolmet','Done.', 5000);
+            Utils.removeNulls(resp.customer,true);
+            model.customer = resp.customer;
+            if (model._bundlePageObj){
+                BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer});
+                if (DedupeEnabled == 'Y' && model.currentStage == "Screening") {
+                    Dedupe.create({
+                        "customerId": model.customer.id,
+                        "status": "pending"
+                    }).$promise;
+                }
+            }
+        }, function(httpRes){
+            PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+            PageHelper.showErrors(httpRes);
+        });
     }
 
     return {
@@ -58,7 +241,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     .$promise
                     .then(function(res){
                         model.customer = res;
-
+                        model.customer.enterprise.registrationType = "GST No";
                         if (model.customer.stockMaterialManagement) {
                         model.proxyIndicatorsHasValue = true;
                         $log.debug('PROXY_INDICATORS already has value');
@@ -263,7 +446,13 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                 _.remove(model.customer.enterpriseCustomerRelations, function(relation){
                     return relation.linkedToCustomerId==enrolmentDetails.customerId;
                 })
-            }
+            },
+            "new-financial": function(bundleModel,model,params){
+                if(!params.customerId)
+                    financialSave(params.model, params.formCtrl, params.form, params.$event);
+                else
+                    financialSubmit(params.model,params.form,params.formName);
+            },
         },
         form: [
             {
@@ -1292,10 +1481,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     }
                 ]
             },
+            // this onew
             {
                 type: "box",
                 title: "BANK_ACCOUNTS",
-                "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
+                "condition":"model.currentStage=='Screening' || model.currentStage=='Application'",
                 items: [
                     {
                         key: "customer.customerBankAccounts",
@@ -1982,10 +2172,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     }
                 ]
             },
+            // this one
             {
                type:"box",
                title:"T_BUSINESS_FINANCIALS",
-               "condition":"model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
+               "condition":"model.currentStage=='Application'",
                 items:[
                     {
                         key: "customer.enterprise.monthlyTurnover",
@@ -3026,7 +3217,21 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 },
                                 onSelect: function(result, model, context) {
                                    // model.customer.fixedAssetsMachinaries[context.arrayIndex].manufacturerName=result.machineName
-                                    $log.info(result);
+                                    // $log.info(result);
+                                    priceCalculation(null, null, model);
+                                    if (model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice && model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue) {
+                                        if(model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice <=0 && model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue > 0) {
+                                            model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = Math.round(model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue);
+                                        }                                        
+                                        else if(model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice > 0 && model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue <=0){
+                                            model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = Math.round(model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice);
+                                        }                                        
+                                        else{
+                                         model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = Math.round(((model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue+model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice) /2)*100)/100;
+                                        }    
+                                    } else {
+                                        model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = null;
+                                    }
                                 }
                             },
                             {
@@ -3042,6 +3247,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 required: true,
                                 "onChange": function(modelValue, form, model) {
                                     priceCalculation(modelValue, form, model);
+                                    if (model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice && model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue) {
+                                        model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = Math.round(((model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue+model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice) /2)*100)/100;
+                                    } else {
+                                        model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = null;
+                                    }
                                 }
 
                             },

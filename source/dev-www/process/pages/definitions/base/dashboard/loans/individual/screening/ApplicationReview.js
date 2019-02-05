@@ -31,16 +31,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageName: 'base.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
                                 title: 'CO_APPLICANT',
                                 pageClass: 'co-applicant',
-                                minimum: 0,
-                                maximum: 4,
+                                minimum: 4,
+                                maximum: 0,
                                 order:20
                             },
                             {
                                 pageName: 'base.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
                                 title: 'GUARANTOR',
                                 pageClass: 'guarantor',
-                                minimum: 0,
-                                maximum: 3,
+                                minimum: 3,
+                                maximum: 0,
                                 order:30
                             },
                             {
