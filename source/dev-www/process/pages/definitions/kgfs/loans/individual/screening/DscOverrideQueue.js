@@ -1,163 +1,163 @@
 define({
-	pageUID: "kgfs.loans.individual.screening.DscOverrideQueue",
-   pageType: "Engine",
-   dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons","irfNavigator"],
-   $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons,irfNavigator) {
-	   var branch = SessionStore.getBranch();
-	   var centres = SessionStore.getCentres();
-	   var centreId=[];
-	   if (centres && centres.length) {
-		   for (var i = 0; i < centres.length; i++) {
-			   centreId.push(centres[i].centreId);
-		   }
-	   }
-	   return {
-		"type": "search-list",
-		"title": "DSC_OVERRIDE_SEARCH",
-		"subTitle": "",
-		initialize: function (model, form, formCtrl) {
-			model.branch = SessionStore.getCurrentBranch().branchId;
-			$log.info("search-list sample got initialized");
+    pageUID: "kgfs.loans.individual.screening.DscOverrideQueue",
+    pageType: "Engine",
+    dependencies: ["$log", "irfNavigator", "formHelper", "entityManager", "IndividualLoan", "$state", "SessionStore", "Utils"],
+    $pageFn: function ($log, irfNavigator, formHelper, EntityManager, IndividualLoan, $state, SessionStore, Utils) {
+        var branch = SessionStore.getBranch();
+        return {
+            "type": "search-list",
+            "title": "DSC_OVERRIDE_SEARCH",
+            "subTitle": "",
 
-		},
-		definition: {
-			title: "SEARCH",
-			searchForm: [
-				"*"
-			],
-			//autoSearch: true,
-			searchSchema: {
-				"type": 'object',
-				"title": 'SEARCH_OPTIONS',
-				"properties": {
-					"branch": {
-						'title': "BRANCH",
-						"type": ["string", "null"],
-						"required":true,
-						"x-schema-form": {
-							"type": "userbranch",
-							"screenFilter": true
-						}
-					},
-					"centre": {
-						"title": "CENTRE",
-						"type": ["integer", "null"],
-                       // "required":true,
-						"x-schema-form": {
-							"type": "select",
-							"enumCode": "centre",
-							"parentEnumCode": "branch_id",
-							"parentValueExpr": "model.branch",
-							"screenFilter": true
-						}
-					},
-					"applicantName": {
-						"title": "CUSTOMER_NAME",
-						"type": "string"
-					},
-					"urn": {
-						"title": "URN_NO",
-						"type": "string"
-					},
-					"loanType": {
-						"title": "PRODUCT_TYPE",
-						"enumCode": "product_type",
-						"type": "string",
-						"x-schema-form": {
-							"type": "select"
-						}
-					},
-				},
-				"required": []
-			},
-			getSearchFormHelper: function () {
-				return formHelper;
-			},
-			getResultsPromise: function (searchOptions, pageOpts) {
-				if (_.hasIn(searchOptions, 'centreCode')) {
-					searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
-				}
-				return IndividualLoan.search({
-					'branchId': searchOptions.branch,
-					'stage': 'DSCOverride',
-					'applicantName': searchOptions.applicantName,
-					'centreCode': searchOptions.centre,
-					'urn':searchOptions.urn,
-					'loanType':searchOptions.loanType
-				}).$promise;
-			},
-			paginationOptions: {
-				"getItemsPerPage": function (response, headers) {
-					return 100;
-				},
-				"getTotalItemsCount": function (response, headers) {
-					return headers['x-total-count']
-				}
-			},
-			listOptions: {
-				selectable: false,
-				expandable: true,
-				listStyle: "table",
-				itemCallback: function (item, index) { },
-				getItems: function (response, headers) {
-					if (response != null && response.length && response.length != 0) {
-						return response;
-					}
-					return [];
-				},
-				getListItem: function (item) {
-					return [
-						item.applicantName,
-						item.urn,
-						item.loanAmount,
-					]
-				},
-				getTableConfig: function () {
-					return {
-						"serverPaginate": true,
-						"paginate": true,
-						"pageLength": 10
-					};
-				},
-				getColumns: function () {
-					return [ {
-						title: 'CUSTOMER_NAME',
-						data: 'applicantName'
-					},{
-						title: 'URN_NO',
-						data: 'urn'
-					},{
-						title:'LOAN_AMOUNT',
-						data:'loanAmount'
-					}]
-				},
-				getActions: function () {
-					return [{
-						name: "REVIEW",
-						desc: "",
-						icon: "fa fa-pencil-square-o",
-						fn: function (item, index) {
-							entityManager.setModel('kgfs.loans.individual.screening.DscCheck', {
-								_request: item
-							});
-							irfNavigator.go({
-								state: "Page.Bundle",
-								pageName: "kgfs.loans.individual.screening.DscCheck",
-								pageId: item.loanId,
-                                'pageData': item
-							}, {
-									state: 'Page.Engine',
-									pageName: "kgfs.loans.individual.screening.DscApprovalQueue"
-								});
-						},
-						isApplicable: function (item, index) {
+            initialize: function (model, form, formCtrl) {
+                // model.branch = branch;
+                model.siteCode = SessionStore.getGlobalSetting("siteCode");
+                model.branch = SessionStore.getCurrentBranch().branchId;
+            },
 
-							return true;
-						}
-					}];
-				}
-			}
-		}
-	};
-}
+            definition: {
+                title: "SEARCH_LOANS",
+                autoSearch: true,
+                searchForm: [
+                    "*"
+                ],
+                searchSchema: {
+                    "type": 'object',
+                    "title": 'SearchOptions',
+                    "properties": {
+                        'branch': {
+                            'title': "BRANCH",
+                            "type": ["string", "null"],
+                            "x-schema-form": {
+                                "type": "userbranch",
+                                "screenFilter": true
+                            }
+                        },
+                        "centre": {
+                            "title": "CENTRE",
+                            "type": ["integer", "null"],
+                            "x-schema-form": {
+                                "type": "select",
+                                "enumCode": "centre",
+                                "parentEnumCode": "branch",
+                                "parentValueExpr": "model.branch",
+                                "screenFilter": true
+                            }
+                        },
+                        "customerUrnNo": {
+                            "title": "CUSTOMER_URN_NO",
+                            "type": "number"
+                        }
+                    },
+                    "required": ["stage"]
+                },
+
+                getSearchFormHelper: function () {
+                    return formHelper;
+                },
+
+                getResultsPromise: function (searchOptions, pageOpts) {
+                    var promise = IndividualLoan.search({
+                        'stage': 'DSCOverride',
+                        'branchId': searchOptions.branch,
+                        'centreCode': searchOptions.centre,
+                        'urn': searchOptions.customerUrnNo,
+                        'accountNumber': searchOptions.accountNumber,
+                        'page': pageOpts.pageNo
+                    }).$promise;
+                    return promise;
+                },
+
+                paginationOptions: {
+                    "getItemsPerPage": function (response, headers) {
+                        return 20;
+                    },
+                    "getTotalItemsCount": function (response, headers) {
+                        return headers['x-total-count']
+                    }
+                },
+
+                listOptions: {
+                    expandable: true,
+                    listStyle: "table",
+                    itemCallback: function (item, index) {},
+                    getItems: function (response, headers) {
+                        if (response != null && response.length && response.length != 0) {
+                            return response;
+                        }
+                        return [];
+                    },
+                    getListItem: function (item) {
+                        return [
+
+                            "{{'ENTITY_NAME'|translate}} : " + item.customerName,
+                            "{{'URN_NO'|translate}} : " + item.urn,
+                            "{{'LOAN_AMOUNT'|translate}} : " + item.loanAmount,
+                            "{{'LOAN_TYPE'|translate}} : " + item.loanType,
+                            "{{'PARTNER_CODE'|translate}} : " + item.partnerCode,
+                            "{{'PROCESS_TYPE'|translate}} : " + item.processType
+
+                        ]
+                    },
+                    getTableConfig: function() {
+						return {
+							"serverPaginate": true,
+							"paginate": true,
+							"pageLength": 10
+						};
+                    },
+                    getColumns: function() {
+						return [{
+							title: 'LOAN_ID',
+							data: 'id'
+                        }, {
+							title: 'URN_NO',
+							data: 'urn'
+                        }, 
+                        {
+                            title: 'ENTITY_NAME',
+                            data: 'customerName'
+                        }, {
+							title: 'LOAN_AMOUNT',
+							data: 'loanAmount'
+                        },{
+							title: 'LOAN_TYPE',
+							data: 'loanType'
+                        },
+                        {
+							title: 'PARTNER_CODE',
+							data: 'partnerCode'
+                        },{
+							title: 'PROCESS_TYPE',
+							data: 'processType'
+                        },
+                    ]
+					},
+                    getActions: function () {
+                        return [
+                        {
+                            name: "DO_DSC_OVERRIDE",
+                            desc: "",
+                            icon: "fa fa-book",
+                            fn: function (item, index) {
+                                irfNavigator.go({
+                                    'state': 'Page.Bundle',
+                                    'pageName': 'kgfs.loans.individual.screening.DscCheck',
+                                    'pageId': item.loanId,
+                                    'pageData': item
+                                },{
+                                    state: 'Page.Engine',
+                                    pageName: "kgfs.loans.individual.screening.DscOverrideQueue"
+                                });
+                            },
+                            isApplicable: function (item, model) {
+                                return true;
+                            }
+                        }];
+                    }
+                }
+            }
+        };
+    }
+
 })
