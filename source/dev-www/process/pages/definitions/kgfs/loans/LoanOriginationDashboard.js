@@ -12,7 +12,7 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanOriginationDashboar
                 "Page/Engine/kgfs.loans.individual.screening.ScreeningQueue",
                 "Page/Engine/kgfs.loans.individual.screening.MELApplicationForm",
                 "Page/Engine/kgfs.loans.individual.screening.ScreeningReviewQueue",
-                "Page/Engine/kgfs.loans.individual.screening.CreditAppraisal",
+                "Page/Engine/kgfs.loans.individual.screening.CreditAppraisalQueue",
                 "Page/Engine/kgfs.loans.individual.screening.DscApprovalQueue",
                 "Page/Engine/kgfs.loans.individual.screening.DscOverrideQueue",
                 "Page/Engine/kgfs.loans.individual.screening.KYCCheck",

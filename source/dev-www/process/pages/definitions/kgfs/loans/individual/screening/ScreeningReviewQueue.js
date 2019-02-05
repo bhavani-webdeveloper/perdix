@@ -1,8 +1,8 @@
 define({
 	pageUID: "kgfs.loans.individual.screening.ScreeningReviewQueue",
    pageType: "Engine",
-   dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
-   $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
+   dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons","irfNavigator"],
+   $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons,irfNavigator) {
 	   var branch = SessionStore.getBranch();
 	   var centres = SessionStore.getCentres();
 	   var centreId=[];
@@ -61,7 +61,7 @@ define({
 					},
 					"loanType": {
 						"title": "PRODUCT_TYPE",
-						"enumCode": "booking_loan_type",
+						"enumCode": "product_type",
 						"type": "string",
 						"x-schema-form": {
 							"type": "select"
@@ -121,7 +121,7 @@ define({
 				},
 				getColumns: function () {
 					return [ {
-						title: 'APPLICANT_NAME',
+						title: 'CUSTOMER_NAME',
 						data: 'applicantName'
 					},{
 						title: 'URN_NO',
