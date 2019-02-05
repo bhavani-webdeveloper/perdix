@@ -712,7 +712,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                                         PageHelper.hideLoader();
                                                         PageHelper.showProgress('disbursement', 'Disbursement done', 2000);
                                                         model.additional.isDisbursementDone = true;
-                                                        model.additional.payOffAmount = resp.payOffAmount;
+                                                        model.additional.payOffAmount = resp.principalNotDue;
                                                         model.additional.demandAmount = resp.totalDemandRaised;
                                                         // model.loanacount.customer1FirstName = resp.customer1FirstName;
                                                         for (i = 0; i < resp.transactions.length; i++) {
