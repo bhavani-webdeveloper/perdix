@@ -2,7 +2,68 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
     ["$log", "LoanAccount","Enrollment", "BiometricService", "elementsUtils", "SessionStore", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "LoanAccount", "formHelper", "Queries", "LoanAccount", "irfNavigator","irfPrinter","GroupProcess",
         function ($log, LoanAccount,Enrollment, BiometricService, elementsUtils, SessionStore, $stateParams, PageHelper, IndividualLoan, SchemaResource, LoanAccount, formHelper, Queries, LoanAccount, irfNavigator,irfPrinter,GroupProcess) {
 
-
+            var computeWeekly = function(expFirRepDate){
+                
+                // get first day of the month
+                // get the datebyconfig
+                // while true
+                // {
+                //     if  expFirRepDate < finalweekday
+                //     break
+                //     return weekday
+                //     else 
+                //         add 7 days to finalweekday
+                // }
+            }
+            var computeForthNte = function(expFirRepDate){
+                // get firday of the month
+                // get the datebyConfig
+                // while true{
+                //     // if expFirRepDate < finalForthDay
+                //         // break
+                //         // return finalForth
+                //     else{
+                //         // add 15 days to the finalForthDay
+                //     }
+                // }
+            }
+            var computeMonthlyDay = function(expFirRepDate){
+                // getfirsday of the moth
+                // get date by config
+                 // while true{
+                //     // if expFirRepDate < finalForthDay
+                //         // break
+                //         // return finalForth
+                //     else{
+                //         // add 28 days to the finalForthDay
+                //     }
+                // }
+                
+            }
+            var computeMonthlyDate = function(expFirRepDate){
+                // get the date by config
+                // if (expFirRepDate < get date by config)
+                    // return get date by mettingConfig
+                // else
+                    // return next month date by config
+            }
+            var calculateFirstRepay = function(scheduledDisbursementDate){
+                var expectedFirstRepaymentDate = 30 + scheduledDisbursementDate
+                if (model.additional.mettingConfig == "WEEKLY"){
+                    // computeWeekly()
+                }
+                else if(model.additional.mettingConfig == "FORTHNITE"){
+                    // computeForthNte()
+                }
+                else if(model.additional.mettingConfig == "MONTHLY"){
+                    // if (status == DATE){
+                        computeMonthlyDate()
+                    // }
+                    // else if(status == DAY) {
+                        computeMonthlyDay()
+                    // }
+                }
+            }
             var branch = SessionStore.getBranch();
             var siteCode = SessionStore.getGlobalSetting("siteCode");
             var requires = {
@@ -712,7 +773,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                                         PageHelper.hideLoader();
                                                         PageHelper.showProgress('disbursement', 'Disbursement done', 2000);
                                                         model.additional.isDisbursementDone = true;
-                                                        model.additional.payOffAmount = resp.principalNotDue;
+                                                        model.additional.payOffAmount = resp.payOffAmount;
                                                         model.additional.demandAmount = resp.totalDemandRaised;
                                                         // model.loanacount.customer1FirstName = resp.customer1FirstName;
                                                         for (i = 0; i < resp.transactions.length; i++) {
