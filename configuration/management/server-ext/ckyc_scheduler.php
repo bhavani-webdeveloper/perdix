@@ -407,7 +407,7 @@ function process_incoming() {
                         $matrixData = $sheet->rangeToArray("A$row:$highestColumn$row", null, true, false);
                         $rowData = $matrixData[0];
                         $customer_urn = $rowData[2];
-                        $response_status = $rowData[115] == 'Rejected'? 'FAILURE': $rowData[115];
+                        $response_status = $rowData[89] == 'Rejected'? 'FAILURE': $rowData[89];
                         echo "            Updating URN: '$customer_urn' with status: $response_status\n";
                         $customer = DB::table("customer")->select('id')->where('urn_no', $customer_urn)->first();
                         if ($customer) {
