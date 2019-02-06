@@ -76,6 +76,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:57
                         },
                         {
+                            pageName: 'witfin.customer.televerification',
+                            title: 'TELE_VERIFICATION',
+                            pageClass: 'televerification',
+                            minimum: 1,
+                            maximum: 1,
+                            order:58
+                        },
+                        {
                             pageName: 'loans.individual.screening.CreditBureauView',
                             title: 'CREDIT_BUREAU',
                             pageClass: 'cbview',
@@ -247,6 +255,15 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess: loanProcess
                                     }
                                 });
+                                
+                                $this.bundlePages.push({
+                                    pageClass: 'televerification',
+                                    model: {
+                                        enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                        loanProcess: loanProcess
+                                    }
+                                });
+                                
                                 $this.bundlePages.push({
                                     pageClass: 'loan-review',
                                     model: {
