@@ -15,7 +15,9 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             "Page/Engine/base.dashboard.loans.individual.screening.ScreeningReviewQueue",
             "Page/Engine/base.dashboard.loans.individual.screening.ApplicationQueue",  
             "Page/Engine/base.dashboard.loans.individual.screening.ApplicationReviewQueue", 
+            "Page/Engine/base.dashboard.loans.individual.screening.ScrutinyQueue",  
             "Page/Engine/base.dashboard.loans.individual.screening.FieldAppraisalQueue",
+            "Page/Engine/base.dashboard.loans.individual.screening.RcuQueue",  
             "Page/Engine/base.dashboard.loans.individual.screening.FieldAppraisalReviewQueue",
             "Page/Engine/base.dashboard.loans.individual.screening.ZonalRiskReviewQueue",
             "Page/Engine/base.dashboard.loans.individual.screening.CentralRiskReviewQueue",
@@ -290,6 +292,42 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.l
                 arqMenu.data = Number(response.headers['x-total-count']);
             }, function() {
                 arqMenu.data = '-';
+            });
+        }
+
+        var scqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.ScrutinyQueue"];
+        if (scqMenu) {
+            IndividualLoan.search({
+                'stage': 'Scrutiny',
+                'enterprisePincode': '',
+                'applicantName': '',
+                'area': '',
+                'villageName': '',
+                'customerName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response, headerGetter) {
+                scqMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                scqMenu.data = '-';
+            });
+        }
+
+        var rcuMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.RcuQueue"];
+        if (rcuMenu) {
+            IndividualLoan.search({
+                'stage': 'RCU',
+                'enterprisePincode': '',
+                'applicantName': '',
+                'area': '',
+                'villageName': '',
+                'customerName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response, headerGetter) {
+                rcuMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                rcuMenu.data = '-';
             });
         }
 

@@ -49,6 +49,42 @@ define([],function(){
                     return 'Co-Applicant';
                 }
             };
+
+            var preLoanSaveOrProceed = function(model){
+                var loanProcess = model.loanProcess;
+               if(model.loanAccount.noOfGuarantersRequired > 0) {
+                   if (_.hasIn(loanProcess, 'guarantorsEnrolmentProcesses') && _.isArray(loanProcess.guarantorsEnrolmentProcesses)){
+                        if(model.loanAccount.noOfGuarantersRequired > loanProcess.guarantorsEnrolmentProcesses.length) {
+                           PageHelper.showProgress("pre-save-validation", "You have to add atleast " + model.loanAccount.noOfGuarantersRequired + "guarantor before proceed",5000);
+                           return false;
+                        } else {
+                            for (var i=0;i<loanProcess.guarantorsEnrolmentProcesses.length; i++){
+                                var guarantor = loanProcess.guarantorsEnrolmentProcesses[i].customer;
+                                if (!_.hasIn(guarantor, 'urnNo') || _.isNull(guarantor, 'urnNo')){
+                                    PageHelper.showProgress("pre-save-validation", "All guarantors should complete the enrolment before proceed",5000);
+                                    return false;
+                                } else {
+                                    if (_.hasIn(guarantor, 'cbCheckList') && _.isArray(guarantor.cbCheckList) && guarantor.cbCheckList.length != 0){
+                                        for (var j=0;j<guarantor.cbCheckList.length; i++){
+                                            if(guarantor.cbCheckList[j].cbCheckValid != true) {
+                                                PageHelper.showProgress("pre-save-validation", "All guarantors should complete the CB Check before proceed",5000);
+                                                return false;
+                                            }
+                                        }
+                                    } else {
+                                        PageHelper.showProgress("pre-save-validation", "All guarantors should complete the CB Check before proceed",5000);
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        PageHelper.showProgress("pre-save-validation", "You have to add atleast " + model.loanAccount.noOfGuarantersRequired + "guarantor before proceed", 5000);
+                        return false;
+                    }
+                }
+                return true;
+            }
  
  
  
@@ -2115,6 +2151,9 @@ define([],function(){
                             return false;
                         }
                         if (!validateForm(formCtrl)){
+                            return;
+                        }
+                        if (!preLoanSaveOrProceed(model)){
                             return;
                         }
                         // var trancheTotalAmount=0;

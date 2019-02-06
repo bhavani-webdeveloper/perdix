@@ -15,10 +15,43 @@ export class BusinessBankStatementsDTElementConfiguration extends DataTableEleme
                         name: "START_MONTH"
                     },
                     {
+                        prop: "cashDeposits",
+                        type: "number",
+                        name: "Cash Deposits",
+                        "onClick": function(modelValue, form, model, event) {
+                            modelValue = modelValue == null ? 0 : modelValue;
+                            var nonCashDeposits = 0;
+                            if (modelValue != null) {
+                                nonCashDeposits = ( model.nonCashDeposits != null) ? model.nonCashDeposits : 0;
+
+                                model.totalDeposits = nonCashDeposits + modelValue;
+                                model.cashDeposits = modelValue;
+                                model.nonCashDeposits = nonCashDeposits;
+                            }
+                        }
+                    },
+                    {
+                        prop: "nonCashDeposits",
+                        type: "number",
+                        name: "Non-cash Deposits",
+                        "onClick": function(modelValue, form, model, event) {
+                            modelValue = modelValue == null ? 0 : modelValue;
+                            var cashDeposits = 0;
+                            if (modelValue != null) {
+                                cashDeposits = ( model.cashDeposits != null) ? model.cashDeposits : 0;
+
+                                model.totalDeposits = cashDeposits + modelValue;
+                                model.cashDeposits = cashDeposits;
+                                model.nonCashDeposits = modelValue;
+                            }
+                        }
+                    },
+                    {
                         prop: "totalDeposits",
                         type: "number",
-                        calculator: true,
-                        creditDebitBook: true,
+                        // calculator: true,
+                        // creditDebitBook: true,
+                        readOnly : true,
                         // onDone: function(result, model, context){
                         //         model.customer.customerBankAccounts[context.arrayIndexes[0]].bankStatements[context.arrayIndexes[1]].totalDeposits = result.totalCredit;
                         //         model.customer.customerBankAccounts[context.arrayIndexes[0]].bankStatements[context.arrayIndexes[1]].totalWithdrawals = result.totalDebit;

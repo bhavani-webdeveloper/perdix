@@ -197,7 +197,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "BankAccounts.customerBankAccounts.bankStatements.totalDeposits": {
-                                    "required": true
+                                    "readonly": true
                                 },
                                 "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced": {
                                     "required": true
@@ -335,7 +335,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "BankAccounts.customerBankAccounts.bankStatements.totalDeposits": {
-                                    "required": true
+                                    "readonly": true
                                 },
                                 "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced": {
                                     "required": true
@@ -552,7 +552,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "BankAccounts.customerBankAccounts.bankStatements.totalDeposits": {
-                                    "required": true
+                                    "readonly": true
                                 },
                                 "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced": {
                                     "required": true
@@ -1360,7 +1360,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         //"title": "Is Disbursement"
                     },
                     "BankAccounts.customerBankAccounts.bankStatements.totalDeposits":{
-                        "required": true
+                        "readonly": true
                     },
                     "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced":{
                         "required": true
@@ -1792,6 +1792,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     // "BankAccounts.customerBankAccounts.bankStatements.openingBalance",
                     // "BankAccounts.customerBankAccounts.bankStatements.closingBalance",
                     //"BankAccounts.customerBankAccounts.bankStatements.emiAmountdeducted",
+                    "BankAccounts.customerBankAccounts.bankStatements.cashDeposits",
+                    "BankAccounts.customerBankAccounts.bankStatements.nonCashDeposits",
                     "BankAccounts.customerBankAccounts.bankStatements.totalDeposits",
                     "BankAccounts.customerBankAccounts.bankStatements.totalWithdrawals",
                     "BankAccounts.customerBankAccounts.bankStatements.balanceAsOn15th",
@@ -2149,6 +2151,52 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "type":"date",
                                             "key": "customer.udf.userDefinedDateFieldValues.udfDate1",
                                             "title":"RENT_LEASE_AGREEMENT_VALID_TILL"
+                                        }
+                                    }
+                                },
+                                "BankAccounts": {
+                                    "items": {
+                                        "customerBankAccounts": {
+                                            "items": {
+                                                "bankStatements": {
+                                                    "items": {
+                                                        "cashDeposits": {
+                                                            "key": "customer.customerBankAccounts[].bankStatements[].cashDeposits",
+                                                            "title": "Cash Deposits",
+                                                            type: "amount",
+                                                            "orderNo": 115,
+                                                            "onChange": function(modelValue, form, model, formCtrl, event) {
+                                                                var index = form.key[2];
+                                                                var indexBank = form.key[4];
+                                                                modelValue = modelValue == null ? 0 : modelValue;
+                                                                var nonCashDeposits = 0;
+                                                                if (modelValue != null) {
+                                                                    nonCashDeposits = ( model.customer.customerBankAccounts[index].bankStatements[indexBank].nonCashDeposits != null) ? model.customer.customerBankAccounts[index].bankStatements[indexBank].nonCashDeposits : 0;
+
+                                                                    model.customer.customerBankAccounts[index].bankStatements[indexBank].totalDeposits = nonCashDeposits + modelValue;
+                                                                }
+                                                            }
+                                                        },
+                                                        "nonCashDeposits": {
+                                                            "key": "customer.customerBankAccounts[].bankStatements[].nonCashDeposits",
+                                                            "title": "Non-cash Deposits",
+                                                            type : "amount",
+                                                            "orderNo": 117,
+                                                            "onChange": function(modelValue, form, model, formCtrl, event) {
+                                                                var index = form.key[2];
+                                                                var indexBank = form.key[4];
+                                                                modelValue = modelValue == null ? 0 : modelValue;
+                                                                var cashDeposits = 0;
+                                                                if (modelValue != null) {
+                                                                    cashDeposits = ( model.customer.customerBankAccounts[index].bankStatements[indexBank].cashDeposits != null) ? model.customer.customerBankAccounts[index].bankStatements[indexBank].cashDeposits : 0;
+
+                                                                    model.customer.customerBankAccounts[index].bankStatements[indexBank].totalDeposits = cashDeposits + modelValue;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 },

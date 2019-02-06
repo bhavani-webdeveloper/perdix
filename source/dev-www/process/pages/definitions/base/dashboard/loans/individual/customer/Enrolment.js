@@ -621,7 +621,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 readonly: true
                             },
                         }
-                    }
+                    },
             }
             }
             var getIncludes_businessbasic = function (model) {
@@ -713,6 +713,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "BankAccounts.customerBankAccounts.bankStatements.openingBalance",
                     "BankAccounts.customerBankAccounts.bankStatements.closingBalance",
                     "BankAccounts.customerBankAccounts.bankStatements.emiAmountdeducted",
+                    "BankAccounts.customerBankAccounts.bankStatements.cashDeposits",
+                    "BankAccounts.customerBankAccounts.bankStatements.nonCashDeposits",
                     "BankAccounts.customerBankAccounts.bankStatements.totalDeposits",
                     "BankAccounts.customerBankAccounts.bankStatements.totalWithdrawals",
                     "BankAccounts.customerBankAccounts.bankStatements.balanceAsOn15th",
@@ -2455,7 +2457,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "key": "customer.customerBankAccounts[].bankStatements",
                      type: "datatable",
                      startEmpty: true,
-                     resolver:"BusinessBankStatementsDTElementConfiguration"
+                     resolver:"BusinessBankStatementsDTElementConfiguration",
                  },
                  "BankAccounts.customerBankAccounts.isDisbersementAccount":{
                      type: "checkbox"
@@ -2487,7 +2489,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
              }
              var repositoryAdditions_businessFinancials = function(bundlePageObj){
                 return{
- 
                 }
              }
              var getIncludes_businessFinancials = function (model) {
@@ -2511,6 +2512,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                      // "BankAccounts.customerBankAccounts.bankStatements.openingBalance",
                      // "BankAccounts.customerBankAccounts.bankStatements.closingBalance",
                      // "BankAccounts.customerBankAccounts.bankStatements.emiAmountdeducted",
+                     "BankAccounts.customerBankAccounts.bankStatements.cashDeposits",
+                    "BankAccounts.customerBankAccounts.bankStatements.nonCashDeposits",
                      "BankAccounts.customerBankAccounts.bankStatements.totalDeposits",
                      "BankAccounts.customerBankAccounts.bankStatements.totalWithdrawals",
                      "BankAccounts.customerBankAccounts.bankStatements.balanceAsOn15th",
