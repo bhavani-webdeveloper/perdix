@@ -55,7 +55,7 @@ define({
 
                 getResultsPromise: function (searchOptions, pageOpts) {
                     var promise = IndividualLoan.search({
-                        'stage': 'LoanInitiation',
+                        'stage': 'DscApprovalQueue',
                         'branchId': searchOptions.branch,
                         'partnerCode': searchOptions.partner_code,
                         'urn': searchOptions.customerUrnNo,

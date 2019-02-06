@@ -1,8 +1,8 @@
 define({
 	pageUID: "kgfs.loans.individual.screening.CreditAppraisalQueue",
    pageType: "Engine",
-   dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
-   $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
+   dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons","irfNavigator"],
+   $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons,irfNavigator) {
 	   var branch = SessionStore.getBranch();
 	   var centres = SessionStore.getCentres();
 	   var centreId=[];
@@ -13,7 +13,7 @@ define({
 	   }
 	   return {
 		"type": "search-list",
-		"title": "CREDIT_APPRAISAL",
+		"title": "CREDIT_APPRAISAL_QUEUE",
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
 			model.branch = SessionStore.getCurrentBranch().branchId;
@@ -42,7 +42,7 @@ define({
 					"centre": {
 						"title": "CENTRE",
 						"type": ["integer", "null"],
-						"required":true,
+                       // "required":true,
 						"x-schema-form": {
 							"type": "select",
 							"enumCode": "centre",
@@ -61,7 +61,7 @@ define({
 					},
 					"loanType": {
 						"title": "PRODUCT_TYPE",
-						"enumCode": "booking_loan_type",
+						"enumCode": "product_type",
 						"type": "string",
 						"x-schema-form": {
 							"type": "select"
@@ -79,7 +79,7 @@ define({
 				}
 				return IndividualLoan.search({
 					'branchId': searchOptions.branch,
-					'stage': 'CreditAppraisal',
+					'stage': 'CreditAppraisalQueue',
 					'applicantName': searchOptions.applicantName,
 					'centreCode': searchOptions.centre,
 					'urn':searchOptions.urn,
@@ -110,6 +110,8 @@ define({
 						item.applicantName,
 						item.urn,
 						item.loanAmount,
+						item.loanType,
+						item.partnerCode,
 					]
 				},
 				getTableConfig: function () {
@@ -121,19 +123,28 @@ define({
 				},
 				getColumns: function () {
 					return [ {
-						title: 'APPLICANT_NAME',
-						data: 'applicantName'
-					},{
-						title: 'URN_NO',
-						data: 'urn'
-					},{
-						title:'LOAN_AMOUNT',
-						data:'loanAmount'
-					}]
+							title: 'LOAN_ID',
+							data: 'id'
+                        },{
+							title: 'URN_NO',
+							data: 'urn'
+						},{
+							title: 'CUSTOMER_NAME',
+							data: 'applicantName'
+						},{
+							title:'LOAN_AMOUNT',
+							data:'loanAmount'
+						},{
+							title: 'LOAN_TYPE',
+							data: 'loanType'
+                      	},{
+							title: 'PARTNER_CODE',
+							data: 'partnerCode'
+                        }]
 				},
 				getActions: function () {
 					return [{
-						name: "REVIEW",
+						name: "CREDIT_APPRAISAL_QUEUE",
 						desc: "",
 						icon: "fa fa-pencil-square-o",
 						fn: function (item, index) {

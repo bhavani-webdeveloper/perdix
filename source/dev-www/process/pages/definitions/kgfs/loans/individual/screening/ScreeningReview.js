@@ -27,6 +27,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:1
                         },
                         {
+                            pageName: 'loans.individual.screening.CreditBureauView',
+                            title: 'CREDIT_BUREAU',
+                            pageClass: 'cbview',
+                            minimum: 1,
+                            maximum: 1,
+                            order:60
+                        },
+                        {
                             pageName: 'kgfs.customer.IndividualEnrolment2',
                             title: 'APPLICANT',
                             pageClass: 'applicant',
@@ -65,14 +73,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                             minimum: 1,
                             maximum: 1,
                             order:50
-                        },
-                        {
-                            pageName: 'loans.individual.screening.CreditBureauView',
-                            title: 'CREDIT_BUREAU',
-                            pageClass: 'cbview',
-                            minimum: 1,
-                            maximum: 1,
-                            order:60
                         }
                     ]);
                 },

@@ -110,6 +110,8 @@ define({
 						item.applicantName,
 						item.urn,
 						item.loanAmount,
+						item.loanType,
+						item.partnerCode,
 					]
 				},
 				getTableConfig: function () {
@@ -121,15 +123,24 @@ define({
 				},
 				getColumns: function () {
 					return [ {
-						title: 'CUSTOMER_NAME',
-						data: 'applicantName'
-					},{
-						title: 'URN_NO',
-						data: 'urn'
-					},{
-						title:'LOAN_AMOUNT',
-						data:'loanAmount'
-					}]
+							title: 'LOAN_ID',
+							data: 'id'
+                        },{
+							title: 'URN_NO',
+							data: 'urn'
+						},{
+							title: 'CUSTOMER_NAME',
+							data: 'applicantName'
+						},{
+							title:'LOAN_AMOUNT',
+							data:'loanAmount'
+						},{
+							title: 'LOAN_TYPE',
+							data: 'loanType'
+                      	},{
+							title: 'PARTNER_CODE',
+							data: 'partnerCode'
+                        }]
 				},
 				getActions: function () {
 					return [{

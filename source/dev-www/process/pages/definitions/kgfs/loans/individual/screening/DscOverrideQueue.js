@@ -142,7 +142,7 @@ define({
                             fn: function (item, index) {
                                 irfNavigator.go({
                                     'state': 'Page.Bundle',
-                                    'pageName': 'kgfs.loans.individual.screening.DscCheck',
+                                    'pageName': 'kgfs.loans.individual.screening.DscOverride',
                                     'pageId': item.loanId,
                                     'pageData': item
                                 },{

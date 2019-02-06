@@ -20,7 +20,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     $log.info("inside thee bundle");
                     return $q.resolve([
                         {
-                            pageName: 'kgfs.customer.IndividualEnrollment',
+                            pageName: 'kgfs.customer.IndividualEnrollment2',
                             title: 'APPLICANT',
                             pageClass: 'applicant',
                             minimum: 1,
@@ -28,7 +28,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:10
                         },
                         {
-                            pageName: 'kgfs.customer.IndividualEnrollment',
+                            pageName: 'kgfs.customer.IndividualEnrollment2',
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
                             minimum: 0,
@@ -36,7 +36,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:20
                         },
                         {
-                            pageName: 'kgfs.customer.IndividualEnrollment',
+                            pageName: 'kgfs.customer.IndividualEnrollment2',
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
                             minimum: 0,
@@ -44,15 +44,15 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:30
                         },
                         {
-                            pageName: 'kgfs.loans.individual.booking.LoanBooking',
-                            title: 'LOAN_BOOKING',
-                            pageClass: 'loan-booking',
+                            pageName: 'kgfs.loans.individual.screening.LoanRequest',
+                            title: 'LOAN_APPROVAL',
+                            pageClass: 'loan-request',
                             minimum: 1,
                             maximum: 1,
                             order:50
                         },
                         {
-                            pageName: 'kgfs.loans.individual.booking.Dsc',
+                            pageName: 'kgfs.loans.individual.screening.Dsc',
                             title: 'DSC',
                             pageClass: 'dsc-check',
                             minimum: 1,
@@ -183,7 +183,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 }
 
                                $this.bundlePages.push({
-                                    pageClass: 'loan-booking',
+                                    pageClass: 'loan-request',
                                     model:{
                                         loanProcess: loanProcess
                                     }
@@ -232,7 +232,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     });
                                 }
                                 $this.bundlePages.push({
-                                    pageClass: 'loan-booking',
+                                    pageClass: 'loan-request',
                                     model:{
                                         loanProcess: loanProcess
                                     }

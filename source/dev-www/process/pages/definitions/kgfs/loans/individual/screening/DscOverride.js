@@ -1,340 +1,278 @@
-define([], function () {
+define(["perdix/domain/model/loan/LoanProcess",
+    "perdix/domain/model/loan/LoanProcessFactory",
+    'perdix/domain/model/customer/EnrolmentProcess',
+    "perdix/domain/model/loan/LoanCustomerRelation",
+    ], function(LoanProcess, LoanFactory, EnrolmentProcess, LoanCustomerRelation) {
+    var LoanProcess = LoanProcess["LoanProcess"];
+    var EnrolmentProcess = EnrolmentProcess["EnrolmentProcess"];
+    var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
 
     return {
-        pageUID: "kgfs.loans.individual.booking.DscOverride",
-        pageType: "Engine",
-        dependencies: ["$log", "$q", "LoanAccount", "LoanProcess", 'Scoring', 'Enrollment', 'EnrollmentHelper', 'AuthTokenHelper', 'SchemaResource', 'PageHelper', 'formHelper', "elementsUtils",
-            'irfProgressMessage', 'SessionStore', "$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",
-            "BundleManager", "PsychometricTestService", "LeadHelper", "Message", "$filter", "Psychometric", "IrfFormRequestProcessor", "UIRepository", "$injector", "irfNavigator"
-        ],
-
-        $pageFn: function ($log, $q, LoanAccount, LoanProcess, Scoring, Enrollment, EnrollmentHelper, AuthTokenHelper, SchemaResource, PageHelper, formHelper, elementsUtils,
-            irfProgressMessage, SessionStore, $state, $stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
-            BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository, $injector, irfNavigator) {
-            var branch = SessionStore.getBranch();
-            var podiValue = SessionStore.getGlobalSetting("percentOfDisposableIncome");
-            //pmt function completed
-
-            var self;
-            var validateForm = function (formCtrl) {
-                formCtrl.scope.$broadcast('schemaFormValidate');
-                if (formCtrl && formCtrl.$invalid) {
-                    PageHelper.showProgress("enrolment", "Your form have errors. Please fix them.", 5000);
-                    return false;
-                }
-                return true;
-            };
-            function showDscData(dscId) {
-                PageHelper.showLoader();
-                Groups.getDSCData({
-                    dscId: dscId
-                }, function (resp, headers) {
-                    PageHelper.hideLoader();
-                    /*var dataHtml = "<table class='table table-striped table-bordered table-responsive'>";
-                    dataHtml += "<tr><td>Response : </td><td>" + resp.response + "</td></tr>";
-                    dataHtml += "<tr><td>Response Message: </td><td>" + resp.responseMessage + "</td></tr>";
-                    dataHtml += "<tr><td>Stop Response: </td><td>" + resp.stopResponse + "</td></tr>";
-                    dataHtml += "</table>"*/
-                    irfSimpleModal('DSC Response', resp.responseMessage);
-                }, function (res) {
-                    PageHelper.showErrors(res);
-                    PageHelper.hideLoader();
-                });
-            };
-
-            var getIncludes = function (model) {
-                return [];
-            }
-            var configFile = function (model) {
-                return []
-            }
-            var overridesFields = function (model) {
-                return {};
-            }
-
+        pageUID: "kgfs.loans.individual.screening.DscOverride",
+        pageType: "Bundle",
+        dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "Lead", "PageHelper", "irfStorageService", "$filter", "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "irfNavigator"],
+        $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, Lead, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
             return {
-                "type": "schema-form",
+                "type": "page-bundle",
                 "title": "DSC_OVERRIDE",
+                "readonly":true,
                 "subTitle": "",
-                initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
-
-                    if (bundlePageObj) {
-                        model._bundlePageObj = _.cloneDeep(bundlePageObj);
-                    }
-
-                    model.customer = model.customer || {};
-                    model.customer.coapplicants = model.customer.coapplicants || [];
-                    model.customer.guarantors = model.customer.guarantors || [];
-                    model.customer.loanSaved = false;
-                    model.customer.cbcheckdone = false;
-                    model.customer.dscOverrideRemarks = null;
-
-                    if (_.hasIn(model, "loanProcess")) {
-                        var lp = model.loanProcess;
-                        model.customer.applicantid = lp.applicantEnrolmentProcess.customer.id;
-                        model.customer.applicantname = lp.applicantEnrolmentProcess.customer.firstName;
-
-                        model.coapplicants = [];
-                        _.forEach(lp.coApplicantsEnrolmentProcesses, function (ep) {
-                            model.coapplicants.push({
-                                coapplicantid: ep.customer.id,
-                                coapplicantname: ep.customer.firstName
-                            });
-                        })
-                        model.guarantors = [];
-                        _.forEach(lp.guarantorsEnrolmentProcesses, function (ep) {
-                            model.guarantors.push({
-                                guarantorid: ep.customer.id,
-                                guarantorname: ep.customer.firstName
-                            });
-                        })
-
-                        model.customer.loanAmount = lp.loanAccount.loanAmount || lp.loanAccount.loanAmountRequested;
-                        model.customer.loanPurpose1 = lp.loanAccount.loanPurpose1;
-                        model.customer.loanSaved = true;
-                    }
-
-                    if (_.hasIn(model, 'loanAccount')) {
-                        if (model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length > 0) {
-                            for (var i = model.loanAccount.loanCustomerRelations.length - 1; i >= 0; i--) {
-                                if (model.loanAccount.loanCustomerRelations[i].relation == 'Applicant') {
-                                    PageHelper.showLoader();
-                                    Enrollment.getCustomerById({ id: model.loanAccount.loanCustomerRelations[i].customerId })
-                                        .$promise
-                                        .then(function (res) {
-                                            model.customer.applicantname = res.firstName;
-                                        },
-                                            function (httpRes) {
-                                                PageHelper.showErrors(httpRes);
-                                            })
-                                        .finally(function () {
-                                            PageHelper.hideLoader();
-                                        })
-                                    model.customer.applicantid = model.loanAccount.loanCustomerRelations[i].customerId;
-                                    model.customer.loanAmount = model.loanAccount.loanAmountRequested;
-                                    model.customer.loanPurpose1 = model.loanAccount.loanPurpose1;
-                                    model.customer.loanSaved = true;
-                                }
-                                else if (model.loanAccount.loanCustomerRelations[i].relation == 'Co-Applicant') {
-                                    Enrollment.getCustomerById({ id: model.loanAccount.loanCustomerRelations[i].customerId })
-                                        .$promise
-                                        .then(function (res) {
-                                            model.customer.coapplicants.push({
-                                                "coapplicantid": res.id,
-                                                "coapplicantname": res.firstName,
-                                                "loanAmount": model.loanAccount.loanAmountRequested,
-                                                "loanPurpose1": model.loanAccount.loanPurpose1,
-                                            });
-                                            model.customer.loanSaved = true;
-
-                                        }, function (httpRes) {
-                                            PageHelper.showErrors(httpRes);
-                                        })
-                                        .finally(function () {
-                                            PageHelper.hideLoader();
-                                        })
-                                }
-                                else if (model.loanAccount.loanCustomerRelations[i].relation == 'Guarantor') {
-                                    Enrollment.getCustomerById({ id: model.loanAccount.loanCustomerRelations[i].customerId })
-                                        .$promise
-                                        .then(function (res) {
-                                            model.customer.guarantors.push({
-                                                "guarantorid": res.id,
-                                                "guarantorname": res.firstName,
-                                                "loanAmount": model.loanAccount.loanAmountRequested,
-                                                "loanPurpose1": model.loanAccount.loanPurpose1,
-                                            });
-                                            model.customer.loanSaved = true;
-
-                                        }, function (httpRes) {
-                                            PageHelper.showErrors(httpRes);
-                                        })
-                                        .finally(function () {
-                                            PageHelper.hideLoader();
-                                        })
-                                }
-                            }
+                "bundleDefinitionPromise": function() {
+                    $log.info("inside thee bundle");
+                    return $q.resolve([
+                        {
+                            pageName: 'kgfs.customer.IndividualEnrolment2',
+                            title: 'APPLICANT',
+                            pageClass: 'applicant',
+                            minimum: 1,
+                            maximum: 1,
+                            order:10
+                        },
+                        {
+                            pageName: 'kgfs.customer.IndividualEnrolment2',
+                            title: 'CO_APPLICANT',
+                            pageClass: 'co-applicant',
+                            minimum: 1,
+                            maximum: 5,
+                            order:20
+                        },
+                        {
+                            pageName: 'kgfs.customer.IndividualEnrolment2',
+                            title: 'GUARANTOR',
+                            pageClass: 'guarantor',
+                            minimum: 1,
+                            maximum: 3,
+                            order:30
+                        },
+                        {
+                            pageName: 'kgfs.loans.individual.screening.LoanRequest',
+                            title: 'LOAN_APPROVAL',
+                            pageClass: 'loan-request',
+                            minimum: 1,
+                            maximum: 1,
+                            order:40
+                        }, {
+                            pageName: 'loans.individual.screening.CreditBureauView',
+                            title: 'CREDIT_BUREAU',
+                            pageClass: 'cbview',
+                            minimum: 1,
+                            maximum: 1,
+                            order:50
+                        },   
+                        {
+                            pageName: 'kgfs.loans.individual.screening.Dsc',
+                            title: 'DSC',
+                            pageClass: 'dsc-check',
+                            minimum: 1,
+                            maximum: 1,
+                            order:60
+                        },
+                        
+                        
+                    ]);
+                },
+                "bundlePages": [],
+                "offline": true,
+                "getOfflineDisplayItem": function(value, index){
+                    var out = new Array(2);
+                    for (var i=0; i<value.bundlePages.length; i++){
+                        var page = value.bundlePages[i];
+                        if (page.pageClass == "applicant"){
+                            out[0] = page.model.customer.firstName;
                         }
                     }
-                    console.log("Model from DSC");
-                    console.log(model);
-                    console.log(bundleModel);
+                    return out;
+                },
+                "pre_pages_initialize": function(bundleModel){
+                    $log.info("Inside pre_page_initialize");
+                    bundleModel.currentStage = "DSCOverride";
+                    var deferred = $q.defer();
+
+                    var $this = this;
+
+                    if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)){
+                        PageHelper.showLoader();
+                        bundleModel.loanId = $stateParams.pageId;
+
+                        LoanProcess.get(bundleModel.loanId)
+                            .subscribe(function(loanProcess){
+                                bundleModel.loanProcess = loanProcess;
+                                var loanAccount = loanProcess;  
+                                loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.loanAccount.customerId;
+                                    if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
+                                        var _leadId = $stateParams.pageData['lead_id'];
+                                        loanProcess.loanAccount.leadId = _leadId;
+
+                                    }
+                                // if (loanAccount.loanAccount.currentStage != 'DSCOverride'){
+                                //     PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
+                                //    // irfNavigator.goBack();
+                                //     return;
+                                // }
+
+                                $this.bundlePages.push({
+                                    pageClass: 'applicant',
+                                    model: {
+                                        enrolmentProcess: loanProcess.applicantEnrolmentProcess,
+                                        loanProcess: loanProcess
+                                    }
+                                });
+
+                                if(_.hasIn(loanAccount, 'coApplicantsEnrolmentProcesses')) {
+                                    for (var i=0;i<loanAccount.coApplicantsEnrolmentProcesses.length; i++){
+                                        $this.bundlePages.push({
+                                            pageClass: 'co-applicant',
+                                            model: {
+                                                enrolmentProcess: loanProcess.coApplicantsEnrolmentProcesses[i],
+                                                loanRelation: loanAccount.coApplicantsEnrolmentProcesses[i]
+                                            }
+                                        });
+                                    }
+                                }
+                                if(_.hasIn(loanAccount, 'guarantorsEnrolmentProcesses')) {
+                                    for (var i=0;i<loanAccount.guarantorsEnrolmentProcesses.length; i++){
+                                        $this.bundlePages.push({
+                                            pageClass: 'guarantor',
+                                            model: {
+                                                enrolmentProcess: loanProcess.guarantorsEnrolmentProcesses[i],
+                                                loanRelation: loanAccount.guarantorsEnrolmentProcesses[i]
+                                            }
+                                        });
+                                    }
+                                }
+
+                               $this.bundlePages.push({
+                                    pageClass: 'loan-request',
+                                    model:{
+                                        loanProcess: loanProcess
+                                    }
+                                });
+                                $this.bundlePages.push({
+                                    pageClass: 'dsc-check',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount
+                                    }
+                                });
+                                $this.bundlePages.push({
+                                    pageClass: 'cbview',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount
+                                    }
+                                });
+                                
+                                deferred.resolve();
+                            });
+
+                    } 
+                    return deferred.promise;
 
                 },
-                offline: false,
-                getOfflineDisplayItem: function (item, index) {
-                    return [
-                        item.customer.firstName,
-                        item.customer.centreCode,
-                        item.customer.id ? '{{"CUSTOMER_ID"|translate}} :' + item.customer.id : ''
-                    ]
+                "post_pages_initialize": function(bundleModel){
+                    $log.info("Inside post_page_initialize");
+                    BundleManager.broadcastEvent('origination-stage', 'DSCOverride');
+                    if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
+                        PageHelper.showLoader();
+                        PageHelper.showProgress("KYC-input", 'Loading lead details');
+                        var _leadId = $stateParams.pageData['lead_id'];
+                        Lead.get({id: _leadId})
+                            .$promise
+                            .then(function(res){
+                                PageHelper.showProgress('KYC-input', 'Done.', 5000);
+                                BundleManager.broadcastEvent('lead-loaded', res);
+                            }, function(httpRes){
+                                PageHelper.showErrors(httpRes);
+                            })
+                            .finally(function(){
+                                PageHelper.hideLoader();
+                            })
+                    }
+
+                    Queries.getCibilHighmarkMandatorySettings()
+                        .then(function(settings){
+                            BundleManager.broadcastEvent("cibil-highmark-mandatory-settings", settings);
+                        })
+
                 },
                 eventListeners: {
-                    "new-applicant": function (bundleModel, model, params) {
-                        $log.info("Inside new-applicant of DscOverride");
-                        model.customer.applicantname = params.customer.firstName;
-                        model.customer.applicantid = params.customer.id;
-                        model.customer.loanAmount = '';
-                        model.customer.loanPurpose1 = '';
-                        /* Assign more customer information to show */
+                    "on-customer-load": function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("test-listener", {name: "SHAHAL AGAIN"});
                     },
-                    "new-co-applicant": function (bundleModel, model, params) {
-                        $log.info("Insdie new-co-applicant of DscOverride");
-                        var recordExists = false;
-                        for (var i = model.customer.coapplicants.length - 1; i >= 0; i--) {
-                            if (model.customer.coapplicants[i].coapplicantid == params.customer.id)
-                                recordExists = true;
-                        }
-                        if (!recordExists) {
-                            model.customer.coapplicants.push({
-                                "coapplicantid": params.customer.id,
-                                "coapplicantname": params.customer.firstName
-                            });
+                    "customer-loaded": function(pageObj, bundleModel, params){
+                        console.log("customer reloaded :: " + params.customer.firstName);
+                        if (pageObj.pageClass =='applicant'){
+                            BundleManager.broadcastEvent("applicant-updated", params.customer);
                         }
                     },
-                    "new-guarantor": function (bundleModel, model, params) {
-                        $log.info("Insdie new-guarantor of DscOverride");
-                        var recordExists = false;
-                        for (var i = model.customer.guarantors.length - 1; i >= 0; i--) {
-                            if (model.customer.guarantors[i].guarantorid == params.customer.id)
-                                recordExists = true;
-                        }
-                        if (!recordExists) {
-                            model.customer.guarantors.push({
-                                "guarantorid": params.customer.id,
-                                "guarantorname": params.customer.firstName
-                            });
-                        }
-                    },
-                    "new-loan": function (bundleModel, model, params) {
-                        $log.info("Inside new-loan of DscOverride");
-                        model.customer.loanSaved = true;
-                        model.customer.loanAmount = params.loanAccount.loanAmountRequested;
-                        model.customer.loanPurpose1 = params.loanAccount.loanPurpose1;
-                        for (var i = model.customer.coapplicants.length - 1; i >= 0; i--) {
-                            model.customer.coapplicants[i].loanAmount = params.loanAccount.loanAmountRequested;
-                            model.customer.coapplicants[i].loanPurpose1 = params.loanAccount.loanPurpose1;
-                        }
-                        for (var i = model.customer.guarantors.length - 1; i >= 0; i--) {
-                            model.customer.guarantors[i].loanAmount = params.loanAccount.loanAmountRequested;
-                            model.customer.guarantors[i].loanPurpose1 = params.loanAccount.loanPurpose1;
-                        }
-                    },
-                    "remove-customer-relation": function (bundleModel, model, enrolmentDetails) {
-                        $log.info("Inside remove-customer-relation of DscOverride");
-                        if (enrolmentDetails.customerClass == 'co-applicant') {
-                            _.remove(model.customer.coapplicants, function (g) {
-                                if (g.coapplicantid == enrolmentDetails.customerId) {
-                                    return true;
+                    "new-enrolment": function(pageObj, bundleModel, params){
+                        switch (pageObj.pageClass){
+                            case 'applicant':
+                                $log.info("New applicant");
+                                bundleModel.applicant = params.customer;
+                                BundleManager.broadcastEvent("new-applicant", params);
+                                break;
+                            case 'co-applicant':
+                                $log.info("New co-applicant");
+                                if (!_.hasIn(bundleModel, 'coApplicants')) {
+                                    bundleModel.coApplicants = [];
                                 }
-                                return false;
-                            })
-                        } else if (enrolmentDetails.customerClass == 'applicant') {
-                            model.customer.applicantname = null;
-                            model.customer.applicantid = null;
-                        } else if (enrolmentDetails.customerClass == 'guarantor') {
-                            _.remove(model.customer.guarantors, function (g) {
-                                if (g.guarantorid == enrolmentDetails.customerId) {
-                                    return true;
+                                BundleManager.broadcastEvent("new-co-applicant", params);
+                                bundleModel.coApplicants.push(params.customer);
+                                break;
+                            case 'guarantor':
+                                $log.info("New guarantor");
+                                if (!_.hasIn(bundleModel, 'guarantors')){
+                                    bundleModel.guarantors = [];
                                 }
-                                return false;
-                            })
+                                BundleManager.broadcastEvent("new-guarantor" , params);
+                                bundleModel.guarantors.push(params.guarantor);
+                                break;
+                            default:
+                                $log.info("Unknown page class");
+                                break;
+
+                        }
+                    },
+                    "new-loan": function(pageObj, bundleModel, params){
+                        $log.info("Inside new-loan of CBCheck");
+                        BundleManager.broadcastEvent("new-loan", params);
+                    },
+                    "applicant-updated": function(pageObj, bundlePageObj, obj){
+                        /* Update other pages */
+                        BundleManager.broadcastEvent("applicant-updated", obj);
+                    },
+                    "co-applicant-updated": function(pageObj, bundlePageObj, obj){
+                        /* Update other pages */
+                        BundleManager.broadcastEvent("co-applicant-updated", obj);
+                    },
+                    "guarantor-updated": function(pageObj, bundlePageObj, obj){
+                        /* Update other pages */
+                        BundleManager.broadcastEvent("guarantor-updated", obj);
+                    },
+                    "enrolment-removed": function(pageObj, bundlePageObj, enrolmentDetails){
+                        if (enrolmentDetails.customerId){
+                            BundleManager.broadcastEvent('remove-customer-relation', enrolmentDetails);
+                        }
+                    },
+                    "cb-check-done": function(pageObj, bundlePageObj, cbCustomer){
+                        $log.info(cbCustomer);
+                        if(cbCustomer.customerId){
+                            BundleManager.broadcastEvent('cb-check-update', cbCustomer);
                         }
                     }
                 },
-                form: [
-                    {
-                        "type": "box",
-                        "items": [
-                            {
-                                "type": "fieldset",
-                                "title": "DSC_STATUS",
-                                "items": [
-                                    {
-                                        title: "DSC_STATUS",
-                                        key: "model.customer.dscStatus",
-                                        readonly: true,
-                                        type: "string",
-                                    },
-                                    {
-                                        "type": "section",
-                                        items: [
-                                            {
-                                                title: "REMARKS",
-                                                key: "customer.dscOverrideRemarks",
-                                                type: "textarea",
-                                                required: true
-                                            },
-                                            {
-                                                "title": "DSC_OVERRIDE",
-                                                "type": "button",
-                                                "onClick": "actions.doDscOverride(model)"
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "key": "group.jlgGroupMembers[].getDSCData",
-                                        "type": "button",
-                                        "title": "VIEW_DSC_RESPONSE",
-                                        "icon": "fa fa-eye",
-                                        "style": "btn-primary",
-                                        // "condition": "model.group.jlgGroupMembers[arrayIndex].dscStatus=='DSC_OVERRIDE_REQUIRED'",
-                                        "onClick": function (model, formCtrl, form, event) {
-                                            console.log(form);
-                                            console.warn(event);
-                                            //var i = event['arrayIndex'];
-                                            //console.warn("dscid :" + model.group.jlgGroupMembers[i].dscId);
-                                            var dscId = model.group.jlgGroupMembers[i].dscId;
-                                            showDscData(dscId);
-                                        }
-                                    },
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                schema: function () {
-                    console.log("First thing to excecute I guess");
-                    return SchemaResource.getLoanAccountSchema().$promise;
-                },
-                actions: {
-                    doDscOverride: function (model) {
-                        console.log("Model from doDScOverride");
-                        console.log(model);
-                        if (model.customer.dscOverrideRemarks) {
-                            irfProgressMessage.pop("dsc-override", "Performing DSC Override");
-                            IndividualLoan.overrideDsc({
-                                customerId: model.loanAccount.customerId,
-                                loanId: model.loanAccount.id,
-                                remarks: model.customer.dscOverrideRemarks,
-                                action: 'approve'
-                            }, {}, function (resp, headers) {
-                                $log.info(resp);
-                                PageHelper.hideLoader();
-                                irfProgressMessage.pop("dsc-override", "Override Succeeded", 2000);
-                                IndividualLoan.get({id:loanid},{},function(resp){
-                                    if(resp.loanCustomerRelations && resp.loanCustomerRelations.length > 0){
-                                        model.customer.dscStatus = "SUCCESS";
-                                        showDscResponse(model,resp);
-                                     BundleManager.pushEvent('dsc-status',resp.loanCustomerRelations);    
-                                    }
-                                })
-                                
-                                //irfNavigator.goBack();
-                            }, function (resp) {
-                                $log.error(resp);
-                                PageHelper.hideLoader();
-                                irfProgressMessage.pop("dsc-override", "An error occurred. Please Try Again", 2000);
-                                PageHelper.showErrors(resp);
-                            });
-                        } else {
-                            PageHelper.hideLoader();
+                preSave: function(offlineData) {
+                    var defer = $q.defer();
+                    for (var i=0; i<offlineData.bundlePages.length; i++){
+                        var page = offlineData.bundlePages[i];
+                        if (page.pageClass == "applicant" && !page.model.customer.firstName){
+                            PageHelper.showProgress("DSCOverride", "Applicant first name is required to save offline", 5000);
+                            defer.reject();
                         }
                     }
-
-                },
-            };
-
+                    defer.resolve();
+                    return defer.promise;
+                }
+            }
         }
     }
-});
+})
