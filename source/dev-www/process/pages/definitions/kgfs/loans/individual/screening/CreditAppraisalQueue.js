@@ -79,7 +79,7 @@ define({
 				}
 				return IndividualLoan.search({
 					'branchId': searchOptions.branch,
-					'stage': 'CreditAppraisalQueue',
+					'stage': 'CreditAppraisal',
 					'applicantName': searchOptions.applicantName,
 					'centreCode': searchOptions.centre,
 					'urn':searchOptions.urn,
