@@ -9,6 +9,10 @@ irf.models.factory('LoanAccount', function($resource, $httpParamSerializer, BASE
             url: BASE_URL + '/api/loanaccounts/activate/:accountId',
             transformResponse: []
         },
+        update: {
+            method: 'PUT',
+            url: endpoint ,
+        },
         disburse: {
             method: 'POST',
             url: endpoint + '/disburse'

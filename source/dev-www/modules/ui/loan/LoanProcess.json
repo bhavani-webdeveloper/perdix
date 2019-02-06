@@ -1852,11 +1852,13 @@
                     },
                     "grossWeight": {
                         "title": "GROSS_WEIGHT",
-                        "key": "loanAccount.ornamentsAppraisals[].grossWeightInGrams"
+                        "key": "loanAccount.ornamentsAppraisals[].grossWeightInGrams",
+                        "type":"number"
                     },
                     "netWeight": {
                         "title": "NET_WEIGHT",
-                        "key": "loanAccount.ornamentsAppraisals[].netWeightInGrams"
+                        "key": "loanAccount.ornamentsAppraisals[].netWeightInGrams",
+                        "type":"number"
                     },
                     "carat": {
                         "title": "CARAT",
@@ -1865,12 +1867,12 @@
                     "rate": {
                         "key": "loanAccount.ornamentsAppraisals[].ratePerGramInPaisa",
                         "title": "RATE",
-                        "type": "numeric"
+                        "type": "number"
                     },
                     "marketValue": {
                         "key": "loanAccount.ornamentsAppraisals[].marketValueInPaisa",
                         "title": "MARKET_VALUE",
-                        "type": "numeric"
+                        "type": "number"
                     }
                 }
             }

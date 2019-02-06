@@ -1,4178 +1,1937 @@
-
-irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2"),
-["$log", "$q","Enrollment", 'EnrollmentHelper', 'PageHelper','formHelper',"elementsUtils",
-'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "BundleManager", "Dedupe", "$filter",
-function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
-    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, BundleManager, Dedupe, $filter){
-
-    var validateRequest = function(req){
-        if (req.customer && req.customer.customerBankAccounts) {
-            for (var i=0; i<req.customer.customerBankAccounts.length; i++){
-                var bankAccount = req.customer.customerBankAccounts[i];
-                if (bankAccount.accountNumber!=bankAccount.confirmedAccountNumber){
-                    PageHelper.showProgress('validate-error', 'Bank Accounts: Account Number doesnt match with Confirmed Account Number', 5000);
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    function priceCalculation(modelValue, form, model) {
-        if (model.customer.fixedAssetsMachinaries[model.arrayIndex].purchasePrice &&
-         model.customer.fixedAssetsMachinaries[model.arrayIndex].machinePurchasedYear &&
-         model.customer.fixedAssetsMachinaries[model.arrayIndex].depreciationPercentage) {
-            var machineCost = model.customer.fixedAssetsMachinaries[model.arrayIndex].purchasePrice;
-            var depreciationPercentage = model.customer.fixedAssetsMachinaries[model.arrayIndex].depreciationPercentage;
-            var amount = machineCost - (machineCost*Math.ceil(new Date().getFullYear() - model.customer.fixedAssetsMachinaries[model.arrayIndex].machinePurchasedYear)*(depreciationPercentage/100));
-            if(amount < (machineCost*0.1)){
-                amount = machineCost*0.1;
-            }
-            model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice = amount;
-        }
-    }
-
+define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/loan/LoanProcess"], function (EnrolmentProcess, LoanProcess) {
+    EnrolmentProcess = EnrolmentProcess['EnrolmentProcess'];
+    LoanProcess = LoanProcess['LoanProcess']
     return {
-        "type": "schema-form",
-        "title": "ENTITY_ENROLLMENT",
-        "subTitle": "BUSINESS",
-        initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
-            model.currentStage = bundleModel.currentStage;
-            var self= this;
-            var branch = SessionStore.getBranch();
-            var centres = SessionStore.getCentres();
-            var centreName = [];
-            var allowedCentres = [];
-            if (centres && centres.length) {
-                for (var i = 0; i < centres.length; i++) {
-                    centreName.push(centres[i].id);
-                    allowedCentres.push(centres[i]);
+        pageUID: "kgfs.customer.EnterpriseEnrolment2",
+        pageType: "Engine",
+        dependencies: ["$log", "$q", "Enrollment", "IrfFormRequestProcessor", 'EnrollmentHelper', 'PageHelper', 'formHelper', "elementsUtils",
+            'irfProgressMessage', 'SessionStore', "$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "BundleManager", "$filter", "$injector", "UIRepository", "LoanAccount"],
+
+        $pageFn: function ($log, $q, Enrollment, IrfFormRequestProcessor, EnrollmentHelper, PageHelper, formHelper, elementsUtils,
+            irfProgressMessage, SessionStore, $state, $stateParams, Queries, Utils, CustomerBankBranch, BundleManager, $filter, $injector, UIRepository, LoanAccount) {
+
+            var getDialySalesDetails = function (value, model, row, day) {
+                model.customer.enterprise.weeklySale = 0;
+                for (i in model.customer.enterpriseDailySale) {
+                    dailysales = model.customer.enterpriseDailySale[i];
+                    if (dailysales.seasonType != row.seasonType && dailysales[day]) {
+                        delete dailysales[day]
+                    }
+                    dailysales.total = (dailysales.mon ? dailysales.mon : 0) + (dailysales.tue ? dailysales.tue : 0) + (dailysales.wed ? dailysales.wed : 0) + (dailysales.thu ? dailysales.thu : 0) +
+                        (dailysales.fri ? dailysales.fri : 0) + (dailysales.sat ? dailysales.sat : 0) + (dailysales.sun ? dailysales.sun : 0)
+                    model.customer.enterprise.weeklySale = model.customer.enterprise.weeklySale + dailysales.total;
+                    model.customer.enterprise.monthlySale = model.customer.enterprise.weeklySale * 4;
                 }
+                averageMonthlySale(model);
+            }
+            var getEnterpriseProductDetails = function (model) {
+                model.customer.enterprise.totalDailySales = 0
+                model.customer.enterprise.totalDailyCost = 0
+                for (i in model.customer.enterpriseProductSales) {
+                    productSale = model.customer.enterpriseProductSales[i];
+                    if (productSale.salePrice && productSale.quantity) {
+                        productSale.totalSale = productSale.salePrice * productSale.quantity
+                    }
+                    if (productSale.costPrice && productSale.quantity) {
+                        productSale.totalCost = productSale.costPrice * productSale.quantity
+                    }
+                    if (productSale.totalSale) {
+                        model.customer.enterprise.totalDailySales = productSale.totalSale + model.customer.enterprise.totalDailySales
+                        model.customer.enterprise.totalWeeklySales = model.customer.enterprise.totalDailySales * 4;
+                        model.customer.enterprise.totalMonthlySales = model.customer.enterprise.totalDailySales * 30;
+                        grossmargin = ((model.customer.enterprise.totalDailySales - model.customer.enterprise.totalDailyCost) / model.customer.enterprise.totalDailySales);
+                        model.customer.enterprise.grossMarginSales = grossmargin;
+                    }
+                    if (productSale.totalCost) {
+                        model.customer.enterprise.totalDailyCost = productSale.totalCost + model.customer.enterprise.totalDailyCost
+                        model.customer.enterprise.totalWeeklyCost = model.customer.enterprise.totalDailyCost * 4;
+                        model.customer.enterprise.totalMonthlyCost = model.customer.enterprise.totalDailyCost * 30;
+                        grossmargin = ((model.customer.enterprise.totalDailySales - model.customer.enterprise.totalDailyCost) / model.customer.enterprise.totalDailySales);
+                        model.customer.enterprise.grossMarginCost = grossmargin;
+                    }
+                }
+                averageMonthlySale(model);
             }
 
+            var getAnnualSales = function (value, model, row, month) {
+                model.customer.enterprise.avgMonthlySales = 0;
+                for (i in model.customer.monthlySale) {
+                    monthlySales = model.customer.monthlySale[i];
+                    if (monthlySales.seasonType != row.seasonType && monthlySales[month]) {
+                        delete monthlySales[month]
+                    }
+                    monthlySales.total = (monthlySales.January ? monthlySales.January : 0) + (monthlySales.Feburary ? monthlySales.Feburary : 0) + (monthlySales.March ? monthlySales.March : 0) + (monthlySales.April ? monthlySales.April : 0) +
+                        (monthlySales.May ? monthlySales.May : 0) + (monthlySales.June ? monthlySales.June : 0) + (monthlySales.July ? monthlySales.July : 0) + (monthlySales.August ? monthlySales.August : 0) + (monthlySales.September ? monthlySales.September : 0) + (monthlySales.October ? monthlySales.October : 0) + (monthlySales.November ? monthlySales.November : 0) + (monthlySales.December ? monthlySales.December : 0);
+                    model.customer.enterprise.avgMonthlySales = model.customer.enterprise.avgMonthlySales + monthlySales.total;
+                    model.customer.enterprise.avgAnnualSales = model.customer.enterprise.avgMonthlySales * 4;
+                }
+                averageMonthlySale(model);
+            }
 
-            if (_.hasIn(model, 'loanRelation')){
-                console.log(model.loanRelation);
-                var custId = model.loanRelation.customerId;
-                Enrollment.getCustomerById({id:custId})
-                    .$promise
-                    .then(function(res){
-                        model.customer = res;
+            var averageMonthlySale = function (model) {
+                data = model.customer.enterprise;
+                data.monthlySalesCal = ((data.initialEstimateMonthlySale ? data.initialEstimateMonthlySale : 0) + (data.monthlySale ? data.monthlySale : 0) + (data.totalMonthlySales ? data.totalMonthlySales : 0) + (data.avgMonthlySales ? data.avgMonthlySales : 0)) / 4;
+                data.costOfGoodsSold = data.monthlySalesCal * (data.grossMarginCost ? data.grossMarginCost : 0)
+                data.grossProfit = data.monthlySalesCal - data.costOfGoodsSold;
+                // data.netBusinessIncome = 
+            }
+            var monthlySurpluse = function (model) {
+                model.customer.enterprise.totalMonthlySurplus = ((model.customer.enterprise.netBusinessIncome ? model.customer.enterprise.netBusinessIncome : 0) + (model.customer.enterprise.additionalIncomeConsidered ? model.customer.enterprise.additionalIncomeConsidered : 0) - (model.customer.enterprise.totalPersonalExpense ? model.customer.enterprise.totalPersonalExpense : 0) - (model.customer.enterprise.totalEmiAmount ? model.customer.enterprise.totalEmiAmount : 0))
+                model.customer.enterprise.emiEligibility = (model.customer.enterprise.totalMonthlySurplus * (model.customer.enterprise.enterdebtServiceRatio ? model.customer.enterprise.enterdebtServiceRatio : 0));
+                model.customer.enterprise.finalEMi = Math.min((model.customer.enterprise.emiEligibility ? model.customer.enterprise.emiEligibility : 0), (model.customer.enterprise.affordableEMi ? model.customer.enterprise.affordableEMi : 0));
+                var x = (((Math.pow((model.customer.enterprise.proposedROI / 12), model.customer.enterprise.loanTenureInMonths)) + 1) * (model.customer.enterprise.finalEMi) + 1)
+                var y = ((Math.pow((model.customer.enterprise.proposedROI / 12), model.customer.enterprise.loanTenureInMonths)) + 1)
+                model.customer.enterprise.eligibleLoanAmount =
+                    "TotalMonthlySurplus.sanctionedLoanAmount"
+            }
+            var computeEstimatedEmi = function (model) {
+                if (model.loanAccount.loanAmountRequested == '' || model.loanAccount.interestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenure == '')
+                    return;
+                var principal = model.loanAccount.loanAmount;
+                var interest = model.loanAccount.interestRate / 100 / 12;
+                var payments = model.loanAccount.tenure;
+                var x = Math.pow(1 + interest, payments);
+                var monthly = (principal * x * interest) / (x - 1);
+                if (!isNaN(monthly) &&
+                    (monthly != Number.POSITIVE_INFINITY) &&
+                    (monthly != Number.NEGATIVE_INFINITY)) {
+                    model.loanAccount.estimatedEmi = Math.ceil(monthly);
+                }
+                else {
+                    model.loanAccount.estimatedEmi = "";
+                }
+            }
+            var computeTotalMonthlySurpluse = function (value, form, model) {
+                var businessIncome = 0;
+                var businessExpense = 0;
+                if (model.customer.incomeThroughSales) {
+                    for (i in model.customer.incomeThroughSales) {
+                        businessIncome = businessIncome + (model.customer.incomeThroughSales[i].amount ? model.customer.incomeThroughSales[i].amount : 0);
+                    }
+                }
+                if (model.customer.rawMaterialExpenses) {
+                    for (i in model.customer.rawMaterialExpenses) {
+                        businessExpense = businessExpense + (model.customer.rawMaterialExpenses[i].amount ? model.customer.rawMaterialExpenses[i].amount : 0);
+                    }
+                }
+                model.customer.totalMonthlySurplus = businessIncome - businessExpense;
+                model.customer.debtServiceRatio = (businessExpense / businessIncome) * 100;
+                monthlySurpluse(model);
+            }
 
-                        if (model.customer.stockMaterialManagement) {
-                        model.proxyIndicatorsHasValue = true;
-                        $log.debug('PROXY_INDICATORS already has value');
+            var getBusinessExpenseData = function (value, model, row) {
+                model.customer.enterprise.totalBusinessExpenses = 0;
+                monthlyBusinessExpense = model.customer.monthlyBusinessExpense;
+                total = 0;
+                for (i in monthlyBusinessExpense) {
+                    model.customer.enterprise.totalBusinessExpenses = model.customer.enterprise.totalBusinessExpenses + (monthlyBusinessExpense[i].annualExpenses ? monthlyBusinessExpense[i].annualExpenses : 0);
+                }
+                model.customer.enterprise.netBusinessIncome = model.customer.enterprise.monthlySalesCal - model.customer.enterprise.totalBusinessExpenses;
+                model.customer.enterprise.netBusinessIncomeGrossMargin = model.customer.enterprise.netBusinessIncome / model.customer.enterprise.grossMarginSales;
+                monthlySurpluse(model);
+            }
+
+            var getPersonalExpenses = function (value, model, row) {
+                model.customer.enterprise.totalPersonalExpense = 0;
+                personalExpense = model.customer.personalExpenses;
+                total = 0;
+                for (i in personalExpense) {
+                    model.customer.enterprise.totalPersonalExpense = model.customer.enterprise.totalPersonalExpense + (personalExpense[i].annualExpenses ? personalExpense[i].annualExpenses : 0);
+                }
+                monthlySurpluse(model);
+            }
+            var getOtherBusinessIncomeDet = function (value, model, row) {
+                model.customer.enterprise.totalMonthlyAdditionIncome = 0;
+                otherExpenses = model.customer.otherBusinessIncomes;
+                for (i in otherExpenses) {
+                    model.customer.enterprise.totalMonthlyAdditionIncome = model.customer.enterprise.totalMonthlyAdditionIncome + (otherExpenses[i].amount ? otherExpenses[i].amount : 0);
+                }
+                model.customer.enterprise.additionalIncomeConsidered = Math.min(model.customer.enterprise.totalMonthlyAdditionIncome, model.customer.enterprise.netBusinessIncome);
+                monthlySurpluse(model);
+            }
+            var overridesFields = function (bundlePageObj) {
+                return {
+                    "ContactInformation.pincode": {
+                        "title": "pincode",
+                        "required": true,
+                        "resolver": "PincodeLOVConfiguration"
+                    },
+                    "EnterpriseInformation.branchName": {
+                        "readonly": true,
+                        "required": true,
+                        "orderNo": 10
+                    },
+                    "EnterpriseInformation.centreId": {
+                        "type": "text",
+                        "title": "CENTRE_ID",
+                        "readonly": true,
+                        "required": true,
+                        "orderNo": 30
+                    },
+                    "EnterpriseInformation.centreName": {
+                        "type": "text",
+                        "title": "CENTRE_Name",
+                        "readonly": true,
+                        "required": true,
+                        "orderNo": 20
+                    },
+                    "EnterpriseInformation.urnNo": {
+                        "condition": true,
+                        "required": true,
+                        "type": "text",
+                        "orderNo": 40
+                    },
+                    "EnterpriseInformation.firstName": {
+                        "required": true,
+                        "title": "NAME_OF_BUSINESS",
+                        "orderNo": 50
+                    },
+                    "EnterpriseInformation.companyOperatingSince": {
+                        "required": true,
+                        "orderNo": 60
+                    },
+                    "EnterpriseInformation.latitude": {
+                        "readonly": true,
+                        "required": true,
+                        "orderNo": 70
+                    },
+                    "EnterpriseInformation.distanceFromBranch": {
+                        //"readonly":true,
+                        "required": true,
+                        "orderNo": 80
+                    },
+                    "EnterpriseInformation.ownership": {
+                        "required": true,
+                        "orderNo": 90,
+                        "enumCode": "business_in_present_area_since",
+                    },
+                    "EnterpriseInformation.businessConstitution": {
+                        "orderNo": 100
+                    },
+                    "EnterpriseInformation.gstNumber": {
+                        "orderNo": 110
+                    },
+                    "EnterpriseInformation.noOfPartners": {
+                        "orderNo": 120
+                    },
+                    "EnterpriseInformation.companyRegistered": {
+                        "required": true,
+                        "orderNo": 130,
+                        "type": "radios"
+                    },
+                    "EnterpriseInformation.enterpriseRegistrations": {
+                        "required": true,
+                        "orderNo": 140
+                    },
+                    "EnterpriseInformation.enterpriseDocuments": {
+                        "orderNo": 150
+                    },
+                    "ContactInformation.mobilePhone": {
+                        "required": true,
+                        "orderNo": 160
+                    },
+                    "ContactInformation.landLineNo": {
+                        "orderNo": 170
+                    },
+                    "ContactInformation.doorNo": {
+                        "required": true,
+                        "orderNo": 180
+                    },
+                    "ContactInformation.street": {
+                        "orderNo": 190
+                    },
+                    "ContactInformation.landmark": {
+                        "orderNo": 200
+                    },
+                    "ContactInformation.pincode": {
+                        "required": true,
+                        "orderNo": 210
+                    },
+                    "ContactInformation.locality": {
+                        "orderNo": 220
+                    },
+                    "ContactInformation.villageName": {
+                        "orderNo": 230
+                    },
+                    "ContactInformation.district": {
+                        "orderNo": 240
+                    },
+                    "ContactInformation.state": {
+                        "orderNo": 250
+                    },
+                    "BankAccounts.customerBankAccounts.ifscCode": {
+                        "required": true,
+                        "orderNo": 260
+                    },
+                    "BankAccounts.customerBankAccounts.customerBankName": {
+                        "required": true,
+                        "orderNo": 270
+                    },
+                    "BankAccounts.customerBankAccounts.customerBankBranchName": {
+                        "required": true,
+                        "orderNo": 280
+                    },
+                    "BankAccounts.customerBankAccounts.customerNameAsInBank": {
+                        "required": true,
+                        "orderNo": 290
+                    },
+                    "BankAccounts.customerBankAccounts.accountNumber": {
+                        "required": true,
+                        "orderNo": 300
+                    },
+                    "BankAccounts.customerBankAccounts.confirmedAccountNumber": {
+                        "required": true,
+                        "orderNo": 310,
+                        "title": "CONFIRMED_ACCOUNT_NUMBER"
+                    },
+                    "BankAccounts.customerBankAccounts.accountType": {
+                        "required": true,
+                        "orderNo": 320
+                    },
+                    "BankAccounts.customerBankAccounts.bankingSince": {
+                        "orderNo": 340
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatementDocId": {
+                        "orderNo": 330
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatements.startMonth": {
+                        "orderNo": 340,
+                        "required": false
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatements.totalDeposits": {
+                        "title": "CUMULATIVE_DEPOSITE_AS_ON_MONTH_END",
+                        "orderNo": 350
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatements.totalWithdrawals": {
+                        "title": "CUMULATIVE_WITHDRAWALS_AS_ON_MONTH_END",
+                        "orderNo": 360
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatements.closingBalance": {
+                        "orderNo": 370,
+                        "title": "BALANCE_AS_ON_MONTH_END"
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced": {
+                        "orderNo": 380,
+                        type: 'number'
+                    },
+                    "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced": {
+                        "orderNo": 390
+                    },
+                    "Liabilities": {
+                        "orderNo": 400
+                    },
+                    "Liabilities.liabilities.installmentAmountInPaisa": {
+                        "required": true,
+                        "orderNo": 430
+                    },
+                    "Liabilities.liabilities.loanSource": {
+                        "orderNo": 410
+                    },
+                    "Liabilities.liabilities.loanAmountInPaisa": {
+                        "orderNo": 420
+                    },
+                    "Liabilities.liabilities.startDate": {
+                        "orderNo": 440
+                    },
+                    "Liabilities.liabilities.tenure": {
+                        "orderNo": 450
+                    }, // add in repo  
+                    "Liabilities.liabilities.interestRate": {
+                        "orderNo": 460,
+                        "required": true
+                    },
+                    "Liabilities.liabilities.frequencyOfInstallment": {
+                        "orderNo": 470,
+                        "required": true
+                    },
+                    "Liabilities.liabilities.outstandingAmountInPaisa": {
+                        "orderNo": 480
+                    },
+                    "Liabilities.liabilities.noOfInstalmentPaid": {
+                        "orderNo": 490
+                    },
+                    "EnterpriseFinancials": {
+                        "orderNo": 500,
+                        "title": "OTHER_BUSINESS_INCOME_AND_EXPENSES"
+                    },
+                    "EnterpriseFinancials.incomeThroughSales": {
+                        "orderNo": 510,
+                        "title": "BUSINESS_INCOME",
+                    },
+                    "EnterpriseFinancials.incomeThroughSales.incomeType": {
+                        "type": "select",
+                        "enumcode": "businessIncomeType"
+                    },
+                    "EnterpriseFinancials.incomeThroughSales.amount": {
+                        onChange: function (value, form, model) {
+                            computeTotalMonthlySurpluse(value, form, model);
                         }
+                    },
+                    "EnterpriseFinancials.incomeThroughSales.frequency": {
+                    },
+                    "EnterpriseFinancials.incomeThroughSales.invoiceDocId": {
 
-                        bundleModel.business = model.customer;
-
-                         if(model.customer.enterprise.isGSTAvailable == null || model.customer.enterprise.isGSTAvailable == undefined){
-                                     model.customer.enterprise.isGSTAvailable = "No";
-                         }
-                         if(model.customer.enterprise.isGSTAvailable == "Yes"){
-                             model.customer.enterprise.companyRegistered = "YES";
-                         }
-
-                        if(model.customer.enterpriseCustomerRelations)
-                        {
-                            var linkedIds = [];
-                            for(i=0;i<model.customer.enterpriseCustomerRelations.length;i++) {
-                                linkedIds.push(model.customer.enterpriseCustomerRelations[i].linkedToCustomerId);
-                            };
-
-                            Queries.getCustomerBasicDetails({
-                                "ids": linkedIds
-                            }).then(function(result) {
-                                if (result && result.ids) {
-                                    for (var i = 0; i < model.customer.enterpriseCustomerRelations.length; i++) {
-                                        var cust = result.ids[model.customer.enterpriseCustomerRelations[i].linkedToCustomerId];
-                                        if (cust) {
-                                            model.customer.enterpriseCustomerRelations[i].linkedToCustomerName = cust.first_name;
-                                        }
-                                    }
-                                }
-                            });
+                    },
+                    "EnterpriseFinancials.rawMaterialExpenses": {
+                        "orderNo": 520,
+                        "title": "BUSINESS_EXPENSE",
+                    },
+                    "EnterpriseFinancials.rawMaterialExpenses.rawMaterialType": {
+                        "type": "select",
+                        "enumcode": "businessExpenseType"
+                    },
+                    "EnterpriseFinancials.rawMaterialExpenses.amount": {
+                        onChange: function (value, form, model) {
+                            computeTotalMonthlySurpluse(value, form, model);
                         }
-                        var actualCentre = $filter('filter')(allowedCentres, {id: model.customer.centreId}, true);
-                        model.customer.centreName = actualCentre && actualCentre.length > 0 ? actualCentre[0].centreName : model.customer.centreName;
-                        BundleManager.broadcastEvent('business-loaded', model.customer);
-                    }, function(httpRes){
-                        PageHelper.showErrors(httpRes);
-                    })
-                    .finally(function(){
-                        PageHelper.hideLoader();
-                    })
-            } else {
-                model.customer = model.customer || {};
-                 if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
-                     model.customer.enterprise = {};
-                 }
-                //model.branchId = SessionStore.getBranchId() + '';
-                //model.customer.kgfsName = SessionStore.getBranch();
-                model.customer.customerType = "Enterprise";
-                var branch1 = formHelper.enum('branch_id').data;
-                for (var i = 0; i < branch1.length; i++) {
-                    if ((branch1[i].name) == SessionStore.getBranch()) {
-                        model.customer.customerBranchId = branch1[i].value;
-                        model.customer.kgfsName = branch1[i].name;
-                    }
-                }
+                    },
+                    "EnterpriseFinancials.totalMonthlySurplus": {
+                        "orderNo": 524,
 
-                model.customer.centreId = centreName[0];
-                model.customer.centreName = (allowedCentres && allowedCentres.length > 0) ? allowedCentres[0].centreName : "";
-                model.customer.enterpriseCustomerRelations = model.customer.enterpriseCustomerRelations || [];
-                model.customer.enterprise.isGSTAvailable = 'YES';
-                model.customer.enterprise.companyRegistered = "YES";
-            }
-            if (bundlePageObj){
-                model._bundlePageObj = bundlePageObj;
-            }
-        },
-        offline: false,
-        getOfflineDisplayItem: function(item, index){
-            return [
-                item.customer.firstName,
-                item.customer.centreId,
-                item.customer.id ? '{{"CUSTOMER_ID"|translate}} :' + item.customer.id : ''
-            ]
-        },
-        eventListeners: {
-            "new-applicant": function(bundleModel, model, params){
-                $log.info("Inside new-applicant of EnterpriseEnrollment");
+                    },
+                    "EnterpriseFinancials.debtServiceRatio": {
+                        "orderNo": 528,
+                    },
+                    "PreliminaryInformation": {
+                        "orderNo": 530
+                    },
+                    "PreliminaryInformation.loanAmountRequested": {
+                        "orderNo": 540,
+                        onChange: function (value, form, model) {
+                            if (model.loanAccount.loanAmountRequested == '' || model.loanAccount.interestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenure == '')
 
-                var addToRelation = true;
-                for (var i=0;i<model.customer.enterpriseCustomerRelations.length; i++){
-                    if (model.customer.enterpriseCustomerRelations[i].linkedToCustomerId == params.customer.id) {
-                        addToRelation = false;
-                        break;
-                    }
-                }
-                if (addToRelation){
-                    var newLinkedCustomer = {
-                        "linkedToCustomerId": params.customer.id,
-                        "linkedToCustomerName": params.customer.firstName
-                    };
+                                return;
+                            var principal = model.loanAccount.loanAmount;
+                            var interest = model.loanAccount.interestRate / 100 / 12;
+                            //var payments;
+                            var payments = model.loanAccount.tenure;
 
-                    model.customer.enterpriseCustomerRelations.push(newLinkedCustomer);
-                }
-            },
-            "lead-loaded": function(bundleModel, model, obj){
-                $log.info(obj);
+                            // Now compute the monthly payment figure, using esoteric math.
+                            var x = Math.pow(1 + interest, payments);
+                            var monthly = (principal * x * interest) / (x - 1);
 
-                var overlayData = function(model, obj){
-                    try {
-                        model.customer.mobilePhone = obj.mobileNo;
-                        model.customer.gender = obj.gender;
-                        model.customer.firstName = obj.businessName;
-                        model.customer.maritalStatus=obj.maritalStatus;
-                        model.customer.customerBranchId=obj.branchId;
-                        model.customer.centreId=obj.centreId;
-                        model.customer.centreName=obj.centreName;
-                        model.customer.street=obj.addressLine2;
-                        model.customer.doorNo=obj.addressLine1;
-                        model.customer.pincode=obj.pincode;
-                        model.customer.district=obj.district;
-                        model.customer.state=obj.state;
-                        model.customer.locality=obj.area;
-                        model.customer.villageName=obj.cityTownVillage;
-                        model.customer.landLineNo=obj.alternateMobileNo;
-                        model.customer.dateOfBirth=obj.dob;
-                        model.customer.age=obj.age;
-                        model.customer.mobilePhone = obj.mobileNo;
-                        model.customer.latitude =obj.location;
-                        if (!_.hasIn(model.customer, 'enterprise') || model.customer.enterprise==null){
-                            model.customer.enterprise = {};
+                            // Check that the result is a finite number. If so, display the results.
+                            if (!isNaN(monthly) &&
+                                (monthly != Number.POSITIVE_INFINITY) &&
+                                (monthly != Number.NEGATIVE_INFINITY)) {
+                                model.loanAccount.estimatedEmi = round(monthly);
+                            }
+                            // Otherwise, the user's input was probably invalid, so don't
+                            // display anything.
+                            else {
+                                model.loanAccount.estimatedEmi = "";
+                            }
                         }
-                        model.customer.enterprise.ownership =obj.ownership;
-                        model.customer.enterprise.companyOperatingSince =obj.companyOperatingSince;
-                        model.customer.enterprise.companyRegistered =obj.companyRegistered;
-                        model.customer.enterprise.businessType =obj.businessType;
-                        model.customer.enterprise.businessActivity=obj.businessActivity;
-                    } catch (e){
-                        $log.error("Error while overlay");
-                    }
-
-                }
-
-                var lep = null;
-                if (obj.customerId != null) {
-                    lep = Enrollment.getCustomerById({id: obj.customerId})
-                        .$promise;
-                    lep.then(function(res){
-                        PageHelper.showProgress("customer-load", "Done..", 5000);
-                        model.customer = Utils.removeNulls(res, true);
-                        overlayData(model, obj);
-                        BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
-                    }, function(httpRes){
-                        PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
-                    })
-                } else {
-                    overlayData(model, obj);
-                }
-
-            },
-            "new-co-applicant": function(bundleModel, model, params){
-                $log.info("Inside new co-applicant of EnterpriseEnrollment");
-
-                var addToRelation = true;
-                for (var i=0;i<model.customer.enterpriseCustomerRelations.length; i++){
-                    if (model.customer.enterpriseCustomerRelations[i].linkedToCustomerId == params.customer.id) {
-                        addToRelation = false;
-                        break;
+                    },
+                    "PreliminaryInformation.tenure": {
+                        "orderNo": 550
+                    },
+                    "PreliminaryInformation.interestRate": {
+                        "orderNo": 560
+                    },
+                    "PreliminaryInformation.estimatedEmi": {
+                        "orderNo": 570
+                    },
+                    "EstimatedSales": {
+                        "orderNo": 590
+                    },
+                    "EstimatedSales.initialEstimateWeeklySale": {
+                        "orderNo": 600,
+                        onChange: function (value, form, model) {
+                            model.customer.enterprise.initialEstimateMonthlySale = model.customer.enterprise.initialEstimateWeeklySale * 4;
+                            averageMonthlySale(model);
+                        }
+                    },
+                    "EstimatedSales.initialEstimateMonthlySale": {
+                        "orderNo": 605
+                    },
+                    "BuyerDetails": {
+                        "orderNo": 800
+                    },
+                    "BuyerDetails.buyerDetails.paymentFrequency": {
+                        "type": "text"
+                    },
+                    "SuppliersDeatils": {
+                        "orderNo": 820
                     }
                 }
-                if (addToRelation){
-                    var newLinkedCustomer = {
-                        "linkedToCustomerId": params.customer.id,
-                        "linkedToCustomerName": params.customer.firstName
-                    };
-
-                    model.customer.enterpriseCustomerRelations.push(newLinkedCustomer);
-                }
-            },
-            "new-guarantor": function(bundleModel, model, params){
-                $log.info("Inside new guarantor of EnterpriseEnrollment");
-
-                var addToRelation = true;
-                for (var i=0;i<model.customer.enterpriseCustomerRelations.length; i++){
-                    if (model.customer.enterpriseCustomerRelations[i].linkedToCustomerId == params.customer.id) {
-                        addToRelation = false;
-                        break;
-                    }
-                }
-                if (addToRelation){
-                    var newLinkedCustomer = {
-                        "linkedToCustomerId": params.customer.id,
-                        "linkedToCustomerName": params.customer.firstName
-                    };
-
-                    model.customer.enterpriseCustomerRelations.push(newLinkedCustomer);
-                }
-            },
-            "origination-stage": function(bundleModel, model, obj){
-                model.currentStage = obj
-            },
-            "remove-customer-relation": function(bundleModel, model, enrolmentDetails){
-                $log.info("Inside remove-customer-relation of EnterpriseEnrolment2");
-                /**
-                 * Following to be Done
-                 *
-                 * 1. Remove customer from Enterprise Customer Relation if exists.
-                 */
-
-                _.remove(model.customer.enterpriseCustomerRelations, function(relation){
-                    return relation.linkedToCustomerId==enrolmentDetails.customerId;
-                })
             }
-        },
-        form: [
-            {
-                "type": "box",
-                "title": "ENTITY_INFORMATION",
-               "condition": "model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
-                "items": [
-                    {
-                        "key": "customer.id",
-                        "title": "LOAD_EXISTING_CUSTOMER",
-                        "type": "lov",
-                        "lovonly": true,
-                         initialize: function(model, form, parentModel, context) {
-                                        model.customerBranchId = parentModel.customer.customerBranchId;
-                                        model.centreId = parentModel.customer.centreId;
-                                        var centreCode = formHelper.enum('centre').data;
-                                        var centreName = $filter('filter')(centreCode, {value: parentModel.customer.centreId}, true);
-                                        if(centreName && centreName.length > 0) {
-                                            model.centreName = centreName[0].name;
-                                        }
-                                    },
-                        "inputMap": {
-                            "firstName": {
-                                "key": "customer.firstName",
-                                "title": "CUSTOMER_NAME"
-                            },
-                            "urnNo": {
-                                "key": "customer.urnNo",
-                                "title": "URN_NO",
-                                "type": "string"
-                            },
-                            "customerBranchId": {
-                                "key": "customer.customerBranchId",
+            var repositoryAdditions = function (bundlePageObj) {
+                return {
+                    "EnterpriseInformation": {
+                        "items": {
+                            "distanceFromBranch": {
+                                "key": "customer.distanceFromBranch",
                                 "type": "select",
-                                "screenFilter": true,
-                                "readonly": true,
-                                "enumCode": "branch_id"
+                                "enumCode": "loan_distance_from_branch",
+                                "title": "DISTANCE_FROM_BRANCH",
                             },
                             "centreName": {
-                                "key": "customer.place",
-                                "title":"CENTRE_NAME",
-                                "type": "string",
-                                "readonly": true,
-
+                                "key": "customer.centreName",
+                                "type": "text",
+                                "title": "CENTRE_NAME"
                             },
-                            "centreId":{
-                                key: "customer.centreId",
-                                type: "lov",
-                                autolov: true,
-                                lovonly: true,
-                                bindMap: {},
-                                searchHelper: formHelper,
-                                search: function(inputModel, form, model, context) {
-                                    var centres = SessionStore.getCentres();
-                                    // $log.info("hi");
-                                    // $log.info(centres);
-
-                                    var centreCode = formHelper.enum('centre').data;
-                                    var out = [];
-                                    if (centres && centres.length) {
-                                        for (var i = 0; i < centreCode.length; i++) {
-                                            for (var j = 0; j < centres.length; j++) {
-                                                if (centreCode[i].value == centres[j].id) {
-
-                                                    // if( out.length == 0){
-                                                    //     model.customer.centreId = centreCode[i].value;
-                                                    // }
-                                                    out.push({
-                                                        name: centreCode[i].name,
-                                                        id:centreCode[i].value
-                                                    })
-                                                }
-                                            }
-                                        }
-                                    }
-                                    return $q.resolve({
-                                        headers: {
-                                            "x-total-count": out.length
-                                        },
-                                        body: out
-                                    });
-                                },
-                                onSelect: function(valueObj, model, context) {
-                                    model.centreId = valueObj.id;
-                                    model.centreName = valueObj.name;
-                                },
-                                getListDisplayItem: function(item, index) {
-                                    return [
-                                        item.name
-                                    ];
-                                }
+                            "branchName": {
+                                "key": "customer.branchName",
+                                "type": "text",
+                                "title": "BRANCH_NAME",
                             },
-                        },
-                        "outputMap": {
-                            "urnNo": "customer.urnNo",
-                            "firstName":"customer.firstName"
-                        },
-                        "searchHelper": formHelper,
-                        "search": function(inputModel, form) {
-                            var branches = formHelper.enum('branch_id').data;
-                            var branchName;
-                            for (var i=0; i<branches.length;i++){
-                                if(branches[i].code==inputModel.customerBranchId)
-                                    branchName = branches[i].name;
-                            }
-                            $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                            var promise = Enrollment.search({
-                                'branchName': branchName ||SessionStore.getBranch(),
-                                'firstName': inputModel.firstName,
-                                'centreId':inputModel.centreId,
-                                'customerType':"enterprise",
-                                'urnNo': inputModel.urnNo
-                            }).$promise;
-                            return promise;
-                        },
-                        getListDisplayItem: function(data, index) {
-                            return [
-                                [data.firstName, data.fatherFirstName].join(' | '),
-                                data.id,
-                                data.urnNo
-                            ];
-                        },
-                        onSelect: function(valueObj, model, context){
-                            PageHelper.showProgress('customer-load', 'Loading customer...');
-                            Enrollment.getCustomerById({id: valueObj.id})
-                                .$promise
-                                .then(function(res){
-                                    PageHelper.showProgress("customer-load", "Done..", 5000);
-                                    model.customer = Utils.removeNulls(res, true);
-                                    BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
-                                }, function(httpRes){
-                                    PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
-                                })
-                        }
-                    },
-                    {
-                        key: "customer.customerBranchId",
-                        title:"BRANCH_NAME",
-                        readonly:true,
-                        type: "select"
-                    },
-                    /*{
-                        key: "customer.centreName",
-                        type: "lov",
-                        "title":"SPOKE_NAME",
-                        autolov: true,
-                        bindMap: {},
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model, context) {
-                            var centres = SessionStore.getCentres();
-                            $log.info("hi");
-                            $log.info(centres);
-
-                            var centreCode = formHelper.enum('centre').data;
-                            var out = [];
-                            if (centres && centres.length) {
-                                for (var i = 0; i < centreCode.length; i++) {
-                                    for (var j = 0; j < centres.length; j++) {
-                                        if (centreCode[i].value == centres[j].id) {
-                                            out.push({
-                                                name: centreCode[i].name,
-                                                id: centreCode[i].value
-                                            })
-                                        }
-                                    }
-                                }
-                            }
-                            return $q.resolve({
-                                headers: {
-                                    "x-total-count": out.length
-                                },
-                                body: out
-                            });
-                        },
-                        onSelect: function(valueObj, model, context) {
-                            model.customer.centreName = valueObj.name;
-                            model.customer.centreId = valueObj.id;
-                        },
-                        getListDisplayItem: function(item, index) {
-                            return [
-                                item.name
-                            ];
-                        }
-                    },*/
-                    {
-                        key: "customer.id",
-                        condition: "model.customer.id",
-                        title:"ENTITY_ID",
-                        readonly: true
-                    },
-                    {
-                        key: "customer.urnNo",
-                        condition: "model.customer.urnNo",
-                        title:"URN_NO",
-                        readonly: true
-                    },
-                    {
-                        key:"customer.centreId",
-                        type:"select",
-                        readonly: true,
-                        title:"CENTRE_NAME",
-                        filter: {
-                         "parentCode": "branch_id"
-                         },
-                        parentEnumCode:"branch_id",
-                        parentValueExpr:"model.customer.customerBranchId",
-                    },
-                    {
-                        key: "customer.centreId",
-                        condition: "!model.customer.id",
-                        type: "lov",
-                        autolov: true,
-                        lovonly: true,
-                        bindMap: {},
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model, context) {
-                            var centres = SessionStore.getCentres();
-                            // $log.info("hi");
-                            // $log.info(centres);
-
-                            var centreCode = formHelper.enum('centre').data;
-                            var out = [];
-                            if (centres && centres.length) {
-                                for (var i = 0; i < centreCode.length; i++) {
-                                    for (var j = 0; j < centres.length; j++) {
-                                        if (centreCode[i].value == centres[j].id) {
-                                            out.push({
-                                                name: centreCode[i].name,
-                                                id:centreCode[i].value
-                                            })
-                                        }
-                                    }
-                                }
-                            }
-                            return $q.resolve({
-                                headers: {
-                                    "x-total-count": out.length
-                                },
-                                body: out
-                            });
-                        },
-                        onSelect: function(valueObj, model, context) {
-                            model.customer.centreId = valueObj.id;
-                        },
-                        getListDisplayItem: function(item, index) {
-                            return [
-                                item.name
-                            ];
-                        }
-                    },
-                    {
-                        key: "customer.centreId",
-                        condition: "model.customer.id",
-                        readonly: true
-                    },
-                    {
-                        key: "customer.oldCustomerId",
-                        title:"ENTITY_ID",
-                        titleExpr:"('ENTITY_ID'|translate)+' (Artoo)'",
-                        condition: "model.customer.oldCustomerId",
-                        readonly: true
-                    },
-                    {
-                        key: "customer.firstName",
-                        title:"ENTITY_NAME"
-                    },
-                    {
-                        key: "customer.enterprise.referredBy",
-                        title:"SOURCED",
-                        required:true,
-                        type: "select",
-                        enumCode: "referredBy"
-                    },
-                    {
-                        key: "customer.enterprise.referredName",
-                        condition: "model.customer.enterprise.referredBy == 'Channel Partner'||model.customer.enterprise.referredBy =='Peer Referral'||model.customer.enterprise.referredBy =='Known supply chain'",
-                        title:"REFERRED_NAME"
-                    },/*
-                    {
-                        key: "customer.enterprise.businessName",
-                        title:"COMPANY_NAME"
-                    },*/
-                    { /*TODO Not working when this is enabled */
-                       key: "customer.enterprise.companyOperatingSince",
-                       title:"OPERATING_SINCE",
-                       required:true,
-                       type: "date"
-                    },
-                    {
-                        "type": "email",
-                         required:true,
-                        "key": "customer.enterprise.companyEmailId",
-                        "pattern": "^\\S+@\\S+$",
-                        "title": "COMPANY_EMAIL_ID"
-                    },
-                    {
-                        "key": "customer.latitude",
-                        "title": "BUSINESS_LOCATION",
-                        "type": "geotag",
-                        "latitude": "customer.latitude",
-                        "longitude": "customer.longitude"
-                    },
-                    {
-                        "key": "customer.photoImageId",
-                        "required":true,
-                        "title": "BUSINESS_LOCATION_PHOTO",
-                        type: "file",
-                        fileType: "image/*",
-                        "category": "CustomerEnrollment",
-                        "subCategory": "PHOTO"
-                    },
-                    {
-                        key: "customer.enterprise.ownership",
-                        title: "OWNERSHIP",
-                        type: "select",
-                        required:true,
-                        enumCode: "ownership"
-                    },
-                    {
-                        key: "customer.enterprise.businessConstitution",
-                        title: "CONSTITUTION",
-                        type: "select",
-                        enumCode: "constitution"
-                    },
-                    {
-                        key: "customer.enterprise.businessHistory",
-                        title: "BUSINESS_HISTORY",
-                        required:true,
-                        type: "select",
-                        enumCode: "business_history"
-                    },
-                    {
-                        key: "customer.enterprise.noOfPartners",
-                        title: "NO_OF_PARTNERS",
-                        type: "select",
-                        condition: "model.customer.enterprise.businessConstitution=='Partnership'",
-                        titleMap: {
-                            "2": "2",
-                            "3": "3",
-                            "4": "4",
-                            ">4": ">4",
-                        }
-                    },
-                    {
-                        key: "customer.enterprise.anyPartnerOfPresentBusiness",
-                        title: "HAS_ANYONE_ELSE_PARTNER",
-                        type: "select",
-                        enumCode: "decisionmaker"
-                    },
-                    {
-                        key: "customer.enterprise.partnershipDissolvedDate",
-                        title: "PREVIOUS_PARTNERSHIP_DISSOLVED_DATE",
-                        condition: "model.customer.enterprise.anyPartnerOfPresentBusiness=='YES'",
-                        type: "date"
-                    },
-                    {
-                        key: "customer.enterprise.companyRegistered",
-                        type: "select",
-                        enumCode: "decisionmaker",
-                        title: "IS_REGISTERED",
-                        required : true
-                    },
-                    {
-                        key: "customer.enterprise.isGSTAvailable",
-                        type: "radios",
-                        enumCode:"decisionmaker",
-                        title: "IS_GST_AVAILABLE",
-                        required : true,
-                        "onChange": function(modelValue, form, model) {
-                                        if (model.customer.enterprise.isGSTAvailable === "YES") {
-                                                model.customer.enterprise.companyRegistered = "YES";
-                                        }
-                                    }
-                    },
-                    {
-                        key: "customer.enterpriseRegistrations",
-                        type: "array",
-                        title: "REGISTRATION_DETAILS",
-                        condition: "model.customer.enterprise.companyRegistered === 'YES' || model.customer.enterprise.isGSTAvailable === 'YES'",
-                        items: [
-                            {
-                                key: "customer.enterpriseRegistrations[].registrationType",
-                                title: "REGISTRATION_TYPE",
-                                type: "select",
-                                enumCode: "business_registration_type"
+                            "gstNumber": {
+                                "key": "loanAccount.gstNumber",
+                                "type": "text",
+                                "title": "GST_NUMBER",
                             },
-                            {
-                                key: "customer.enterpriseRegistrations[].registrationNumber",
-                               title: "REGISTRATION_NUMBER"
-                            },
-                            {
-                                key: "customer.enterpriseRegistrations[].registeredDate",
-                                type: "date",
-                                title: "REGISTRATION_DATE"
-                            },
-                            {
-                                key: "customer.enterpriseRegistrations[].expiryDate",
-                                type: "date",
-                                title: "VALID_UPTO"
-                            },
-                            {
-                                key:"customer.enterpriseRegistrations[].documentId",
-                                type:"file",
-                                required: true,
-                                title:"REGISTRATION_DOCUMENT",
-                                category:"CustomerEnrollment",
-                                subCategory:"REGISTRATIONDOCUMENT",
-                                fileType:"application/pdf",
-                                using: "scanner"
-                            }
-                        ]
-                    },/*,
-                    {
-                        key: "customer.enterprise.registrationType",
-                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
-                        title: "REGISTRATION_TYPE",
-                        type: "select",
-                        enumCode: "business_registration_type"
-                    },
-                    {
-                        key: "customer.enterprise.registrationNumber",
-                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
-                        title: "REGISTRATION_NUMBER"
-                    },
-                    {
-                        key: "customer.enterprise.registrationDate",
-                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
-                        type: "date",
-                        title: "REGISTRATION_DATE"
-                    }*/
-                    {
-                        key: "customer.enterprise.businessType",
-                        title: "BUSINESS_TYPE",
-                        type: "select",
-                        enumCode: "businessType"
-                    },
-                    {
-                        key: "customer.enterprise.businessActivity",
-                        required:true,
-                        title: "BUSINESS_ACTIVITY",
-                        type: "select",
-                        enumCode: "businessActivity",
-                        parentEnumCode: "businessType",
-                        parentValueExpr:"model.customer.enterprise.businessType",
-                    },
-                    {
-                        key: "customer.enterprise.businessSector",
-                        required:true,
-                        title: "BUSINESS_SECTOR",
-                        type: "select",
-                        enumCode: "businessSector",
-                        parentEnumCode: "businessType",
-                        parentValueExpr:"model.customer.enterprise.businessType",
-                        onChange: function(modelValue, form, model, formCtrl, event) {
-                            model.customer.enterprise.businessSubsector = null;
-                        }
-                    },
-                    {
-                        key: "customer.enterprise.businessSubsector",
-                        required:true,
-                        title: "BUSINESS_SUBSECTOR",
-                        type: "lov",
-                        "lovonly": true,
-                        autolov: true,
-                        bindMap: {
-                        },
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model, context) {
-                            var businessSubsectors = formHelper.enum('businessSubSector').data;
-                            var businessSectors = formHelper.enum('businessSector').data;
-
-                            var selectedBusinessSector  = null;
-
-                            for (var i=0;i<businessSectors.length;i++){
-                                if (businessSectors[i].value == model.customer.enterprise.businessSector && businessSectors[i].parentCode == model.customer.enterprise.businessType){
-                                    selectedBusinessSector = businessSectors[i];
-                                    break;
-                                }
-                            }
-
-                            var out = [];
-                            for (var i=0;i<businessSubsectors.length; i++){
-                                if (businessSubsectors[i].parentCode == selectedBusinessSector.code){
-                                    out.push({
-                                        name: businessSubsectors[i].name,
-                                        value: businessSubsectors[i].value
-                                    })
-                                }
-                            }
-                            return $q.resolve({
-                                headers: {
-                                    "x-total-count": out.length
-                                },
-                                body: out
-                            });
-                        },
-                        onSelect: function(valueObj, model, context){
-                            model.customer.enterprise.businessSubsector = valueObj.value;
-                        },
-                        getListDisplayItem: function(item, index) {
-                            return [
-                                item.name
-                            ];
-                        }
-                    },
-                    {
-                        key: "customer.enterprise.itrAvailable",
-                        title: "ITR_AVAILABLE",
-                        type: "select",
-                        enumCode: "decisionmaker"
-                    },
-                    /*{
-                        key: "customer.enterprise.electricityAvailable",
-                        title: "ELECTRICITY_AVAIALBLE",
-                        type: "select",
-                        enumCode: "decisionmaker",
-                        required: true
-                    },
-                    {
-                        key: "customer.enterprise.spaceAvailable",
-                        title: "SPACE_AVAILABLE",
-                        type: "select",
-                        enumCode: "decisionmaker",
-                        required: true
-                    },*/
-                    {
-                        key: "customer.enterpriseCustomerRelations",
-                        type: "array",
-                        startEmpty: true,
-                        title: "RELATIONSHIP_TO_BUSINESS",
-                        items: [
-                            {
-                                key: "customer.enterpriseCustomerRelations[].relationshipType",
-                                title: "RELATIONSHIP_TYPE",
-                                type: "select",
-                                enumCode: "relationship_type",
-                                required: true
-                            },
-                            {
-                                key: "customer.enterpriseCustomerRelations[].linkedToCustomerId",
-                                type: "lov",
-                                title: "CUSTOMER_ID",
-                                inputMap: {
-                                    "firstName": {
-                                        "key": "customer.firstName",
-                                        "title": "CUSTOMER_NAME"
-                                    },
-                                    "branchName": {
-                                        "key": "customer.kgfsName",
-                                        "type": "select"
-                                    },
-                                    "centreId": {
-                                        "key": "customer.centreId",
+                            "enterpriseDocuments": {
+                                "type": "array",
+                                "title": "BUSINESS_DOCUMENT",
+                                "key": "customer.enterpriseDocuments",
+                                "startEmpty": true,
+                                "items": {
+                                    "udf1": {
+                                        "title": "BUSINESS_TYPE",
                                         "type": "select",
-                                        title:"CENTRE_NAME"
+                                        "enumCode": "businessType",
+                                        "title": "BUSINESS_TYPE",
+                                        "key": "customer.enterpriseDocuments[].udf1",
+                                        "required": true
+                                    },
+                                    "udf2": {
+                                        "key": "customer.enterpriseDocuments[].udf2",
+                                        "title": "BUSINESS_ACTIVITY",
+                                        "required": true,
+                                        type: "select",
+                                        enumCode: "businessActivity",
+                                    },
+                                    "udf3": {
+                                        "key": "customer.enterpriseDocuments[].udf3",
+                                        "title": "BUSINESS_SECTOR",
+                                        "required": true,
+                                        "title": "BUSINESS_SECTOR",
+                                        "type": "select",
+                                        "enumCode": "businessSector",
+                                    },
+                                    "udf4": {
+                                        "title": "ITR_AVAILABLE",
+                                        "type": "radios",
+                                        "enumCode": "decisionmaker",
+                                        "key": "customer.enterpriseDocuments[].udf4",
+                                        "title": "INCOME_TAX_RETURN_AVAILABLE",
+                                        "required": true
                                     }
-                                },
-                                outputMap: {
-                                    "id": "customer.enterpriseCustomerRelations[arrayIndex].linkedToCustomerId",
-                                    "firstName": "customer.enterpriseCustomerRelations[arrayIndex].linkedToCustomerName"
-                                },
-                                searchHelper: formHelper,
-                                search: function(inputModel, form, model) {
-                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                    $log.info("inputModel.centreId: " + inputModel.centreId);
-                                    if (!inputModel.branchName)
-                                        inputModel.branchName = SessionStore.getBranch();
-                                    var promise = Enrollment.search({
-                                        'branchName': inputModel.branchName,
-                                        'firstName': inputModel.firstName,
-                                        'centreId': inputModel.centreId,
-                                        'customerType': 'Individual'
-                                    }).$promise;
-                                    return promise;
-                                },
-                                getListDisplayItem: function(data, index) {
-                                    return [
-                                        [data.firstName, data.fatherFirstName].join(' '),
-                                        data.id
-                                    ];
+                                }
+                            }
+                        }
+
+                    },
+                    "PreliminaryInformation": {
+                        "type": "box",
+                        "title": "PRELIMINARY_INFORMATION",
+                        "items": {
+                            "loanAmountRequested": {
+                                "key": "loanAccount.loanAmountRequested",
+                                "type": "amount",
+                                "title": "REQUESTED_LOAN_AMOUNT"
+                            },
+                            "tenure": {
+                                "key": "loanAccount.tenure",
+                                "title": "DURATION_IN_MONTHS",
+                                "required": true
+                            },
+                            "interestRate": {
+                                "key": "loanAccount.interestRate",
+                                "type": "number",
+                                "required": true,
+                                "title": "INTEREST_RATE"
+                            },
+                            "estimatedEmi": {
+                                "key": "loanAccount.estimatedEmi",
+                                "type": "amount",
+                                "title": "ESTIMATED_EMI",
+                            },
+                        }
+                    },
+                    "EnterpriseFinancials": {
+                        "items": {
+                            "totalMonthlySurplus": {
+                                "key": "customer.totalMonthlySurplus",
+                                "type": "text",
+                                "title": "TOTAL_MONTHLY_SURPLUS",
+                            },
+                            "debtServiceRatio": {
+                                "key": "customer.debtServiceRatio",
+                                "type": "text",
+                                "title": "DEBT_SERVICE_RATIO",
+                            }
+                        }
+                    },
+                    "EstimatedSales": {
+                        "type": "box",
+                        "title": "Intial Estimate Weekly Sales",
+                        "items": {
+                            'initialEstimateWeeklySale': {
+                                key: "customer.enterprise.initialEstimateWeeklySale",
+                                title: "EstimatedWeeklySales",
+                                "type": "number"
+                            },
+                            'initialEstimateMonthlySale': {
+                                key: "customer.enterprise.initialEstimateMonthlySale",
+                                title: "EstimmatedMonthlySales",
+                                "type": "number"
+                            }
+                        }
+                    },
+                    "DailySales": {
+                        "type": "box",
+                        "orderNo": 620,
+                        colClass: "col-sm-12",
+                        "title": "DDaily_Sales",
+                        "items": {
+                            "enterpriseDailySale": {
+                                key: "customer.enterpriseDailySale",
+                                type: "datatable",
+                                title: "Daily_Sales",
+                                startEmpty: true,
+                                dtlConfig: {
+                                    columnsFn: function () {
+                                        return $q.resolve({
+                                            "dtlKeyvalue": "ADD_PARAMETER",
+                                            "columns": [
+                                                {
+                                                    prop: "seasonType",
+                                                    type: "string",
+                                                    name: "CYCLE"
+                                                },
+                                                {
+                                                    prop: "mon",
+                                                    type: "number",
+                                                    name: "MON",
+                                                    "readonly": true,
+                                                    onClick: function (value, model, row) {
+                                                        getDialySalesDetails(value, model, row, 'mon')
+                                                    },
+                                                },
+                                                {
+                                                    prop: "tue",
+                                                    type: "number",
+                                                    name: "TUE",
+                                                    onClick: function (value, model, row) {
+                                                        getDialySalesDetails(value, model, row, 'tue')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "wed",
+                                                    type: "number",
+                                                    name: "WED",
+                                                    onClick: function (value, model, row) {
+                                                        getDialySalesDetails(value, model, row, 'wed')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "thu",
+                                                    type: "number",
+                                                    name: "THU",
+                                                    onClick: function (value, model, row) {
+                                                        getDialySalesDetails(value, model, row, 'thu')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "fri",
+                                                    type: "number",
+                                                    name: "FRI",
+                                                    onClick: function (value, model, row) {
+                                                        getDialySalesDetails(value, model, row, 'fri')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "sat",
+                                                    type: "number",
+                                                    name: "SAT",
+                                                    "readonly": true,
+                                                    onClick: function (value, model, row) {
+                                                        getDialySalesDetails(value, model, row, 'sat')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "sun",
+                                                    type: "number",
+                                                    name: "SUN",
+                                                    onClick: function (value, model, row) {
+                                                        getDialySalesDetails(value, model, row, 'sun')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "total",
+                                                    type: "number",
+                                                    name: "TOTAL",
+                                                    "readonly": true
+                                                }
+                                            ],
+
+                                        })
+                                    }
                                 }
                             },
-                            {
-                                key: "customer.enterpriseCustomerRelations[].linkedToCustomerName",
-                                readonly: true,
-                                title: "CUSTOMER_NAME"
+                            'weeklySale': {
+                                key: "customer.enterprise.weeklySale",
+                                title: "WeeklySales",
+                                "type": "number",
+                                required: true,
+                                readonly: true
                             },
-                            {
-                                key: "customer.enterpriseCustomerRelations[].experienceInBusiness",
-                                title: "EXPERIENCE_IN_BUSINESS",
-                                type:"select",
-                                "enumCode": "years_in_current_area",
-                                required:true,
-                            },
-                            {
-                                key: "customer.enterpriseCustomerRelations[].businessInvolvement",
-                                title: "BUSINESS_INVOLVEMENT",
-                                required:true,
-                                type: "select",
-                                enumCode: "business_involvement"
-                            },
-
-                            {
-                                key: "customer.enterpriseCustomerRelations[].partnerOfAnyOtherCompany",
-                                title: "PARTNER_OF_ANY_OTHER_COMPANY",
-                                type: "select",
-                                enumCode: "decisionmaker"
-                            },
-                            {
-                                key: "customer.enterpriseCustomerRelations[].otherBusinessClosed",
-                                title: "OTHER_BUSINESS_CLOSED",
-                                type: "select",
-                                enumCode: "decisionmaker",
-                                condition:"model.customer.enterpriseCustomerRelations[arrayIndex].partnerOfAnyOtherCompany == 'YES'"
-                            },
-                            {
-                                key: "customer.enterpriseCustomerRelations[].otherBusinessClosureDate",
-                                type: "date",
-                                title: "OTHER_BUSINESS_CLOSE_DATE",
-                                condition:"model.customer.enterpriseCustomerRelations[arrayIndex].otherBusinessClosed == 'YES'"
+                            'monthlySale': {
+                                key: "customer.enterprise.monthlySale",
+                                title: "MonthlySales",
+                                "type": "number",
+                                required: true,
+                                readonly: true
                             }
-                        ]
-                    }
-                ]
-            },
-            {
-                "type": "box",
-                "title": "ENTITY_INFORMATION",
-                "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
-               // "condition": "model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'",
-                readonly:true,
-                "items": [
-                    {
-                        "key": "customer.firstName",
-                        "title":"CUSTOMER_NAME"
-                    },
-                    {
-                        key: "customer.customerBranchId",
-                        title:"BRANCH_NAME",
-                        type: "select"
-                    },
-                    {
-                        key: "customer.id",
-                        condition: "model.customer.id",
-                        title:"ENTITY_ID",
-                        parentEnumCode:"branch_id",
-                        parentValueExpr:"model.customer.customerBranchId",
-                        readonly: true
-                    },
-                    {
-                        key: "customer.urnNo",
-                        condition: "model.customer.urnNo",
-                        title:"URN_NO",
-                        readonly: true
-                    },
-                    {
-                        key:"customer.centreId",
-                        type:"select",
-                        title:"CENTRE_NAME"
-                    },
-                    {
-                        key: "customer.oldCustomerId",
-                        title:"ENTITY_ID",
-                        titleExpr:"('ENTITY_ID'|translate)+' (Artoo)'",
-                        condition: "model.customer.oldCustomerId",
-                        readonly: true
-                    },
-                    {
-                        key: "customer.firstName",
-                        title:"ENTITY_NAME"
-                    },
-                    {
-                        key: "customer.enterprise.referredBy",
-                        title:"SOURCED",
-                        type: "select",
-                        enumCode: "referredBy"
-                    },
-                    {
-                        key: "customer.enterprise.referredName",
-                        title:"REFERRED_NAME"
-                    },
-                    {
-                       key: "customer.enterprise.companyOperatingSince",
-                       title:"OPERATING_SINCE",
-                       type: "date"
-                    },
-                    {
-                        "type": "email",
-                        "key": "customer.enterprise.companyEmailId",
-                        "pattern": "^\\S+@\\S+$",
-                        "title": "COMPANY_EMAIL_ID",
-                    },
-                    {
-                        "key": "customer.latitude",
-                        "title": "BUSINESS_LOCATION",
-                        "type": "geotag",
-                        "latitude": "customer.latitude",
-                        "longitude": "customer.longitude"
-                    },
-                    {
-                        "key": "customer.photoImageId",
-                        "title": "BUSINESS_LOCATION_PHOTO",
-                        type: "file",
-                        fileType: "image/*",
-                        "category": "CustomerEnrollment",
-                        "subCategory": "PHOTO"
-                    },
-                    {
-                        key: "customer.enterprise.ownership",
-                        title: "OWNERSHIP",
-                        /*type: "select",
-                        enumCode: "ownership"*/
-                    },
-                    {
-                        key: "customer.enterprise.businessConstitution",
-                        title: "CONSTITUTION",
-                        type: "select",
-                        enumCode: "constitution"
-                    },
-                    {
-                        key: "customer.enterprise.businessHistory",
-                        title: "BUSINESS_HISTORY",
-                        type: "select",
-                        enumCode: "business_history"
-                    },
-                    {
-                        key: "customer.enterprise.noOfPartners",
-                        title: "NO_OF_PARTNERS",
-                        type: "select",
-                        condition: "model.customer.enterprise.businessConstitution=='Partnership'",
-                        titleMap: {
-                            "2": "2",
-                            "3": "3",
-                            "4": "4",
-                            ">4": ">4",
                         }
                     },
-                    {
-                        key: "customer.enterprise.anyPartnerOfPresentBusiness",
-                        title: "HAS_ANYONE_ELSE_PARTNER",
-                        type: "string"
+                    "EnterpriseProductSale": {
+                        "type": "box",
+                        colClass: "col-sm-12",
+                        "title": "ENTERPRISE_PRODUCT_SALES",
+                        "orderNo": 640,
+                        "items": {
+                            "enterpriseProductSales": {
+                                key: "customer.enterpriseProductSales",
+                                type: "datatable",
+                                title: "EnterpriseProductSale",
+                                dtlConfig: {
+                                    columnsFn: function () {
+                                        return $q.resolve({
+                                            "dtlKeyvalue": "ADD_PARAMETER",
+                                            "columns": [
+                                                {
+                                                    prop: "productName",
+                                                    type: "text",
+                                                    name: "PRODUCT_NAME"
+                                                },
+                                                {
+                                                    prop: "salePrice",
+                                                    type: "number",
+                                                    name: "SALE_PRICE",
+                                                    onClick: function (value, model, row) {
+                                                        getEnterpriseProductDetails(model);
+
+                                                    }
+                                                },
+                                                {
+                                                    prop: "costPrice",
+                                                    type: "number",
+                                                    name: "COST_PRICE",
+                                                    onClick: function (value, model, row) {
+                                                        getEnterpriseProductDetails(model);
+
+                                                    }
+                                                },
+                                                {
+                                                    prop: "quantity",
+                                                    type: "number",
+                                                    name: "QUANTITY",
+                                                    onClick: function (value, model, row) {
+                                                        getEnterpriseProductDetails(model);
+                                                    }
+                                                },
+                                                {
+                                                    prop: "totalSale",
+                                                    type: "number",
+                                                    name: "TOTAL_SALE",
+                                                    "readonly": true
+                                                },
+                                                {
+                                                    prop: "totalCost",
+                                                    type: "number",
+                                                    name: "TOTAL_COST",
+                                                    "readonly": true
+                                                },
+
+                                            ],
+
+                                        })
+                                    }
+                                }
+                            },
+                            'totalDailySales': {
+                                key: "customer.enterprise.totalDailySales",
+                                title: "TOTAL_DAILY_Sales",
+                                "type": "number",
+                                required: true,
+                                readonly: true
+                            },
+                            'totalDailyCost': {
+                                key: "customer.enterprise.totalDailyCost",
+                                title: "TOTAL_DAILY_COST",
+                                "type": "number",
+                                required: true,
+                                readonly: true
+                            },
+                            'totalWeeklySales': {
+                                key: "customer.enterprise.totalWeeklySales",
+                                title: "TOTAL_WEEKLY_SALES",
+                                "type": "number",
+                                required: true,
+                                readonly: true
+                            },
+                            'totalWeeklyCost': {
+                                key: "customer.enterprise.totalWeeklyCost",
+                                title: "TOTAL_WEEKLY_COST",
+                                "type": "number",
+                                required: true,
+                                readonly: true
+                            },
+                            'totalMonthlySales': {
+                                key: "customer.enterprise.totalMonthlySales",
+                                title: "TOTAL_MONTHLY_SALE",
+                                "type": "number",
+                                required: true,
+                                readonly: true
+                            },
+                            'totalMonthlyCost': {
+                                key: "customer.enterprise.totalMonthlyCost",
+                                title: "TOTAL_MONTHLY_COST",
+                                "type": "number",
+                                required: true,
+                                readonly: true
+                            },
+                            'grossMarginSales': {
+                                key: "customer.enterprise.grossMarginSales",
+                                title: "GROSS_MARGIN_SALE",
+                                "type": "number",
+                                required: true,
+                                readonly: true
+                            },
+                            'grossMarginCost': {
+                                key: "customer.enterprise.grossMarginCost",
+                                title: "GROSS_MARGIN_COST",
+                                "type": "number",
+                                required: true,
+                                readonly: true
+                            }
+                        }
                     },
-                    {
-                        key: "customer.enterprise.partnershipDissolvedDate",
-                        title: "PREVIOUS_PARTNERSHIP_DISSOLVED_DATE",
-                        condition: "model.customer.enterprise.anyPartnerOfPresentBusiness=='Yes' || model.customer.enterprise.anyPartnerOfPresentBusiness=='YES'",
-                        type: "date"
+                    "AnnualSales": {
+                        "type": "box",
+                        colClass: "col-sm-12",
+                        "title": "ANNUAL_BUSINESS_CYCLE",
+                        "orderNo": 650,
+                        "items": {
+                            "monthlySale": {
+                                key: "customer.monthlySale",
+                                type: "datatable",
+                                title: "ANNUAL_BUSINESS_CYCLE",
+                                startEmpty: true,
+                                dtlConfig: {
+                                    columnsFn: function () {
+                                        return $q.resolve({
+                                            "dtlKeyvalue": "ADD_PARAMETER",
+                                            "columns": [
+                                                {
+                                                    prop: "seasonType",
+                                                    type: "string",
+                                                    name: "CYCLE"
+                                                },
+                                                {
+                                                    prop: "January",
+                                                    type: "number",
+                                                    name: "Jan",
+                                                    "readonly": true,
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'January');
+                                                    },
+                                                },
+
+                                                {
+                                                    prop: "Feburary",
+                                                    type: "number",
+                                                    name: "Feb",
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'Feburary')
+                                                    }
+
+                                                },
+                                                {
+                                                    prop: "March",
+                                                    type: "number",
+                                                    name: "Mar",
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'March')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "April",
+                                                    type: "number",
+                                                    name: "Apr",
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'April')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "May",
+                                                    type: "number",
+                                                    name: "May",
+                                                    "readonly": true,
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'May')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "June",
+                                                    type: "number",
+                                                    name: "Jun",
+                                                    "readonly": true,
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'June')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "July",
+                                                    type: "number",
+                                                    name: "Jul",
+                                                    "readonly": true,
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'July')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "August",
+                                                    type: "number",
+                                                    name: "Aug",
+                                                    "readonly": true,
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'August')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "September",
+                                                    type: "number",
+                                                    name: "Sep",
+                                                    "readonly": true,
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'September')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "October",
+                                                    type: "number",
+                                                    name: "Oct",
+                                                    "readonly": true,
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'October')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "November",
+                                                    type: "number",
+                                                    name: "Nov",
+                                                    "readonly": true,
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'November')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "December",
+                                                    type: "number",
+                                                    name: "Dec",
+                                                    "readonly": true,
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'December')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "total",
+                                                    type: "number",
+                                                    name: "Total",
+                                                    "readonly": true
+                                                }
+                                            ],
+
+                                        })
+                                    }
+                                }
+                            },
+                            'avgMonthlySales': {
+                                key: "customer.enterprise.avgMonthlySales",
+                                title: "MonthlySales",
+                                "type": "number",
+                                required: true,
+                                readonly: true
+                            },
+                            'avgAnnualSales': {
+                                key: "customer.enterprise.avgAnnualSales",
+                                title: "AnnualSale",
+                                "type": "number",
+                                required: true,
+                                readonly: true
+                            }
+
+                        }
                     },
-                    {
-                        key: "customer.enterprise.companyRegistered",
-                        type: "select",
-                        titleMap: {
-                            "YES": "Yes",
-                            "NO": "No"
-                        },
-                        title: "IS_REGISTERED"
+                    "MonthlySalesCalculate": {
+                        "type": "box",
+                        colClass: "col-sm-12",
+                        "title": "MONTHLY_SALES_CALCULATE",
+                        "orderNo": 660,
+                        "items": {
+                            'monthlySalesCal': {
+                                key: "customer.enterprise.monthlySalesCal",
+                                title: "MonthlySalesCal",
+                                "type": "number",
+                                "readonly": true
+                            },
+                            'costOfGoodsSold': {
+                                key: "customer.enterprise.costOfGoodsSold",
+                                title: "CostOfGoodsSold",
+                                "type": "number",
+                                "readonly": true
+                            },
+                            'grossProfit': {
+                                key: "customer.enterprise.grossProfit",
+                                title: "GrossProfit",
+                                "type": "number",
+                                "readonly": true
+                            }
+                        }
                     },
-                    {
-                        key: "customer.enterprise.isGSTAvailable",
-                        type: "radios",
-                        enumCode:"decisionmaker",
-                        title: "IS_GST_AVAILABLE",
-                        "onChange": function(modelValue, form, model) {
-                                        if (model.customer.enterprise.isGSTAvailable === "YES") {
-                                                model.customer.enterprise.companyRegistered = "YES";
+                    "MonthlyBusinessExpense": {
+                        "type": "box",
+                        colClass: "col-sm-12",
+                        "title": "BUSINESS_EXPENSE_MONTHLY",
+                        "orderNo": 670,
+                        "items": {
+                            "monthlyBusinessExpense": {
+                                key: "customer.monthlyBusinessExpense",
+                                type: "datatable",
+                                title: "BUSINESS_EXPENSE_MONTHLY",
+                                dtlConfig: {
+                                    columnsFn: function () {
+                                        return $q.resolve({
+                                            "dtlKeyvalue": "ADD_PARAMETER",
+                                            "columns": [
+                                                {
+                                                    prop: "expenditureSource",
+                                                    type: "text",
+                                                    name: "ITEM"
+                                                },
+                                                {
+                                                    prop: "expenseType",
+                                                    type: "number",
+                                                    name: "ADDITIONAL_DETAILS",
+
+                                                },
+
+                                                {
+                                                    prop: "annualExpenses",
+                                                    type: "number",
+                                                    name: "AMOUNT",
+                                                    onClick: function (value, model, row) {
+                                                        getBusinessExpenseData(value, model, row)
+                                                    },
+                                                    "readonly": true
+                                                }
+                                            ],
+
+                                        })
+                                    }
+                                }
+                            },
+                            'totalBusinessExpenses': {
+                                key: "customer.enterprise.totalBusinessExpenses",
+                                title: "TotalBusinessExpenses",
+                                "type": "number",
+                                required: true,
+                                readonly: true
+                            },
+                            'netBusinessIncome': {
+                                key: "customer.enterprise.netBusinessIncome",
+                                title: "NetBusinessIncome",
+                                "type": "number",
+                                required: true,
+                                readonly: true
+                            }
+                        }
+                    },
+                    "NetBusinessIncome": {
+                        "type": "box",
+                        "title": "NET_BUSINESS_INCOME",
+                        "orderNo": 680,
+                        "items": {
+                            'netBusinessIncomeGrossMargin': {
+                                key: "customer.enterprise.netBusinessIncomeGrossMargin",
+                                title: "NET_BUSINESS_INCOME_AS_GROSS_SALE_OR_PROFIT",
+                                "type": "number",
+                                readonly: true
+                            },
+                        }
+                    },
+                    "OtherBusinessIncomes": {
+                        "type": "box",
+                        colClass: "col-sm-12",
+                        "title": "OtherBusinessIncomes",
+                        "orderNo": 690,
+                        "items": {
+                            "otherBusinessIncomes": {
+                                key: "customer.otherBusinessIncomes",
+                                type: "datatable",
+                                title: "OtherBusinessIncomes",
+                                dtlConfig: {
+                                    columnsFn: function () {
+                                        return $q.resolve({
+                                            "dtlKeyvalue": "ADD_PARAMETER",
+                                            "columns": [
+                                                {
+                                                    prop: "incomeSource",
+                                                    type: "text",
+                                                    name: "ITEM"
+                                                },
+                                                {
+                                                    prop: "additionDetails",
+                                                    type: "number",
+                                                    name: "ADDITIONAL_DETAILS",
+
+                                                },
+
+                                                {
+                                                    prop: "amount",
+                                                    type: "number",
+                                                    name: "AMOUNT",
+                                                    onClick: function (value, model, row) {
+                                                        getOtherBusinessIncomeDet(value, model, row);
+                                                    },
+                                                    "readonly": true
+                                                }
+
+                                            ],
+
+                                        })
+                                    }
+                                }
+                            },
+                            'totalMonthlyAdditionIncome': {
+                                key: "customer.enterprise.totalMonthlyAdditionIncome",
+                                title: "TotalMonthlyAdditionIncome",
+                                "type": "number",
+                                required: true,
+                                readonly: true
+                            },
+                            'additionalIncomeConsidered': {
+                                key: "customer.enterprise.additionalIncomeConsidered",
+                                title: "AdditionalIncomeConsidered",
+                                "type": "number",
+                                required: true,
+                                readonly: true
+                            }
+                        }
+                    },
+                    "PersonalExpenses": {
+                        "type": "box",
+                        colClass: "col-sm-12",
+                        "title": "PersonalExpenses",
+                        "orderNo": 710,
+                        "items": {
+                            "personalExpenses": {
+                                key: "customer.personalExpenses",
+                                type: "datatable",
+                                title: "MonthlyBusinessExpense",
+                                dtlConfig: {
+                                    columnsFn: function () {
+                                        return $q.resolve({
+                                            "dtlKeyvalue": "ADD_PARAMETER",
+                                            "columns": [
+                                                {
+                                                    prop: "expenditureSource",
+                                                    type: "text",
+                                                    name: "ITEM"
+                                                },
+                                                {
+                                                    prop: "expenseType",
+                                                    type: "number",
+                                                    name: "ADDITIONAL_DETAILS",
+
+                                                },
+
+                                                {
+                                                    prop: "annualExpenses",
+                                                    type: "number",
+                                                    name: "AMOUNT",
+                                                    onClick: function (value, model, row) {
+                                                        getPersonalExpenses(value, model, row);
+                                                        //model.customer.enterprise.totalBusinessExpenses = total;
+
+                                                    },
+                                                    "readonly": true
+                                                }
+
+                                            ],
+
+                                        })
+                                    }
+                                }
+                            },
+                            'totalPersonalExpense': {
+                                key: "customer.enterprise.totalPersonalExpense",
+                                title: "TotalPersonalExpense",
+                                "type": "number",
+                                required: true,
+                                readonly: true
+                            }
+                        }
+                    },
+                    "LiabilityRepayment": {
+                        "type": "box",
+                        colClass: "col-sm-12",
+                        "title": "LIABILITY_REPAYMENT",
+                        "orderNo": 730,
+                        "items": {
+                            "liabilities": {
+                                "key": "customer.liabilities[]",
+                                "type": "array",
+                                "items": {
+                                    "customerLiabilityRepayments": {
+                                        key: "customer.liabilities[].customerLiabilityRepayments",
+                                        type: "datatable",
+                                        title: "LIABILITY_REPAYMENT",
+                                        dtlConfig: {
+                                            columnsFn: function () {
+                                                return $q.resolve({
+                                                    "dtlKeyvalue": "ADD_PARAMETER",
+                                                    "columns": [
+                                                        {
+                                                            prop: "udf2",
+                                                            type: "text",
+                                                            name: "ITEM"
+                                                        },
+                                                        {
+                                                            prop: "udf1",
+                                                            type: "text",
+                                                            name: "number",
+                                                            // onClick : function(value , model , row){
+                                                            // //    model.customer.enterprise.totalLoanAmount = 0;
+
+                                                            // //    var liabilities =  model.customer.liabilities;
+                                                            // //    for(i in liabilities){
+                                                            // //     model.customer.enterprise.totalLoanAmount = model.customer.enterprise.totalLoanAmount + liabilities[i].loanAmount;
+                                                            // //    }
+                                                            // }
+                                                        },
+                                                        {
+                                                            prop: "emiAmount",
+                                                            type: "number",
+                                                            name: "EMI"
+                                                            // onClick : function(value , model , row){
+                                                            //     model.customer.enterprise.totalEmiAmount = 0;
+                                                            //     var liabilities =  model.customer.liabilities;
+                                                            //    for(i in liabilities){
+                                                            //     model.customer.enterprise.totalEmiAmount = model.customer.enterprise.totalEmiAmount + liabilities[i].emiAmount;
+                                                            //    }
+                                                            // }
+                                                        }
+
+                                                    ],
+
+                                                })
+                                            }
                                         }
                                     }
-                    },
-                    {
-                        key: "customer.enterpriseRegistrations",
-                        type: "array",
-                        title: "REGISTRATION_DETAILS",
-                        condition: "model.customer.enterprise.companyRegistered === 'YES'",
-                        items: [
-                            {
-                                key: "customer.enterpriseRegistrations[].registrationType",
-                                title: "REGISTRATION_TYPE",
-                                type: "select",
-                                enumCode: "business_registration_type"
+                                }
                             },
-                            {
-                                key: "customer.enterpriseRegistrations[].registrationNumber",
-                               title: "REGISTRATION_NUMBER"
-                            },
-                            {
-                                key: "customer.enterpriseRegistrations[].registeredDate",
-                                type: "date",
-                                title: "REGISTRATION_DATE"
-                            },
-                            {
-                                key: "customer.enterpriseRegistrations[].expiryDate",
-                                type: "date",
-                                title: "VALID_UPTO"
-                            },
-                            {
-                                key:"customer.enterpriseRegistrations[].documentId",
-                                type:"file",
-                                required: true,
-                                title:"REGISTRATION_DOCUMENT",
-                                category:"CustomerEnrollment",
-                                subCategory:"REGISTRATIONDOCUMENT",
-                                fileType:"application/pdf",
-                                using: "scanner"
-                            }
-                        ]
-                    },
+                            'totalEmiAmount': {
 
-                    {
-                        key: "customer.enterprise.businessType",
-                        title: "BUSINESS_TYPE",
-                        type: "select",
-                        enumCode: "businessType"
-                    },
-                    {
-                        key: "customer.enterprise.businessActivity",
-                        title: "BUSINESS_ACTIVITY",
-                        type: "select",
-                        enumCode: "businessActivity",
-                    },
-                    {
-                        key: "customer.enterprise.businessSector",
-                        title: "BUSINESS_SECTOR",
-                        type: "select",
-                        enumCode: "businessSector",
-                        //parentValueExpr:"model.customer.enterprise.businessLine",
-                    },
-                    {
-                        key: "customer.enterprise.businessSubsector",
-                        title: "BUSINESS_SUBSECTOR",
-                        type: "select",
-                        enumCode: "businessSubSector",
-                        // parentEnumCode: "businessSector",
-                        //parentValueExpr:"model.customer.enterprise.businessSector",
-                    },
-                    {
-                        key: "customer.enterprise.itrAvailable",
-                        title: "ITR_AVAILABLE",
-                        type: "string",
-                        // enumCode: "decisionmaker"
-                    },
-                    {
-                        key: "customer.enterpriseCustomerRelations",
-                        type: "array",
-                        title: "RELATIONSHIP_TO_BUSINESS",
-                        startEmpty: true,
-                        items: [
-                            {
-                                key: "customer.enterpriseCustomerRelations[].relationshipType",
-                                title: "RELATIONSHIP_TYPE",
-                                type: "select",
-                                enumCode: "relationship_type"
+                                key: "customer.enterprise.totalEmiAmount",
+                                title: "TOTAL_EMI_AMOUNT",
+                                "type": "number",
+                                //required: true,
+                                readonly: true
                             },
-                            {
-                               key: "customer.enterpriseCustomerRelations[].linkedToCustomerId",
-                               title: "CUSTOMER_ID",
-                            },
-                            {
-                                key: "customer.enterpriseCustomerRelations[].linkedToCustomerName",
-                                readonly: true,
-                                title: "CUSTOMER_NAME"
-                            },
-                            {
-                                key: "customer.enterpriseCustomerRelations[].experienceInBusiness",
-                                title: "EXPERIENCE_IN_BUSINESS",
-                                type:"select",
-                                "enumCode": "years_in_current_area"
-                            },
-                            {
-                                key: "customer.enterpriseCustomerRelations[].businessInvolvement",
-                                title: "BUSINESS_INVOLVEMENT",
-                                type: "select",
-                                enumCode: "business_involvement"
-                            },
-                            {
-                                key: "customer.enterpriseCustomerRelations[].partnerOfAnyOtherCompany",
-                                title: "PARTNER_OF_ANY_OTHER_COMPANY",
-                                type: "select",
-                                enumCode: "decisionmaker"
-                            },
-                            {
-                                key: "customer.enterpriseCustomerRelations[].otherBusinessClosed",
-                                title: "OTHER_BUSINESS_CLOSED",
-                                type: "select",
-                                enumCode: "decisionmaker",
-                                condition:"model.customer.enterpriseCustomerRelations[arrayIndex].partnerOfAnyOtherCompany=='YES'"
-                            },
-                            {
-                                key: "customer.enterpriseCustomerRelations[].otherBusinessClosureDate",
-                                type: "date",
-                                title: "OTHER_BUSINESS_CLOSE_DATE",
-                                condition:"model.customer.enterpriseCustomerRelations[arrayIndex].otherBusinessClosed == 'YES'"
+                            'totalLoanAmount': {
+                                key: "customer.enterprise.totalLoanAmount",
+                                title: "TOTAL_LOAN_AMOUNT",
+                                "type": "number",
+                                //required: true,
+                                readonly: true
                             }
-                        ]
-                    }
-                ]
-            },
-            {
-                "type": "box",
-                "title": "CONTACT_INFORMATION",
-                "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
-                "items":[
-                    {
-                        "key": "customer.mobilePhone",
-                        "inputmode": "number",
-                        "numberType": "tel"
-                    },
-                    {
-                        "key": "customer.landLineNo",
-                        "inputmode": "number",
-                        "numberType": "tel"
-                    },
-                    "customer.doorNo",
-                    "customer.street",
-                    "customer.enterprise.landmark",
-                    {
-                        key: "customer.pincode",
-                        type: "lov",
-                        fieldType: "number",
-                        autolov: true,
-                        inputMap: {
-                            "pincode": "customer.pincode",
-                            "district": {
-                                key: "customer.district"
-                            },
-                            "state": {
-                                key: "customer.state"
-                            }
-                        },
-                        outputMap: {
-                            "division": "customer.locality",
-                            "region": "customer.villageName",
-                            "pincode": "customer.pincode",
-                            "district": "customer.district",
-                            "state": "customer.state"
-                        },
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model) {
-                            if (!inputModel.pincode) {
-                                return $q.reject();
-                            }
-                            return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
-                        },
-                        getListDisplayItem: function(item, index) {
-                            return [
-                                item.division + ', ' + item.region,
-                                item.pincode,
-                                item.district + ', ' + item.state
-                            ];
                         }
                     },
-                    {
-                        key: "customer.locality",
-                        readonly: true
+                    // "LiabilityRepayment": {
+                    //     "type": "box",
+                    //     colClass: "col-sm-12",
+                    //     "title": "LIABILITY_REPAYMENT",
+                    //     "orderNo": 730,
+                    //     "items": {
+                    //         "liabilities":{
+                    //             "key": "customer.liabilities",
+                    //             "type": "array",
+                    //             //"startEmpty": true,
+                    //             "items":{
+                    //                 "customerLiabilityRepayments": {
+                    //                     key: "customer.liabilities[].customerLiabilityRepayments",
+                    //                     type: "datatable",
+                    //                     title: "LIABILITY_REPAYMENT",
+                    //                     dtlConfig: {
+                    //                         columnsFn: function () {
+                    //                             return $q.resolve({
+                    //                                 "dtlKeyvalue": "ADD_PARAMETER",
+                    //                                 "columns": [
+                    //                                     {
+                    //                                         prop: "udf2",
+                    //                                         type: "text",
+                    //                                         name: "ITEM"
+                    //                                     },
+                    //                                     {
+                    //                                         prop: "udf1",
+                    //                                         type: "text",
+                    //                                         name: "LOAN_AMOUNT",
+                    //                                         onClick : function(value , model , row){
+                    //                                         //    model.customer.enterprise.totalLoanAmount = 0;
+
+                    //                                         //    var liabilities =  model.customer.liabilities;
+                    //                                         //    for(i in liabilities){
+                    //                                         //     model.customer.enterprise.totalLoanAmount = model.customer.enterprise.totalLoanAmount + liabilities[i].loanAmount;
+                    //                                         //    }
+                    //                                         }
+                    //                                     },
+                    //                                     {
+                    //                                         prop: "emiAmount",
+                    //                                         type: "number",
+                    //                                         name: "EMI"
+                    //                                         // onClick : function(value , model , row){
+                    //                                         //     model.customer.enterprise.totalEmiAmount = 0;
+                    //                                         //     var liabilities =  model.customer.liabilities;
+                    //                                         //    for(i in liabilities){
+                    //                                         //     model.customer.enterprise.totalEmiAmount = model.customer.enterprise.totalEmiAmount + liabilities[i].emiAmount;
+                    //                                         //    }
+                    //                                         // }
+                    //                                     }
+
+                    //                                 ],
+
+                    //                             })
+                    //                         }
+                    //                     }
+                    //                 },
+                    //             }
+                    //         },
+                    //         'totalEmiAmount':{
+
+                    //                 key: "customer.enterprise.totalEmiAmount",
+                    //                 title:"TOTAL_EMI_AMOUNT",
+                    //                 "type":"number",
+                    //                 //required: true,
+                    //                 readonly: true
+                    //             },
+                    //         'totalLoanAmount':{ 
+                    //             key: "customer.enterprise.totalLoanAmount",
+                    //             title:"TOTAL_LOAN_AMOUNT",
+                    //             "type":"number",
+                    //             //required: true,
+                    //             readonly: true
+                    //         }
+
+                    // }},
+                    "TotalMonthlySurplus": {
+                        "type": "box",
+                        // colClass: "col-sm-12",
+                        "title": 'TotalMonthlySurplus',
+                        "orderNo": 750,
+                        "items": {
+                            'totalMonthlySurplus': {
+                                key: "customer.enterprise.totalMonthlySurplus",
+                                title: "TotalMonthlySurplus",
+                                "type": "number",
+                                "readonly": true
+                            },
+                            'enterdebtServiceRatio': {
+                                key: "customer.enterprise.enterdebtServiceRatio",
+                                title: "DebtServiceRation",
+                                "type": "number",
+                                "onChange": function (value, form, model) {
+                                    monthlySurpluse(model);
+                                }
+                            },
+                            'emiEligibility': {
+                                key: "customer.enterprise.emiEligibility",
+                                title: "Emi_Eligibility",
+                                "type": "number",
+                                "readonly": true
+                            },
+                            'affordableEMi': {
+                                key: "customer.enterprise.affordableEMi",
+                                title: "Affordable_EMi",
+                                "type": "number",
+                                "onChange": function (value, form, model) {
+                                    monthlySurpluse(model);
+                                }
+                            },
+                            'finalEMi': {
+                                key: "customer.enterprise.finalEMi",
+                                title: "Final_EMi",
+                                "type": "number",
+                                "readonly": true
+                            },
+                            'actualEmiOffered': {
+                                key: "customer.enterprise.actualEmiOffered",
+                                title: "Actual Emi Offered",
+                                "type": "number",
+                                "onChange": function (value, form, model) {
+                                    monthlySurpluse(model);
+                                }
+                            },
+                            'eligibleLoanAmount': {
+                                key: "customer.enterprise.eligibleLoanAmount",
+                                title: "Eligible_Loan_Amount",
+                                "type": "number",
+                                "readonly": true
+                            },
+                            'sanctionedLoanAmount': {
+                                key: "customer.enterprise.sanctionedLoanAmount",
+                                title: "Sanctioned_LoanAmount",
+                                "type": "number"
+                            }
+                        }
                     },
-                    {
-                        key: "customer.villageName",
-                        readonly: true
-                    },
-                    {
-                        key: "customer.district",
-                        readonly: true
-                    },
-                    {
-                        key: "customer.state",
-                        readonly: true,
-                    },
-                    {
-                       key: "customer.distanceFromBranch",
-                       type: "select",
-                       enumCode: "distance_from_branch",
-                       title: "DISTANCE_FROM_BRANCH"
-                    },
-                    {
-                       key: "customer.enterprise.businessInPresentAreaSince", // customer.enterprise.businessInPresentAreaSince
-                       type: "select",
-                       required:true,
-                       enumCode: "business_in_present_area_since",
-                       title: "YEARS_OF_BUSINESS_PRESENT_AREA"
-                    },
-                    {
-                        key: "customer.enterprise.businessInCurrentAddressSince", // customer.enterprise.businessInCurrentAddressSince
-                        type: "select",
-                        required:true,
-                        enumCode: "bsns_in_current_addrss_since",
-                        title: "YEARS_OF_BUSINESS_PRESENT_ADDRESS"
-                    }
+
+                }
+
+            }
+            var getIncludes = function (model) {
+                return [
+
+                    "PreliminaryInformation",
+                    "PreliminaryInformation.loanAmountRequested",
+                    "PreliminaryInformation.tenure",
+                    "PreliminaryInformation.interestRate",
+                    "PreliminaryInformation.estimatedEmi",
+
+                    "EnterpriseInformation",
+                    // "EnterpriseInformation.customerId",
+                    "EnterpriseInformation.branchName",
+                    "EnterpriseInformation.centreName",
+                    "EnterpriseInformation.centreId",
+                    "EnterpriseInformation.urnNo",  // check
+                    "EnterpriseInformation.firstName",
+                    "EnterpriseInformation.companyOperatingSince",
+                    "EnterpriseInformation.latitude",
+                    "EnterpriseInformation.distanceFromBranch",
+                    "EnterpriseInformation.ownership",
+                    "EnterpriseInformation.businessConstitution",
+                    "EnterpriseInformation.gstNumber",
+                    "EnterpriseInformation.noOfPartners",
+                    "EnterpriseInformation.companyRegistered",
+                    "EnterpriseInformation.enterpriseRegistrations",
+                    "EnterpriseInformation.enterpriseRegistrations.registrationType",
+                    "EnterpriseInformation.enterpriseRegistrations.registrationNumber",
+                    "EnterpriseInformation.enterpriseRegistrations.registeredDate",
+                    "EnterpriseInformation.enterpriseRegistrations.expiryDate",
+                    "EnterpriseInformation.enterpriseRegistrations.documentId",
+                    "EnterpriseInformation.enterpriseDocuments",
+                    "EnterpriseInformation.enterpriseDocuments.udf1",
+                    "EnterpriseInformation.enterpriseDocuments.udf2",
+                    "EnterpriseInformation.enterpriseDocuments.udf3",
+                    "EnterpriseInformation.enterpriseDocuments.udf4",
+
+                    "ContactInformation",
+                    "ContactInformation.mobilePhone",
+                    "ContactInformation.landLineNo",
+                    "ContactInformation.doorNo",
+                    "ContactInformation.street",
+                    "ContactInformation.landmark",
+                    "ContactInformation.pincode",
+                    "ContactInformation.locality",
+                    "ContactInformation.villageName",
+                    "ContactInformation.district",
+                    "ContactInformation.state",
+
+
+                    "BankAccounts",
+                    "BankAccounts.customerBankAccounts",
+                    "BankAccounts.customerBankAccounts.ifscCode",
+                    "BankAccounts.customerBankAccounts.customerBankName",
+                    "BankAccounts.customerBankAccounts.customerBankBranchName",
+                    "BankAccounts.customerBankAccounts.customerNameAsInBank",
+                    "BankAccounts.customerBankAccounts.accountNumber",
+                    "BankAccounts.customerBankAccounts.confirmedAccountNumber",
+                    "BankAccounts.customerBankAccounts.accountType",
+                    "BankAccounts.customerBankAccounts.bankingSince",
+                    "BankAccounts.customerBankAccounts.bankStatementDocId",
+                    "BankAccounts.customerBankAccounts.bankStatements",
+                    "BankAccounts.customerBankAccounts.bankStatements.startMonth",
+                    "BankAccounts.customerBankAccounts.bankStatements.totalDeposits",
+                    "BankAccounts.customerBankAccounts.bankStatements.totalWithdrawals",
+                    "BankAccounts.customerBankAccounts.bankStatements.closingBalance",
+                    "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced",
+                    "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced",
+
+                    "Liabilities",
+                    "Liabilities.liabilities",
+                    "Liabilities.liabilities.loanSource",
+                    "Liabilities.liabilities.loanAmountInPaisa",
+                    "Liabilities.liabilities.installmentAmountInPaisa",
+                    "Liabilities.liabilities.startDate",
+                    "Liabilities.liabilities.tenure", // add in repo  
+                    "Liabilities.liabilities.interestRate",
+                    "Liabilities.liabilities.frequencyOfInstallment",
+                    "Liabilities.liabilities.outstandingAmountInPaisa",
+                    "Liabilities.liabilities.noOfInstalmentPaid",
+
+                    "EnterpriseFinancials",
+                    "EnterpriseFinancials.incomeThroughSales",
+                    "EnterpriseFinancials.incomeThroughSales.incomeType",
+                    "EnterpriseFinancials.incomeThroughSales.amount",
+                    "EnterpriseFinancials.incomeThroughSales.frequency",
+                    "EnterpriseFinancials.incomeThroughSales.invoiceDocId",
+
+                    "EnterpriseFinancials",
+                    "EnterpriseFinancials.rawMaterialExpenses",
+                    "EnterpriseFinancials.rawMaterialExpenses.rawMaterialType",
+                    "EnterpriseFinancials.rawMaterialExpenses.amount",
+                    "EnterpriseFinancials.rawMaterialExpenses.frequency",
+                    "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId",
+
+                    "EnterpriseFinancials",
+                    "EnterpriseFinancials.totalMonthlySurplus",
+                    "EnterpriseFinancials.debtServiceRatio",
+
+                    "BuyerDetails",
+                    "BuyerDetails.buyerDetails",
+                    "BuyerDetails.buyerDetails.buyerName",
+                    "BuyerDetails.buyerDetails.customerSince",
+                    "BuyerDetails.buyerDetails.paymentFrequency",
+                    "BuyerDetails.buyerDetails.product",
+                    "BuyerDetails.buyerDetails.receivablesOutstanding",
+                    "BuyerDetails.buyerDetails.contactNumber",
+
+                    "SuppliersDeatils",
+                    "SuppliersDeatils.supplierDetails",
+                    "SuppliersDeatils.supplierDetails.supplierName",
+                    "SuppliersDeatils.supplierDetails.customerSince",//paymentFrequency
+                    "SuppliersDeatils.supplierDetails.paymentFrequency",//
+                    "SuppliersDeatils.supplierDetails.product",//
+                    "SuppliersDeatils.supplierDetails.receivablesOutstanding",
+                    "SuppliersDeatils.supplierDetails.contactNumber",
+
+
+                    "EstimatedSales",
+                    "EstimatedSales.initialEstimateWeeklySale",
+                    "EstimatedSales.initialEstimateMonthlySale",
+
+
+                    "DailySales",
+                    "DailySales.enterpriseDailySale",
+                    "DailySales.weeklySale",
+                    "DailySales.monthlySale",
+
+                    "AnnualSales",
+                    "AnnualSales.monthlySale",
+                    "AnnualSales.avgMonthlySales",
+                    "AnnualSales.avgAnnualSales",
+
+                    "MonthlySalesCalculate",
+                    "MonthlySalesCalculate.monthlySalesCal",
+                    "MonthlySalesCalculate.costOfGoodsSold",
+                    "MonthlySalesCalculate.grossProfit",
+
+                    "NetBusinessIncome",
+                    "NetBusinessIncome.netBusinessIncomeGrossMargin",
+
+                    "EnterpriseProductSale",
+                    "EnterpriseProductSale.enterpriseProductSales",
+                    "EnterpriseProductSale.totalDailySales",
+                    "EnterpriseProductSale.totalDailyCost",
+                    "EnterpriseProductSale.totalWeeklySales",
+                    "EnterpriseProductSale.totalWeeklyCost",
+                    "EnterpriseProductSale.totalMonthlySales",
+                    "EnterpriseProductSale.totalMonthlyCost",
+                    "EnterpriseProductSale.grossMarginSales",
+                    "EnterpriseProductSale.grossMarginCost",
+
+                    "MonthlyBusinessExpense",
+                    "MonthlyBusinessExpense.monthlyBusinessExpense",
+                    "MonthlyBusinessExpense.totalBusinessExpenses",
+                    "MonthlyBusinessExpense.netBusinessIncome",
+
+                    "OtherBusinessIncomes",
+                    "OtherBusinessIncomes.otherBusinessIncomes",
+                    "OtherBusinessIncomes.totalMonthlyAdditionIncome",
+                    "OtherBusinessIncomes.additionalDetails",
+
+                    "PersonalExpenses",
+                    "PersonalExpenses.personalExpenses",
+                    "PersonalExpenses.totalPersonalExpense",
+
+                    "LiabilityRepayment",
+                    "LiabilityRepayment.liabilities.customerLiabilityRepayments",
+                    "LiabilityRepayment.totalEmiAmount",
+                    "LiabilityRepayment.totalLoanAmount",
+
+                    "TotalMonthlySurplus",
+                    "TotalMonthlySurplus.totalMonthlySurplus",
+                    "TotalMonthlySurplus.enterdebtServiceRatio",
+                    "TotalMonthlySurplus.emiEligibility",
+                    "TotalMonthlySurplus.affordableEMi",
+                    "TotalMonthlySurplus.finalEMi",
+                    "TotalMonthlySurplus.actualEmiOffered",
+                    "TotalMonthlySurplus.eligibleLoanAmount",
+                    "TotalMonthlySurplus.sanctionedLoanAmount"
                 ]
-            },
-            {
-                "type": "box",
-                "title": "CONTACT_INFORMATION",
-                "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
-                readonly:true,
-                "items":[
-                    "customer.mobilePhone",
-                    "customer.landLineNo",
-                    "customer.doorNo",
-                    "customer.street",
-                    "customer.enterprise.landmark",
-                    {
-                        key: "customer.pincode",
-                        fieldType: "number"
-                    },
-                    "customer.locality",
-                    "customer.villageName",
-                    "customer.district",
-                    "customer.state",
-                    {
-                       key: "customer.distanceFromBranch",
-                       type: "select",
-                       enumCode: "distance_from_branch",
-                       title: "DISTANCE_FROM_BRANCH"
-                    },
-                    {
-                       key: "customer.enterprise.businessInPresentAreaSince", // customer.enterprise.businessInPresentAreaSince
-                       type: "string",
-                       // enumCode: "years_in_present_area",
-                       title: "YEARS_OF_BUSINESS_PRESENT_AREA"
-                    },
-                    {
-                        key: "customer.enterprise.businessInCurrentAddressSince", // customer.enterprise.businessInCurrentAddressSince
-                        type: "string",
-                        // enumCode: "years_in_current_address",
-                        title: "YEARS_OF_BUSINESS_PRESENT_ADDRESS"
+            }
+
+            var configFile = function () {
+                return {
+
+
+
+                }
+            }
+
+            return {
+                "type": "schema-form",
+                "title": "ENTITY_ENROLLMENT",
+                "subTitle": "BUSINESS",
+                initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+                    if (bundlePageObj) {
+                        model._bundlePageObj = _.cloneDeep(bundlePageObj);
                     }
-                ]
-            },
-            {
-                type: "box",
-                title: "BANK_ACCOUNTS",
-                "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
-                items: [
-                    {
-                        key: "customer.customerBankAccounts",
-                        type: "array",
-                        title: "BANK_ACCOUNTS",
-                        startEmpty: true,
-                        onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
-                            modelValue.bankStatements = [];
-                            var CBSDateMoment = moment(SessionStore.getCBSDate(), SessionStore.getSystemDateFormat());
-                            var noOfMonthsToDisplay = 6;
-                            var statementStartMoment = CBSDateMoment.subtract(noOfMonthsToDisplay, 'months').startOf('month');
-                            for (var i = 0; i < noOfMonthsToDisplay; i++) {
-                                modelValue.bankStatements.push({
-                                    startMonth: statementStartMoment.format(SessionStore.getSystemDateFormat())
+
+                    /* Setting data recieved from Bundle */
+                    model.loanCustomerRelationType = "Customer";
+                    model.currentStage = bundleModel.currentStage;
+                    /* End of setting data recieved from Bundle */
+
+                    /* Setting data for the form */
+                    model.loanAccount = model.loanProcess.loanAccount;
+                    model.customer = model.enrolmentProcess.customer;
+                    computeEstimatedEmi(model);
+                    model.customer.customerBranchId = SessionStore.getCurrentBranch().branchId;
+                    model.customer.branchName = SessionStore.getCurrentBranch().branchName;
+                    var centre = SessionStore.getCentres();
+                    model.customer.centreId = centre[0].centreCode;
+                    model.customer.centreName = centre[0].centreName;
+                    var branchId = SessionStore.getBranchId();
+                    if (branchId && !model.customer.customerBranchId) {
+                        model.customer.customerBranchId = branchId;
+                    };
+                    model.customer['enterpriseDailySale'] = []
+                    model.customer['enterpriseDailySale1'] = []
+                    // model.customer['enterpriseMonthlySales'] = []
+                    model.customer['monthlySale'] = []
+                    model.customer['enterpriseProductSales'] = []
+                    model.customer['monthlyBusinessExpense'] = []
+                    model.customer['otherBusinessIncomes'] = [];
+                    model.customer['personalExpenses'] = []
+                    model.customer['totalMonthlySurplus'] = '';
+                    model.customer['debtServiceRatio'] = '';
+
+                    if (model.customer.expenditures.length != 0) {
+                        _.forEach(model.customer.expenditures, function (expenditure, index) {
+                            if (index < 8) {
+                                model.customer.monthlyBusinessExpense.push(expenditure)
+                            }
+                            else {
+                                model.customer.personalExpenses.push(expenditure)
+                            }
+                            getBusinessExpenseData('value', model, 'row');
+                            getPersonalExpenses('value', model, 'row');
+                        })
+                    }
+                    else {
+                        var busineeExpenseMonthly = ['Raw materials Consumed', 'Rent for Shop', 'Lab our / Wages', 'Electricity', 'Conveyance- Fuel & Maintenance', 'Transport Expenses', 'Depreciation/Development Rebate Reserve', 'Admin & Operating Expenses'];
+                        for (i in busineeExpenseMonthly) {
+                            model.customer.monthlyBusinessExpense.push({ 'expenditureSource': busineeExpenseMonthly[i] });
+                        }
+
+                        var personalExpense = ['Living Expenses (Food, Clothing, etc.)', 'Education', 'Rent & Electricity', 'Mobile / Telephone', 'Medical expenses'];
+                        for (i in personalExpense) {
+                            model.customer.personalExpenses.push({ 'expenditureSource': personalExpense[i] });
+                        }
+                    }
+
+                    // var  otherBusinessIncome  = ['Monthly Rental Income','Avg. Monthly Agricultural Income','Income of the Spouse on Monthly basis','Other Income per month PENSION'];// get invalid error
+                    var otherBusinessIncome = ['Dairy', 'Shop Owner', 'Unemployed', 'Fishing'];
+                    for (i in otherBusinessIncome) {
+                        model.customer.otherBusinessIncomes.push({ 'incomeSource': otherBusinessIncome[i], 'otherBusinessIncomeDate': "2017-11-01", 'amount': 0 });
+                    }
+
+                    var seasonTypes = ['High', 'Medium', 'Low']
+                    for (i in seasonTypes) {
+                        model.customer.enterpriseDailySale.push({ seasonType: seasonTypes[i], 'total': 0 })
+                    }
+                    model.customer.monthlySale = [];
+                    for (i in seasonTypes) {
+                        model.customer.monthlySale.push({ seasonType: seasonTypes[i], 'total': 0 })
+                    }
+
+                    if (model.customer.enterpriseDailySale1.length != 0) {
+                        _.forEach(model.customer.enterpriseDailySale, function (dailysales) {
+                            var sales = dailysales;
+                            if (dailysales.seasonType == 'High' ? (i = 1) : (dailysales.seasonType == 'Medium' ? (i = 2) : (i = 3))) {
+                                for (var key of Object.keys(dailysales)) {
+                                    if (dailysales[key] != 'undefined' && key != 'seasonType' && key != 'totalSales') {
+                                        day = dailysales[key]
+                                        model.customer.enterpriseDailySale[i - 1][day] = sales.totalSales;
+                                        model.customer.enterpriseDailySale[i - 1]["total"] += sales.totalSales;
+                                    }
+                                }
+                            }
+                        })
+                    }
+                    if (model.customer.enterpriseMonthlySales.length != 0) {
+                        _.forEach(model.customer.enterpriseMonthlySales, function (monthlySales) {
+                            var sales = monthlySales;
+                            if (monthlySales.seasonType == 'High' ? (i = 1) : (monthlySales.seasonType == 'Medium' ? (i = 2) : (i = 3))) {
+                                for (var key of Object.keys(monthlySales)) {
+                                    if (key == 'month') {
+                                        month = monthlySales[key]
+                                        model.customer.monthlySale[i - 1][month] = sales.totalSales;
+                                        model.customer.monthlySale[i - 1]["total"] += sales.totalSales;
+                                    }
+                                }
+                            }
+                        })
+                        getAnnualSales(' ', model, ' ', " ");
+                    }
+                    if (model.customer.enterpriseProductSales.length != 0) {
+                        getEnterpriseProductDetails(model)
+                    }
+
+                    /* End of setting data for the form */
+                    console.log("model information");
+                    console.log(model);
+
+                    var self = this;
+                    var formRequest = {
+                        "overrides": overridesFields(model),
+                        "includes": getIncludes(model),
+                        "excludes": [],
+                        "options": {
+                            "repositoryAdditions": repositoryAdditions(model),
+                            "additions": [
+                                {
+                                    "type": "actionbox",
+                                    "condition": "!model.customer.currentStage",
+                                    "orderNo": 1000,
+                                    "items": [
+                                        {
+                                            "type": "submit",
+                                            "title": "SUBMIT"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "actionbox",
+                                    "condition": "model.customer.currentStage",
+                                    "orderNo": 1000,
+                                    "items": [
+                                        {
+                                            "type": "button",
+                                            "title": "UPDATE",
+                                            "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    };
+                    UIRepository.getEnrolmentProcessUIRepository().$promise
+                        .then(function (repo) {
+                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
+                        })
+                        .then(function (form) {
+                            self.form = form;
+                        });
+                },
+                offline: false,
+                getOfflineDisplayItem: function (item, index) {
+                    return [
+                        item.customer.firstName,
+                        item.customer.centreId,
+                        item.customer.id ? '{{"CUSTOMER_ID"|translate}} :' + item.customer.id : ''
+                    ]
+                },
+                eventListeners: {
+                    "applicant-updated": function (bundleModel, model, params) {
+                        $log.info("inside applicant-updated of EnterpriseEnrolment2");
+                        /* Load an existing customer associated with applicant, if exists. Otherwise default details*/
+                        Queries.getEnterpriseCustomerId(params.customer.id)
+                            .then(function (response) {
+                                if (!response || !response.customer_id) {
+                                    return false;
+                                }
+
+                                if (response.customer_id == model.customer.id) {
+                                    return false;
+                                }
+
+                                return EnrolmentProcess.fromCustomerID(response.customer_id).toPromise();
+                            })
+                            .then(function (enrolmentProcess) {
+                                if (!enrolmentProcess) {
+                                    /* IF no enrolment present, reset to applicant */
+                                    model.customer.enterpriseCustomerRelations[0].linkedToCustomerId = params.customer.id;
+                                    model.customer.enterpriseCustomerRelations[0].linkedToCustomerName = params.customer.firstName;
+                                    //model.customer.firstName = params.customer.firstName;
+                                    model.customer.villageName = params.customer.villageName;
+                                    model.customer.pincode = params.customer.pincode;
+                                    model.customer.area = params.customer.area;
+                                    return;
+                                }
+                                $log.info("Inside customer loaded of applicant-updated");
+                                if (model.customer.id) {
+                                    model.loanProcess.removeRelatedEnrolmentProcess(enrolmentProcess, 'Customer');
+                                }
+                                model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, model.loanCustomerRelationType);
+
+                                /* Setting for the current page */
+                                model.enrolmentProcess = enrolmentProcess;
+                                model.customer = enrolmentProcess.customer;
+
+                                /* Setting enterprise customer relation on the enterprise customer */
+                                model.enrolmentProcess.refreshEnterpriseCustomerRelations(model.loanProcess);
+                            })
+                    },
+                    "co-applicant-updated": function (bundleModel, model, params) {
+                        model.enrolmentProcess.refreshEnterpriseCustomerRelations(model.loanProcess);
+                    },
+                    "guarantor-updated": function (bundleModel, model, params) {
+                        model.enrolmentProcess.refreshEnterpriseCustomerRelations(model.loanProcess);
+                    },
+                    "load-address-business": function (bundleModel, model, params) {
+                        model.customer.mobilePhone = params.customer.mobilePhone;
+                        model.customer.landLineNo = params.customer.landLineNo;
+                        model.customer.doorNo = params.customer.doorNo;
+                        model.customer.street = params.customer.street;
+                        model.customer.postOffice = params.customer.postOffice;
+                        model.customer.landmark = params.customer.landmark;
+                        model.customer.locality = params.customer.locality;
+                        model.customer.villageName = params.customer.villageName;
+                        model.customer.district = params.customer.district;
+                        model.customer.state = params.customer.state;
+                    }
+                },
+                form: [
+
+                ],
+                schema: function () {
+                    return Enrollment.getSchema().$promise;
+                },
+                actions: {
+                    preSave: function (model, form, formName) {
+                        var deferred = $q.defer();
+                        if (model.customer.firstName) {
+                            deferred.resolve();
+                        } else {
+                            PageHelper.showProgress('enrollment', 'Customer Name is required', 3000);
+                            deferred.reject();
+                        }
+                        return deferred.promise;
+                    },
+                    save: function (model, formCtrl, formName) {
+
+                    },
+                    submit: function (model, form, formName) {
+                        PageHelper.clearErrors();
+                        if (PageHelper.isFormInvalid(form)) {
+                            return false;
+                        }
+                        PageHelper.showProgress('enrolment', 'Updating Customer');
+                        PageHelper.showLoader();
+                        model.enrolmentProcess.save()
+                            .finally(function () {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function () {
+                                model.loanProcess.refreshRelatedCustomers();
+                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                model.enrolmentProcess.proceed()
+                                    .subscribe(function (enrolmentProcess) {
+                                        PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                    }, function (err) {
+                                        PageHelper.showErrors(err);
+                                        PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                        PageHelper.hideLoader();
+                                    })
+                            }, function (err) {
+                                PageHelper.showErrors(err);
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.hideLoader();
+                            });
+
+                    },
+                    proceed: function (model, form) {
+                        PageHelper.clearErrors();
+                        if (PageHelper.isFormInvalid(form)) {
+                            return false;
+                        }
+                        PageHelper.showProgress('enrolment', 'Updating Customer');
+                        PageHelper.showLoader();
+                        model.customer.expenditures = [];
+
+                        model.customer.enterpriseMonthlySales = []
+                        _.forEach(model.customer.monthlySale, function (monthlysale) {
+                            for (const key of Object.keys(monthlysale)) {
+                                monthlysales = {}
+                                if (monthlysale[key] != 'undefined' && key != 'seasonType' && key != 'total') {
+                                    monthlysales['seasonType'] = monthlysale['seasonType'];
+                                    monthlysales['month'] = key;
+                                    monthlysales['totalSales'] = monthlysale[key]
+                                }
+                                if (!_.isEmpty(monthlysales)) {
+                                    model.customer.enterpriseMonthlySales.push(monthlysales);
+                                }
+                            }
+                        })
+
+                        model.customer.enterpriseDailySales = []
+                        _.forEach(model.customer.enterpriseDailySale, function (dailySale) {
+                            for (const key of Object.keys(dailySale)) {
+                                dailySales = {}
+                                if (dailySale[key] != 'undefined' && key != 'seasonType' && dailySale[key] != 'total') {
+                                    dailySales['seasonType'] = dailySale['seasonType'];
+                                    dailySales['day'] = key;
+                                    dailySales['totalSales'] = dailySale[key]
+                                }
+                                if (!_.isEmpty(dailySales)) {
+                                    model.customer.enterpriseDailySales.push(dailySales);
+                                }
+                            }
+                        })
+                        _.forEach(model.customer.monthlyBusinessExpense, function (expenses) {
+                            if (expenses.annualExpenses) {
+                                model.customer.expenditures.push(expenses)
+                            }
+
+                        })
+                        _.forEach(model.customer.personalExpenses, function (expenses) {
+
+                            if (expenses.annualExpenses) {
+                                model.customer.expenditures.push(expenses)
+                            }
+                        })
+                        // model.customer.expenditures.push( model.customer.monthlyBusinessExpense);
+                        // model.customer.expenditures.push( model.customer.personalExpenses)
+                        model.enrolmentProcess.customer = model.customer;
+                        model.enrolmentProcess.proceed()
+                            .finally(function () {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function (enrolmentProcess) {
+                                LoanAccount.update(model.loanAccount).$promise.then(function (res) {
+                                    PageHelper.showProgress('LoanAccount', 'Updated.', 5000);
+                                }, function (err) {
+                                    PageHelper.showErrors(err.message);
                                 });
-                                statementStartMoment = statementStartMoment.add(1, 'months').startOf('month');
-                            }
-                        },
-                        items: [
-                            {
-                                key: "customer.customerBankAccounts[].ifscCode",
-                                type: "lov",
-                                lovonly: true,
-                                required: true,
-                                inputMap: {
-                                    "ifscCode": {
-                                        "key": "customer.customerBankAccounts[].ifscCode"
-                                    },
-                                    "bankName": {
-                                        "key": "customer.customerBankAccounts[].customerBankName"
-                                    },
-                                    "branchName": {
-                                        "key": "customer.customerBankAccounts[].customerBankBranchName"
-                                    }
-                                },
-                                outputMap: {
-                                    "bankName": "customer.customerBankAccounts[arrayIndex].customerBankName",
-                                    "branchName": "customer.customerBankAccounts[arrayIndex].customerBankBranchName",
-                                    "ifscCode": "customer.customerBankAccounts[arrayIndex].ifscCode"
-                                },
-                                searchHelper: formHelper,
-                                search: function(inputModel, form) {
-                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                    var promise = CustomerBankBranch.search({
-                                        'bankName': inputModel.bankName,
-                                        'ifscCode': inputModel.ifscCode,
-                                        'branchName': inputModel.branchName
-                                    }).$promise;
-                                    return promise;
-                                },
-                                getListDisplayItem: function(data, index) {
-                                    return [
-                                        data.ifscCode,
-                                        data.branchName,
-                                        data.bankName
-                                    ];
-                                }
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].customerBankName",
-                                required: true,
-                                readonly: true
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].customerBankBranchName",
-                                required: true,
-                                readonly: true
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].customerNameAsInBank"
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].accountNumber",
-                                type: "password",
-                                inputmode: "number",
-                                numberType: "tel"
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].confirmedAccountNumber",
-                                "title": "CONFIRMED_ACCOUNT_NUMBER",
-                                inputmode: "number",
-                                numberType: "tel"
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].accountType",
-                                type: "select"
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].bankingSince",
-                                type: "date",
-                                title: "BANKING_SINCE"
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].netBankingAvailable",
-                                type: "select",
-                                title: "NET_BANKING_AVAILABLE",
-                                enumCode:"decisionmaker"
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].sanctionedAmount",
-                                condition:"model.customer.customerBankAccounts[arrayIndex].accountType =='OD'||model.customer.customerBankAccounts[arrayIndex].accountType =='CC'",
-                                type: "amount",
-                                required:true,
-                                title: "OUTSTANDING_BALANCE"
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].limit",
-                                type: "amount"
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].bankStatements",
-                                type: "array",
-                                title: "STATEMENT_DETAILS",
-                                titleExpr: "moment(model.customer.customerBankAccounts[arrayIndexes[0]].bankStatements[arrayIndexes[1]].startMonth).format('MMMM YYYY') + ' ' + ('STATEMENT_DETAILS' | translate)",
-                                titleExprLocals: {moment: window.moment},
-                                startEmpty: true,
-                                items: [
-                                    {
-                                        key: "customer.customerBankAccounts[].bankStatements[].startMonth",
-                                        type: "date",
-                                        title: "START_MONTH"
-                                    },
-                                    {
-                                        key: "customer.customerBankAccounts[].bankStatements[].totalDeposits",
-                                        type: "amount",
-                                        calculator: true,
-                                        creditDebitBook: true,
-                                        onDone: function(result, model, context){
-                                                model.customer.customerBankAccounts[context.arrayIndexes[0]].bankStatements[context.arrayIndexes[1]].totalDeposits = result.totalCredit;
-                                                model.customer.customerBankAccounts[context.arrayIndexes[0]].bankStatements[context.arrayIndexes[1]].totalWithdrawals = result.totalDebit;
-                                        },
-                                        title: "TOTAL_DEPOSITS"
-                                    },
-                                    {
-                                        key: "customer.customerBankAccounts[].bankStatements[].totalWithdrawals",
-                                        type: "amount",
-                                        title: "TOTAL_WITHDRAWALS"
-                                    },
-                                    {
-                                        key: "customer.customerBankAccounts[].bankStatements[].balanceAsOn15th",
-                                        type: "amount",
-                                        title: "BALENCE_AS_ON_REQUESTED_EMI_DATE"
-                                    },
-                                    {
-                                        key: "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",
-                                        type: "amount",
-                                        //maximum:99,
-                                        required:true,
-                                        title: "NO_OF_CHEQUE_BOUNCED"
-                                    },
-                                    {
-                                        key: "customer.customerBankAccounts[].bankStatements[].noOfEmiChequeBounced",
-                                        type: "amount",
-                                        required:true,
-                                        //maximum:99,
-                                        title: "NO_OF_EMI_CHEQUE_BOUNCED"
-                                    },
-                                    {
-                                        key: "customer.customerBankAccounts[].bankStatements[].bankStatementPhoto",
-                                        type: "file",
-                                        required: true,
-                                        title: "BANK_STATEMENT_UPLOAD",
-                                        fileType: "application/pdf",
-                                        "category": "CustomerEnrollment",
-                                        "subCategory": "IDENTITYPROOF",
-                                        using: "scanner"
-                                    },
-                                ]
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].isDisbersementAccount",
-                                type: "checkbox"
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                type: "box",
-                title: "BANK_ACCOUNTS",
-                "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
-                readonly:true,
-                items: [
-                    {
-                        key: "customer.customerBankAccounts",
-                        type: "array",
-                        title: "BANK_ACCOUNTS",
-                        startEmpty: true,
-                        items: [
-                            {
-                                key: "customer.customerBankAccounts[].ifscCode"
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].customerBankName",
-                                readonly: true
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].customerBankBranchName",
-                                readonly: true
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].customerNameAsInBank"
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].accountNumber"
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].confirmedAccountNumber",
-                                "title": "CONFIRMED_ACCOUNT_NUMBER"
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].accountType",
-                                type: "select"
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].bankingSince",
-                                type: "date",
-                                title: "BANKING_SINCE"
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].netBankingAvailable",
-                                type: "string",
-                                title: "NET_BANKING_AVAILABLE",
-                                //enumCode:"decisionmaker"
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].sanctionedAmount",
-                                condition:"model.customer.customerBankAccounts[arrayIndex].accountType =='OD'||model.customer.customerBankAccounts[arrayIndex].accountType =='CC'",
-                                type: "amount",
-                                title: "OUTSTANDING_BALANCE"
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].limit",
-                                type: "amount"
-                            },
-                            {
-                                key:"customer.customerBankAccounts[].bankStatementDocId",
-                                type:"file",
-                                title:"BANK_STATEMENT_UPLOAD",
-                                fileType:"application/pdf",
-                                "category": "CustomerEnrollment",
-                                "subCategory": "IDENTITYPROOF",
-                                using: "scanner"
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].bankStatements",
-                                type: "array",
-                                title: "STATEMENT_DETAILS",
-                                titleExpr: "moment(model.customer.customerBankAccounts[arrayIndexes[0]].bankStatements[arrayIndexes[1]].startMonth).format('MMMM YYYY') + ' ' + ('STATEMENT_DETAILS' | translate)",
-                                titleExprLocals: {moment: window.moment},
-                                startEmpty: true,
-                                items: [
-                                    {
-                                        key: "customer.customerBankAccounts[].bankStatements[].startMonth",
-                                        type: "date",
-                                        title: "START_MONTH"
-                                    },
-                                    {
-                                        key: "customer.customerBankAccounts[].bankStatements[].totalDeposits",
-                                        type: "amount",
-                                        title: "TOTAL_DEPOSITS"
-                                    },
-                                    {
-                                        key: "customer.customerBankAccounts[].bankStatements[].totalWithdrawals",
-                                        type: "amount",
-                                        title: "TOTAL_WITHDRAWALS"
-                                    },
-                                    {
-                                        key: "customer.customerBankAccounts[].bankStatements[].balanceAsOn15th",
-                                        type: "amount",
-                                        title: "BALENCE_AS_ON_REQUESTED_EMI_DATE"
-                                    },
-                                    {
-                                        key: "customer.customerBankAccounts[].bankStatements[].noOfChequeBounced",
-                                        type: "amount",
-                                        title: "NO_OF_CHEQUE_BOUNCED"
-                                    },
-                                    {
-                                        key: "customer.customerBankAccounts[].bankStatements[].noOfEmiChequeBounced",
-                                        type: "amount",
-                                        title: "NO_OF_EMI_CHEQUE_BOUNCED"
-                                    },
-                                    {
-                                        key: "customer.customerBankAccounts[].bankStatements[].bankStatementPhoto",
-                                        type: "file",
-                                        title: "BANK_STATEMENT_UPLOAD",
-                                        fileType: "application/pdf",
-                                        "category": "CustomerEnrollment",
-                                        "subCategory": "IDENTITYPROOF",
-                                        using: "scanner"
-                                    }
-                                ]
-                            },
-                            {
-                                key: "customer.customerBankAccounts[].isDisbersementAccount",
-                                type: "radios",
-                                titleMap: [{
-                                    value: true,
-                                    name: "Yes"
-                                },{
-                                    value: false,
-                                    name: "No"
-                                }]
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-               type:"box",
-               title:"BUSINESS_LIABILITIES",
-               "condition":"model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
-                items:[
-                    {
-                       key:"customer.liabilities",
-                       type:"array",
-                       startEmpty: true,
-                       title:"LIABILITIES",
-                       items:[
-                           {
-                               key:"customer.liabilities[].loanType",
-                               type:"select",
-                               enumCode:"liability_loan_type"
-                           },
-                           {
-                               key:"customer.liabilities[].loanSource",
-                                type:"select",
-                                enumCode:"loan_source"
-                           },
-                           //"customer.liabilities[].instituteName",
-                           {
-                               key: "customer.liabilities[].loanAmountInPaisa",
-                               type: "amount"
-                           },
-                           {
-                               key: "customer.liabilities[].installmentAmountInPaisa",
-                               type: "amount"
-                           },
-                           {
-                                key: "customer.liabilities[].outstandingAmountInPaisa",
-                                type: "amount",
-                                title: "OUTSTANDING_AMOUNT"
-                           },
-                           {
-                               key: "customer.liabilities[].startDate",
-                               type:"date"
-                           },
-                           {
-                               key:"customer.liabilities[].maturityDate",
-                               type:"date"
-                           },
-                           {
-                                key: "customer.liabilities[].noOfInstalmentPaid",
-                                type: "number",
-                                title: "NO_OF_INSTALLMENT_PAID"
-                           },
-                           {
-                               key:"customer.liabilities[].frequencyOfInstallment",
-                               type:"select"
-                           },
-                           {
-                               key:"customer.liabilities[].liabilityLoanPurpose",
-                               /*type:"select",
-                               enumCode: "loan_purpose_1"*/
-                           },
-                           {
-                               key:"customer.liabilities[].interestOnly",
-                               type:"radios",
-                               title:"INTEREST_ONLY",
-                               enumCode:"decisionmaker"
-                           },
-                           {
-                               key:"customer.liabilities[].interestRate",
-                               type:"number",
-                               title:"RATE_OF_INTEREST"
-                           },
-                            {
-                                key: "customer.liabilities[].proofDocuments",
-                                title: "DOCUMENTS",
-                                "category": "Loan",
-                                "subCategory": "DOC1",
-                                type: "file",
-                                fileType: "application/pdf",
-                                using: "scanner"
-                            }
-
-                           /*{
-                               key:"customer.liabilities[].interestExpense",
-                               title:"INTEREST_EXPENSE"
-                           },
-                           {
-                               key:"customer.liabilities[].principalExpense",
-                               title:"PRINCIPAL_EXPENSE"
-                           }*/
-                       ]
-                    }
-                ]
-            },
-            {
-               type:"box",
-               title:"BUSINESS_LIABILITIES",
-               "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
-               readonly:true,
-                items:[
-                    {
-                       key:"customer.liabilities",
-                       type:"array",
-                       startEmpty: true,
-                       title:"COMPANY_LIABILITIES",
-                       items:[
-                           {
-                               key:"customer.liabilities[].loanType"/*,
-                                type:"select"*/ //Made as free text till list of values are given by Kinara
-                           },
-                           {
-                               key:"customer.liabilities[].loanSource"/*,
-                                type:"select"*/ //Made as free text till list of values are given by Kinara
-                           },
-                           //"customer.liabilities[].instituteName",
-                           {
-                               key: "customer.liabilities[].loanAmountInPaisa",
-                               type: "amount"
-                           },
-                           {
-                               key: "customer.liabilities[].installmentAmountInPaisa",
-                               type: "amount"
-                           },
-                           {
-                                key: "customer.liabilities[].outstandingAmountInPaisa",
-                                type: "amount",
-                                title: "OUTSTANDING_AMOUNT"
-                           },
-                           {
-                               key: "customer.liabilities[].startDate",
-                               type:"date"
-                           },
-                           {
-                               key:"customer.liabilities[].maturityDate",
-                               type:"date"
-                           },
-                           {
-                                key: "customer.liabilities[].noOfInstalmentPaid",
-                                type: "number",
-                                title: "NO_OF_INSTALLMENT_PAID"
-                           },
-                           {
-                               key:"customer.liabilities[].frequencyOfInstallment",
-                               type:"select"
-                           },
-                           {
-                               key:"customer.liabilities[].liabilityLoanPurpose",
-                               /*type:"select",
-                               enumCode: "loan_purpose_1"*/
-                           },
-                           {
-                               key:"customer.liabilities[].interestOnly",
-                               type:"radios",
-                               title:"INTEREST_ONLY",
-                               enumCode:"decisionmaker"
-                           },
-                           {
-                               key:"customer.liabilities[].interestRate",
-                               type:"number",
-                               title:"RATE_OF_INTEREST"
-                           },
-                           {
-                                key: "customer.liabilities[].proofDocuments",
-                                title: "DOCUMENTS",
-                                "category": "Loan",
-                                "subCategory": "DOC1",
-                                type: "file",
-                                fileType: "application/pdf",
-                                using: "scanner"
-                            }
-                       ]
-                    }
-                ]
-            },
-            {
-                type:"box",
-                title:"CUSTOMER_BUYER_DETAILS",
-                "condition":"model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
-                items:[
-                    {
-                      key:"customer.buyerDetails",
-                       type:"array",
-                       startEmpty: true,
-                       title:"BUYER_DETAILS",
-                       items:[
-                            {
-                                key: "customer.buyerDetails[].buyerName",
-                                title: "BUYER_NAME",
-                                type: "string"
-                            },
-                            {
-                                key: "customer.buyerDetails[].customerSince",
-                                title: "CUSTOMER_SINCE",
-                                type:"number"
-                                /*type: "select",
-                                enumCode: "customer_since"*/
-                            },
-                            {
-                                key: "customer.buyerDetails[].paymentDate",
-                                title: "PAYMET_DATE",
-                                type: "date"
-                            },
-                            {
-                                key: "customer.buyerDetails[].paymentFrequency",
-                                title: "PAYMENT_FREQUENCY",
-                                type: "select",
-                                enumCode: "payment_frequency"
-                            },
-                            {
-                                key: "customer.buyerDetails[].paymentTerms",
-                                title: "PAYEMNT_TERMS",
-                                type: "select",
-                                enumCode: "payment_terms"
-                            },
-                            {
-                                key: "customer.buyerDetails[].product",
-                                title:"PRODUCT",
-                                type: "string"
-                            },
-                            {
-                                key: "customer.buyerDetails[].sector",
-                                title: "SECTOR",
-                                type: "select",
-                                enumCode: "businessSector"
-                            },
-                            {
-                                key: "customer.buyerDetails[].subSector",
-                                title: "SUBSECTOR",
-                                type: "select",
-                                parentEnumCode: "businessSector",
-                                enumCode: "businessSubSector"
-                            },
-                            {
-                                key: "customer.buyerDetails[].receivablesOutstanding",
-                                title:"RECEIVABLES_OUTSTANDING_CUSTOMER_CREDIT",
-                                type: "number"
-                            },
-                        ]
-                    }
-                ]
-            },
-            {
-                "type": "box",
-                "title": "SUPPLIERS_DEATILS",
-                "condition":"model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
-                "items": [
-                    {
-                        key:"customer.supplierDetails",
-                        title:"SUPPLIERS_DEATILS",
-                        type: "array",
-                        items:[
-                            {
-                                key:"customer.supplierDetails[].supplierName",
-                                title:"SUPPLIERS_NAME",
-                                required:true,
-                                type:"string"
-                            },
-                            {
-                                key:"customer.supplierDetails[].supplierType",
-                                title:"TYPE",
-                                type:"select",
-                                enumCode: "supplier_type"
-                            },
-                            {
-                                key:"customer.supplierDetails[].paymentTerms",
-                                title:"PAYMENT_TERMS_IN_DAYS",
-                                type: "select",
-                                enumCode: "payment_terms"
-                            },
-                            {
-                                key:"customer.supplierDetails[].amount",
-                                title:"PAYABLE_OUTSTANDING",
-                                type:"amount"
-                            },
-                         ]
-                     }
-                ]
-            },
-            {
-                "type": "box",
-                "title": "SUPPLIERS_DEATILS",
-                "readonly": true,
-                "condition":" model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
-                "items": [
-                    {
-                        key:"customer.supplierDetails",
-                        title:"SUPPLIERS_DEATILS",
-                        type: "array",
-                        items:[
-                            {
-                                key:"customer.supplierDetails[].supplierName",
-                                title:"SUPPLIERS_NAME",
-                                type:"string"
-                            },
-                            {
-                                key:"customer.supplierDetails[].supplierType",
-                                title:"TYPE",
-                                type:"select",
-                                enumCode: "supplier_type"
-                            },
-                            {
-                                key:"customer.supplierDetails[].paymentTerms",
-                                title:"PAYEMNT_TERMS_IN_DAYS",
-                                type: "select",
-                                enumCode: "payment_terms"
-                                //type:" number"
-                            },
-                            {
-                                key:"customer.supplierDetails[].amount",
-                                title:"amount",
-                                title:"PAYABLE_OUTSTANDING",
-                            },
-                         ]
-                     }
-                ]
-            },
-            {
-               type:"box",
-               title:"CUSTOMER_BUYER_DETAILS",
-               "condition":" model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
-               readonly:true,
-                items:[
-                    {
-                      key:"customer.buyerDetails",
-                       type:"array",
-                       startEmpty: true,
-                       title:"BUYER_DETAILS",
-                       items:[
-                            {
-                                key: "customer.buyerDetails[].buyerName",
-                                title: "BUYER_NAME",
-                                type: "string"
-                            },
-                            {
-                                key: "customer.buyerDetails[].customerSince",
-                                title: "CUSTOMER_SINCE",
-                            },
-
-                            {
-                                key: "customer.buyerDetails[].paymentDate",
-                                title: "PAYMENT_DATE",
-                                type: "date"
-                            },
-                            {
-                                key: "customer.buyerDetails[].paymentFrequency",
-                                title: "PAYMENT_FREQUENCY",
-                                type: "select",
-                                enumCode: "payment_frequency"
-                            },
-                            {
-                                key: "customer.buyerDetails[].paymentTerms",
-                                title: "PAYEMNT_TERMS",
-                                type: "select",
-                                enumCode: "payment_terms"
-                            },
-                            {
-                                key: "customer.buyerDetails[].product",
-                                title:"PRODUCT",
-                                type: "string"
-                            },
-                            {
-                                key: "customer.buyerDetails[].sector",
-                                title: "SECTOR",
-                                type: "select",
-                                enumCode: "businessSector"
-                            },
-                            {
-                                key: "customer.buyerDetails[].subSector",
-                                title: "SUBSECTOR",
-                                type: "string",
-                                /*parentEnumCode: "businessSector",
-                                enumCode: "businessSubSector"*/
-                            },
-                            {
-                                key: "customer.buyerDetails[].receivablesOutstanding",
-                                title:"RECEIVABLES_OUTSTANDING_CUSTOMER_CREDIT",
-                                type: "number"
-                            },
-                        ]
-                    }
-                ]
-            },
-            {
-               type:"box",
-               title:"T_BUSINESS_FINANCIALS",
-               "condition":"model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
-                items:[
-                    {
-                        key: "customer.enterprise.monthlyTurnover",
-                        title: "MONTHLY_TURNOVER",
-                        required:true,
-                        type: "amount"
-                    },
-                    {
-                        key: "customer.enterprise.monthlyBusinessExpenses",
-                        title: "MONTHLY_BUSINESS_EXPENSES",
-                        type: "amount"
-                    },
-                    {
-                        key: "customer.enterprise.avgMonthlyNetIncome",
-                        title: "AVERAGE_MONTHLY_NET_INCOME",
-                        type: "amount"
-                    },
-                    {
-                        type:"section",
-                        title:"INCOME_EXPENSE_INFORMATION",
-                        condition: "model.currentStage == 'Application' || model.currentStage == 'FieldAppraisal'",
-                        items: [
-                            {
-                                key:"customer.otherBusinessIncomes",
-                                type:"array",
-                                startEmpty: true,
-                                title:"OTHER_BUSINESS_INCOME",
-                                items:[
-                                    {
-                                        key: "customer.otherBusinessIncomes[].incomeSource",
-                                        title: "INCOME_SOURCE",
-                                        type: "select",
-                                        required: true,
-                                        enumCode:"occupation"
-                                    },
-                                    {
-                                        key: "customer.otherBusinessIncomes[].amount",
-                                        title: "AMOUNT",
-                                        required: true,
-                                        type: "amount"
-                                    },
-                                    {
-                                        key: "customer.otherBusinessIncomes[].otherBusinessIncomeDate",
-                                        title: "DATE",
-                                        type: "date"
-                                    },
-                                ]
-                            },
-                            {
-                                key:"customer.incomeThroughSales",
-                                type:"array",
-                                startEmpty: true,
-                                title:"INCOMRE_THROUGH_SALES",
-                                items:[
-                                    {
-                                        key: "customer.incomeThroughSales[].buyerName",
-                                        type: "lov",
-                                        autolov: true,
-                                        required: true,
-                                        lovonly: true,
-                                        title:"BUYER_NAME",
-                                        bindMap: {
-                                        },
-                                        searchHelper: formHelper,
-                                        search: function(inputModel, form, model, context) {
-                                            var out = [];
-                                            if (!model.customer.buyerDetails){
-                                                return out;
-                                            }
-                                            for (var i=0; i<model.customer.buyerDetails.length; i++){
-                                                out.push({
-                                                    name: model.customer.buyerDetails[i].buyerName,
-                                                    value: model.customer.buyerDetails[i].buyerName
-                                                })
-                                            }
-                                            return $q.resolve({
-                                                headers: {
-                                                    "x-total-count": out.length
-                                                },
-                                                body: out
-                                            });
-                                        },
-                                        onSelect: function(valueObj, model, context){
-                                            if (_.isUndefined(model.customer.incomeThroughSales[context.arrayIndex])) {
-                                                model.customer.incomeThroughSales[context.arrayIndex] = {};
-                                            }
-
-                                            model.customer.incomeThroughSales[context.arrayIndex].buyerName = valueObj.value;
-                                        },
-                                        getListDisplayItem: function(item, index) {
-                                            return [
-                                                item.name
-                                            ];
-                                        }
-                                    },
-                                    {
-                                        key: "customer.incomeThroughSales[].incomeType",
-                                        title: "INCOME_TYPE",
-                                        type: "radios",
-                                        required: true,
-                                        enumCode: "salesincome_income_type"
-                                    },
-                                    {
-                                        key: "customer.incomeThroughSales[].invoiceType",
-                                        title: "INVOICE_TYPE",
-                                        type: "select",
-                                        required: true,
-                                        enumCode: "salesincome_invoice_type",
-                                        parentValueExpr: "model.customer.enterprise.businessType"
-                                    },
-                                    {
-                                        key: "customer.incomeThroughSales[].amount",
-                                        title: "AMOUNT",
-                                        type: "amount",
-                                        calculator: true,
-                                        creditDebitBook: true,
-                                    },
-                                    {
-                                        key: "customer.incomeThroughSales[].incomeSalesDate",
-                                        title: "DATE",
-                                        type: "date"
-                                    },
-                                    {
-                                        key: "customer.incomeThroughSales[].invoiceDocId",
-                                        type: "file",
-                                        required: true,
-                                        condition: "model.customer.incomeThroughSales[arrayIndex].incomeType != 'Cash'",
-                                        title: "INVOICE_DOCUMENT",
-                                        fileType: "application/pdf",
-                                        "category": "CustomerEnrollment",
-                                        "subCategory": "IDENTITYPROOF",
-                                        using: "scanner"
-                                    },
-                                    {
-                                        key: "customer.incomeThroughSales[].invoiceDocId",
-                                        type: "file",
-                                        condition: "model.customer.incomeThroughSales[arrayIndex].incomeType =='Cash'",
-                                        title: "INVOICE_DOCUMENT",
-                                        fileType: "application/pdf",
-                                        "category": "CustomerEnrollment",
-                                        "subCategory": "IDENTITYPROOF",
-                                        using: "scanner"
-                                    }
-                                ]
-                            },
-                            {
-                                type:"fieldset",
-                                title:"EXPENSES",
-                                items:[]
-                            },
-                            {
-                                key:"customer.expenditures",
-                                type:"array",
-                                title:"BUSINESS_EXPENSE",
-                                items:[
-                                    {
-                                        key: "customer.expenditures[].expenditureSource",
-                                        title: "EXPENDITURE_SOURCE",
-                                        type: "select",
-                                        enumCode: "business_expense"
-                                    },
-                                    {
-                                        key: "customer.expenditures[].annualExpenses",
-                                        title: "AMOUNT",
-                                        type: "amount"
-                                    },
-                                    {
-                                        key: "customer.expenditures[].frequency",
-                                        title: "FREQUENCY",
-                                        type: "select",
-                                        enumCode: "frequency"
-                                    },
-                                    {
-                                        key: "customer.expenditures[].billDocId",
-                                        type: "file",
-                                        title: "BILLS",
-                                        fileType: "application/pdf",
-                                        "category": "CustomerEnrollment",
-                                        "subCategory": "IDENTITYPROOF",
-                                        using: "scanner"
-                                    }
-                                ]
-                            },
-                            {
-                                key:"customer.rawMaterialExpenses",
-                                type:"array",
-                                startEmpty: true,
-                                title:"PURCHASES",
-                                items:[
-                                    {
-                                        key: "customer.rawMaterialExpenses[].vendorName",
-                                        type: "lov",
-                                        autolov: true,
-                                        required: true,
-                                        lovonly: true,
-                                        title:"VENDOR_NAME",
-                                        bindMap: {
-                                        },
-                                        searchHelper: formHelper,
-                                        search: function(inputModel, form, model, context) {
-                                            var out = [];
-                                            if (!model.customer.supplierDetails){
-                                                return out;
-                                            }
-                                            for (var i=0; i<model.customer.supplierDetails.length; i++){
-                                                out.push({
-                                                    name: model.customer.supplierDetails[i].supplierName,
-                                                    value: model.customer.supplierDetails[i].supplierName
-                                                })
-                                            }
-                                            return $q.resolve({
-                                                headers: {
-                                                    "x-total-count": out.length
-                                                },
-                                                body: out
-                                            });
-                                        },
-                                        onSelect: function(valueObj, model, context){
-                                            if (_.isUndefined(model.customer.rawMaterialExpenses[context.arrayIndex])) {
-                                                model.customer.rawMaterialExpenses[context.arrayIndex] = {};
-                                            }
-
-                                            model.customer.rawMaterialExpenses[context.arrayIndex].vendorName = valueObj.value;
-                                        },
-                                        getListDisplayItem: function(item, index) {
-                                            return [
-                                                item.name
-                                            ];
-                                        }
-                                    },
-                                    {
-                                        key: "customer.rawMaterialExpenses[].rawMaterialType",
-                                        title: "TYPE",
-                                        type: "radios",
-                                        titleMap: {
-                                            Cash:"Cash",
-                                            Invoice:"Invoice"
-                                        }
-                                    },
-                                    {
-                                        key: "customer.rawMaterialExpenses[].amount",
-                                        title: "AMOUNT",
-                                        type: "amount"
-                                    },
-                                    {
-                                        key: "customer.rawMaterialExpenses[].rawMaterialDate",
-                                        title: "DATE",
-                                        type: "date"
-                                    },
-                                    {
-                                        key: "customer.rawMaterialExpenses[].invoiceDocId",
-                                        title: "PURCHASE_BILLS",
-                                        "required":true,
-                                        "condition":"model.customer.rawMaterialExpenses[arrayIndex].rawMaterialType != 'Cash'",
-                                        "category": "Loan",
-                                        "subCategory": "DOC1",
-                                        type: "file",
-                                        fileType: "application/pdf",
-                                        using: "scanner"
-                                    },
-                                    {
-                                        key: "customer.rawMaterialExpenses[].invoiceDocId",
-                                        title: "PURCHASE_BILLS",
-                                        "condition":"model.customer.rawMaterialExpenses[arrayIndex].rawMaterialType == 'Cash'",
-                                        "category": "Loan",
-                                        "subCategory": "DOC1",
-                                        type: "file",
-                                        fileType: "application/pdf",
-                                        using: "scanner"
-                                    }
-
-                                ]
-                            },
-                            ]
-                        },
-                            // {
-                            //     type:"fieldset",
-                            //     title:"ASSETS",
-                            //     items:[]
-                            // },
-                            // {
-                            //     key: "customer.enterprise.cashAtBank",
-                            //     title: "CASH_AT_BANK",
-                            //     type: "amount"
-                            // },
-                            // {
-                            //     key: "customer.enterprise.rawMaterial",
-                            //     title: "RAW_MATERIAL",
-                            //     type: "amount",
-                            //     required: true
-                            // },
-                            // {
-                            //     key: "customer.enterprise.workInProgress",
-                            //     title: "WIP",
-                            //     type: "amount",
-                            //     required: true
-                            // },
-                            // {
-                            //     key: "customer.enterprise.finishedGoods",
-                            //     title: "FINISHED_GOODS",
-                            //     type: "amount",
-                            //     required: true
-                            // },
-                            // {
-                            //     key: 'customer.enterpriseAssets',
-                            //     type: 'array',
-                            //     startEmpty: true,
-                            //     title: "ENTERPRICE_ASSETS",
-                            //     items: [
-                            //         {
-                            //             key: "customer.enterpriseAssets[].assetType",
-                            //             title: "ASSET_TYPE",
-                            //             type: "select",
-                            //             enumCode: "enterprice_asset_types",
-                            //             required: true
-                            //         },
-                            //         {
-                            //             key: "customer.enterpriseAssets[].vehicleMakeModel",
-                            //             title: "VEHICLE_MAKE_MODEL",
-                            //             type: "string",
-                            //             condition:"model.customer.enterpriseAssets[arrayIndex].assetType=='Vehicle'"
-                            //         },
-                            //         {
-                            //             key: "customer.enterpriseAssets[].valueOfAsset",
-                            //             title: "VALUE_OF_THE_ASSET",
-                            //             type: "amount"
-                            //         },
-                            //     ]
-                            // },
-
-                ]
-            },
-            {
-                type: "box",
-                condition: "model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
-                title: "STOCKS",
-                items: [{
-                    key: "customer.currentAssets",
-                    type: "pivotarray",
-                    startEmpty: false,
-                    view: "fixed",
-                    addButtonExpr: " ('ADD'| translate ) + ' ' + (pivotValue | translate)",
-                    pivotFieldEnumCode: 'stock_current_assets',
-                    pivotField: "assetCategory",
-                   // title: "RAW_MATERIAL",
-                    items: [{
-                        key: "customer.currentAssets[].description",
-                        title:"DESCRIPTION",
-                        type: "string",
-                        required:true,
-                    },
-                    {
-                        key: "customer.currentAssets[].assetType",
-                        title:"TYPE",
-                        type: "select",
-                        enumCode:"stock_asset_type",
-                        parentEnumCode:"stock_current_assets",
-                        parentValueExpr:"model.customer.currentAssets[arrayIndex].assetCategory",
-                        required:true,
-                    },{
-                        key: "customer.currentAssets[].assetValue",
-                        title:"PRESENT_VALUE",
-                        required:true,
-                        type: "amount",
-                    },{
-                        key: "customer.currentAssets[].isHypothecated",
-                        title:"IS_THE_MACHINE_HYPOTHECATED",
-                        type: "radios",
-                        titleMap: {
-                            "No": "No",
-                            "Yes": "Yes"
-                        }
-                    },{
-                        key: "customer.currentAssets[].hypothecatedToUs",
-                        condition : "model.customer.currentAssets[arrayIndex].isHypothecated == 'No' ",
-                        title:"HYPOTHECATED_TO_KINARA",
-                        type: "radios",
-                        titleMap: {
-                            "No": "No",
-                            "Yes": "Yes"
-                        }
-                    },{
-                        key: "customer.currentAssets[].assetImageId",
-                        title:"IMAGE",
-                        "type": "file",
-                        "fileType": "image/*",
-                        "category": "Loan",
-                        "subCategory": "COLLATERALPHOTO"
-                    }]
-
-                }]
-            },   {
-                type: "box",
-                condition: "model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
-                readonly:true,
-                title: "STOCKS",
-                items: [{
-                    key: "customer.currentAssets",
-                    type: "pivotarray",
-                    startEmpty: false,
-                    view: "fixed",
-                    addButtonExpr: " ('ADD'| translate ) + ' ' + (pivotValue | translate)",
-                    pivotFieldEnumCode: 'stock_current_assets',
-                    pivotField: "assetCategory",
-                   // title: "RAW_MATERIAL",
-                    items: [{
-                        key: "customer.currentAssets[].description",
-                        title:"DESCRIPTION",
-                        type: "string",
-                    },
-                    {
-                        key: "customer.currentAssets[].assetType",
-                        title:"TYPE",
-                        type: "select",
-                        enumCode:"stock_asset_type",
-                        parentEnumCode:"stock_current_assets",
-                        parentValueExpr:"model.customer.currentAssets[arrayIndex].assetCategory",
-                    },{
-                        key: "customer.currentAssets[].assetValue",
-                        title:"PRESENT_VALUE",
-                        type: "amount",
-                    },{
-                        key: "customer.currentAssets[].isHypothecated",
-                        title:"IS_THE_MACHINE_HYPOTHECATED",
-                        type: "radios",
-                        titleMap: {
-                            "No": "No",
-                            "Yes": "Yes"
-                        }
-                    },{
-                        key: "customer.currentAssets[].hypothecatedToUs",
-                        condition : "model.customer.currentAssets[arrayIndex].isHypothecated == 'No' ",
-                        title:"HYPOTHECATED_TO_KINARA",
-                        type: "radios",
-                        titleMap: {
-                            "No": "No",
-                            "Yes": "Yes"
-                        }
-                    },{
-                        key: "customer.currentAssets[].assetImageId",
-                        title:"IMAGE",
-                        "type": "file",
-                        "fileType": "image/*",
-                        "category": "Loan",
-                        "subCategory": "COLLATERALPHOTO"
-                    }]
-
-                }]
-            },
-            {
-                type: "box",
-                condition: "model.currentStage == 'Application' || model.currentStage=='FieldAppraisal'",
-                startEmpty: true,
-                title: "ENTERPRICE_ASSETS",
-                items: [{
-                    key: 'customer.enterpriseAssets',
-                    type: 'array',
-                    startEmpty: true,
-                    view: "fixed",
-                    title: "ENTERPRICE_ASSETS",
-                    items: [{
-                        key: "customer.enterpriseAssets[].assetType",
-                        title: "ASSET_TYPE",
-                        type: "select",
-                        enumCode: "stock_enterprise_assets",
-                        required: true,
-                    }, {
-                        key: "customer.enterpriseAssets[].valueOfAsset",
-                        // condition : "model.customer.enterpriseAssets[form.arrayIndex].assetType  == 'Furniture'",
-                        title: "PRESENT_VALUE",
-                        required:true,
-                        type: "amount",
-                    }, {
-                        key: "customer.enterpriseAssets[].details",
-                        title: "DESCRIPTION",
-                        required:true,
-                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
-                        type: "string",
-                    },{
-                        key: "customer.enterpriseAssets[].assetName",
-                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
-                        title: "TYPE",
-                        required:true,
-                        type: "select",
-                        enumCode: "enterprise_asset_name"
-                    }, {
-                        key: "customer.enterpriseAssets[].isHypothecated",
-                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
-                        title: "IS_THE_MACHINE_HYPOTHECATED" ,
-                        type: "radios",
-                        titleMap: {
-                            "No": "No",
-                            "Yes": "Yes"
-                        }
-                    },
-                     {
-                        key: "customer.enterpriseAssets[].hypothecatedToUs",
-                        title: "HYPOTHECATED_TO_KINARA",
-                        condition : "model.customer.enterpriseAssets[arrayIndex].isHypothecated == 'No'",
-                        type: "radios",
-                        titleMap: {
-                            "No": "No",
-                            "Yes": "Yes"
-                        }
-                    },
-                     {
-                        key: "customer.enterpriseAssets[].assetImageId",
-                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
-                        title: "IMAGE",
-                        "type": "file",
-                        "fileType": "image/*",
-                        "category": "Loan",
-                        "subCategory": "COLLATERALPHOTO"
-                    }]
-                }]
-            },{
-                type: "box",
-                condition: "model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
-               readonly:true,
-                startEmpty: true,
-                title: "ENTERPRICE_ASSETS",
-                items: [{
-                    key: 'customer.enterpriseAssets',
-                    type: 'array',
-                    startEmpty: true,
-                    view: "fixed",
-                    title: "ENTERPRICE_ASSETS",
-                    items: [{
-                        key: "customer.enterpriseAssets[].assetType",
-                        title: "ASSET_TYPE",
-                        type: "select",
-                        enumCode: "stock_enterprise_assets",
-                    }, {
-                        key: "customer.enterpriseAssets[].valueOfAsset",
-                        title: "PRESENT_VALUE",
-                        type: "amount",
-                    }, {
-                        key: "customer.enterpriseAssets[].details",
-                        title: "DESCRIPTION",
-                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
-                        type: "string",
-                    },{
-                        key: "customer.enterpriseAssets[].assetName",
-                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
-                        title: "TYPE",
-                        type: "select",
-                        enumCode: "enterprise_asset_name"
-                    }, {
-                        key: "customer.enterpriseAssets[].isHypothecated",
-                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
-                        title: "IS_THE_MACHINE_HYPOTHECATED" ,
-                        type: "radios",
-                        titleMap: {
-                            "No": "No",
-                            "Yes": "Yes"
-                        }
-                    },
-                     {
-                        key: "customer.enterpriseAssets[].hypothecatedToUs",
-                        title: "HYPOTHECATED_TO_KINARA",
-                        condition : "model.customer.enterpriseAssets[arrayIndex].isHypothecated == 'No'",
-                        type: "radios",
-                        titleMap: {
-                            "No": "No",
-                            "Yes": "Yes"
-                        }
-                    },
-                     {
-                        key: "customer.enterpriseAssets[].assetImageId",
-                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
-                        title: "IMAGE",
-                        "type": "file",
-                        "fileType": "image/*",
-                        "category": "Loan",
-                        "subCategory": "COLLATERALPHOTO"
-                    }]
-                }]
-            },
-             {
-                type: "box",
-                title: "T_BUSINESS_FINANCIALS",
-                "condition": "model.currentStage=='Screening'",
-                items: [{
-                        key: "customer.enterprise.monthlyTurnover",
-                        title: "MONTHLY_TURNOVER",
-                        required:true,
-                        type: "amount",
-
-                    },
-                    {
-                        key: "customer.enterprise.monthlyBusinessExpenses",
-                        title: "MONTHLY_BUSINESS_EXPENSES",
-                        type: "amount",
-
-                    },
-                    {
-                        key: "customer.enterprise.avgMonthlyNetIncome",
-                        title: "AVERAGE_MONTHLY_NET_INCOME",
-                        type: "amount"
-                    }]
-            },
-            {
-                type: "box",
-                title: "T_BUSINESS_FINANCIALS",
-                "condition": "model.currentStage=='ScreeningReview'",
-                readonly:true,
-                items: [{
-                    key: "customer.enterprise.monthlyTurnover",
-                    title: "MONTHLY_TURNOVER",
-                    required: true,
-                    type: "amount"
-                }, {
-                    key: "customer.enterprise.monthlyBusinessExpenses",
-                    title: "MONTHLY_BUSINESS_EXPENSES",
-                    type: "amount"
-                }, {
-                    key: "customer.enterprise.avgMonthlyNetIncome",
-                    title: "AVERAGE_MONTHLY_NET_INCOME",
-                    type: "amount"
-                }]
-            },
-            {
-               type:"box",
-               title:"T_BUSINESS_FINANCIALS",
-               "condition":"model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
-               readonly:true,
-                items:[
-                    {
-                        key: "customer.enterprise.monthlyTurnover",
-                        title: "MONTHLY_TURNOVER",
-                        type: "amount"
-                    },
-                    {
-                        key: "customer.enterprise.monthlyBusinessExpenses",
-                        title: "MONTHLY_BUSINESS_EXPENSES",
-                        type: "amount"
-                    },
-                    {
-                        key: "customer.enterprise.avgMonthlyNetIncome",
-                        title: "AVERAGE_MONTHLY_NET_INCOME",
-                        type: "amount"
-                    },
-
-                        {
-                                type:"fieldset",
-                                title:"Income",
-                                items:[]
-                        },
-                         {
-                            key:"customer.incomeThroughSales",
-                            type:"array",
-                            startEmpty: true,
-                            title:"Through Sales",
-                            items:[
-                                {
-                                    key: "customer.incomeThroughSales[].buyerName",
-                                    title:"BUYER_NAME",
-                                },
-                                {
-                                    key: "customer.incomeThroughSales[].incomeType",
-                                    title: "INCOME_TYPE",
-                                    type: "string"
-                                },
-                                {
-                                    key: "customer.incomeThroughSales[].invoiceType",
-                                    title: "INVOICE_TYPE",
-                                    type: "string"
-                                },
-                                {
-                                    key: "customer.incomeThroughSales[].amount",
-                                    title: "AMOUNT",
-                                    type: "amount"
-                                },
-                                {
-                                    key: "customer.incomeThroughSales[].incomeSalesDate",
-                                    title: "DATE",
-                                    type: "date"
-                                },
-                                {
-                                    key: "customer.incomeThroughSales[].invoiceDocId",
-                                    type: "file",
-                                    title: "INVOICE_DOCUMENT",
-                                    fileType: "application/pdf",
-                                    "category": "CustomerEnrollment",
-                                    "subCategory": "IDENTITYPROOF",
-                                    using: "scanner"
-                                }
-
-
-                            ]
-                        },
-                        {
-                          key:"customer.otherBusinessIncomes",
-                            type:"array",
-                            startEmpty: true,
-                            title:"OTHER_BUSINESS_INCOME",
-                            items:[
-                                {
-                                    key: "customer.otherBusinessIncomes[].incomeSource",
-                                    title: "INCOME_SOURCE",
-                                    type: "select",
-                                    enumCode:"occupation"
-                                },
-                                {
-                                    key: "customer.otherBusinessIncomes[].amount",
-                                    title: "AMOUNT",
-                                    type: "amount"
-                                },
-                                {
-                                    key: "customer.otherBusinessIncomes[].otherBusinessIncomeDate",
-                                    title: "DATE",
-                                    type: "date"
-                                },
-                             ]
-                        },
-                         {
-                                type:"fieldset",
-                                title:"EXPENSES",
-                                items:[]
-                        },
-                        {
-                                key:"customer.expenditures",
-                                type:"array",
-                                title:"BUSINESS_EXPENSE",
-                                items:[
-                                    {
-                                        key: "customer.expenditures[].expenditureSource",
-                                        title: "EXPENDITURE_SOURCE",
-                                        type: "select",
-                                        enumCode: "business_expense"
-                                    },
-                                    {
-                                        key: "customer.expenditures[].annualExpenses",
-                                        title: "AMOUNT",
-                                        type: "amount"
-                                    },
-                                    {
-                                        key: "customer.expenditures[].frequency",
-                                        title: "FREQUENCY",
-                                        type: "select",
-                                        enumCode: "frequency"
-                                    },
-                                    {
-                                        key: "customer.expenditures[].billDocId",
-                                        type: "file",
-                                        title: "BILLS",
-                                        fileType: "application/pdf",
-                                        "category": "CustomerEnrollment",
-                                        "subCategory": "IDENTITYPROOF",
-                                        using: "scanner"
-                                    }
-                                ]
-                            },
-                         {
-                            key:"customer.rawMaterialExpenses",
-                            type:"array",
-                            startEmpty: true,
-                            title:"PURCHASES",
-                            items:[
-                                {
-                                    key: "customer.rawMaterialExpenses[].vendorName",
-                                    title: "VENDOR_NAME",
-                                    type: "string"
-                                },
-                                {
-                                    key: "customer.rawMaterialExpenses[].rawMaterialType",
-                                    title: "TYPE",
-                                    type: "radios",
-                                        titleMap: {
-                                            Cash:"Cash",
-                                            Invoice:"Invoice"
-                                        }
-                                },
-                                {
-                                    key: "customer.rawMaterialExpenses[].amount",
-                                    title: "AMOUNT",
-                                    type: "amount"
-                                },
-                                {
-                                    key: "customer.rawMaterialExpenses[].rawMaterialDate",
-                                    title: "DATE",
-                                    type: "date"
-                                },
-                                {
-                                    key: "customer.rawMaterialExpenses[].invoiceDocId",
-                                    title: "PURCHASE_BILLS",
-                                    "category": "Loan",
-                                    "subCategory": "DOC1",
-                                    type: "file",
-                                    fileType: "application/pdf",
-                                    using: "scanner"
-                                }
-                                ]
-                            },
-                                {
-                                    type:"fieldset",
-                                    title:"ASSETS",
-                                    items:[]
-                                },
-                                {
-                                    key: "customer.enterprise.cashAtBank",
-                                    title: "CASH_AT_BANK",
-                                    type: "amount"
-                                },
-                                // {
-                                //     key: "customer.enterprise.rawMaterial",
-                                //     title: "RAW_MATERIAL",
-                                //     type: "amount"
-                                // },
-                                // {
-                                //     key: "customer.enterprise.workInProgress",
-                                //     title: "WIP",
-                                //     type: "amount"
-                                // },
-                                // {
-                                //     key: "customer.enterprise.finishedGoods",
-                                //     title: "FINISHED_GOODS",
-                                //     type: "amount"
-                                // },
-                                // {
-                                //     key: 'customer.enterpriseAssets',
-                                //     type: 'array',
-                                //     startEmpty: true,
-                                //     title: "ENTERPRICE_ASSETS",
-                                //     items: [
-                                //         {
-                                //             key: "customer.enterpriseAssets[].assetType",
-                                //             title: "ASSET_TYPE",
-                                //             type: "string",
-                                //             //enumCode: "enterprise_asset_types"
-                                //         },
-                                //         {
-                                //             key: "customer.enterpriseAssets[].vehicleMakeModel",
-                                //             title: "VEHICLE_MAKE_MODEL",
-                                //             type: "string",
-                                //             condition:"model.customer.enterpriseAssets[arrayIndex].assetType=='Vehicle'"
-                                //         },
-                                //         {
-                                //             key: "customer.enterpriseAssets[].valueOfAsset",
-                                //             title: "VALUE_OF_THE_ASSET",
-                                //             type: "amount"
-                                //         },
-                                //     ]
-                                // },
-
-
-
-                ]
-            },
-            {
-               type:"box",
-               title:"EMPLOYEE_DETAILS",
-               "condition":"model.currentStage=='Screening' || model.currentStage=='Application'|| model.currentStage=='FieldAppraisal'",
-                items:[
-                    {
-                        key: "customer.enterprise.noOfMaleEmployees",
-                        title: "NO_OF_MALE_EMPLOYEES",
-                        //required:true,
-                        type: "number"
-                    },
-                    {
-                        key: "customer.enterprise.noOfFemaleEmployees",
-                        //required:true,
-                        title: "NO_OF_FEMALE_EMPLOYEES",
-                        type: "number"
-                    },
-                    {
-                        key: "customer.enterprise.avgMonthlySalary",
-                        condition:"model.customer.enterprise.noOfFemaleEmployees > 0 ||model.customer.enterprise.noOfMaleEmployees > 0 ",
-                        //required:true,
-                        title: "AVERAGE_MONTHLY_SALARY",
-                        type: "amount"
+                                formHelper.resetFormValidityState(form);
+                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                PageHelper.clearErrors();
+                                BundleManager.pushEvent(model._bundlePageObj.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
+                            }, function (err) {
+                                PageHelper.showErrors(err.message);
+                                PageHelper.showProgress('enrolment', err.message, 5000);
+                                PageHelper.hideLoader();
+                            });
                     }
 
-                ]
-            },
-            {
-               type:"box",
-               title:"EMPLOYEE_DETAILS",
-               "condition":"model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
-               readonly:true,
-                items:[
-                    {
-                        key: "customer.enterprise.noOfFemaleEmployees",
-                        title: "NO_OF_MALE_EMPLOYEES",
-                        type: "number"
-                    },
-                    {
-                        key: "customer.enterprise.noOfMaleEmployees",
-                        title: "NO_OF_FEMALE_EMPLOYEES",
-                        type: "number"
-                    },
-                    {
-                        key: "customer.enterprise.avgMonthlySalary",
-                        title: "AVERAGE_MONTHLY_SALARY",
-                        type: "amount"
-                    }
-
-                ]
-            },
-            {
-               type:"box",
-               title:"MACHINERY",
-               condition: "model.currentStage == 'Application'",
-                items:[
-                    {
-                      key:"customer.fixedAssetsMachinaries",
-                       type:"array",
-                       startEmpty: true,
-                       title:"MACHINERY",
-                       items:[
-                            {
-                                key:"customer.fixedAssetsMachinaries[].machineDescription",
-                                title:"MACHINE_DESCRIPTION",
-                                required: true,
-                                type: "lov",
-                                autolov: true,
-                                lovonly:true,
-                                searchHelper: formHelper,
-                                
-                                 outputMap: {
-                                
-                                "machineDescription": "customer.fixedAssetsMachinaries[arrayIndex].machineDescription"
-                                 },
-                                initialize: function(inputModel) {
-                                    $log.warn('in machine description initialize');
-                                    $log.info(inputModel);
-                                },
-                                search: function(inputModel, form, model) {
-                                    
-                                    return Queries.searchMachineDescription(
-                                    );
-                                },
-                                getListDisplayItem: function(item, index) {
-                                return [
-                                    item.machineDescription
-                                ];
-                            },
-                                onSelect: function(result, model, context) {
-                                   if(model.customer.fixedAssetsMachinaries[context.arrayIndex].manufacturerName){
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].manufacturerName=null;                                  
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].machineType=null;                                  
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].workProcess=null;                                  
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].depreciationPercentage=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
-
-                                   }
-                                   $log.info(result);
-                                }
-                            }, 
-
-                            {
-                                key:"customer.fixedAssetsMachinaries[].manufacturerName",
-                                title:"MANUFACTURER_NAME",
-                                type: "lov",
-                                autolov: true,
-                                lovonly:true,
-                                searchHelper: formHelper,
-                                
-                                outputMap: {
-                                     "machineName": "customer.fixedAssetsMachinaries[arrayIndex].manufacturerName"
-                                 },
-                                search: function(inputModel, form, model) {
-                                    
-                                    return Queries.searchMachineName(model.customer.fixedAssetsMachinaries[model.arrayIndex].machineDescription);
-                                },
-                                getListDisplayItem: function(item, index) {
-                                    return [
-                                        item.machineName
-                                    ];
-                                },
-                                onSelect: function(result, model, context) {
-                                   if(model.customer.fixedAssetsMachinaries[context.arrayIndex].machineType){
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].machineType=null;                                  
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].workProcess=null;                                  
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].depreciationPercentage=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
-                                   }
-                                    $log.info(result);
-                                }
-                            }, 
-                            {
-                                key:"customer.fixedAssetsMachinaries[].machineType",
-                                title:"MACHINE_TYPE",
-                                type: "lov",
-                                autolov: true,
-                                lovonly:true,
-                                searchHelper: formHelper,
-                               
-                                outputMap: {
-                                     "machineType": "customer.fixedAssetsMachinaries[arrayIndex].machineType",
-                                     "depreciationPercentage": "customer.fixedAssetsMachinaries[arrayIndex].depreciationPercentage"
-                                 },
-                                search: function(inputModel, form, model) {
-                                    
-                                    return Queries.searchMachineType(model.customer.fixedAssetsMachinaries[model.arrayIndex].machineDescription,
-                                        model.customer.fixedAssetsMachinaries[model.arrayIndex].manufacturerName);
-                                },
-                                getListDisplayItem: function(item, index) {
-                                    return [
-                                        item.machineType,
-                                        item.depreciationPercentage
-                                    ];
-                                },
-                                onSelect: function(result, model, context) {
-                                    
-                                   if(model.customer.fixedAssetsMachinaries[context.arrayIndex].workProcess){                                                                         
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].workProcess=null;                                  
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
-                                       
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
-                                   }
-                                    $log.info(result);
-                                }
-                            }, 
-                            {
-                                key:"customer.fixedAssetsMachinaries[].workProcess",
-                                title:"WORK_PROCESS",
-                                type: "lov",
-                                autolov: true,
-                                lovonly:true,
-                                searchHelper: formHelper,
-                                
-                                outputMap: {
-                                     "workProcess": "customer.fixedAssetsMachinaries[arrayIndex].workProcess"
-                                 },
-                                search: function(inputModel, form, model) {
-                                    
-                                    return Queries.searchMachineWorkProcess(model.customer.fixedAssetsMachinaries[model.arrayIndex].machineDescription,
-                                        model.customer.fixedAssetsMachinaries[model.arrayIndex].manufacturerName,
-                                        model.customer.fixedAssetsMachinaries[model.arrayIndex].machineType);
-                                },
-                                getListDisplayItem: function(item, index) {
-                                    return [
-                                        item.workProcess
-                                    ];
-                                },
-                                onSelect: function(result, model, context) {
-                                   if(model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel){
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].depreciationPercentage=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
-                                   }
-                                    $log.info(result);
-                                }
-                            }, 
-                           
-                            {
-                                key: "customer.fixedAssetsMachinaries[].machineModel",
-                                title:"MACHINE_MODEL",
-                                type: "lov",
-                                autolov: true,
-                                lovonly:true,
-                                searchHelper: formHelper,
-                                
-                                outputMap: {
-                                     "machineModel": "customer.fixedAssetsMachinaries[arrayIndex].machineModel"
-                                 },
-                                search: function(inputModel, form, model) {
-                                    
-                                    return Queries.searchMachineModel(model.customer.fixedAssetsMachinaries[model.arrayIndex].machineDescription,
-                                        model.customer.fixedAssetsMachinaries[model.arrayIndex].manufacturerName,
-                                        model.customer.fixedAssetsMachinaries[model.arrayIndex].machineType,
-                                        model.customer.fixedAssetsMachinaries[model.arrayIndex].workProcess);
-                                },
-                                getListDisplayItem: function(item, index) {
-                                    return [
-                                        item.machineModel
-                                    ];
-                                },
-                                onSelect: function(result, model, context) {
-                                   // model.customer.fixedAssetsMachinaries[context.arrayIndex].manufacturerName=result.machineName
-                                    $log.info(result);
-                                }
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].serialNumber",
-                                title:"SERIAL_NUMBER",
-                                type: "string",
-                                required: true
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].purchasePrice",
-                                title:"PURCHASE_PRICE",
-                                type: "amount",
-                                required: true,
-                                "onChange": function(modelValue, form, model) {
-                                    priceCalculation(modelValue, form, model);
-                                }
-
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].machinePurchasedYear",
-                                title:"MACHINE_PURCHASED_YEAR",
-                                type: "number",
-                                "schema":{
-                                    "minimum":1000,
-                                    "maximum":9999
-                                },
-                                "onChange": function(modelValue, form, model) {
-                                    priceCalculation(modelValue, form, model);
-                                }
-                            },    
-                            {
-                                key: "customer.fixedAssetsMachinaries[].presentValue",
-                                title:"PRESSENT_VALUE",
-                                type: "amount",
-                                required: true,
-                                "onChange": function(modelValue, form, model) {
-                                        if (model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice && model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue) {
-                                            
-                                            model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = (model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue+model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice) /2;
-                                        }
-                                    }
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].depreciationPercentage",
-                                readonly:true,
-                                title:"DEPRECIATION_PERCENTAGE"
-
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].marketPrice",
-                                readonly:true,
-                                title:"MARKET_PRICE"
-
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].finalPrice",
-                                readonly:true,
-                                title:"FINAL_PRICE"
-
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].isTheMachineNew",
-                                title:"IS_THE_MACHINE_NEW",
-                                type: "select",
-                                enumCode: "decisionmaker"
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].fundingSource",
-                                title:"FUNDING_SOURCE",
-                                type: "select",
-                                enumCode: "machinery_funding_source"
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].isTheMachineHypothecated",
-                                title:"IS_THE_MACHINE_HYPOTHECATED",
-                                type: "radios",
-                                enumCode: "decisionmaker",
-                                onChange: function(modelValue, form, model, formCtrl, event) {
-                                    if (modelValue && modelValue.toLowerCase() === 'no')
-                                        model.customer.fixedAssetsMachinaries[form.arrayIndex].hypothecatedTo = null;
-                                    else if(modelValue && modelValue.toLowerCase() === 'yes')
-                                        model.customer.fixedAssetsMachinaries[form.arrayIndex].hypothecatedToUs = null;
-                                }
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].hypothecatedTo",
-                                title:"HYPOTHECATED_TO",
-                                type: "string",
-                                condition:"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='YES'"
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].hypothecatedToUs",
-                                title:"CAN_BE_HYPOTHECATED_TO_US",
-                                type: "radios",
-                                enumCode: "decisionmaker",
-                                condition:"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='NO'"
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].machinePermanentlyFixedToBuilding",
-                                title:"MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
-                                type: "radios",
-                                enumCode: "decisionmaker"
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].machineBillsDocId",
-                                title:"MACHINE_BILLS",
-                                "category":"Loan",
-                                "subCategory":"DOC1",
-                                type: "file",
-                                fileType:"application/pdf",
-                                using: "scanner",
-                                offline:true
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].machineImage",
-                                title:"MACHINE_IMAGE",
-                                "type": "file",
-                                "fileType": "image/*",
-                                "category": "Loan",
-                                "subCategory": "COLLATERALPHOTO",
-
-                                offline:true
-                            },
-                         ]
-                     }
-                 ]
-            },
-            {
-               type:"box",
-               title:"MACHINERY",
-               condition: "model.currentStage == 'ApplicationReview' || model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
-               readonly:true,
-                items:[
-                    {
-                      key:"customer.fixedAssetsMachinaries",
-                       type:"array",
-                       startEmpty: true,
-                       title:"MACHINERY",
-                       items:[
-                            {
-                                key:"customer.fixedAssetsMachinaries[].machineDescription",
-                                title:"MACHINE_DESCRIPTION",
-                                type: "string"
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].manufacturerName",
-                                title:"MANUFACTURER_NAME",
-                                type: "string"
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].machineType",
-                                title:"MACHINE_TYPE",
-                                type: "string"
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].workProcess",
-                                title:"WORK_PROCESS",
-                                type: "string"
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].machineModel",
-                                title:"MACHINE_MODEL",
-                                type: "string"
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].serialNumber",
-                                title:"SERIAL_NUMBER",
-                                type: "string"
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].purchasePrice",
-                                title:"PURCHASE_PRICE",
-                                type: "number"
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].machinePurchasedYear",
-                                title:"MACHINE_PURCHASED_YEAR",
-                                type: "number"
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].presentValue",
-                                title:"PRESSENT_VALUE",
-                                type: "number"
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].depreciationPercentage",
-                                title:"DEPRECIATION_PERCENTAGE",
-                                type: "number"
-                            },
-                             {
-                                key: "customer.fixedAssetsMachinaries[].marketPrice",
-                                title:"MARKET_PRICE",
-                                type: "number"
-                            },
-                             {
-                                key: "customer.fixedAssetsMachinaries[].finalPrice",
-                                title:"FINAL_PRICE",
-                                type: "number"
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].isTheMachineNew",
-                                title:"IS_THE_MACHINE_NEW? ",
-                                type: "radios",
-                                enumCode: "decisionmaker"
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].fundingSource",
-                                title:"FUNDING_SOURCE",
-                                type: "string",
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].isTheMachineHypothecated",
-                                title:"IS_THE_MACHINE_HYPOTHECATED",
-                                type: "radios",
-                                enumCode: "decisionmaker"
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].hypothecatedTo",
-                                title:"HYPOTHECATED_TO",
-                                type: "string",
-                                enumCode: "decisionmaker",
-                                condition:"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='YES'"
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].hypothecatedToUs",
-                                title:"HYPOTHECATED_TO_US",
-                                type: "select",
-                                enumCode: "decisionmaker",
-                                condition:"model.customer.fixedAssetsMachinaries[arrayIndex].isTheMachineHypothecated=='NO'"
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].machinePermanentlyFixedToBuilding",
-                                title:"MACHINE_PERMANENTLY_FIXED_TO_BUILDING",
-                                type: "radios",
-                                enumCode: "decisionmaker"
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].machineBillsDocId",
-                                title:"MACHINE_BILLS",
-                                "category":"Loan",
-                                "subCategory":"DOC1",
-                                type: "file",
-                                fileType:"application/pdf",
-                                using: "scanner"
-                            },
-                            {
-                                key: "customer.fixedAssetsMachinaries[].machineImage",
-                                title:"MACHINE_IMAGE",
-                                "category":"Loan",
-                                "subCategory":"DOC1",
-                                type: "file",
-                                fileType:"application/pdf",
-                                using: "scanner"
-                            }
-                         ]
-                     }
-                 ]
-            },
-        {
-            type: "box",
-            title: "PROXY_INDICATORS",
-            condition: "model.currentStage=='FieldAppraisal' && !model.proxyIndicatorsHasValue",
-            items: [{
-                    key: "customer.properAndMatchingSignboard",
-                    title: "PROPER_MATCHING_SIGNBOARD",
-                    type: "select",
-                    required: "true",
-                    enumCode: "decisionmaker",
-                }, {
-                    key: "customer.bribeOffered",
-                    title: "BRIBE_OFFERED",
-                    type: "select",
-                    required: "true",
-                    enumCode: "decisionmaker",
-                }, {
-                    key: "customer.shopOrganized",
-                    title: "SHOP_SHED_ORGANIZED",
-                    type: "select",
-                    required: "true",
-                    enumCode: "status_scale_2"
-                }, {
-                    key: "customer.isIndustrialArea",
-                    title: "IN_INDUSTRIAL_AREA",
-                    type: "select",
-                    required: "true",
-                    enumCode: "decisionmaker",
-                }, {
-                    key: "customer.customerAttitudeToKinara",
-                    title: "CUSTOMER_ATTITUDE_TO_KINARA",
-                    type: "select",
-                    required: "true",
-                    enumCode: "status_scale_2"
-                }, {
-                    key: "customer.bookKeepingQuality",
-                    title: "BOOK_KEEPING_QUALITY",
-                    type: "select",
-                    required: "true",
-                    enumCode: "status_scale_2"
-                }, {
-                    key: "customer.challengingChequeBounce",
-                    title: "CHALLENGING_CHEQUE_BOUNCE/FESS_CHARGE/POLICIES",
-                    type: "select",
-                    required: "true",
-                    enumCode: "decisionmaker",
-                }, {
-                    key: "customer.allMachinesAreOperational",
-                    title: "ALL_MACHINES_OPERATIONAL?",
-                    type: "select",
-                    required: "true",
-                    enumCode: "decisionmaker",
-                }, {
-                    key: "customer.employeeSatisfaction",
-                    title: "EMPLOYEE_SATISFACTION",
-                    type: "select",
-                    required: "true",
-                    enumCode: "status_scale_2"
-                }, {
-                    key: "customer.politicalOrPoliceConnections",
-                    title: "POLITICAL_POLICE_CONNECTIONS",
-                    type: "select",
-                    required: "true",
-                    enumCode: "decisionmaker",
-                }, {
-                    key: "customer.multipleProducts",
-                    title: "MULTIPLE_PRODUCTS_MORE_THAN_3",
-                    type: "select",
-                    required: "true",
-                    enumCode: "decisionmaker",
-                }, {
-                    key: "customer.multipleBuyers",
-                    title: "MULTIPLE_BUYERS_MORE_THAN_3",
-                    condition: "model.customer.enterprise.businessType == 'Manufacturing'",
-                    type: "select",
-                    required: "true",
-                    enumCode: "decisionmaker",
-                }, {
-                    key: "customer.seasonalBusiness",
-                    title: "SEASONAL_BUSINESS",
-                    type: "select",
-                    required: "true",
-                    enumCode: "decisionmaker",
-                }, {
-                    key: "customer.incomeStability",
-                    title: "INCOME STABILITY",
-                    type: "select",
-                    required: "true",
-                    enumCode: "income_stability"
-                }, {
-                    key: "customer.utilisationOfBusinessPremises",
-                    title: "UTILIZATION_OF_BUSINESS_PREMISES ",
-                    type: "select",
-                    required: "true",
-                    enumCode: "utilisation_of_business"
-                }, {
-                    key: "customer.approachForTheBusinessPremises",
-                    title: "APPROACH_FOR_THE_BUSINESS_PREMISES",
-                    type: "select",
-                    required: "true",
-                    enumCode: "status_scale_2"
-                        //enumCode:"connectivity_status "
-                }, {
-                    key: "customer.safetyMeasuresForEmployees",
-                    title: "SAFETY_MEASURES_FOR_EMPLOYEES",
-                    type: "select",
-                    required: "true",
-                    enumCode: "decisionmaker",
-                    //enumCode: "status_scale"
-                }, {
-                    key: "customer.childLabours",
-                    title: "CHILD_LABOURERS",
-                    type: "select",
-                    required: "true",
-                    enumCode: "decisionmaker",
-                }, {
-                    key: "customer.isBusinessEffectingTheEnvironment",
-                    title: "IS_THE_BUSSINESS_IN_AFFECTING_ENVIRONMENT",
-                    type: "select",
-                    required: "true",
-                    enumCode: "decisionmaker",
-                }, {
-                    key: "customer.stockMaterialManagement",
-                    title: "STOCK_MATERIAL_MANAGEMENT",
-                    type: "select",
-                    required: "true",
-                    enumCode: "status_scale_2"
-                        //enumCode: "status_scale"
-                }, {
-                    key: "customer.customerWalkinToBusiness",
-                    condition: "model.customer.enterprise.businessType == 'Trading'",
-                    title: "CUSTOMER_WALK_IN_TO_THE_BUSINESS",
-                    type: "select",
-                    required: "true",
-                    enumCode: "status_scale"
-                        //enumCode: "status_scale"
-                },
-                {
-                    key: "customer.businessSignboardImage",
-                    title: "SIGN_BOARD",
-                    "category": "Loan",
-                    "subCategory": "DOC1",
-                    type: "file",
-                    fileType: "application/pdf",
-                    using: "scanner"
                 }
-
-            ]
-        }, {
-            type: "box",
-            title: "PROXY_INDICATORS",
-            condition: "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView' || ( model.currentStage=='FieldAppraisal' && model.proxyIndicatorsHasValue)",
-            readonly: true,
-            items: [{
-                    key: "customer.properAndMatchingSignboard",
-                    title: "PROPER_MATCHING_SIGNBOARD",
-                    type: "string",
-                    required: false,
-                    enumCode: "decisionmaker",
-                }, {
-                    key: "customer.bribeOffered",
-                    title: "BRIBE_OFFERED",
-                    type: "string",
-                    required: false,
-                    enumCode: "decisionmaker",
-                }, {
-                    key: "customer.shopOrganized",
-                    title: "SHOP_SHED_ORGANIZED",
-                    type: "string",
-                    required: false,
-                    enumCode: "status_scale_2"
-                }, {
-                    key: "customer.isIndustrialArea",
-                    title: "IN_INDUSTRIAL_AREA",
-                    type: "string",
-                    required: false,
-                    enumCode: "decisionmaker",
-                }, {
-                    key: "customer.customerAttitudeToKinara",
-                    title: "CUSTOMER_ATTITUDE_TO_KINARA",
-                    type: "string",
-                    required: false,
-                    enumCode: "status_scale_2"
-                }, {
-                    key: "customer.bookKeepingQuality",
-                    title: "BOOK_KEEPING_QUALITY",
-                    type: "string",
-                    required: false,
-                    enumCode: "status_scale_2"
-                }, {
-                    key: "customer.challengingChequeBounce",
-                    title: "CHALLENGING_CHEQUE_BOUNCE/FESS_CHARGE/POLICIES",
-                    type: "string",
-                    required: false,
-                    enumCode: "decisionmaker",
-                }, {
-                    key: "customer.allMachinesAreOperational",
-                    title: "ALL_MACHINES_OPERATIONAL?",
-                    type: "string",
-                    required: false,
-                    enumCode: "decisionmaker",
-                }, {
-                    key: "customer.employeeSatisfaction",
-                    title: "EMPLOYEE_SATISFACTION",
-                    type: "string",
-                    required: false,
-                    enumCode: "status_scale_2"
-                }, {
-                    key: "customer.politicalOrPoliceConnections",
-                    title: "POLITICAL_POLICE_CONNECTIONS",
-                    type: "string",
-                    required: false,
-                    enumCode: "decisionmaker",
-                }, {
-                    key: "customer.multipleProducts",
-                    title: "MULTIPLE_PRODUCTS_MORE_THAN_3",
-                    type: "string",
-                    required: false,
-                    enumCode: "decisionmaker",
-                }, {
-                    key: "customer.multipleBuyers",
-                    title: "MULTIPLE_BUYERS_MORE_THAN_3",
-                    condition: "model.customer.enterprise.businessType == 'Manufacturing'",
-                    type: "string",
-                    required: false,
-                    enumCode: "decisionmaker",
-                }, {
-                    key: "customer.seasonalBusiness",
-                    title: "SEASONAL_BUSINESS",
-                    type: "string",
-                    required: false,
-                    enumCode: "decisionmaker",
-                }, {
-                    key: "customer.incomeStability",
-                    title: "INCOME_STABILITY",
-                    type: "string",
-                    required: false,
-                    enumCode: "income_stability"
-                }, {
-                    key: "customer.utilisationOfBusinessPremises",
-                    title: "UTILIZATION_OF_BUSINESS_PREMISES ",
-                    type: "string",
-                    required: false,
-                    enumCode: "utilisation_of_business"
-                }, {
-                    key: "customer.approachForTheBusinessPremises",
-                    title: "APPROACH_FOR_THE_BUSINESS_PREMISES",
-                    type: "string",
-                    required: false,
-                    enumCode: "status_scale_2"
-                }, {
-                    key: "customer.safetyMeasuresForEmployees",
-                    title: "SAFETY_MEASURES_FOR_EMPLOYEES",
-                    type: "string",
-                    required: false,
-                    enumCode: "decisionmaker"
-                }, {
-                    key: "customer.childLabours",
-                    title: "CHILD_LABOURERS",
-                    type: "string",
-                    required: false,
-                    enumCode: "decisionmaker",
-                }, {
-                    key: "customer.isBusinessEffectingTheEnvironment",
-                    title: "IS_THE_BUSSINESS_IN_EFFECTING_ENVIRONMENT",
-                    type: "string",
-                    required: false,
-                    enumCode: "decisionmaker",
-                }, {
-                    key: "customer.stockMaterialManagement",
-                    title: "STOCK_MATERIAL_MANAGEMENT",
-                    type: "string",
-                    required: false,
-                    enumCode: "status_scale_2"
-                }, {
-                    key: "customer.customerWalkinToBusiness",
-                    title: "CUSTOMER_WALK_IN_TO_THE_BUSINESS",
-                    condition: "model.customer.enterprise.businessType == 'Trading'",
-                    type: "string",
-                    required: false,
-                    enumCode: "status_scale"
-                        //enumCode: "status_scale"
-                },
-                {
-                    key: "customer.businessSignboardImage",
-                    title: "SIGN_BOARD",
-                    "category": "Loan",
-                    "subCategory": "DOC1",
-                    type: "file",
-                    fileType: "application/pdf",
-                    using: "scanner"
-                }
-
-            ]
-        },
-            {
-                "type": "box",
-                "title": "REFERENCES",
-                "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
-                "items": [
-                    {
-                        key:"customer.verifications",
-                        title:"REFERENCES",
-                        type: "array",
-                        items:[
-                            {
-                                key:"customer.verifications[].relationship",
-                                title:"REFERENCE_TYPE",
-                                type:"select",
-                                required:"true",
-                                enumCode: "business_reference_type"
-                            },
-                             {
-                                key:"customer.verifications[].businessName",
-                                title:"BUSINESS_NAME",
-                                type:"string"
-                            },
-                            {
-                                key:"customer.verifications[].referenceFirstName",
-                                title:"CONTACT_PERSON_NAME",
-                                type:"string"
-                            },
-                            {
-                                key:"customer.verifications[].mobileNo",
-                                title:"CONTACT_NUMBER",
-                                type:"string",
-                                inputmode: "number",
-                                numberType: "tel",
-                                "schema": {
-                                     "pattern": "^[0-9]{10}$"
-                                }
-                            }/*,
-                            {
-                                key:"customer.verifications[].businessSector",
-                                title:"BUSINESS_SECTOR",
-                                type:"select",
-                                enumCode: "businessSector"
-                            },
-                            {
-                                key:"customer.verifications[].businessSubSector",
-                                title:"BUSINESS_SUBSECTOR",
-                                type:"select",
-                                enumCode: "businessSubSector",
-                                parentEnumCode: "businessSector"
-                            },
-                            {
-                                key:"customer.verifications[].selfReportedIncome",
-                                title:"SELF_REPORTED_INCOME",
-                                type:"number"
-                            }*/,
-                            {
-                                key:"customer.verifications[].address",
-                                type:"textarea"
-                            },
-                            {
-                            type: "fieldset",
-                            title: "REFERENCE_CHECK",
-                            "condition": "model.currentStage=='FieldAppraisal'",
-                            items: [
-                                /*,
-                                {
-                                    key:"customer.verifications[].remarks",
-                                    title:"REMARKS",
-                                },*/
-                                {
-                                    key:"customer.verifications[].knownSince",
-                                    required:true
-                                },
-                                {
-                                    key:"customer.verifications[].goodsSold",
-                                    "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
-                                },
-                                {
-                                    key:"customer.verifications[].goodsBought",
-                                    "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
-                                },
-                                {
-                                    key:"customer.verifications[].paymentTerms",
-                                    type:"select",
-                                    "title":"payment_tarms",
-                                    enumCode: "payment_terms"
-                                },
-                                {
-                                    key:"customer.verifications[].modeOfPayment",
-                                    type:"select",
-                                    enumCode: "payment_mode"
-                                },
-                                {
-                                    key:"customer.verifications[].outstandingPayable",
-                                    "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
-                                },
-                                {
-                                    key:"customer.verifications[].outstandingReceivable",
-                                    "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
-                                },
-                                {
-                                    key:"customer.verifications[].customerResponse",
-                                    title:"CUSTOMER_RESPONSE",
-                                    type:"select",
-                                    required:true,
-                                    titleMap: [{
-                                                    value: "positive",
-                                                    name: "positive"
-                                                },{
-                                                    value: "Negative",
-                                                    name: "Negative"
-                                                }]
-                                }
-                            ]
-                            }
-                         ]
-                    },
-                ]
-            },
-            {
-                "type": "box",
-                "title": "REFERENCES",
-                "condition": "model.currentStage=='ApplicationReview' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
-                readonly:true,
-                "items": [
-                    {
-                        key:"customer.verifications",
-                        title:"REFERENCES",
-                        type: "array",
-                        items:[
-                            {
-                                key:"customer.verifications[].relationship",
-                                title:"REFERENCE_TYPE",
-                                type:"select",
-                                required:"true",
-                                enumCode: "business_reference_type"
-                            },
-                             {
-                                key:"customer.verifications[].businessName",
-                                title:"BUSINESS_NAME",
-                                type:"string"
-                            },
-                            {
-                                key:"customer.verifications[].referenceFirstName",
-                                title:"CONTACT_PERSON_NAME",
-                                type:"string"
-                            },
-                            {
-                                key:"customer.verifications[].mobileNo",
-                                title:"CONTACT_NUMBER",
-                                type:"string"
-                            }/*,
-                            {
-                                key:"customer.verifications[].businessSector",
-                                title:"BUSINESS_SECTOR",
-                                type:"string"
-                            },
-                            {
-                                key:"customer.verifications[].businessSubSector",
-                                title:"BUSINESS_SUBSECTOR",
-                                type:"string"
-                            },
-                            {
-                                key:"customer.verifications[].selfReportedIncome",
-                                title:"SELF_REPORTED_INCOME",
-                                type:"number"
-                            }*/,
-                            {
-                                key:"customer.verifications[].address",
-                                type:"textarea"
-                            },
-                            {
-                            type: "fieldset",
-                            title: "REFERENCE_CHECK",
-                            "condition": "model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
-                            items: [
-                                /*,
-                                {
-                                    key:"customer.verifications[].remarks",
-                                    title:"REMARKS",
-                                }*/
-                                {
-                                    key:"customer.verifications[].knownSince"
-                                },
-                                {
-                                    key:"customer.verifications[].goodsSold",
-                                    "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
-                                },
-                                {
-                                    key:"customer.verifications[].goodsBought",
-                                    "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
-                                },
-                                {
-                                    key:"customer.verifications[].paymentTerms",
-                                    type:"select",
-                                    "title":"payment_tarms",
-                                    enumCode: "payment_terms"
-                                },
-                                {
-                                    key:"customer.verifications[].modeOfPayment",
-                                    type:"select",
-                                    enumCode: "payment_mode"
-                                },
-                                {
-                                    key:"customer.verifications[].outstandingPayable",
-                                    "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
-                                },
-                                {
-                                    key:"customer.verifications[].outstandingReceivable",
-                                    "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
-                                },
-                                {
-                                    key:"customer.verifications[].customerResponse",
-                                    title:"CUSTOMER_RESPONSE",
-                                    type:"string"
-                                }
-                            ]
-                            }
-
-                         ]
-                    },
-                ]
-            },
-            {
-                "type": "box",
-                "title": "COMMERCIAL_CB_CHECK",
-                "condition": "model.currentStage=='ScreeningReview'",
-                "items": [
-                    {
-                        key:"customer.enterpriseBureauDetails",
-                        title:"CB Check",
-                        type: "array",
-                        items:[
-                            {
-                                key:"customer.enterpriseBureauDetails[].bureau",
-                                title:"BUREAU",
-                                type:"select",
-                                titleMap: {
-                                      "CIBIL": "CIBIL",
-                                      "Highmark": "Highmark"
-                                }
-                            },
-                            {
-                                key:"customer.enterpriseBureauDetails[].fileId",
-                                title:"FILE",
-                                type:"file",
-                                fileType:"application/pdf",
-                                using: "scanner"
-                            },
-                            {
-                                key:"customer.enterpriseBureauDetails[].doubtful",
-                                title:"DOUBTFUL_ACS",
-                                type:"number"
-                            },
-                            {
-                                key:"customer.enterpriseBureauDetails[].loss",
-                                title:"LOSS_ACS",
-                                type:"number"
-                            },
-                            {
-                                key:"customer.enterpriseBureauDetails[].specialMentionAccount",
-                                title:"SPECIAL_MENTION_ACS",
-                                type:"number"
-                            },
-                            {
-                                key:"customer.enterpriseBureauDetails[].standard",
-                                title:"STANDARD_ACS",
-                                type:"number"
-                            },
-                            {
-                                key:"customer.enterpriseBureauDetails[].subStandard",
-                                title:"SUB_STANDARD_ACS",
-                                type:"number"
-                            },
-
-                         ]
-                    },
-                ]
-            },
-            {
-                "type": "box",
-                "title": "COMMERCIAL_CB_CHECK",
-                "condition": "model.currentStage=='ApplicationReview' || model.currentStage == 'Application' || model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview' || model.currentStage == 'CentralRiskReview' || model.currentStage == 'CreditCommitteeReview' || model.currentStage=='Sanction'||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
-                readonly:true,
-                "items": [
-                    {
-                        key:"customer.enterpriseBureauDetails",
-                        title:"CB Check",
-                        type: "array",
-                        items:[
-                            {
-                                key:"customer.enterpriseBureauDetails[].bureau",
-                                title:"BUREAU",
-                                type:"select",
-                                titleMap: {
-                                      "CIBIL": "CIBIL",
-                                      "Highmark": "Highmark"
-                                }
-                            },
-                            {
-                                key:"customer.enterpriseBureauDetails[].fileId",
-                                title:"FILE",
-                                type:"file",
-                                fileType:"application/pdf",
-                                using: "scanner"
-                            },
-                            {
-                                key:"customer.enterpriseBureauDetails[].doubtful",
-                                title:"DOUBTFUL_ACS",
-                                type:"number"
-                            },
-                            {
-                                key:"customer.enterpriseBureauDetails[].loss",
-                                title:"LOSS_ACS",
-                                type:"number"
-                            },
-                            {
-                                key:"customer.enterpriseBureauDetails[].specialMentionAccount",
-                                title:"SPECIAL_MENTION_ACS",
-                                type:"number"
-                            },
-                            {
-                                key:"customer.enterpriseBureauDetails[].standard",
-                                title:"STANDARD_ACS",
-                                type:"number"
-                            },
-                            {
-                                key:"customer.enterpriseBureauDetails[].subStandard",
-                                title:"SUB_STANDARD_ACS",
-                                type:"number"
-                            },
-
-                         ]
-                    },
-                ]
-            },
-            {
-                "type": "actionbox",
-                "condition": "!model.customer.id && !(model.currentStage=='ScreeningReview' || model.currentStage=='ApplicationReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview')",
-                "items": [
-                    {
-                        "type": "button",
-                        "icon": "fa fa-circle-o",
-                        "title": "SUBMIT",
-                        "onClick": "actions.save(model, formCtrl, form, $event)",
-                        "buttonType": "submit"
-                    }
-                ]
-            },
-            {
-                "type": "actionbox",
-                "condition": "model.customer.id && !(model.currentStage=='ApplicationReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'||model.currentStage == 'Rejected'||model.currentStage == 'loanView')",
-                "items": [
-                    {
-                        "type": "submit",
-                        "title": "COMPLETE_ENROLMENT"
-                    }
-                ]
-            }
-        ],
-        schema: function() {
-            return Enrollment.getSchema().$promise;
-        },
-        actions: {
-            preSave: function(model, form, formName) {
-                var deferred = $q.defer();
-                if (model.customer.firstName) {
-                    deferred.resolve();
-                } else {
-                    PageHelper.showProgress('enrollment', 'Customer Name is required', 3000);
-                    deferred.reject();
-                }
-                return deferred.promise;
-            },
-            save: function(model, formCtrl, formName){
-                $log.info("Inside save()");
-                formCtrl.scope.$broadcast('schemaFormValidate');
-
-                var DedupeEnabled = SessionStore.getGlobalSetting("DedupeEnabled") || 'N';
-
-                if (formCtrl && formCtrl.$invalid) {
-                    PageHelper.showProgress("enrolment","Your form have errors. Please fix them.", 5000);
-                    return false;
-                }
-                if (model.customer.enterprise.isGSTAvailable === "YES"){
-                    try
-                    {
-                        var count = 0;
-                        for (var i = 0; i < model.customer.enterpriseRegistrations.length; i++) {
-                            if (model.customer.enterpriseRegistrations[i].registrationType === "GST No"
-                                && model.customer.enterpriseRegistrations[i].registrationNumber != ""
-                                && model.customer.enterpriseRegistrations[i].registrationNumber != null
-                                ) {
-                                count++;
-                            }
-                        }
-                        if (count < 1) {
-                            PageHelper.showProgress("enrolment","Since GST is applicable so please select Registration type GST No and provide Registration details ",9000);
-                            return false;
-                        }
-                    }
-                    catch(err){
-                        console.error(err);
-                    }
-                }
-
-                if (model.customer.enterprise.companyRegistered != "YES"){
-                    try
-                    {
-                        delete model.customer.enterpriseRegistrations;
-                    }
-                    catch(err){
-                        console.error(err);
-                    }
-                }
-
-                var reqData = _.cloneDeep(model);
-                EnrollmentHelper.fixData(reqData);
-
-                if (!(validateRequest(reqData))){
-                    return;
-                }
-                if (model.currentStage == 'ApplicationReview') {
-                    PageHelper.showProgress("enrolment","Loan must be saved/updated for psychometric test", 6000);
-                }
-
-                PageHelper.showProgress('enrolment','Saving..');
-                EnrollmentHelper.saveData(reqData).then(function(resp){
-                    formHelper.resetFormValidityState(formCtrl);
-                    PageHelper.showProgress('enrolment', 'Done.', 5000);
-                    Utils.removeNulls(resp.customer, true);
-                    model.customer = resp.customer;
-                    if (model._bundlePageObj){
-                        BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
-                    }
-                    if (DedupeEnabled == 'Y' && model.currentStage == "Screening") {
-                        Dedupe.create({
-                            "customerId": model.customer.id,
-                            "status": "pending"
-                        }).$promise;
-                    }
-                }, function(httpRes){
-                    PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                    PageHelper.showErrors(httpRes);
-                });
-            },
-            submit: function(model, form, formName){
-                $log.info("Inside submit()");
-                $log.warn(model);
-
-                var DedupeEnabled = SessionStore.getGlobalSetting("DedupeEnabled") || 'N';
-                var sortFn = function(unordered){
-                    var out = {};
-                    Object.keys(unordered).sort().forEach(function(key) {
-                        out[key] = unordered[key];
-                    });
-                    return out;
-                };
-                if (model.customer.enterprise.companyRegistered != "YES"){
-                    try
-                    {
-                        delete model.customer.enterpriseRegistrations;
-                    }
-                    catch(err){
-                        console.error(err);
-                    }
-                }
-
-                if (model.customer.enterprise.isGSTAvailable === "YES"){
-                    try
-                    {
-                        var count = 0;
-                        for (var i = 0; i < model.customer.enterpriseRegistrations.length; i++) {
-                            if (model.customer.enterpriseRegistrations[i].registrationType === "GST No"
-                                && model.customer.enterpriseRegistrations[i].registrationNumber != ""
-                                && model.customer.enterpriseRegistrations[i].registrationNumber != null
-                                && model.customer.enterpriseRegistrations[i].registeredDate != ""
-                                && model.customer.enterpriseRegistrations[i].registeredDate != null) {
-                                count++;
-                            }
-                        }
-                        if (count < 1) {
-                            PageHelper.showProgress("enrolment","Since GST is applicable so please select Registration type GST No and provide Registration details ",9000);
-                            return false;
-                        }
-                    }
-                    catch(err){
-                        console.error(err);
-                    }
-                }
-
-                if (model.currentStage == 'Application') {
-                    if (model.customer.verifications.length<2){
-                        PageHelper.showProgress("enrolment","minimum two references are mandatory",5000);
-                        return false;
-                    }
-                }
-                if (model.currentStage == 'ApplicationReview') {
-                    PageHelper.showProgress("enrolment","Loan must be saved/updated for psychometric test", 6000);
-                }
-                if(model.currentStage=='ScreeningReview'){
-                    var commercialCheckFailed = false;
-                    if(model.customer.enterpriseBureauDetails && model.customer.enterpriseBureauDetails.length>0){
-                        for (var i = model.customer.enterpriseBureauDetails.length - 1; i >= 0; i--) {
-                            if(!model.customer.enterpriseBureauDetails[i].fileId
-                                || !model.customer.enterpriseBureauDetails[i].bureau
-                                || model.customer.enterpriseBureauDetails[i].doubtful==null
-                                || model.customer.enterpriseBureauDetails[i].loss==null
-                                || model.customer.enterpriseBureauDetails[i].specialMentionAccount==null
-                                || model.customer.enterpriseBureauDetails[i].standard==null
-                                || model.customer.enterpriseBureauDetails[i].subStandard==null){
-                                commercialCheckFailed = true;
-                                break;
-                            }
-                        }
-                    }
-                    else
-                        commercialCheckFailed = true;
-                    if(commercialCheckFailed && model.customer.customerBankAccounts && model.customer.customerBankAccounts.length>0){
-                        for (var i = model.customer.customerBankAccounts.length - 1; i >= 0; i--) {
-                            if(model.customer.customerBankAccounts[i].accountType == 'OD' || model.customer.customerBankAccounts[i].accountType == 'CC'){
-                                PageHelper.showProgress("enrolment","Commercial bureau check fields are mandatory",5000);
-                                return false;
-                            }
-                        }
-                    }
-                }
-                var reqData = _.cloneDeep(model);
-                EnrollmentHelper.fixData(reqData);
-
-                if (!(validateRequest(reqData))){
-                    return;
-                }
-
-                PageHelper.showProgress('enrolment','Updating...', 2000);
-                EnrollmentHelper.proceedData(reqData).then(function(resp){
-                    formHelper.resetFormValidityState(form);
-                    PageHelper.showProgress('enrolmet','Done.', 5000);
-                    Utils.removeNulls(resp.customer,true);
-                    model.customer = resp.customer;
-                    if (model._bundlePageObj){
-                        BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer});
-                        if (DedupeEnabled == 'Y' && model.currentStage == "Screening") {
-                            Dedupe.create({
-                                "customerId": model.customer.id,
-                                "status": "pending"
-                            }).$promise;
-                        }
-                    }
-                }, function(httpRes){
-                    PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                    PageHelper.showErrors(httpRes);
-                });
-            }
+            };
         }
-    };
-}]);
-
-
+    }
+});

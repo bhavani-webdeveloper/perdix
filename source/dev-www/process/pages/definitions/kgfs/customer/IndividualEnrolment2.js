@@ -334,17 +334,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 if (_.hasIn(model, 'customer.id')){
                                     BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails)
                                 }
+                                
+                                EnrolmentProcess.fromCustomerID(valueObj.id)
+                                    .finally(function(){
+                                        PageHelper.showProgress('customer-load', 'Done.', 5000);
+                                    })
+                                    .subscribe(function(enrolmentProcess){
+                                        /* Updating the loan process */
+                                        model.loanProcess.removeRelatedEnrolmentProcess(model.enrolmentProcess, model.loanCustomerRelationType);
+                                        model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, model.loanCustomerRelationType);
     
-                                Enrollment.getCustomerById({id: valueObj.id})
-                                    .$promise
-                                    .then(function(res){
-                                        PageHelper.showProgress("customer-load", "Done..", 5000);
-                                        model.customer = Utils.removeNulls(res, true);
-                                        model.customer.identityProof = "Pan Card";
-                                        model.customer.addressProof= "Aadhar Card";
+                                        /* Setting on the current page */
+                                        model.enrolmentProcess = enrolmentProcess;
+                                        model.customer = enrolmentProcess.customer;
+    
+                                        BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                                         BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
-                                    }, function(httpRes){
-                                        PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
                                     })
                             }
                         },
@@ -420,7 +425,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "ContactInformation.landLineNo":{
                             "key":"customer.landLineNo",
-                            "required": true,
                             "title":"ALTERNATE_MOBILE_NO"
 
                         },
@@ -554,10 +558,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             title:"LOCALITY1"
                         },
                         "ContactInformation.permanentAddressFieldSet": {
-                            condition: "!model.customer.residentialAddressAlsoBusinessAddress"
+                            condition: "!model.customer.residentialAddressAlsoBusinessAddress",
                         },
                         "ContactInformation.permanentAddressFieldSet": {
-                            condition: "!model.customer.mailSameAsResidence"
+                            condition: "!model.customer.mailSameAsResidence",
+                        },
+                        "ContactInformation.mailSameAsResidence":{
+                            "onChange": function (modelValue, form, model) {
+                                BundleManager.pushEvent('load-address', model._bundlePageObj,{customer: model.customer});
+                            }
                         },
                         "ContactInformation.mailingDoorNo":{
                             title:"DOOR_BUILDING",

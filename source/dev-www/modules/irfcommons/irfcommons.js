@@ -654,8 +654,8 @@ irf.commons.service('irfPrinter',["$log","PageHelper","Utils","irfSimpleModal",f
 		} else if (self.data.paperReceipt) {
 			self.previewHtml = '<div class="web-print-wrapper">' +self.webPrintStyle+ printData.paperReceipt + '</div>'
 		}
-		self.thermalReceipt = generateThermelPrint(self.data.thermalReceipt);
-		self.previewHtml = '<div class="web-print-wrapper">'  +self.webPrintStyle+ self.thermalReceipt.html + '</div>'
+		// self.thermalReceipt = generateThermelPrint(self.data.thermalReceipt);
+		// self.previewHtml = '<div class="web-print-wrapper">'  +self.webPrintStyle+ self.thermalReceipt.html + '</div>'
 		// self.previewHtml = mapButtonToHtml(self.previewHtml);
 		irfSimpleModal('<div style="display:grid;grid-template-columns:1fr minmax(100px,1fr);"><div>Print Preview</div> <div class="print-button" style="justify-self:end; padding-right:15px;"> <button class="btn btn-theme" ng-click=model.print()> <i class="fa fa-print"></i> PRINT</button></div><div>', self.previewHtml, {
 				print: function() {

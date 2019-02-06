@@ -26,8 +26,8 @@ define([], function () {
             var setGoldRate = function(weight,carat,model,index){
                 var dynamicRate = model.additions.goldRatePerCarat * carat;
                 var dynamicMarketValue = dynamicRate * weight;
-                model.loanAccount.ornamentsAppraisals[index].ratePerGramInPaisa = parseInt(dynamicRate/100 + 0);
-                model.loanAccount.ornamentsAppraisals[index].marketValueInPaisa = parseInt(dynamicMarketValue/100 + 0);
+                model.loanAccount.ornamentsAppraisals[index].ratePerGramInPaisa = parseFloat((dynamicRate/100).toFixed(2));
+                model.loanAccount.ornamentsAppraisals[index].marketValueInPaisa = parseFloat((dynamicMarketValue/100).toFixed(2));
             };
 
             var addressMapCustomertoNominee= function (customer,nominee){
@@ -1523,6 +1523,11 @@ define([], function () {
                             });
                     },
                     proceed: function (model, formCtrl, form, $event) {
+                        formCtrl.scope.$broadcast('schemaFormValidate');
+					    if(!formCtrl.$valid){
+                            PageHelper.showProgress('form-error', 'Your form have errors. Please fix them.',5000);
+                            return
+                        }
                         PageHelper.showProgress('enrolment', 'Updating Loan');
                         if (model.loanAccount.id){
                             if(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length > 0){

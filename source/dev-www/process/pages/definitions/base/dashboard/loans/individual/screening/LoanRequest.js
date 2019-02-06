@@ -49,6 +49,43 @@ define([],function(){
                     return 'Co-Applicant';
                 }
             };
+
+            var preLoanSaveOrProceed = function(model){
+                var loanProcess = model.loanProcess;
+               if(model.loanAccount.noOfGuarantersRequired > 0) {
+                   if (_.hasIn(loanProcess, 'guarantorsEnrolmentProcesses') && _.isArray(loanProcess.guarantorsEnrolmentProcesses)){
+                        if(model.loanAccount.noOfGuarantersRequired > loanProcess.guarantorsEnrolmentProcesses.length) {
+                           PageHelper.showProgress("pre-save-validation", "You have to add atleast " + model.loanAccount.noOfGuarantersRequired + "guarantor before proceed",5000);
+                           return false;
+                        } else {
+                            for (var i=0;i<loanProcess.guarantorsEnrolmentProcesses.length; i++){
+                                var guarantor = loanProcess.guarantorsEnrolmentProcesses[i].customer;
+                                if (!_.hasIn(guarantor, 'urnNo') || _.isNull(guarantor, 'urnNo')){
+                                    PageHelper.showProgress("pre-save-validation", "All guarantors should complete the enrolment before proceed",5000);
+                                    return false;
+                                } else {
+                                    if (_.hasIn(guarantor, 'cbCheckList') && _.isArray(guarantor.cbCheckList) && guarantor.cbCheckList.length != 0){
+                                        for (var j=0;j<guarantor.cbCheckList.length; i++){
+                                            if(guarantor.cbCheckList[j].cbCheckValid != true) {
+                                                PageHelper.showProgress("pre-save-validation", "All guarantors should complete the CB Check before proceed",5000);
+                                                return false;
+                                            }
+                                        }
+                                    } else {
+                                        PageHelper.showProgress("pre-save-validation", "All guarantors should complete the CB Check before proceed",5000);
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        PageHelper.showProgress("pre-save-validation", "You have to add atleast " + model.loanAccount.noOfGuarantersRequired + "guarantor before proceed", 5000);
+                        return false;
+                    }
+                }
+                return true;
+            }
+ 
  
  
             var configFile = function() {
@@ -828,7 +865,8 @@ define([],function(){
                             ],
                             "overrides": {
                                 "NomineeDetails.nominees.nomineeFirstName":{
-                                    "required":true
+                                    "required":true,
+                                    "lovonly": false,
                                 },
                                 "NomineeDetails.nominees.nomineeGender":{
                                     "required":true
@@ -845,9 +883,24 @@ define([],function(){
                                 "NomineeDetails.nominees.nomineePincode":{
                                     "required":true
                                 },
-                                "LoanCustomerRelations": {
-                                    "readonly": true
+                                "LoanCustomerRelations.loanCustomerRelations.customerId":
+                                {
+                                    "readonly":true
                                 },
+                                "LoanCustomerRelations.loanCustomerRelations.urn":{
+                                    "readonly":true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.name":{
+                                    "readonly":true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.relation":{
+                                    "readonly":true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
+                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                 }
+                    
+                                
                             }
                         },
                         "FieldAppraisal":{
@@ -1390,7 +1443,7 @@ define([],function(){
                     "LoanCustomerRelations.loanCustomerRelations.urn",
                     "LoanCustomerRelations.loanCustomerRelations.name",
                     "LoanCustomerRelations.loanCustomerRelations.relation",
-                    //"LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant",
+                    "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant",
  
                      "DeductionsFromLoan",
                      "DeductionsFromLoan.expectedProcessingFeePercentage",
@@ -1497,8 +1550,8 @@ define([],function(){
                     "revertReject.rejectReason",
                     "revertReject.targetStage",
                     "revertReject.sendBackButton"
-                    
 
+ 
                     // "ProposedUtilizationPlan",
                     // "ProposedUtilizationPlan.loanUtilisationDetail",
                     // "ProposedUtilizationPlan.loanUtilisationDetail.utilisationType",
@@ -1507,7 +1560,7 @@ define([],function(){
                 ];
  
             }
-            
+ 
             return {
                 "type": "schema-form",
                 "title": "LOAN_REQUEST",
@@ -1596,7 +1649,7 @@ define([],function(){
         
                         });
                     }
-        
+ 
                     self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
                     p1.then(function(repo) {                       
@@ -1751,10 +1804,11 @@ define([],function(){
                                            }
                                         }
                                     },
+
                                     "PostReview": {
                                         "type": "box",
                                         "title": "POST_REVIEW",
-                                        "condition": "model.loanAccount.id && model.currentStage!=='Rejected'",
+                                        "condition": "model.loanAccount.id  && model.currentStage!=='Rejected'",
                                         "orderNo": 600,
                                         "items": {
                                             "action": {
@@ -1869,7 +1923,6 @@ define([],function(){
                                             }
                                         }
                                     },
-                                    
                                     "revertReject": {
                                         "type": "box",
                                         "title": "REVERT_REJECT",
@@ -1932,9 +1985,11 @@ define([],function(){
                                                 "onClick": "actions.sendBack(model, formCtrl, form, $event)"
                                             }
                                         }
-                                    },
+
+                                    }
+                                   
+
                                 },
-                                
                                 "additions": [
                                     {
                                         "type": "actionbox",
@@ -2098,6 +2153,9 @@ define([],function(){
                         if (!validateForm(formCtrl)){
                             return;
                         }
+                        if (!preLoanSaveOrProceed(model)){
+                            return;
+                        }
                         // var trancheTotalAmount=0;
                         // if(model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length){
                             
@@ -2131,14 +2189,14 @@ define([],function(){
                                         irfNavigator.goBack(); 
                                     }
                                 }
-                                //irfNavigator.goBack();
+                                irfNavigator.goBack();
+
                             }, function (err) {
                                 PageHelper.showErrors(err);
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                
                                 PageHelper.hideLoader();
                             });
-                        
                     },
                     reject: function(model, formCtrl, form, $event){
                         // if(PageHelper.isFormInvalid(formCtrl)) {

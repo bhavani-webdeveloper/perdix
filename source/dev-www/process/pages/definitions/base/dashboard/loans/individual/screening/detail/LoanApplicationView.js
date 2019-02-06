@@ -248,7 +248,7 @@ define({
                 model.mitigantsChanged=0;
                 model.loanMitigants= model.loanAccount.loanMitigants;
                 model.expectedTurnoverObj = {};
-
+                
 
             /*Asset details*/
                 if (model.loanAccount.collateral.length != 0) {
@@ -295,6 +295,11 @@ define({
                     $log.info("loan request Individual/find api failure" + err);
                 });
              }
+            if(model.loanAccount.noOfGuarantersRequired <= 0) {
+                model.loanAccount.isGuarantorRequired = "NO";
+            } else {
+                model.loanAccount.isGuarantorRequired = "YES";
+            }
 
         },
         form: [{
@@ -796,6 +801,68 @@ define({
                         }                            
                     }]
         },{
+
+            "type": "box",		
+            "colClass": "col-sm-12",		
+            "readonly": true,		
+            "overrideType": "default-view",		
+            condition: "model.currentStage == 'FieldAppraisalReview' && model.loanAccount.loanDocuments.length != 0",		
+            "title": "View Documents",		
+            "items": [  {		
+                "key": "loanAccount.loanDocuments",		
+                "type": "array",		
+                "title": "Documents",		
+                //startEmpty: true,		
+                "items": [		
+                {		
+                    key:"loanAccount.loanDocuments[].document",		
+                    type:"text",		
+                    title:"Document Name",		
+                    required: true,		
+                },		
+                {		
+                    key:"loanAccount.loanDocuments[].documentId",		
+                    title : "Upload",		
+                    type:"file",		
+                    required: true,		
+                    category: "Loan",		
+                    subCategory: "DOC3"		
+                }		
+                ]		
+                },]		
+            }, {
+            "type": "box",
+            "colClass": "col-sm-12",
+            condition: "model.currentStage == 'FieldAppraisalReview'",
+            "title": "Add Guarantor",
+            "items": [
+                {
+                    key: "loanAccount.isGuarantorRequired",
+                    type: "radios",
+                    title:"Guarantor required",
+                    titleMap: {
+                        "YES": "YES",
+                        "NO": "NO"
+                    },
+                    required: true,
+                },
+                {
+                    key:"loanAccount.noOfGuarantersRequired",
+                    title : "No.of Guarantors",
+                    type:"select",
+                    condition: "model.loanAccount.isGuarantorRequired == 'YES'",
+                    titleMap: [{
+                        value: 1,
+                        name: 1
+                    },{
+                        value: 2,
+                        name: 2
+                    }],
+                    required: true,
+                }
+            ]
+        }, {
+
                 "type": "box",
                 "title": "Post Review Decision",
                 "colClass": "col-sm-12",
@@ -1082,6 +1149,7 @@ define({
                     if (!preLoanSaveOrProceed(model)){
                         return;
                     }
+                    
                 
                     model.mitigantsChanged= (model.loanMitigants.length== model.loanAccount.loanMitigants.length)?0:1;
                    // loanMitigants= [];
@@ -1097,6 +1165,9 @@ define({
                                     loanAccount: _.cloneDeep(model.loanAccount)
                                 };
                                 reqData.loanProcessAction = "SAVE";
+                                if(reqData.isGuarantorRequired == "NO") {
+                                    reqData.noOfGuarantersRequired = 0;
+                                }
                                 //reqData.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
                                 // reqData.remarks = model.review.remarks;
                                 reqData.loanAccount.screeningDate = reqData.loanAccount.screeningDate || Utils.getCurrentDate();
@@ -1242,7 +1313,7 @@ define({
                         };
                         reqData.loanAccount.status = null;
                         if (model.loanAccount.currentStage == 'CreditCommitteeReview') {
-                            reqData.loanAccount.status = 'REJECTED'
+                            reqData.loanAccount.status = 'SENT BACK'
                         }
 
                         reqData.loanProcessAction = "PROCEED";
@@ -1366,7 +1437,7 @@ define({
                         PageHelper.showLoader();
                         if (model.currentStage == 'Sanction') {
                             reqData.stage = 'LoanInitiation';
-                        }
+                        }                    
                         PageHelper.showProgress("update-loan", "Working...");
 
                         if (reqData.loanAccount.currentStage == 'Screening') {

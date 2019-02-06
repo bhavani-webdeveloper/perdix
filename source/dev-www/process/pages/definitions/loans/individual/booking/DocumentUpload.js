@@ -944,7 +944,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                     if (model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview') {
                                         stage1 = "FieldAppraisal";
                                     }
-
+                                    if(typeof stage1 === 'undefined'){
+                                        stage1=model.loanAccount.currentStage;
+                                    }
                                     var rejectReason = formHelper.enum('application_reject_reason').data;
                                     var out = [];
                                     for (var i = 0; i < rejectReason.length; i++) {
