@@ -14,12 +14,19 @@ define({
                 "title": "PRODUCT_CATEGORY",
                 "items": [
                     {
+                        "key": "product.loanType",
+                        "type": "select",
+                        "enumCode": "loan_type",
+                        "required": true,
+                        "title": "LOAN_TYPE",
+                    },
+                    {
                         "key": "product.productCategory",
                         "type": "select",
                         "enumCode": "loan_product_category_master",
+                        "parentEnumCode":"loan_type",
                         "required": true,
                         "title": "PRODUCT_CATEGORY",
-                       
                     },
                     {
                         "type": "actionbox",
