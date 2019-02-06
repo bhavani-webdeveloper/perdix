@@ -12,8 +12,8 @@ define(["perdix/domain/model/loan/LoanProcess",
             pageType: "Bundle",
             dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
             ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-            "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan", "BundleManager", "Message"],
-            $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager, Message) {
+            "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan", "BundleManager", "Message","irfNavigator"],
+            $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager, Message,irfNavigator) {
                 return {
                     "type": "page-bundle",
                     "title": "SCREENING_REVIEW",
@@ -68,6 +68,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 minimum: 1,
                                 maximum: 1,
                                 order:55
+                            },
+                            {
+                                pageName: 'witfin.customer.televerification',
+                                title: 'TELE_VERIFICATION',
+                                pageClass: 'televerification',
+                                minimum: 1,
+                                maximum: 1,
+                                order:58
                             },
                             {
                                 pageName: 'loans.individual.screening.CBCheck',
@@ -189,6 +197,17 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 //     pageClass: 'balance-sheet-history',
                                 //     model: {customerUrn:loanAccount.urnNo, loanId:bundleModel.loanId}
                                 // });
+
+                                if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
+                                    var _leadId = $stateParams.pageData['lead_id'];
+                                    loanProcess.loanAccount.leadId = _leadId;
+
+                                }
+                                if (loanAccount.loanAccount.currentStage != 'ScreeningReview'){
+                                    PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
+                                    irfNavigator.goBack();
+                                    return;
+                                }
 
                                 $this.bundlePages.push({
                                     pageClass: 'applicant',

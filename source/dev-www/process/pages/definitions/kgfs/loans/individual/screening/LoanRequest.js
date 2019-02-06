@@ -105,7 +105,6 @@ define([],function(){
 
             if(model.loanAccount.loanAmount == '' || model.loanAccount.interestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenure == '')
                 return;
-
             var principal = model.loanAccount.loanAmount;
             var interest = model.loanAccount.interestRate / 100 / 12;
             var payments;
@@ -117,7 +116,6 @@ define([],function(){
             // Now compute the monthly payment figure, using esoteric math.
             var x = Math.pow(1 + interest, payments);
             var monthly = (principal*x*interest)/(x-1);
-
             // Check that the result is a finite number. If so, display the results.
             if (!isNaN(monthly) &&
                 (monthly != Number.POSITIVE_INFINITY) &&
@@ -524,7 +522,7 @@ define([],function(){
                                             "timeSinceTheAssetIsOwned":{
                                                 "key": "loanAccount.collateral[].udf3",
                                                 "title":"TIME_SINCE_THE_ASSET_IS_OWNED",
-                                                "type":"numeric"
+                                                "type":"amount"
                                             },
                                             "collateralDocuments":{
                                                 "title":"COLLATERAL_DOCUMENTS",
@@ -763,6 +761,7 @@ define([],function(){
                 },
                 actions: {
                     submit: function(model, formCtrl, form){
+                        model.loanAccount.customerId=model.loanAccount.loanCustomerRelations[0].customerId;
                         /* Loan SAVE */
                         if (!model.loanAccount.id){
                             model.loanAccount.isRestructure = false;

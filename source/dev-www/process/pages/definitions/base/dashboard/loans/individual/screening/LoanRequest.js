@@ -2189,7 +2189,7 @@ define([],function(){
                                         irfNavigator.goBack(); 
                                     }
                                 }
-                                //irfNavigator.goBack();
+                                irfNavigator.goBack();
 
                             }, function (err) {
                                 PageHelper.showErrors(err);

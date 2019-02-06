@@ -23,11 +23,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 ];
 
             }
-
+            var readonly_status= false;
             var generateQuestionairreFormForParty = function(key, title) {
                 return {
                     "type": "box",
                     "colClass": "col-xs-6 col-md-6",
+                    "readonly": readonly_status,
                     "title": title + "_TELE_VERIFICATION",
                     "items": [
                         {
@@ -78,23 +79,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "key": key + ".telecallingQuestionnaireList[].answer",                                                                            
                                             "type": "string",  
                                             "title": "ANSWER",
+                                            "readonly": readonly_status,
                                             "condition":"model." + key + ".telecallingQuestionnaireList[arrayIndex].input_type=='string'"
                                         },
                                         {
                                             "key": key + ".telecallingQuestionnaireList[].answer",                                                                            
                                             "type": "textarea",  
                                             "title": "ANSWER",
+                                            "readonly": readonly_status,
                                             "condition":"model." + key + ".telecallingQuestionnaireList[arrayIndex].input_type=='textarea'"
                                         },
                                         {
                                             "key": key + ".telecallingQuestionnaireList[].answer",                                                                            
                                             "type": "number",  
                                             "title": "ANSWER",
+                                            "readonly": readonly_status,
                                             "condition":"model." + key + ".telecallingQuestionnaireList[arrayIndex].input_type=='number'"
                                         },
                                         {
                                             "key": key + ".telecallingQuestionnaireList[].answer",
                                             "title": "ANSWER",
+                                            "readonly": readonly_status,
                                             "condition":"model." + key + ".telecallingQuestionnaireList[arrayIndex].input_type=='select'",
                                             "type": "lov",
                                             "autolov": true,
@@ -860,6 +865,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             {
                                                 "type": "box",
                                                 "colClass": "col-xs-6 col-md-6",
+                                                "readonly": readonly_status,
                                                 "title": "APPLICANT_TELE_VERIFICATION",
                                                 "items": [
                                                     {
@@ -910,23 +916,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                                         "key": "applicant.telecallingQuestionnaireList[].answer",                                                                            
                                                                         "type": "string",  
                                                                         "title": "ANSWER",
+                                                                        "readonly": readonly_status,
                                                                         "condition":"model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='string'"
                                                                     },
                                                                     {
                                                                         "key": "applicant.telecallingQuestionnaireList[].answer",                                                                            
                                                                         "type": "textarea",  
                                                                         "title": "ANSWER",
+                                                                        "readonly": readonly_status,
                                                                         "condition":"model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='textarea'"
                                                                     },
                                                                     {
                                                                         "key": "applicant.telecallingQuestionnaireList[].answer",                                                                            
                                                                         "type": "number",  
                                                                         "title": "ANSWER",
+                                                                        "readonly": readonly_status,
                                                                         "condition":"model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='number'"
                                                                     },
                                                                     {
                                                                         "key": "applicant.telecallingQuestionnaireList[].answer",                                                                            
                                                                         "title": "ANSWER",
+                                                                        "readonly": readonly_status,
                                                                         "condition":"model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='select'",
                                                                         "type": "lov",
                                                                         "autolov": true,
@@ -1054,6 +1064,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             {
                                                 "type": "box",
                                                 "colClass": "col-xs-6 col-md-6",
+                                                "readonly": readonly_status,
                                                 "title": "TELE_VERIFICATION",
                                                 "items": [
                                                     {
@@ -1102,25 +1113,29 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                                     },
                                                                     {
                                                                         "key": "loanCustomer.telecallingQuestionnaireList[].answer",                                                                            
-                                                                        "type": "string",  
+                                                                        "type": "string", 
+                                                                        "readonly": readonly_status, 
                                                                         "title": "ANSWER",
                                                                         "condition":"model.loanCustomer.telecallingQuestionnaireList[arrayIndex].input_type=='string'"
                                                                     },
                                                                     {
                                                                         "key": "loanCustomer.telecallingQuestionnaireList[].answer",                                                                            
                                                                         "type": "textarea",  
+                                                                        "readonly": readonly_status,
                                                                         "title": "ANSWER",
                                                                         "condition":"model.loanCustomer.telecallingQuestionnaireList[arrayIndex].input_type=='textarea'"
                                                                     },
                                                                     {
                                                                         "key": "loanCustomer.telecallingQuestionnaireList[].answer",                                                                            
                                                                         "type": "number",  
+                                                                        "readonly": readonly_status,
                                                                         "title": "ANSWER",
                                                                         "condition":"model.loanCustomer.telecallingQuestionnaireList[arrayIndex].input_type=='number'"
                                                                     },
                                                                     {
                                                                         "key": "loanCustomer.telecallingQuestionnaireList[].answer", 
                                                                         "title": "ANSWER",
+                                                                        "readonly": readonly_status,
                                                                         "condition":"model.loanCustomer.telecallingQuestionnaireList[arrayIndex].input_type=='select'",
                                                                         "type": "lov",
                                                                         "autolov": true,
@@ -1306,6 +1321,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.guarantor = {};
                     model.telecalling = [];
                     model.loanAccount = model.loanProcess.loanAccount;
+
+                    if(model.loanAccount.currentStage !='TeleVerification') {
+                        readonly_status=true;
+                    }
                     // Setting necessary parties to child arrays.
                     model.applicant.customer = model.loanProcess.applicantEnrolmentProcess.customer;
                     model.loanCustomer.customer = model.loanProcess.loanCustomerEnrolmentProcess.customer;

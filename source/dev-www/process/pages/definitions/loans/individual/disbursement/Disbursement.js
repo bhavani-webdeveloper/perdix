@@ -278,7 +278,13 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             "title": "MODE_OF_DISBURSEMENT",
                             "required": requires['modeOfDisbursement'],
                             "type": "select",
-                            "enumCode": "mode_of_disbursement"
+                            "enumCode": "mode_of_disbursement",
+                            onChange:function(valueObj,form,model,context){
+                                if (model.siteCode == 'KGFS' && valueObj == "RTGS" && model.loanAccountDisbursementSchedule.disbursementAmount <= 200000){
+                                    PageHelper.showProgress('Disbursment',"RTGS is for Disbursement amount of 200000 or greater",4000);
+                                    model.loanAccountDisbursementSchedule.modeOfDisbursement = null;
+                                }
+                            }
                         },
                         {
                             "key": "loanAccountDisbursementSchedule.referenceNumber",

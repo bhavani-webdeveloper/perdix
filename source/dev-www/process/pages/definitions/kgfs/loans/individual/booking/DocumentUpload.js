@@ -621,6 +621,11 @@ define({
                         });
                 },
                 proceed: function (model, formCtrl, form, $event) {
+                    formCtrl.scope.$broadcast('schemaFormValidate');
+					    if(!formCtrl.$valid){
+                            PageHelper.showProgress('form-error', 'Your form have errors. Please fix them.',5000);
+                            return
+                        }
                     PageHelper.showProgress('enrolment', 'Updating Loan');
                     if(model.loanAccount.currentStage=='Checker2'){
                         model.loanProcess.stage='Completed';
