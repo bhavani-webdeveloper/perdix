@@ -151,6 +151,15 @@
                 "Completed"
               ]
             },
+            "dateOfBirth": {
+              "title": "Date Of Birth",
+              "type": "string",
+              "format": "date",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
 
             "educationStatus": {
               "title": "Education Status",

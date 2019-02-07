@@ -31,16 +31,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'CO_APPLICANT',
                                 pageClass: 'co-applicant',
-                                minimum: 0,
-                                maximum: 4,
+                                minimum: 3,
+                                maximum: 0,
                                 order:20
                             },
                             {
                                 pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'GUARANTOR',
                                 pageClass: 'guarantor',
-                                minimum: 0,
-                                maximum: 3,
+                                minimum: 3,
+                                maximum: 0,
                                 order:30
                             },
                             {
@@ -75,14 +75,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             //     maximum: 1,
                             //     order:57
                             // },
-                            {
-                                pageName: 'loans.individual.screening.CBCheck',
-                                title: 'CB_CHECK',
-                                pageClass: 'cb-check',
-                                minimum: 1,
-                                maximum: 1,
-                                order:60
-                            },
+                            // {
+                            //     pageName: 'loans.individual.screening.CBCheck',
+                            //     title: 'CB_CHECK',
+                            //     pageClass: 'cb-check',
+                            //     minimum: 1,
+                            //     maximum: 1,
+                            //     order:60
+                            // },
                             {
                                 pageName: 'loans.individual.screening.CreditBureauView',
                                 title: 'CREDIT_BUREAU',

@@ -63,17 +63,22 @@ define([],function(){
                                 if (!_.hasIn(guarantor, 'urnNo') || _.isNull(guarantor, 'urnNo')){
                                     PageHelper.showProgress("pre-save-validation", "All guarantors should complete the enrolment before proceed",5000);
                                     return false;
+                                    break;
                                 } else {
                                     if (_.hasIn(guarantor, 'cbCheckList') && _.isArray(guarantor.cbCheckList) && guarantor.cbCheckList.length != 0){
                                         for (var j=0;j<guarantor.cbCheckList.length; i++){
                                             if(guarantor.cbCheckList[j].cbCheckValid != true) {
                                                 PageHelper.showProgress("pre-save-validation", "All guarantors should complete the CB Check before proceed",5000);
                                                 return false;
+                                                break;
+                                            } else {
+                                                return true; 
                                             }
                                         }
                                     } else {
                                         PageHelper.showProgress("pre-save-validation", "All guarantors should complete the CB Check before proceed",5000);
                                         return false;
+                                        break;
                                     }
                                 }
                             }
@@ -898,6 +903,7 @@ define([],function(){
                                 },
                                 "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
                                     "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                    "required":true
                                  }
                     
                                 
@@ -917,7 +923,8 @@ define([],function(){
                             ],
                             "overrides": {
                                 "NomineeDetails.nominees.nomineeFirstName":{
-                                    "required":true
+                                    "required":true,
+                                    "lovonly": false
                                 },
                                 "NomineeDetails.nominees.nomineeGender":{
                                     "required":true
@@ -942,6 +949,10 @@ define([],function(){
                                 },
                                 "LoanCustomerRelations":{
                                     "readonly":true,
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
+                                   "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                   "required": true
                                 },
                                 "LoanMitigants":{
                                     "readonly":true,
@@ -999,10 +1010,35 @@ define([],function(){
                         },
                         "Rejected":{
                             "overrides":{
-                                "AdditionalLoanInformation": {
-                                    "readonly": true
-                                },
                                 "CollateralDetails":{
+                                    "readonly":true
+                                },
+                                "PreliminaryInformation":{
+                                    "readonly":true
+                                },
+                                "LoanCustomerRelations":{
+                                    "readonly":true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
+                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                 },
+  
+                                "DeductionsFromLoan":{
+                                    "readonly":true
+                                },
+                                "LoanMitigants":{
+                                    "readonly":true
+                                },
+                                "LoanDocuments":{
+                                    "readonly":true
+                                },
+                                "AdditionalLoanInformation":{
+                                    "readonly":true
+                                },
+                                "LoanSanction":{
+                                    "readonly":true
+                                },
+                                "NomineeDetails":{
                                     "readonly":true
                                 }
                             }
@@ -2124,13 +2160,23 @@ define([],function(){
                             });
  
                     },
-                    sendBack: function(model, formCtrl, form, $event){   
-                        if (model.loanProcess.remarks==null || model.review.remarks =="" || model.review.targetStage1==null || model.review.targetStage1==""){
+                    sendBack: function(model, formCtrl, form, $event){  
+                        if (model.currentStage == "Rejected") {
+                            if (typeof model.review.remarks === "undefined") {
+                                PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
+                                return false;
+                            }
+                            if (model.review.remarks == "" || model.review.targetStage == null && model.review.targetStage == "") {
+                                PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
+                                return false;
+                            }
+                        } 
+                        else if (model.loanProcess.remarks==null || model.review.remarks =="" || model.review.targetStage1==null || model.review.targetStage1==""){
                             PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
                             return false;
                         }                    
-                        PageHelper.showLoader();
-                        model.loanProcess.sendBack()
+                       PageHelper.showLoader();
+                       model.loanProcess.sendBack()
                             .finally(function () {
                                 PageHelper.hideLoader();
                             })

@@ -819,7 +819,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced",
                     "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto",
                     "BankAccounts.customerBankAccounts.isDisbersementAccount",
-
+                    
                     "Liabilities",
                     "Liabilities.liabilities",
                    // "Liabilities.liabilities.liabilityType",
@@ -866,12 +866,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId",
                     "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId1",
                    
-
+                    
                     "EmployeeDetails",
                     "EmployeeDetails.noOfFemaleEmployees",
                     "EmployeeDetails.noOfMaleEmployees",
                     "EmployeeDetails.avgMonthlySalary",
-                   
+                    
                     "CommercialCBCheck",
                     "CommercialCBCheck.enterpriseBureauDetails",
                     "CommercialCBCheck.enterpriseBureauDetails.bureau",
@@ -882,7 +882,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "CommercialCBCheck.enterpriseBureauDetails.standard",
                     "CommercialCBCheck.enterpriseBureauDetails.subStandard",
 
-
+                    
                     "BuyerDetails",
                     "BuyerDetails.buyerDetails",
                     "BuyerDetails.buyerDetails.buyerName",
@@ -896,7 +896,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "BuyerDetails.buyerDetails.subSector",
                     "BuyerDetails.buyerDetails.receivablesOutstanding",
 
-
+                    
                     "SuppliersDeatils",
                     "SuppliersDeatils.supplierDetails",
                     "SuppliersDeatils.supplierDetails.supplierName",
@@ -908,7 +908,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseAssets.enterpriseAssets",
                     "EnterpriseAssets.enterpriseAssets.assetType",                    
                     "EnterpriseAssets.enterpriseAssets.valueOfAsset",  
-
+                     
                     "Machinery",
                     "Machinery.fixedAssetsMachinaries",
                     "Machinery.fixedAssetsMachinaries.machineDescription",
@@ -927,7 +927,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "Machinery.fixedAssetsMachinaries.machinePermanentlyFixedToBuilding",
                     "Machinery.fixedAssetsMachinaries.machineBillsDocId",
                     "Machinery.fixedAssetsMachinaries.machineImage",
-
+                    
                     "CurrentAssets",
                     "CurrentAssets.currentAssets",
                     "CurrentAssets.currentAssets.description",
@@ -935,7 +935,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "CurrentAssets.currentAssets.assetValue",
                     "CurrentAssets.currentAssets.isHypothecated",
                     "CurrentAssets.currentAssets.assetImageId",
-
+                    
                     "ProxyIndicators",
                     "ProxyIndicators.properAndMatchingSignboard",
                     "ProxyIndicators.bribeOffered",
@@ -959,7 +959,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "ProxyIndicators.stockMaterialManagement",
                     "ProxyIndicators.customerWalkinToBusiness",
                     "ProxyIndicators.businessSignboardImage",
-
+                    
                     "EnterpriseReferences",
                     "EnterpriseReferences.verifications",
                     "EnterpriseReferences.verifications.relationship",
@@ -975,6 +975,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     //"EnterpriseReferences.verifications.outstandingPayable",
                     //"EnterpriseReferences.verifications.outstandingReceivable",
                     //"EnterpriseReferences.verifications.customerResponse"
+                    
                     "References",
                     "References.verifications",
                     "References.verifications.relationship",
@@ -2307,13 +2308,56 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             },
                             "Rejected":{
                                 "overrides":{
-                                    "References": {
+                                    "EnterpriseInformation":{
                                         "readonly": true
                                     },
                                     "EnterpriseInformation.customerId":{
                                         "key": "customer.firstName",
                                         "title":"CUSTOMER_NAME"
+                                    },
+                                    "ContactInformation":
+                                    {
+                                        "readonly": true
+                                    },
+                                    "BankAccounts":{
+                                        "readonly": true
+                                    },
+                                    "Liabilities":{
+                                        "readonly": true
+                                    },
+                                    "EnterpriseFinancials":{
+                                        "readonly": true
+                                    },
+                                    "EmployeeDetails":
+                                    {
+                                        "readonly": true
+                                    },
+                                    "CommercialCBCheck":{
+                                        "readonly": true
+                                    },
+                                    "BuyerDetails":{
+                                        "readonly": true
+                                    },
+                                    "SuppliersDeatils":{
+                                        "readonly": true
+                                    },
+                                    "Machinery":{
+                                        "readonly": true
+                                    },
+                                    "CurrentAssets":{
+                                        "readonly": true
+                                    },
+                                   "ProxyIndicators":{
+                                    "readonly": true
+                                   },
+                                    "EnterpriseReferences":{
+                                        "readonly": true
+                                    },
+                                    "References":
+                                    {
+                                        "readonly": true
                                     }
+                    
                                 }
                             }
                                 // "Televerification": {
