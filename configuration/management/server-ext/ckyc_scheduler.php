@@ -309,7 +309,8 @@ function download_customer_file($customer_id, $file_name, $file_id) {
         $extension = "";
         try {
             $temp_file_name = DB::table('file_info')->where('file_id', $file_id)->first();
-            $extension = end((explode('.', $temp_file_name->name)));
+            $temp_explode = explode('.', $temp_file_name->name);
+            $extension = end($temp_explode);
         } catch (Exception $e) {}
         if (!empty($extension)) {
             $extension = '.'.$extension;
