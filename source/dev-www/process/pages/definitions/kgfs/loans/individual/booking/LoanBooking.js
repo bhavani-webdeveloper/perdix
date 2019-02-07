@@ -1530,6 +1530,9 @@ define([], function () {
                         }
                         PageHelper.showProgress('enrolment', 'Updating Loan');
                         if (model.loanAccount.id){
+                            model.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
+                            model.loanAccount.portfolioInsuranceUrn = model.loanAccount.urnNo;
+
                             if(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length > 0){
                                 for(i = 0; i< model.loanAccount.loanCustomerRelations.length;i++){
                                     if(model.loanAccount.loanCustomerRelations[i].relation != "Applicant")
