@@ -431,7 +431,8 @@ var getIncludes = function (model) {
                                 search : function(inputModel,form,model,context){
                                     return Queries.getProductCode(
                                        SessionStore.getBankId(),
-                                       SessionStore.getCurrentBranch().branchId
+                                       SessionStore.getCurrentBranch().branchId,
+                                       'TLI'
                                     );
                                 },
                                 onSelect : function(result,model,context){
