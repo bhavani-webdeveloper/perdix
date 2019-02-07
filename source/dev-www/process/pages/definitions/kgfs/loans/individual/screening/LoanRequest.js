@@ -477,7 +477,7 @@ define([],function(){
                                         "orderNo": 140
                                     },
                                     "modeOfDisbursement": {
-                                        "key":"loanAccount.udf2",
+                                        "key":"loanAccount.psychometricCompleted",
                                         "title": "MODE_OF_DISBURSEMENT",
                                         "type": "select",
                                         "enumCode":"mode_of_disbursement",

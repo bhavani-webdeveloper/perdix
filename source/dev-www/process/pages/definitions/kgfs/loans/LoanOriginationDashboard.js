@@ -52,7 +52,7 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanOriginationDashboar
 
 
 
-            var srqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.ScreeningReviewQueue"];
+            var srqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.ScreeningReviewQueue"];
             if (srqMenu) {
                 IndividualLoan.search({
                     'stage': 'ScreeningReview',
@@ -70,6 +70,59 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanOriginationDashboar
                 });
             }
 
+             var caqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.CreditAppraisalQueue"];
+            if (caqMenu) {
+                IndividualLoan.search({
+                    'stage': 'ScreeningReview',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    caqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    caqMenu.data = '-';
+                });
+            }
+
+             var daqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.DscApprovalQueue"];
+            if (daqMenu) {
+                IndividualLoan.search({
+                    'stage': 'ScreeningReview',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    daqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    daqMenu.data = '-';
+                });
+            }
+
+             var doqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.DscOverrideQueue"];
+            if (doqMenu) {
+                IndividualLoan.search({
+                    'stage': 'ScreeningReview',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    doqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    doqMenu.data = '-';
+                });
+            }
 
             var lrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.RejectedQueue"];
             if (lrqMenu) {
