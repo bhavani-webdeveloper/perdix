@@ -49,6 +49,11 @@ define({
                             pageName: 'base.dashboard.loans.individual.screening.ApplicationReviewQueue',
                             pageId: null
                         });
+                    if (model.currentStage == 'Scrutiny')
+                        $state.go('Page.Engine', {
+                            pageName: 'base.dashboard.loans.individual.screening.ScrutinyQueue',
+                            pageId: null
+                        });
                     if (model.currentStage == 'FieldAppraisal')
                         $state.go('Page.Engine', {
                             pageName: 'base.dashboard.loans.individual.screening.FieldAppraisalQueue',
@@ -248,8 +253,7 @@ define({
                 model.mitigantsChanged=0;
                 model.loanMitigants= model.loanAccount.loanMitigants;
                 model.expectedTurnoverObj = {};
-                
-
+               
             /*Asset details*/
                 if (model.loanAccount.collateral.length != 0) {
                     model.asset_details = [];
@@ -608,7 +612,7 @@ define({
                     "startEmpty": true,
                     "title": "LOAN_DOCUMENT",
                     "titleExpr": "model.loanAccount.loanDocuments[arrayIndex].document",
-                    condition: "model.loanAccount.loanDocuments[form.arrayIndex].remarks.includes('RCUStageDocuments-') != true",
+                    condition: "model.currentStage === 'ApplicationReview' || model.currentStage === 'Scrutiny'",
                     "items": [
                         {
                             "key": "loanAccount.loanDocuments[].document",
@@ -632,6 +636,31 @@ define({
                         //     "type": "string"
                         // }
                     ]
+                },
+                {		
+                    "key": "loanAccount.loanDocuments",		
+                    "type": "array",	
+                    "view": "fixed",	
+                    "title": "Documents",	
+                    "readonly": true,
+                    condition: "(model.currentStage !== 'ApplicationReview' || model.currentStage !== 'Scrutiny') && loanAccount.loanDocuments.length != 0",
+                    //startEmpty: true,		
+                    "items": [		
+                    {		
+                        key:"loanAccount.loanDocuments[].document",		
+                        type:"text",		
+                        title:"Document Name",		
+                        required: true,		
+                    },		
+                    {		
+                        key:"loanAccount.loanDocuments[].documentId",		
+                        title : "Upload",		
+                        type:"file",		
+                        required: true,		
+                        category: "Loan",		
+                        subCategory: "DOC3",
+                    }		
+                    ]		
                 }
             ]
 
@@ -801,38 +830,40 @@ define({
                             return [];
                         }                            
                     }]
-        },{
+        },
+        // {
 
-            "type": "box",		
-            "colClass": "col-sm-12",		
-            "readonly": true,		
-            "overrideType": "default-view",		
-            condition: "model.currentStage == 'FieldAppraisalReview'",		
-            "title": "View Documents",		
-            "items": [  {		
-                "key": "loanAccount.loanDocuments",		
-                "type": "array",		
-                "title": "Documents",	
-                condition: "model.loanAccount.loanDocuments[form.arrayIndex].remarks.includes('RCUStageDocuments-') == true",	
-                //startEmpty: true,		
-                "items": [		
-                {		
-                    key:"loanAccount.loanDocuments[].document",		
-                    type:"text",		
-                    title:"Document Name",		
-                    required: true,		
-                },		
-                {		
-                    key:"loanAccount.loanDocuments[].documentId",		
-                    title : "Upload",		
-                    type:"file",		
-                    required: true,		
-                    category: "Loan",		
-                    subCategory: "DOC3"		
-                }		
-                ]		
-                },]		
-            }, {
+        //     "type": "box",		
+        //     "colClass": "col-sm-12",		
+        //     "readonly": true,		
+        //     "overrideType": "default-view",		
+        //     condition: "model.currentStage == 'FieldAppraisalReview'",		
+        //     "title": "View Documents",		
+        //     "items": [  {		
+        //         "key": "loanAccount.loanDocuments",		
+        //         "type": "array",		
+        //         "title": "Documents",	
+        //         condition: "model.loanAccount.loanDocuments[arrayIndex].remarks.includes('RCUStageDocuments-') == true",
+        //         //startEmpty: true,		
+        //         "items": [		
+        //         {		
+        //             key:"loanAccount.loanDocuments[].document",		
+        //             type:"text",		
+        //             title:"Document Name",		
+        //             required: true,		
+        //         },		
+        //         {		
+        //             key:"loanAccount.loanDocuments[].documentId",		
+        //             title : "Upload",		
+        //             type:"file",		
+        //             required: true,		
+        //             category: "Loan",		
+        //             subCategory: "DOC3",
+        //         }		
+        //         ]		
+        //         },]		
+        // }, 
+        {
             "type": "box",
             "colClass": "col-sm-12",
             condition: "model.currentStage == 'FieldAppraisalReview'",
