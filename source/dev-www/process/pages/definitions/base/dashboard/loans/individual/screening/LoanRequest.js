@@ -903,6 +903,7 @@ define([],function(){
                                 },
                                 "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
                                     "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                    "required":true
                                  }
                     
                                 
@@ -922,7 +923,8 @@ define([],function(){
                             ],
                             "overrides": {
                                 "NomineeDetails.nominees.nomineeFirstName":{
-                                    "required":true
+                                    "required":true,
+                                    "lovonly": false
                                 },
                                 "NomineeDetails.nominees.nomineeGender":{
                                     "required":true
@@ -947,6 +949,10 @@ define([],function(){
                                 },
                                 "LoanCustomerRelations":{
                                     "readonly":true,
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
+                                   "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                   "required": true
                                 },
                                 "LoanMitigants":{
                                     "readonly":true,
@@ -1004,10 +1010,35 @@ define([],function(){
                         },
                         "Rejected":{
                             "overrides":{
-                                "AdditionalLoanInformation": {
-                                    "readonly": true
-                                },
                                 "CollateralDetails":{
+                                    "readonly":true
+                                },
+                                "PreliminaryInformation":{
+                                    "readonly":true
+                                },
+                                "LoanCustomerRelations":{
+                                    "readonly":true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
+                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                 },
+  
+                                "DeductionsFromLoan":{
+                                    "readonly":true
+                                },
+                                "LoanMitigants":{
+                                    "readonly":true
+                                },
+                                "LoanDocuments":{
+                                    "readonly":true
+                                },
+                                "AdditionalLoanInformation":{
+                                    "readonly":true
+                                },
+                                "LoanSanction":{
+                                    "readonly":true
+                                },
+                                "NomineeDetails":{
                                     "readonly":true
                                 }
                             }
