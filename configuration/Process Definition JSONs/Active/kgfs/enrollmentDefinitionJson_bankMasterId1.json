@@ -24,7 +24,9 @@
         "name": "Completed",
         "stageType": "CAPTURE",
         "allowedRoles": ["WM"]
-    }],
+    }
+  
+],
     "schema": {
         "$schema": "http://json-schema.org/draft-04/schema#",
         "type": "object",
@@ -2694,8 +2696,8 @@
                             "format": "date",
                             "captureStages": ["Completed"]
                         },
-                        "additionalDeatils": {
-                            "title": "additional Deatils",
+                        "additionalDetails": {
+                            "title": "additional Details",
                             "type": "string",
                             "refCodeCategory": "occupation",
                             "captureStages": ["Completed"]
