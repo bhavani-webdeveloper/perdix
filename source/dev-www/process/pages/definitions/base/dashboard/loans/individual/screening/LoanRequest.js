@@ -2160,13 +2160,23 @@ define([],function(){
                             });
  
                     },
-                    sendBack: function(model, formCtrl, form, $event){   
-                        if (model.loanProcess.remarks==null || model.review.remarks =="" || model.review.targetStage1==null || model.review.targetStage1==""){
+                    sendBack: function(model, formCtrl, form, $event){  
+                        if (model.currentStage == "Rejected") {
+                            if (typeof model.review.remarks === "undefined") {
+                                PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
+                                return false;
+                            }
+                            if (model.review.remarks == "" || model.review.targetStage == null && model.review.targetStage == "") {
+                                PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
+                                return false;
+                            }
+                        } 
+                        else if (model.loanProcess.remarks==null || model.review.remarks =="" || model.review.targetStage1==null || model.review.targetStage1==""){
                             PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
                             return false;
                         }                    
-                        PageHelper.showLoader();
-                        model.loanProcess.sendBack()
+                       PageHelper.showLoader();
+                       model.loanProcess.sendBack()
                             .finally(function () {
                                 PageHelper.hideLoader();
                             })

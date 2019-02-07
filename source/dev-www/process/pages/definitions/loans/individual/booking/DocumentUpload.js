@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), ["$log", "Enrollment", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', 'Utils', 'formHelper', "LoanProcess", "CustomerBankBranch", "SchemaResource", "LoanAccount", "Misc","irfNavigator", "PagesDefinition",
-    function($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries, Utils, formHelper, LoanProcess, CustomerBankBranch, SchemaResource, LoanAccount,Misc, irfNavigator, PagesDefinition) {
+irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), ["$log", "Enrollment", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', 'Utils', 'formHelper', "LoanProcess", "CustomerBankBranch", "SchemaResource", "LoanAccount", "Misc","irfNavigator", "PagesDefinition","$q",
+    function($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries, Utils, formHelper, LoanProcess, CustomerBankBranch, SchemaResource, LoanAccount,Misc, irfNavigator, PagesDefinition,$q) {
 
 
         var getDocument = function(docsArr, docCode) {
@@ -955,6 +955,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                              out.push({
                                                 name: t.name,
                                             })
+                                        }
+                                        else{
+                                            console.log(t.field1);
                                         }
                                     }
                                     return $q.resolve({
