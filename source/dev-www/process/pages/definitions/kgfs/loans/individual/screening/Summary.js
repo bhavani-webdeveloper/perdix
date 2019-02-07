@@ -48,10 +48,13 @@ irf.pageCollection.directive("irfSimpleSummaryTable", function(){
 
 }]);
 
-irf.pageCollection.factory(irf.page("loans.individual.screening.Summary"),
-["$log", "$q","Enrollment", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
-'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch","Scoring","AuthTokenHelper", "BundleManager",
-function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUtils,
+
+define({
+    "pageUID": "kgfs.loans.individual.screening.Summary",
+    "pageType": "Engine",
+    "dependencies": ["$log", "$q","Enrollment", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
+'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch","Scoring","AuthTokenHelper", "BundleManager"],
+    $pageFn: function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch,Scoring,AuthTokenHelper,BundleManager){
 
     var branch = SessionStore.getBranch();
@@ -61,8 +64,6 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
 
         model.enterpriseDetails = res[0];
         model.scoreDetails = [res[1], res[2], res[3], res[4]];
-        model.c = res[25].summary;
-        //model.scoreDetails[3].data.push({Parameter:"Hypothecation Status",color_hexadecimal:model.c.status,"Actual Value" :model.c.ActualValue})
 
 
         var managementScore = model.scoreDetails[0];
@@ -94,10 +95,6 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.liabilitiesSummary = res[19];
         model.machineryDetails = res[20];
         model.opexDetails = res[21];
-        model.stockDetails = res[23];
-        model.nonMachineryDetails = res[24];
-        model.hypothecationType = res[25];
-
 
         model.enterpriseDetails.columns = model.enterpriseDetails.columns.concat(model.ratioDetails.columns);
         _.merge(model.enterpriseDetails.data[0], model.ratioDetails.data[0]);
@@ -120,8 +117,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.assetsAndLiabilities.ownCapital = model.balanceSheet.data[0]['Own capital'];
         model.assetsAndLiabilities.building = model.balanceSheet.data[0]['Building'];
         model.assetsAndLiabilities.vehicle = model.balanceSheet.data[0]['Vehicle'];
-        model.assetsAndLiabilities.furniture = model.balanceSheet.data[0]['Furniture'];
-        model.assetsAndLiabilities.fixture = model.balanceSheet.data[0]['Fixtures'];
+        model.assetsAndLiabilities.furnitureAndFixtures = model.balanceSheet.data[0]['Furniture & Fixtures'];
         model.assetsAndLiabilities.totalFixedAssets = model.balanceSheet.data[0]['Total fixed assets'];
         model.assetsAndLiabilities.totalLengTermLiabilities = model.balanceSheet.data[0]['Total long-term liabilities'];
         model.assetsAndLiabilities.totalAssets = model.balanceSheet.data[0]['Total Assets'];
@@ -188,6 +184,8 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.pl.business.netIncome = model.businessPL.data[0]['Net Income'];
         model.pl.business.finalKinaraEmi = model.businessPL.data[0]['Final Kinara EMI'];
         model.pl.business.finalKinaraEmiPCT = model.businessPL.data[0]['Final Kinara EMI pct'];
+
+
 
         /* Scoring Sections */
 
@@ -264,7 +262,6 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         $log.info(model.additional);
 
         model.enterpriseDetailsData = model.enterpriseDetails.data[0];
-        model.enterpriseDetailsData["Hypothecation Type"] = model.hypothecationType.data[0]["Hypothecation Type"];
 
     }; // END OF prepareData()
 
@@ -318,7 +315,6 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 "colClass": "col-sm-12 table-box",
                 "title": "Business Summary",
                 "readonly": true,
-                condition: " model.siteCode != 'IREPDhan'",
                 "items": [
                     {
                         type: "section",
@@ -390,13 +386,13 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         form.push({
             type: "box",
             colClass: "col-sm-12 table-box",
+            condition: "model.siteCode != IREPDhan",
             title: "SCORES",
-            condition: " model.siteCode != 'IREPDhan'",
             items: [
                 {
                     type: "section",
                     htmlClass: "row",
-                    html: '<div class="col-sm-3"><div class="stat-container" ><dd class="stat-key"> Total Score</dd><dt class="stat-value"> {{ model.ScoreDetails[0].OverallWeightedScore }}</dt></div></div><div class="col-sm-3"><div class="stat-container" ><dd class="stat-key">Status</dd><dt class="stat-value" ng-class="{\'text-a-green\': model.ScoreDetails[0].OverallPassStatus==\'PASS\', \'text-a-red\': model.ScoreDetails[0].OverallPassStatus==\'FAIL\'}"> {{ model.ScoreDetails[0].OverallPassStatus }}</dt></div></div><div class="clearfix"></div><hr>'
+                    html: '<div class="col-sm-3"><div class="stat-container" ><dd class="stat-key"> Total Score</dd><dt class="stat-value"> {{ model.ScoreDetails[0].OverallWeightedScore }}</dt></div></div><div class="col-sm-3"><div class="stat-container" ><dd class="stat-key"> Status</dd><dt class="stat-value" ng-class="{\'text-a-green\': model.ScoreDetails[0].OverallPassStatus==\'PASS\', \'text-a-red\': model.ScoreDetails[0].OverallPassStatus==\'FAIL\'}"> {{ model.ScoreDetails[0].OverallPassStatus }}</dt></div></div><div class="clearfix"></div><hr>'
                 },
                 {
                     type: "section",
@@ -541,7 +537,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 type: "box",
                 colClass: "col-sm-12 table-box",
                 title: "Psychometric Scores",
-                condition: "model.currentStage != 'ScreeningReview' && model.siteCode != 'IREPDhan'",
+                condition: "model.currentStage != 'ScreeningReview' && model.siteCode == 'kinara'",
                 items: [
                     {
                         type: "section",
@@ -734,7 +730,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         '<tr> <td>{{"NET_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.pl.business.netBusinessIncome | irfCurrency}}</td> <td>{{model.pl.business.netBusinessIncomePCT }}</td> </tr>'+
         '<tr class="text"> <td><strong>{{"KINARA_EMI" | translate}}</strong></td><td></td><td><strong>{{model.pl.business.kinaraEmi | irfCurrency}}</strong></td> <td>{{model.pl.business.kinaraEmiPCT }}</td> </tr>'+
         '<tr> <td><strong>{{"NET_INCOME" | translate}}</strong></td> <td></td> <td><strong>{{model.pl.business.netIncome | irfCurrency}}</strong></td> <td></td> </tr>'+
-        '<tr class="table-bottom-summary"> <td>{{"FINAL_KINARA_EMI" | translate}}</td><td></td><td>{{model.pl.business.finalKinaraEmi | irfCurrency}}</td> <td>{{model.pl.business.finalKinaraEmiPCT }}</td> </tr>'+
+        '<tr class="table-bottom-summary"> <td>Final Kinara EMI</td><td></td><td>{{model.pl.business.finalKinaraEmi | irfCurrency}}</td> <td>{{model.pl.business.finalKinaraEmiPCT }}</td> </tr>'+
     '</tbody>'+
 '</table>'
                 }
@@ -770,8 +766,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         '<tr class="table-sub-header"><th colspan="2">{{"FIXED_ASSETS" | translate}}</th><th colspan="2">{{"LONG_TERM_LIABILITIES" | translate}}</th></tr><tr><td>{{"MACHINERY" | translate}}</td><td>{{model.assetsAndLiabilities.machinery | irfCurrency}}</td><td>{{"LONGTERMDEBT" | translate}}</td><td>{{model.assetsAndLiabilities.longTermDebt | irfCurrency}}</td></tr>'+
         '<tr><td>{{"LAND" | translate}}</td><td>{{model.assetsAndLiabilities.land | irfCurrency}}</td><td>{{"OWN_CAPITAL" | translate}}</td><td>{{model.assetsAndLiabilities.ownCapital | irfCurrency}}</td></tr><tr><td>{{"BUILDING" | translate}}</td><td>{{model.assetsAndLiabilities.building | irfCurrency}}</td><td></td><td></td></tr>'+
         '<tr><td>{{"VEHICLE" | translate}}</td><td>{{model.assetsAndLiabilities.vehicle | irfCurrency}}</td><td></td><td></td></tr>'+
-        '<tr><td>{{"FURNITURE" | translate}}</td><td>{{model.assetsAndLiabilities.furniture | irfCurrency}}</td><td></td><td></td></tr>'+
-        '<tr><td>{{"FIXTURES" | translate}}</td><td>{{model.assetsAndLiabilities.fixture | irfCurrency}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"FURNITURE_AND_FIXING" | translate}}</td><td>{{model.assetsAndLiabilities.furnitureAndFixtures | irfCurrency}}</td><td></td><td></td></tr>'+
         '<tr><td>{{"TOTAL_FIXED_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalFixedAssets | irfCurrency}}</td><td>{{"TOTAL_LONG_TERM_LIABILITIES" | translate}}</td><td>{{model.assetsAndLiabilities.totalLengTermLiabilities | irfCurrency}}</td></tr><tr></tr>'+
         '<tr class="table-bottom-summary"><th>{{"TOTAL_ASSETS" | translate}}</th><th>{{model.assetsAndLiabilities.totalAssets | irfCurrency}}</th><th>{{"TOTAL_LIABILITIES" | translate}}</th><th>{{model.assetsAndLiabilities.totalLiabilities | irfCurrency}}</th></tr>'+
     '</tbody>'+
@@ -863,36 +858,6 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             ]
         });
 
-        var stockDetailsTable = "<irf-simple-summary-table irf-table-def = 'model.stockDetails'></irf-simple-summary-table>";
-
-        form.push({
-             type: "box",
-            colClass: "col-sm-12 table-box",
-            title: model.stockDetails.title,
-            items: [
-                {
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: stockDetailsTable
-                }
-            ]
-        });
-
-        var nonMachineryDetailsTable = "<irf-simple-summary-table irf-table-def = 'model.nonMachineryDetails'></irf-simple-summary-table>";
-
-        form.push({
-             type: "box",
-            colClass: "col-sm-12 table-box",
-            title: model.nonMachineryDetails.title,
-            items: [
-                {
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: nonMachineryDetailsTable
-                }
-            ]
-        });
-
         var businessBankStmtSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.businessBankStmtSummary'></irf-simple-summary-table>";
 
         form.push({
@@ -939,7 +904,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             type: "box",
             colClass: "col-sm-12 table-box",
             title: "DEVIATION_AND_MITIGATIONS",
-            condition: "model.currentStage != 'ScreeningReview' && model.siteCode != 'IREPDhan'",
+            condition: "model.currentStage != 'ScreeningReview'",
             items: [
                 {
                     type: "section",
@@ -994,28 +959,15 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
             prepareDataDeferred = $q.defer();
             prepareDataPromise = prepareDataDeferred.promise;
-            model.siteCode = SessionStore.getGlobalSetting('siteCode');
+
             model.currentStage = bundleModel.currentStage;
             model.ScoreDetails = [];
             model.customer = {};
             var $this = this;
             var deferred = $q.defer();
 
-            scoreName = null;
-            switch(model.currentStage){
-                case "ScreeningReview":
-                    scoreName = "RiskScore1";
-                    break;
-                case "ApplicationReview":
-                    scoreName = "RiskScore2";
-                    break;
-                case "FieldAppraisalReview":
-                    scoreName = "RiskScore3";
-                    break;
-                default:
-                    scoreName = "ConsolidatedScore";
-                    break;
-            }
+            scoreName = 'RiskScore1';
+
 
             if (bundlePageObj) {
                 model._bundlePageObj = _.cloneDeep(bundlePageObj);
@@ -1090,4 +1042,5 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             }
         }
     };
-}]);
+}
+});

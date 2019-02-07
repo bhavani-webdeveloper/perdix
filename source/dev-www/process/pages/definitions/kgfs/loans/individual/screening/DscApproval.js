@@ -20,7 +20,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     $log.info("inside thee bundle");
                     return $q.resolve([
                         {
-                            pageName: 'kgfs.customer.IndividualEnrollment2',
+                            pageName: 'kgfs.customer.IndividualEnrolment2',
                             title: 'APPLICANT',
                             pageClass: 'applicant',
                             minimum: 1,
@@ -28,7 +28,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:10
                         },
                         {
-                            pageName: 'kgfs.customer.IndividualEnrollment2',
+                            pageName: 'kgfs.customer.IndividualEnrolment2',
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
                             minimum: 0,
@@ -36,7 +36,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:20
                         },
                         {
-                            pageName: 'kgfs.customer.IndividualEnrollment2',
+                            pageName: 'kgfs.customer.IndividualEnrolment2',
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
                             minimum: 0,
@@ -60,8 +60,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:70
                         },
                         {
-                            pageName: 'kgfs.customer.CBCheck',
-                            title: 'CB_CHECK',
+                            pageName: 'kgfs.loans.individual.screening.CBCheck',
+                            title: 'CREDIT_BUREAU',
                             pageClass: 'cb-check',
                             minimum: 1,
                             maximum: 1,
@@ -126,7 +126,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 },
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
-                    bundleModel.currentStage = "LoanInitiation";
+                    bundleModel.currentStage = "DSCApproval";
                     var deferred = $q.defer();
 
                     var $this = this;
@@ -145,7 +145,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess.loanAccount.leadId = _leadId;
 
                                     }
-                                // if (loanAccount.loanAccount.currentStage != 'LoanInitiation'){
+                                // if (loanAccount.loanAccount.currentStage != 'DSCApproval'){
                                 //     PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
                                 //     irfNavigator.goBack();
                                 //     return;
@@ -214,7 +214,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     } else {
                         LoanProcess.createNewProcess()
                             .subscribe(function(loanProcess){
-                                loanProcess.loanAccount.currentStage = 'LoanInitiation';
+                                loanProcess.loanAccount.currentStage = 'DSCApproval';
                                 bundleModel.loanProcess = loanProcess;
                                  if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
 
@@ -267,7 +267,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 },
                 "post_pages_initialize": function(bundleModel){
                     $log.info("Inside post_page_initialize");
-                    BundleManager.broadcastEvent('origination-stage', 'KYC');
+                    BundleManager.broadcastEvent('origination-stage', 'DSCApproval');
                     if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
                         PageHelper.showLoader();
                         PageHelper.showProgress("KYC-input", 'Loading lead details');

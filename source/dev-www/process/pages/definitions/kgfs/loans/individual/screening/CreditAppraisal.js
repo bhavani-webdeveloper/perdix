@@ -31,19 +31,19 @@ define(["perdix/domain/model/loan/LoanProcess",
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
                             minimum: 0,
-                            maximum: 4,
-                            order:20
+                            maximum: 1,
+                            order:11
                         },
                         {
                             pageName: 'kgfs.customer.IndividualEnrolment2',
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
                             minimum: 0,
-                            maximum: 3,
-                            order:30
+                            maximum: 1,
+                            order:12
                         },
                         {
-                            pageName: 'customer.EnterpriseEnrolment2',
+                            pageName: 'kgfs.customer.EnterpriseEnrolment2',
                             title: 'BUSINESS',
                             pageClass: 'business',
                             minimum: 1,
@@ -56,16 +56,32 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'loan-request',
                             minimum: 1,
                             maximum: 1,
-                            order:50
+                            order:60
                         },
                         {
-                            pageName: 'loans.individual.screening.CreditBureauView',
+                            pageName: 'kgfs.loans.individual.screening.CBCheck',
                             title: 'CREDIT_BUREAU',
                             pageClass: 'cbview',
                             minimum: 1,
                             maximum: 1,
-                            order:60
-                        }
+                            order:9
+                        },
+                            // {
+                            //     pageName: 'kgfs.loans.individual.screening.Summary',
+                            //     title: 'SUMMARY',
+                            //     pageClass: 'summary',
+                            //     minimum: 1,
+                            //     maximum: 1,
+                            //     order: 5
+                            // },                            
+                            {
+                                pageName: 'kgfs.loans.individual.screening.Review',
+                                title: 'REVIEW',
+                                pageClass: 'loan-review',
+                                minimum: 1,
+                                maximum: 1,
+                                order:80
+                            }
                     ]);
                 },
                 "bundlePages": [],
@@ -193,15 +209,25 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
+                                $this.bundlePages.push({
+                                    pageClass: 'loan-review',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount,
+                                    }
+                                });
+
                             
                                 deferred.resolve();
 
                             });
 
                     } else {
+                        if($stateParams.pageData){
+                            var productCategory = $stateParams.pageData.productCategory; 
+                        }
                         LoanProcess.createNewProcess()
                             .subscribe(function(loanProcess){
-                                loanProcess.loanAccount.currentStage = 'Screening';
+                                loanProcess.loanAccount.currentStage = 'CreditAppraisal';
                                 bundleModel.loanProcess = loanProcess;
                                  if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
 
@@ -218,17 +244,17 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         }
                                     });
                                 }
-
-                                if (loanProcess.loanCustomerEnrolmentProcess) {
-                                    $this.bundlePages.push({
-                                        pageClass: "business",
-                                        model: {
-                                            enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
-                                            loanProcess: loanProcess
-                                        }
-                                    });
+                                if(productCategory == 'MEL'){
+                                    if (loanProcess.loanCustomerEnrolmentProcess) {
+                                        $this.bundlePages.push({
+                                            pageClass: "business",
+                                            model: {
+                                                enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                                loanProcess: loanProcess
+                                            }
+                                        });
+                                    }
                                 }
-
                                 $this.bundlePages.push({
                                     pageClass: 'loan-request',
                                     model: {
@@ -243,6 +269,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
+                                $this.bundlePages.push({
+                                    pageClass: 'loan-review',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount,
+                                    }
+                                });
+
                                 deferred.resolve();
                             });
                     }
@@ -251,7 +284,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 },
                 "post_pages_initialize": function(bundleModel){
                     $log.info("Inside post_page_initialize");
-                    BundleManager.broadcastEvent('origination-stage', 'Screening');
+                    BundleManager.broadcastEvent('origination-stage', 'CreditAppraisal');
                     if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
                         PageHelper.showLoader();
                         PageHelper.showProgress("screening-input", 'Loading lead details');
@@ -276,6 +309,13 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                 },
                 eventListeners: {
+                    "load-address": function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("load-address-business", params);
+                    },
+                    "load_business": function(pageObj, bundleModel, params){
+                        console.log(params)
+                        model.productCategory = params
+                    },
                     "on-customer-load": function(pageObj, bundleModel, params){
                         BundleManager.broadcastEvent("test-listener", {name: "SHAHAL AGAIN"});
                     },
@@ -355,7 +395,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     for (var i=0; i<offlineData.bundlePages.length; i++){
                         var page = offlineData.bundlePages[i];
                         if (page.pageClass == "applicant" && !page.model.customer.firstName){
-                            PageHelper.showProgress("screening", "Applicant first name is required to save offline", 5000);
+                            PageHelper.showProgress("CreditAppraisal", "Applicant first name is required to save offline", 5000);
                             defer.reject();
                         }
                     }

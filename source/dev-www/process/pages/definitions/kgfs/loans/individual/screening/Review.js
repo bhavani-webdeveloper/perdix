@@ -1,51 +1,49 @@
-irf.pageCollection.factory(irf.page("loans.individual.screening.Review"),
-["$log", 'SchemaResource', 'PageHelper', "Utils", "IndividualLoan", "Messaging", "SessionStore", "irfCurrencyFilter", "$filter",
-function($log, SchemaResource, PageHelper, Utils, IndividualLoan, Messaging, SessionStore, irfCurrencyFilter, $filter){
-	var getStageNameByStageCode = function(stageCode) {
-		var stageName;
-		switch(stageCode) {
-			case 'Screening':
-				stageName = $filter('translate')('SCREENING');
-				break;
-			case 'Dedupe':
-				stageName = $filter('translate')('DEDUPE');
-				break;
-			case 'ScreeningReview':
-				stageName = $filter('translate')('SCREENING_REVIEW');
-				break;
-			case 'Application':
-				stageName = $filter('translate')('APPLICATION');
-				break;
-			case 'ApplicationReview':
-				stageName = $filter('translate')('APPLICATION_REVIEW');
-				break;
-			case 'FieldAppraisal':
-				stageName = $filter('translate')('FIELD_APPRAISAL');
-				break;
-			case 'FieldAppraisalReview':
-				stageName = $filter('translate')('REGIONAL_RISK_REVIEW');
-				break;
-			case 'ZonalRiskReview':
-				stageName = $filter('translate')('ZONAL_RISK_REVIEW');
-				break;
-			case 'CentralRiskReview':
-				stageName = $filter('translate')('VP_CREDIT_RISK_REVIEW');
-				break;
-			case 'CreditCommitteeReview':
-				stageName = $filter('translate')('CREDIT_COMITTEE_REVIEW');
-				break;
-			case 'Sanction':
-				stageName = $filter('translate')('SANCTION');
-				break;
-			case 'Rejected':
-				stageName = $filter('translate')('REJECTED');
-				break;
-			default:
-				stageName = stageCode;
-				break;
-		}
-		return stageName;
-	};
+define([],function(){
+	return {
+        pageUID: "kgfs.loans.individual.screening.Review",
+        pageType: "Engine",
+        dependencies: ["$log", 'SchemaResource', 'PageHelper', "Utils", "IndividualLoan", "Messaging", "SessionStore", "irfCurrencyFilter", "$filter"],
+
+        $pageFn: function($log, SchemaResource, PageHelper, Utils, IndividualLoan, Messaging, SessionStore, irfCurrencyFilter, $filter) {
+        	var getStageNameByStageCode = function(stageCode) {
+		        var stageName;
+		            switch(stageCode) {
+			            case 'KYC':
+				            stageName = 'KYC';
+				            break;
+			            case 'KYCReview':
+				            stageName = 'KYCReview';
+				            break;
+			            case 'Appraisal':
+				            stageName = 'Appraisal';
+				            break;
+			            case 'AppraisalReview':
+				            stageName = 'AppraisalReview';
+				            break;
+			            case 'Televerification':
+				            stageName = 'Televerification';
+				            break;
+			            case 'Evaluation':
+				            stageName = 'Evaluation';
+				            break;
+			            case 'CreditCommitteeReview':
+				            stageName = 'CreditCommitteeReview';
+				            break;
+			            case 'GuarantorAddition':
+				            stageName = 'GuarantorAddition';
+				            break;
+			            case 'Sanction':
+				            stageName = 'Sanction';
+				            break;
+			            case 'Rejected':
+				            stageName = 'Rejected';
+			        	    break;
+			            default:
+				            stageName = stageCode;
+				            break;
+		                }
+		            return stageName;
+	            };
 	return {
 		"type": "schema-form",
 		"title": "REVIEW",
@@ -71,17 +69,14 @@ function($log, SchemaResource, PageHelper, Utils, IndividualLoan, Messaging, Ses
 							model.loanSummary[currentStage].hideCreateConversation = true;
 						}
 
-						model.loanSummary[currentStage].isCurrentStage = true;	
+						model.loanSummary[currentStage].isCurrentStage = true;
 						model.loanSummary[currentStage]._conversationExpand = true;	
 
 						Messaging.getConversationStatus({
 		                    'process_id': model.loanAccount.id
 		                }).$promise.then(function(response) {
-							model.conversationStatus = response.body;
-							var i =0;
-							for(i in model.conversationStatus){
-								model.conversationStatus[i] = {'sub_process_id' :Number(model.conversationStatus[i].sub_process_id)};
-							}
+		                    model.conversationStatus = response.body;
+
 							for(var i = 0; i < model.loanSummary.length; i++) {
 								if(model.loanSummary[i].action == 'PROCEED' && (_.find(model.conversationStatus, {'sub_process_id': model.loanSummary[i].id}) || model.loanSummary[i].isCurrentStage)) {
 									model.loanSummary[i].conversationStatus =  true;
@@ -136,4 +131,4 @@ function($log, SchemaResource, PageHelper, Utils, IndividualLoan, Messaging, Ses
 		},
 		actions: {}
 	};
-}]);
+ }}})

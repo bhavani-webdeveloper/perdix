@@ -56,15 +56,15 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'loan-request',
                             minimum: 1,
                             maximum: 1,
-                            order:50
+                            order:60
                         },
                         {
-                            pageName: 'loans.individual.screening.CreditBureauView',
+                            pageName: 'kgfs.loans.individual.screening.CBCheck',
                             title: 'CREDIT_BUREAU',
                             pageClass: 'cbview',
                             minimum: 1,
                             maximum: 1,
-                            order:60
+                            order:50
                         }
                     ]);
                 },

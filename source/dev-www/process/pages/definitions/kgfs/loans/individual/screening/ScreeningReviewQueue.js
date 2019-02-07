@@ -13,7 +13,7 @@ define({
 	   }
 	   return {
 		"type": "search-list",
-		"title": "SCREENING_REVIEW_QUEUE",
+		"title": "SCREENING_REVIEW",
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
 			model.branch = SessionStore.getCurrentBranch().branchId;
