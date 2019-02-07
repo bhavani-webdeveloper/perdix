@@ -48,6 +48,26 @@ Class Ckyc {
         'Ration Card' => 'OthersPOACKYCInd',
         'Driving Licence' => 'DrivingLicence'
     ];
+    private static function address_split($c, $type, $length, $index) {
+        if ($type == 'permanent')
+            $address_array = array_filter([$c->door_no,$c->street,$c->post_office,$c->landmark,$c->locality,$c->district,$c->state]);
+        else if ($type == 'mailing')
+            $address_array = array_filter([$c->mailing_doorno,$c->mailing_street,$c->mailing_postoffice,$c->mailing_locality,$c->mailing_district,$c->mailing_state,$c->mailing_pincode]);
+        $data = join(',',$address_array);
+        for($i=1;$i<= ($index+1); $i++){
+            if(strlen($data) <= $length-1){
+                if (strlen($data) == 0 || $i < $index+1) return '';
+                else return $data;
+            }
+            else{
+                $tillTrim = strlen(end(explode(',',substr($data,0,$length-1))));
+                if (substr($data,$length-1,1) == ',') $tillTrim = 0;
+                if ($i == ($index+1)) return implode(',',explode(',',substr($data,0,$length-($tillTrim+1))));
+                $data = substr($data,(($length-1)-$tillTrim),strlen($data));
+            }
+        }
+    }
+    
     public static function CKYC_PERDIX_FIELD_MAP() { return [
         'TransactionID' => '',
         'SourceSystemName' => 'Perdix',
@@ -110,9 +130,9 @@ Class Ckyc {
         'PermanentCKYCAddType' => '01',
         'PermanentCountry' => 'IN',
         'PermanentPin' => '@pincode',
-        'PermanentAddressLine1' => function($c) { return join(',', array_filter([$c->door_no,$c->street,$c->post_office,$c->landmark,$c->locality,$c->district,$c->state])); },
-        'PermanentAddressLine2' => '',
-        'PermanentAddressLine3' => '',
+        'PermanentAddressLine1' => function($c) { return Cky::address_split($c,'permanent',50, 0); },
+        'PermanentAddressLine2' => function($c) { return Ckyc::address_split($c, 'permanent',50, 1); },
+        'PermanentAddressLine3' => function($c) { return Ckyc::address_split($c,'permanent',50, 2); },
         'PermanentDistrict' => '',
         'PermanentCity' => '@village_name',
         'PermanentState' => '',
@@ -286,8 +306,18 @@ function recreate_directory($dir) {
 
 function download_customer_file($customer_id, $file_name, $file_id) {
     if ($file_id) {
+        $extension = "";
+        try {
+            $temp_file_name = DB::table('file_info')->where('file_id', $file_id)->first();
+            $extension = end((explode('.', $temp_file_name->name)));
+        } catch (Exception $e) {}
+        if (!empty($extension)) {
+            $extension = '.'.$extension;
+        } else {
+            $extension = "";
+        }
         echo "    Downloading $customer_id $file_name: $file_id\n";
-        file_put_contents(CKYC_OUTGOING_TEMP_DIR.DIRECTORY_SEPARATOR.$customer_id.DIRECTORY_SEPARATOR.$file_name, file_get_contents(PERDIX_FILE_STREAM_API.'/'.$file_id));
+        file_put_contents(CKYC_OUTGOING_TEMP_DIR.DIRECTORY_SEPARATOR.$customer_id.DIRECTORY_SEPARATOR.$file_name.$extension, file_get_contents(PERDIX_FILE_STREAM_API.'/'.$file_id));
     }
 }
 
