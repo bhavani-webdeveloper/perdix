@@ -14,7 +14,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                 model.customer.enterprise.weeklySale = 0;
                 for (i in model.customer.enterpriseDailySale) {
                     dailysales = model.customer.enterpriseDailySale[i];
-                    if (dailysales.seasonType != row.seasonType && dailysales[day]) {
+                    if (dailysales.salesType != row.salesType && dailysales[day]) {
                         delete dailysales[day]
                     }
                     dailysales.total = (dailysales.mon ? dailysales.mon : 0) + (dailysales.tue ? dailysales.tue : 0) + (dailysales.wed ? dailysales.wed : 0) + (dailysales.thu ? dailysales.thu : 0) +
@@ -60,8 +60,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     if (monthlySales.seasonType != row.seasonType && monthlySales[month]) {
                         delete monthlySales[month]
                     }
-                    monthlySales.total = (monthlySales.January ? monthlySales.January : 0) + (monthlySales.Feburary ? monthlySales.Feburary : 0) + (monthlySales.March ? monthlySales.March : 0) + (monthlySales.April ? monthlySales.April : 0) +
-                        (monthlySales.May ? monthlySales.May : 0) + (monthlySales.June ? monthlySales.June : 0) + (monthlySales.July ? monthlySales.July : 0) + (monthlySales.August ? monthlySales.August : 0) + (monthlySales.September ? monthlySales.September : 0) + (monthlySales.October ? monthlySales.October : 0) + (monthlySales.November ? monthlySales.November : 0) + (monthlySales.December ? monthlySales.December : 0);
+                    monthlySales.total = (monthlySales.Jan ? monthlySales.Jan : 0) + (monthlySales.Feb ? monthlySales.Feb : 0) + (monthlySales.Mar ? monthlySales.Mar : 0) + (monthlySales.Apr ? monthlySales.Apr : 0) +
+                        (monthlySales.May ? monthlySales.May : 0) + (monthlySales.June ? monthlySales.June : 0) + (monthlySales.July ? monthlySales.July : 0) + (monthlySales.Aug ? monthlySales.Aug : 0) + (monthlySales.Sep ? monthlySales.Sep : 0) + (monthlySales.Oct ? monthlySales.Oct : 0) + (monthlySales.Nov ? monthlySales.Nov : 0) + (monthlySales.Dec ? monthlySales.Dec : 0);
                     model.customer.enterprise.avgMonthlySales = model.customer.enterprise.avgMonthlySales + monthlySales.total;
                     model.customer.enterprise.avgAnnualSales = model.customer.enterprise.avgMonthlySales * 4;
                 }
@@ -76,12 +76,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                 // data.netBusinessIncome = 
             }
             var monthlySurpluse = function (model) {
+                model.customer.enterprise.finalEMi = 1;
                 model.customer.enterprise.totalMonthlySurplus = ((model.customer.enterprise.netBusinessIncome ? model.customer.enterprise.netBusinessIncome : 0) + (model.customer.enterprise.additionalIncomeConsidered ? model.customer.enterprise.additionalIncomeConsidered : 0) - (model.customer.enterprise.totalPersonalExpense ? model.customer.enterprise.totalPersonalExpense : 0) - (model.customer.enterprise.totalEmiAmount ? model.customer.enterprise.totalEmiAmount : 0))
                 model.customer.enterprise.emiEligibility = (model.customer.enterprise.totalMonthlySurplus * (model.customer.enterprise.enterdebtServiceRatio ? model.customer.enterprise.enterdebtServiceRatio : 0));
                 model.customer.enterprise.finalEMi = Math.min((model.customer.enterprise.emiEligibility ? model.customer.enterprise.emiEligibility : 0), (model.customer.enterprise.affordableEMi ? model.customer.enterprise.affordableEMi : 0));
-                var x = (((Math.pow((model.customer.enterprise.proposedROI / 12), model.customer.enterprise.loanTenureInMonths)) + 1) * (model.customer.enterprise.finalEMi) + 1)
-                var y = ((Math.pow((model.customer.enterprise.proposedROI / 12), model.customer.enterprise.loanTenureInMonths)) + 1)
-                model.customer.enterprise.eligibleLoanAmount =
+                var x = (((Math.pow(((model.loanAccount.interestRate / 12)+1), model.loanAccount.tenure)) - 1) * (model.customer.enterprise.finalEMi))
+                var y = ((Math.pow(((model.loanAccount.interestRate/ 12)+1), model.loanAccount.tenure)) * ((model.loanAccount.interestRate/ 12)))
+                model.customer.enterprise.eligibleLoanAmount = (x/y);
                     "TotalMonthlySurplus.sanctionedLoanAmount"
             }
             var computeEstimatedEmi = function (model) {
@@ -488,7 +489,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 "startEmpty": true,
                                 "items": {
                                     "udf1": {
-                                        "title": "BUSINESS_TYPE",
                                         "type": "select",
                                         "enumCode": "businessType",
                                         "title": "BUSINESS_TYPE",
@@ -566,16 +566,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EstimatedSales": {
                         "type": "box",
-                        "title": "Intial Estimate Weekly Sales",
+                        "title": "INITIALISE_ESTIMATE_OF_SALES",
                         "items": {
                             'initialEstimateWeeklySale': {
                                 key: "customer.enterprise.initialEstimateWeeklySale",
-                                title: "EstimatedWeeklySales",
+                                title: "WEEKLY_SALES",
                                 "type": "number"
                             },
                             'initialEstimateMonthlySale': {
                                 key: "customer.enterprise.initialEstimateMonthlySale",
-                                title: "EstimmatedMonthlySales",
+                                title: "MONTHLY_SALES",
                                 "type": "number"
                             }
                         }
@@ -584,12 +584,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "type": "box",
                         "orderNo": 620,
                         colClass: "col-sm-12",
-                        "title": "DDaily_Sales",
+                        "title": "DAILY_SALES",
                         "items": {
                             "enterpriseDailySale": {
                                 key: "customer.enterpriseDailySale",
                                 type: "datatable",
-                                title: "Daily_Sales",
+                                title: "DAILY_SALES",
                                 startEmpty: true,
                                 dtlConfig: {
                                     columnsFn: function () {
@@ -597,7 +597,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                             "dtlKeyvalue": "ADD_PARAMETER",
                                             "columns": [
                                                 {
-                                                    prop: "seasonType",
+                                                    prop: "salesType",
                                                     type: "string",
                                                     name: "CYCLE"
                                                 },
@@ -673,14 +673,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             },
                             'weeklySale': {
                                 key: "customer.enterprise.weeklySale",
-                                title: "WeeklySales",
+                                title: "WEEKLY_SALES",
                                 "type": "number",
                                 required: true,
                                 readonly: true
                             },
                             'monthlySale': {
                                 key: "customer.enterprise.monthlySale",
-                                title: "MonthlySales",
+                                title: "MONTHLY_SALES",
                                 "type": "number",
                                 required: true,
                                 readonly: true
@@ -690,13 +690,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "EnterpriseProductSale": {
                         "type": "box",
                         colClass: "col-sm-12",
-                        "title": "ENTERPRISE_PRODUCT_SALES",
+                        "title": "Sales per product & Gross margin",
                         "orderNo": 640,
                         "items": {
                             "enterpriseProductSales": {
                                 key: "customer.enterpriseProductSales",
                                 type: "datatable",
-                                title: "EnterpriseProductSale",
+                                title: "Sales per product & Gross margin",
                                 dtlConfig: {
                                     columnsFn: function () {
                                         return $q.resolve({
@@ -705,12 +705,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                                 {
                                                     prop: "productName",
                                                     type: "text",
-                                                    name: "PRODUCT_NAME"
+                                                    name: "Product"
                                                 },
                                                 {
                                                     prop: "salePrice",
                                                     type: "number",
-                                                    name: "SALE_PRICE",
+                                                    name: "sales Price Per Unit",
                                                     onClick: function (value, model, row) {
                                                         getEnterpriseProductDetails(model);
 
@@ -719,7 +719,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                                 {
                                                     prop: "costPrice",
                                                     type: "number",
-                                                    name: "COST_PRICE",
+                                                    name: "Cost Price Per Unit",
                                                     onClick: function (value, model, row) {
                                                         getEnterpriseProductDetails(model);
 
@@ -728,7 +728,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                                 {
                                                     prop: "quantity",
                                                     type: "number",
-                                                    name: "QUANTITY",
+                                                    name: "Quantity",
                                                     onClick: function (value, model, row) {
                                                         getEnterpriseProductDetails(model);
                                                     }
@@ -832,38 +832,38 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                                     name: "CYCLE"
                                                 },
                                                 {
-                                                    prop: "January",
+                                                    prop: "Jan",
                                                     type: "number",
                                                     name: "Jan",
                                                     "readonly": true,
                                                     onClick: function (value, model, row) {
-                                                        getAnnualSales(value, model, row, 'January');
+                                                        getAnnualSales(value, model, row, 'Jan');
                                                     },
                                                 },
 
                                                 {
-                                                    prop: "Feburary",
+                                                    prop: "Feb",
                                                     type: "number",
                                                     name: "Feb",
                                                     onClick: function (value, model, row) {
-                                                        getAnnualSales(value, model, row, 'Feburary')
+                                                        getAnnualSales(value, model, row, 'Feb')
                                                     }
 
                                                 },
                                                 {
-                                                    prop: "March",
+                                                    prop: "Mar",
                                                     type: "number",
                                                     name: "Mar",
                                                     onClick: function (value, model, row) {
-                                                        getAnnualSales(value, model, row, 'March')
+                                                        getAnnualSales(value, model, row, 'Mar')
                                                     }
                                                 },
                                                 {
-                                                    prop: "April",
+                                                    prop: "Apr",
                                                     type: "number",
                                                     name: "Apr",
                                                     onClick: function (value, model, row) {
-                                                        getAnnualSales(value, model, row, 'April')
+                                                        getAnnualSales(value, model, row, 'Apr')
                                                     }
                                                 },
                                                 {
@@ -878,7 +878,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                                 {
                                                     prop: "June",
                                                     type: "number",
-                                                    name: "Jun",
+                                                    name: "June",
                                                     "readonly": true,
                                                     onClick: function (value, model, row) {
                                                         getAnnualSales(value, model, row, 'June')
@@ -894,48 +894,48 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                                     }
                                                 },
                                                 {
-                                                    prop: "August",
+                                                    prop: "Aug",
                                                     type: "number",
                                                     name: "Aug",
                                                     "readonly": true,
                                                     onClick: function (value, model, row) {
-                                                        getAnnualSales(value, model, row, 'August')
+                                                        getAnnualSales(value, model, row, 'Aug')
                                                     }
                                                 },
                                                 {
-                                                    prop: "September",
+                                                    prop: "Sep",
                                                     type: "number",
                                                     name: "Sep",
                                                     "readonly": true,
                                                     onClick: function (value, model, row) {
-                                                        getAnnualSales(value, model, row, 'September')
+                                                        getAnnualSales(value, model, row, 'Sep')
                                                     }
                                                 },
                                                 {
-                                                    prop: "October",
+                                                    prop: "Oct",
                                                     type: "number",
                                                     name: "Oct",
                                                     "readonly": true,
                                                     onClick: function (value, model, row) {
-                                                        getAnnualSales(value, model, row, 'October')
+                                                        getAnnualSales(value, model, row, 'Oct')
                                                     }
                                                 },
                                                 {
-                                                    prop: "November",
+                                                    prop: "Nov",
                                                     type: "number",
                                                     name: "Nov",
                                                     "readonly": true,
                                                     onClick: function (value, model, row) {
-                                                        getAnnualSales(value, model, row, 'November')
+                                                        getAnnualSales(value, model, row, 'Nov')
                                                     }
                                                 },
                                                 {
-                                                    prop: "December",
+                                                    prop: "Dec",
                                                     type: "number",
                                                     name: "Dec",
                                                     "readonly": true,
                                                     onClick: function (value, model, row) {
-                                                        getAnnualSales(value, model, row, 'December')
+                                                        getAnnualSales(value, model, row, 'Dec')
                                                     }
                                                 },
                                                 {
@@ -952,14 +952,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             },
                             'avgMonthlySales': {
                                 key: "customer.enterprise.avgMonthlySales",
-                                title: "MonthlySales",
+                                title: "TOTAL_MONTHLY_SALE",
                                 "type": "number",
                                 required: true,
                                 readonly: true
                             },
                             'avgAnnualSales': {
                                 key: "customer.enterprise.avgAnnualSales",
-                                title: "AnnualSale",
+                                title: "TOTAL_ANNUAL_SALE",
                                 "type": "number",
                                 required: true,
                                 readonly: true
@@ -975,19 +975,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "items": {
                             'monthlySalesCal': {
                                 key: "customer.enterprise.monthlySalesCal",
-                                title: "MonthlySalesCal",
+                                title: "MONTHLY_SALES",
                                 "type": "number",
                                 "readonly": true
                             },
                             'costOfGoodsSold': {
                                 key: "customer.enterprise.costOfGoodsSold",
-                                title: "CostOfGoodsSold",
+                                title: "COST_OF_GOODS_SOLD",
                                 "type": "number",
                                 "readonly": true
                             },
                             'grossProfit': {
                                 key: "customer.enterprise.grossProfit",
-                                title: "GrossProfit",
+                                title: "GROSS_PROFIT",
                                 "type": "number",
                                 "readonly": true
                             }
@@ -1067,7 +1067,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "OtherBusinessIncomes": {
                         "type": "box",
                         colClass: "col-sm-12",
-                        "title": "OtherBusinessIncomes",
+                        "title": "ADDITIONAL_INCOME",
                         "orderNo": 690,
                         "items": {
                             "otherBusinessIncomes": {
@@ -1126,7 +1126,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "PersonalExpenses": {
                         "type": "box",
                         colClass: "col-sm-12",
-                        "title": "PersonalExpenses",
+                        "title": "PERSONAL_EXPENSES",
                         "orderNo": 710,
                         "items": {
                             "personalExpenses": {
@@ -1331,18 +1331,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "TotalMonthlySurplus": {
                         "type": "box",
                         // colClass: "col-sm-12",
-                        "title": 'TotalMonthlySurplus',
+                        "title": 'TOTAL_MONTHLY_SURPLUS',
                         "orderNo": 750,
                         "items": {
                             'totalMonthlySurplus': {
                                 key: "customer.enterprise.totalMonthlySurplus",
-                                title: "TotalMonthlySurplus",
+                                title: "TOTAL_MONTHLY_SURPLUS",
                                 "type": "number",
                                 "readonly": true
                             },
                             'enterdebtServiceRatio': {
                                 key: "customer.enterprise.enterdebtServiceRatio",
-                                title: "DebtServiceRation",
+                                title: "DEBT_SERVICE_RATIO",
                                 "type": "number",
                                 "onChange": function (value, form, model) {
                                     monthlySurpluse(model);
@@ -1350,13 +1350,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             },
                             'emiEligibility': {
                                 key: "customer.enterprise.emiEligibility",
-                                title: "Emi_Eligibility",
+                                title: "EMI Eligibility as per Net Business Surplus",
                                 "type": "number",
                                 "readonly": true
                             },
                             'affordableEMi': {
                                 key: "customer.enterprise.affordableEMi",
-                                title: "Affordable_EMi",
+                                title: "Affordable EMI as stated by the customer",
                                 "type": "number",
                                 "onChange": function (value, form, model) {
                                     monthlySurpluse(model);
@@ -1364,13 +1364,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             },
                             'finalEMi': {
                                 key: "customer.enterprise.finalEMi",
-                                title: "Final_EMi",
+                                title: "Final EMI Eligibility",
                                 "type": "number",
                                 "readonly": true
                             },
                             'actualEmiOffered': {
                                 key: "customer.enterprise.actualEmiOffered",
-                                title: "Actual Emi Offered",
+                                title: "Actual EMI offered to the borrower",
                                 "type": "number",
                                 "onChange": function (value, form, model) {
                                     monthlySurpluse(model);
@@ -1378,13 +1378,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             },
                             'eligibleLoanAmount': {
                                 key: "customer.enterprise.eligibleLoanAmount",
-                                title: "Eligible_Loan_Amount",
+                                title: "Loan Amount Eligible for the customer",
                                 "type": "number",
                                 "readonly": true
                             },
                             'sanctionedLoanAmount': {
                                 key: "customer.enterprise.sanctionedLoanAmount",
-                                title: "Sanctioned_LoanAmount",
+                                title: "Final Loan Amount Sanctioned ",
                                 "type": "number"
                             }
                         }
@@ -1611,8 +1611,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         model.customer.customerBranchId = branchId;
                     };
                     model.customer['enterpriseDailySale'] = []
-                    model.customer['enterpriseDailySale1'] = []
-                    // model.customer['enterpriseMonthlySales'] = []
+                    model.customer['enterpriseDailySales'] = []
+                    model.customer['enterpriseMonthlySales'] = []
                     model.customer['monthlySale'] = []
                     model.customer['enterpriseProductSales'] = []
                     model.customer['monthlyBusinessExpense'] = []
@@ -1636,12 +1636,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     else {
                         var busineeExpenseMonthly = ['Raw materials Consumed', 'Rent for Shop', 'Lab our / Wages', 'Electricity', 'Conveyance- Fuel & Maintenance', 'Transport Expenses', 'Depreciation/Development Rebate Reserve', 'Admin & Operating Expenses'];
                         for (i in busineeExpenseMonthly) {
-                            model.customer.monthlyBusinessExpense.push({ 'expenditureSource': busineeExpenseMonthly[i] });
+                            model.customer.monthlyBusinessExpense.push({ 'expenditureSource': busineeExpenseMonthly[i] ,'annualExpenses':0});
                         }
 
                         var personalExpense = ['Living Expenses (Food, Clothing, etc.)', 'Education', 'Rent & Electricity', 'Mobile / Telephone', 'Medical expenses'];
                         for (i in personalExpense) {
-                            model.customer.personalExpenses.push({ 'expenditureSource': personalExpense[i] });
+                            model.customer.personalExpenses.push({ 'expenditureSource': personalExpense[i],'annualExpenses':0});
                         }
                     }
 
@@ -1651,21 +1651,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         model.customer.otherBusinessIncomes.push({ 'incomeSource': otherBusinessIncome[i], 'otherBusinessIncomeDate': "2017-11-01", 'amount': 0 });
                     }
 
-                    var seasonTypes = ['High', 'Medium', 'Low']
-                    for (i in seasonTypes) {
-                        model.customer.enterpriseDailySale.push({ seasonType: seasonTypes[i], 'total': 0 })
+                    var sales = ['High', 'Medium', 'Low']
+                    for (i in sales) {
+                        model.customer.enterpriseDailySale.push({ salesType: sales[i], 'total': 0 })
                     }
-                    model.customer.monthlySale = [];
-                    for (i in seasonTypes) {
-                        model.customer.monthlySale.push({ seasonType: seasonTypes[i], 'total': 0 })
+                  //  model.customer.monthlySale = [];
+                    for (i in sales) {
+                        model.customer.monthlySale.push({ seasonType: sales[i], 'total': 0 })
                     }
 
-                    if (model.customer.enterpriseDailySale1.length != 0) {
-                        _.forEach(model.customer.enterpriseDailySale, function (dailysales) {
+                    if (model.customer.enterpriseDailySales.length != 0) {
+                        _.forEach(model.customer.enterpriseDailySales, function (dailysales) {
                             var sales = dailysales;
-                            if (dailysales.seasonType == 'High' ? (i = 1) : (dailysales.seasonType == 'Medium' ? (i = 2) : (i = 3))) {
+                            if (dailysales.salesType == 'High' ? (i = 1) : (dailysales.salesType == 'Medium' ? (i = 2) : (i = 3))) {
                                 for (var key of Object.keys(dailysales)) {
-                                    if (dailysales[key] != 'undefined' && key != 'seasonType' && key != 'totalSales') {
+                                    if (dailysales[key] != 'undefined' && key != 'salesType' && key != 'totalSales') {
                                         day = dailysales[key]
                                         model.customer.enterpriseDailySale[i - 1][day] = sales.totalSales;
                                         model.customer.enterpriseDailySale[i - 1]["total"] += sales.totalSales;
@@ -1884,8 +1884,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         _.forEach(model.customer.enterpriseDailySale, function (dailySale) {
                             for (const key of Object.keys(dailySale)) {
                                 dailySales = {}
-                                if (dailySale[key] != 'undefined' && key != 'seasonType' && dailySale[key] != 'total') {
-                                    dailySales['seasonType'] = dailySale['seasonType'];
+                                if (dailySale[key] != 'undefined' && key != 'salesType' && dailySale[key] != 'total') {
+                                    dailySales['salesType'] = dailySale['salesType'];
                                     dailySales['day'] = key;
                                     dailySales['totalSales'] = dailySale[key]
                                 }
@@ -1895,16 +1895,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             }
                         })
                         _.forEach(model.customer.monthlyBusinessExpense, function (expenses) {
-                            if (expenses.annualExpenses) {
                                 model.customer.expenditures.push(expenses)
-                            }
-
                         })
                         _.forEach(model.customer.personalExpenses, function (expenses) {
-
-                            if (expenses.annualExpenses) {
                                 model.customer.expenditures.push(expenses)
-                            }
                         })
                         // model.customer.expenditures.push( model.customer.monthlyBusinessExpense);
                         // model.customer.expenditures.push( model.customer.personalExpenses)
@@ -1914,11 +1908,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (enrolmentProcess) {
-                                LoanAccount.update(model.loanAccount).$promise.then(function (res) {
-                                    PageHelper.showProgress('LoanAccount', 'Updated.', 5000);
-                                }, function (err) {
-                                    PageHelper.showErrors(err.message);
-                                });
+                                // LoanAccount.update(model.loanAccount).$promise.then(function (res) {
+                                //     PageHelper.showProgress('LoanAccount', 'Updated.', 5000);
+                                // }, function (err) {
+                                //     PageHelper.showErrors(err.message);
+                                // });
                                 formHelper.resetFormValidityState(form);
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();

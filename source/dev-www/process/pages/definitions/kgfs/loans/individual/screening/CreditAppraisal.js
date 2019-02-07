@@ -116,7 +116,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 },
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
-                    bundleModel.currentStage = "Screening";
+                    bundleModel.currentStage = "CreditAppraisal";
                     var deferred = $q.defer();
 
                     var $this = this;
@@ -135,7 +135,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess.loanAccount.leadId = _leadId;
 
                                     }
-                                if (loanAccount.loanAccount.currentStage != 'Screening'){
+                                if (loanAccount.loanAccount.currentStage != 'CreditAppraisal'){
                                     PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
                                     irfNavigator.goBack();
                                     return;

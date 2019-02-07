@@ -608,6 +608,7 @@ define({
                     "startEmpty": true,
                     "title": "LOAN_DOCUMENT",
                     "titleExpr": "model.loanAccount.loanDocuments[arrayIndex].document",
+                    condition: "model.loanAccount.loanDocuments[form.arrayIndex].remarks.includes('RCUStageDocuments-') != true",
                     "items": [
                         {
                             "key": "loanAccount.loanDocuments[].document",
@@ -806,12 +807,13 @@ define({
             "colClass": "col-sm-12",		
             "readonly": true,		
             "overrideType": "default-view",		
-            condition: "model.currentStage == 'FieldAppraisalReview' && model.loanAccount.loanDocuments.length != 0",		
+            condition: "model.currentStage == 'FieldAppraisalReview'",		
             "title": "View Documents",		
             "items": [  {		
                 "key": "loanAccount.loanDocuments",		
                 "type": "array",		
-                "title": "Documents",		
+                "title": "Documents",	
+                condition: "model.loanAccount.loanDocuments[form.arrayIndex].remarks.includes('RCUStageDocuments-') == true",	
                 //startEmpty: true,		
                 "items": [		
                 {		
