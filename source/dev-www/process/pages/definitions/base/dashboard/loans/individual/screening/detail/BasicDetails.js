@@ -1,8 +1,8 @@
 define({
     pageUID: "base.dashboard.loans.individual.screening.detail.BasicDetails",
     pageType: "Engine",
-    dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "Model_ELEM_FC", "CreditBureau", "irfElementsConfig", "$filter","SchemaResource","$q","SessionStore","BundleManager","PageHelper","Utils","IndividualLoan"],
-    $pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, Model_ELEM_FC, CreditBureau, irfElementsConfig, $filter,SchemaResource,$q,SessionStore,BundleManager,PageHelper,Utils,IndividualLoan) {
+    dependencies: ["$log","$state", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "Model_ELEM_FC", "CreditBureau", "irfElementsConfig", "$filter","SchemaResource","$q","SessionStore","BundleManager","PageHelper","Utils","IndividualLoan"],
+    $pageFn: function($log,$state, Enrollment, formHelper, filterFilter, irfCurrencyFilter, Model_ELEM_FC, CreditBureau, irfElementsConfig, $filter,SchemaResource,$q,SessionStore,BundleManager,PageHelper,Utils,IndividualLoan) {
         var navigateToQueue = function(model) {
             BundleManager.deleteOffline().then(function() {
                 PageHelper.showProgress("loan-offline", "Offline record cleared", 5000);
@@ -76,6 +76,13 @@ define({
             var stageName = $filter('translate')(stageCode) || stageCode;
             return stageName;
         };
+        var appendPrefix = function(model, form) {
+            if(model.loanAccount.currentStage == 'RCU') {
+                if(model.loanAccount.documents.length != 0) {
+                    model.loanAccount.documents[form.arrayIndex].remarks = "RCUStageDocuments-" + model.loanAccount.documents[form.arrayIndex].document;
+                }
+            }
+        }
         var preLoanSaveOrProceed = function(model){
             var loanAccount = model.loanAccount;
     
@@ -466,24 +473,26 @@ define({
                     "title": "Documents",
                     "colClass": "col-sm-12",
                     "items": [  {
-                        "key": "loanAccount.loanDocuments",
+                        "key": "loanAccount.documents",
                         "type": "array",
                         "title": "Documents",
-                        //startEmpty: true,
                         "items": [
                             {
-                                key:"loanAccount.loanDocuments[].document",
+                                key:"loanAccount.documents[].document",
                                 type:"text",
                                 title:"Document Name",
                                 required: true,
+                                onChange:function(value,form,model){
+                                    appendPrefix(model, form);
+                                }
                             },
                             {
-                                key:"loanAccount.loanDocuments[].documentId",
+                                key:"loanAccount.documents[].documentId",
                                 title : "Upload",
                                 type:"file",
                                 required: true,
                                 category: "Loan",
-                                subCategory: "DOC3"
+                                subCategory: "DOC3",
                             },
                             
                         ]
@@ -670,12 +679,18 @@ define({
                         return false;
                     }
                     model.loanAccount.loanMitigants = [];
-
+                    
+                    if (model.loanAccount.documents.length != 0) {
+                        for (var i = 0; i < model.loanAccount.documents.length; i++) {
+                            model.loanAccount.loanDocuments.push(model.loanAccount.documents[i]);
+                        }
+                    }
                     //model.loanAccount.loanDocuments = [];
                     if (model.loanAccount.loanDocuments.length) {
                         for (var i = 0; i < model.loanAccount.loanDocuments.length; i++) {
                             model.loanAccount.loanDocuments[i].loanId = model.loanAccount.id;
                             model.loanAccount.loanDocuments[i].documentStatus = null;
+                            model.loanAccount.loanDocuments[i].version = 0;
                         }
                     }
                     console.log(_.cloneDeep(model.loanAccount));

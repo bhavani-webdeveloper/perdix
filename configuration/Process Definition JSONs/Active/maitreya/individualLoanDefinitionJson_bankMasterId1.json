@@ -4043,7 +4043,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "DocumentVerification","LoanBooking", "Completed","DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation"
+                        "DocumentVerification","LoanBooking", "Completed","DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation","RCU"
                      ]
                   },
                   "document":{
@@ -4052,7 +4052,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "DocumentVerification", "LoanBooking","Completed","DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation"
+                        "DocumentVerification", "LoanBooking","Completed","DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation","RCU"
                      ]
                   },
                   "remarks":{
@@ -4061,7 +4061,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "DocumentVerification","LoanBooking","Completed","LinkedAccountVerification"
+                        "DocumentVerification","LoanBooking","Completed","LinkedAccountVerification","RCU"
                      ]
                   },
                   "documentStatus":{
@@ -4070,7 +4070,7 @@
                     "minLength":1,
                     "maxLength":100,
                     "captureStages":[
-                       "LoanBooking","LinkedAccountVerification"
+                       "LoanBooking","LinkedAccountVerification","RCU"
                     ]
                   },
                   "rejectReason":{
