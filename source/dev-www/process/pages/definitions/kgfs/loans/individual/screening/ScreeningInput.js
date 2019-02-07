@@ -232,8 +232,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         });
                                     }
                                 }
-                               
-
                                 $this.bundlePages.push({
                                     pageClass: 'loan-request',
                                     model: {
