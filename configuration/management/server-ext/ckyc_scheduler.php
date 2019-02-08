@@ -130,18 +130,18 @@ Class Ckyc {
         'PermanentCKYCAddType' => '01',
         'PermanentCountry' => 'IN',
         'PermanentPin' => '@pincode',
-        'PermanentAddressLine1' => function($c) { return Cky::address_split($c,'permanent',50, 0); },
-        'PermanentAddressLine2' => function($c) { return Ckyc::address_split($c, 'permanent',50, 1); },
-        'PermanentAddressLine3' => function($c) { return Ckyc::address_split($c,'permanent',50, 2); },
+        'PermanentAddressLine1' => function($c) { return Ckyc::address_split($c,'permanent',55, 0); },
+        'PermanentAddressLine2' => function($c) { return Ckyc::address_split($c,'permanent',55, 1); },
+        'PermanentAddressLine3' => function($c) { return Ckyc::address_split($c,'permanent',55, 2); },
         'PermanentDistrict' => '',
         'PermanentCity' => '@village_name',
         'PermanentState' => '',
         'PermanentAddressProof' => function($c) { return Ckyc::$p2c_address_proof[$c->address_proof]; },
         'CorrespondenceGlobalCountry' => 'IN',
         'CorrespondenceGlobalPin' => '@pincode',
-        'CorrespondenceGlobalAddressLine1' => function($c) { return join(',', array_filter([$c->door_no,$c->street,$c->post_office,$c->landmark,$c->locality,$c->district,$c->state])); },
-        'CorrespondenceGlobalAddressLine2' => '',
-        'CorrespondenceGlobalAddressLine3' => '',
+        'CorrespondenceGlobalAddressLine1' => function($c) { return Ckyc::address_split($c,'mailing',55, 0); },
+        'CorrespondenceGlobalAddressLine2' => function($c) { return Ckyc::address_split($c,'mailing',55, 1); },
+        'CorrespondenceGlobalAddressLine3' => function($c) { return Ckyc::address_split($c,'mailing',55, 2); },
         'CorrespondenceGlobalDistrict' => '',
         'CorrespondenceGlobalCity' => '@village_name',
         'CorrespondenceGlobalState' => '',
@@ -309,7 +309,8 @@ function download_customer_file($customer_id, $file_name, $file_id) {
         $extension = "";
         try {
             $temp_file_name = DB::table('file_info')->where('file_id', $file_id)->first();
-            $extension = end((explode('.', $temp_file_name->name)));
+            $temp_explode = explode('.', $temp_file_name->name);
+            $extension = end($temp_explode);
         } catch (Exception $e) {}
         if (!empty($extension)) {
             $extension = '.'.$extension;

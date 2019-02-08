@@ -90,6 +90,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         coB.relation = 'Co-Applicant';
                         coB.urn = coB.coBorrowerUrnNo;
                         coB.customerId = coB.customerId;
+                        model.loanAccount.coBorrowerUrnNo = coB.coBorrowerUrnNo;
                         model.loanAccount.loanCustomerRelations.push(coB);
                     }
                 }
