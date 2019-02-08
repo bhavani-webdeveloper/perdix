@@ -649,7 +649,7 @@ irf.commons.service('irfPrinter',["$log","PageHelper","Utils","irfSimpleModal",f
 	self.printPreview = function(printData){
 		self.data = printData;
 		if (Utils.isCordova && self.data.thermalReceipt) {
-			self.thermalReceipt = generateThermelPrint(data.thermalReceipt);
+			self.thermalReceipt = generateThermelPrint(self.data.thermalReceipt);
 			self.previewHtml = '<div class="web-print-wrapper">'  +self.webPrintStyle+ self.thermalReceipt.html + '</div>'
 		} else if (self.data.paperReceipt) {
 			self.previewHtml = '<div class="web-print-wrapper">' +self.webPrintStyle+ printData.paperReceipt + '</div>'
