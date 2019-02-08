@@ -236,6 +236,28 @@ define({
           return Math.ceil(x);
         }
 
+        documentArrayFormation = function(model) {
+            if (_.hasIn(model.loanAccount, 'loanDocuments') && _.isArray(model.loanAccount.loanDocuments)){
+                model.loanAccount.documents = [];
+                _.filter(model.loanAccount.loanDocuments, function(doc) { 
+                    if(_.includes(doc.remarks, 'RCUStageDocuments-') == true) {
+                        model.loanAccount.documents.push(doc)
+                    }
+                });
+              
+                for(var j=0;j <model.loanAccount.loanDocuments.length; j++) {
+                    if(_.includes(model.loanAccount.loanDocuments[j].remarks, 'RCUStageDocuments-') == true) {
+                        model.loanAccount.loanDocuments.splice(j,1);
+                    }
+                }
+            }
+            if(model.loanAccount.noOfGuarantersRequired <= 0) {
+                model.loanAccount.isGuarantorRequired = "NO";
+            } else {
+                model.loanAccount.isGuarantorRequired = "YES";
+            }
+        }
+
 
         return {
             "type": "schema-form",
@@ -253,7 +275,7 @@ define({
                 model.mitigantsChanged=0;
                 model.loanMitigants= model.loanAccount.loanMitigants;
                 model.expectedTurnoverObj = {};
-               
+                documentArrayFormation(model);
             /*Asset details*/
                 if (model.loanAccount.collateral.length != 0) {
                     model.asset_details = [];
@@ -299,11 +321,6 @@ define({
                     $log.info("loan request Individual/find api failure" + err);
                 });
              }
-            if(model.loanAccount.noOfGuarantersRequired <= 0) {
-                model.loanAccount.isGuarantorRequired = "NO";
-            } else {
-                model.loanAccount.isGuarantorRequired = "YES";
-            }
 
         },
         form: [{
@@ -612,7 +629,6 @@ define({
                     "startEmpty": true,
                     "title": "LOAN_DOCUMENT",
                     "titleExpr": "model.loanAccount.loanDocuments[arrayIndex].document",
-                    condition: "model.currentStage === 'ApplicationReview' || model.currentStage === 'Scrutiny'",
                     "items": [
                         {
                             "key": "loanAccount.loanDocuments[].document",
@@ -637,31 +653,6 @@ define({
                         // }
                     ]
                 },
-                {		
-                    "key": "loanAccount.loanDocuments",		
-                    "type": "array",	
-                    "view": "fixed",	
-                    "title": "Documents",	
-                    "readonly": true,
-                    condition: "(model.currentStage !== 'ApplicationReview' || model.currentStage !== 'Scrutiny') && loanAccount.loanDocuments.length != 0",
-                    //startEmpty: true,		
-                    "items": [		
-                    {		
-                        key:"loanAccount.loanDocuments[].document",		
-                        type:"text",		
-                        title:"Document Name",		
-                        required: true,		
-                    },		
-                    {		
-                        key:"loanAccount.loanDocuments[].documentId",		
-                        title : "Upload",		
-                        type:"file",		
-                        required: true,		
-                        category: "Loan",		
-                        subCategory: "DOC3",
-                    }		
-                    ]		
-                }
             ]
 
         }, {
@@ -831,38 +822,37 @@ define({
                         }                            
                     }]
         },
-        // {
+        {
 
-        //     "type": "box",		
-        //     "colClass": "col-sm-12",		
-        //     "readonly": true,		
-        //     "overrideType": "default-view",		
-        //     condition: "model.currentStage == 'FieldAppraisalReview'",		
-        //     "title": "View Documents",		
-        //     "items": [  {		
-        //         "key": "loanAccount.loanDocuments",		
-        //         "type": "array",		
-        //         "title": "Documents",	
-        //         condition: "model.loanAccount.loanDocuments[arrayIndex].remarks.includes('RCUStageDocuments-') == true",
-        //         //startEmpty: true,		
-        //         "items": [		
-        //         {		
-        //             key:"loanAccount.loanDocuments[].document",		
-        //             type:"text",		
-        //             title:"Document Name",		
-        //             required: true,		
-        //         },		
-        //         {		
-        //             key:"loanAccount.loanDocuments[].documentId",		
-        //             title : "Upload",		
-        //             type:"file",		
-        //             required: true,		
-        //             category: "Loan",		
-        //             subCategory: "DOC3",
-        //         }		
-        //         ]		
-        //         },]		
-        // }, 
+            "type": "box",		
+            "colClass": "col-sm-12",		
+            "readonly": true,		
+            "overrideType": "default-view",		
+            condition: "model.currentStage !== 'ApplicationReview' && model.currentStage !== 'Scrutiny' && model.loanAccount.documents.length != 0",		
+            "title": "RCU Documents",		
+            "items": [  {		
+                "key": "loanAccount.documents",		
+                "type": "array",		
+                "title": "Documents",	
+                //startEmpty: true,		
+                "items": [		
+                {		
+                    key:"loanAccount.documents[].document",		
+                    type:"text",		
+                    title:"Document Name",		
+                    required: true,		
+                },		
+                {		
+                    key:"loanAccount.documents[].documentId",		
+                    title : "Upload",		
+                    type:"file",		
+                    required: true,		
+                    category: "Loan",		
+                    subCategory: "DOC3",
+                }		
+                ]		
+                },]		
+        }, 
         {
             "type": "box",
             "colClass": "col-sm-12",
@@ -1183,7 +1173,12 @@ define({
                         return;
                     }
                     
-                
+                    if (_.hasIn(model.loanAccount, 'documents') && _.isArray(model.loanAccount.documents)){
+                        for(var k=0;k <model.loanAccount.documents.length; k++) {
+                            model.loanAccount.loanDocuments.push(model.loanAccount.documents[k]);
+                        }
+                    }
+                    
                     model.mitigantsChanged= (model.loanMitigants.length== model.loanAccount.loanMitigants.length)?0:1;
                    // loanMitigants= [];
 
@@ -1226,7 +1221,7 @@ define({
                                                 }
                                             }
                                         }
-
+                                        documentArrayFormation(model);
                                         BundleManager.pushEvent('new-loan', model._bundlePageObj, {
                                             loanAccount: model.loanAccount
                                         });
@@ -1260,6 +1255,11 @@ define({
                         PageHelper.showProgress("update-loan", "Reject Reason is mandatory");
                         return false;
                     }
+                    if (_.hasIn(model.loanAccount, 'documents') && _.isArray(model.loanAccount.documents)){
+                        for(var k=0;k <model.loanAccount.documents.length; k++) {
+                            model.loanAccount.loanDocuments.push(model.loanAccount.documents[k]);
+                        }
+                    }
                     Utils.confirm("Are You Sure?").then(function() {
 
                         var reqData = {
@@ -1292,7 +1292,11 @@ define({
                     if (!preLoanSaveOrProceed(model)){
                     return;
                 }
-
+                    if (_.hasIn(model.loanAccount, 'documents') && _.isArray(model.loanAccount.documents)){
+                        for(var k=0;k <model.loanAccount.documents.length; k++) {
+                            model.loanAccount.loanDocuments.push(model.loanAccount.documents[k]);
+                        }
+                    }
                     if (model.review.remarks == null || model.review.remarks == "") {
                         PageHelper.showProgress("update-loan", "Remarks is mandatory");
                         return false;
@@ -1339,6 +1343,11 @@ define({
                      if (!preLoanSaveOrProceed(model)){
                          return;
                      }
+                    if (_.hasIn(model.loanAccount, 'documents') && _.isArray(model.loanAccount.documents)){
+                        for(var k=0;k <model.loanAccount.documents.length; k++) {
+                            model.loanAccount.loanDocuments.push(model.loanAccount.documents[k]);
+                        }
+                    }
                     Utils.confirm("Are You Sure?").then(function() {
 
                         var reqData = {
@@ -1419,6 +1428,11 @@ define({
                     var dedupeCustomerIdArray = [];
                     if (!validateForm(formCtrl)){
                         return;
+                    }
+                    if (_.hasIn(model.loanAccount, 'documents') && _.isArray(model.loanAccount.documents)){
+                        for(var k=0;k <model.loanAccount.documents.length; k++) {
+                            model.loanAccount.loanDocuments.push(model.loanAccount.documents[k]);
+                        }
                     }
                     /*if (!validateForm(formCtrl)){
                     return;
