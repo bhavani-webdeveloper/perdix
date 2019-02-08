@@ -96,45 +96,57 @@ define([],function(){
 
             };
 
-        var computeEMI = function(model){
+            var computeEMI = function(model){
 
-            // Get the user's input from the form. Assume it is all valid.
-            // Convert interest from a percentage to a decimal, and convert from
-            // an annual rate to a monthly rate. Convert payment period in years
-            // to the number of monthly payments.
+                // Get the user's input from the form. Assume it is all valid.
+                // Convert interest from a percentage to a decimal, and convert from
+                // an annual rate to a monthly rate. Convert payment period in years
+                // to the number of monthly payments.
 
-            if(model.loanAccount.loanAmount == '' || model.loanAccount.interestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenure == '')
-                return;
-            var principal = model.loanAccount.loanAmount;
-            var interest = model.loanAccount.interestRate / 100 / 12;
-            var payments;
-            if (model.loanAccount.frequencyRequested == 'Yearly')
-                payments = model.loanAccount.tenure * 12;
-            else if (model.loanAccount.frequencyRequested == 'Monthly')
-                payments = model.loanAccount.tenure;
+                if(model.loanAccount.loanAmount == '' || model.loanAccount.interestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenure == '')
+                    return;
+                var principal = model.loanAccount.loanAmount;
+                var interest = model.loanAccount.interestRate / 100 / 12;
+                var payments;
+                if (model.loanAccount.frequencyRequested == 'Yearly')
+                    payments = model.loanAccount.tenure * 12;
+                else if (model.loanAccount.frequencyRequested == 'Monthly')
+                    payments = model.loanAccount.tenure;
 
-            // Now compute the monthly payment figure, using esoteric math.
-            var x = Math.pow(1 + interest, payments);
-            var monthly = (principal*x*interest)/(x-1);
-            // Check that the result is a finite number. If so, display the results.
-            if (!isNaN(monthly) &&
-                (monthly != Number.POSITIVE_INFINITY) &&
-                (monthly != Number.NEGATIVE_INFINITY)) {
+                // Now compute the monthly payment figure, using esoteric math.
+                var x = Math.pow(1 + interest, payments);
+                var monthly = (principal*x*interest)/(x-1);
+                // Check that the result is a finite number. If so, display the results.
+                if (!isNaN(monthly) &&
+                    (monthly != Number.POSITIVE_INFINITY) &&
+                    (monthly != Number.NEGATIVE_INFINITY)) {
 
-                model.loanAccount.emiRequested = round(monthly);
-                //document.loandata.total.value = round(monthly * payments);
-                //document.loandata.totalinterest.value = round((monthly * payments) - principal);
+                    model.loanAccount.emiRequested = round(monthly);
+                    //document.loandata.total.value = round(monthly * payments);
+                    //document.loandata.totalinterest.value = round((monthly * payments) - principal);
+                }
+                // Otherwise, the user's input was probably invalid, so don't
+                // display anything.
+                else {
+                    model.loanAccount.emiRequested  = "";
+                    //document.loandata.total.value = "";
+                    //document.loandata.totalinterest.value = "";
+                }
+
+            };
+                // This simple method rounds a number to two decimal places.
+             var clearAll = function(baseKey,listOfKeys,model){
+                if(listOfKeys != null && listOfKeys.length > 0){
+                    for(var i =0 ;i<listOfKeys.length;i++){
+                        if(typeof model[baseKey][listOfKeys[i]] !="undefined"){
+                                model[baseKey][listOfKeys[i]] = null;
+                        }
+                    }
+                }
+                else{
+                    model[baseKey] = {};
+                }
             }
-            // Otherwise, the user's input was probably invalid, so don't
-            // display anything.
-            else {
-                model.loanAccount.emiRequested  = "";
-                //document.loandata.total.value = "";
-                //document.loandata.totalinterest.value = "";
-            }
-
-        };
-            // This simple method rounds a number to two decimal places.
                 function round(x) {
                   return Math.ceil(x);
                 }
@@ -220,18 +232,92 @@ define([],function(){
                             "title": "NOMINAL_RATE",
                             "readonly": true
                         },
-                        "PreliminaryInformation.partner": {
-                            "required": true
-                        },
                         "PreliminaryInformation.productType": {
-                            "required": true
+                        "required": true,
+                        "enumCode": "product_type",
+                        "onChange": function(valueObj,context,model){
+                                clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
+                                model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
+                                if(valueObj == "JEWEL"){
+                                    getGoldRate(model);
+                                    model.loanAccount.jewelLoanDetails = {};
+                                    model.loanAccount.jewelLoanDetails.encoreClosed = false;
+                                    model.loanAccount.jewelLoanDetails.jewelPouchLocationType = "BRANCH";
+                                }
+                                else{
+                                    model.loanAccount.jewelLoanDetails = {};
+                                }
+                            }
+                        },
+                        "PreliminaryInformation.partner": {
+                            "enumCode": "loan_partner",
+                            "onChange": function(valueObj,context,model){
+                                clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
+                                model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
+                                //clearAll('additions',['tenurePlaceHolder','interestPlaceHolder','amountPlaceHolder'],model)
+                            },
                         },
                         "PreliminaryInformation.frequency": {
-                            "required": true
+                            "required":true,
+                            "enumCode": "loan_product_frequency",
+                            "onChange": function(valueObj,context,model){
+                                clearAll('loanAccount',['productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
+                                model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
+                                //clearAll('additions',['tenurePlaceHolder','interestPlaceHolder','amountPlaceHolder'],model)
+                            }
                         },
                         "PreliminaryInformation.loanProduct": {
-                            "required": true
-                        },
+                            bindMap: {
+                                "Partner": "loanAccount.partnerCode",
+                                // "ProductCategory": "loanAccount.productCategory",
+                                "Frequency": "loanAccount.frequency",
+                                "loanType": "loanAccount.loanType"
+                            },
+                            autolov: true,
+                            required: true,
+                            searchHelper: formHelper,
+                            search: function (inputModel, form, model, context) {
+                                var deferred = $q.defer();
+                                Queries.getLoanProductDetails(model.loanAccount.loanType, model.loanAccount.partnerCode, model.loanAccount.frequency).then(function(resp){
+                                    for(var i = resp.body.length-1; i>= 0; i--){
+                                        var date = moment(resp.body[i].expiry_date,"YYYY-MM-DD");
+                                        var currentDate = moment(Utils.getCurrentDate(),"YYYY-MM-DD");
+                                        if( date < currentDate)
+                                            resp.body.splice(i,1);
+                                    }
+                                    deferred.resolve(resp);
+                                }),function(err){
+                                    deferred.reject(err);
+                                };
+                                return deferred.promise;
+                            },
+                            onSelect: function (valueObj, model, context) {
+                                clearAll("loanAccount",["loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
+                                model.loanAccount.productCode = valueObj.productCode;
+                                // model.additions.tenurePlaceHolder = valueObj.tenure_from == valueObj.tenure_to ? valueObj.tenure_from : valueObj.tenure_from + '-' + valueObj.tenure_to;
+                                // model.additions.amountPlaceHolder = valueObj.amount_from == valueObj.amount_to ? valueObj.amount_from : valueObj.amount_from + '-' + valueObj.amount_to;
+                                // model.additions.interestPlaceHolder = valueObj.min_interest_rate == valueObj.max_interest_rate ? valueObj.min_interest_rate : valueObj.min_interest_rate + '-' + valueObj.max_interest_rate;
+                                // if(valueObj.tenure_from == valueObj.tenure_to){
+                                //     model.additions.tenurePlaceHolder = valueObj.tenure_from
+                                // }
+                                // if(valueObj.amount_from == valueObj.amount_to){
+                                //     model.additions.amountPlaceHolder = valueObj.amount_from;
+                                // }
+                                model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = valueObj.product_name;
+                                // model.additions.number_of_guarantors = valueObj.number_of_guarantors ? valueObj.number_of_guarantors : 0;
+                                // model.additions.co_borrower_required = valueObj.co_borrower_required ? 1 : 0;
+                            },
+                            getListDisplayItem: function (item, index) {
+                                return [
+                                    item.productCode, 
+                                    item.product_name
+                                ];
+                            },
+                            onChange: function (value, form, model) {
+                                console.log("Test");
+                            //    clearAll("loanAccount",["loanAmountRequested","requestedTenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
+                            },
+                        },                        
                         "PreliminaryInformation.comfortableEMI": {
                             "required": true
                         },
@@ -309,6 +395,7 @@ define([],function(){
                     "PreliminaryInformation.productType",
                     "PreliminaryInformation.frequency",
                     "PreliminaryInformation.loanProduct",
+                    "PreliminaryInformation.productName",
                     "PreliminaryInformation.loanPurpose1",
                     "PreliminaryInformation.loanPurpose2",
                     "PreliminaryInformation.loanAmountRequested",
@@ -453,22 +540,29 @@ define([],function(){
                                         "key":"loanAccount.loanType",
                                         "title": "PRODUCT_TYPE",
                                         "type": "select",
-                                        "enumCode":"booking_loan_type",
+                                        "enumCode":"product_type",
 
                                         "orderNo": 9
                                     },
                                     "frequency": {
                                         "key":"loanAccount.frequency",
                                         "title": "FREQUENCY",
-                                        "type": "string",
+                                        "type": "select",
                                         "orderNo": 9
                                     },
                                     "loanProduct": {
                                         "key":"loanAccount.productCode",
                                         "title": "LOAN_PRODUCT",
-                                        "type": "select",
+                                        "type": "lov",
                                         "enumCode":"loan_product",
-                                        "orderNo": 9
+                                        "orderNo": 10
+                                    },
+                                    "productName":{
+                                        "title": "PRODUCT_NAME",
+                                        "readonly": true,
+                                        "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6",
+                                        "orderNo": 11
+                                            
                                     },
                                     "comfortableEMI": {
                                         "key":"loanAccount.estimatedEmi",

@@ -2112,13 +2112,25 @@ define([],function(){
                             model.loanAccount.psychometricCompleted = "NO";
  
                         }
-                       
+                        model.loanAccount.noOfGuarantersRequired = -1;
+                        var completeLead = false;
+                        if (!_.hasIn(model.loanAccount, "id")){
+                            completeLead = true;
+                        }
                         PageHelper.showProgress('loan-process', 'Updating Loan');
                         model.loanProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
+                                if (completeLead===true && _.hasIn(model, "lead.id")){
+                                    var reqData = {
+                                        lead: _.cloneDeep(model.lead),
+                                        stage: "Completed"
+                                    }
+                                    reqData.lead.leadStatus = "Complete";
+                                    LeadHelper.proceedData(reqData)
+                                }
                                 BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount});                                   
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
