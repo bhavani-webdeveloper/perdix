@@ -3222,7 +3222,7 @@
                       "title":"Collateral Type",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
                       ],
                       "refCodeCategory":"collateral_type"
                    },
@@ -3662,7 +3662,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                        "ScreeningReview","ApplicationReview","FieldAppraisalReview","ZonalRiskReview","CentralRiskReview","CreditCommitteeReview","Rejected"
+                        "Screening","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","ApplicationReview","FieldAppraisalReview","ZonalRiskReview","CentralRiskReview","CreditCommitteeReview","Rejected"
                       ]
                    },
                    "mitigant":{
@@ -3671,7 +3671,7 @@
                       "minimum":1,
                       "maximum":100000000,
                       "captureStages":[
-                         "ScreeningReview","ApplicationReview","FieldAppraisalReview","ZonalRiskReview", "CentralRiskReview","CreditCommitteeReview","Rejected"
+                         "Screening","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","ApplicationReview","FieldAppraisalReview","ZonalRiskReview", "CentralRiskReview","CreditCommitteeReview","Rejected"
                       ]
                    },
                    "riskScore":{
@@ -3680,7 +3680,7 @@
                       "minimum":1,
                       "maximum":100000000,
                       "captureStages":[
-                         "ScreeningReview","ApplicationReview","FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview","CreditCommitteeReview","Rejected"
+                         "Screening","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","ApplicationReview","FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview","CreditCommitteeReview","Rejected"
                       ]
                    }
                 }
