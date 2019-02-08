@@ -1890,7 +1890,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         model.customer = model.enrolmentProcess.customer;
                    // }
                     /* End of setting data recieved from Bundle */
-        
+                    // set Age from DateOfBirth
+                    if (_.hasIn(model.customer, 'familyMembers') && _.isArray(model.customer.familyMembers)){
+                        if(model.customer.familyMembers.length != 0) {
+                            for(var i=0; i< model.customer.familyMembers.length; i++) {
+                                if(model.customer.familyMembers[i].dateOfBirth != null) {
+                                    model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                }
+                            }
+                        }
+                    }
                     /* Setting data for the form */
                     var branchId = SessionStore.getBranchId();
                     if(!model.customer){
