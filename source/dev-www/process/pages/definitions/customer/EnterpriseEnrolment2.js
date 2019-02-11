@@ -3159,6 +3159,20 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
                                     model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
                                     model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
+                                    priceCalculation(null, context, model);
+                                    if (model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice && model.customer.fixedAssetsMachinaries[context.arrayIndex].presentValue) {
+                                        if(model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice <=0 && model.customer.fixedAssetsMachinaries[context.arrayIndex].presentValue > 0) {
+                                            model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice = Math.round(model.customer.fixedAssetsMachinaries[context.arrayIndex].presentValue);
+                                        }                                        
+                                        else if(model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice > 0 && model.customer.fixedAssetsMachinaries[context.arrayIndex].presentValue <=0){
+                                            model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice = Math.round(model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice);
+                                        }                                        
+                                        else{
+                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice = Math.round(((model.customer.fixedAssetsMachinaries[context.arrayIndex].presentValue+model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice) /2)*100)/100;
+                                        }    
+                                    } else {
+                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice = null;
+                                    }
                                 }
                             }, 
                             {
@@ -3256,7 +3270,15 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 "onChange": function(modelValue, form, model) {
                                     priceCalculation(modelValue, form, model);
                                     if (model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice && model.customer.fixedAssetsMachinaries[form.arrayIndex].presentValue) {
-                                        model.customer.fixedAssetsMachinaries[form.arrayIndex].finalPrice = Math.round(((model.customer.fixedAssetsMachinaries[form.arrayIndex].presentValue+model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice) /2)*100)/100;
+                                        if(model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice <=0 && model.customer.fixedAssetsMachinaries[form.arrayIndex].presentValue > 0) {
+                                            model.customer.fixedAssetsMachinaries[form.arrayIndex].finalPrice = Math.round(model.customer.fixedAssetsMachinaries[form.arrayIndex].presentValue);
+                                        }                                        
+                                        else if(model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice > 0 && model.customer.fixedAssetsMachinaries[form.arrayIndex].presentValue <=0){
+                                            model.customer.fixedAssetsMachinaries[form.arrayIndex].finalPrice = Math.round(model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice);
+                                        }                                        
+                                        else{
+                                         model.customer.fixedAssetsMachinaries[form.arrayIndex].finalPrice = Math.round(((model.customer.fixedAssetsMachinaries[form.arrayIndex].presentValue+model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice) /2)*100)/100;
+                                        }    
                                     } else {
                                         model.customer.fixedAssetsMachinaries[form.arrayIndex].finalPrice = null;
                                     }
@@ -3273,6 +3295,19 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 },
                                 "onChange": function(modelValue, form, model) {
                                     priceCalculation(modelValue, form, model);
+                                    if (model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice && model.customer.fixedAssetsMachinaries[form.arrayIndex].presentValue) {
+                                        if(model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice <=0 && model.customer.fixedAssetsMachinaries[form.arrayIndex].presentValue > 0) {
+                                            model.customer.fixedAssetsMachinaries[form.arrayIndex].finalPrice = Math.round(model.customer.fixedAssetsMachinaries[form.arrayIndex].presentValue);
+                                        }                                        
+                                        else if(model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice > 0 && model.customer.fixedAssetsMachinaries[form.arrayIndex].presentValue <=0){
+                                            model.customer.fixedAssetsMachinaries[form.arrayIndex].finalPrice = Math.round(model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice);
+                                        }                                        
+                                        else{
+                                         model.customer.fixedAssetsMachinaries[form.arrayIndex].finalPrice = Math.round(((model.customer.fixedAssetsMachinaries[form.arrayIndex].presentValue+model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice) /2)*100)/100;
+                                        }    
+                                    } else {
+                                        model.customer.fixedAssetsMachinaries[form.arrayIndex].finalPrice = null;
+                                    }
                                 }
                             },    
                             {
@@ -3281,12 +3316,20 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 type: "amount",
                                 required: true,
                                 "onChange": function(modelValue, form, model) {
-                                        if (model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice && model.customer.fixedAssetsMachinaries[form.arrayIndex].presentValue) {
-                                            model.customer.fixedAssetsMachinaries[form.arrayIndex].finalPrice = Math.round(((model.customer.fixedAssetsMachinaries[form.arrayIndex].presentValue+model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice) /2)*100)/100;
-                                        } else {
-                                            model.customer.fixedAssetsMachinaries[form.arrayIndex].finalPrice = null;
-                                        }
+                                    if (model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice && model.customer.fixedAssetsMachinaries[form.arrayIndex].presentValue) {
+                                        if(model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice <=0 && model.customer.fixedAssetsMachinaries[form.arrayIndex].presentValue > 0) {
+                                            model.customer.fixedAssetsMachinaries[form.arrayIndex].finalPrice = Math.round(model.customer.fixedAssetsMachinaries[form.arrayIndex].presentValue);
+                                        }                                        
+                                        else if(model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice > 0 && model.customer.fixedAssetsMachinaries[form.arrayIndex].presentValue <=0){
+                                            model.customer.fixedAssetsMachinaries[form.arrayIndex].finalPrice = Math.round(model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice);
+                                        }                                        
+                                        else{
+                                         model.customer.fixedAssetsMachinaries[form.arrayIndex].finalPrice = Math.round(((model.customer.fixedAssetsMachinaries[form.arrayIndex].presentValue+model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice) /2)*100)/100;
+                                        }    
+                                    } else {
+                                        model.customer.fixedAssetsMachinaries[form.arrayIndex].finalPrice = null;
                                     }
+                                }
                             },
                             {
                                 key: "customer.fixedAssetsMachinaries[].depreciationPercentage",
