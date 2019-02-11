@@ -238,7 +238,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
 
                             if(model.loanAccount.loanDocuments && model.loanAccount.loanDocuments.length>0){
                                 for(documents of model.loanAccount.loanDocuments){
-                                    if(documents.document=='WAIVERAPPROVAL'){
+                                  if(documents.document=='WAIVERAPPROVAL'){
                                         model.loanAccount.waiverdocumentId= documents.documentId;
                                         model.loanAccount.waiverdocumentstatus= documents.documentStatus;
                                         model.loanAccount.waiverdocumentrejectReason=documents.rejectReason;
@@ -1156,7 +1156,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
 
                     if(model.siteCode != 'sambandh' && model.siteCode != 'saija'){
 
-                        if(model.siteCode != 'witfin') {
+                        if(model.siteCode != 'witfin' && model.siteCode != 'maitreya') {
                             if(model.postDatedTransactionNotAllowed) {
                                 if (customerSignatureDate.diff(cbsdate, "days") <0) {
                                     PageHelper.showProgress("loan-create", "Customer signature date should be greater than or equal to system date", 5000);
@@ -1205,7 +1205,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         }
                     }
                     else  {
-                        if(model.siteCode != 'witfin'){
+                        if(model.siteCode != 'witfin' && model.siteCode != 'maitreya'){
                             if (scheduledDisbursementDate.diff(customerSignatureDate,"days") <= 0){
                                 PageHelper.showProgress("loan-create","Scheduled disbursement date should be greater than Customer sign date",5000);
                                 return false;
