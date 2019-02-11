@@ -447,13 +447,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "orderNo": 605
                     },
                     "BuyerDetails": {
-                        "orderNo": 800
+                        "orderNo": 800,
+                        "condition":"model.currentStage == 'CreditAppraisal'",
                     },
                     "BuyerDetails.buyerDetails.paymentFrequency": {
                         "type": "text"
                     },
                     "SuppliersDeatils": {
-                        "orderNo": 820
+                        "orderNo": 820,
+                        "condition":"model.currentStage == 'CreditAppraisal'",
                     }
                 }
             }
@@ -525,6 +527,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "PreliminaryInformation": {
                         "type": "box",
+                        "condition":"model.currentStage == 'CreditAppraisal'",
                         "title": "PRELIMINARY_INFORMATION",
                         "items": {
                             "loanAmountRequested": {
@@ -566,6 +569,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EstimatedSales": {
                         "type": "box",
+                        "condition":"model.currentStage == 'CreditAppraisal'",
                         "title": "INITIALISE_ESTIMATE_OF_SALES",
                         "items": {
                             'initialEstimateWeeklySale': {
@@ -582,6 +586,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "DailySales": {
                         "type": "box",
+                        "condition":"model.currentStage == 'CreditAppraisal'",
                         "orderNo": 620,
                         colClass: "col-sm-12",
                         "title": "DAILY_SALES",
@@ -689,6 +694,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EnterpriseProductSale": {
                         "type": "box",
+                        "condition":"model.currentStage == 'CreditAppraisal'",
                         colClass: "col-sm-12",
                         "title": "Sales per product & Gross margin",
                         "orderNo": 640,
@@ -812,6 +818,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "AnnualSales": {
                         "type": "box",
+                        "condition":"model.currentStage == 'CreditAppraisal'",
                         colClass: "col-sm-12",
                         "title": "ANNUAL_BUSINESS_CYCLE",
                         "orderNo": 650,
@@ -969,6 +976,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "MonthlySalesCalculate": {
                         "type": "box",
+                        "condition":"model.currentStage == 'CreditAppraisal'",
                         colClass: "col-sm-12",
                         "title": "MONTHLY_SALES_CALCULATE",
                         "orderNo": 660,
@@ -996,6 +1004,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "MonthlyBusinessExpense": {
                         "type": "box",
                         colClass: "col-sm-12",
+                        "condition":"model.currentStage == 'CreditAppraisal'",
                         "title": "BUSINESS_EXPENSE_MONTHLY",
                         "orderNo": 670,
                         "items": {
@@ -1054,6 +1063,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "NetBusinessIncome": {
                         "type": "box",
                         "title": "NET_BUSINESS_INCOME",
+                        "condition":"model.currentStage == 'CreditAppraisal'",
                         "orderNo": 680,
                         "items": {
                             'netBusinessIncomeGrossMargin': {
@@ -1068,6 +1078,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "type": "box",
                         colClass: "col-sm-12",
                         "title": "ADDITIONAL_INCOME",
+                        "condition":"model.currentStage == 'CreditAppraisal'",
                         "orderNo": 690,
                         "items": {
                             "otherBusinessIncomes": {
@@ -1128,6 +1139,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         colClass: "col-sm-12",
                         "title": "PERSONAL_EXPENSES",
                         "orderNo": 710,
+                        "condition":"model.currentStage == 'CreditAppraisal'",
                         "items": {
                             "personalExpenses": {
                                 key: "customer.personalExpenses",
@@ -1181,6 +1193,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "type": "box",
                         colClass: "col-sm-12",
                         "title": "LIABILITY_REPAYMENT",
+                        "condition":"model.currentStage == 'CreditAppraisal'",
                         "orderNo": 730,
                         "items": {
                             "liabilities": {
@@ -1332,6 +1345,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "type": "box",
                         // colClass: "col-sm-12",
                         "title": 'TOTAL_MONTHLY_SURPLUS',
+                        "condition":"model.currentStage == 'CreditAppraisal'",
                         "orderNo": 750,
                         "items": {
                             'totalMonthlySurplus': {
@@ -1600,6 +1614,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     /* Setting data for the form */
                     model.loanAccount = model.loanProcess.loanAccount;
                     model.customer = model.enrolmentProcess.customer;
+                    model.customer.customerType = "Enterprise";
                     computeEstimatedEmi(model);
                     model.customer.customerBranchId = SessionStore.getCurrentBranch().branchId;
                     model.customer.branchName = SessionStore.getCurrentBranch().branchName;
@@ -1620,6 +1635,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     model.customer['personalExpenses'] = []
                     model.customer['totalMonthlySurplus'] = '';
                     model.customer['debtServiceRatio'] = '';
+                    model.customer.enterprise = {
+                        
+                    }
 
                     if (model.customer.expenditures.length != 0) {
                         _.forEach(model.customer.expenditures, function (expenditure, index) {
@@ -1884,7 +1902,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         _.forEach(model.customer.enterpriseDailySale, function (dailySale) {
                             for (const key of Object.keys(dailySale)) {
                                 dailySales = {}
-                                if (dailySale[key] != 'undefined' && key != 'salesType' && dailySale[key] != 'total') {
+                                if (dailySale[key] != 'undefined' && key != 'salesType' && key != 'total') {
                                     dailySales['salesType'] = dailySale['salesType'];
                                     dailySales['day'] = key;
                                     dailySales['totalSales'] = dailySale[key]
