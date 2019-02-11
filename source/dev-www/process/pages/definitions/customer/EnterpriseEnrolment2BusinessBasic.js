@@ -18,18 +18,18 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
         return true;
     }
     function priceCalculation(modelValue, form, model) {
-        if (model.customer.fixedAssetsMachinaries[model.arrayIndex].purchasePrice &&
-         model.customer.fixedAssetsMachinaries[model.arrayIndex].machinePurchasedYear &&
-         model.customer.fixedAssetsMachinaries[model.arrayIndex].depreciationPercentage) {
-            var machineCost = model.customer.fixedAssetsMachinaries[model.arrayIndex].purchasePrice;
-            var depreciationPercentage = model.customer.fixedAssetsMachinaries[model.arrayIndex].depreciationPercentage;
-            var amount = machineCost - (machineCost*Math.ceil(new Date().getFullYear() - model.customer.fixedAssetsMachinaries[model.arrayIndex].machinePurchasedYear)*(depreciationPercentage/100));
+        if (model.customer.fixedAssetsMachinaries[form.arrayIndex].purchasePrice &&
+         model.customer.fixedAssetsMachinaries[form.arrayIndex].machinePurchasedYear &&
+         model.customer.fixedAssetsMachinaries[form.arrayIndex].depreciationPercentage) {
+            var machineCost = model.customer.fixedAssetsMachinaries[form.arrayIndex].purchasePrice;
+            var depreciationPercentage = model.customer.fixedAssetsMachinaries[form.arrayIndex].depreciationPercentage;
+            var amount = machineCost - (machineCost*Math.ceil(new Date().getFullYear() - model.customer.fixedAssetsMachinaries[form.arrayIndex].machinePurchasedYear)*(depreciationPercentage/100));
             if(amount < (machineCost*0.1)){
                 amount = machineCost*0.1;
             }
-            model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice = Math.round(amount*100)/100;
+            model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice = Math.round(amount*100)/100;
         } else {
-            model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice = null;
+            model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice = null;
         }
     }
     function financialSave(model, formCtrl, formName){
@@ -1450,42 +1450,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 key:"customer.fixedAssetsMachinaries[].machineDescription",
                                 title:"MACHINE_DESCRIPTION",
                                 required: true,
-                                type: "string",
-                            //     autolov: true,
-                            //     lovonly:true,
-                            //     searchHelper: formHelper,
-                                
-                            //      outputMap: {
-                                
-                            //     "machineDescription": "customer.fixedAssetsMachinaries[arrayIndex].machineDescription"
-                            //      },
-                            //     initialize: function(inputModel) {
-                            //         $log.warn('in machine description initialize');
-                            //         $log.info(inputModel);
-                            //     },
-                            //     search: function(inputModel, form, model) {
-                                    
-                            //         return Queries.searchMachineDescription(
-                            //         );
-                            //     },
-                            //     getListDisplayItem: function(item, index) {
-                            //     return [
-                            //         item.machineDescription
-                            //     ];
-                            // },
-                            //     onSelect: function(result, model, context) {
-                            //        if(model.customer.fixedAssetsMachinaries[context.arrayIndex].manufacturerName){
-                            //             model.customer.fixedAssetsMachinaries[context.arrayIndex].manufacturerName=null;                                  
-                            //             model.customer.fixedAssetsMachinaries[context.arrayIndex].machineType=null;                                  
-                            //             model.customer.fixedAssetsMachinaries[context.arrayIndex].workProcess=null;                                  
-                            //             model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
-                            //             model.customer.fixedAssetsMachinaries[context.arrayIndex].depreciationPercentage=null;
-                            //             model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
-                            //             model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
-
-                            //        }
-                            //        $log.info(result);
-                            //     }
+                                type: "string"
                             },
                             {
                                 key: "customer.fixedAssetsMachinaries[].manufacturerName",
@@ -1494,11 +1459,10 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 required:true,
                                 inputMap: {
                                     "machineName": {
-                                    "key": "customer.fixedAssetsMachinaries[].manufacturerName",
-                                    "title": "MANUFACTURER_NAME"
+                                        "key": "customer.fixedAssetsMachinaries[].manufacturerName",
+                                        "title": "MANUFACTURER_NAME"
+                                    },
                                 },
-
-                            },
                                 outputMap: {
                                      "machineName": "customer.fixedAssetsMachinaries[arrayIndex].manufacturerName",
                                 },
@@ -1513,41 +1477,16 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     return [
                                         item.machineName
                                     ];
+                                },
+                                onSelect: function(result, model, context) {                             
+                                    model.customer.fixedAssetsMachinaries[context.arrayIndex].machineType=null;                                  
+                                    model.customer.fixedAssetsMachinaries[context.arrayIndex].workProcess=null;                                  
+                                    model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
+                                    model.customer.fixedAssetsMachinaries[context.arrayIndex].depreciationPercentage=null;
+                                    model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
+                                    model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
                                 }
                             },
-
-                            // {
-                            //     key:"customer.fixedAssetsMachinaries[].manufacturerName",
-                            //     title:"MANUFACTURER_NAME",
-                            //     type: "lov",
-                            //     autolov: true,
-                            //     lovonly:true,
-                            //     searchHelper: formHelper,
-                                
-                            //     outputMap: {
-                            //          "machineName": "customer.fixedAssetsMachinaries[arrayIndex].manufacturerName"
-                            //      },
-                            //     search: function(inputModel, form, model) {
-                                    
-                            //         return Queries.searchMachineName(model.customer.fixedAssetsMachinaries[model.arrayIndex].machineDescription);
-                            //     },
-                            //     getListDisplayItem: function(item, index) {
-                            //         return [
-                            //             item.machineName
-                            //         ];
-                            //     },
-                            //     onSelect: function(result, model, context) {
-                            //        if(model.customer.fixedAssetsMachinaries[context.arrayIndex].machineType){
-                            //             model.customer.fixedAssetsMachinaries[context.arrayIndex].machineType=null;                                  
-                            //             model.customer.fixedAssetsMachinaries[context.arrayIndex].workProcess=null;                                  
-                            //             model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
-                            //             model.customer.fixedAssetsMachinaries[context.arrayIndex].depreciationPercentage=null;
-                            //             model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
-                            //             model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
-                            //        }
-                            //         $log.info(result);
-                            //     }
-                            // }, 
                             {
                                 key:"customer.fixedAssetsMachinaries[].machineType",
                                 title:"MACHINE_TYPE",
@@ -1560,10 +1499,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                      "machineType": "customer.fixedAssetsMachinaries[arrayIndex].machineType",
                                      "depreciationPercentage": "customer.fixedAssetsMachinaries[arrayIndex].depreciationPercentage"
                                  },
-                                search: function(inputModel, form, model) {
-                                    
-                                    return Queries.searchMachineType(
-                                        model.customer.fixedAssetsMachinaries[model.arrayIndex].manufacturerName);
+                                search: function(inputModel, form, model, locals) {
+                                    return Queries.searchMachineType(model.customer.fixedAssetsMachinaries[locals.arrayIndex].manufacturerName);
                                 },
                                 getListDisplayItem: function(item, index) {
                                     return [
@@ -1571,16 +1508,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                         item.depreciationPercentage
                                     ];
                                 },
-                                onSelect: function(result, model, context) {
-                                    
-                                   if(model.customer.fixedAssetsMachinaries[context.arrayIndex].workProcess){                                                                         
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].workProcess=null;                                  
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
-                                       
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
-                                   }
-                                    $log.info(result);
+                                onSelect: function(result, model, context) {                                                                     
+                                    model.customer.fixedAssetsMachinaries[context.arrayIndex].workProcess=null;                                  
+                                    model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
+                                    model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
+                                    model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
                                 }
                             }, 
                             {
@@ -1594,11 +1526,11 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 outputMap: {
                                      "workProcess": "customer.fixedAssetsMachinaries[arrayIndex].workProcess"
                                  },
-                                search: function(inputModel, form, model) {
+                                search: function(inputModel, form, model, locals) {
                                     
                                     return Queries.searchMachineWorkProcess(
-                                        model.customer.fixedAssetsMachinaries[model.arrayIndex].manufacturerName,
-                                        model.customer.fixedAssetsMachinaries[model.arrayIndex].machineType);
+                                        model.customer.fixedAssetsMachinaries[locals.arrayIndex].manufacturerName,
+                                        model.customer.fixedAssetsMachinaries[locals.arrayIndex].machineType);
                                 },
                                 getListDisplayItem: function(item, index) {
                                     return [
@@ -1606,13 +1538,23 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     ];
                                 },
                                 onSelect: function(result, model, context) {
-                                   if(model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel){
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].depreciationPercentage=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
-                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
-                                   }
-                                    $log.info(result);
+                                    model.customer.fixedAssetsMachinaries[context.arrayIndex].machineModel=null;
+                                    model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice=null;
+                                    model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice=null;
+                                    priceCalculation(null, context, model);
+                                    if (model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice && model.customer.fixedAssetsMachinaries[context.arrayIndex].presentValue) {
+                                        if(model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice <=0 && model.customer.fixedAssetsMachinaries[context.arrayIndex].presentValue > 0) {
+                                            model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice = Math.round(model.customer.fixedAssetsMachinaries[context.arrayIndex].presentValue);
+                                        }                                        
+                                        else if(model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice > 0 && model.customer.fixedAssetsMachinaries[context.arrayIndex].presentValue <=0){
+                                            model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice = Math.round(model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice);
+                                        }                                        
+                                        else{
+                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice = Math.round(((model.customer.fixedAssetsMachinaries[context.arrayIndex].presentValue+model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice) /2)*100)/100;
+                                        }    
+                                    } else {
+                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice = null;
+                                    }
                                 }
                             }, 
                            
@@ -1626,12 +1568,12 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 outputMap: {
                                      "machineModel": "customer.fixedAssetsMachinaries[arrayIndex].machineModel"
                                  },
-                                search: function(inputModel, form, model) {
+                                search: function(inputModel, form, model, locals) {
                                     
                                     return Queries.searchMachineModel(
-                                        model.customer.fixedAssetsMachinaries[model.arrayIndex].manufacturerName,
-                                        model.customer.fixedAssetsMachinaries[model.arrayIndex].machineType,
-                                        model.customer.fixedAssetsMachinaries[model.arrayIndex].workProcess);
+                                        model.customer.fixedAssetsMachinaries[locals.arrayIndex].manufacturerName,
+                                        model.customer.fixedAssetsMachinaries[locals.arrayIndex].machineType,
+                                        model.customer.fixedAssetsMachinaries[locals.arrayIndex].workProcess);
                                 },
                                 getListDisplayItem: function(item, index) {
                                     return [
@@ -1639,20 +1581,19 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     ];
                                 },
                                 onSelect: function(result, model, context) {
-                                    //model.customer.fixedAssetsMachinaries[context.arrayIndex].manufacturerName=result.machineName;
-                                    priceCalculation(null, null, model);
-                                    if (model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice && model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue) {
-                                        if(model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice <=0 && model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue > 0) {
-                                            model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = Math.round(model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue);
+                                    priceCalculation(null, context, model);
+                                    if (model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice && model.customer.fixedAssetsMachinaries[context.arrayIndex].presentValue) {
+                                        if(model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice <=0 && model.customer.fixedAssetsMachinaries[context.arrayIndex].presentValue > 0) {
+                                            model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice = Math.round(model.customer.fixedAssetsMachinaries[context.arrayIndex].presentValue);
                                         }                                        
-                                        else if(model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice > 0 && model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue <=0){
-                                            model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = Math.round(model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice);
+                                        else if(model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice > 0 && model.customer.fixedAssetsMachinaries[context.arrayIndex].presentValue <=0){
+                                            model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice = Math.round(model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice);
                                         }                                        
                                         else{
-                                         model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = Math.round(((model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue+model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice) /2)*100)/100;
+                                         model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice = Math.round(((model.customer.fixedAssetsMachinaries[context.arrayIndex].presentValue+model.customer.fixedAssetsMachinaries[context.arrayIndex].marketPrice) /2)*100)/100;
                                         }    
                                     } else {
-                                        model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = null;
+                                        model.customer.fixedAssetsMachinaries[context.arrayIndex].finalPrice = null;
                                     }
                                 }
                             },
@@ -1669,10 +1610,10 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 required: true,
                                 "onChange": function(modelValue, form, model) {
                                     priceCalculation(modelValue, form, model);
-                                    if (model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice && model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue) {
-                                        model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = Math.round(((model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue+model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice) /2)*100)/100;
+                                    if (model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice && model.customer.fixedAssetsMachinaries[form.arrayIndex].presentValue) {
+                                        model.customer.fixedAssetsMachinaries[form.arrayIndex].finalPrice = Math.round(((model.customer.fixedAssetsMachinaries[form.arrayIndex].presentValue+model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice) /2)*100)/100;
                                     } else {
-                                        model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = null;
+                                        model.customer.fixedAssetsMachinaries[form.arrayIndex].finalPrice = null;
                                     }
                                 }
 
@@ -1695,10 +1636,10 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 type: "amount",
                                 required: true,
                                 "onChange": function(modelValue, form, model) {
-                                    if (model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice && model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue) {
-                                        model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = Math.round(((model.customer.fixedAssetsMachinaries[model.arrayIndex].presentValue+model.customer.fixedAssetsMachinaries[model.arrayIndex].marketPrice) /2)*100)/100;
+                                    if (model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice && model.customer.fixedAssetsMachinaries[form.arrayIndex].presentValue) {
+                                        model.customer.fixedAssetsMachinaries[form.arrayIndex].finalPrice = Math.round(((model.customer.fixedAssetsMachinaries[form.arrayIndex].presentValue+model.customer.fixedAssetsMachinaries[form.arrayIndex].marketPrice) /2)*100)/100;
                                     } else {
-                                        model.customer.fixedAssetsMachinaries[model.arrayIndex].finalPrice = null;
+                                        model.customer.fixedAssetsMachinaries[form.arrayIndex].finalPrice = null;
                                     }
                                 }
                             },
