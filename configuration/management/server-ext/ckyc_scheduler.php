@@ -48,24 +48,49 @@ Class Ckyc {
         'Ration Card' => 'OthersPOACKYCInd',
         'Driving Licence' => 'DrivingLicence'
     ];
+    private static function preProcessOfAddress($index1,$givenLenght,$data,$symbol,$preStrings,$prevJ,$preData,$total){
+        $index = $index1;
+        if ($symbol == ',' && $total!= 0){
+             $prevJ  = $prevJ;
+             $preData = $preData;
+             $data = explode(',',$preData[$prevJ]);
+        }
+        $j =0;
+        for ($i =0;$i<=$index;$i++){
+            $preString = $preStrings ? $preStrings : "";
+            while (true){
+                if (strlen($preString.$data[$j]) <= $givenLenght && $j<sizeof($data) && $total!= 0){
+                    $ssymbol = strlen($preString.$data[$j].$symbol) > $givenLenght ? "" : $symbol;
+                    $preString =  $preString.$data[$j].$ssymbol;
+                    if ($symbol != ",")
+                        $j = $j+1;
+                    else
+                        \array_splice($data,0, 1);
+                    continue;
+                }
+                if ($symbol != ','){
+                    $temp = Ckyc::preProcessOfAddress(0,$givenLenght,$data,',',$preString,$j,$data,$j-sizeof($data));
+                    $preString = $temp[0];
+                    $data = $temp[1];
+                }
+                else if ($total != 0){
+                    return [$preString,$preData];
+                }
+                else
+                    return [$preString,$preData];
+                break;
+            }
+            continue;
+        }
+        return [$preString,$preData];
+    }
     private static function address_split($c, $type, $length, $index) {
         if ($type == 'permanent')
             $address_array = array_filter([$c->door_no,$c->street,$c->post_office,$c->landmark,$c->locality,$c->district,$c->state]);
         else if ($type == 'mailing')
             $address_array = array_filter([$c->mailing_doorno,$c->mailing_street,$c->mailing_postoffice,$c->mailing_locality,$c->mailing_district,$c->mailing_state,$c->mailing_pincode]);
-        $data = join(',',$address_array);
-        for($i=1;$i<= ($index+1); $i++){
-            if(strlen($data) <= $length-1){
-                if (strlen($data) == 0 || $i < $index+1) return '';
-                else return $data;
-            }
-            else{
-                $tillTrim = strlen(end(explode(',',substr($data,0,$length-1))));
-                if (substr($data,$length-1,1) == ',') $tillTrim = 0;
-                if ($i == ($index+1)) return implode(',',explode(',',substr($data,0,$length-($tillTrim+1))));
-                $data = substr($data,(($length-1)-$tillTrim),strlen($data));
-            }
-        }
+        $default_data = join(',',$address_array);
+        return Ckyc::preProcessOfAddress($index,$length,$default_data,' ',"",0,"",1)[0];
     }
     
     public static function CKYC_PERDIX_FIELD_MAP() { return [
