@@ -90,7 +90,10 @@ Class Ckyc {
         else if ($type == 'mailing')
             $address_array = array_filter([$c->mailing_doorno,$c->mailing_street,$c->mailing_postoffice,$c->mailing_locality,$c->mailing_district,$c->mailing_state,$c->mailing_pincode]);
         $default_data = join(',',$address_array);
-        return Ckyc::preProcessOfAddress($index,$length,$default_data,' ',"",0,"",1)[0];
+        $value = Ckyc::preProcessOfAddress($index,$length,$default_data,' ',"",0,"",1)[0];
+        echo $value;
+        echo "<p></p>";
+        return $value;
     }
     
     public static function CKYC_PERDIX_FIELD_MAP() { return [
