@@ -1348,6 +1348,9 @@ define({
                             model.loanAccount.loanDocuments.push(model.loanAccount.documents[k]);
                         }
                     }
+                    if (_.hasIn(model.loanAccount, 'noOfGuarantersRequired')) {
+                        model.loanAccount.noOfGuarantersRequired = -1;
+                    } 
                     Utils.confirm("Are You Sure?").then(function() {
 
                         var reqData = {

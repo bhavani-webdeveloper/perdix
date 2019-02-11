@@ -844,9 +844,12 @@ define({
                          return false;
                      }
 
-                     if (!preLoanSaveOrProceed(model)){
+                    if (!preLoanSaveOrProceed(model)){
                          return;
-                     }
+                    }
+                    if (_.hasIn(model.loanAccount, 'noOfGuarantersRequired')) {
+                        model.loanAccount.noOfGuarantersRequired = -1;
+                    } 
                     Utils.confirm("Are You Sure?").then(function() {
 
                         var reqData = {

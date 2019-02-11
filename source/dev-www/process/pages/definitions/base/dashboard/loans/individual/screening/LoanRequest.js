@@ -2112,7 +2112,10 @@ define([],function(){
                             model.loanAccount.psychometricCompleted = "NO";
  
                         }
-                        model.loanAccount.noOfGuarantersRequired = -1;
+                        if (_.hasIn(model.loanAccount, 'noOfGuarantersRequired') && model.loanAccount.noOfGuarantersRequired <= 0) {
+                            model.loanAccount.noOfGuarantersRequired = -1;
+                        }
+                        
                         var completeLead = false;
                         if (!_.hasIn(model.loanAccount, "id")){
                             completeLead = true;
@@ -2186,7 +2189,10 @@ define([],function(){
                         else if (model.loanProcess.remarks==null || model.review.remarks =="" || model.review.targetStage1==null || model.review.targetStage1==""){
                             PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
                             return false;
-                        }                    
+                        }  
+                        if (_.hasIn(model.loanAccount, 'noOfGuarantersRequired')) {
+                            model.loanAccount.noOfGuarantersRequired = -1;
+                        }                  
                        PageHelper.showLoader();
                        model.loanProcess.sendBack()
                             .finally(function () {
