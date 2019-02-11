@@ -50,6 +50,9 @@ Class Ckyc {
     ];
     private static function preProcessOfAddress($index1,$givenLenght,$data,$symbol,$preStrings,$prevJ,$preData,$total){
         $index = $index1;
+      	var_dump($data);
+      	echo "<p></p>";
+      
         if ($symbol == ',' && $total!= 0){
              $prevJ  = $prevJ;
              $preData = $preData;
@@ -70,7 +73,9 @@ Class Ckyc {
                 }
                 if ($symbol != ','){
                     $temp = Ckyc::preProcessOfAddress(0,$givenLenght,$data,',',$preString,$j,$data,$j-sizeof($data));
-                    $preString = $temp[0];
+                  	echo $temp;
+                  	echo "<p></p>";
+                  $preString = $temp[0];
                     $data = $temp[1];
                 }
                 else if ($total != 0){
