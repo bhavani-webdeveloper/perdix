@@ -2045,7 +2045,7 @@
             "enterprise": {
                 "title": "Enterprise",
                 "type": "object",
-                "required": ["corporateName", "businessName", "businessConstitution", "businessType"],
+                "required": ["corporateName", "businessName", "businessConstitution"],
                 "properties": {
                     "customerNumber": {
                         "title": "customerNumber",
@@ -2647,7 +2647,7 @@
                 "type": "array",
                 "items": {
                     "type": "object",
-                    "required": ["buyerName", "incomeType", "amount"],
+                    "required": [],
                     "properties": {
                         "buyerName": {
                             "title": "Buyer Name",
@@ -2728,7 +2728,7 @@
                 "type": "array",
                 "items": {
                     "type": "object",
-                    "required": ["vendorName", "rawMaterialType", "amount"],
+                    "required": [],
                     "properties": {
                         "vendorName": {
                             "title": "Vendor Name",
@@ -2983,7 +2983,7 @@
                 "type": "array",
                 "items": {
                     "type": "object",
-                    "required": ["buyerName", "sector", "subSector", "product", "paymentTerms", "paymentDate", "paymentFrequency", "receivablesOutstanding"],
+                    "required": [],
                     "properties": {
                         "buyerName": {
                             "title": "Buyer Name",
@@ -3059,7 +3059,7 @@
                 "type": "array",
                 "items": {
                     "type": "object",
-                    "required": ["supplierName", "supplierType", "paymentTerms", "amount", "product", "paymentFrequency", "receivablesOutstanding"],
+                    "required": [],
                     "properties": {
                         "supplierName": {
                             "title": "Supplier Name",
