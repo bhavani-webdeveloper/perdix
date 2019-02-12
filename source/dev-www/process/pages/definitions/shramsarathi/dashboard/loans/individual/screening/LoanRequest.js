@@ -1213,6 +1213,10 @@ define([],function(){
                         "PreliminaryInformation.collectionPaymentType": {
                             "enumCode": "customerinfo_colctn_Pymt_type"
                         },
+                        "PreliminaryInformation.tenureRequested": {
+                            "title":"NO_OF_INSTALLMENTS",
+                            "required": true
+                        },
                         //over ride for ticket
                         "LoanSanction.numberOfDisbursements": {
                            // key:"loanAccount.numberOfDisbursements",
@@ -1326,7 +1330,8 @@ define([],function(){
                             "required": true
                         },
                         "PreliminaryInformation.emiRequested": {
-                            "required": true
+                            "required": true,
+                            "title":"REPAYMENT_CAPACITY"
                         },
                         "PreliminaryInformation.collectionPaymentType": {
                             "required": true
@@ -1458,6 +1463,9 @@ define([],function(){
                     "PreliminaryInformation.loan",
                     "PreliminaryInformation.loanPurpose1",
                     "PreliminaryInformation.loanPurpose2",
+                    "PreliminaryInformation.loanPurpose3",
+                    "PreliminaryInformation.referenceFrom",
+                    "PreliminaryInformation.referenceCheck",
                     "PreliminaryInformation.loanAmountRequested",
                     "PreliminaryInformation.loanToValue",
                     "PreliminaryInformation.frequencyRequested",
@@ -1708,6 +1716,22 @@ define([],function(){
                                 "repositoryAdditions": {
                                     "PreliminaryInformation":{
                                         "items": {
+                                            "PreliminaryInformation.loanPurpose3": {
+                                                "key":"loanAccount.loanPurpose3",
+                                              "title":"LOAN_SUB_PURPOSE2",
+                                              "type":"text"
+                                            },
+                                            "PreliminaryInformation.referenceFrom": {
+                                                "key":"loanAccount.referenceFrom",
+                                              "title":"REFERNECE_FROM",
+                                              "type":"text"
+                                            },
+                                            "PreliminaryInformation.referenceCheck": {
+                                                "key":"loanAccount.referenceCheck",
+                                              "title":"REFERNECE_CHECK",
+                                              "type":"radios",
+                                              "inputMap":{"good":"Good","bad":"Bad"}
+                                            },
                                             "transactionType": {
                                                 key: "loanAccount.transactionType",
                                                 title: "TRANSACTION_TYPE",
