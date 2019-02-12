@@ -65,21 +65,21 @@ define([],function(){
                                     return false;
                                     break;
                                 } else {
-                                    if (_.hasIn(guarantor, 'cbCheckList') && _.isArray(guarantor.cbCheckList) && guarantor.cbCheckList.length != 0){
-                                        for (var j=0;j<guarantor.cbCheckList.length; i++){
-                                            if(guarantor.cbCheckList[j].cbCheckValid != true) {
-                                                PageHelper.showProgress("pre-save-validation", "All guarantors should complete the CB Check before proceed",5000);
-                                                return false;
-                                                break;
-                                            } else {
-                                                return true; 
-                                            }
-                                        }
-                                    } else {
-                                        PageHelper.showProgress("pre-save-validation", "All guarantors should complete the CB Check before proceed",5000);
-                                        return false;
-                                        break;
-                                    }
+                                    // if (_.hasIn(guarantor, 'cbCheckList') && _.isArray(guarantor.cbCheckList) && guarantor.cbCheckList.length != 0){
+                                    //     for (var j=0;j<guarantor.cbCheckList.length; i++){
+                                    //         if(guarantor.cbCheckList[j].cbCheckValid != true) {
+                                    //             PageHelper.showProgress("pre-save-validation", "All guarantors should complete the CB Check before proceed",5000);
+                                    //             return false;
+                                    //             break;
+                                    //         } else {
+                                    //             return true; 
+                                    //         }
+                                    //     }
+                                    // } else {
+                                    //     PageHelper.showProgress("pre-save-validation", "All guarantors should complete the CB Check before proceed",5000);
+                                    //     return false;
+                                    //     break;
+                                    // }
                                 }
                             }
                         }
