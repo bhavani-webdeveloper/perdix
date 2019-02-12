@@ -1645,6 +1645,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title:"MACHINE_PURCHASED_YEAR",
                                 type: "number",
                                 "schema":{
+                                    "type": ["integer","null"],
                                     "minimum":1000,
                                     "maximum":9999
                                 },
@@ -1968,6 +1969,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 title:"MACHINE_PURCHASED_YEAR",
                                 type: "number",
                                 "schema":{
+                                    "type": ["integer","null"],
                                     "minimum":1000,
                                     "maximum":9999
                                 },
@@ -2346,7 +2348,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
                 $log.warn(model);
-
+                
                 var DedupeEnabled = SessionStore.getGlobalSetting("DedupeEnabled") || 'N';
                 var sortFn = function(unordered){
                     var out = {};
