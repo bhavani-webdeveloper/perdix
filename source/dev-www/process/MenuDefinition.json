@@ -49,6 +49,7 @@
         "Page/Adhoc/kgfs.loans.LoanOriginationDashboard",
         "Page/Adhoc/base.dashboard.lead.LeadDashboard",
         "Page/Adhoc/base.dashboard.loans.LoanOriginationDashboard",
+       
         "Page/DocumentTrackingDashboard", {
             "title": "INDIVIDUAL_LOANS",
             "iconClass": "fa fa-female",
@@ -140,6 +141,10 @@
         "Page/ReportsDashboard",
         "Page/ScoreDashboard",
         "Page/Adhoc/audit.AuditDashboard",
-        "Page/Engine/excelUpload.ExcelUpload"
+        "Page/Engine/excelUpload.ExcelUpload",
+        "Page/Adhoc/shramsarathi.dashboard.loans.LoanOriginationDashboard",
+        "Page/Adhoc/shramsarathi.dashboard.loans.individual.booking.LoanBookingDashboard",
+        "Page/Adhoc/shramsarathi.dashboard.loans.individual.collections.LoansCollectionsDashboard",
+        "Page/Adhoc/shramsarathi.dashboard.loans.individual.disbursement.LoansDisbursementDashboard"
     ]
 }
