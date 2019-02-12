@@ -33,29 +33,30 @@ define({
                         Lead.leadBulkUpload(file, progress).then(function(resp){
                             irfNavigator.go({
                                 state: "Page.Adhoc",
-                                pageName: "witfin.loans.LoanOriginationDashboard"
+                                pageName: "base.dashboard.lead.LeadDashboard"
                             });
                         });
                     }
                 }]
-            },
-            {
-                "type": "box",
-                "title": "LEAD_DOWNLOAD",
-                "colClass": "col-sm-6",
-                "items": [{
-                    "type": "button",
-                    "title":"DOWNLOAD",
-                    "icon": "fa fa-download",
-                    "notitle": true,
-                    "readonly": false,
-                     onClick: function(model, form, schemaForm, event) {
-                        var file = irf.MANAGEMENT_BASE_URL + "/server-ext/template/LeadBulkUpload.xlsx";
-                        Utils.downloadFile(file);
-                        //Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/forms/AllFormsDownload.php?record_id=" + model.loanAccount.id);
-                    }
-                }]
-            }],
+            }
+            // {
+            //     "type": "box",
+            //     "title": "LEAD_DOWNLOAD",
+            //     "colClass": "col-sm-6",
+            //     "items": [{
+            //         "type": "button",
+            //         "title":"DOWNLOAD",
+            //         "icon": "fa fa-download",
+            //         "notitle": true,
+            //         "readonly": false,
+            //          onClick: function(model, form, schemaForm, event) {
+            //             var file = irf.MANAGEMENT_BASE_URL + "/server-ext/template/LeadBulkUpload.xlsx";
+            //             Utils.downloadFile(file);
+            //             //Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/forms/AllFormsDownload.php?record_id=" + model.loanAccount.id);
+            //         }
+            //     }]
+            // }
+        ],
             schema: function() {
                 return Lead.getLeadSchema().$promise;
             },
