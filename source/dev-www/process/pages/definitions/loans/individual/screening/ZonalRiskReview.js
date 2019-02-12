@@ -53,7 +53,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ZonalRiskReview'
                 order: 52
             }, {
                 pageName: 'loans.individual.screening.detail.PortfolioAnalysis',
-                title: 'CUSTOMER HISTORY',
+                title: 'CUSTOMER_HISTORY',
                 pageClass: 'portfolio-analysis',
                 minimum: 1,
                 maximum: 1,

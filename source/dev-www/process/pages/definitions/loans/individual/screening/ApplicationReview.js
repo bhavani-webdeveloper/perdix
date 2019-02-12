@@ -40,7 +40,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
                 order: 50
             }, {
                 pageName: 'loans.individual.screening.detail.PortfolioAnalysis',
-                title: 'CUSTOMER HISTORY',
+                title: 'CUSTOMER_HISTORY',
                 pageClass: 'portfolio-analysis',
                 minimum: 1,
                 maximum: 1,
@@ -193,7 +193,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
                                     }
                                 }
                             });
-                            
+
                             if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan') {
                                 $this.bundlePages.push({
                                     pageClass: 'summaryView',
