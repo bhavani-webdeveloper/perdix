@@ -112,7 +112,8 @@ function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $
                 {
                     key:"customer.photoImageId",
                     type:"file",
-                    fileType:"image/*"
+                    fileType:"image/*",
+                    required:true
                 },
                 {
                     key: "customer.firstName",
