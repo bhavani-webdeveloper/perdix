@@ -11,7 +11,7 @@ irf.pageCollection.factory(irf.page("loans.individual.luc.LucRiskQueue"),
 				model.siteCode = SessionStore.getGlobalSetting("siteCode");
 			},
 			definition: {
-				title: "SEARCH CUSTOMER",
+				title: "CUSTOMER_SEARCH",
 				searchForm: [
 					"*"
 				],

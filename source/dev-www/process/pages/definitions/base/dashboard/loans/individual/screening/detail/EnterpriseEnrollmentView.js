@@ -663,10 +663,11 @@ define({
                                 "title": "Work Process",
                                 "data": "workProcess",
                             },
+                            // {
+                            //     "title": "Depreciation%",
+                            //     "data": "depreciationPercentage",
+                            // }, 
                             {
-                                "title": "Depreciation%",
-                                "data": "depreciationPercentage",
-                            }, {
                                 "title": "Purchase Year",
                                 "data": "machinePurchasedYear"
                             }, {
@@ -691,21 +692,22 @@ define({
                                     return irfCurrencyFilter(data);
                                 }
                             },
+                            // {
+                            //     "title": "Market Price",
+                            //     "data": "marketPrice",
+                            //     render: function(data, type, full, meta) {
+                            //         return irfCurrencyFilter(data);
+                            //     }
+                            // },
+                            // {
+                            //     "title": "Fixed Price",
+                            //     "data": "finalPrice",
+                            //     render: function(data, type, full, meta) {
+                            //         return irfCurrencyFilter(data);
+                            //     }
+                            // }, 
                             {
-                                "title": "Market Price",
-                                "data": "marketPrice",
-                                render: function(data, type, full, meta) {
-                                    return irfCurrencyFilter(data);
-                                }
-                            },
-                            {
-                                "title": "Fixed Price",
-                                "data": "finalPrice",
-                                render: function(data, type, full, meta) {
-                                    return irfCurrencyFilter(data);
-                                }
-                            }, {
-                                "title": "Source",
+                                 "title": "Source",
                                 "data": "fundingSource"
                             }, {
                                 "title": "Hypothecated to",

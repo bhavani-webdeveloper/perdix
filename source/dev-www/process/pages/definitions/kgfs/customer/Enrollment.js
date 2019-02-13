@@ -7,11 +7,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
             pageType: "Engine",
             dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper",
                 "$q", "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
-                "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","irfProgressMessage","Files"],
+                "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","irfProgressMessage","Files","translateFilter","BranchCreationResource"],
 
             $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
                 PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch,
-                BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,irfProgressMessage,Files) {
+                BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,irfProgressMessage,Files,translateFilter,BranchCreationResource) {
 
                 AngularResourceService.getInstance().setInjector($injector);
                 var branch = SessionStore.getBranch();
@@ -283,7 +283,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                 }
                             }
                         },
-                        "KYC.addressProof1.idProofValidUptoDate":{
+                        "KYC.addressProof1.addressProofValidUptoDate":{
                             onChange: function (value, form, model, event) {
                                 if(model.customer.addressProofValidUptoDate){
                                     var addressProof1IssueDate = moment(model.customer.addressProofIssueDate, SessionStore.getSystemDateFormat());
@@ -295,7 +295,68 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                     }
                                 }
                             }
-                        },                        
+                        },       
+                        "AdditionalKYC.additionalKYCs.kyc1IssueDate":{
+                            onChange: function (value, form, model, event) {
+                                if(model.customer.additionalKYCs[form.arrayIndex].kyc1IssueDate){
+                                    model.customer.additionalKYCs[form.arrayIndex].kyc1ValidUptoDate = "";
+                                }
+                            }
+                        },
+                        "AdditionalKYC.additionalKYCs.kyc1ValidUptoDate":{
+                            onChange: function (value, form, model, event) {
+                                if(model.customer.additionalKYCs[form.arrayIndex].kyc1ValidUptoDate){
+                                    var kyc1IssueDate = moment(model.customer.additionalKYCs[form.arrayIndex].kyc1IssueDate, SessionStore.getSystemDateFormat());
+                                    var kyc1ValidUptoDate = moment(model.customer.additionalKYCs[form.arrayIndex].kyc1ValidUptoDate, SessionStore.getSystemDateFormat());
+                                    if (kyc1ValidUptoDate <= kyc1IssueDate) {
+                                        model.customer.additionalKYCs[form.arrayIndex].kyc1ValidUptoDate = null;
+                                        PageHelper.showProgress("pre-save-validation", "KYC1 ValidUptoDate always more than KYC1 Issue Date", 5000);
+                                        
+                                    }
+                                }
+                            }
+                        },
+                        "AdditionalKYC.additionalKYCs.kyc2IssueDate":{
+                            onChange: function (value, form, model, event) {
+                                if(model.customer.additionalKYCs[form.arrayIndex].kyc2IssueDate){
+                                    model.customer.additionalKYCs[form.arrayIndex].kyc2ValidUptoDate = "";
+                                }
+                            }
+                        },
+                        "AdditionalKYC.additionalKYCs.kyc2ValidUptoDate":{
+                            onChange: function (value, form, model, event) {
+                                if(model.customer.additionalKYCs[form.arrayIndex].kyc2ValidUptoDate){
+                                    var kyc2IssueDate = moment(model.customer.additionalKYCs[form.arrayIndex].kyc2IssueDate, SessionStore.getSystemDateFormat());
+                                    var kyc2ValidUptoDate = moment(model.customer.additionalKYCs[form.arrayIndex].kyc2ValidUptoDate, SessionStore.getSystemDateFormat());
+                                    if (kyc2ValidUptoDate <= kyc2IssueDate) {
+                                        model.customer.additionalKYCs[form.arrayIndex].kyc2ValidUptoDate = null;
+                                        PageHelper.showProgress("pre-save-validation", "KYC2 ValidUptoDate always more than KYC2 Issue Date", 5000);
+                                        
+                                    }
+                                }
+                            }
+                        },       
+                        "Liabilities1.liabilities.startDate":{
+                            onChange: function (value, form, model, event) {
+                                if(model.customer.liabilities[form.arrayIndex].startDate){
+                                    model.customer.liabilities[form.arrayIndex].maturityDate = "";
+                                }
+                            }
+                        },
+                        "Liabilities1.liabilities.maturityDate":{
+                            onChange: function (value, form, model, event) {
+                                if(model.customer.liabilities[form.arrayIndex].maturityDate){
+                                    var liabilitesStartDate = moment(model.customer.liabilities[form.arrayIndex].startDate, SessionStore.getSystemDateFormat());
+                                    var liabilitesmaturityDate = moment(model.customer.liabilities[form.arrayIndex].maturityDate, SessionStore.getSystemDateFormat());
+                                    if (liabilitesmaturityDate <= liabilitesStartDate) {
+                                        model.customer.liabilities[form.arrayIndex].maturityDate= null;
+                                        PageHelper.showProgress("pre-save-validation", "Liabilities Maturity Date always more than Liabilities Start Date", 5000);
+                                        
+                                    }
+                                }
+                            }
+                        },
+                        
                         "KYC.spouseIdProof.udf34": {
                             "viewParams": function(modelValue, form, model) {
                                 return {
@@ -1001,6 +1062,26 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         if (branchId && !model.customer.customerBranchId) {
                             model.customer.customerBranchId = branchId;
                         };
+                       //start
+                           if (!Utils.isCordova) {
+                               BranchCreationResource.getBranchByID({
+                                       id: branchId
+                                   },
+                                   function (res) {
+                                       if (res.fingerPrintDeviceType) {
+                                           if (res.fingerPrintDeviceType == "MANTRA") {
+                                               model.fingerPrintDeviceType = res.fingerPrintDeviceType;
+                                           }
+                                       }
+
+                                       PageHelper.hideLoader();
+                                   },
+                                   function (err) {
+                                       $log.info(err);
+                                   }
+                               );
+                           }
+                       //end
                         model.siteCode = SessionStore.getGlobalSetting('siteCode');
                         var self = this;
                         var formRequest = {
@@ -1095,7 +1176,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             }
             
                             model.getFingerLabel = function(fingerId) {
-                                return BiometricService.getLabel(fingerId);
+                                return translateFilter(BiometricService.getLabel(fingerId));
                             }
 
                         /* Form rendering ends */
@@ -1177,7 +1258,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         }
         
                         model.getFingerLabel = function(fingerId) {
-                            return BiometricService.getLabel(fingerId);
+                            return translateFilter(BiometricService.getLabel(fingerId));
                         }
 
                     },

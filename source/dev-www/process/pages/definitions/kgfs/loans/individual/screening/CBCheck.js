@@ -1,32 +1,37 @@
-irf.pageCollection.factory(irf.page("loans.individual.screening.CBCheck"),
-["$log", "$q","LoanAccount", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
-'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch","CreditBureau","Enrollment","BundleManager",
-function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUtils,
+define({
+    "pageUID": "kgfs.loans.individual.screening.CBCheck",
+    "pageType": "Engine",
+    "dependencies": ["$log", "$q","LoanAccount", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils"
+    ,'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch","CreditBureau","Enrollment","BundleManager"],
+
+    $pageFn: function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch,CreditBureau,Enrollment,BundleManager){
 
     var branch = SessionStore.getBranch();
 
     var fnPost = function(model, customerType, CBType, index){
+        console.log(model);
+        console.log("Model form CBCHECK");
         var customerId;
         var CBType;
-        var loanAmount = model.loanAccount.loanAmountRequested;
+        var loanAmount;
         var loanPurpose;
         if(customerType=='APP'){
             customerId = model.customer.applicantid;
-            // loanAmount = model.customer.loanAmount;
+            loanAmount = model.customer.loanAmount;
         }
         else if(customerType == 'CO-APP'){
             customerId = model.customer.coapplicants[index].coapplicantid;
-            // loanAmount = model.customer.coapplicants[index].loanAmount || model.customer.loanAmount;
+            loanAmount = model.customer.coapplicants[index].loanAmount || model.customer.loanAmount;
         }
         else if(customerType == 'GUARANTOR'){
             customerId = model.customer.guarantors[index].guarantorid;
-            // loanAmount = model.customer.guarantors[index].loanAmount || model.customer.loanAmount;
+            loanAmount = model.customer.guarantors[index].loanAmount || model.customer.loanAmount;
         }
 
         $log.info("Inside submit()");
         PageHelper.showLoader();
-        loanPurpose = model.customer.loanPurpose1;
+        loanPurpose = model.loanAccount.loanPurpose3 || 'Business Loan - General';
         //loanPurpose = 'Agriculture';
         PageHelper.clearErrors();
         if (CBType != 'CHMHUB') {
@@ -48,7 +53,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                     PageHelper.showProgress("cb-check", "Failed while placing Credit Bureau Request", 5000);
             });
         } else {
-            model.idenCheck.customerId = customerId;
+            model.idenCheck.customerId = model.customer.applicantid;
             model.idenCheck.type = CBType;
             Enrollment.idenCheckVerification(model.idenCheck).$promise.
             then(function(response) {
@@ -106,8 +111,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 }
                 else if(customerType == 'GUARANTOR'){
                     model.customer.guarantors[index].inqUnqRefNo = response.inqUnqRefNo;
-                    model.customer.guarantors[index].indvHighmarkStatus = response.status;
-                    
+                    model.customer.guarantors[index].highmarkStatus = response.status;
                     if(response.status != 'SUCCESS' && response.status != 'PROCESSED')
                         model.customer.guarantors[index].applicantIndvHighmarkFailed = true;
                     else
@@ -180,7 +184,9 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             }
             if(response.status == 'SUCCESS' || response.status == 'PROCESSED'){
                 PageHelper.showProgress("cb-check", "Credit Bureau Request Placed..", 5000);
-                BundleManager.pushEvent('cb-check-done', model._bundlePageObj, {customerId: customerId, cbType:CBType})
+                BundleManager.pushEvent('cb-check-done', model._bundlePageObj, {customerId: customerId, cbType:CBType});
+                model.customer.cbcheckdone = true;
+                BundleManager.broadcastEvent('cb-check-done',model);    
             }
             else if(response.status == 'ERROR' || response.status == 'Error'){
                 PageHelper.showProgress("Idencheck", "Error while placing Idencheck Resuest Request", 5000);
@@ -258,18 +264,18 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             if (bundlePageObj){
                 model._bundlePageObj = _.cloneDeep(bundlePageObj);
             }
-
             model.customer = model.customer || {};
             model.customer.coapplicants = model.customer.coapplicants || [];
             model.customer.guarantors = model.customer.guarantors || [];
             model.customer.loanSaved = false;
+            model.customer.cbcheckdone = false;
 
             if (_.hasIn(model, "loanProcess")){
                 /* Loan process data is available. derive applicant / coapplicant / guarantors data from it */
-                var lp = model.loanProcess;
-                model.customer.applicantid = lp.applicantEnrolmentProcess.customer.id;
-                model.customer.applicantname = lp.applicantEnrolmentProcess.customer.firstName;
-
+                    var lp = model.loanProcess;
+                    model.customer.applicantid = lp.applicantEnrolmentProcess.customer.id;
+                    model.customer.applicantname = lp.applicantEnrolmentProcess.customer.firstName;
+                    
                 model.coapplicants = [];
                 _.forEach(lp.coApplicantsEnrolmentProcesses, function(ep){
                     model.coapplicants.push({
@@ -437,7 +443,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 /* Assign more customer information to show */
             },
             "new-co-applicant": function(bundleModel, model, params){
-                $log.info("Insdie new-co-applicant of CBCheck");
+                $log.info("Inside new-co-applicant of CBCheck");
                 var recordExists = false;
                 for (var i = model.customer.coapplicants.length - 1; i >= 0; i--) {
                     if(model.customer.coapplicants[i].coapplicantid == params.customer.id)
@@ -450,7 +456,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 }
             },
             "new-guarantor": function(bundleModel, model, params){
-                $log.info("Insdie new-new-guarantor of CBCheck");
+                $log.info("Inside new-guarantor of CBCheck");
                 var recordExists = false;
                 for (var i = model.customer.guarantors.length - 1; i >= 0; i--) {
                     if(model.customer.guarantors[i].guarantorid == params.customer.id)
@@ -464,7 +470,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             },
             "new-loan": function(bundleModel, model, params){
                 $log.info("Inside new-loan of CBCheck");
-                model.loanAmountRequested = params.loanAccount.loanAmountRequested;
                 model.customer.loanSaved = true;
                 model.customer.loanAmount = params.loanAccount.loanAmountRequested;
                 model.customer.loanPurpose1 = params.loanAccount.loanPurpose1;
@@ -594,16 +599,16 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                     readonly: true,
                                     type: "string",
 
-                                }, {
-                                    type: 'button',
-                                    "condition": "model.customer.loanSaved",
-                                    title: 'Submit for CBCheck',
-                                    "onClick": "actions.save(model,'APP', 'BASE',null)"
-                                }, {
+                                },{
                                     "key": "customer.highmarkStatus",
                                     "condition": "model.customer.highmarkStatus",
                                     readonly: true,
                                     title: "Status"
+                                },{
+                                    type: 'button',
+                                    "condition": "model.customer.loanSaved",
+                                    title: 'Submit for CBCheck',
+                                    "onClick": "actions.save(model,'APP', 'BASE',null)"
                                 }, {
                                     type: 'button',
                                     title: 'Retry',
@@ -640,7 +645,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                         title: "Status"
                                     }, {
                                         type: 'button',
-                                        key: "customer.coapplicants[].retrybutton",
+                                        key: "customer.coapplicants[].retrybutton ",
                                         title: 'Retry',
                                         "condition": "model.customer.coapplicants[arrayIndex].applicantHighmarkFailed",
                                         "onClick": function(model, schemaForm, form, event) {
@@ -663,7 +668,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                         type: "string"
                                     }, {
                                         type: 'button',
-                                        key: "customer.guarantors[].highmarkbutton",
+                                        key: "customer.guarantors[].highmarkbutton ",
                                         title: 'Submit for CBCheck',
                                         "condition": "model.customer.loanSaved && model.customer.guarantors.length",
                                         "onClick": function(model, schemaForm, form, event) {
@@ -709,7 +714,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 }, {
                                     type: 'button',
                                     title: 'Retry',
-                                    "condition": "model.customer.applicantIndvHighmarkFailed",
+                                    "condition": "model.customer.applicantIndvHighmarkFailed ",
                                     "onClick": function(model, schemaForm, form, event) {
                                         retry(model, 'APP', null);
                                     }
@@ -831,7 +836,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                             type: "string"
                                         }, {
                                             type: 'button',
-                                            key: "customer.coapplicants[].Equifaxbutton",
+                                            key: "customer.coapplicants[].Equifaxbutton ",
                                             title: 'Submit for CBCheck',
                                             "condition": "model.customer.loanSaved && model.customer.coapplicants.length",
                                             "onClick": function(model, schemaForm, form, event) {
@@ -1009,5 +1014,5 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
     };
 }
 
-]);
+});
 

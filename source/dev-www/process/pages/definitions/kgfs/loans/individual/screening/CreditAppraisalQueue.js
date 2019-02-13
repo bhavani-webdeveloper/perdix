@@ -13,7 +13,7 @@ define({
 	   }
 	   return {
 		"type": "search-list",
-		"title": "CREDIT_APPRAISAL_QUEUE",
+		"title": "CREDIT_APPRAISAL",
 		"subTitle": "",
 		initialize: function (model, form, formCtrl) {
 			model.branch = SessionStore.getCurrentBranch().branchId;
@@ -144,7 +144,7 @@ define({
 				},
 				getActions: function () {
 					return [{
-						name: "CREDIT_APPRAISAL_QUEUE",
+						name: "CREDIT_APPRAISAL",
 						desc: "",
 						icon: "fa fa-pencil-square-o",
 						fn: function (item, index) {

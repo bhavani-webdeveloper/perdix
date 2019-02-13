@@ -728,7 +728,7 @@ define({
                                     "render": self.strongRender
                                 },
                                 {
-                                    "title": "# of EMI Paid",
+                                    "title": "NO_OF_EMI_PAID",
                                     "data": "no_of_emi_paid"
                                 },
                                 {

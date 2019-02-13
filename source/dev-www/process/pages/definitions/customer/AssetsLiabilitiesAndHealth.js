@@ -1,8 +1,8 @@
 irf.pageCollection.factory("Pages__AssetsLiabilitiesAndHealth",
 ["$log","formHelper","Enrollment","EnrollmentHelper", '$state','$stateParams',"elementsUtils","entityManager", '$q', 'irfProgressMessage', 'PageHelper',
-    'SessionStore','Utils','authService', 'BiometricService', 'Files', 'irfNavigator',"CustomerBankBranch",
+    'SessionStore','Utils','authService', 'BiometricService', 'Files', 'irfNavigator',"CustomerBankBranch","BranchCreationResource",
 function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elementsUtils,entityManager, $q, irfProgressMessage, PageHelper,
-         SessionStore,Utils,authService, BiometricService, Files, irfNavigator,CustomerBankBranch) {
+         SessionStore,Utils,authService, BiometricService, Files, irfNavigator,CustomerBankBranch,BranchCreationResource) {
     
     return {
         "id": "AssetsAndLiabilities",
@@ -13,6 +13,27 @@ function($log,formHelper,Enrollment,EnrollmentHelper,$state, $stateParams,elemen
         "uri": "Profile/Stage 2",
         initialize: function (model, form, formCtrl) {
 
+             //start
+             var branchId = SessionStore.getBranchId();
+             if (!Utils.isCordova) {
+                 BranchCreationResource.getBranchByID({
+                         id: branchId
+                     },
+                     function (branchDetails) {
+                         if (branchDetails.fingerPrintDeviceType) {
+                             if (branchDetails.fingerPrintDeviceType == "MANTRA") {
+                                 model.fingerPrintDeviceType = branchDetails.fingerPrintDeviceType;
+                             }
+                         }
+
+                         PageHelper.hideLoader();
+                     },
+                     function (err) {
+                         $log.info(err);
+                     }
+                 );
+             }
+             //end
             var customerId = $stateParams.pageId;
 
             if (!(model && model.customer && model.customer.id && model.$$STORAGE_KEY$$)) {

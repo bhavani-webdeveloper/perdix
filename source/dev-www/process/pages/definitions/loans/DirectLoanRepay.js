@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'), 
     ["$log", "$q", "$timeout","BiometricService", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-    "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "Utils","Queries",
-    function($log, $q, $timeout,BiometricService, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, Utils,Queries) {
+    "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "Utils","Queries","BranchCreationResource",
+    function($log, $q, $timeout,BiometricService, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, Utils,Queries,BranchCreationResource) {
 
         function backToLoansList() {
             try {
@@ -54,6 +54,26 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'),
                 model.branch = SessionStore.getBranch();
                 model.branchId = SessionStore.getBranchId();
                 model.branchCode = SessionStore.getBranchCode();
+                   //start
+                   if (!Utils.isCordova) {
+                    BranchCreationResource.getBranchByID({
+                            id: model.branchId
+                        },
+                        function (res) {
+                            if (res.fingerPrintDeviceType) {
+                                if (res.fingerPrintDeviceType == "MANTRA") {
+                                    model.fingerPrintDeviceType = res.fingerPrintDeviceType;
+                                }
+                            }
+
+                            PageHelper.hideLoader();
+                        },
+                        function (err) {
+                            $log.info(err);
+                        }
+                    );
+                }
+            //end
                 //PageHelper
                 var loanAccountNo = ($stateParams.pageId.split("."))[0];
                 var customerId = ($stateParams.pageId.split("."))[2];
@@ -466,17 +486,31 @@ irf.pageCollection.factory(irf.page('loans.DirectLoanRepay'),
                                     'RightRing': model.customer.rightHandRingImageId,
                                     'RightLittle': model.customer.rightHandSmallImageId
                                 };
+                                if (model.fingerPrintDeviceType == "MANTRA") {
+                                    BiometricService.validateFingerPrintByMantra(fingerprintObj).then(function (data) {
+                                        model.customer.isBiometricMatched = data;
+                                        if (data == "Match found") {
+                                            model.customer.isBiometricValidated = true;
+                                        } else {
+                                            model.customer.isBiometricValidated = false;
+                                        }
+                                    }, function (reason) {
+                                        console.log(reason);
+                                    });
 
-                                BiometricService.validate(fingerprintObj).then(function(data) {
-                                    model.customer.isBiometricMatched = data;
-                                    if (data == "Match found") {
-                                        model.customer.isBiometricValidated = true;
-                                    } else {
-                                        model.customer.isBiometricValidated = false;
-                                    }
-                                }, function(reason) {
-                                    console.log(reason);
-                                });
+                                }else{
+
+                                    BiometricService.validate(fingerprintObj).then(function(data) {
+                                        model.customer.isBiometricMatched = data;
+                                        if (data == "Match found") {
+                                            model.customer.isBiometricValidated = true;
+                                        } else {
+                                            model.customer.isBiometricValidated = false;
+                                        }
+                                    }, function(reason) {
+                                        console.log(reason);
+                                    });
+                                }
                             }
                         }, {
                             "key": "customer.isBiometricMatched",

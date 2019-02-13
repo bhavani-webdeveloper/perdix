@@ -52,7 +52,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             maximum: 1,
                             order:40
                         }, {
-                            pageName: 'loans.individual.screening.CreditBureauView',
+                            pageName: 'kgfs.loans.individual.screening.CreditBureauView',
                             title: 'CREDIT_BUREAU',
                             pageClass: 'cbview',
                             minimum: 1,
@@ -85,7 +85,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 },
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
-                    bundleModel.currentStage = "DSCOverride";
+                    bundleModel.currentStage = "LosDSCOverride";
                     var deferred = $q.defer();
 
                     var $this = this;
@@ -169,7 +169,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 },
                 "post_pages_initialize": function(bundleModel){
                     $log.info("Inside post_page_initialize");
-                    BundleManager.broadcastEvent('origination-stage', 'DSCOverride');
+                    BundleManager.broadcastEvent('origination-stage', 'LosDSCOverride');
                     if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
                         PageHelper.showLoader();
                         PageHelper.showProgress("KYC-input", 'Loading lead details');

@@ -154,7 +154,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                         }
                                         return false;
                                     }
-                                },
+                                }, 
                                 {
                                     name: "Repay",
                                     desc: "",
@@ -185,7 +185,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                     },
                                     isApplicable: function(item, index){
                                         var siteCode = SessionStore.getGlobalSetting('siteCode');
-                                        if(siteCode == 'sambandh') {
+                                        if(siteCode == 'sambandh'||siteCode == 'KGFS') {
                                             return false;
                                         }
                                         return true;
@@ -229,12 +229,22 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                                 }
                                             },function(error){
                                                 PageHelper.showErrors(error)
-                                            });
-                                        if (model.pageConfig.IsUnMarkNPA) {
-                                            return true
-                                        } else {
-                                            return false
-                                        };
+                                            }); 
+
+                                            var siteCode = SessionStore.getGlobalSetting('siteCode');
+
+                                            if(siteCode == 'KGFS')
+                                            {
+                                                return false;
+                                            };
+                                                    
+                                            if (model.pageConfig.IsUnMarkNPA) {
+                                                return true
+                                            } else {
+                                                return false
+                                            };
+
+
                                     }
                                 }, { 
                                     name: "FREEZE_ACCOUNT",

@@ -49,6 +49,11 @@ define({
                             pageName: 'base.dashboard.loans.individual.screening.ApplicationReviewQueue',
                             pageId: null
                         });
+                    if (model.currentStage == 'Scrutiny')
+                        $state.go('Page.Engine', {
+                            pageName: 'base.dashboard.loans.individual.screening.ScrutinyQueue',
+                            pageId: null
+                        });
                     if (model.currentStage == 'FieldAppraisal')
                         $state.go('Page.Engine', {
                             pageName: 'base.dashboard.loans.individual.screening.FieldAppraisalQueue',
@@ -231,6 +236,28 @@ define({
           return Math.ceil(x);
         }
 
+        documentArrayFormation = function(model) {
+            if (_.hasIn(model.loanAccount, 'loanDocuments') && _.isArray(model.loanAccount.loanDocuments)){
+                model.loanAccount.documents = [];
+                _.filter(model.loanAccount.loanDocuments, function(doc) { 
+                    if(_.includes(doc.remarks, 'RCUStageDocuments-') == true) {
+                        model.loanAccount.documents.push(doc)
+                    }
+                });
+              
+                for(var j=0;j <model.loanAccount.loanDocuments.length; j++) {
+                    if(_.includes(model.loanAccount.loanDocuments[j].remarks, 'RCUStageDocuments-') == true) {
+                        model.loanAccount.loanDocuments.splice(j,1);
+                    }
+                }
+            }
+            if(model.loanAccount.noOfGuarantersRequired <= 0) {
+                model.loanAccount.isGuarantorRequired = "NO";
+            } else {
+                model.loanAccount.isGuarantorRequired = "YES";
+            }
+        }
+
 
         return {
             "type": "schema-form",
@@ -248,8 +275,7 @@ define({
                 model.mitigantsChanged=0;
                 model.loanMitigants= model.loanAccount.loanMitigants;
                 model.expectedTurnoverObj = {};
-                
-
+                documentArrayFormation(model);
             /*Asset details*/
                 if (model.loanAccount.collateral.length != 0) {
                     model.asset_details = [];
@@ -295,11 +321,6 @@ define({
                     $log.info("loan request Individual/find api failure" + err);
                 });
              }
-            if(model.loanAccount.noOfGuarantersRequired <= 0) {
-                model.loanAccount.isGuarantorRequired = "NO";
-            } else {
-                model.loanAccount.isGuarantorRequired = "YES";
-            }
 
         },
         form: [{
@@ -631,7 +652,7 @@ define({
                         //     "type": "string"
                         // }
                     ]
-                }
+                },
             ]
 
         }, {
@@ -800,37 +821,39 @@ define({
                             return [];
                         }                            
                     }]
-        },{
+        },
+        {
 
             "type": "box",		
             "colClass": "col-sm-12",		
             "readonly": true,		
             "overrideType": "default-view",		
-            condition: "model.currentStage == 'FieldAppraisalReview' && model.loanAccount.loanDocuments.length != 0",		
-            "title": "View Documents",		
+            condition: "model.currentStage !== 'ApplicationReview' && model.currentStage !== 'Scrutiny' && model.loanAccount.documents.length != 0",		
+            "title": "RCU Documents",		
             "items": [  {		
-                "key": "loanAccount.loanDocuments",		
+                "key": "loanAccount.documents",		
                 "type": "array",		
-                "title": "Documents",		
+                "title": "Documents",	
                 //startEmpty: true,		
                 "items": [		
                 {		
-                    key:"loanAccount.loanDocuments[].document",		
+                    key:"loanAccount.documents[].document",		
                     type:"text",		
                     title:"Document Name",		
                     required: true,		
                 },		
                 {		
-                    key:"loanAccount.loanDocuments[].documentId",		
+                    key:"loanAccount.documents[].documentId",		
                     title : "Upload",		
                     type:"file",		
                     required: true,		
                     category: "Loan",		
-                    subCategory: "DOC3"		
+                    subCategory: "DOC3",
                 }		
                 ]		
                 },]		
-            }, {
+        }, 
+        {
             "type": "box",
             "colClass": "col-sm-12",
             condition: "model.currentStage == 'FieldAppraisalReview'",
@@ -1150,7 +1173,12 @@ define({
                         return;
                     }
                     
-                
+                    if (_.hasIn(model.loanAccount, 'documents') && _.isArray(model.loanAccount.documents)){
+                        for(var k=0;k <model.loanAccount.documents.length; k++) {
+                            model.loanAccount.loanDocuments.push(model.loanAccount.documents[k]);
+                        }
+                    }
+                    
                     model.mitigantsChanged= (model.loanMitigants.length== model.loanAccount.loanMitigants.length)?0:1;
                    // loanMitigants= [];
 
@@ -1193,7 +1221,7 @@ define({
                                                 }
                                             }
                                         }
-
+                                        documentArrayFormation(model);
                                         BundleManager.pushEvent('new-loan', model._bundlePageObj, {
                                             loanAccount: model.loanAccount
                                         });
@@ -1227,6 +1255,11 @@ define({
                         PageHelper.showProgress("update-loan", "Reject Reason is mandatory");
                         return false;
                     }
+                    if (_.hasIn(model.loanAccount, 'documents') && _.isArray(model.loanAccount.documents)){
+                        for(var k=0;k <model.loanAccount.documents.length; k++) {
+                            model.loanAccount.loanDocuments.push(model.loanAccount.documents[k]);
+                        }
+                    }
                     Utils.confirm("Are You Sure?").then(function() {
 
                         var reqData = {
@@ -1259,7 +1292,11 @@ define({
                     if (!preLoanSaveOrProceed(model)){
                     return;
                 }
-
+                    if (_.hasIn(model.loanAccount, 'documents') && _.isArray(model.loanAccount.documents)){
+                        for(var k=0;k <model.loanAccount.documents.length; k++) {
+                            model.loanAccount.loanDocuments.push(model.loanAccount.documents[k]);
+                        }
+                    }
                     if (model.review.remarks == null || model.review.remarks == "") {
                         PageHelper.showProgress("update-loan", "Remarks is mandatory");
                         return false;
@@ -1306,6 +1343,14 @@ define({
                      if (!preLoanSaveOrProceed(model)){
                          return;
                      }
+                    if (_.hasIn(model.loanAccount, 'documents') && _.isArray(model.loanAccount.documents)){
+                        for(var k=0;k <model.loanAccount.documents.length; k++) {
+                            model.loanAccount.loanDocuments.push(model.loanAccount.documents[k]);
+                        }
+                    }
+                    if (_.hasIn(model.loanAccount, 'noOfGuarantersRequired')) {
+                        model.loanAccount.noOfGuarantersRequired = -1;
+                    } 
                     Utils.confirm("Are You Sure?").then(function() {
 
                         var reqData = {
@@ -1386,6 +1431,11 @@ define({
                     var dedupeCustomerIdArray = [];
                     if (!validateForm(formCtrl)){
                         return;
+                    }
+                    if (_.hasIn(model.loanAccount, 'documents') && _.isArray(model.loanAccount.documents)){
+                        for(var k=0;k <model.loanAccount.documents.length; k++) {
+                            model.loanAccount.loanDocuments.push(model.loanAccount.documents[k]);
+                        }
                     }
                     /*if (!validateForm(formCtrl)){
                     return;

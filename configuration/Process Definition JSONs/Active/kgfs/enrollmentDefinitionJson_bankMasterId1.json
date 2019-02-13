@@ -24,7 +24,9 @@
         "name": "Completed",
         "stageType": "CAPTURE",
         "allowedRoles": ["WM"]
-    }],
+    }
+  
+],
     "schema": {
         "$schema": "http://json-schema.org/draft-04/schema#",
         "type": "object",
@@ -2043,7 +2045,7 @@
             "enterprise": {
                 "title": "Enterprise",
                 "type": "object",
-                "required": ["corporateName", "businessName", "businessConstitution", "businessType"],
+                "required": ["corporateName", "businessName", "businessConstitution"],
                 "properties": {
                     "customerNumber": {
                         "title": "customerNumber",
@@ -2366,11 +2368,29 @@
                         "maxLength": 100,
                         "captureStages": ["Completed"]
                     },
-                    "finishedGoods": {
-                        "title": "finishedGoods",
+                    "vatNumber": {
+                        "title": "GST_NUMBER",
+                        "type": "string",
+                        "captureStages": ["Completed"]
+                    },
+                    "ssiNumber": {
+                        "title": "WEEKLY_SALES",
+                        "type": "string",
+                        "captureStages": ["Completed"]
+                    },
+                    "tin": {
+                        "title": "SANCTIONED_LOAN_AMOUNT",
+                        "type": "string",
+                        "captureStages": ["Completed"]
+                    },
+                    "dic": {
+                        "title": "ACTUAL_EMI_OFFERED",
+                        "type": "string",
+                        "captureStages": ["Completed"]
+                    },
+                    "generalAdmin": {
+                        "title": "DEBT_SERVICE_RATIO",
                         "type": "number",
-                        "minimum": 0,
-                        "maximum": 100000000,
                         "captureStages": ["Completed"]
                     }
                 }
@@ -2627,7 +2647,7 @@
                 "type": "array",
                 "items": {
                     "type": "object",
-                    "required": ["buyerName", "incomeType", "amount"],
+                    "required": [],
                     "properties": {
                         "buyerName": {
                             "title": "Buyer Name",
@@ -2694,8 +2714,8 @@
                             "format": "date",
                             "captureStages": ["Completed"]
                         },
-                        "additionalDeatils": {
-                            "title": "additional Deatils",
+                        "additionalDetails": {
+                            "title": "additional Details",
                             "type": "string",
                             "refCodeCategory": "occupation",
                             "captureStages": ["Completed"]
@@ -2708,7 +2728,7 @@
                 "type": "array",
                 "items": {
                     "type": "object",
-                    "required": ["vendorName", "rawMaterialType", "amount"],
+                    "required": [],
                     "properties": {
                         "vendorName": {
                             "title": "Vendor Name",
@@ -2963,7 +2983,7 @@
                 "type": "array",
                 "items": {
                     "type": "object",
-                    "required": ["buyerName", "sector", "subSector", "product", "paymentTerms", "paymentDate", "paymentFrequency", "receivablesOutstanding"],
+                    "required": [],
                     "properties": {
                         "buyerName": {
                             "title": "Buyer Name",
@@ -3039,7 +3059,7 @@
                 "type": "array",
                 "items": {
                     "type": "object",
-                    "required": ["supplierName", "supplierType", "paymentTerms", "amount", "product", "paymentFrequency", "receivablesOutstanding"],
+                    "required": [],
                     "properties": {
                         "supplierName": {
                             "title": "Supplier Name",

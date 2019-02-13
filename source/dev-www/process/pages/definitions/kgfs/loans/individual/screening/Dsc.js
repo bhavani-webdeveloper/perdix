@@ -360,7 +360,7 @@ define([], function () {
                                     },
                                     {
                                         "type": "section",
-                                        "condition" : "model.loanAccount.currentStage == 'DSCOverride'",
+                                        "condition" : "model.loanAccount.currentStage == 'LosDSCOverride'",
                                         items: [
                                             {
                                                 title: "REMARKS",
@@ -377,7 +377,7 @@ define([], function () {
                                     },
                                     {
                                         "type": "button",
-                                        "condition" : "model.customer.loanSaved && model.loanAccount.currentStage == 'LoanInitiation' ",  
+                                        "condition" : "model.customer.loanSaved && model.loanAccount.currentStage == 'DscApproval' ",  
                                         "title": "DSC_REQUEST",
                                         "onClick": "actions.getDscDetails(model,model.loanAccount.id)"
                                     },
@@ -386,7 +386,7 @@ define([], function () {
                                         "title": "VIEW_DSC_RESPONSE",
                                         "icon": "fa fa-eye",
                                         "style": "btn-primary",
-                                        "condition":"model.customer.dscStatus && model.loanAccount.currentStage == 'LoanInitiation'",
+                                        "condition":"model.customer.dscStatus && model.loanAccount.currentStage == 'DscApproval'",
                                         "onClick": function(model, formCtrl, form, event) {
                                             console.log(form);
                                             console.warn(event);

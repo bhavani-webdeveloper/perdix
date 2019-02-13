@@ -48,6 +48,59 @@ Class Ckyc {
         'Ration Card' => 'OthersPOACKYCInd',
         'Driving Licence' => 'DrivingLicence'
     ];
+    private static function preProcessOfAddress($index1,$givenLenght,$data,$symbol,$preStrings,$prevJ,$preData,$total){
+        $index = $index1;
+      	var_dump($data);
+      	echo "<p></p>";
+      
+        if ($symbol == ',' && $total!= 0){
+             $prevJ  = $prevJ;
+             $preData = $preData;
+             $data = explode(',',$preData[$prevJ]);
+        }
+        $j =0;
+        for ($i =0;$i<=$index;$i++){
+            $preString = $preStrings ? $preStrings : "";
+            while (true){
+            if ($j<sizeof($data)){
+                if (strlen($preString.$data[$j]) <= $givenLenght && $total!= 0){
+                    $ssymbol = strlen($preString.$data[$j].$symbol) > $givenLenght ? "" : $symbol;
+                    $preString =  $preString.$data[$j].$ssymbol;
+                    if ($symbol != ",")
+                        $j = $j+1;
+                    else
+                        \array_splice($data,0, 1);
+                    continue;
+                }
+            }
+                if ($symbol != ','){
+                    $temp = Ckyc::preProcessOfAddress(0,$givenLenght,$data,',',$preString,$j,$data,$j-sizeof($data));
+                  	echo $temp;
+                  	echo "<p></p>";
+                  $preString = $temp[0];
+                    $data = $temp[1];
+                }
+                else if ($total != 0){
+                    return [$preString,$preData];
+                }
+                else
+                    return [$preString,$preData];
+                break;
+            }
+            continue;
+        }
+        return [$preString,$preData];
+    }
+    private static function address_split($c, $type, $length, $index) {
+        if ($type == 'permanent')
+            $address_array = array_filter([$c->door_no,$c->street,$c->post_office,$c->landmark,$c->locality,$c->district,$c->state]);
+        else if ($type == 'mailing')
+            $address_array = array_filter([$c->mailing_doorno,$c->mailing_street,$c->mailing_postoffice,$c->mailing_locality,$c->mailing_district,$c->mailing_state,$c->mailing_pincode]);
+        $default_data = join(',',$address_array);
+        $value = Ckyc::preProcessOfAddress($index,$length,explode(' ',$default_data),' ',"",0,"",1);
+        return $value[0];
+    }
+    
     public static function CKYC_PERDIX_FIELD_MAP() { return [
         'TransactionID' => '',
         'SourceSystemName' => 'Perdix',
@@ -110,18 +163,18 @@ Class Ckyc {
         'PermanentCKYCAddType' => '01',
         'PermanentCountry' => 'IN',
         'PermanentPin' => '@pincode',
-        'PermanentAddressLine1' => function($c) { return join(',', array_filter([$c->door_no,$c->street,$c->post_office,$c->landmark,$c->locality,$c->district,$c->state])); },
-        'PermanentAddressLine2' => '',
-        'PermanentAddressLine3' => '',
+        'PermanentAddressLine1' => function($c) { return Ckyc::address_split($c,'permanent',55, 0); },
+        'PermanentAddressLine2' => function($c) { return Ckyc::address_split($c,'permanent',55, 1); },
+        'PermanentAddressLine3' => function($c) { return Ckyc::address_split($c,'permanent',55, 2); },
         'PermanentDistrict' => '',
         'PermanentCity' => '@village_name',
         'PermanentState' => '',
         'PermanentAddressProof' => function($c) { return Ckyc::$p2c_address_proof[$c->address_proof]; },
         'CorrespondenceGlobalCountry' => 'IN',
         'CorrespondenceGlobalPin' => '@pincode',
-        'CorrespondenceGlobalAddressLine1' => function($c) { return join(',', array_filter([$c->door_no,$c->street,$c->post_office,$c->landmark,$c->locality,$c->district,$c->state])); },
-        'CorrespondenceGlobalAddressLine2' => '',
-        'CorrespondenceGlobalAddressLine3' => '',
+        'CorrespondenceGlobalAddressLine1' => function($c) { return Ckyc::address_split($c,'mailing',55, 0); },
+        'CorrespondenceGlobalAddressLine2' => function($c) { return Ckyc::address_split($c,'mailing',55, 1); },
+        'CorrespondenceGlobalAddressLine3' => function($c) { return Ckyc::address_split($c,'mailing',55, 2); },
         'CorrespondenceGlobalDistrict' => '',
         'CorrespondenceGlobalCity' => '@village_name',
         'CorrespondenceGlobalState' => '',
@@ -286,8 +339,19 @@ function recreate_directory($dir) {
 
 function download_customer_file($customer_id, $file_name, $file_id) {
     if ($file_id) {
+        $extension = "";
+        try {
+            $temp_file_name = DB::table('file_info')->where('file_id', $file_id)->first();
+            $temp_explode = explode('.', $temp_file_name->name);
+            $extension = end($temp_explode);
+        } catch (Exception $e) {}
+        if (!empty($extension)) {
+            $extension = '.'.$extension;
+        } else {
+            $extension = "";
+        }
         echo "    Downloading $customer_id $file_name: $file_id\n";
-        file_put_contents(CKYC_OUTGOING_TEMP_DIR.DIRECTORY_SEPARATOR.$customer_id.DIRECTORY_SEPARATOR.$file_name, file_get_contents(PERDIX_FILE_STREAM_API.'/'.$file_id));
+        file_put_contents(CKYC_OUTGOING_TEMP_DIR.DIRECTORY_SEPARATOR.$customer_id.DIRECTORY_SEPARATOR.$file_name.$extension, file_get_contents(PERDIX_FILE_STREAM_API.'/'.$file_id));
     }
 }
 

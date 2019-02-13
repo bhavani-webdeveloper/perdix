@@ -18,7 +18,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
 
         return {
             "type": "schema-form",
-            "title": "Loan Details",
+            "title": "LOAN_DETAILS",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 //

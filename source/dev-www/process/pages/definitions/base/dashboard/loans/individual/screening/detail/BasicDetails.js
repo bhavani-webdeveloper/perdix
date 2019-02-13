@@ -1,8 +1,8 @@
 define({
     pageUID: "base.dashboard.loans.individual.screening.detail.BasicDetails",
     pageType: "Engine",
-    dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "Model_ELEM_FC", "CreditBureau", "irfElementsConfig", "$filter","SchemaResource","$q","SessionStore","BundleManager","PageHelper","Utils","IndividualLoan"],
-    $pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, Model_ELEM_FC, CreditBureau, irfElementsConfig, $filter,SchemaResource,$q,SessionStore,BundleManager,PageHelper,Utils,IndividualLoan) {
+    dependencies: ["$log","$state", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "Model_ELEM_FC", "CreditBureau", "irfElementsConfig", "$filter","SchemaResource","$q","SessionStore","BundleManager","PageHelper","Utils","IndividualLoan"],
+    $pageFn: function($log,$state, Enrollment, formHelper, filterFilter, irfCurrencyFilter, Model_ELEM_FC, CreditBureau, irfElementsConfig, $filter,SchemaResource,$q,SessionStore,BundleManager,PageHelper,Utils,IndividualLoan) {
         var navigateToQueue = function(model) {
             BundleManager.deleteOffline().then(function() {
                 PageHelper.showProgress("loan-offline", "Offline record cleared", 5000);
@@ -76,6 +76,13 @@ define({
             var stageName = $filter('translate')(stageCode) || stageCode;
             return stageName;
         };
+        var appendPrefix = function(model, form) {
+            if(model.loanAccount.currentStage == 'RCU') {
+                if(model.loanAccount.documents.length != 0) {
+                    model.loanAccount.documents[form.arrayIndex].remarks = "RCUStageDocuments-" + model.loanAccount.documents[form.arrayIndex].document;
+                }
+            }
+        }
         var preLoanSaveOrProceed = function(model){
             var loanAccount = model.loanAccount;
     
@@ -143,6 +150,16 @@ define({
     
             return true;
         }
+        documentArrayFormation = function(model) {
+            if (_.hasIn(model.loanAccount, 'loanDocuments') && _.isArray(model.loanAccount.loanDocuments)){
+                model.loanAccount.documents = [];
+                _.filter(model.loanAccount.loanDocuments, function(doc) { 
+                    if(_.includes(doc.remarks, 'RCUStageDocuments-') == true) {
+                        model.loanAccount.documents.push(doc)
+                    }
+                });
+            }
+        }
         return {
             "type": "schema-form",
             "title": "Basic Details",
@@ -159,7 +176,7 @@ define({
                 BundleManager.pushEvent('loanAccount', model._bundlePageObj, model.loanAccount);
                 model.mitigantsChanged=0;
                 model.loanMitigants= model.loanAccount.loanMitigants;
-                          
+                documentArrayFormation(model);       
                 Enrollment.getCustomerById({
                     id: model.customerId
                 }).$promise.then(function(res) {
@@ -466,24 +483,26 @@ define({
                     "title": "Documents",
                     "colClass": "col-sm-12",
                     "items": [  {
-                        "key": "loanAccount.loanDocuments",
+                        "key": "loanAccount.documents",
                         "type": "array",
                         "title": "Documents",
-                        //startEmpty: true,
                         "items": [
                             {
-                                key:"loanAccount.loanDocuments[].document",
+                                key:"loanAccount.documents[].document",
                                 type:"text",
                                 title:"Document Name",
                                 required: true,
+                                onChange:function(value,form,model){
+                                    appendPrefix(model, form);
+                                }
                             },
                             {
-                                key:"loanAccount.loanDocuments[].documentId",
+                                key:"loanAccount.documents[].documentId",
                                 title : "Upload",
                                 type:"file",
                                 required: true,
                                 category: "Loan",
-                                subCategory: "DOC3"
+                                subCategory: "DOC3",
                             },
                             
                         ]
@@ -670,12 +689,18 @@ define({
                         return false;
                     }
                     model.loanAccount.loanMitigants = [];
-
+                    var Test 
+                    if (model.loanAccount.documents.length != 0) {
+                        for (var i = 0; i < model.loanAccount.documents.length; i++) {
+                            model.loanAccount.loanDocuments.push(model.loanAccount.documents[i]);
+                        }
+                    }
                     //model.loanAccount.loanDocuments = [];
                     if (model.loanAccount.loanDocuments.length) {
                         for (var i = 0; i < model.loanAccount.loanDocuments.length; i++) {
                             model.loanAccount.loanDocuments[i].loanId = model.loanAccount.id;
                             model.loanAccount.loanDocuments[i].documentStatus = null;
+                            model.loanAccount.loanDocuments[i].version = 0;
                         }
                     }
                     console.log(_.cloneDeep(model.loanAccount));
@@ -704,11 +729,6 @@ define({
 
                             PageHelper.showLoader();
                          
-
-                            var completeLead = false;
-                            if (!_.hasIn(reqData.loanAccount, "id")) {
-                                completeLead = true;
-                            }
                             IndividualLoan.update(reqData)
                             .$promise
                             .then(function(res) {
@@ -723,16 +743,7 @@ define({
                                         }
                                     }
                                 }
-
-                                if (completeLead === true && _.hasIn(model, "lead.id")) {
-                                    var reqData = {
-                                        lead: _.cloneDeep(model.lead),
-                                        stage: "Completed"
-                                    }
-
-                                    reqData.lead.leadStatus = "Complete";
-                                    LeadHelper.proceedData(reqData)
-                                }
+                                documentArrayFormation(model);
                             }, function(httpRes) {
                                 PageHelper.showErrors(httpRes);
                             })
@@ -829,9 +840,12 @@ define({
                          return false;
                      }
 
-                     if (!preLoanSaveOrProceed(model)){
+                    if (!preLoanSaveOrProceed(model)){
                          return;
-                     }
+                    }
+                    if (_.hasIn(model.loanAccount, 'noOfGuarantersRequired')) {
+                        model.loanAccount.noOfGuarantersRequired = -1;
+                    } 
                     Utils.confirm("Are You Sure?").then(function() {
 
                         var reqData = {

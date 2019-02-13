@@ -283,7 +283,7 @@ irf.commons.factory("Utils", ["$log", "$q", "$http", function($log, $q, $http){
 	};
 }]);
 
-irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','Files', function($log, $q,irfSimpleModal,$sce, Files){
+irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','Files','MantraFingrePrintService','PageHelper', function($log, $q,irfSimpleModal,$sce, Files,MantraFingrePrintService,PageHelper){
 
 	return {
         getLabel: function(fingerId){
@@ -408,7 +408,96 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
                 });
 
             return deferred.promise;
-        },
+		},
+		validateFingerPrintByMantra(fingerObj) {
+		    var fingerObj = fingerObj;
+		    var deferred = $q.defer();
+		    var fingerData;
+		    var response;
+		    var result = [];
+		    var fileId = null;
+		    var BiometricHTML = '\
+			<select class="dropdown" ng-model="selectedFinger" ng-change="model.changeFinger(selectedFinger)">\
+			<option value="LeftThumb">LeftThumb</option>\
+			<option value="LeftIndex">LeftIndex</option>\
+			<option value="LeftMiddle">LeftMiddle</option>\
+			<option value="LeftRing">LeftRing</option>\
+			<option value="LeftLittle">LeftLittle</option>\
+			<option value="RightThumb">RightThumb</option>\
+			<option value="RightIndex">RightIndex</option>\
+			<option value="RightMiddle">RightMiddle</option>\
+			<option value="RightRing">RightRing</option>\
+			<option value="RightLittle">RightLittle</option>\
+			</select>' +
+		        '<button class="btn btn-primary" ng-click="model.takeDataForMantra();">Validate Finger</button>' +
+		        '<div><button id="statusMatchTrue" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 350%; color: green;">✓</button>' +
+		        '<button id="statusMatchFalse"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 350%; color: red;">X</button> <div>' +
+				'<button id="notCaptured"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Not Captured</button> <div>' +
+				'<div id="responsediv" class="text-danger">' +
+		        '</div>' +
+		        '<style>.button {background-color: #4CAF50' +
+		        'border: 14px solid green;' +
+		        'height: 105;' +
+		        'text-align: center;' +
+		        'text-decoration: none;' +
+		        'display: inline;' +
+		        'font-size: 6px;' +
+		        'cursor: pointer;' +
+		        'height: 60px;' +
+		        'width: 60px;' +
+		        'padding-left: 2px;' +
+		        'padding-right: 2px;' +
+		        'border-bottom-width: 0px;' +
+		        'border-left-width: 0px;' +
+		        'border-top-width: 0px;' +
+		        'border-right-width: 0px;background-color: #40ff00;' +
+		        'border-radius: 50%;    margin-right: 10px;} </style>';
+
+			var fpMatchStatus="";
+		    var BiometricModal = irfSimpleModal("Choose a finger to Validate Biometric Data", BiometricHTML, {
+		        "result": result,
+		        changeFinger: function (fingerId) {
+		            // Get Finger Data Using API
+					fileId = fingerObj[fingerId];
+					document.getElementById("statusMatchTrue").style.visibility = 'hidden';
+					document.getElementById("statusMatchFalse").style.visibility = 'hidden';
+					document.getElementById("notCaptured").style.visibility = 'hidden';
+		        },
+		        takeDataForMantra: function () {fpMatchStatus="";
+		            Files.getBase64DataFromFileId(fileId, {}, true)
+		                .then(function (res) {
+		                    fingerData = res;
+							document.getElementById("notCaptured").style.visibility = 'hidden';
+		                    MantraFingrePrintService.verifyFingerPrintMantra({
+		                            base64ISOTemplate: fingerData
+		                        },
+		                        function (verifyResponse) {
+									//responsediv.innerHTML=verifyResponse.match;
+								   // lastCapturedFingerValidationStatus = verifyResponse.match;
+								   fpMatchStatus=verifyResponse.match?"Match found":"Not Matched";
+		                            if (verifyResponse.match) {
+		                                document.getElementById("statusMatchTrue").style.visibility = 'visible';
+		                                document.getElementById("statusMatchFalse").style.visibility = 'hidden';
+		                            } else {
+		                                document.getElementById("statusMatchTrue").style.visibility = 'hidden';
+		                                document.getElementById("statusMatchFalse").style.visibility = 'visible';
+									}
+									deferred.resolve(fpMatchStatus);
+		                        },
+		                        function (error) {
+		                            document.getElementById("statusMatchTrue").style.visibility = 'hidden';
+		                            document.getElementById("statusMatchFalse").style.visibility = 'hidden';
+									document.getElementById("notCaptured").style.visibility = 'visible';
+									$log.info("verify error");
+		                        });
+		                }, function (err) {
+		                    deferred.reject(err);
+		                });
+		        }
+		    });
+
+		    return deferred.promise;
+		},
 		capture: function(model){
 			var deferred = $q.defer();
 			if (typeof(cordova)!=='undefined' && cordova && cordova.plugins && cordova.plugins.irfBluetooth && _.isFunction(cordova.plugins.irfBluetooth.enroll)) {
@@ -547,7 +636,265 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
                 	console.log("Modal closed by user");
                 	deferred.reject();
                 })
-			} else {
+			}
+			else if (model.fingerPrintDeviceType == "MANTRA") {
+
+			    var BiometricHTML = '\
+                     \
+					<div id="mantraFPModal" style="padding-left: 100px;">' +
+			        '<button id="LEFT_HAND_THUMB" ng-click="$close(model.takeData($event)) " class="button button5" ><img class="button button5" alt="LEFT_HAND_THUMB"  src=""/></button>' +
+			        '<button id="LEFT_HAND_INDEX" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5"  alt= "LEFT_HAND_INDEX"  src=""></button>' +
+			        '<button id="LEFT_HAND_MIDDLE" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5" alt= "LEFT_HAND_MIDDLE" src=""></button>' +
+			        '<button id="LEFT_HAND_RING" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5" alt= "LEFT_HAND_RING"  src=""></button>' +
+			        '<button id="LEFT_HAND_SMALL" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5" alt= "LEFT_HAND_SMALL"  src=""></button>' +
+					'</br>'+
+			        '<button id="RIGHT_HAND_THUMB" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5" alt="RIGHT_HAND_THUMB"  src=""></button>' +
+			        '<button id="RIGHT_HAND_INDEX" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5"  alt= "RIGHT_HAND_INDEX" src=""></button>' +
+			        '<button id="RIGHT_HAND_MIDDLE" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5" alt= "RIGHT_HAND_MIDDLE" src=""></button>' +
+			        '<button id="RIGHT_HAND_RING" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5" alt= "RIGHT_HAND_RING"  src=""></button>' +
+			        '<button id="RIGHT_HAND_SMALL" ng-click="$close(model.takeData($event))" class="button button5"><img  class="button button5" alt= "RIGHT_HAND_SMALL" src=""></button></div>' +
+					'<div style="padding-left: 100px;"><button id="statusMatchTrue"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 350%; color: green;">✓</button>'+
+					'<button id="statusMatchFalse"  class="" style="font-size: 8px; visibility:hidden; background-color:white;  font-size: 450%; border: aliceblue; color: red;">x</button>'+
+					'<button id="notCaptured"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Not Captured</button> <div>'+
+					'<div id="submitPanel" ><button id="validateLastCapturedFP" class="btn btn-primary" ng-click="$close(model.validateLastCaptured())" style="margin-top: 10%; margin-right: 10%; visibility:hidden;">VALIDATE LAST CAPTURED</button>' +
+					'<button id="" class="btn btn-primary" ng-click="$close(model.submitFPDetails())" style="margin-top: 10%; margin-right: 10%;">Submit</button></div>'+
+			        '<style>.button {background-color: #4CAF50' +
+			        'border: 14px solid green;' +
+			        'height: 105;' +
+			        'text-align: center;' +
+			        'text-decoration: none;' +
+			        'display: inline;' +
+			        'font-size: 6px;' +
+			        'cursor: pointer;' +
+			        'height: 60px;' +
+			        'width: 60px;' +
+			        'padding-left: 2px;' +
+			        'padding-right: 2px;' +
+			        'border-bottom-width: 0px;' +
+			        'border-left-width: 0px;' +
+			        'border-top-width: 0px;' +
+			        'border-right-width: 0px;background-color: #9cf739;' +
+			        'border-radius: 50%;    margin-right: 10px;} </style>';
+
+			    var result = [];
+			    var verifyFingerPrint = function (isoTemplate) {
+			        MantraFingrePrintService.verifyFingerPrintMantra({
+			                base64ISOTemplate: isoTemplate
+			            },
+			            function (verifyResponse) {
+							lastCapturedFingerValidationStatus = verifyResponse.match;
+							document.getElementById("notCaptured").style.visibility = 'hidden';
+							if (lastCapturedFingerValidationStatus) {
+							    document.getElementById("statusMatchTrue").style.visibility = 'visible';
+								document.getElementById("statusMatchFalse").style.visibility = 'hidden';
+							} else {
+							    document.getElementById("statusMatchTrue").style.visibility = 'hidden';
+							    document.getElementById("statusMatchFalse").style.visibility = 'visible';
+							}
+			            },
+			            function (error) {
+							document.getElementById("statusMatchTrue").style.visibility = 'hidden';
+							document.getElementById("statusMatchFalse").style.visibility = 'hidden';
+							document.getElementById("notCaptured").style.visibility = 'visible';
+							$log.info("verify error");
+			            });
+			    }
+			    var fingerArray = [];
+			    var lastCapturedFingerPrintISOTemplate = '';
+			    var lastCapturedFingerValidationStatus = false;
+			    var uploadFingerPrint = function (targetElement) {
+			        var temp = "data:image/png;base64,";
+			        var baseElem = document.getElementById("mantraFPModal").childNodes;
+			        for (var i = 0; i < baseElem.length; i++) {
+						if(i!=5){
+							document.getElementById(baseElem[i].id).disabled = true;
+						}
+			            };
+						MantraFingrePrintService.captureFingerPrintMantra(
+			            function (biometricDetails) {
+			                var b = biometricDetails;
+			                var iso = b.base64ISOTemplate;
+			                var applet = document.getElementById('mantraFPModal');
+			                lastCapturedFingerPrintISOTemplate = b.base64ISOTemplate;
+			                var child = applet.childNodes;
+			                for (var i = 0; i < child.length; i++) {
+			                    if (targetElement == child[i].id) {
+			                        var tempImg = document.getElementById(targetElement).childNodes;
+									tempImg[0].src = temp + b.base64Image;
+									fingerArray.push({
+										'name':targetElement,
+										'data':b.base64ISOTemplate,
+									});
+
+			                    }
+			                }
+			                for (var i = 0; i < baseElem.length; i++) {
+								if(i!=5)
+			                    document.getElementById(baseElem[i].id).disabled = false;
+			                };
+							document.getElementById("validateLastCapturedFP").style.visibility = 'visible';
+			            },
+			            function (err) {
+			                var baseElem = document.getElementById("mantraFPModal").childNodes;
+			                for (var i = 0; i < baseElem.length; i++) {
+								if(i!=5)
+			                    document.getElementById(baseElem[i].id).disabled = false;
+							};
+							document.getElementById("notCaptured").style.visibility = 'visible';
+			                $log.info(err);
+			            }
+			        );
+			    }
+			    var BiometricModal = irfSimpleModal("Capture Data", BiometricHTML, {
+			        "result": result,
+			        "takeData": function (event) {
+			            var targetElem = event.target.alt;
+			            if (typeof targetElem === 'undefined') {
+			                targetElem = event.target.id;
+			            }
+						document.getElementById("statusMatchTrue").style.visibility = 'hidden';
+						document.getElementById("statusMatchFalse").style.visibility = 'hidden';
+						document.getElementById("notCaptured").style.visibility = 'hidden';
+			            result = uploadFingerPrint(targetElem);
+			            for (var i = 0; i < result.length; i++) {
+
+			                switch (i) {
+			                    case 0:
+			                        tableField = 'leftHandThumpImageId';
+			                        thumb = 'LeftThumb';
+			                        break;
+			                   
+			                }
+			            
+			            }
+			        },
+			        "submitFPDetails": function () {
+			            var obj = {};
+			            var tableField = null;
+			            var thumb = null;
+			            if (fingerArray.length) {
+			                for (var i = 0; i < fingerArray.length; i++) {
+
+			                    switch (fingerArray[i].name) {
+			                        case 'LEFT_HAND_THUMB':
+			                            tableField = 'leftHandThumpImageId';
+			                            thumb = 'LeftThumb';
+			                            break;
+			                        case 'LEFT_HAND_INDEX':
+			                            tableField = 'leftHandIndexImageId';
+			                            thumb = 'LeftIndex';
+			                            break;
+			                        case 'LEFT_HAND_MIDDLE':
+			                            tableField = 'leftHandMiddleImageId';
+			                            thumb = 'LeftMiddle';
+			                            break;
+			                        case 'LEFT_HAND_RING':
+			                            tableField = 'leftHandRingImageId';
+			                            thumb = 'LeftRing';
+			                            break;
+			                        case 'LEFT_HAND_SMALL':
+			                            tableField = 'leftHandSmallImageId';
+			                            thumb = 'LeftLittle';
+			                            break;
+			                        case 'RIGHT_HAND_THUMB':
+			                            tableField = 'rightHandThumpImageId';
+			                            thumb = 'RightThumb';
+			                            break;
+			                        case 'RIGHT_HAND_INDEX':
+			                            tableField = 'rightHandIndexImageId';
+			                            thumb = 'RightIndex';
+			                            break;
+			                        case 'RIGHT_HAND_MIDDLE':
+			                            tableField = 'rightHandMiddleImageId';
+			                            thumb = 'RightMiddle';
+			                            break;
+			                        case 'RIGHT_HAND_RING':
+			                            tableField = 'rightHandRingImageId';
+			                            thumb = 'RightRing';
+			                            break;
+			                        case 'RIGHT_HAND_SMALL':
+			                            tableField = 'rightHandSmallImageId';
+			                            thumb = 'RightLittle';
+			                            break;
+			                    }
+			                    if (tableField != null) {
+			                        obj[thumb] = {};
+			                        obj[thumb]['data'] = fingerArray[i].data;
+			                        obj[thumb]['table_field'] = tableField;
+			                    }
+
+
+			                }
+			                return obj;
+			            }
+
+			        },
+			        "validateLastCaptured": function () {
+			            verifiedFP = verifyFingerPrint(lastCapturedFingerPrintISOTemplate);
+			            for (var i = 0; i < result.length; i++) {
+
+			                switch (i) {
+			                    case 0:
+			                        tableField = 'leftHandThumpImageId';
+			                        thumb = 'LeftThumb';
+			                        break;
+			                    case 1:
+			                        tableField = 'leftHandIndexImageId';
+			                        thumb = 'LeftIndex';
+			                        break;
+			                    case 2:
+			                        tableField = 'leftHandMiddleImageId';
+			                        thumb = 'LeftMiddle';
+			                        break;
+			                    case 3:
+			                        tableField = 'leftHandRingImageId';
+			                        thumb = 'LeftRing';
+			                        break;
+			                    case 4:
+			                        tableField = 'leftHandSmallImageId';
+			                        thumb = 'LeftLittle';
+			                        break;
+			                    case 5:
+			                        tableField = 'rightHandThumpImageId';
+			                        thumb = 'RightThumb';
+			                        break;
+			                    case 6:
+			                        tableField = 'rightHandIndexImageId';
+			                        thumb = 'RightIndex';
+			                        break;
+			                    case 7:
+			                        tableField = 'rightHandMiddleImageId';
+			                        thumb = 'RightMiddle';
+			                        break;
+			                    case 8:
+			                        tableField = 'rightHandRingImageId';
+			                        thumb = 'RightRing';
+			                        break;
+			                    case 9:
+			                        tableField = 'rightHandSmallImageId';
+			                        thumb = 'RightLittle';
+			                        break;
+			                }
+			                if (true) {
+			                    obj[thumb] = {};
+			                    obj[thumb]['data'] = 'LEFT_HAND_THUMB';
+			                    obj[thumb]['table_field'] = 'leftHandThumpImageId';
+			                }
+
+
+			            }
+			        }
+			    });
+
+			    BiometricModal.result.then(function (obj) {
+			        console.log(obj)
+			        deferred.resolve(obj);
+			    }, function () {
+			        console.log("Modal closed by user");
+			        deferred.reject();
+			    })
+			}
+			else {
 				deferred.reject('ERR_BIOMETRIC_PLUGIN_MISSING');
 			}
 			return deferred.promise;
@@ -649,7 +996,7 @@ irf.commons.service('irfPrinter',["$log","PageHelper","Utils","irfSimpleModal",f
 	self.printPreview = function(printData){
 		self.data = printData;
 		if (Utils.isCordova && self.data.thermalReceipt) {
-			self.thermalReceipt = generateThermelPrint(data.thermalReceipt);
+			self.thermalReceipt = generateThermelPrint(self.data.thermalReceipt);
 			self.previewHtml = '<div class="web-print-wrapper">'  +self.webPrintStyle+ self.thermalReceipt.html + '</div>'
 		} else if (self.data.paperReceipt) {
 			self.previewHtml = '<div class="web-print-wrapper">' +self.webPrintStyle+ printData.paperReceipt + '</div>'

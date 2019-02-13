@@ -1241,12 +1241,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 {
                                     "type": "actionbox",
-                                    "condition": "model.customer.currentStage && (model.currentStage=='Screening' || model.currentStage=='Appraisal' || (model.currentStage=='GuarantorAddition' && model.pageClass=='guarantor'))",
+                                    "condition": "model.customer.currentStage && (model.currentStage=='Screening' || model.currentStage=='Appraisal' || model.currentStage=='ScreeningReview' || model.currentStage=='CreditAppraisal' || model.currentStage=='DSCApproval' || model.currentStage=='LosDSCOverride' ||  (model.currentStage=='GuarantorAddition' && model.pageClass=='guarantor'))",
                                     "orderNo": 1200,
                                     "items": [
                                         {
                                             "type": "button",
-                                            "title": "UPDATE_ENROLMENT",
+                                            "title": "UPDATE",
                                             "onClick": "actions.proceed(model, formCtrl, form, $event)"
                                         }
                                     ]
@@ -1254,7 +1254,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             ]
                         }
                     };
-
                     UIRepository.getEnrolmentProcessUIRepository().$promise
                         .then(function(repo){
                             return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)

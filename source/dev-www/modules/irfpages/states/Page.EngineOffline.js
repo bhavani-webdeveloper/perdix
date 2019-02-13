@@ -8,6 +8,7 @@ irf.pages.controller("PageEngineOfflineCtrl", [
 	"elementsUtils",
 	"entityManager",
 	"Utils",
+	"translateFilter",
 function(
 	$log,
 	$scope,
@@ -17,7 +18,8 @@ function(
 	irfStorageService,
 	elementsUtils,
 	entityManager,
-	Utils
+	Utils,
+	translateFilter
 ) {
 	var self = this;
 	$log.info("Page.EngineOffline.html loaded");
@@ -26,7 +28,7 @@ function(
 	$scope.page = $injector.get(irf.page($scope.pageName));
 
 	var updateAppTitle = function(menuTitle) {
-		document.title = menuTitle + " | " + document.mainTitle;
+		document.title = translateFilter(menuTitle) + " | " + document.mainTitle;
 	};
 
 	$scope.loadPage = function(event) {

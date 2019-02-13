@@ -12,11 +12,12 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanOriginationDashboar
                // "Page/Bundle/kgfs.loans.individual.screening.ScreeningInput",
                 "Page/Engine/kgfs.loans.individual.screening.ScreeningQueue",
                 "Page/Engine/kgfs.loans.individual.screening.MELApplicationForm",
-                "Page/Engine/kgfs.loans.individual.screening.ScreeningReviewQueue",
+                "Page/Engine/kgfs.loans.individual.screening.ApplicationQueue",
                 "Page/Engine/kgfs.loans.individual.screening.CreditAppraisalQueue",
-                "Page/Engine/kgfs.loans.individual.screening.DscApprovalQueue",
+                "Page/Engine/kgfs.loans.individual.screening.DscQueue",
                 "Page/Engine/kgfs.loans.individual.screening.DscOverrideQueue",
                 "Page/Engine/kgfs.loans.individual.screening.KYCCheck",
+                "Page/Engine/kgfs.loans.individual.screening.RiskReviewAndLoanSanctionQueue",
                 "Page/Engine/kgfs.loans.individual.screening.RejectedQueue"
             ]
         };
@@ -52,7 +53,7 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanOriginationDashboar
 
 
 
-            var srqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.ScreeningReviewQueue"];
+            var srqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.ScreeningReviewQueue"];
             if (srqMenu) {
                 IndividualLoan.search({
                     'stage': 'ScreeningReview',
@@ -67,6 +68,96 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanOriginationDashboar
                     srqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     srqMenu.data = '-';
+                });
+            }
+
+             var caqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.CreditAppraisalQueue"];
+            if (caqMenu) {
+                IndividualLoan.search({
+                    'stage': 'CreditAppraisal',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    caqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    caqMenu.data = '-';
+                });
+            }
+
+             var daqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.DscQueue"];
+            if (daqMenu) {
+                IndividualLoan.search({
+                    'stage': 'DscApproval',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    daqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    daqMenu.data = '-';
+                });
+            }
+
+             var doqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.DscOverrideQueue"];
+            if (doqMenu) {
+                IndividualLoan.search({
+                    'stage': 'LosDscOverride',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    doqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    doqMenu.data = '-';
+                });
+            }
+
+             var kyccMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.KYCCheck"];
+            if (kyccMenu) {
+                IndividualLoan.search({
+                    'stage': 'KYCCheck',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    kyccMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    kyccMenu.data = '-';
+                });
+            }
+
+            var rralsMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.RiskReviewAndLoanSanctionQueue"];
+            if (rralsMenu) {
+                IndividualLoan.search({
+                    'stage': 'RiskReviewAndLoanSanction',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    rralsMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    rralsMenu.data = '-';
                 });
             }
 

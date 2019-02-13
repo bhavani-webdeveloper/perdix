@@ -19,22 +19,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                 "bundleDefinitionPromise": function() {
                     return $q.resolve([
                         {
-                            pageName: 'kgfs.loans.individual.screening.Summary',
-                            title: 'APPLICANT',
-                            pageClass: 'applicant',
-                            minimum: 1,
-                            maximum: 1,
-                            order:1
-                        },
-                        {
-                            pageName: 'loans.individual.screening.CreditBureauView',
-                            title: 'CREDIT_BUREAU',
-                            pageClass: 'cbview',
-                            minimum: 1,
-                            maximum: 1,
-                            order:60
-                        },
-                        {
                             pageName: 'kgfs.customer.IndividualEnrolment2',
                             title: 'APPLICANT',
                             pageClass: 'applicant',
@@ -47,16 +31,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
                             minimum: 0,
-                            maximum: 4,
-                            order:20
+                            maximum: 1,
+                            order:11
                         },
                         {
                             pageName: 'kgfs.customer.IndividualEnrolment2',
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
                             minimum: 0,
-                            maximum: 3,
-                            order:30
+                            maximum: 1,
+                            order:12
                         },
                         {
                             pageName: 'kgfs.customer.EnterpriseEnrolment2',
@@ -72,8 +56,32 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'loan-request',
                             minimum: 1,
                             maximum: 1,
-                            order:50
-                        }
+                            order:60
+                        },
+                        {
+                            pageName: 'kgfs.loans.individual.screening.CreditBureauView',
+                            title: 'CREDIT_BUREAU',
+                            pageClass: 'cbview',
+                            minimum: 1,
+                            maximum: 1,
+                            order:9
+                        },
+                            // {
+                            //     pageName: 'kgfs.loans.individual.screening.Summary',
+                            //     title: 'SUMMARY',
+                            //     pageClass: 'summary',
+                            //     minimum: 1,
+                            //     maximum: 1,
+                            //     order: 5
+                            // },                            
+                            {
+                                pageName: 'kgfs.loans.individual.screening.Review',
+                                title: 'REVIEW',
+                                pageClass: 'loan-review',
+                                minimum: 1,
+                                maximum: 1,
+                                order:80
+                            }
                     ]);
                 },
                 "bundlePages": [],
@@ -150,14 +158,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 }
 
                                 $this.bundlePages.push({
-                                    pageClass: 'summary',
-                                    model: {
-                                        cbModel: {customerId:res.customerId,loanId:bundleModel.loanId, scoreName:'RiskScore1'}
-                                        loanProcess: loanProcess
-                                    }
-                                });
-
-                                $this.bundlePages.push({
                                     pageClass: 'applicant',
                                     model: {
                                         enrolmentProcess: loanProcess.applicantEnrolmentProcess,
@@ -209,6 +209,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
+                                $this.bundlePages.push({
+                                    pageClass: 'loan-review',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount,
+                                    }
+                                });
+
                             
                                 deferred.resolve();
 
@@ -248,8 +255,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         });
                                     }
                                 }
-                               
-
                                 $this.bundlePages.push({
                                     pageClass: 'loan-request',
                                     model: {
@@ -261,6 +266,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     pageClass: 'cbview',
                                     model: {
                                         loanAccount: loanProcess.loanAccount
+                                    }
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'loan-review',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount,
                                     }
                                 });
 
@@ -383,7 +395,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     for (var i=0; i<offlineData.bundlePages.length; i++){
                         var page = offlineData.bundlePages[i];
                         if (page.pageClass == "applicant" && !page.model.customer.firstName){
-                            PageHelper.showProgress("screeningReview", "Applicant first name is required to save offline", 5000);
+                            PageHelper.showProgress("ScreeningReview", "Applicant first name is required to save offline", 5000);
                             defer.reject();
                         }
                     }

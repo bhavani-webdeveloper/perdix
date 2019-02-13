@@ -90,6 +90,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         coB.relation = 'Co-Applicant';
                         coB.urn = coB.coBorrowerUrnNo;
                         coB.customerId = coB.customerId;
+                        model.loanAccount.coBorrowerUrnNo = coB.coBorrowerUrnNo;
                         model.loanAccount.loanCustomerRelations.push(coB);
                     }
                 }
@@ -2107,12 +2108,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         autolov: true,
                                         inputMap: {
                                             "pincode": {
+                                                title:"PINCODE",
                                                 key:"loanAccount.nominees[].nomineePincode"
                                             },
                                             "district": {
+                                                title:"DISTRICT",
                                                 key: "loanAccount.nominees[].nomineeDistrict"
                                             },
                                             "state": {
+                                                title:"STATE",
                                                 key: "loanAccount.nominees[].nomineeState"
                                             }
                                         },
@@ -2417,12 +2421,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         autolov: true,
                                         inputMap: {
                                             "pincode": {
+                                                title:"DISTRICT",
                                                 key:"loanAccount.nominees[].nomineePincode"
                                             },
                                             "district": {
+                                                title:"DISTRICT",
                                                 key: "loanAccount.nominees[].nomineeDistrict"
                                             },
                                             "state": {
+                                                title:"STATE",
                                                 key: "loanAccount.nominees[].nomineeState"
                                             }
                                         },

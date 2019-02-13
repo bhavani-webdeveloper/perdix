@@ -82,6 +82,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                         minimum: 1,
                         maximum: 1,
                         order:50
+                    }, {
+                        pageName: 'loans.individual.screening.detail.PortfolioAnalysis',
+                        title: 'CUSTOMER_HISTORY',
+                        pageClass: 'portfolio-analysis',
+                        minimum: 1,
+                        maximum: 1,
+                        order: 52
                     },
                     {
                         pageName: 'loans.individual.screening.Review',
@@ -90,13 +97,14 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                         minimum: 1,
                         maximum: 1,
                         order:60
-                    }, {
-                        pageName: 'loans.individual.screening.detail.PortfolioAnalyticsView',
-                        title: 'Portfolio Analytics',
-                        pageClass: 'portfolio-analytics',
+                    }, 
+                    {
+                        pageName: 'loans.individual.screening.detail.SummaryView',
+                        title: 'SummaryView',
+                        pageClass: 'summaryView',
                         minimum: 1,
                         maximum: 1,
-                        order: 90
+                        order: 5
                     }
                 ],
                 "bundlePages": [],
@@ -172,6 +180,20 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                                         }
                                     });
 
+                                    if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan') {
+                                        $this.bundlePages.push({
+                                            pageClass: 'summaryView',
+                                            model: {
+                                                cbModel: {
+                                                    customerId: res.customerId,
+                                                    loanId: bundleModel.loanId,
+                                                    scoreName: 'RiskScore3',
+                                                    customerDetail: bundleModel.customer_detail
+                                                }
+                                            }
+                                        });
+                                    }
+
                                     $this.bundlePages.push({
                                         pageClass: 'cbview',
                                         model: {
@@ -212,6 +234,21 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                                         pageClass: 'business-financials',
                                         model: businessModel
                                     })
+
+                                    $this.bundlePages.push({
+                                        pageClass: 'portfolio-analysis',
+                                        model: {
+                                            customerUrn: res.urnNo,
+                                            cbModel: {
+                                                customerId: res.customerId,
+                                                loanId: bundleModel.loanId,
+                                                scoreName: 'RiskScore3',
+                                                customerDetail: bundleModel.customer_detail
+                                            }
+                                            
+                                        }
+                                    });
+
                                     var temp_model = {
                                         loanAccount:res
                                     }
@@ -229,12 +266,6 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                                         pageClass: 'loan-review',
                                         model: {
                                             loanAccount: res
-                                        }
-                                    });
-                                    $this.bundlePages.push({
-                                        pageClass: 'portfolio-analytics',
-                                        model: {
-                                            loanId: bundleModel.loanId
                                         }
                                     });
 
@@ -310,6 +341,15 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                         BundleManager.broadcastEvent('load-personal-discussion', form, formCtrl, model,bundlePageObj, bundleModel);
                         //object.initialize(model, form, formCtrl, bundlePageObj, bundleModel);
                     },
+                    "financialSummary": function(pageObj, bundleModel, params) {
+                        BundleManager.broadcastEvent("financial-summary", params);
+                    },
+                    "customer-history-data": function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("customer-history-fin-snap", params);
+                    },
+                    "business": function(pageObj, bundleModel, params) {
+                        BundleManager.broadcastEvent("business-customer", params);
+                    }
         		}
         	}
         }
