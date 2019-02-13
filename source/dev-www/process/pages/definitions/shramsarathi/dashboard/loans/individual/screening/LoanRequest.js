@@ -1723,7 +1723,7 @@ define([],function(){
                                     "PreliminaryInformation":{
                                         "items": {
                                             "loanPurpose3": {
-                                                "key":"loanAccount.loanPurpose3",
+                                                "key":"loanAccount.loanPurpose2",
                                               "title":"LOAN_SUB_PURPOSE2",
                                               "type":"text",
                                               "orderNo":40
