@@ -1554,6 +1554,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             var overridesFields = function (bundlePageObj) {
                 return {
                     //over 
+                    "KYC.idProofIssueDate":{
+                        "orderNo":50
+                    },
+                    "KYC.idProofValidUptoDate":{
+                        "orderNo":60
+                    },
+                    "KYC.identityProofBackside":{
+                        "orderNo":40
+                    },
+                    "KYC.addressProofIssueDate":{
+                        "orderNo":70
+                    },
+                    "KYC.addressProofValidUptoDate":{
+                        "orderNo":80
+                    },
                     "EnterpriseFinancials":{
                         "title":"CURRENT_ASSET",
                         "orderNo":300
@@ -1907,10 +1922,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "KYC.identityProof",
                     "KYC.identityProofImageId",
                     "KYC.identityProofNo",
+                    "KYC.idProofIssueDate",
+                    "KYC.idProofValidUptoDate",
+                    "KYC.identityProofBackside",
                     "KYC.addressProofFieldSet",
                     "KYC.addressProof",
                     "KYC.addressProofImageId",
                     "KYC.addressProofNo",
+                    "KYC.addressProofIssueDate",
+                    "KYC.addressProofValidUptoDate",
                     "KYC.additionalKYCs",
                     "KYC.additionalKYCs.kyc1ProofType",
                     "KYC.additionalKYCs.kyc1ImagePath",
@@ -2343,6 +2363,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             //     "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='ScreeningReview'",
 
                                         },
+                                        "identityProofBackside":{
+                                            "key":"customer.identityProofBackside",
+                                            "type": "file",
+                                            "fileType": "application/pdf",
+                                            "using": "scanner",
+                                            "title":"IDENTITY_PROOF_BACKSIDE",
+                                           // "orderNo":70
+                                        }
                                     }
 
                                 },
