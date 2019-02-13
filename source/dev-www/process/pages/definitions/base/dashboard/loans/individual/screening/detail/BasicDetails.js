@@ -150,6 +150,16 @@ define({
     
             return true;
         }
+        documentArrayFormation = function(model) {
+            if (_.hasIn(model.loanAccount, 'loanDocuments') && _.isArray(model.loanAccount.loanDocuments)){
+                model.loanAccount.documents = [];
+                _.filter(model.loanAccount.loanDocuments, function(doc) { 
+                    if(_.includes(doc.remarks, 'RCUStageDocuments-') == true) {
+                        model.loanAccount.documents.push(doc)
+                    }
+                });
+            }
+        }
         return {
             "type": "schema-form",
             "title": "Basic Details",
@@ -166,7 +176,7 @@ define({
                 BundleManager.pushEvent('loanAccount', model._bundlePageObj, model.loanAccount);
                 model.mitigantsChanged=0;
                 model.loanMitigants= model.loanAccount.loanMitigants;
-                          
+                documentArrayFormation(model);       
                 Enrollment.getCustomerById({
                     id: model.customerId
                 }).$promise.then(function(res) {
@@ -679,7 +689,7 @@ define({
                         return false;
                     }
                     model.loanAccount.loanMitigants = [];
-                    
+                    var Test 
                     if (model.loanAccount.documents.length != 0) {
                         for (var i = 0; i < model.loanAccount.documents.length; i++) {
                             model.loanAccount.loanDocuments.push(model.loanAccount.documents[i]);
@@ -719,11 +729,6 @@ define({
 
                             PageHelper.showLoader();
                          
-
-                            var completeLead = false;
-                            if (!_.hasIn(reqData.loanAccount, "id")) {
-                                completeLead = true;
-                            }
                             IndividualLoan.update(reqData)
                             .$promise
                             .then(function(res) {
@@ -738,16 +743,7 @@ define({
                                         }
                                     }
                                 }
-
-                                if (completeLead === true && _.hasIn(model, "lead.id")) {
-                                    var reqData = {
-                                        lead: _.cloneDeep(model.lead),
-                                        stage: "Completed"
-                                    }
-
-                                    reqData.lead.leadStatus = "Complete";
-                                    LeadHelper.proceedData(reqData)
-                                }
+                                documentArrayFormation(model);
                             }, function(httpRes) {
                                 PageHelper.showErrors(httpRes);
                             })
