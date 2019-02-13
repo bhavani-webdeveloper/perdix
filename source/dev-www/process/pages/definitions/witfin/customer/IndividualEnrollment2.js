@@ -915,6 +915,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "title":"COMMENTS_OF_NEIGHBOUR"
                     },
                     "IndividualInformation.spouseFirstName":{
+                        "type":"string",
                         "condition": "model.customer.maritalStatus.toLowerCase() == 'married'"
                     },
                     "IndividualInformation.spouseDateOfBirth":{
@@ -1038,7 +1039,32 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "condition": "!model.customer.mailSameAsResidence"
                     },
                     "KYC.addressProofNo": {
-                        onCapture: EnrollmentHelper.customerAadhaarOnCapture
+                        onCapture: function(result, model, form) {
+                            var aadhaarData = EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
+                            model.customer.addressProofNo = aadhaarData.uid;
+                            if (aadhaarData.dob) {
+                                $log.debug('aadhaarData dob: ' + aadhaarData.dob);
+                                if (!isNaN(aadhaarData.dob.substring(2, 3))) {
+                                    model.customer.dateOfBirth = aadhaarData.dob;
+                                } else {
+                                    model.customer.dateOfBirth = moment(aadhaarData.dob, 'DD/MM/YYYY').format(SessionStore.getSystemDateFormat());
+                                }
+                                $log.debug('customer dateOfBirth: ' + model.customer.dateOfBirth);
+                                model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                            } else if (aadhaarData.yob) {
+                                $log.debug('aadhaarData yob: ' + aadhaarData.yob);
+                                if (model.customer.dateOfBirth) {
+                                    var dateOfBirth = moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat());
+                                    var month = dateOfBirth.format('MM');
+                                    var day = dateOfBirth.format('DD');
+                                    var year = dateOfBirth.format('YYYY');
+                                    model.customer.dateOfBirth = aadhaarData.yob + '-' + month + '-' + day;
+                                } else {
+                                    model.customer.dateOfBirth = aadhaarData.yob + '-01-01';
+                                }
+                                model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                            }
+                        }
                     },
                     "KYC.addressProof" :{
                         "readonly": true
