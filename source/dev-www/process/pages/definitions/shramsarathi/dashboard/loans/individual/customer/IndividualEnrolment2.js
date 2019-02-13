@@ -48,13 +48,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences",
                             ],
                             "overrides": {
+
                                 "ContactInformation.locality": {
                                     "readonly": true,
-                                    
+                                    "title":"PANCHAYAT"
                                 },
                                 "ContactInformation.villageName": {
                                     "readonly": true,
-                                    
+                                    "title":"VILLAGE"
                                 },
                                 "ContactInformation.district": {
                                     "readonly": true
@@ -62,7 +63,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ContactInformation.state": {
                                     "readonly": true
                                 },
-                                
+                                "ContactInformation.landLineNo":{
+                                    "title":"ALTERNATIVE_MOBILE_NO",
+                                },
+                                "ContactInformation.residentialAddressFieldSet":{
+                                    "title":"SOURCE_ADDRESS"
+                                },
+                                "ContactInformation.doorNo":{
+                                    "title":"HAMLET"
+                                },
+                                "ContactInformation.permanentAddressFieldSet":{
+                                    "title":"DESTINATION_ADDRESS"
+                                }
+
                             }
                         },
                         "FieldAppraisal":
@@ -73,16 +86,31 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             ],
                             "overrides": {
                                 "ContactInformation.locality": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"PANCHAYAT"
                                 },
                                 "ContactInformation.villageName": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"VILLAGE"
                                 },
                                 "ContactInformation.district": {
                                     "readonly": true
                                 },
                                 "ContactInformation.state": {
                                     "readonly": true
+                                },
+                                "ContactInformation.landLineNo":{
+                                    "title":"ALTERNATIVE_MOBILE_NO",
+                                   
+                                },
+                                "ContactInformation.residentialAddressFieldSet":{
+                                    "title":"SOURCE_ADDRESS"
+                                },
+                                "ContactInformation.doorNo":{
+                                    "title":"HAMLET"
+                                },
+                                "ContactInformation.permanentAddressFieldSet":{
+                                    "title":"DESTINATION_ADDRESS"
                                 }
                             }
                         },
@@ -135,7 +163,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.identityProofImageId": {
-                                    "required": false
+                                    "required": true
                                 },
                                 "KYC.identityProofNo": {
                                     "required": true
@@ -161,14 +189,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true,
                                     "title":"VILLAGE"
                                 },
-                                "ContactInformation.doorNo":{
-                                    "title":"HAMLET_FALA"
-                                },
                                 "ContactInformation.district": {
                                     "readonly": true
                                 },
                                 "ContactInformation.state": {
                                     "readonly": true
+                                },
+                                "ContactInformation.landLineNo":{
+                                    "title":"ALTERNATIVE_MOBILE_NO",
+                                   
+                                },
+                                "ContactInformation.residentialAddressFieldSet":{
+                                    "title":"SOURCE_ADDRESS"
+                                },
+                                "ContactInformation.doorNo":{
+                                    "title":"HAMLET"
+                                },
+                                "ContactInformation.permanentAddressFieldSet":{
+                                    "title":"DESTINATION_ADDRESS"
                                 },
                                 "IndividualInformation.customerId": {
                                     "readonly": true
@@ -242,9 +280,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
                                     "required": true
                                 },
-                                // "FamilyDetails.familyMembers": {
-                                //     "view": "fixed"
-                                // },
+                                "FamilyDetails.familyMembers": {
+                                    "title": "MIGRANT_DETAILS"
+                                },
                                 "BankAccounts.customerBankAccounts.accountNumber": {
                                     required: false
                                 },
@@ -296,7 +334,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.identityProofImageId": {
-                                    "required": false
+                                    "required": true
                                 },
                                 "KYC.identityProofNo": {
                                     "required": true
@@ -314,16 +352,31 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "ContactInformation.locality": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"PANCHAYAT"
                                 },
                                 "ContactInformation.villageName": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"VILLAGE"
                                 },
                                 "ContactInformation.district": {
                                     "readonly": true
                                 },
                                 "ContactInformation.state": {
                                     "readonly": true
+                                },
+                                "ContactInformation.landLineNo":{
+                                    "title":"ALTERNATIVE_MOBILE_NO",
+                                   
+                                },
+                                "ContactInformation.residentialAddressFieldSet":{
+                                    "title":"SOURCE_ADDRESS"
+                                },
+                                "ContactInformation.permanentAddressFieldSet":{
+                                    "title":"DESTINATION_ADDRESS"
+                                },
+                                "ContactInformation.doorNo":{
+                                    "title":"HAMLET"
                                 },
                                 "IndividualInformation.customerId": {
                                     "readonly": true
@@ -347,8 +400,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "condition": "model.customer.maritalStatus==='MARRIED'"
                                 },
                                 // "FamilyDetails.familyMembers.relationShip": {
-                                //     "readonly": true
+                                //     "title": "RELATIONSHIP_WITH_MIGRANT"
                                 // },
+                                "FamilyDetails.familyMembers": {
+                                    "title": "MIGRANT_DETAILS"
+                                },
                                 "HouseVerification.ownership": {
                                     "required": true
                                 },
@@ -383,6 +439,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 // "FamilyDetails.familyMembers": {
                                 //     "view": "fixed"
                                 // }
+                                "FamilyDetails.familyMembers": {
+                                    "title": "MIGRANT_DETAILS"
+                                },
                             }
                         },
                         "KYCReview": {
@@ -398,10 +457,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "ContactInformation.locality": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"PANCHAYAT"
                                 },
                                 "ContactInformation.villageName": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"VILLAGE"
                                 },
                                 "ContactInformation.district": {
                                     "readonly": true
@@ -411,6 +472,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ContactInformation": {
                                     "readonly": true
+                                },
+                                "ContactInformation.landLineNo":{
+                                    "title":"ALTERNATIVE_MOBILE_NO",
+                                   
+                                },
+                                "ContactInformation.residentialAddressFieldSet":{
+                                    "title":"SOURCE_ADDRESS"
+                                },
+                                "ContactInformation.permanentAddressFieldSet":{
+                                    "title":"DESTINATION_ADDRESS"
+                                },
+                                "ContactInformation.doorNo":{
+                                    "title":"HAMLET"
                                 },
                                 "IndividualFinancials": {
                                     "readonly": true
@@ -498,7 +572,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.identityProofImageId": {
-                                    "required": false
+                                    "required": true
                                 },
                                 "KYC.identityProofNo": {
                                     "required": true
@@ -545,8 +619,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ContactInformation.mailingDoorNo": {
                                     "condition": "!model.customer.mailSameAsResidence",
+                                    "title":"HAMLET"
                                 },
                                 "ContactInformation.mailingStreet": {
+                                    "condition": "!model.customer.mailSameAsResidence"
+                                },
+                                "ContactInformation.mailingMobilePhone": {
                                     "condition": "!model.customer.mailSameAsResidence"
                                 },
                                 "ContactInformation.mailingPostoffice": {
@@ -556,15 +634,32 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "condition": "!model.customer.mailSameAsResidence",
                                     "resolver": "MailingPincodeLOVConfiguration"
                                 },
+                                "ContactInformation.mailingLandmark": {
+                                    "condition": "!model.customer.mailSameAsResidence",
+                                    "title":"LANDMARK"
+                                },
                                 "ContactInformation.mailingLocality": {
                                     "condition": "!model.customer.mailSameAsResidence",
-                                    "title": "LANDMARK"
+                                    "title":"PANCHAYAT"
                                 },
                                 "ContactInformation.mailingDistrict": {
                                     "condition": "!model.customer.mailSameAsResidence",
                                 },
                                 "ContactInformation.mailingState": {
                                     "condition": "!model.customer.mailSameAsResidence",
+                                },
+                                "ContactInformation.landLineNo":{
+                                    "title":"ALTERNATIVE_MOBILE_NO",
+                                   
+                                },
+                                "ContactInformation.residentialAddressFieldSet":{
+                                    "title":"SOURCE_ADDRESS"
+                                },
+                                "ContactInformation.permanentAddressFieldSet":{
+                                    "title":"DESTINATION_ADDRESS"
+                                },
+                                "ContactInformation.doorNo":{
+                                    "title":"HAMLET"
                                 },
                                 // "FamilyDetails.familyMembers.relationShip": {
                                 //     "readonly": true
@@ -602,17 +697,26 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 // "FamilyDetails.familyMembers": {
                                 //     "view": "fixed"
                                 // },
+                                "FamilyDetails.familyMembers": {
+                                    "title": "MIGRANT_DETAILS"
+                                },
                                 "ContactInformation.locality": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"PANCHAYAT"
                                 },
                                 "ContactInformation.villageName": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"VILLAGE"
                                 },
                                 "ContactInformation.district": {
                                     "readonly": true
                                 },
                                 "ContactInformation.state": {
                                     "readonly": true
+                                },
+                                "ContactInformation.landLineNo":{
+                                    "title":"ALTERNATIVE_MOBILE_NO",
+                                   
                                 },
                                 "IndividualReferences.verifications.referenceFirstName": {
                                     "required": true
@@ -665,16 +769,31 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "ContactInformation.locality": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"PANCHAYAT"
                                 },
                                 "ContactInformation.villageName": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"VILLAGE"
                                 },
                                 "ContactInformation.district": {
                                     "readonly": true
                                 },
                                 "ContactInformation.state": {
                                     "readonly": true
+                                },
+                                "ContactInformation.landLineNo":{
+                                    "title":"ALTERNATIVE_MOBILE_NO",
+                                   
+                                },
+                                "ContactInformation.residentialAddressFieldSet":{
+                                    "title":"SOURCE_ADDRESS"
+                                },
+                                "ContactInformation.permanentAddressFieldSet":{
+                                    "title":"DESTINATION_ADDRESS"
+                                },
+                                "ContactInformation.doorNo":{
+                                    "title":"HAMLET"
                                 },
                                 "reference": {
                                     "readonly": true
@@ -721,16 +840,31 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title": "HOUSEHOLD_DETAILS"
                                 },
                                 "ContactInformation.locality": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"PANCHAYAT"
                                 },
                                 "ContactInformation.villageName": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"VILLAGE"
                                 },
                                 "ContactInformation.district": {
                                     "readonly": true
                                 },
                                 "ContactInformation.state": {
                                     "readonly": true
+                                },
+                                "ContactInformation.landLineNo":{
+                                    "title":"ALTERNATIVE_MOBILE_NO",
+                                   
+                                },
+                                "ContactInformation.residentialAddressFieldSet":{
+                                    "title":"SOURCE_ADDRESS"
+                                },
+                                "ContactInformation.doorNo":{
+                                    "title":"HAMLET"
+                                },
+                                "ContactInformation.permanentAddressFieldSet":{
+                                    "title":"DESTINATION_ADDRESS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -778,10 +912,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "ContactInformation.locality": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"PANCHAYAT"
                                 },
                                 "ContactInformation.villageName": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"VILLAGE"
                                 },
                                 "ContactInformation.district": {
                                     "readonly": true
@@ -843,16 +979,31 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "resolver": "IndividualCustomerIDLOVConfiguration"
                                 },
                                 "ContactInformation.locality": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"PANCHAYAT"
                                 },
                                 // "FamilyDetails.familyMembers.familyMemberFirstName": {
                                 //     "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
                                 // },
                                 "ContactInformation.villageName": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"VILLAGE"
                                 },
                                 "ContactInformation.district": {
                                     "readonly": true
+                                },
+                                "ContactInformation.landLineNo":{
+                                    "title":"ALTERNATIVE_MOBILE_NO",
+                                   
+                                },
+                                "ContactInformation.residentialAddressFieldSet":{
+                                    "title":"SOURCE_ADDRESS"
+                                },
+                                "ContactInformation.doorNo":{
+                                    "title":"HAMLET"
+                                },
+                                "ContactInformation.permanentAddressFieldSet":{
+                                    "title":"DESTINATION_ADDRESS"
                                 },
                                 "IndividualInformation.customerId": {
                                     "readonly": true
@@ -1127,7 +1278,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.identityProofImageId": {
-                                    "required": false
+                                    "required": true
                                 },
                                 "KYC.identityProofNo": {
                                     "required": true
@@ -1173,10 +1324,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "condition": "model.customer.maritalStatus==='MARRIED'"
                                 },
                                 "ContactInformation.locality": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"PANCHAYAT"
                                 },
                                 "ContactInformation.villageName": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"VILLAGE"
                                 },
                                 "ContactInformation.district": {
                                     "readonly": true
@@ -1185,7 +1338,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "ContactInformation.mailingDoorNo": {
-                                    "condition": "!model.customer.mailSameAsResidence"
+                                    "condition": "!model.customer.mailSameAsResidence",
+                                    "title":"HAMLET"
                                 },
                                 "ContactInformation.mailingStreet": {
                                     "condition": "!model.customer.mailSameAsResidence"
@@ -1199,7 +1353,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ContactInformation.mailingLocality": {
                                     "condition": "!model.customer.mailSameAsResidence",
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"PANCHAYAT"
                                 },
                                 "ContactInformation.mailingDistrict": {
                                     "condition": "!model.customer.mailSameAsResidence",
@@ -1437,11 +1592,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "orderNo": 20
                     },
                     "KYC.identityProof": {
-                        "orderNo": 30,
+                        "orderNo": 30
                     },
                     "KYC.identityProofImageId": {
-                        "orderNo": 40,
-                        "required": false
+                        "orderNo": 40
                     },
                     "KYC.identityProofNo": {
                         "orderNo": 50
@@ -1479,16 +1633,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "orderNo": 150
                     },
                     "ContactInformation.permanentAddressFieldSet": {
-                        "condition": "!model.customer.mailSameAsResidence",
-                        "title":"DESTINATION_ADDRESS"
+                        "condition": "!model.customer.mailSameAsResidence"
                     },
                     "ContactInformation.pincode": {
                         "resolver": "PincodeLOVConfiguration",
                         "searchHelper": formHelper
+
                     },
                     "ContactInformation.mailingPincode": {
                         "condition": "!model.customer.mailSameAsResidence",
                         "resolver": "MailingPincodeLOVConfiguration"
+                    },
+                    "FamilyDetails.familyMembers.relationShip":{
+                        "title":"RELATIONSHIP_WITH_MIGRANT",
+                        "condition":"FamilyDetails.familyMembers.migrantType!='NOTaMigrate'"
+                    },
+                    "FamilyDetails.familyMembers.familyMemberFirstName":{
+                        "title":"MIGRANT_NAME",
+                        "required":true,
+                        "condition":"FamilyDetails.familyMembers.migrantType!='NOTaMigrate'"
                     },
                     "HouseVerification.houseDetailsFieldSet": {
                         "orderNo": 10
@@ -1659,7 +1822,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "condition": "!model.customer.mailSameAsResidence"
                     },
                     "ContactInformation.mailingDoorNo": {
-                        "condition": "!model.customer.mailSameAsResidence"
+                        "condition": "!model.customer.mailSameAsResidence",
+                        "title":"HAMLET"
                     },
                     "ContactInformation.mailingStreet": {
                         "condition": "!model.customer.mailSameAsResidence"
@@ -1673,7 +1837,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "ContactInformation.mailingLocality": {
                         "condition": "!model.customer.mailSameAsResidence",
-                        "readonly": true
+                        "readonly": true,
+                        "title":"PANCHAYAT"
                     },
                     "ContactInformation.mailingDistrict": {
                         "condition": "!model.customer.mailSameAsResidence",
@@ -1714,7 +1879,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "KYC.identityProofFieldSet",
                     "KYC.identityProof",
                     "KYC.identityProofImageId",
-                    "KYC.identityproofbackside",
                     "KYC.identityProofNo",
                     "KYC.addressProofFieldSet",
                     "KYC.addressProof",
@@ -1755,7 +1919,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                     "ContactInformation",
                     "ContactInformation.mobilePhone",
-                    "ContactInformation.landLineNo",
+                   // "ContactInformation.alternativeMobileNo",
+                     "ContactInformation.landLineNo",
                     "ContactInformation.whatsAppMobileNoOption",
                     "ContactInformation.whatsAppMobileNo",
                     "ContactInformation.email",
@@ -1773,6 +1938,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.state",
                     "ContactInformation.mailSameAsResidence",
                     "ContactInformation.permanentAddressFieldSet",
+                    "ContactInformation.mailingLandmark",
+                    "ContactInformation.mailingMobilePhone",
                     "ContactInformation.mailingDoorNo",
                     "ContactInformation.mailingStreet",
                     "ContactInformation.mailingPostoffice",
@@ -1790,6 +1957,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                     "FamilyDetails",
                     "FamilyDetails.familyMembers",
+                    "FamilyDetails.familyMembers.migrantType",
+                    //"FamilyDetails.familyMembers.id",
                     "FamilyDetails.familyMembers.relationShip",
                     "FamilyDetails.familyMembers.customerId",
                     "FamilyDetails.familyMembers.familyMemberFirstName",
@@ -1804,6 +1973,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "FamilyDetails.familyMembers.incomes.incomeSource",
                     "FamilyDetails.familyMembers.incomes.incomeEarned",
                     "FamilyDetails.familyMembers.incomes.frequency",
+                    "FamilyDetails.familyMembers.incomes.occupation",
+                    "FamilyDetails.familyMembers.incomes.workSector",
+                    "FamilyDetails.familyMembers.incomes.incomeEarned",
+                    "FamilyDetails.familyMembers.incomes.frequency",
+                    "FamilyDetails.familyMembers.incomes.occupationType",
+                    "FamilyDetails.familyMembers.incomes.skillLevel",
+                    "FamilyDetails.familyMembers.incomes.avarageTimeSpend",
+                    "FamilyDetails.familyMembers.incomes.avarageReturn",
+                    "FamilyDetails.familyMembers.incomes.incomeFrom",
 
                     "Liabilities",
                     "Liabilities.liabilities",
@@ -1986,6 +2164,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "repositoryAdditions": {
                                 "ContactInformation": {
                                     "items": {
+                                        // "alternativeMobileNo": {
+                                        //     "key": "customer.alternativeMobileNo",
+                                        //     "title": "ALTERNATIVE_MOBILE_NO",
+                                        //     "type": "number",
+                                        //    // "orderNo": 100
+                                        // },
                                         "mandal": {
                                             "key": "customer.udf.userDefinedFieldValues.udf1",
                                             "title": "MANDAL_TAHSIL",
@@ -1998,22 +2182,132 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "type": "string",
                                             "orderNo": 181
                                         },
-                                        "collectionArea":{
-                                            "key":"ContactInformation.collectionArea",
-                                            "title":"COLLECTION_CENTRE",
-                                            //"required": true,
-                                            "type":"select",
-                                            "orderNo":110
+                                        "mailingLandmark": {
+                                            "key": "customer.landmark",
+                                            "title": "LANDMARK",
+                                            "type": "string",
+                                            //"orderNo": 181
                                         },
-                                        "mailingMobilePhone":{
-                                            "key":"ContactInformation.mailingMobilePhone",
+                                        "mailingmobilePhone":{
+                                            "key":"ContactInformation.mailingmobilePhone",
                                             "title":"DESTINATION_PHONE_NO",
                                             "type":"number",
                                             "condition": "!model.customer.mailSameAsResidence"
-                                        },
-                                        "mailingLocality":{
-                                            "key":"ContactInformation.mailingLocality",
-                                            "title":"PANCHAYAT"
+                                        }
+                                    }
+                                },
+                                "FamilyDetails": {
+                                    "items": {
+                                        "familyMembers": {
+                                            "items": {
+                                                // "relationShip1": {
+                                                //     "key": "customer.familyMembers[].relationShip",
+                                                //     "type": "select",
+                                                //     "title": "T_RELATIONSHIP"
+                                                // },
+                                                "migrantType":{
+                                                    "key":"customer.familyMembers[].migrantType",
+                                                    "type":"select",
+                                                    "title":"MIGRATION_TYPE",
+                                                    "required":true,
+                                                    // "orderNo":0,
+                                                    "titleMap":
+                                                            {
+                                                            "LCM":"LCM",
+                                                            "SDM":"SDM",
+                                                            "CM":"CM",
+                                                            "RETURNEE":"RETURNEE",
+                                                            "NOTaMigrate":"NOT A MIGRANT"
+                                                            }
+                                                },
+                                                // "id":{
+                                                //     "key":"FamilyDetails.familyMembers.id",
+                                                //     "type":"LOV",
+                                                //     "title":"MIGRANT_ID",
+                                                //     "orderNo":40
+                                                // },
+                                                // "relationShip":{
+                                                //     "key":"FamilyDetails.familyMembers.relationShip",
+                                                //     "type":"text",
+                                                //     "title":"RELATIONSHIP_WITH_MIGRANT"
+                                                // },
+                                                "Gender":{
+                                                    "key":"FamilyDetails.familyMembers.gender",
+                                                    "type":"radios",
+                                                    "title":"GENDER",
+                                                    "orderNo":90,
+                                                    "enumCode": "gender",
+                                                    "required":true
+                                                },
+                                                // "dateOfBirth":{
+                                                //     "key":"FamilyDetails.familyMembers.dateOfBirth",
+                                                //     "title":"DATE_OF_BIRTH",
+                                                //     "type":"date",
+                                                //     "orderNo":100,
+                                                //     "required":true
+                                                // },
+                                                // "maritalStatus":{
+                                                //     "key":"FamilyDetails.familyMembers.maritalStatus",
+                                                //     "title":"MARITAL_STATUS",
+                                                //     "enumCode":"marital_status",
+                                                //     "orderNo":120,
+                                                //     "required":true
+                                                // },
+                                                "mobilePhone":{
+                                                    "key":"FamilyDetails.familyMembers.mobilePhone",
+                                                    "title":"MOBILE_PHONE",
+                                                    "orderNo":130,
+                                                    "type":"number"
+                                                },
+                                                "Health":{
+                                                    "key":"FamilyDetails.familyMembers.Health",
+                                                    "title":"HEALTH_STATUS",
+                                                    "orderNo":200,
+                                                    "type":"radios",
+                                                    "titleMap":{"good":"Good","bad":"bad"}
+                                                },
+                                                "Age":{
+                                                    "key":"familyDetails.age",
+                                                    "type":"number",
+                                                    "title":"AGE",
+                                                   // "orderNo":140,
+                                                    "required":true
+                                                },
+                                                "incomes":{
+                                                    "items":{
+                                                        "workSectore":{
+                                                            "key":"FamilyDetails.familyMembers.incomes.workSector",
+                                                            "title":"WORK_SECTOR"
+                                                        },
+                                                        "occupationType":{
+                                                            "key":"FamilyDetails.familyMembers.incomes.occupationType",
+                                                            "title":"OCCUPATION_TYPE"
+                                                            
+                                                        },
+                                                        "skillLevel":{
+                                                            "key":"FamilyDetails.familyMembers.incomes.skillLevel",
+                                                            "title":"SKILL_LEVEL"
+                                                            
+                                                        },
+                                                        "avarageTimeSpend":{
+                                                            "key":"FamilyDetails.familyMembers.incomes.avarageTimeSpend",
+                                                            "title":"AVARAGE_TIME_SPENT"
+                                                           
+                                                        },
+                                                        "avarageReturn":{
+                                                            "key":"FamilyDetails.familyMembers.incomes.avarageReturn",
+                                                            "title":"AVARAGE_RETURN"
+                                                            
+                                                        },
+                                                        "incomeFrom":{
+                                                            "key":"FamilyDetails.familyMembers.incomes.incomeFrom",
+                                                            "title":"INCOME_FROM",
+                                                            
+                                                        }
+                                                        
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 },
@@ -2024,14 +2318,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "title": "CUSTOMER_NAME",
                                             "type": "string",
                                             "orderNo": 1,
-                                            //     "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='ScreeningReview'",
-
-                                        },
-                                        "identityproofbackside": {
-                                            "key": "customer.identityProofReverseImageId",
-                                            "title": "IDENTITY_PROOF_REVERSE_IMAGE_ID",
-                                            "type": "string",
-                                            "orderNo": 52,
                                             //     "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='ScreeningReview'",
 
                                         },
@@ -2084,6 +2370,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "customerId": {
                                                     "orderNo": 2,
                                                     key: "customer.familyMembers[].customerId",
+                                                    title:"MIGRANT_ID",
                                                     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
                                                     type: "lov",
                                                     "inputMap": {
@@ -2199,19 +2486,52 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     items: {
                                                         "incomeSource": {
                                                             key: "customer.familyMembers[].incomes[].incomeSource",
-                                                            type: "select"
+                                                            type: "select",
+                                                            title:"OCCUPATION"
                                                         },
                                                         "incomeEarned": {
                                                             key: "customer.familyMembers[].incomes[].incomeEarned",
+                                                            title:"INCOME_AMOUNT"
                                                         },
                                                         "frequency": {
                                                             key: "customer.familyMembers[].incomes[].frequency",
                                                             type: "select"
+                                                        },
+                                                        "workSectore":{
+                                                            "key":"FamilyDetails.familyMembers.incomes.workSector",
+                                                            "title":"WORK_SECTOR"
+                                                        },
+                                                        "occupationType":{
+                                                            "key":"FamilyDetails.familyMembers.incomes.occupationType",
+                                                            "title":"OCCUPATION_TYPE"
+                                                            
+                                                        },
+                                                        "skillLevel":{
+                                                            "key":"FamilyDetails.familyMembers.incomes.skillLevel",
+                                                            "title":"SKILL_LEVEL"
+                                                            
+                                                        },
+                                                        "avarageTimeSpend":{
+                                                            "key":"FamilyDetails.familyMembers.incomes.avarageTimeSpend",
+                                                            "title":"AVARAGE_TIME_SPENT"
+                                                           
+                                                        },
+                                                        "avarageReturn":{
+                                                            "key":"FamilyDetails.familyMembers.incomes.avarageReturn",
+                                                            "title":"AVARAGE_RETURN"
+                                                            
+                                                        },
+                                                        "incomeFrom":{
+                                                            "key":"FamilyDetails.familyMembers.incomes.incomeFrom",
+                                                            "title":"INCOME_FROM",
+                                                            
+                                                            
                                                         }
 
                                                     }
 
-                                                }
+                                                },
+                                               
                                             }
                                         }
                                     }
@@ -2651,6 +2971,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             }, function (err) {
                                 PageHelper.showErrors(err);
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+
                             });
                     },
                     submit: function (model, form, formName) {
