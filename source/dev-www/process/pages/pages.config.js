@@ -165,6 +165,7 @@ irf.pages.config([
 
 	elemConfig.configFileUpload(Model_ELEM_FC);
 	elemConfig.configCommons(MODEL_ELEM_COMMONS);
+	elemConfig.configMantraDeviceURL("https://localhost:9999/verify");
 	
 	elemConfig.configPikaday({
 		minDate: new Date(1800, 0, 1),
@@ -183,7 +184,8 @@ irf.pages.run(["Model_ELEM_FC", "MODEL_ELEM_COMMONS", "$rootScope", "SessionStor
 		Model_ELEM_FC.imageCompressionRatio = SessionStore.getGlobalSetting("imageCompressionRatio");
 		Model_ELEM_FC.compressionRatio = SessionStore.getGlobalSetting("compressionRatio");
 		MODEL_ELEM_COMMONS.defaultGeoLocationPLugin = SessionStore.getGlobalSetting("cordova.defaultGeoLocationPlugin");
-		
+
+	
 		if(!(moment().isSame(moment(SessionStore.getSystemDate(),SessionStore.getSystemDateFormat()), 'date'))){
 			PageHelper.clearWarnings();
 			PageHelper.setWarning({message:'Device date should be in sync with system date: '+SessionStore.getFormatedSystemDate()});
