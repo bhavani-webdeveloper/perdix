@@ -74,7 +74,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ContactInformation.permanentAddressFieldSet":{
                                     "title":"DESTINATION_ADDRESS"
+                                },
+                                "BankAccounts.customerBankAccounts.accountType":{
+                                    "title":"TYPE_OF_BANK"   
+                               },
+                                "BankAccounts.customerBankAccounts.bankingSince":{
+                                   "title":"ACTIVE_FROM"
                                 }
+                                
 
                             }
                         },
@@ -256,10 +263,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "BankAccounts.customerBankAccounts.ifscCode": {
                                     "required": true,
-                                    "resolver": "IFSCCodeLOVConfiguration"
+                                    "resolver": "IFSCCodeLOVConfiguration",
+                                    
                                 },
                                 "BankAccounts.customerBankAccounts.customerBankName": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"BANK"
                                 },
                                 "BankAccounts.customerBankAccounts.customerBankBranchName": {
                                     "readonly": true
@@ -288,6 +297,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "BankAccounts.customerBankAccounts.isDisbersementAccount": {
                                     "type": "checkbox"
                                 },
+                                "BankAccounts.customerBankAccounts.accountType":{
+                                     "title":"TYPE_OF_BANK"   
+                                },
+                                 "BankAccounts.customerBankAccounts.bankingSince":{
+                                    "title":"ACTIVE_FROM"
+                                 }
                             }
                         },
                         "KYC": {
@@ -1539,6 +1554,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             var overridesFields = function (bundlePageObj) {
                 return {
                     //over 
+                    "KYC.idProofIssueDate":{
+                        "orderNo":50
+                    },
+                    "KYC.idProofValidUptoDate":{
+                        "orderNo":60
+                    },
+                    "KYC.identityProofBackside":{
+                        "orderNo":40
+                    },
+                    "KYC.addressProofIssueDate":{
+                        "orderNo":70
+                    },
+                    "KYC.addressProofValidUptoDate":{
+                        "orderNo":80
+                    },
                     "EnterpriseFinancials":{
                         "title":"CURRENT_ASSET",
                         "orderNo":300
@@ -1892,10 +1922,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "KYC.identityProof",
                     "KYC.identityProofImageId",
                     "KYC.identityProofNo",
+                    "KYC.idProofIssueDate",
+                    "KYC.idProofValidUptoDate",
+                    "KYC.identityProofBackside",
                     "KYC.addressProofFieldSet",
                     "KYC.addressProof",
                     "KYC.addressProofImageId",
                     "KYC.addressProofNo",
+                    "KYC.addressProofIssueDate",
+                    "KYC.addressProofValidUptoDate",
                     "KYC.additionalKYCs",
                     "KYC.additionalKYCs.kyc1ProofType",
                     "KYC.additionalKYCs.kyc1ImagePath",
@@ -2218,23 +2253,23 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "items": {
                                         "familyMembers": {
                                             "items": {
-                                                "migrantType":{
-                                                    "key":"customer.familyMembers[].migrantType",
-                                                    "type":"select",
-                                                    "title":"MIGRATION_TYPE",
-                                                    "required":true,
-                                                    // "orderNo":0,
-                                                    "titleMap":
-                                                            {
-                                                            "LCM":"LCM",
-                                                            "SDM":"SDM",
-                                                            "CM":"CM",
-                                                            "RETURNEE":"RETURNEE",
-                                                            "NOTaMigrate":"NOT A MIGRANT"
-                                                            }
-                                                },
+                                                // "migrantType":{
+                                                //     "key":"customer.familyMembers[].migrantType",
+                                                //     "type":"select",
+                                                //     "title":"MIGRATION_TYPE",
+                                                //     "required":true,
+                                                //     // "orderNo":0,
+                                                //     "titleMap":
+                                                //             {
+                                                //             "LCM":"LCM",
+                                                //             "SDM":"SDM",
+                                                //             "CM":"CM",
+                                                //             "RETURNEE":"RETURNEE",
+                                                //             "NOTaMigrate":"NOT A MIGRANT"
+                                                //             }
+                                                // },
                                                 "Gender":{
-                                                    "key":"FamilyDetails.familyMembers.gender",
+                                                    "key":"customer.familyMembers[].gender",
                                                     "type":"radios",
                                                     "title":"GENDER",
                                                     "orderNo":90,
@@ -2242,59 +2277,78 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     "required":true
                                                 },
                                                 "mobilePhone":{
-                                                    "key":"FamilyDetails.familyMembers.mobilePhone",
+                                                    "key":"customer.familyMembers[].mobilePhone",
                                                     "title":"MOBILE_PHONE",
                                                     "orderNo":130,
                                                     "type":"number"
                                                 },
                                                 "Health":{
-                                                    "key":"FamilyDetails.familyMembers.Health",
+                                                    "key":"customer.familyMembers[].Health",
                                                     "title":"HEALTH_STATUS",
                                                     "orderNo":200,
                                                     "type":"radios",
                                                     "titleMap":{"good":"Good","bad":"bad"}
                                                 },
                                                 "Age":{
-                                                    "key":"familyDetails.age",
+                                                    "key":"customer.familyMembers[].age",
                                                     "type":"number",
                                                     "title":"AGE",
                                                    // "orderNo":140,
                                                     "required":true
                                                 },
-                                                "incomes":{
-                                                    "items":{
-                                                        "workSectore":{
-                                                            "key":"FamilyDetails.familyMembers.incomes.workSector",
-                                                            "title":"WORK_SECTOR"
-                                                        },
-                                                        "occupationType":{
-                                                            "key":"FamilyDetails.familyMembers.incomes.occupationType",
-                                                            "title":"OCCUPATION_TYPE"
+                                                // "incomes":{
+                                                //     "items":{
+                                                //         "workSector":{
+                                                //             "key":"customer.familyMembers[].incomes[].workSector",
+                                                //             "title":"WORK_SECTOR",
+                                                //             "type": "select",
+                                                //             "enumCode": "workSector"
+                                                //         },
+                                                //         "occupationType":{
+                                                //             "key":"customer.familyMembers[].incomes[].occupationType",
+                                                //             "title":"OCCUPATION_TYPE",
+                                                //             "type": "select",
+                                                //             "enumCode": "occupationType"
                                                             
-                                                        },
-                                                        "skillLevel":{
-                                                            "key":"FamilyDetails.familyMembers.incomes.skillLevel",
-                                                            "title":"SKILL_LEVEL"
+                                                //         },
+                                                //         "skillLevel":{
+                                                //             "key":"customer.familyMembers[].incomes[].skillLevel",
+                                                //             "title":"SKILL_LEVEL",
+                                                //             "type": "select",
+                                                //             "enumCode": "skillLevel"
                                                             
-                                                        },
-                                                        "avarageTimeSpend":{
-                                                            "key":"FamilyDetails.familyMembers.incomes.avarageTimeSpend",
-                                                            "title":"AVARAGE_TIME_SPENT"
+                                                //         },
+                                                //         "avarageTimeSpend":{
+                                                //             "key":"customer.familyMembers[].incomes[].avarageTimeSpend",
+                                                //             "title":"AVARAGE_TIME_SPENT",
+                                                //             "type": "number",
                                                            
-                                                        },
-                                                        "avarageReturn":{
-                                                            "key":"FamilyDetails.familyMembers.incomes.avarageReturn",
-                                                            "title":"AVARAGE_RETURN"
+                                                           
+                                                //         },
+                                                //         "avarageReturn":{
+                                                //             "key":"customer.familyMembers[].incomes[].avarageReturn",
+                                                //             "title":"AVARAGE_RETURN",
+                                                //             "type": "numeber",
+                                                //             "titleMap":{
+                                                //                 "lessThanMonth":"Less Than Month",
+                                                //                 "biMonthly":"Bi Monthly",
+                                                //                 "etc":"etc"
+                                                //             }
+                                                           
                                                             
-                                                        },
-                                                        "incomeFrom":{
-                                                            "key":"FamilyDetails.familyMembers.incomes.incomeFrom",
-                                                            "title":"INCOME_FROM",
-                                                            
-                                                        }
+                                                //         },
+                                                //         "incomeFrom":{
+                                                //             "key":"customer.familyMembers[].incomes[].incomeFrom",
+                                                //             "title":"INCOME_FROM",
+                                                //             "type": "select",
+                                                //             "titleMap":{
+                                                //                 "sourceIncome":"Source Income",
+                                                //                 "DistanationIncome":"Destination Income"
+                                                //             }
+                                                //         }
                                                         
-                                                    }
-                                                }
+                                                //     }
+                                                // }
                                             }
                                         }
                                     }
@@ -2309,6 +2363,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             //     "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='ScreeningReview'",
 
                                         },
+                                        "identityProofBackside":{
+                                            "key":"customer.identityProofBackside",
+                                            "type": "file",
+                                            "fileType": "application/pdf",
+                                            "using": "scanner",
+                                            "title":"IDENTITY_PROOF_BACKSIDE",
+                                           // "orderNo":70
+                                        }
                                     }
 
                                 },
@@ -2466,6 +2528,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     },
 
                                                 },
+                                                "migrantType":{
+                                                    "key":"customer.familyMembers[].migrantType",
+                                                    "type":"select",
+                                                    "title":"MIGRATION_TYPE",
+                                                    "required":true,
+                                                     "orderNo":0,
+                                                    "titleMap":
+                                                            {
+                                                            "LCM":"LCM",
+                                                            "SDM":"SDM",
+                                                            "CM":"CM",
+                                                            "RETURNEE":"RETURNEE",
+                                                            "NOTaMigrate":"NOT A MIGRANT"
+                                                            }
+                                                },
                                                 "incomes": {
                                                     "orderNo": 11,
                                                     key: "customer.familyMembers[].incomes",
@@ -2481,37 +2558,60 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             key: "customer.familyMembers[].incomes[].incomeEarned",
                                                             title:"INCOME_AMOUNT"
                                                         },
+                                                        "incomeType": {
+                                                            "key": "customer.familyMembers[].incomes[].incomeType",
+                                                            "title": "INCOME_TYPE",
+                                                        },
                                                         "frequency": {
                                                             key: "customer.familyMembers[].incomes[].frequency",
                                                             type: "select"
                                                         },
-                                                        "workSectore":{
+                                                        "workSector":{
                                                             "key":"FamilyDetails.familyMembers.incomes.workSector",
-                                                            "title":"WORK_SECTOR"
+                                                            "title":"WORK_SECTOR",
+                                                            "type":"select",
+                                                            "enum":"occupation"
                                                         },
                                                         "occupationType":{
                                                             "key":"FamilyDetails.familyMembers.incomes.occupationType",
-                                                            "title":"OCCUPATION_TYPE"
+                                                            "title":"OCCUPATION_TYPE",
+                                                            "type":"select",
+                                                            "enum":"occupation"
                                                             
                                                         },
                                                         "skillLevel":{
                                                             "key":"FamilyDetails.familyMembers.incomes.skillLevel",
-                                                            "title":"SKILL_LEVEL"
+                                                            "title":"SKILL_LEVEL",
+                                                            "type":"select",
+                                                            "enum":"occupation"
                                                             
                                                         },
                                                         "avarageTimeSpend":{
                                                             "key":"FamilyDetails.familyMembers.incomes.avarageTimeSpend",
-                                                            "title":"AVARAGE_TIME_SPENT"
+                                                            "title":"AVARAGE_TIME_SPENT",
+                                                            "type":"number"
                                                            
                                                         },
                                                         "avarageReturn":{
                                                             "key":"FamilyDetails.familyMembers.incomes.avarageReturn",
-                                                            "title":"AVARAGE_RETURN"
+                                                            "title":"AVARAGE_RETURN",
+                                                            "type":"select",
+                                                            titleMap: {
+                                                                "lessThanAMonth": "Less Than a Month",
+                                                                "biMonthly": "Bi Monthly",
+                                                                "etc":"etc"
+                                                            },
+
                                                             
                                                         },
                                                         "incomeFrom":{
                                                             "key":"FamilyDetails.familyMembers.incomes.incomeFrom",
                                                             "title":"INCOME_FROM",
+                                                            "type":"radios",
+                                                            titleMap: {
+                                                                "sourceIncome": "Source Income",
+                                                                "destinationIncome": "Destination Income"
+                                                            },
                                                             
                                                             
                                                         }
@@ -2552,6 +2652,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     }
                                 },
                                 "BankAccounts": {
+                                    "title":"SAVING_DETAILS",
                                     "items": {
                                         "customerBankAccounts": {
                                             "items": {

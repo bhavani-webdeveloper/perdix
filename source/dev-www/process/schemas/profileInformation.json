@@ -32,6 +32,11 @@
                     "type":["string","null"],
                     "title":"ADDRESS_IN_LOCAL_LANGUAGE"
                 },
+                "identityProofBackside": {
+                    "type": ["string","null"],
+                    "category": "CustomerEnrollment",
+                    "title":"IDENTITY_PROOF_BACKSIDE"
+                },
                 "additionalKYCs": {
                     "type": "array",
                     "title": "ADDITIONAL_KYCS",
