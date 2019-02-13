@@ -218,7 +218,7 @@ irf.pageCollection.factory("CIBILAppendix", [function(){
     };
 }]);
 
-irf.pageCollection.factory(irf.page("loans.individual.screening.CreditBureauView"),
+irf.pageCollection.factory(irf.page("kgfs.loans.individual.screening.CreditBureauView"),
 ["$log", "$q", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch",
 "CreditBureau","AuthTokenHelper","irfSimpleModal", "CIBILAppendix","$timeout",

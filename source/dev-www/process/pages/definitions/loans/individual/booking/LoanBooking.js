@@ -586,7 +586,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                         "title":"PRESENT_VALUE"
                                     },
                                     {
-                                        "key":"loanAccount.collateralValueteral[].collateralValue",
+                                        "key":"loanAccount.collateral[].collateralValue",
                                         "type":"amount",
                                         "title":"PURCHASE_PRICE"
                                     },

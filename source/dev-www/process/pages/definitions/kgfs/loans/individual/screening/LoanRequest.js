@@ -214,12 +214,6 @@ define([],function(){
                                 computeEstimatedEMI(model);
                             }
                         },
-                        "PreliminaryInformation.udf5": {
-                            "required": true,
-                            onChange:function(value,form,model){
-                                computeEstimatedEMI(model);
-                            }
-                        },
                         "PreliminaryInformation.tenureRequested": {
                             "required": true,
                             onChange:function(value,form,model){
@@ -237,7 +231,7 @@ define([],function(){
                         "enumCode": "product_type",
                         "onChange": function(valueObj,context,model){
                                 clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
-                                model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
+                                // model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                                 if(valueObj == "JEWEL"){
                                     getGoldRate(model);
                                     model.loanAccount.jewelLoanDetails = {};
@@ -253,7 +247,7 @@ define([],function(){
                             "enumCode": "loan_partner",
                             "onChange": function(valueObj,context,model){
                                 clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
-                                model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
+                                // model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                                 //clearAll('additions',['tenurePlaceHolder','interestPlaceHolder','amountPlaceHolder'],model)
                             },
                         },
@@ -262,7 +256,7 @@ define([],function(){
                             "enumCode": "loan_product_frequency",
                             "onChange": function(valueObj,context,model){
                                 clearAll('loanAccount',['productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
-                                model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
+                                // model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                                 //clearAll('additions',['tenurePlaceHolder','interestPlaceHolder','amountPlaceHolder'],model)
                             }
                         },
@@ -303,7 +297,7 @@ define([],function(){
                                 // if(valueObj.amount_from == valueObj.amount_to){
                                 //     model.additions.amountPlaceHolder = valueObj.amount_from;
                                 // }
-                                model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = valueObj.product_name;
+                                // model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = valueObj.product_name;
                                 // model.additions.number_of_guarantors = valueObj.number_of_guarantors ? valueObj.number_of_guarantors : 0;
                                 // model.additions.co_borrower_required = valueObj.co_borrower_required ? 1 : 0;
                             },
@@ -359,7 +353,8 @@ define([],function(){
                         },
                         "CollateralInformation": {
                             "title":"COLLATERAL",
-                            "orderNo":20
+                            "orderNo":20,
+                            "condition": "model.loanAccount.loanType=='Secured'"
                         },
                         "CollateralInformation.collateral": {
                             "title":"ADD_COLLATERAL",
@@ -470,7 +465,7 @@ define([],function(){
 
                     /* Setting data recieved from Bundle */
                     model.loanAccount = model.loanProcess.loanAccount;
-
+                    model.loanAccount.partnerCode='KGFS';
                     if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
                         model.loanAccount.loanCustomerRelations!=null &&
                         model.loanAccount.loanCustomerRelations.length > 0) {

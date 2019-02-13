@@ -1,6 +1,6 @@
 irf.pages.controller("PageEngineCtrl",
-["$log", "Utils", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "formHelper", "$timeout", "PageHelper", "elementsUtils", "Locking", "SessionStore", "irfNavigator",
-function($log, Utils, $scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout, PageHelper, elementsUtils, Locking, SessionStore, irfNavigator) {
+["$log", "Utils", "$scope", "$state", "$stateParams", "$injector", "$q", "entityManager", "formHelper", "$timeout", "PageHelper", "elementsUtils", "Locking", "SessionStore", "irfNavigator","translateFilter",
+function($log, Utils, $scope, $state, $stateParams, $injector, $q, entityManager, formHelper, $timeout, PageHelper, elementsUtils, Locking, SessionStore, irfNavigator, translateFilter) {
 	var self = this;
 
 	$scope.boxHeads = [];
@@ -239,7 +239,7 @@ function($log, Utils, $scope, $state, $stateParams, $injector, $q, entityManager
 	};
 
 	var updateAppTitle = function(menuTitle) {
-		document.title = menuTitle + " | " + document.mainTitle;
+		document.title = translateFilter(menuTitle) + " | " + document.mainTitle;
 	};
 
 	$scope.loadOfflinePage = function(event) {

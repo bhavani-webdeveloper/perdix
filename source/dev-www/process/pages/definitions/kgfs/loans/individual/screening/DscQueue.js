@@ -1,5 +1,5 @@
 define({
-    pageUID: "kgfs.loans.individual.screening.DscApprovalQueue",
+    pageUID: "kgfs.loans.individual.screening.DscQueue",
     pageType: "Engine",
     dependencies: ["$log", "irfNavigator", "formHelper", "entityManager", "IndividualLoan", "$state", "SessionStore", "Utils"],
     $pageFn: function ($log, irfNavigator, formHelper, EntityManager, IndividualLoan, $state, SessionStore, Utils) {
@@ -138,7 +138,7 @@ define({
                                     'pageData': item
                                 },{
                                     'state': 'Page.Engine',
-                                    'pageName': 'kgfs.loans.individual.screening.DscApprovalQueue'
+                                    'pageName': 'kgfs.loans.individual.screening.DscQueue'
                                 }
                                 );
                             },

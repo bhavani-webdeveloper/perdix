@@ -1,83 +1,91 @@
-irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
-	["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
-        ,"IndividualLoan", "Lead", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
-        "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan", "BundleManager", "irfNavigator",
-        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,IndividualLoan, Lead, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
-        	$log.info("Inside LoanBookingBundle");
+define(["perdix/domain/model/loan/LoanProcess",
+    "perdix/domain/model/loan/LoanProcessFactory",
+    'perdix/domain/model/customer/EnrolmentProcess',
+    "perdix/domain/model/loan/LoanCustomerRelation",
+    ], function(LoanProcess, LoanFactory, EnrolmentProcess, LoanCustomerRelation) {
+    var LoanProcess = LoanProcess["LoanProcess"];
+    var EnrolmentProcess = EnrolmentProcess["EnrolmentProcess"];
+    var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
 
-        	return {
-        		"type": "page-bundle",
-        		"title": "APPLICATION",
-        		"subTitle": "",
-                "bundleDefinition": [
-                    {
-                        pageName: 'customer.IndividualEnrolment2',
-                        title: 'APPLICANT',
-                        pageClass: 'applicant',
-                        minimum: 1,
-                        maximum: 1,
-                        order:10
-                    },
-                    {
-                        pageName: 'customer.IndividualEnrolment2',
-                        title: 'CO_APPLICANT',
-                        pageClass: 'co-applicant',
-                        minimum: 5,
-                        maximum: 0,
-                        order:20
-                    },
-                    {
-                        pageName: 'customer.IndividualEnrolment2',
-                        title: 'GUARANTOR',
-                        pageClass: 'guarantor',
-                        minimum: 5,
-                        maximum: 0,
-                        order:30
-                    },
-                    {
-                        pageName: 'customer.EnterpriseEnrolment2BusinessBasic',
-                        title: 'BUSINESS',
-                        pageClass: 'businessBasic',
-                        minimum: 1,
-                        maximum: 1,
-                        order:40
-                    },
-                    {
-                        pageName: 'customer.EnterpriseEnrolment2BusinessFinancial',
-                        title: 'Business Financials',
-                        pageClass: 'businessFinancial',
-                        minimum: 1,
-                        maximum: 1,
-                        order:50
-                    },
-                    {
-                        pageName: 'loans.individual.screening.LoanRequest',
-                        title: 'LOAN_REQUEST',
-                        pageClass: 'loan-request',
-                        minimum: 1,
-                        maximum: 1,
-                        order:60
-                    },
-                    {
-                        pageName: 'loans.individual.screening.CreditBureauView',
-                        title: 'CREDIT_BUREAU',
-                        pageClass: 'cbview',
-                        minimum: 1,
-                        maximum: 1,
-                        order:70
-                    },
-                    {
-                        pageName: 'loans.individual.screening.Review',
-                        title: 'REVIEW',
-                        pageClass: 'loan-review',
-                        minimum: 1,
-                        maximum: 1,
-                        order:80
-                    }
-                ],
-        		"bundlePages": [],
+    return {
+        pageUID: "kgfs.loans.individual.screening.Application",
+        pageType: "Bundle",
+        dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "Lead", "PageHelper", "irfStorageService", "$filter", "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "irfNavigator"],
+        $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, Lead, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
+            return {
+                "type": "page-bundle",
+                "title": "SCREENING_REVIEW",
+                "subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
+                "bundleDefinitionPromise": function() {
+                    return $q.resolve([
+                        {
+                            pageName: 'kgfs.customer.IndividualEnrolment2',
+                            title: 'APPLICANT',
+                            pageClass: 'applicant',
+                            minimum: 1,
+                            maximum: 1,
+                            order:10
+                        },
+                        {
+                            pageName: 'kgfs.customer.IndividualEnrolment2',
+                            title: 'CO_APPLICANT',
+                            pageClass: 'co-applicant',
+                            minimum: 0,
+                            maximum: 1,
+                            order:11
+                        },
+                        {
+                            pageName: 'kgfs.customer.IndividualEnrolment2',
+                            title: 'GUARANTOR',
+                            pageClass: 'guarantor',
+                            minimum: 0,
+                            maximum: 1,
+                            order:12
+                        },
+                        {
+                            pageName: 'kgfs.customer.EnterpriseEnrolment2',
+                            title: 'BUSINESS',
+                            pageClass: 'business',
+                            minimum: 1,
+                            maximum: 1,
+                            order:40
+                        },
+                        {
+                            pageName: 'kgfs.loans.individual.screening.LoanRequest',
+                            title: 'LOAN_APPROVAL',
+                            pageClass: 'loan-request',
+                            minimum: 1,
+                            maximum: 1,
+                            order:60
+                        },
+                        {
+                            pageName: 'kgfs.loans.individual.screening.CreditBureauView',
+                            title: 'CREDIT_BUREAU',
+                            pageClass: 'cbview',
+                            minimum: 1,
+                            maximum: 1,
+                            order:9
+                        },
+                            // {
+                            //     pageName: 'kgfs.loans.individual.screening.Summary',
+                            //     title: 'SUMMARY',
+                            //     pageClass: 'summary',
+                            //     minimum: 1,
+                            //     maximum: 1,
+                            //     order: 5
+                            // },                            
+                            {
+                                pageName: 'kgfs.loans.individual.screening.Review',
+                                title: 'REVIEW',
+                                pageClass: 'loan-review',
+                                minimum: 1,
+                                maximum: 1,
+                                order:80
+                            }
+                    ]);
+                },
+                "bundlePages": [],
                 "offline": true,
-                // "offlineStrategy" : window.cordova.platformId =="android" ?  "SQLITE" : undefined,
                 "getOfflineDisplayItem": function(value, index){
                     var out = new Array(2);
                     for (var i=0; i<value.bundlePages.length; i++){
@@ -90,138 +98,233 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
                     }
                     return out;
                 },
+                "onAddNewTab": function(definition, bundleModel){ /* returns model on promise resolution. */
+                    var deferred = $q.defer();
+                    var model = null;
+                    var loanProcess = bundleModel.loanProcess;
 
-                bundleActions: [/*{
-                    name: "Conversation",
-                    icon: "fa fa-comment",
-                    fn: function(bundleModel) {
-                    },
-                    isApplicable: function(bundleModel) {
-                        return true;
+                    switch (definition.pageClass){
+                        case 'co-applicant':
+                            /* TODO Add new coApplicant to loan process and return the model accordingly */
+                            EnrolmentProcess.createNewProcess()
+                                .subscribe(function(enrolmentProcess) {
+                                    loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, LoanCustomerRelationTypes.CO_APPLICANT);
+                                    deferred.resolve({
+                                        enrolmentProcess: enrolmentProcess,
+                                        loanProcess: loanProcess
+                                    })
+                                });
+                            break;
+                        case 'guarantor':
+                            /* TODO Add new guarantor to loan process and return model accordingly */
+                            EnrolmentProcess.createNewProcess()
+                                .subscribe(function(enrolmentProcess) {
+                                    loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, LoanCustomerRelationTypes.GUARANTOR);
+                                    deferred.resolve({
+                                        enrolmentProcess: enrolmentProcess,
+                                        loanProcess: loanProcess
+                                    })
+                                });
+                            break;
                     }
-                }*/],
-
+                    deferred.resolve(model);
+                    return deferred.promise;
+                },
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
-                    var deferred = $q.defer();
                     bundleModel.currentStage = "Application";
+                    var deferred = $q.defer();
 
                     var $this = this;
+
                     if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)){
                         PageHelper.showLoader();
                         bundleModel.loanId = $stateParams.pageId;
-                        IndividualLoan.get({id: bundleModel.loanId})
-                            .$promise
-                            .then(
-                                function(res){
-                                    var applicant;
-                                    var coApplicants = [];
-                                    var guarantors = [];
-                                    var urnNos = [];
-                                    var loanCustomerId = res.customerId;
 
-                                    if (res.currentStage!= 'Application'){
-                                        PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
-                                        irfNavigator.goBack();
-                                        return;
+                        LoanProcess.get(bundleModel.loanId)
+                            .subscribe(function(loanProcess){
+                                bundleModel.loanProcess = loanProcess;
+                                var loanAccount = loanProcess;
+                                loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.loanAccount.customerId;
+                                    if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
+                                        var _leadId = $stateParams.pageData['lead_id'];
+                                        loanProcess.loanAccount.leadId = _leadId;
+
                                     }
+                                if (loanAccount.loanAccount.currentStage != 'Application'){
+                                    PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
+                                    irfNavigator.goBack();
+                                    return;
+                                }
 
-                                    for (var i=0; i<res.loanCustomerRelations.length; i++){
-                                        var cust = res.loanCustomerRelations[i];
-                                        if (cust.relation == 'APPLICANT' || cust.relation == 'Applicant' || cust.relation =='Sole Proprieter'){
-                                            applicant = cust;
-                                            urnNos.push(cust.urn);
-                                            res.applicantId=cust.customerId;
-                                        } else if (cust.relation == 'COAPPLICANT' || cust.relation == 'Co-Applicant') {
-                                            coApplicants.push(cust);
-                                            urnNos.push(cust.urn);
-                                        } else if (cust.relation == 'GUARANTOR' || cust.relation == 'Guarantor') {
-                                            guarantors.push(cust);
-                                        }
+                                $this.bundlePages.push({
+                                    pageClass: 'applicant',
+                                    model: {
+                                        enrolmentProcess: loanProcess.applicantEnrolmentProcess,
+                                        loanProcess: loanProcess
                                     }
+                                });
 
-                                    $this.bundlePages.push({
-                                        pageClass: 'applicant',
-                                        model: {
-                                            loanRelation: applicant
-                                        }
-                                    });
-
-                                    for (var i=0;i<coApplicants.length; i++){
+                                if(_.hasIn(loanAccount, 'coApplicantsEnrolmentProcesses')) {
+                                    for (var i=0;i<loanAccount.coApplicantsEnrolmentProcesses.length; i++){
                                         $this.bundlePages.push({
                                             pageClass: 'co-applicant',
                                             model: {
-                                                loanRelation: coApplicants[i]
+                                                loanRelation: loanAccount.coApplicantsEnrolmentProcesses[i]
                                             }
                                         });
                                     }
-
-                                    for (var i=0;i<guarantors.length; i++){
+                                }
+                                if(_.hasIn(loanAccount, 'guarantorsEnrolmentProcesses')) {
+                                    for (var i=0;i<loanAccount.guarantorsEnrolmentProcesses.length; i++){
                                         $this.bundlePages.push({
                                             pageClass: 'guarantor',
                                             model: {
-                                                loanRelation: guarantors[i]
+                                                loanRelation: loanAccount.guarantorsEnrolmentProcesses[i]
                                             }
                                         });
                                     }
-
-                                    var businessModel = {
-                                        loanRelation: {customerId: loanCustomerId}
-                                    };
-
-                                    $this.bundlePages.push({
-                                        pageClass: 'businessBasic',
-                                        model: businessModel
-                                    });
-
-                                    $this.bundlePages.push({
-                                        pageClass: 'businessFinancial',
-                                        model: businessModel
-                                    });
-
-                                    $this.bundlePages.push({
-                                        pageClass: 'loan-request',
-                                        model: {
-                                            loanAccount: res
-                                        }
-                                    });
-
-                                    $this.bundlePages.push({
-                                        pageClass: 'loan-review',
-                                        model: {
-                                            loanAccount: res
-                                        }
-                                    });
-
-                                    $this.bundlePages.push({
-                                        pageClass: 'cbview',
-                                        model: {
-                                            loanAccount: res
-                                        }
-                                    });
-
-
-                                    deferred.resolve();
-
-                                }, function(httpRes){
-                                    deferred.reject();
-                                    PageHelper.showErrors(httpRes);
                                 }
-                            )
-                            .finally(function(){
-                                PageHelper.hideLoader();
-                            })
+
+
+                                 $this.bundlePages.push({
+                                    pageClass: 'business',
+                                    model: {
+                                        enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                        loanProcess: loanProcess
+                                    }
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'loan-request',
+                                    model: {
+                                        loanProcess: loanProcess
+                                    }
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'cbview',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount
+                                    }
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'loan-review',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount,
+                                    }
+                                });
+
+                            
+                                deferred.resolve();
+
+                            });
+
+                    } else {
+                        if($stateParams.pageData){
+                            var productCategory = $stateParams.pageData.productCategory; 
+                        }
+                        LoanProcess.createNewProcess()
+                            .subscribe(function(loanProcess){
+                                loanProcess.loanAccount.currentStage = 'Application';
+                                bundleModel.loanProcess = loanProcess;
+                                 if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
+
+                                    var _leadId = $stateParams.pageData['lead_id'];
+                                    loanProcess.loanAccount.leadId = _leadId;
+
+                                    }
+                                if (loanProcess.applicantEnrolmentProcess){
+                                    $this.bundlePages.push({
+                                        pageClass: "applicant",
+                                        model: {
+                                            enrolmentProcess: loanProcess.applicantEnrolmentProcess,
+                                            loanProcess: loanProcess
+                                        }
+                                    });
+                                }
+                                if(productCategory == 'MEL'){
+                                    if (loanProcess.loanCustomerEnrolmentProcess) {
+                                        $this.bundlePages.push({
+                                            pageClass: "business",
+                                            model: {
+                                                enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                                loanProcess: loanProcess
+                                            }
+                                        });
+                                    }
+                                }
+                                $this.bundlePages.push({
+                                    pageClass: 'loan-request',
+                                    model: {
+                                        loanProcess: loanProcess
+                                    }
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'cbview',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount
+                                    }
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'loan-review',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount,
+                                    }
+                                });
+
+                                deferred.resolve();
+                            });
                     }
                     return deferred.promise;
+
                 },
                 "post_pages_initialize": function(bundleModel){
                     $log.info("Inside post_page_initialize");
                     BundleManager.broadcastEvent('origination-stage', 'Application');
+                    if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
+                        PageHelper.showLoader();
+                        PageHelper.showProgress("screening-input", 'Loading lead details');
+                        var _leadId = $stateParams.pageData['lead_id'];
+                        Lead.get({id: _leadId})
+                            .$promise
+                            .then(function(res){
+                                PageHelper.showProgress('screening-input', 'Done.', 5000);
+                                BundleManager.broadcastEvent('lead-loaded', res);
+                            }, function(httpRes){
+                                PageHelper.showErrors(httpRes);
+                            })
+                            .finally(function(){
+                                PageHelper.hideLoader();
+                            })
+                    }
+
+                    Queries.getCibilHighmarkMandatorySettings()
+                        .then(function(settings){
+                            BundleManager.broadcastEvent("cibil-highmark-mandatory-settings", settings);
+                        })
+
                 },
-        		eventListeners: {
-        			"on-customer-load": function(pageObj, bundleModel, params){
+                eventListeners: {
+                    "load-address": function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("load-address-business", params);
+                    },
+                    "load_business": function(pageObj, bundleModel, params){
+                        console.log(params)
+                        model.productCategory = params
+                    },
+                    "on-customer-load": function(pageObj, bundleModel, params){
                         BundleManager.broadcastEvent("test-listener", {name: "SHAHAL AGAIN"});
-        			},
+                    },
+                    "customer-loaded": function(pageObj, bundleModel, params){
+                        console.log("custome rloaded :: " + params.customer.firstName);
+                        if (pageObj.pageClass =='applicant'){
+                            BundleManager.broadcastEvent("applicant-updated", params.customer);
+                        }
+                    },
                     "new-enrolment": function(pageObj, bundleModel, params){
                         switch (pageObj.pageClass){
                             case 'applicant':
@@ -244,7 +347,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
                                 }
                                 bundleModel.guarantors.push(params.guarantor);
                                 break;
-                            case 'businessBasic':
+                            case 'business':
                                 $log.info("New Business Enrolment");
                                 bundleModel.business = params.customer;
                                 BundleManager.broadcastEvent("new-business", params);
@@ -255,13 +358,51 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.Application'),
 
                         }
                     },
+                    "new-loan": function(pageObj, bundleModel, params){
+                        $log.info("Inside new-loan of CBCheck");
+                        BundleManager.broadcastEvent("new-loan", params);
+                    },
+                    "applicant-updated": function(pageObj, bundlePageObj, obj){
+                        /* Update other pages */
+                        BundleManager.broadcastEvent("applicant-updated", obj);
+                    },
+                    "co-applicant-updated": function(pageObj, bundlePageObj, obj){
+                        /* Update other pages */
+                        BundleManager.broadcastEvent("co-applicant-updated", obj);
+                    },
+                    "guarantor-updated": function(pageObj, bundlePageObj, obj){
+                        /* Update other pages */
+                        BundleManager.broadcastEvent("guarantor-updated", obj);
+                    },
+                    "business-updated": function(pageObj, bundlePageObj, obj) {
+                        /* Update other pages */
+                        BundleManager.broadcastEvent("business-updated", obj);
+                    },
                     "enrolment-removed": function(pageObj, bundlePageObj, enrolmentDetails){
                         if (enrolmentDetails.customerId){
                             BundleManager.broadcastEvent('remove-customer-relation', enrolmentDetails);
                         }
+                    },
+                    "cb-check-done": function(pageObj, bundlePageObj, cbCustomer){
+                        $log.info(cbCustomer);
+                        if(cbCustomer.customerId){
+                            BundleManager.broadcastEvent('cb-check-update', cbCustomer);
+                        }
                     }
-        		}
-        	}
+                },
+                preSave: function(offlineData) {
+                    var defer = $q.defer();
+                    for (var i=0; i<offlineData.bundlePages.length; i++){
+                        var page = offlineData.bundlePages[i];
+                        if (page.pageClass == "applicant" && !page.model.customer.firstName){
+                            PageHelper.showProgress("Application", "Applicant first name is required to save offline", 5000);
+                            defer.reject();
+                        }
+                    }
+                    defer.resolve();
+                    return defer.promise;
+                }
+            }
         }
-    ]
-)
+    }
+})

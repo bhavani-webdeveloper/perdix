@@ -128,7 +128,7 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 					},
 					"includeDuplicates":{
 						"type": "boolean",
-						"title": "Include_Duplicates"
+						"title": "INCLUDE_DUPLICATES"
 					}
 
 				},
