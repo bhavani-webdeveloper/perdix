@@ -120,7 +120,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification.latitude",
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
-                                "PhysicalAssets",
                                 "IndividualReferences",
                                 "References",
                                 "KYC.firstName",
@@ -805,7 +804,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "PhysicalAssets": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"FINANCIAL_ASSET"
                                 }
                             }
 
@@ -954,7 +954,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "PhysicalAssets": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"FINANCIAL_ASSET"
                                 },
                                 "BankAccounts.customerBankAccounts": {
                                     "readonly": true
@@ -1046,7 +1047,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "PhysicalAssets": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"FINANCIAL_ASSET"
                                 },
                                 "BankAccounts.customerBankAccounts": {
                                     "readonly": true
@@ -1106,7 +1108,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "PhysicalAssets": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    
                                 },
                                 "BankAccounts.customerBankAccounts": {
                                     "readonly": true
@@ -1536,6 +1539,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             var overridesFields = function (bundlePageObj) {
                 return {
                     //over 
+                    "EnterpriseFinancials":{
+                        "title":"CURRENT_ASSET",
+                        "orderNo":300
+                    },
+                    "Machinery":{
+                        "title":"FIXED_ASSET",
+                        "orderNo":400
+                    },
+                    "PhysicalAssets":{
+                        "title":"FINANCIAL_ASSET"
+                    },
                     "IndividualInformation.customerBranchId": {
                         "required": true,
                         "readonly": false
@@ -1646,12 +1660,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "FamilyDetails.familyMembers.relationShip":{
                         "title":"RELATIONSHIP_WITH_MIGRANT",
-                        "condition":"FamilyDetails.familyMembers.migrantType!='NOTaMigrate'"
                     },
                     "FamilyDetails.familyMembers.familyMemberFirstName":{
                         "title":"MIGRANT_NAME",
                         "required":true,
-                        "condition":"FamilyDetails.familyMembers.migrantType!='NOTaMigrate'"
                     },
                     "HouseVerification.houseDetailsFieldSet": {
                         "orderNo": 10
@@ -1958,7 +1970,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "FamilyDetails",
                     "FamilyDetails.familyMembers",
                     "FamilyDetails.familyMembers.migrantType",
-                    //"FamilyDetails.familyMembers.id",
                     "FamilyDetails.familyMembers.relationShip",
                     "FamilyDetails.familyMembers.customerId",
                     "FamilyDetails.familyMembers.familyMemberFirstName",
@@ -2036,11 +2047,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "BankAccounts.customerBankAccounts.isDisbersementAccount",
                     //
                     "PhysicalAssets",
-                    "PhysicalAssets.physicalAssets",
-                    "PhysicalAssets.physicalAssets.nameOfOwnedAsset",
-                    "PhysicalAssets.physicalAssets.vehicleModel",
-                    "PhysicalAssets.physicalAssets.registeredOwner",
-                    "PhysicalAssets.physicalAssets.ownedAssetValue",
+                    "PhysicalAssets.financialAssets",
+                    "PhysicalAssets.financialAssets.installmentAmount",
+                    "PhysicalAssets.financialAssets.balance",
+                    "EnterpriseFinancials",
+                    "EnterpriseFinancials.currentAsset",
+                    "EnterpriseFinancials.currentAsset.assetType",
+                    "EnterpriseFinancials.currentAsset.value",
+                    "Machinery",
+                    "Machinery.fixedAssetsMachinaries",
+                    "Machinery.fixedAssetsMachinaries.machineType",
+                    "Machinery.fixedAssetsMachinaries.presentValue",
+                    
                     //"PhysicalAssets.physicalAssets.unit",
 
                     "IndividualReferences",
@@ -2200,11 +2218,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "items": {
                                         "familyMembers": {
                                             "items": {
-                                                // "relationShip1": {
-                                                //     "key": "customer.familyMembers[].relationShip",
-                                                //     "type": "select",
-                                                //     "title": "T_RELATIONSHIP"
-                                                // },
                                                 "migrantType":{
                                                     "key":"customer.familyMembers[].migrantType",
                                                     "type":"select",
@@ -2220,17 +2233,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "NOTaMigrate":"NOT A MIGRANT"
                                                             }
                                                 },
-                                                // "id":{
-                                                //     "key":"FamilyDetails.familyMembers.id",
-                                                //     "type":"LOV",
-                                                //     "title":"MIGRANT_ID",
-                                                //     "orderNo":40
-                                                // },
-                                                // "relationShip":{
-                                                //     "key":"FamilyDetails.familyMembers.relationShip",
-                                                //     "type":"text",
-                                                //     "title":"RELATIONSHIP_WITH_MIGRANT"
-                                                // },
                                                 "Gender":{
                                                     "key":"FamilyDetails.familyMembers.gender",
                                                     "type":"radios",
@@ -2239,20 +2241,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     "enumCode": "gender",
                                                     "required":true
                                                 },
-                                                // "dateOfBirth":{
-                                                //     "key":"FamilyDetails.familyMembers.dateOfBirth",
-                                                //     "title":"DATE_OF_BIRTH",
-                                                //     "type":"date",
-                                                //     "orderNo":100,
-                                                //     "required":true
-                                                // },
-                                                // "maritalStatus":{
-                                                //     "key":"FamilyDetails.familyMembers.maritalStatus",
-                                                //     "title":"MARITAL_STATUS",
-                                                //     "enumCode":"marital_status",
-                                                //     "orderNo":120,
-                                                //     "required":true
-                                                // },
                                                 "mobilePhone":{
                                                     "key":"FamilyDetails.familyMembers.mobilePhone",
                                                     "title":"MOBILE_PHONE",
@@ -2780,6 +2768,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "orderNo": 181,
                                         }
                                     }
+                                },
+                                "PhysicalAssets":{
+                                    "items":{
+                                        "financialAssets":{
+                                            "title":"FINANCIAL_ASSET",
+                                            "items":{
+                                                "installmentAmount":{
+                                                    "key":"customer.financialAssets.installmentAmount",
+                                                    "title":"INSTALLMENT_AMOUNT"
+                                                    },
+                                                    "balance":{
+                                                        "key":"customer.financialAssets.balance",
+                                                        "title":"BALANCE_IN_THE_ACCOUNT"
+                                                    }
+                                            }
+
+
+                                        }
+                                             
+                                    }
+                                    
                                 }
                             },
                             "additions": [
