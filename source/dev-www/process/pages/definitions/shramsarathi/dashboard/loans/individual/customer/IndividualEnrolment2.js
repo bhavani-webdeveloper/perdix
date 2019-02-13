@@ -1485,7 +1485,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.pincode": {
                         "resolver": "PincodeLOVConfiguration",
                         "searchHelper": formHelper
-
                     },
                     "ContactInformation.mailingPincode": {
                         "condition": "!model.customer.mailSameAsResidence",
@@ -2652,7 +2651,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             }, function (err) {
                                 PageHelper.showErrors(err);
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-
                             });
                     },
                     submit: function (model, form, formName) {
