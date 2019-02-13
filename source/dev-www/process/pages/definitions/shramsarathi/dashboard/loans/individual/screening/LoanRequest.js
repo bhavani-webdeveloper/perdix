@@ -1716,17 +1716,17 @@ define([],function(){
                                 "repositoryAdditions": {
                                     "PreliminaryInformation":{
                                         "items": {
-                                            "PreliminaryInformation.loanPurpose3": {
+                                            "loanPurpose3": {
                                                 "key":"loanAccount.loanPurpose3",
                                               "title":"LOAN_SUB_PURPOSE2",
                                               "type":"text"
                                             },
-                                            "PreliminaryInformation.referenceFrom": {
+                                            "referenceFrom": {
                                                 "key":"loanAccount.referenceFrom",
                                               "title":"REFERNECE_FROM",
                                               "type":"text"
                                             },
-                                            "PreliminaryInformation.referenceCheck": {
+                                            "referenceCheck": {
                                                 "key":"loanAccount.referenceCheck",
                                               "title":"REFERNECE_CHECK",
                                               "type":"radios",
@@ -1753,7 +1753,7 @@ define([],function(){
                                             },
                                             "expectedEmi": {
                                                 "key": "loanAccount.expectedEmi",
-                                                "title": "ESTIMATED_KINARA_EMI",
+                                                "title": "INSTALLMENT_AMOUNT",
                                                 "orderNo": 91,
                                                 type: "amount",
                                                 "readonly": true
