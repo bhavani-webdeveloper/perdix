@@ -7,12 +7,13 @@ irf.pageCollection.factory(irf.page("management.SpokeMerger"), ["$log", "Mainten
 
         return {
             "type": "schema-form",
-            "title": "SPOKE_MERGER",
+            "title": "",
 
             initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                 model.customer = model.customer || {};
                 model.interbranchMerge = ($stateParams.pageId === "interbranch") ? true : false;
                 form[0].title = ($stateParams.pageId === "interbranch") ? 'SPOKE_MERGER' : 'INTRA_HUB_SPOKE_MERGER',
+                this.title = ($stateParams.pageId === "interbranch") ? 'SPOKE_MERGER' : 'INTRA_HUB_SPOKE_MERGER',
                 model = Utils.removeNulls(model, true);
                 model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 $log.info("Spoke Merger page ");

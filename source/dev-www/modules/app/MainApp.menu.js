@@ -15,8 +15,8 @@ MainApp.directive('irfMainMenu', function(){
 });
 
 MainApp.controller("irfMainMenuController", [
-	"$scope", "$log", "$http", "$state", "SessionStore", "PagesDefinition", "irfNavigator",
-	function($scope, $log, $http, $state, SessionStore, PagesDefinition, irfNavigator) {
+	"$scope", "$log", "$http", "$state", "SessionStore", "PagesDefinition", "irfNavigator","translateFilter",
+	function($scope, $log, $http, $state, SessionStore, PagesDefinition, irfNavigator, translateFilter) {
 
 	$scope.ss = SessionStore;
 
@@ -49,7 +49,7 @@ MainApp.controller("irfMainMenuController", [
 	});*/
 
 	var updateAppTitle = function(menuTitle) {
-		document.title = menuTitle + " | " + document.mainTitle;
+		document.title = translateFilter(menuTitle) + " | " + document.mainTitle;
 	};
 
 	$scope.loadPage = function(event, menu) {

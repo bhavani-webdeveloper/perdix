@@ -307,7 +307,7 @@ var EQUIFAX_HTML =
     '<h3 ng-show="CBDATA.equifax.equifaxScore" style="font-weight:bold;color:#ccc;">EQUIFAX REPORT</h3>'+
     '<iframe ng-show="CBDATA.equifax.reportHtml" id="{{CBDATA._equifaxId}}" style="border:0;width:100%;height:500px;"></iframe>'+
     '<div ng-hide="CBDATA.equifax.reportHtml">'+
-        '<center><b style="color:tomato">{{CBDATA.customer.first_name||CBDATA.customerId}} - Equifax Scores NOT available</b></center>'+
+        '<center><b style="color:tomato">{{CBDATA.customer.first_name||CBDATA.customerId}} - EQUIFAX Scores NOT available</b></center>'+
     '</div>'+
 '</div>';
 var INDIVIDUAL_HTML =

@@ -472,7 +472,7 @@ irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
                                 },
                                 "urnNo": {
                                     "type": "string",
-                                    "title": "URNNO"
+                                    "title": "URN_NO"
                                 },
                                 "firstName": {
                                     "type": "string",
