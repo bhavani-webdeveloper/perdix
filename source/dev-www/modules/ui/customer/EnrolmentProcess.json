@@ -1242,7 +1242,7 @@
                         "key": "customer.incomeThroughSales[].frequency",
                         "title": "FREQUENCY",
                         "type": "select",
-                        "enumcode":"frequency"
+                        "enumCode":"frequency"
                     }
                 }
             },
