@@ -1,8 +1,8 @@
 irf.pageCollection.factory("Pages__EDF",
  ["$log", "formHelper", "Enrollment","elementsUtils", "entityManager", '$state', '$stateParams', '$q', 'LoanAccount', 'LoanProcess', 'irfProgressMessage', 'PageHelper',
-    'SessionStore', 'Utils', 'authService', 'BiometricService', 'Files', 'irfNavigator',
+    'SessionStore', 'Utils', 'authService', 'BiometricService', 'Files', 'irfNavigator','BranchCreationResource',
     function($log, formHelper, Enrollment,elementsUtils, entityManager, $state, $stateParams, $q, LoanAccount, LoanProcess, irfProgressMessage, PageHelper,
-        SessionStore, Utils, authService, BiometricService, Files, irfNavigator) {
+        SessionStore, Utils, authService, BiometricService, Files, irfNavigator,BranchCreationResource) {
         return {
             "id": "EDF",
             "type": "schema-form",
@@ -13,8 +13,27 @@ irf.pageCollection.factory("Pages__EDF",
             initialize: function(model, form, formCtrl) {
                 $log.info("I got initialized");
                 $log.info($stateParams);
+            //start
+            var branchId = SessionStore.getBranchId();
+            if (!Utils.isCordova) {
+                BranchCreationResource.getBranchByID({
+                        id: branchId
+                    },
+                    function (branchDetails) {
+                        if (branchDetails.fingerPrintDeviceType) {
+                            if (branchDetails.fingerPrintDeviceType == "MANTRA") {
+                                model.fingerPrintDeviceType = branchDetails.fingerPrintDeviceType;
+                            }
+                        }
 
-
+                        PageHelper.hideLoader();
+                    },
+                    function (err) {
+                        $log.info(err);
+                    }
+                );
+            }
+            //end
                 if (!(model && model.customer && model.customer.id && model.$$STORAGE_KEY$$)) {
 
                     PageHelper.showLoader();
@@ -125,17 +144,31 @@ irf.pageCollection.factory("Pages__EDF",
                                         'RightRing': model.customer.rightHandRingImageId,
                                         'RightLittle': model.customer.rightHandSmallImageId
                                     };
+                                    if (model.fingerPrintDeviceType == "MANTRA") {
+                                        BiometricService.validateFingerPrintByMantra(fingerprintObj).then(function (data) {
+                                            model.customer.isBiometricMatched = data;
+                                            if (data == "Match found") {
+                                                model.customer.isBiometricValidated = true;
+                                            } else {
+                                                model.customer.isBiometricValidated = false;
+                                            }
+                                        }, function (reason) {
+                                            console.log(reason);
+                                        });
 
-                                    BiometricService.validate(fingerprintObj).then(function(data) {
-                                        model.customer.isBiometricMatched = data;
-                                        if (data == "Match found") {
-                                            model.customer.isBiometricValidated = true;
-                                        } else {
-                                            model.customer.isBiometricValidated = false;
-                                        }
-                                    }, function(reason) {
-                                        console.log(reason);
-                                    });
+                                    }
+                                    else{
+                                        BiometricService.validate(fingerprintObj).then(function(data) {
+                                            model.customer.isBiometricMatched = data;
+                                            if (data == "Match found") {
+                                                model.customer.isBiometricValidated = true;
+                                            } else {
+                                                model.customer.isBiometricValidated = false;
+                                            }
+                                        }, function(reason) {
+                                            console.log(reason);
+                                        });
+                                    }
                                 }
                             }, {
                                 "key": "customer.isBiometricMatched",

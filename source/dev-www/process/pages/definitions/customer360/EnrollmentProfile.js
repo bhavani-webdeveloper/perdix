@@ -1,10 +1,11 @@
 irf.pageCollection.factory(irf.page("customer360.EnrollmentProfile"),
 ["$log", "Enrollment","Queries","EnrollmentHelper","PagesDefinition", "SessionStore","$state","$stateParams", "formHelper", "$q", "irfProgressMessage",
-"PageHelper", "Utils", "BiometricService","CustomerBankBranch",
+"PageHelper", "Utils", "BiometricService","CustomerBankBranch","BranchCreationResource",
 function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStore,$state,$stateParams, formHelper, $q, irfProgressMessage,
-    PageHelper, Utils, BiometricService,CustomerBankBranch){
+    PageHelper, Utils, BiometricService,CustomerBankBranch,BranchCreationResource){
         // userAllowedPages["Page/Engine/customer360.EnrollmentProfile"]
     var branch = SessionStore.getBranch();
+   
     var mapCustomerToSelfFamilyMemeber = function(model){
         var temp = model.customer.familyMembers;
         if(temp.length > 0){
@@ -59,6 +60,27 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
             $log.info("Profile Page got initialized");
             console.log(model);
             initData(model);
+             //start
+    var branchId = SessionStore.getBranchId();
+    if (!Utils.isCordova) {
+        BranchCreationResource.getBranchByID({
+                id: branchId
+            },
+            function (branchDetails) {
+                if (branchDetails.fingerPrintDeviceType) {
+                    if (branchDetails.fingerPrintDeviceType == "MANTRA") {
+                        model.fingerPrintDeviceType = branchDetails.fingerPrintDeviceType;
+                    }
+                }
+
+                PageHelper.hideLoader();
+            },
+            function (err) {
+                $log.info(err);
+            }
+        );
+    }
+    //end
             console.log("TEst");
             console.log(model.customer);
             model.enabletrue= false;

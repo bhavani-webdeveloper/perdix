@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page("customer360.Recapture"),
 ["$log", "$q", "Enrollment", "SessionStore", "$state", "entityManager", "formHelper",
-"$stateParams", "irfProgressMessage", "PageHelper", "EnrollmentHelper", "BiometricService", "Files","$window",
+"$stateParams", "irfProgressMessage", "PageHelper", "EnrollmentHelper", "BiometricService", "Files","$window","Utils","BranchCreationResource",
 function($log, $q, Enrollment, SessionStore, $state, entityManager, formHelper,
-    $stateParams, irfProgressMessage, PageHelper, EnrollmentHelper, BiometricService, Files,$window){
+    $stateParams, irfProgressMessage, PageHelper, EnrollmentHelper, BiometricService, Files,$window,Utils,BranchCreationResource){
 
         
     var submit = function (model) {
@@ -35,6 +35,27 @@ function($log, $q, Enrollment, SessionStore, $state, entityManager, formHelper,
             var ids = $stateParams.pageId.split(':');
             this.subTitle = model.recaptureType = this.form[0].title = ids[1];
             var customerId = Number(ids[0]);
+             //start
+             var branchId = SessionStore.getBranchId();
+             if (!Utils.isCordova) {
+                 BranchCreationResource.getBranchByID({
+                         id: branchId
+                     },
+                     function (branchDetails) {
+                         if (branchDetails.fingerPrintDeviceType) {
+                             if (branchDetails.fingerPrintDeviceType == "MANTRA") {
+                                 model.fingerPrintDeviceType = branchDetails.fingerPrintDeviceType;
+                             }
+                         }
+
+                         PageHelper.hideLoader();
+                     },
+                     function (err) {
+                         $log.info(err);
+                     }
+                 );
+             }
+             //end
             if (!model || !model.customer || model.customer.id != customerId) {
                 $log.info("data not there, redirecting...");
 

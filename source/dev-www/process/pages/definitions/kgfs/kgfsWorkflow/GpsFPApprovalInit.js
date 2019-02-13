@@ -2,9 +2,9 @@ define({
     pageUID: "kgfs.kgfsWorkflow.GpsFPApprovalInit",
     pageType: "Engine",
     dependencies: ["$window", "$log", "formHelper", "filterFilter", "Workflow", "Enrollment", "RolesPages", "Queries", "$q", "$state", "SessionStore", "UIRepository", "IrfFormRequestProcessor", "Utils", "PagesDefinition",
-        "irfNavigator", "User", "SchemaResource", "$stateParams", "PageHelper", "irfProgressMessage", "BundleManager", "BiometricService", "Files"],
+        "irfNavigator", "User", "SchemaResource", "$stateParams", "PageHelper", "irfProgressMessage", "BundleManager", "BiometricService", "Files","BranchCreationResource"],
     $pageFn: function ($window, $log, formHelper, filterFilter, Workflow, Enrollment, RolesPages, Queries, $q, $state, SessionStore, UIRepository, IrfFormRequestProcessor,
-        Utils, PagesDefinition, irfNavigator, User, SchemaResource, $stateParams, PageHelper, irfProgressMessage, BundleManager, BiometricService, Files) {
+        Utils, PagesDefinition, irfNavigator, User, SchemaResource, $stateParams, PageHelper, irfProgressMessage, BundleManager, BiometricService, Files,BranchCreationResource) {
 
         var getCustomer = function (result, model) {
             Enrollment.EnrollmentById({ id: result.id }, function (resp, header) {
@@ -109,6 +109,27 @@ define({
             "type": "schema-form",
             "title": "UPDATE_CUSTOMER_INFO",
             initialize: function (model, form, formCtrl) {
+                //start
+             var branchId = SessionStore.getBranchId();
+             if (!Utils.isCordova) {
+                 BranchCreationResource.getBranchByID({
+                         id: branchId
+                     },
+                     function (branchDetails) {
+                         if (branchDetails.fingerPrintDeviceType) {
+                             if (branchDetails.fingerPrintDeviceType == "MANTRA") {
+                                 model.fingerPrintDeviceType = branchDetails.fingerPrintDeviceType;
+                             }
+                         }
+
+                         PageHelper.hideLoader();
+                     },
+                     function (err) {
+                         $log.info(err);
+                     }
+                 );
+             }
+             //end
                 $log.info("User Maintanance loaded");
                 var workflowId = $stateParams.pageId;
                 $log.info("Loading data for Cust ID " + workflowId);
