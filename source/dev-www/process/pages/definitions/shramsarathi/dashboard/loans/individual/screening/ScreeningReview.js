@@ -110,6 +110,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             //     maximum: 1,
                             //     order: 5
                             // }
+                              {
+                                pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.EnterpriseFinancialView',
+                                title: 'FINANCIAL_INFORMATION_SUMMARY',
+                                pageClass: 'financialInfoSummary',
+                                minimum: 1,
+                                maximum: 1,
+                                order: 5
+                            }
                         ]);
                     },
                     "bundlePages": [],
@@ -279,7 +287,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                             //             }
                             //         }
                             //     });
-
+                            $this.bundlePages.push({
+                                        pageClass: 'financialInfoSummary',
+                                        model: {
+                                        customerId: loanAccount.customerId,
+                                        enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess
+                                        }
+                                    });
                                 deferred.resolve();
 
                             });
