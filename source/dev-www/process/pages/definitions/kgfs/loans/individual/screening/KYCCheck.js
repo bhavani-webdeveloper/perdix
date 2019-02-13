@@ -8,13 +8,13 @@ define(["perdix/domain/model/loan/LoanProcess",
     var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
 
     return {
-        pageUID: "kgfs.loans.individual.screening.ScreeningReview",
+        pageUID: "kgfs.loans.individual.screening.KYCCheck",
         pageType: "Bundle",
         dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "Lead", "PageHelper", "irfStorageService", "$filter", "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "irfNavigator"],
         $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, Lead, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
             return {
                 "type": "page-bundle",
-                "title": "SCREENING_REVIEW",
+                "title": "KYC_CHECK",
                 "subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
                 "bundleDefinitionPromise": function() {
                     return $q.resolve([
@@ -32,7 +32,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'co-applicant',
                             minimum: 0,
                             maximum: 1,
-                            order:11
+                            order:20
                         },
                         {
                             pageName: 'kgfs.customer.IndividualEnrolment2',
@@ -40,7 +40,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'guarantor',
                             minimum: 0,
                             maximum: 1,
-                            order:12
+                            order:30
                         },
                         {
                             pageName: 'kgfs.customer.EnterpriseEnrolment2',
@@ -64,24 +64,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'cbview',
                             minimum: 1,
                             maximum: 1,
-                            order:9
-                        },
-                            // {
-                            //     pageName: 'kgfs.loans.individual.screening.Summary',
-                            //     title: 'SUMMARY',
-                            //     pageClass: 'summary',
-                            //     minimum: 1,
-                            //     maximum: 1,
-                            //     order: 5
-                            // },                            
-                            {
-                                pageName: 'kgfs.loans.individual.screening.Review',
-                                title: 'REVIEW',
-                                pageClass: 'loan-review',
-                                minimum: 1,
-                                maximum: 1,
-                                order:80
-                            }
+                            order:50
+                        }
                     ]);
                 },
                 "bundlePages": [],
@@ -132,7 +116,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 },
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
-                    bundleModel.currentStage = "ScreeningReview";
+                    bundleModel.currentStage = "KYCCheck";
                     var deferred = $q.defer();
 
                     var $this = this;
@@ -151,7 +135,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess.loanAccount.leadId = _leadId;
 
                                     }
-                                if (loanAccount.loanAccount.currentStage != 'ScreeningReview'){
+                                if (loanAccount.loanAccount.currentStage != 'KYCCheck'){
                                     PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
                                     irfNavigator.goBack();
                                     return;
@@ -209,13 +193,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-                                $this.bundlePages.push({
-                                    pageClass: 'loan-review',
-                                    model: {
-                                        loanAccount: loanProcess.loanAccount,
-                                    }
-                                });
-
                             
                                 deferred.resolve();
 
@@ -227,7 +204,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         }
                         LoanProcess.createNewProcess()
                             .subscribe(function(loanProcess){
-                                loanProcess.loanAccount.currentStage = 'ScreeningReview';
+                                loanProcess.loanAccount.currentStage = 'KYCCheck';
                                 bundleModel.loanProcess = loanProcess;
                                  if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
 
@@ -269,13 +246,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-                                $this.bundlePages.push({
-                                    pageClass: 'loan-review',
-                                    model: {
-                                        loanAccount: loanProcess.loanAccount,
-                                    }
-                                });
-
                                 deferred.resolve();
                             });
                     }
@@ -284,15 +254,15 @@ define(["perdix/domain/model/loan/LoanProcess",
                 },
                 "post_pages_initialize": function(bundleModel){
                     $log.info("Inside post_page_initialize");
-                    BundleManager.broadcastEvent('origination-stage', 'ScreeningReview');
+                    BundleManager.broadcastEvent('origination-stage', 'KYCCheck');
                     if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
                         PageHelper.showLoader();
-                        PageHelper.showProgress("screening-input", 'Loading lead details');
+                        PageHelper.showProgress("kyc-check", 'Loading lead details');
                         var _leadId = $stateParams.pageData['lead_id'];
                         Lead.get({id: _leadId})
                             .$promise
                             .then(function(res){
-                                PageHelper.showProgress('screening-input', 'Done.', 5000);
+                                PageHelper.showProgress('kyc-check', 'Done.', 5000);
                                 BundleManager.broadcastEvent('lead-loaded', res);
                             }, function(httpRes){
                                 PageHelper.showErrors(httpRes);
@@ -395,7 +365,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     for (var i=0; i<offlineData.bundlePages.length; i++){
                         var page = offlineData.bundlePages[i];
                         if (page.pageClass == "applicant" && !page.model.customer.firstName){
-                            PageHelper.showProgress("ScreeningReview", "Applicant first name is required to save offline", 5000);
+                            PageHelper.showProgress("KYCCheck", "Applicant first name is required to save offline", 5000);
                             defer.reject();
                         }
                     }

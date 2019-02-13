@@ -19,8 +19,8 @@
        },
        {
           "order":2,
-          "code":"Dedupe",
-          "name":"Dedupe",
+          "code":"MELApplication",
+          "name":"MELApplication",
           "stageType":"CAPTURE",
           "sendSms":"No",
           "smsCategory":"LoanBooking",
@@ -31,8 +31,8 @@
        },
        {
           "order":3,
-          "code":"ScreeningReview",
-          "name":"Screening Review",
+          "code":"Application",
+          "name":"Application",
           "stageType":"CAPTURE",
           "sendSms":"No",
           "smsCategory":"LoanBooking",
@@ -43,8 +43,8 @@
        },
        {
           "order":4,
-          "code":"Application",
-          "name":"Application",
+          "code":"CreditAppraisal",
+          "name":"Credit Appraisal",
           "stageType":"CAPTURE",
           "sendSms":"No",
           "smsCategory":"LoanBooking",
@@ -56,8 +56,8 @@
        },
        {
           "order":5,
-          "code":"ApplicationReview",
-          "name":"Application Review",
+          "code":"DSCApproval",
+          "name":"DSC Approval",
           "stageType":"CAPTURE",
           "sendSms":"Yes",
           "smsCategory":"ApplicationReview",
@@ -69,8 +69,8 @@
        },
        {
           "order":6,
-          "code":"FieldAppraisal",
-          "name":"FieldAppraisal",
+          "code":"LosDSCOverride",
+          "name":"DSC Override",
           "stageType":"CAPTURE",
           "sendSms":"No",
           "smsCategory":"LoanBooking",
@@ -82,8 +82,8 @@
        },
        {
           "order":7,
-          "code":"FieldAppraisalReview",
-          "name":"FieldAppraisal Review",
+          "code":"KYCCheck",
+          "name":"KYC Check",
           "stageType":"CAPTURE",
           "sendSms":"No",
           "smsCategory":"LoanBooking",
@@ -94,8 +94,8 @@
        },
        {
           "order":8,
-          "code":"ZonalRiskReview",
-          "name":"ZonalRisk Review",
+          "code":"RiskReviewAndLoanSanction",
+          "name":"Risk Review And Loan Sanction",
           "stageType":"CAPTURE",
           "sendSms":"No",
           "smsCategory":"LoanBooking",
@@ -3222,7 +3222,7 @@
                       "title":"Collateral Type",
                       "type":"string",
                       "captureStages":[
-                        "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                        "Screening","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
                       ],
                       "refCodeCategory":"collateral_type"
                    },
@@ -3543,7 +3543,7 @@
                       "title":"propertyOwnerName",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Screening","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3607,7 +3607,7 @@
                       "title":"udf1",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Screening","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3615,7 +3615,7 @@
                       "title":"udf4",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Screening","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3623,7 +3623,7 @@
                       "title":"udf2",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Screening","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3631,7 +3631,7 @@
                       "title":"udf3",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Screening","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3639,7 +3639,7 @@
                       "title":"udf5",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Screening","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
                       ]
                    }
  
@@ -3662,7 +3662,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                        "Screening","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","ApplicationReview","FieldAppraisalReview","ZonalRiskReview","CentralRiskReview","CreditCommitteeReview","Rejected"
+                        "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","ApplicationReview","FieldAppraisalReview","ZonalRiskReview","CentralRiskReview","CreditCommitteeReview","Rejected"
                       ]
                    },
                    "mitigant":{
@@ -3671,7 +3671,7 @@
                       "minimum":1,
                       "maximum":100000000,
                       "captureStages":[
-                         "Screening","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","ApplicationReview","FieldAppraisalReview","ZonalRiskReview", "CentralRiskReview","CreditCommitteeReview","Rejected"
+                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","ApplicationReview","FieldAppraisalReview","ZonalRiskReview", "CentralRiskReview","CreditCommitteeReview","Rejected"
                       ]
                    },
                    "riskScore":{
@@ -3680,7 +3680,7 @@
                       "minimum":1,
                       "maximum":100000000,
                       "captureStages":[
-                         "Screening","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","ApplicationReview","FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview","CreditCommitteeReview","Rejected"
+                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","ApplicationReview","FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview","CreditCommitteeReview","Rejected"
                       ]
                    }
                 }

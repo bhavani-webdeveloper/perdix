@@ -8,7 +8,7 @@ define(["perdix/domain/model/loan/LoanProcess",
     var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
 
     return {
-        pageUID: "kgfs.loans.individual.screening.ScreeningReview",
+        pageUID: "kgfs.loans.individual.screening.RiskReviewAndLoanSanction",
         pageType: "Bundle",
         dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "Lead", "PageHelper", "irfStorageService", "$filter", "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "irfNavigator"],
         $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, Lead, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
@@ -132,7 +132,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 },
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
-                    bundleModel.currentStage = "ScreeningReview";
+                    bundleModel.currentStage = "RiskReviewAndLoanSanction";
                     var deferred = $q.defer();
 
                     var $this = this;
@@ -151,7 +151,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess.loanAccount.leadId = _leadId;
 
                                     }
-                                if (loanAccount.loanAccount.currentStage != 'ScreeningReview'){
+                                if (loanAccount.loanAccount.currentStage != 'RiskReviewAndLoanSanction'){
                                     PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
                                     irfNavigator.goBack();
                                     return;
@@ -227,7 +227,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         }
                         LoanProcess.createNewProcess()
                             .subscribe(function(loanProcess){
-                                loanProcess.loanAccount.currentStage = 'ScreeningReview';
+                                loanProcess.loanAccount.currentStage = 'RiskReviewAndLoanSanction';
                                 bundleModel.loanProcess = loanProcess;
                                  if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
 
@@ -284,7 +284,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 },
                 "post_pages_initialize": function(bundleModel){
                     $log.info("Inside post_page_initialize");
-                    BundleManager.broadcastEvent('origination-stage', 'ScreeningReview');
+                    BundleManager.broadcastEvent('origination-stage', 'RiskReviewAndLoanSanction');
                     if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
                         PageHelper.showLoader();
                         PageHelper.showProgress("screening-input", 'Loading lead details');
@@ -395,7 +395,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     for (var i=0; i<offlineData.bundlePages.length; i++){
                         var page = offlineData.bundlePages[i];
                         if (page.pageClass == "applicant" && !page.model.customer.firstName){
-                            PageHelper.showProgress("ScreeningReview", "Applicant first name is required to save offline", 5000);
+                            PageHelper.showProgress("RiskReviewAndLoanSanction", "Applicant first name is required to save offline", 5000);
                             defer.reject();
                         }
                     }

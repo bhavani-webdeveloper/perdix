@@ -59,7 +59,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:60
                         },
                         {
-                            pageName: 'kgfs.loans.individual.screening.CBCheck',
+                            pageName: 'kgfs.loans.individual.screening.CreditBureauView',
                             title: 'CREDIT_BUREAU',
                             pageClass: 'cbview',
                             minimum: 1,
