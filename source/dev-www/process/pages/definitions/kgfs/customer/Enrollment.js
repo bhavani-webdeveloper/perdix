@@ -7,11 +7,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
             pageType: "Engine",
             dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper",
                 "$q", "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
-                "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","irfProgressMessage","Files","translateFilter"],
+                "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","irfProgressMessage","Files","translateFilter","BranchCreationResource"],
 
             $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
                 PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch,
-                BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,irfProgressMessage,Files,translateFilter) {
+                BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,irfProgressMessage,Files,translateFilter,BranchCreationResource) {
 
                 AngularResourceService.getInstance().setInjector($injector);
                 var branch = SessionStore.getBranch();
@@ -1062,6 +1062,26 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         if (branchId && !model.customer.customerBranchId) {
                             model.customer.customerBranchId = branchId;
                         };
+                       //start
+                           if (!Utils.isCordova) {
+                               BranchCreationResource.getBranchByID({
+                                       id: branchId
+                                   },
+                                   function (res) {
+                                       if (res.fingerPrintDeviceType) {
+                                           if (res.fingerPrintDeviceType == "MANTRA") {
+                                               model.fingerPrintDeviceType = res.fingerPrintDeviceType;
+                                           }
+                                       }
+
+                                       PageHelper.hideLoader();
+                                   },
+                                   function (err) {
+                                       $log.info(err);
+                                   }
+                               );
+                           }
+                       //end
                         model.siteCode = SessionStore.getGlobalSetting('siteCode');
                         var self = this;
                         var formRequest = {
