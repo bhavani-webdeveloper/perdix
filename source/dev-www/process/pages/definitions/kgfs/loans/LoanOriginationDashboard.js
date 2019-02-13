@@ -11,12 +11,12 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanOriginationDashboar
                 "Page/Engine/kgfs.loans.individual.screening.Input",
                // "Page/Bundle/kgfs.loans.individual.screening.ScreeningInput",
                 "Page/Engine/kgfs.loans.individual.screening.ScreeningQueue",
-                "Page/Engine/kgfs.loans.individual.screening.MELApplicationForm",
+                "Page/Engine/kgfs.loans.individual.screening.MELApplicationFormQueue",
                 "Page/Engine/kgfs.loans.individual.screening.ApplicationQueue",
                 "Page/Engine/kgfs.loans.individual.screening.CreditAppraisalQueue",
                 "Page/Engine/kgfs.loans.individual.screening.DscQueue",
                 "Page/Engine/kgfs.loans.individual.screening.DscOverrideQueue",
-                "Page/Engine/kgfs.loans.individual.screening.KYCCheck",
+                "Page/Engine/kgfs.loans.individual.screening.KYCCheckQueue",
                 "Page/Engine/kgfs.loans.individual.screening.RiskReviewAndLoanSanctionQueue",
                 "Page/Engine/kgfs.loans.individual.screening.RejectedQueue"
             ]
@@ -51,12 +51,35 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanOriginationDashboar
                     });   
             }
 
+            var sqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.MELApplicationFormQueue"];
+
+            if (sqMenu) {
+                sqMenu.data = 0;
+                    _.forEach(centres, function(centre) {
+                        IndividualLoan.search({
+                            'stage': 'MELApplication',
+                            'enterprisePincode': '',
+                            'applicantName': '',
+                            'area': '',
+                            'villageName': '',
+                            'customerName': '',
+                            'page': 1,
+                            'per_page': 1,
+                            'centreCode': centre.centreCode
+                        }).$promise.then(function(response, headerGetter) {
+                            sqMenu.data = sqMenu.data + Number(response.headers['x-total-count']);
+                        }, function() {
+                            sqMenu.data = '-';
+                        });
+                    });   
+            }
 
 
-            var srqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.ScreeningReviewQueue"];
+
+            var srqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.ApplicationQueue"];
             if (srqMenu) {
                 IndividualLoan.search({
-                    'stage': 'ScreeningReview',
+                    'stage': 'ApplicationQueue',
                     'enterprisePincode': '',
                     'applicantName': '',
                     'area': '',
@@ -125,8 +148,8 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanOriginationDashboar
                 });
             }
 
-             var kyccMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.KYCCheck"];
-            if (kyccMenu) {
+             var kyccqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.KYCCheckQueue"];
+            if (kyccqMenu) {
                 IndividualLoan.search({
                     'stage': 'KYCCheck',
                     'enterprisePincode': '',
@@ -137,9 +160,9 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanOriginationDashboar
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    kyccMenu.data = Number(response.headers['x-total-count']);
+                    kyccqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
-                    kyccMenu.data = '-';
+                    kyccqMenu.data = '-';
                 });
             }
 

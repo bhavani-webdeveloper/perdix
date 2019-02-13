@@ -283,7 +283,7 @@ foreach ($partners as $partner) {
                         $customer = $customer::join('customer_partner', function($join) {
                             $join->on('customer.id', '=', 'customer_partner.customer_id');
                           })
-                          ->where('customer_partner_number', '=', $rowData[1])
+                          ->where('old_customer_id', '=', "".$rowData[1])
                           ->first([
                               'customer.id',
                               'customer.first_name',

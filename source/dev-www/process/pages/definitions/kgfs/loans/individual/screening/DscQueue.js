@@ -127,7 +127,7 @@ define({
                     },
                     getActions: function () {
                         return [{
-                            name: "VIEW/EDIT_APPLICATION",
+                            name: "DSC",
                             desc: "",
                             icon: "fa fa-book",
                             fn: function (item, index) {
