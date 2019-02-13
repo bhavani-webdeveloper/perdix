@@ -591,7 +591,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 title: "HighMark",
                                 items: [{
                                     key: "customer.applicantname",
-                                    title: "ApplicantName",
+                                    title: "APPLICANT_NAME",
                                     readonly: true,
                                     type: "string",
 
@@ -693,7 +693,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 title: "INDIVIDUAL",
                                 items: [{
                                     key: "customer.applicantname",
-                                    title: "ApplicantName",
+                                    title: "APPLICANT_NAME",
                                     readonly: true,
                                     type: "string",
 
@@ -796,7 +796,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 title: "EQUIFAX",
                                 items: [{
                                         key: "customer.applicantname",
-                                        title: "ApplicantName",
+                                        title: "APPLICANT_NAME",
                                         readonly: true,
                                         type: "string",
                                     }, {
@@ -898,7 +898,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 title: "IDENCHECK",
                                 items: [{
                                         key: "customer.applicantname",
-                                        title: "ApplicantName",
+                                        title: "APPLICANT_NAME",
                                         readonly: true,
                                         type: "string",
                                     }, {

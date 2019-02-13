@@ -7,11 +7,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
             pageType: "Engine",
             dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper",
                 "$q", "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
-                "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","irfProgressMessage","Files"],
+                "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","irfProgressMessage","Files","translateFilter"],
 
             $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
                 PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch,
-                BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,irfProgressMessage,Files) {
+                BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,irfProgressMessage,Files,translateFilter) {
 
                 AngularResourceService.getInstance().setInjector($injector);
                 var branch = SessionStore.getBranch();
@@ -1156,7 +1156,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             }
             
                             model.getFingerLabel = function(fingerId) {
-                                return BiometricService.getLabel(fingerId);
+                                return translateFilter(BiometricService.getLabel(fingerId));
                             }
 
                         /* Form rendering ends */
@@ -1238,7 +1238,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         }
         
                         model.getFingerLabel = function(fingerId) {
-                            return BiometricService.getLabel(fingerId);
+                            return translateFilter(BiometricService.getLabel(fingerId));
                         }
 
                     },

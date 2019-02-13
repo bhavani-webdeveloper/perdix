@@ -87,7 +87,8 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     { /*TODO Not working when this is enabled */
                        key: "customer.enterprise.companyOperatingSince",
                        title:"OPERATING_SINCE",
-                       type: "date"
+                       type: "date",
+                       required:true
                     },
                     {
                         "type": "string",
