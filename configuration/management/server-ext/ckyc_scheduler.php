@@ -62,7 +62,8 @@ Class Ckyc {
         for ($i =0;$i<=$index;$i++){
             $preString = $preStrings ? $preStrings : "";
             while (true){
-                if (strlen($preString.$data[$j]) <= $givenLenght && $j<sizeof($data) && $total!= 0){
+            if ($j<sizeof($data)){
+                if (strlen($preString.$data[$j]) <= $givenLenght && $total!= 0){
                     $ssymbol = strlen($preString.$data[$j].$symbol) > $givenLenght ? "" : $symbol;
                     $preString =  $preString.$data[$j].$ssymbol;
                     if ($symbol != ",")
@@ -71,6 +72,7 @@ Class Ckyc {
                         \array_splice($data,0, 1);
                     continue;
                 }
+            }
                 if ($symbol != ','){
                     $temp = Ckyc::preProcessOfAddress(0,$givenLenght,$data,',',$preString,$j,$data,$j-sizeof($data));
                   	echo $temp;
@@ -95,10 +97,8 @@ Class Ckyc {
         else if ($type == 'mailing')
             $address_array = array_filter([$c->mailing_doorno,$c->mailing_street,$c->mailing_postoffice,$c->mailing_locality,$c->mailing_district,$c->mailing_state,$c->mailing_pincode]);
         $default_data = join(',',$address_array);
-        $value = Ckyc::preProcessOfAddress($index,$length,$default_data,' ',"",0,"",1)[0];
-        echo $value;
-        echo "<p></p>";
-        return $value;
+        $value = Ckyc::preProcessOfAddress($index,$length,explode(' ',$default_data),' ',"",0,"",1);
+        return $value[0];
     }
     
     public static function CKYC_PERDIX_FIELD_MAP() { return [
