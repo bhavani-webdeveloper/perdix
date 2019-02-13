@@ -49,10 +49,7 @@ Class Ckyc {
         'Driving Licence' => 'DrivingLicence'
     ];
     private static function preProcessOfAddress($index1,$givenLenght,$data,$symbol,$preStrings,$prevJ,$preData,$total){
-        $index = $index1;
-      	var_dump($data);
-      	echo "<p></p>";
-      
+        $index = $index1;  
         if ($symbol == ',' && $total!= 0){
              $prevJ  = $prevJ;
              $preData = $preData;
@@ -75,12 +72,11 @@ Class Ckyc {
             }
                 if ($symbol != ','){
                     $temp = Ckyc::preProcessOfAddress(0,$givenLenght,$data,',',$preString,$j,$data,$j-sizeof($data));
-                  	echo $temp;
-                  	echo "<p></p>";
-                  $preString = $temp[0];
+                    $preString = $temp[0];
                     $data = $temp[1];
                 }
                 else if ($total != 0){
+                    $preData[$prevJ] = implode(',',$data);
                     return [$preString,$preData];
                 }
                 else
@@ -97,6 +93,18 @@ Class Ckyc {
         else if ($type == 'mailing')
             $address_array = array_filter([$c->mailing_doorno,$c->mailing_street,$c->mailing_postoffice,$c->mailing_locality,$c->mailing_district,$c->mailing_state,$c->mailing_pincode]);
         $default_data = join(',',$address_array);
+        $preProcess = explode(',',$default_data);
+        $newPreProcess = [];
+        for($i=0;$i<sizeof($preProcess);$i++){
+            $values = strlen($preProcess[$i]);
+            if ($values == 0){
+                continue;
+            }
+            else{
+                \array_push($newPreProcess,$preProcess[$i]);
+            }
+        }
+        $default_data = implode(',',$newPreProcess);
         $value = Ckyc::preProcessOfAddress($index,$length,explode(' ',$default_data),' ',"",0,"",1);
         return $value[0];
     }
