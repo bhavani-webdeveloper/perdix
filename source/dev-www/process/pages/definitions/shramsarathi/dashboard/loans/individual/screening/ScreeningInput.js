@@ -32,8 +32,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
                             minimum: 0,
-                            maximum: 4,
-                            order:20
+                            maximum: 1,
+                            order:70
                         },
                         {
                             pageName: 'shramsarathi.dashboard.loans.individual.customer.IndividualEnrolment2',
@@ -43,21 +43,21 @@ define(["perdix/domain/model/loan/LoanProcess",
                             maximum: 3,
                             order:30
                         },
-                        {
-                            pageName: 'shramsarathi.dashboard.loans.individual.customer.EnterpriseEnrolment2',
-                            title: 'BUSINESS',
-                            pageClass: 'business',
-                            minimum: 1,
-                            maximum: 1,
-                            order:40
-                        },
+                        // {
+                        //     pageName: 'shramsarathi.dashboard.loans.individual.customer.EnterpriseEnrolment2',
+                        //     title: 'BUSINESS',
+                        //     pageClass: 'business',
+                        //     minimum: 0,
+                        //     maximum: 1,
+                        //     order:60
+                        // },
                         {
                             pageName: 'shramsarathi.dashboard.loans.individual.screening.LoanRequest',
                             title: 'LOAN_REQUEST',
                             pageClass: 'loan-request',
                             minimum: 1,
                             maximum: 1,
-                            order:50
+                            order:20
                         },
                         // {
                         //     pageName: 'shramsarathi.dashboard.loans.individual.screening.VehicleDetails',
@@ -73,7 +73,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'cb-check',
                             minimum: 1,
                             maximum: 1,
-                            order:70
+                            order:40
                         },
                         {
                             pageName: 'loans.individual.screening.CreditBureauView',
@@ -81,15 +81,15 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'cbview',
                             minimum: 1,
                             maximum: 1,
-                            order:80
+                            order:50
                         },
                         {
                             pageName: 'shramsarathi.dashboard.loans.individual.screening.Review',
                             title: 'REVIEW',
                             pageClass: 'loan-review',
-                            minimum: 0,
-                            maximum: 0,
-                            order:90
+                            minimum: 1,
+                            maximum: 1,
+                            order:30
                             
                         }
                     ]);
@@ -102,9 +102,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                         var page = value.bundlePages[i];
                         if (page.pageClass == "applicant"){
                             out[0] = page.model.customer.firstName;
-                        } else if (page.pageClass == "business"){
-                            out[1] = page.model.customer.firstName;
-                        }
+                        } //else if (page.pageClass == "business"){
+                        //     out[1] = page.model.customer.firstName;
+                        // }
                     }
                     return out;
                 },
@@ -199,13 +199,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 }
 
-                                 $this.bundlePages.push({
-                                    pageClass: 'business',
-                                    model: {
-                                        enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
-                                        loanProcess: loanProcess
-                                    }
-                                });
+                                //  $this.bundlePages.push({
+                                //     pageClass: 'business',
+                                //     model: {
+                                //         enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                //         loanProcess: loanProcess
+                                //     }
+                                // });
 
                                 $this.bundlePages.push({
                                     pageClass: 'loan-request',
@@ -268,15 +268,15 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     });
                                 }
 
-                                if (loanProcess.loanCustomerEnrolmentProcess) {
-                                    $this.bundlePages.push({
-                                        pageClass: "business",
-                                        model: {
-                                            enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
-                                            loanProcess: loanProcess
-                                        }
-                                    });
-                                }
+                                // if (loanProcess.loanCustomerEnrolmentProcess) {
+                                //     $this.bundlePages.push({
+                                //         pageClass: "business",
+                                //         model: {
+                                //             enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                //             loanProcess: loanProcess
+                                //         }
+                                //     });
+                                // }
 
                                 // $this.bundlePages.push({
                                 //     pageClass: 'vehicle-details',
@@ -392,11 +392,11 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 BundleManager.broadcastEvent("new-guarantor", params);
                                 bundleModel.guarantors.push(params.guarantor);
                                 break;
-                            case 'business':
-                                $log.info("New Business Enrolment");
-                                bundleModel.business = params.customer;
-                                BundleManager.broadcastEvent("new-business", params);
-                                break;
+                            // case 'business':
+                            //     $log.info("New Business Enrolment");
+                            //     bundleModel.business = params.customer;
+                            //     BundleManager.broadcastEvent("new-business", params);
+                            //     break;
                             default:
                                 $log.info("Unknown page class");
                                 break;
@@ -430,14 +430,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             BundleManager.broadcastEvent('cb-check-update', cbCustomer);
                         }
                     },
-                    "business-updated": function(pageObj, bundlePageObj, obj){
-                        /* Update other pages */
-                        BundleManager.broadcastEvent("business-updated", obj);
-                    },
-                    "new-business": function(pageObj, bundlePageObj, obj){
-                        /* Update other pages */
-                        BundleManager.broadcastEvent("new-business", obj);
-                    }
+                    // "business-updated": function(pageObj, bundlePageObj, obj){
+                    //     /* Update other pages */
+                    //     BundleManager.broadcastEvent("business-updated", obj);
+                    // },
+                    // "new-business": function(pageObj, bundlePageObj, obj){
+                    //     /* Update other pages */
+                    //     BundleManager.broadcastEvent("new-business", obj);
+                    // }
                 },
                 preSave: function(offlineData) {
                     var defer = $q.defer();
