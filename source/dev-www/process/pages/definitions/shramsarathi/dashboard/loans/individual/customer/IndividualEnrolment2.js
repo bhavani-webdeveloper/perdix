@@ -2944,11 +2944,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "items":{
                                                 "installmentAmount":{
                                                     "key":"customer.financialAssets.amountInPaisa",
-                                                    "title":"INSTALLMENT_AMOUNT"
+                                                    "title":"INSTALLMENT_AMOUNT",
+                                                    "required":true
                                                     },
                                                     "balance":{
                                                         "key":"customer.financialAssets.balance",
-                                                        "title":"BALANCE_IN_THE_ACCOUNT"
+                                                        "title":"BALANCE_IN_THE_ACCOUNT",
+                                                        "required":true
                                                     }
                                             }
 
