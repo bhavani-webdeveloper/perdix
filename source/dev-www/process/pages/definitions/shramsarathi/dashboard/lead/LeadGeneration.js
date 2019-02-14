@@ -21,7 +21,19 @@ function(LeadProcess, AngularResourceService) {
 
             var getOverrides = function (model) {
                 return {
+<<<<<<< Updated upstream
                 
+=======
+                    "leadProfile.individualDetails.maritalStatus":{
+                        "required":true
+                    },
+                    "leadProfile.individualDetails.educationStatus":{
+                        "required":true
+                    },
+                    "leadProfile.individualDetails.age":{
+                        "required":true
+                    },
+>>>>>>> Stashed changes
                     "leadProfile.leadDetails.customerTypeString":{
                         "readonly":false,
                         "required":true
@@ -150,6 +162,7 @@ function(LeadProcess, AngularResourceService) {
                     },
                     "leadProfile.contactDetails.area":{
                         "title":"PANCHAYAT",
+                        "required":true
                         //"orderNo":20
                     },
                     // "leadProfile.contactDetails.mobileNo":{
@@ -157,13 +170,16 @@ function(LeadProcess, AngularResourceService) {
                     // },
                     "leadProfile.contactDetails.cityTownVillage":{
                         "title":"VILLAGE",
+                        required:true
                         //"orderNo":30
                     },
                     "leadProfile.contactDetails.district":{
                        // "orderNo":40
+                       "required":true
                     },
                     "leadProfile.contactDetails.subDistrict":{
-                        "orderNo":50
+                        "orderNo":50,
+                        "required":true
                     },
                     "leadProfile.contactDetails.addressLine1":{
                         "title":"HAMLET_FALA",
@@ -178,13 +194,16 @@ function(LeadProcess, AngularResourceService) {
                             "pincode": "lead.pincode",
                             "division": {
                                 key: "lead.area",
-                                title:"PANCHAYAT"
+                                title:"PANCHAYAT",
+                                required:true
                             },
                             "district": {
-                                key: "lead.district"
+                                key: "lead.district",
+                                "required":true
                             },
                             "state": {
-                                key: "lead.state"
+                                key: "lead.state",
+                                "required":true
                             }
                         },
                         outputMap: {
@@ -256,6 +275,7 @@ function(LeadProcess, AngularResourceService) {
                     //"leadProfile.contactDetails.addressLine2",
                     "leadProfile.contactDetails.pincode",
                     "leadProfile.contactDetails.area",
+                    "leadProfile.contactDetails.taluk",
                     "leadProfile.contactDetails.cityTownVillage",
                     "leadProfile.contactDetails.district",
                     "leadProfile.contactDetails.state",
@@ -354,6 +374,7 @@ function(LeadProcess, AngularResourceService) {
                                             "lastName": {
                                                 key: "leadProfile.individualDetails.lastName",
                                                 title: "LAST_NAME",
+                                                required:true,
                                                 schema: {
                                                     pattern: "^[a-zA-Z\. ]+$",
                                                 },
@@ -367,10 +388,24 @@ function(LeadProcess, AngularResourceService) {
                                                     pattern: "^[a-zA-Z\. ]+$",
                                                 },
                                                 validationMessage: {202: "Only alphabets and space are allowed."},
-                                                "orderNo": 60
-                                            },
-                                    }
+                                                "orderNo": 60,
+                                                required:true
+                                            }
+                                            
                                     },
+                                    
+                                    
+                                    },
+                                    "contactDetails":{
+                                        "items":{
+                                             "taluk":{
+                                                     "key":"leadProfile.contactDetails.taluk",
+                                                     "title":"SUBDISTRICT",
+                                                     "readonly":true,
+                                                     "required":true
+                                                 }
+                                        } 
+                                     },
                                     "migrantDetails": {
                                         "type": "fieldset",
                                         "title": "MIGRANT_DETAILS",
@@ -379,6 +414,7 @@ function(LeadProcess, AngularResourceService) {
                                             "migrantDependantLabourFamily": {
                                                 key: "lead.udf.userDefinedFieldValues.udf3",
                                                 title: "MIGRANT_DEPENDENT_LABOUR_FAMILY",
+                                                required:true,
                                                 type:"radios",
                                                 titleMap:[
                                                     {
