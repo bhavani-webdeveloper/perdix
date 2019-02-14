@@ -26,6 +26,8 @@ define({
             model.business = {};
             model.business.kgfsName =  res[0].data[0]['Hub Name'];
             model.business.centreName = res[0].data[0]['Spoke Name'];
+            model.customer.firstName = res[0].data[0]['Company Name'];
+            model.business.id = model.loanAccount.customerId;
             if(res[26]){
                 model.fullScoringDetails = res[26].data;
             }
@@ -510,6 +512,7 @@ define({
                 /*Business Summary*/
                 model.customer_detail = bundleModel.customer_detail;
                 model.loanAccount = bundleModel.loanAccount;
+              
                 var $this = this;
                 var deferred = $q.defer();
 

@@ -37,7 +37,7 @@ function($log, formHelper, Enrollment, $state, SessionStore, $q, IndividualLoan,
                         }
                     },
                     "centre": {
-                        "title": "CENTRE",
+                        "title": "ZONE",
                         "type": ["integer", "null"],
                         "x-schema-form": {
                             "type": "select",

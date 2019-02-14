@@ -1,6 +1,6 @@
 define(['perdix/domain/model/lead/LeadRepository'], function(LeadRepository) {
     return {
-        pageUID: "base.dashboard.lead.LeadReassign",
+        pageUID: "shramsarathi.dashboard.lead.LeadReassign",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams", "Lead", "SessionStore",
         "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "LeadHelper", "irfNavigator"],

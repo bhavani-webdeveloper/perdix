@@ -165,7 +165,7 @@ irf.pages.config([
 
 	elemConfig.configFileUpload(Model_ELEM_FC);
 	elemConfig.configCommons(MODEL_ELEM_COMMONS);
-	// elemConfig.configMantraDeviceURL("https://localhost:9999/verify");
+	elemConfig.configMantraDeviceURL("https://localhost:9999/verify");
 	
 	elemConfig.configPikaday({
 		minDate: new Date(1800, 0, 1),

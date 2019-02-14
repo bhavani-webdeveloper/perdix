@@ -89,7 +89,7 @@ $pageFn: function($log, elementsConfig, Enrollment, SessionStore, formHelper, $q
                                         var reqdownload = {
                                             auth_data:{auth_token:model.authToken},
                                             report_name :"icici_integration_ircs",
-                                            filters: [{"parameter":"dispatch_name","operator":"=","value":[model.payment.dispatchName]}]
+                                            filters: [{"parameter":"dispatch_name","operator":"=","value":model.payment.dispatchName}]
                                         };  
         
                                     $http.post(
