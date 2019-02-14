@@ -516,7 +516,7 @@ define({
                             LeadHelper.proceedData(reqData).then(function(resp) {
                                 irfNavigator.go({
                                     state: "Page.Adhoc",
-                                    pageName: "base.dashboard.loans.LoanOriginationDashboard"
+                                    pageName: "shramsarathi.dashboard.loans.LoanOriginationDashboard"
                                 });
                                 
                             }, function(err) {
@@ -529,7 +529,7 @@ define({
                             LeadHelper.proceedData(res).then(function(resp) {
                                 irfNavigator.go({
                                     state: "Page.Adhoc",
-                                    pageName: "base.dashboard.loans.LoanOriginationDashboard"
+                                    pageName: "shramsarathi.dashboard.loans.LoanOriginationDashboard"
                                 });
                             }, function(err) {
                                 Utils.removeNulls(res.lead, true);

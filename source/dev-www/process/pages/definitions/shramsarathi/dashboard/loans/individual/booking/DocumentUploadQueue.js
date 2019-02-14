@@ -41,7 +41,7 @@ function($log, formHelper,$state, SessionStore, $q, IndividualLoan, entityManage
 
                     // },
                     "centreCode": {
-                        "title": "CENTER_NAME",
+                        "title": "ZONE",
                         "type": ["number", "null"],
                         "enumCode": "centre",
                         "x-schema-form": {

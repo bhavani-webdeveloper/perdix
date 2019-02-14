@@ -2,9 +2,9 @@ define({
     pageUID: "kgfs.kgfsWorkflow.GpsFPApprovalInit",
     pageType: "Engine",
     dependencies: ["$window", "$log", "formHelper", "filterFilter", "Workflow", "Enrollment", "RolesPages", "Queries", "$q", "$state", "SessionStore", "UIRepository", "IrfFormRequestProcessor", "Utils", "PagesDefinition",
-        "irfNavigator", "User", "SchemaResource", "$stateParams", "PageHelper", "irfProgressMessage", "BundleManager", "BiometricService", "Files"],
+        "irfNavigator", "User", "SchemaResource", "$stateParams", "PageHelper", "irfProgressMessage", "BundleManager", "BiometricService", "Files","BranchCreationResource"],
     $pageFn: function ($window, $log, formHelper, filterFilter, Workflow, Enrollment, RolesPages, Queries, $q, $state, SessionStore, UIRepository, IrfFormRequestProcessor,
-        Utils, PagesDefinition, irfNavigator, User, SchemaResource, $stateParams, PageHelper, irfProgressMessage, BundleManager, BiometricService, Files) {
+        Utils, PagesDefinition, irfNavigator, User, SchemaResource, $stateParams, PageHelper, irfProgressMessage, BundleManager, BiometricService, Files,BranchCreationResource) {
 
         var getCustomer = function (result, model) {
             Enrollment.EnrollmentById({ id: result.id }, function (resp, header) {
@@ -13,6 +13,7 @@ define({
 
 
                 model.customer.isGpsChanged = "NO"; //flag for gps updation
+                model.customer.isEnrollmentChanged="NO";
                 model.customer.isFingerPrintChanged = "NO"; //flag for updation of finger prints
                 model.customer.biometricCaptured = "Captured";
                 model.customer.fingerPrintUpdated = "Updated"; //flag for displaying the updated finger prints
@@ -52,6 +53,13 @@ define({
                     model.customer.newLatitude = model.UpdatedWorkflow.customer.latitude;
                     model.customer.newLongitude = model.UpdatedWorkflow.customer.longitude;
                 }
+                if(model.customer.enrolledAs == model.UpdatedWorkflow.customer.enrolledAs) {
+                    model.customer.isEnrollmentChanged="NO";
+                }else {
+                    model.customer.isEnrollmentChanged="YES";
+                    model.customer.newEnrollment=model.UpdatedWorkflow.customer.enrolledAs;
+                }
+
                 if(model.customer.photoImageId == model.UpdatedWorkflow.customer.photoImageId ){
                     model.customer.isPhotoImageIdChanged = "NO";
                 }
@@ -109,6 +117,27 @@ define({
             "type": "schema-form",
             "title": "UPDATE_CUSTOMER_INFO",
             initialize: function (model, form, formCtrl) {
+                //start
+             var branchId = SessionStore.getBranchId();
+             if (!Utils.isCordova) {
+                 BranchCreationResource.getBranchByID({
+                         id: branchId
+                     },
+                     function (branchDetails) {
+                         if (branchDetails.fingerPrintDeviceType) {
+                             if (branchDetails.fingerPrintDeviceType == "MANTRA") {
+                                 model.fingerPrintDeviceType = branchDetails.fingerPrintDeviceType;
+                             }
+                         }
+
+                         PageHelper.hideLoader();
+                     },
+                     function (err) {
+                         $log.info(err);
+                     }
+                 );
+             }
+             //end
                 $log.info("User Maintanance loaded");
                 var workflowId = $stateParams.pageId;
                 $log.info("Loading data for Cust ID " + workflowId);
@@ -250,6 +279,32 @@ define({
                                     "latitude": "customer.newLatitude",
                                     "longitude": "customer.newLongitude"
                                 }
+                            ]
+                        },
+                        //Enrollment
+                        {
+                            type:"fieldset",
+                            title:"ENROLLMENT", 
+                            "items":[
+                            {
+                                key:"customer.enrolledAs",
+                                title:"ENROLLED_AS",
+                                readonly:true
+                            },{
+                                key:"customer.isEnrollmentChanged",
+                                type: "radios",
+                                title: "UPDATE",
+                                "titleMap": {
+                                    "YES": "YES",
+                                    "NO": "NO"
+                                }
+                            },{
+                                key: "customer.newEnrollment",
+                                title: "UPDATE_ENROLLMENT",
+                                "type": "select",
+                                required: true,
+                                condition: "model.customer.isEnrollmentChanged=='YES'"
+                            }
                             ]
                         },
                         {
@@ -502,6 +557,12 @@ define({
                                 "type": ["string","null"],
                                 "captureStages": ["Init"]
                             },
+                            "newEnrollment": {
+                                "type": ["string","null"],
+                                "title": "ENROLLED_AS",
+                                "enumCode":"enrolled_as",                                                                        
+                                "captureStages": ["Init"]
+                            },
                             "photoImageId": {
                                 "title" : "CUSTOMER_PHOTO",
                                 "type":["string","null"],
@@ -608,6 +669,9 @@ define({
                         }
                         if(model.customer.isPhotoImageIdChanged == "YES"){
                             updatedModel.customer.photoImageId = updatedModel.customer.newPhotoImageId;
+                        }
+                        if(model.customer.isEnrollmentChanged=="YES"){
+                            updatedModel.customer.enrolledAs=updatedModel.customer.newEnrollment;
                         }
                         if (model.customer.isFingerPrintChanged == "YES") {
                             updatedModel.customer.leftHandThumpImageId = updatedModel.customer.newLeftHandThumpImageId;

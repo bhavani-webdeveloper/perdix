@@ -11,7 +11,7 @@ define({
 			"title": "LEAD_REJECTED",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				console.log("r :: base.dashboard.lead.LeadRejectedQueue");
+				console.log("r :: shramsarathi.dashboard.lead.LeadRejectedQueue");
 				model.branch = branch;
 				$log.info("search-list sample got initialized");
 				var branchId = SessionStore.getBranchId();
@@ -192,11 +192,11 @@ define({
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('base.dashboard.lead.LeadGeneration', {
+								entityManager.setModel('shramsarathi.dashboard.lead.LeadGeneration', {
 									_request: item
 								});
 								$state.go("Page.Engine", {
-									pageName: "base.dashboard.lead.LeadGeneration",
+									pageName: "shramsarathi.dashboard.lead.LeadGeneration",
 									pageId: item.id
 								});
 							},

@@ -138,7 +138,9 @@ define([],function(){
                                     "schema": {
                                              "enumCode": "tenure_requested"
                                         },
-                                        "required":true
+                                        "required":true,
+                                        "title":"NO_OF_INSTALLMENTS",
+                                        
                                 },
                                 "PreliminaryInformation.expectedEmi": {
                                     "readonly": true
@@ -309,9 +311,9 @@ define([],function(){
                                 "PreliminaryInformation.tenureRequested": {
                                     "required": true
                                 },
-                                // "PreliminaryInformation.expectedEmi": {
-                                //     "readonly": true
-                                // },
+                                "PreliminaryInformation.expectedEmi": {
+                                    "readonly": true
+                                },
                                 "PreliminaryInformation.emiRequested": {
                                     "required": true
                                 },
@@ -1213,10 +1215,10 @@ define([],function(){
                         "PreliminaryInformation.collectionPaymentType": {
                             "enumCode": "customerinfo_colctn_Pymt_type"
                         },
-                        "PreliminaryInformation.tenureRequested": {
-                            "title":"NO_OF_INSTALLMENTS",
-                            "required": true
-                        },
+                        // "PreliminaryInformation.tenureRequested": {
+                        //     "title":"NO_OF_INSTALLMENTS",
+                        //     "required": true
+                        // },
                         //over ride for ticket
                         "LoanSanction.numberOfDisbursements": {
                            // key:"loanAccount.numberOfDisbursements",
@@ -1327,11 +1329,15 @@ define([],function(){
                             condition:"model.currentStage=='Application' || model.currentStage=='FieldAppraisal'"
                         },
                         "PreliminaryInformation.tenureRequested": {
-                            "required": true
+                            "required": true,
+                            "title":"NO_OF_INSTALLMENTS"
                         },
                         "PreliminaryInformation.emiRequested": {
                             "required": true,
                             "title":"REPAYMENT_CAPACITY"
+                        },
+                        "PreliminaryInformation.loanPurpose2":{
+                            "title":"LOAN_SUB_PURPOSE_1"
                         },
                         "PreliminaryInformation.collectionPaymentType": {
                             "required": true
@@ -1717,9 +1723,10 @@ define([],function(){
                                     "PreliminaryInformation":{
                                         "items": {
                                             "loanPurpose3": {
-                                                "key":"loanAccount.loanPurpose3",
+                                                "key":"loanAccount.loanPurpose2",
                                               "title":"LOAN_SUB_PURPOSE2",
-                                              "type":"text"
+                                              "type":"text",
+                                              "orderNo":40
                                             },
                                             "referenceFrom": {
                                                 "key":"loanAccount.referenceFrom",

@@ -76,7 +76,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"DESTINATION_ADDRESS"
                                 },
                                 "BankAccounts.customerBankAccounts.accountType":{
-                                    "title":"TYPE_OF_BANK"   
+                                    "title":"TYPE_OF_BANK_ACCOUNT"   
                                },
                                 "BankAccounts.customerBankAccounts.bankingSince":{
                                    "title":"ACTIVE_FROM"
@@ -274,7 +274,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "BankAccounts.customerBankAccounts.bankStatements.totalDeposits": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"DEPOSIT_AMOUNT"
+                                },
+                                "BankAccounts.customerBankAccounts.bankStatements.balanceAsOn15th":{
+                                    "title":"BALANCE_IN_THE_A/C_AS_ON_DATE"
                                 },
                                 "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced": {
                                     "required": true
@@ -295,10 +299,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     required: false
                                 },
                                 "BankAccounts.customerBankAccounts.isDisbersementAccount": {
-                                    "type": "checkbox"
+                                    "type": "radios"
+                                    
                                 },
                                 "BankAccounts.customerBankAccounts.accountType":{
-                                     "title":"TYPE_OF_BANK"   
+                                     "title":"TYPE_OF_BANK_ACCOUNT"   
                                 },
                                  "BankAccounts.customerBankAccounts.bankingSince":{
                                     "title":"ACTIVE_FROM"
@@ -455,6 +460,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 // }
                                 "FamilyDetails.familyMembers": {
                                     "title": "MIGRANT_DETAILS"
+                                },
+                                "Liabilities.liabilities.maturityDate":{
+                                    "title":"END_DATE"
                                 },
                             }
                         },
@@ -1553,6 +1561,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var overridesFields = function (bundlePageObj) {
                 return {
+                    "Machinery.fixedAssetsMachinaries":{
+                        "title":"FIXED_ASSET"
+                    },
                     //over 
                     "KYC.idProofIssueDate":{
                         "orderNo":50
@@ -2031,7 +2042,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                     "Liabilities",
                     "Liabilities.liabilities",
-                    //"Liabilities.liabilities.loanType",
+                    "Liabilities.liabilities.loanType",
+                    "Liabilities.liabilities.liabilityType",
+                    "Liabilities.liabilities.mortage",
+                    "Liabilities.liabilities.mortageAmount",
                     "Liabilities.liabilities.loanSource",
                     "Liabilities.liabilities.loanAmountInPaisa",
                     "Liabilities.liabilities.installmentAmountInPaisa",
@@ -2043,6 +2057,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Liabilities.liabilities.liabilityLoanPurpose",
                     "Liabilities.liabilities.interestOnly",
                     "Liabilities.liabilities.interestRate",
+                    "Liabilities.liabilities.liabilityType",
+                    
 
                     "HouseVerification",
                     "HouseVerification.houseDetailsFieldSet",
@@ -2053,6 +2069,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "HouseVerification.houseVerificationPhoto",
                     "HouseVerification.date",
                     "HouseVerification.place",
+                    "HouseVerification.houseStatus",
+                    "HouseVerification.noOfRooms",
                     //"HouseVerification.rentLeaseStatus",
                     //"HouseVerification.rentLeaseAgreement",
 
@@ -2236,9 +2254,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "orderNo": 181
                                         },
                                         "mailingLandmark": {
-                                            "key": "customer.landmark",
+                                            "key": "customer.Landmark",
                                             "title": "LANDMARK",
                                             "type": "string",
+                                            "condition": "!model.customer.mailSameAsResidence"
                                             //"orderNo": 181
                                         },
                                         "mailingmobilePhone":{
@@ -2529,7 +2548,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                                                 },
                                                 "migrantType":{
-                                                    "key":"customer.familyMembers[].migrantType",
+                                                    "key":"customer.familyMembers.migrantType",
                                                     "type":"select",
                                                     "title":"MIGRATION_TYPE",
                                                     "required":true,
@@ -2567,33 +2586,33 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             type: "select"
                                                         },
                                                         "workSector":{
-                                                            "key":"FamilyDetails.familyMembers.incomes.workSector",
+                                                            "key":"customer.familyMembers.incomes.workSector",
                                                             "title":"WORK_SECTOR",
                                                             "type":"select",
                                                             "enum":"occupation"
                                                         },
                                                         "occupationType":{
-                                                            "key":"FamilyDetails.familyMembers.incomes.occupationType",
+                                                            "key":"customer.familyMembers.incomes.occupationType",
                                                             "title":"OCCUPATION_TYPE",
                                                             "type":"select",
                                                             "enum":"occupation"
                                                             
                                                         },
                                                         "skillLevel":{
-                                                            "key":"FamilyDetails.familyMembers.incomes.skillLevel",
+                                                            "key":"customer.familyMembers.incomes.skillLevel",
                                                             "title":"SKILL_LEVEL",
                                                             "type":"select",
                                                             "enum":"occupation"
                                                             
                                                         },
                                                         "avarageTimeSpend":{
-                                                            "key":"FamilyDetails.familyMembers.incomes.avarageTimeSpend",
+                                                            "key":"customer.familyMembers.incomes.averageTimeSpent",
                                                             "title":"AVARAGE_TIME_SPENT",
                                                             "type":"number"
                                                            
                                                         },
                                                         "avarageReturn":{
-                                                            "key":"FamilyDetails.familyMembers.incomes.avarageReturn",
+                                                            "key":"customer.familyMembers.incomes.averageReturn",
                                                             "title":"AVARAGE_RETURN",
                                                             "type":"select",
                                                             titleMap: {
@@ -2605,7 +2624,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             
                                                         },
                                                         "incomeFrom":{
-                                                            "key":"FamilyDetails.familyMembers.incomes.incomeFrom",
+                                                            "key":"customer.familyMembers.incomes.incomeType",
                                                             "title":"INCOME_FROM",
                                                             "type":"radios",
                                                             titleMap: {
@@ -2648,8 +2667,56 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "type": "date",
                                             "key": "customer.udf.userDefinedDateFieldValues.udfDate1",
                                             "title": "RENT_LEASE_AGREEMENT_VALID_TILL"
+                                        },
+                                        "houseStatus":{
+                                            "title":"HOUSE_STATUS",
+                                            "key":"customer.houseStatus",
+                                            "type":"select",
+                                            "titleMap":{
+                                                "PAKKA":"PAKKA",
+                                                "KACCHA":"KACCHA",
+                                                "TARPAL_SEET":"TARPAL_SEET"
+                                            }
+                                        },
+                                        "noOfRooms":{
+                                            "key":"customer.noOfRooms",
+                                            "type":"number",
+                                            "title":"NO_OF_ROOMS"
                                         }
                                     }
+                                },
+                                "Liabilities":{
+                                    "items":{
+                                        "liabilities":{
+                                            "items":{
+                                                "mortage": {
+                                                    "key": "Liabilities.liabilities.mortage",
+                                                    "title": "MORTAGE",
+                                                    //"condition": "model.Liabilities.liabilities.loanType=='SECURED'",
+                                                    "orderNo": 10
+                                                },
+                                                "mortageAmount": {
+                                                    "key": "customer.liabilities.mortageAmount",
+                                                    "title": "MORTAGE_AMOUNT",
+                                                    //"condition": "model.Liabilities.liabilities.loanType=='SECURED'",
+                                                },
+                                                "amountPaid":{
+                                                    "key":"customer.liabilities.principalExpense",
+                                                    "title":"AMOUNT_PAID"
+                                                },
+                                                "amountPaidInterest":{
+                                                    "key":"customer.liabilities.interestExpense",
+                                                    "title":"AMOUNT_PAID_INTEREST"
+                                                },
+                                                "masonValuation":{
+                                                    "key":"Liabilities.liabilities.masonValuation",
+                                                    "title":"MASON_VALUATION_DOCUMENT"
+                                                }
+                                               
+                                            }
+                                        }
+                                    }
+
                                 },
                                 "BankAccounts": {
                                     "title":"SAVING_DETAILS",
@@ -2857,13 +2924,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             parentValueExpr: "model.customer.customerBranchId",
                                         },
                                         "groupName": {
-                                            "key": "customer.groupName",
+                                            "key": "loanAccount.groupName",
                                             "title": "GROUP_NAME",
                                             "type": "string",
                                             "orderNo": 100
                                         },
                                         "groupID": {
-                                            "key": "customer.groupID",
+                                            "key": "loanAccount.jlgGroupId ",
                                             "title": "GROUP_ID",
                                             "type": "string",
                                             "orderNo": 181,
@@ -2876,7 +2943,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "title":"FINANCIAL_ASSET",
                                             "items":{
                                                 "installmentAmount":{
-                                                    "key":"customer.financialAssets.installmentAmount",
+                                                    "key":"customer.financialAssets.amountInPaisa",
                                                     "title":"INSTALLMENT_AMOUNT"
                                                     },
                                                     "balance":{

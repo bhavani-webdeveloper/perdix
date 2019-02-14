@@ -152,9 +152,31 @@ define([],function(){
                 }
 
             var configFile = function() {
-                return {
+                return{
+                    "loanProcess.loanAccount.currentStage":{
+                        "KYCCheck":{
+                            "overrides":{
+                                "PreliminaryInformation":{
+                                    "readonly":true
+                                },
+                                "CollateralInformation":{
+                                    "readonly":true
+                                },
+                                "LoanDocuments":{
+                                    "readonly":true
+                                },
+                                "LoanRecommendation":{
+                                    "readonly":true
+                                },
+                                "LoanMitigants":{
+                                    "readonly":true
+                                }
+                            }
 
+                        }
+                    }
                 }
+                
             }
 
              var overridesFields = function (bundlePageObj) {

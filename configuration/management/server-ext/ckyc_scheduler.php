@@ -49,10 +49,7 @@ Class Ckyc {
         'Driving Licence' => 'DrivingLicence'
     ];
     private static function preProcessOfAddress($index1,$givenLenght,$data,$symbol,$preStrings,$prevJ,$preData,$total){
-        $index = $index1;
-      	var_dump($data);
-      	echo "<p></p>";
-      
+        $index = $index1;  
         if ($symbol == ',' && $total!= 0){
              $prevJ  = $prevJ;
              $preData = $preData;
@@ -75,12 +72,11 @@ Class Ckyc {
             }
                 if ($symbol != ','){
                     $temp = Ckyc::preProcessOfAddress(0,$givenLenght,$data,',',$preString,$j,$data,$j-sizeof($data));
-                  	echo $temp;
-                  	echo "<p></p>";
-                  $preString = $temp[0];
+                    $preString = $temp[0];
                     $data = $temp[1];
                 }
                 else if ($total != 0){
+                    $preData[$prevJ] = implode(',',$data);
                     return [$preString,$preData];
                 }
                 else
@@ -93,10 +89,22 @@ Class Ckyc {
     }
     private static function address_split($c, $type, $length, $index) {
         if ($type == 'permanent')
-            $address_array = array_filter([$c->door_no,$c->street,$c->post_office,$c->landmark,$c->locality,$c->district,$c->state]);
+            $address_array = array_filter([$c->door_no,$c->street,$c->post_office,$c->landmark,$c->locality,$c->village_name,$c->district,$c->state,$c->pincode]);
         else if ($type == 'mailing')
             $address_array = array_filter([$c->mailing_doorno,$c->mailing_street,$c->mailing_postoffice,$c->mailing_locality,$c->mailing_district,$c->mailing_state,$c->mailing_pincode]);
         $default_data = join(',',$address_array);
+        $preProcess = explode(',',$default_data);
+        $newPreProcess = [];
+        for($i=0;$i<sizeof($preProcess);$i++){
+            $values = strlen($preProcess[$i]);
+            if ($values == 0){
+                continue;
+            }
+            else{
+                \array_push($newPreProcess,$preProcess[$i]);
+            }
+        }
+        $default_data = implode(',',$newPreProcess);
         $value = Ckyc::preProcessOfAddress($index,$length,explode(' ',$default_data),' ',"",0,"",1);
         return $value[0];
     }
@@ -172,9 +180,9 @@ Class Ckyc {
         'PermanentAddressProof' => function($c) { return Ckyc::$p2c_address_proof[$c->address_proof]; },
         'CorrespondenceGlobalCountry' => 'IN',
         'CorrespondenceGlobalPin' => '@pincode',
-        'CorrespondenceGlobalAddressLine1' => function($c) { return Ckyc::address_split($c,'mailing',55, 0); },
-        'CorrespondenceGlobalAddressLine2' => function($c) { return Ckyc::address_split($c,'mailing',55, 1); },
-        'CorrespondenceGlobalAddressLine3' => function($c) { return Ckyc::address_split($c,'mailing',55, 2); },
+        'CorrespondenceGlobalAddressLine1' => function($c) { return Ckyc::address_split($c,'permanent',55, 0); },
+        'CorrespondenceGlobalAddressLine2' => function($c) { return Ckyc::address_split($c,'permanent',55, 1); },
+        'CorrespondenceGlobalAddressLine3' => function($c) { return Ckyc::address_split($c,'permanent',55, 2); },
         'CorrespondenceGlobalDistrict' => '',
         'CorrespondenceGlobalCity' => '@village_name',
         'CorrespondenceGlobalState' => '',

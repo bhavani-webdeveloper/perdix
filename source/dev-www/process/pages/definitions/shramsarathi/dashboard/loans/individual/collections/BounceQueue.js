@@ -39,7 +39,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                     "key": "centre",
                     "type":"select",
                     "enumCode":"usercentre",
-                    title:"CENTRE",
+                    title:"ZONE",
                     required:true,
                 },
                 {
@@ -67,7 +67,7 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                         }
                     },
                     "centre": {
-                        "title": "CENTRE",
+                        "title": "ZONE",
                         "type": ["integer", "null"],
                         // "x-schema-form": {
                         //     "type": "select",

@@ -4,10 +4,10 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
        pageUID: "insurance.Registration",
        pageType: "Engine",
        dependencies: ["$log", "$state", "$stateParams","Insurance", "SessionStore", "formHelper", "$q",
-           "PageHelper", "Utils", "PagesDefinition", "Queries", "irfProgressMessage", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator","Enrollment"],
+           "PageHelper", "Utils", "PagesDefinition", "Queries", "irfProgressMessage", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator","Enrollment","BranchCreationResource"],
 
        $pageFn: function ($log, $state, $stateParams, Insurance,SessionStore, formHelper, $q,
-                          PageHelper, Utils, PagesDefinition, Queries, PM, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator,Enrollment) {
+                          PageHelper, Utils, PagesDefinition, Queries, PM, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator,Enrollment,BranchCreationResource) {
 
              var configFile = function () {
                return {
@@ -121,6 +121,27 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                    model.customer = {};
                    model.idPresent = "false";
                     
+                   //start
+            var branchId = SessionStore.getBranchId();
+            if (!Utils.isCordova) {
+                BranchCreationResource.getBranchByID({
+                        id: branchId
+                    },
+                    function (branchDetails) {
+                        if (branchDetails.fingerPrintDeviceType) {
+                            if (branchDetails.fingerPrintDeviceType == "MANTRA") {
+                                model.fingerPrintDeviceType = branchDetails.fingerPrintDeviceType;
+                            }
+                        }
+
+                        PageHelper.hideLoader();
+                    },
+                    function (err) {
+                        $log.info(err);
+                    }
+                );
+            }
+            //end
                    var self = this;
                    var formRequest = {
                        

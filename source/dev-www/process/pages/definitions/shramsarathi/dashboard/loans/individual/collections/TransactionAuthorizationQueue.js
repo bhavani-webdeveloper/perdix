@@ -62,7 +62,7 @@ function($log, formHelper, entityManager, LoanCollection, $state, SessionStore,$
                         }
                     },
                     "centre": {
-                        "title": "CENTRE",
+                        "title": "ZONE",
                         "type": ["integer", "null"],
                         "x-schema-form": {
                             "type": "select",
