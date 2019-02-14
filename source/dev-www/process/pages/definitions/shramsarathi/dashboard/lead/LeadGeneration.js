@@ -171,11 +171,9 @@ function(LeadProcess, AngularResourceService) {
                     },
                     "leadProfile.contactDetails.district":{
                        // "orderNo":40
-                       "required":true
                     },
                     "leadProfile.contactDetails.subDistrict":{
                         "orderNo":50,
-                        "required":true
                     },
                     "leadProfile.contactDetails.addressLine1":{
                         "title":"HAMLET_FALA",
@@ -191,15 +189,12 @@ function(LeadProcess, AngularResourceService) {
                             "division": {
                                 key: "lead.area",
                                 title:"PANCHAYAT",
-                                required:true
                             },
                             "district": {
                                 key: "lead.district",
-                                "required":true
                             },
                             "state": {
                                 key: "lead.state",
-                                "required":true
                             }
                         },
                         outputMap: {
@@ -394,8 +389,8 @@ function(LeadProcess, AngularResourceService) {
                                     },
                                     "contactDetails":{
                                         "items":{
-                                             "taluk":{
-                                                     "key":"leadProfile.contactDetails.taluk",
+                                             "subDistrict":{
+                                                     "key":"lead.cityTownVillage",
                                                      "title":"SUBDISTRICT",
                                                      "readonly":true,
                                                      "required":true

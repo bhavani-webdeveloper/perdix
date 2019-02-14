@@ -175,10 +175,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.addressProofImageId": {
-                                    "required": true
+                                    "required": true,
+                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
                                 },
                                 "KYC.addressProofNo": {
-                                    "required": true
+                                    "required": true,
+                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
                                 },
                                 "KYC.additionalKYCs.kyc1ImagePath": {
                                     "required": true
@@ -359,10 +361,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.addressProofImageId": {
-                                    "required": true
+                                    "required": true,
+                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
                                 },
                                 "KYC.addressProofNo": {
-                                    "required": true
+                                    "required": true,
+                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
                                 },
                                 "KYC.additionalKYCs.kyc1ImagePath": {
                                     "required": true
@@ -600,13 +604,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.addressProofImageId": {
-                                    "required": true
+                                    "required": true,
+                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
                                 },
                                 "KYC.addressProofNo": {
-                                    "required": true
+                                    "required": true,
+                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
                                 },
                                 "KYC.addressProof": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
                                 },
                                 "KYC.additionalKYCs.kyc1ImagePath": {
                                     "required": true
@@ -1310,13 +1317,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.addressProofImageId": {
-                                    "required": true
+                                    "required": true,
+                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
                                 },
                                 "KYC.addressProofNo": {
-                                    "required": true
+                                    "required": true,
+                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
                                 },
                                 "KYC.addressProof": {
-                                    "readonly": true
+                                    // "readonly": true,
+                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
                                 },
                                 "KYC.additionalKYCs.kyc1ImagePath": {
                                     "required": true
@@ -1561,6 +1571,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var overridesFields = function (bundlePageObj) {
                 return {
+                    "KYC.addressProofFieldSet":{
+                        "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                    },
+                    "KYC.addressProof":{
+                        "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                    },
+                    "KYC.addressProofImageId":{
+                        "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                    },
+                    "KYC.addressProofNo":{
+                        "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                    },
+                    "KYC.addressProofIssueDate":{
+                        "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                    },
+                    "KYC.addressProofValidUptoDate":{
+                        "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                    },
                     "Machinery.fixedAssetsMachinaries":{
                         "title":"FIXED_ASSET"
                     },
@@ -1936,6 +1964,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "KYC.idProofIssueDate",
                     "KYC.idProofValidUptoDate",
                     "KYC.identityProofBackside",
+                    "KYC.addressProofSameAsIdProof",
                     "KYC.addressProofFieldSet",
                     "KYC.addressProof",
                     "KYC.addressProofImageId",
@@ -2229,7 +2258,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "overrides": overridesFields(model),
                         "includes": getIncludes(model),
                         "excludes": [
-                            "KYC.addressProofSameAsIdProof",
+                           // "KYC.addressProofSameAsIdProof",
                         ],
                         "options": {
                             "repositoryAdditions": {
@@ -2389,7 +2418,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "using": "scanner",
                                             "title":"IDENTITY_PROOF_BACKSIDE",
                                            // "orderNo":70
-                                        }
+                                        },
+                                        "addressProofSameAsIdProof":{
+                                            "key":"KYC.addressProofSameAsIdProof",
+                                            "title":"ADDRESS_PROOF_SAME_AS_IDPROOF",
+                                            "type":"radios",
+                                            "titleMap":{
+                                                "YES":"Yes",
+                                                "NO":"No"
+                                            }
+                                        },
                                     }
 
                                 },
