@@ -1556,23 +1556,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var overridesFields = function (bundlePageObj) {
                 return {
-                    "Liabilities.liabilities.liabilityLoanPurpose":{
-                        "title":"PURPOSE"
-                    },
-                    "Liabilities.liabilities.noOfInstalmentPaid":{
-                        "title":"PAYMENT"
-                    },
-                    "Liabilities.liabilities.startDate":{
-                        "title":"DATE_OF_BORROWING"
-                    },
-                    // "Liabilities.liabilities.maturityDate":{
-                    //     "title":"END_DATE"
-                    // },
-                    "Liabilities.liabilities.installmentAmountInPaisa":{
-                        "title":"AMOUNT"
-                    },
-                    "Liabilities.liabilities":{
-                        "title":"OUTSTANDING_DEBT"
+                    "Machinery.fixedAssetsMachinaries":{
+                        "title":"FIXED_ASSET"
                     },
                     //over 
                     "KYC.idProofIssueDate":{
@@ -2067,9 +2052,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Liabilities.liabilities.liabilityLoanPurpose",
                     "Liabilities.liabilities.interestOnly",
                     "Liabilities.liabilities.interestRate",
-                    "Liabilities.liabilities.amountPaid",
-                    "Liabilities.liabilities.amountPaidInterest",
-                    "Liabilities.liabilities.masonValuation",
+                    "Liabilities.liabilities.liabilityType",
+                    
 
                     "HouseVerification",
                     "HouseVerification.houseDetailsFieldSet",
@@ -2080,6 +2064,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "HouseVerification.houseVerificationPhoto",
                     "HouseVerification.date",
                     "HouseVerification.place",
+                    "HouseVerification.houseStatus",
+                    "HouseVerification.noOfRooms",
                     //"HouseVerification.rentLeaseStatus",
                     //"HouseVerification.rentLeaseAgreement",
 
@@ -2675,6 +2661,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "type": "date",
                                             "key": "customer.udf.userDefinedDateFieldValues.udfDate1",
                                             "title": "RENT_LEASE_AGREEMENT_VALID_TILL"
+                                        },
+                                        "houseStatus":{
+                                            "title":"HOUSE_STATUS",
+                                            "key":"customer.houseStatus",
+                                            "type":"select",
+                                            "titleMap":{
+                                                "PAKKA":"PAKKA",
+                                                "KACCHA":"KACCHA",
+                                                "TARPAL_SEET":"TARPAL_SEET"
+                                            }
+                                        },
+                                        "noOfRooms":{
+                                            "key":"customer.noOfRooms",
+                                            "type":"number",
+                                            "title":"NO_OF_ROOMS"
                                         }
                                     }
                                 },
