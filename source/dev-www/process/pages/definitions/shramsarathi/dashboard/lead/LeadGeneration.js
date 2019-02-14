@@ -21,6 +21,7 @@ function(LeadProcess, AngularResourceService) {
 
             var getOverrides = function (model) {
                 return {
+                
                     "leadProfile.leadDetails.customerTypeString":{
                         "readonly":false,
                         "required":true
@@ -56,7 +57,7 @@ function(LeadProcess, AngularResourceService) {
                         "condition": "(model.lead.interestedInProduct==='YES' && model.lead.leadStatus ==='FollowUp')",
                     },
                     "leadInteractions.leadInteractions.typeOfInteraction": {
-                        "required" : true,
+                        "required" : false,
                         onChange: function (value, form, model) {
                             model.lead.leadInteractions[form.arrayIndex].customerResponse = '';
                             model.lead.leadInteractions[form.arrayIndex].additionalRemarks = '';
@@ -67,7 +68,7 @@ function(LeadProcess, AngularResourceService) {
                         }
                     },
                     "leadInteractions.leadInteractions.customerResponse":{
-                        "required": true,
+                        "required": false,
                         "type": "text"
                     },
                     "sourceDetails.agentName": {
@@ -79,22 +80,45 @@ function(LeadProcess, AngularResourceService) {
                         "enumCode": "dealer"
                     },
                     "productDetails.interestedInProduct": {
-                        "orderNo" : 10
+                        "orderNo" : 10,
+                        "required":false,
+                        // enumCode: "decisionmaker",
+                        // "onChange": function(modelValue, form, model) {
+                        //         if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
+                        //             model.lead.leadStatus = "Reject";
+                        //         } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this week') {
+                        //             model.lead.leadStatus = "Screening";
+                        //         } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this month' || model.lead.productRequiredBy == 'In Next months') {
+                        //             model.lead.leadStatus = "FollowUp";
+                        //         } else {
+                        //             model.lead.leadStatus = "Incomplete";
+                        //         }
+                               
+                        //     }
                     },
                     "productDetails.loanAmountRequested": {
-                        "orderNo": 60
+                        "orderNo": 60,
+                        "required":false
                     },
                     "productDetails.loanPurpose1": {
-                        "orderNo": 20
+                        "orderNo": 20,
+                        "required":false
                     },
                     // "productDetails.loanPurpose2": {
                     //     "orderNo": 30
                     // },
                     "productDetails.productRequiredBy": {
-                        "orderNo": 50
+                        "orderNo": 50,
+                        "title":"PRODUCT_REQUIRED_BY_DATE",
+                        // "titleMap":{
+                        //     "thisWeek":"This Week",
+                        //     "thisMonth":"This Month",
+                        //     "nextMonth":"Next Month"
+                        // }
                     },
                     "productDetails.screeningDate": {
-                        "orderNo": 60
+                        "orderNo": 60,
+                        //"condition":"model.lead.productRequiredBy=='thisWeek'"
                     },
                     "productDetails.productRejectionReason":{
                         "condition" : "model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO' "
@@ -385,7 +409,31 @@ function(LeadProcess, AngularResourceService) {
                                     //     }
                                     // },
                                     
-                                }
+                                },
+                                // "productDetails":{
+                                //     items: {
+                                //                 "interestedInProduct":{
+                                //                     key: "lead.interestedInProduct",
+                                //                     title: "INTERESTED_IN_LOAN_PRODUCT",
+                                //                     type: "select",
+                                //                     required: false,
+                                //                     enumCode: "decisionmaker",
+                                //                     "onChange": function(modelValue, form, model) {
+                                //                             if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
+                                //                                 model.lead.leadStatus = "Reject";
+                                //                             } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this week') {
+                                //                                 model.lead.leadStatus = "Screening";
+                                //                             } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this month' || model.lead.productRequiredBy == 'In Next months') {
+                                //                                 model.lead.leadStatus = "FollowUp";
+                                //                             } else {
+                                //                                 model.lead.leadStatus = "Incomplete";
+                                //                             }
+                                                           
+                                //                         }
+                                                       
+                                //                 }
+                                //     }
+                                // }
 
 
                             }
