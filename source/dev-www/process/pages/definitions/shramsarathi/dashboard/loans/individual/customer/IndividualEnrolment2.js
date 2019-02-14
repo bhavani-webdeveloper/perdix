@@ -76,7 +76,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"DESTINATION_ADDRESS"
                                 },
                                 "BankAccounts.customerBankAccounts.accountType":{
-                                    "title":"TYPE_OF_BANK"   
+                                    "title":"TYPE_OF_BANK_ACCOUNT"   
                                },
                                 "BankAccounts.customerBankAccounts.bankingSince":{
                                    "title":"ACTIVE_FROM"
@@ -274,7 +274,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "BankAccounts.customerBankAccounts.bankStatements.totalDeposits": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "title":"DEPOSIT_AMOUNT"
+                                },
+                                "BankAccounts.customerBankAccounts.bankStatements.balanceAsOn15th":{
+                                    "title":"BALANCE_IN_THE_A/C_AS_ON_DATE"
                                 },
                                 "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced": {
                                     "required": true
@@ -295,10 +299,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     required: false
                                 },
                                 "BankAccounts.customerBankAccounts.isDisbersementAccount": {
-                                    "type": "checkbox"
+                                    "type": "radios"
+                                    
                                 },
                                 "BankAccounts.customerBankAccounts.accountType":{
-                                     "title":"TYPE_OF_BANK"   
+                                     "title":"TYPE_OF_BANK_ACCOUNT"   
                                 },
                                  "BankAccounts.customerBankAccounts.bankingSince":{
                                     "title":"ACTIVE_FROM"
@@ -2252,6 +2257,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "key": "customer.Landmark",
                                             "title": "LANDMARK",
                                             "type": "string",
+                                            "condition": "!model.customer.mailSameAsResidence"
                                             //"orderNo": 181
                                         },
                                         "mailingmobilePhone":{
