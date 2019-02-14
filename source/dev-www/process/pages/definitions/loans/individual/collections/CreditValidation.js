@@ -346,41 +346,41 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                     },
                     ]
             },
-            {
-                type: "box",
-                title: "LOAN_COLLECTIONS",
-                condition:"model._credit.instrumentType=='CASH'",
-                items: [
-                {
-                    key: "Collection.depositsummary.loanCollections",
-                    type: "array",
-                    "titleExpr":"model.Collection.depositsummary.loanCollections[arrayIndex].customerName",
-                    add: null,
-                    remove: null,
-                    items: [{
-                        key: "Collection.depositsummary.loanCollections[].accountNumber",
-                        title: "LOAN_ACCOUNT_NUMBER",
-                        readonly: true,
-                    }, {
-                        key: "Collection.depositsummary.loanCollections[].customerName",
-                        title: "ENTERPRISE_NAME",
-                        readonly: true,
-                    }, {
-                        key: "Collection.depositsummary.loanCollections[].repaymentAmount",
-                        title: "AMOUNT_COLLECTED",
-                        readonly: true,
-                    }, {
-                        key: "Collection.depositsummary.loanCollections[].transactionName",
-                        "title":"TRANSACTION_NAME",
-                        readonly: true,
-                    }, {
-                        key: "Collection.depositsummary.loanCollections[].repaymentDate",
-                        type:"date",
-                        "title":"REPAYMENT_DATE",
-                        readonly: true,
-                    }]
-                }]
-            },
+            // {
+            //     type: "box",
+            //     title: "LOAN_COLLECTIONS",
+            //     condition:"model._credit.instrumentType=='CASH'",
+            //     items: [
+            //     {
+            //         key: "Collection.depositsummary.loanCollections",
+            //         type: "array",
+            //         "titleExpr":"model.Collection.depositsummary.loanCollections[arrayIndex].customerName",
+            //         add: null,
+            //         remove: null,
+            //         items: [{
+            //             key: "Collection.depositsummary.loanCollections[].accountNumber",
+            //             title: "LOAN_ACCOUNT_NUMBER",
+            //             readonly: true,
+            //         }, {
+            //             key: "Collection.depositsummary.loanCollections[].customerName",
+            //             title: "ENTERPRISE_NAME",
+            //             readonly: true,
+            //         }, {
+            //             key: "Collection.depositsummary.loanCollections[].repaymentAmount",
+            //             title: "AMOUNT_COLLECTED",
+            //             readonly: true,
+            //         }, {
+            //             key: "Collection.depositsummary.loanCollections[].transactionName",
+            //             "title":"TRANSACTION_NAME",
+            //             readonly: true,
+            //         }, {
+            //             key: "Collection.depositsummary.loanCollections[].repaymentDate",
+            //             type:"date",
+            //             "title":"REPAYMENT_DATE",
+            //             readonly: true,
+            //         }]
+            //     }]
+            // },
             {
                 "type": "actionbox",
                 "items": [{
