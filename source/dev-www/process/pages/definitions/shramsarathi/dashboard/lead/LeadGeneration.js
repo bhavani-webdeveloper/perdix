@@ -389,7 +389,7 @@ function(LeadProcess, AngularResourceService) {
                                     },
                                     "contactDetails":{
                                         "items":{
-                                             "subDistrict":{
+                                             "subDistrict": {
                                                      "key":"lead.cityTownVillage",
                                                      "title":"SUBDISTRICT",
                                                      "readonly":true,
