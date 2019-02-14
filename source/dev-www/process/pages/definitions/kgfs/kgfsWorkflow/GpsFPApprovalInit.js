@@ -13,6 +13,7 @@ define({
 
 
                 model.customer.isGpsChanged = "NO"; //flag for gps updation
+                model.customer.isEnrollmentChanged="NO";
                 model.customer.isFingerPrintChanged = "NO"; //flag for updation of finger prints
                 model.customer.biometricCaptured = "Captured";
                 model.customer.fingerPrintUpdated = "Updated"; //flag for displaying the updated finger prints
@@ -52,6 +53,13 @@ define({
                     model.customer.newLatitude = model.UpdatedWorkflow.customer.latitude;
                     model.customer.newLongitude = model.UpdatedWorkflow.customer.longitude;
                 }
+                if(model.customer.enrolledAs == model.UpdatedWorkflow.customer.enrolledAs) {
+                    model.customer.isEnrollmentChanged="NO";
+                }else {
+                    model.customer.isEnrollmentChanged="YES";
+                    model.customer.newEnrollment=model.UpdatedWorkflow.customer.enrolledAs;
+                }
+
                 if(model.customer.photoImageId == model.UpdatedWorkflow.customer.photoImageId ){
                     model.customer.isPhotoImageIdChanged = "NO";
                 }
@@ -271,6 +279,32 @@ define({
                                     "latitude": "customer.newLatitude",
                                     "longitude": "customer.newLongitude"
                                 }
+                            ]
+                        },
+                        //Enrollment
+                        {
+                            type:"fieldset",
+                            title:"ENROLLMENT", 
+                            "items":[
+                            {
+                                key:"customer.enrolledAs",
+                                title:"ENROLLED_AS",
+                                readonly:true
+                            },{
+                                key:"customer.isEnrollmentChanged",
+                                type: "radios",
+                                title: "UPDATE",
+                                "titleMap": {
+                                    "YES": "YES",
+                                    "NO": "NO"
+                                }
+                            },{
+                                key: "customer.newEnrollment",
+                                title: "UPDATE_ENROLLMENT",
+                                "type": "select",
+                                required: true,
+                                condition: "model.customer.isEnrollmentChanged=='YES'"
+                            }
                             ]
                         },
                         {
@@ -523,6 +557,12 @@ define({
                                 "type": ["string","null"],
                                 "captureStages": ["Init"]
                             },
+                            "newEnrollment": {
+                                "type": ["string","null"],
+                                "title": "ENROLLED_AS",
+                                "enumCode":"enrolled_as",                                                                        
+                                "captureStages": ["Init"]
+                            },
                             "photoImageId": {
                                 "title" : "CUSTOMER_PHOTO",
                                 "type":["string","null"],
@@ -629,6 +669,9 @@ define({
                         }
                         if(model.customer.isPhotoImageIdChanged == "YES"){
                             updatedModel.customer.photoImageId = updatedModel.customer.newPhotoImageId;
+                        }
+                        if(model.customer.isEnrollmentChanged=="YES"){
+                            updatedModel.customer.enrolledAs=updatedModel.customer.newEnrollment;
                         }
                         if (model.customer.isFingerPrintChanged == "YES") {
                             updatedModel.customer.leftHandThumpImageId = updatedModel.customer.newLeftHandThumpImageId;
