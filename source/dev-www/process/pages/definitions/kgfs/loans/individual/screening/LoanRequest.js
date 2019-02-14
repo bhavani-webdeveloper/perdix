@@ -173,6 +173,26 @@ define([],function(){
                                 }
                             }
 
+                        },
+                        "Rejected":{
+                            "overrides":{
+                                "PreliminaryInformation":{
+                                    "readonly":true
+                                },
+                                "CollateralInformation":{
+                                    "readonly":true
+                                },
+                                "LoanDocuments":{
+                                    "readonly":true
+                                },
+                                "LoanRecommendation":{
+                                    "readonly":true
+                                },
+                                "LoanMitigants":{
+                                    "readonly":true
+                                }
+                            }
+
                         }
                     }
                 }
@@ -472,21 +492,23 @@ define([],function(){
                 "subTitle": "BUSINESS",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                     // AngularResourceService.getInstance().setInjector($injector);
+                    model.loanAccount = model.loanProcess.loanAccount;
 
-                    if(model.currentStage=='Screening' || model.currentStage=='ScreeningReview'|| model.currentStage=='Application') {
                         if(model.loanAccount.estimatedEmi){
                             model.loanAccount.estimatedEmi = model.loanAccount.estimatedEmi;
                         } else {
-                            if(model.currentStage=='ScreeningReview') {
-                                computeEMI(model);
-                            } else {
                                 computeEstimatedEMI(model);
-                            }
                         }
-                    }
+
+                        if(model.loanAccount.emiRequested){
+                            model.loanAccount.emiRequested = model.loanAccount.emiRequested;
+                        } else {
+                                computeEMI(model);
+                        }
+
+
 
                     /* Setting data recieved from Bundle */
-                    model.loanAccount = model.loanProcess.loanAccount;
                     model.loanAccount.partnerCode='KGFS';
                     if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
                         model.loanAccount.loanCustomerRelations!=null &&
@@ -544,57 +566,57 @@ define([],function(){
                             ],
                             "options": {
                                 "repositoryAdditions": {
-                                        "PreliminaryInformation": {
-                                "items": {
-                                    "partner": {
-                                        "key":"loanAccount.partnerCode",
-                                        "title": "PARTNER",
-                                        "type": "select",
-                                        "enumCode":"partner",
-                                        "orderNo": 9
-                                    },
-                                    "productType": {
-                                        "key":"loanAccount.loanType",
-                                        "title": "PRODUCT_TYPE",
-                                        "type": "select",
-                                        "enumCode":"product_type",
+                                    "PreliminaryInformation": {
+                                        "items": {
+                                            "partner": {
+                                                "key":"loanAccount.partnerCode",
+                                                "title": "PARTNER",
+                                                "type": "select",
+                                                "enumCode":"partner",
+                                                "orderNo": 9
+                                            },
+                                            "productType": {
+                                                "key":"loanAccount.loanType",
+                                                "title": "PRODUCT_TYPE",
+                                                "type": "select",
+                                                "enumCode":"product_type",
 
-                                        "orderNo": 9
-                                    },
-                                    "frequency": {
-                                        "key":"loanAccount.frequency",
-                                        "title": "FREQUENCY",
-                                        "type": "select",
-                                        "orderNo": 9
-                                    },
-                                    "loanProduct": {
-                                        "key":"loanAccount.productCode",
-                                        "title": "LOAN_PRODUCT",
-                                        "type": "lov",
-                                        "enumCode":"loan_product",
-                                        "orderNo": 10
-                                    },
-                                    "productName":{
-                                        "title": "PRODUCT_NAME",
-                                        "readonly": true,
-                                        "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6",
-                                        "orderNo": 11
-                                            
-                                    },
-                                    "comfortableEMI": {
-                                        "key":"loanAccount.estimatedEmi",
-                                        "title": "COMFORTABLE_EMI",
-                                        "type": "string",
-                                        "orderNo": 140
-                                    },
-                                    "modeOfDisbursement": {
-                                        "key":"loanAccount.psychometricCompleted",
-                                        "title": "MODE_OF_DISBURSEMENT",
-                                        "type": "select",
-                                        "enumCode":"mode_of_disbursement",
-                                        "orderNo": 150
-                                    }
-                                }
+                                                "orderNo": 9
+                                            },
+                                            "frequency": {
+                                                "key":"loanAccount.frequency",
+                                                "title": "FREQUENCY",
+                                                "type": "select",
+                                                "orderNo": 9
+                                            },
+                                            "loanProduct": {
+                                                "key":"loanAccount.productCode",
+                                                "title": "LOAN_PRODUCT",
+                                                "type": "lov",
+                                                "enumCode":"loan_product",
+                                                "orderNo": 10
+                                            },
+                                            "productName":{
+                                                "title": "PRODUCT_NAME",
+                                                "readonly": true,
+                                                "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6",
+                                                "orderNo": 11
+                                                    
+                                            },
+                                            "comfortableEMI": {
+                                                "key":"loanAccount.estimatedEmi",
+                                                "title": "COMFORTABLE_EMI",
+                                                "type": "string",
+                                                "orderNo": 140
+                                            },
+                                            "modeOfDisbursement": {
+                                                "key":"loanAccount.psychometricCompleted",
+                                                "title": "MODE_OF_DISBURSEMENT",
+                                                "type": "select",
+                                                "enumCode":"mode_of_disbursement",
+                                                "orderNo": 150
+                                            }
+                                        }
                             },
                             "LoanRecommendation":{
                                 "items":{
@@ -689,7 +711,7 @@ define([],function(){
                             "PostReview": {
                                         "type": "box",
                                         "title": "POST_REVIEW",
-                                        "condition": "model.loanAccount.id",
+                                        "condition": "model.loanAccount.id && model.loanAccount.isReadOnly!='Yes' && model.loanAccount.currentStage != 'Rejected'",
                                         "orderNo": 600,
                                         "items": {
                                             "action": {
@@ -760,7 +782,7 @@ define([],function(){
                                                         "autolov": true,
                                                         "required":true,
                                                         "title": "REJECT_REASON",
-                                                        "resolver": "IREPRejectReasonLOVConfiguration"
+                                                        "resolver": "KGFSRejectReasonLOVConfiguration"
                                                     },
                                                     "rejectButton": {
                                                         "key": "review.rejectButton",
@@ -796,6 +818,7 @@ define([],function(){
                                 "additions": [
                                     {
                                         "type": "actionbox",
+                                        "condition": "model.loanAccount.currentStage !='Rejected' && model.loanAccount.currentStage !='KYCCheck' ",
                                         "orderNo": 1000,
                                         "items": [
                                             {

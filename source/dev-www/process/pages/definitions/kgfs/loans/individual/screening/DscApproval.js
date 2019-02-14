@@ -67,14 +67,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             maximum: 1,
                             order:60
                         },
-                        // {
-                        //     pageName: 'kgfs.loans.individual.booking.DocumentUpload',
-                        //     title: 'DOCUMENT_UPLOAD',
-                        //     pageClass: 'document-upload',
-                        //     minimum: 1,
-                        //     maximum: 1,
-                        //     order:80
-                        // }
+                        {
+                            pageName: 'kgfs.loans.individual.screening.Review',
+                            title: 'REVIEW',
+                            pageClass: 'loan-review',
+                            minimum: 1,
+                            maximum: 1,
+                            order:80
+                        }
                         
                         
                     ]);
@@ -206,6 +206,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanAccount: loanProcess.loanAccount
                                     }
                                 });
+
+                                 $this.bundlePages.push({
+                                    pageClass: 'loan-review',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount,
+                                    }
+                                });
                                 
                                 
                                 deferred.resolve();
@@ -252,12 +259,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 });
                                
 
-                                    // $this.bundlePages.push({
-                                    //     pageClass: 'document-upload',
-                                    //     model:{
-                                    //         loanProcess: loanProcess
-                                    //     }
-                                    // }); 
+                                $this.bundlePages.push({
+                                    pageClass: 'loan-review',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount,
+                                    }
+                                });
 
                                 deferred.resolve();
                             });

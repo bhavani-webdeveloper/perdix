@@ -65,23 +65,23 @@ define(["perdix/domain/model/loan/LoanProcess",
                             minimum: 1,
                             maximum: 1,
                             order:9
-                        },
-                            // {
-                            //     pageName: 'kgfs.loans.individual.screening.Summary',
-                            //     title: 'SUMMARY',
-                            //     pageClass: 'summary',
-                            //     minimum: 1,
-                            //     maximum: 1,
-                            //     order: 5
-                            // },                            
-                            {
-                                pageName: 'kgfs.loans.individual.screening.Review',
-                                title: 'REVIEW',
-                                pageClass: 'loan-review',
-                                minimum: 1,
-                                maximum: 1,
-                                order:80
-                            }
+                        }, 
+                        {
+                            pageName: 'kgfs.loans.individual.screening.Dsc',
+                            title: 'DSC',
+                            pageClass: 'dsc-check',
+                            minimum: 1,
+                            maximum: 1,
+                            order:70
+                        },                           
+                        {
+                            pageName: 'kgfs.loans.individual.screening.Review',
+                            title: 'REVIEW',
+                            pageClass: 'loan-review',
+                            minimum: 1,
+                            maximum: 1,
+                            order:80
+                        }
                     ]);
                 },
                 "bundlePages": [],
@@ -208,6 +208,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanAccount: loanProcess.loanAccount
                                     }
                                 });
+                                $this.bundlePages.push({
+                                    pageClass: 'dsc-check',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount
+                                    }
+                                });
 
                                 $this.bundlePages.push({
                                     pageClass: 'loan-review',
@@ -264,6 +270,13 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                                 $this.bundlePages.push({
                                     pageClass: 'cbview',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount
+                                    }
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'dsc-check',
                                     model: {
                                         loanAccount: loanProcess.loanAccount
                                     }

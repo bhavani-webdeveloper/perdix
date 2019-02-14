@@ -59,7 +59,7 @@
           "code":"DSCApproval",
           "name":"DSC Approval",
           "stageType":"CAPTURE",
-          "sendSms":"Yes",
+          "sendSms":"No",
           "smsCategory":"ApplicationReview",
           "isAccountOpening":false,
           "riskScoreName":"RiskScore3",
@@ -106,59 +106,10 @@
        },
        {
           "order":9,
-          "code":"CentralRiskReview",
-          "name":"Central Risk Review",
-          "stageType":"CAPTURE",
-          "sendSms":"Yes",
-          "smsCategory":"FieldAppraisal",
-          "isAccountOpening":false,
-          "allowedRoles":[
-             "WM"
-          ]
-       },
-       {
-          "order":10,
-          "code":"CreditCommitteeReview",
-          "name":"Credit Committee Review",
-          "stageType":"CAPTURE",
-          "authorizationCount":2,
-          "sendSms":"Yes",
-          "smsCategory":"Approval",
-          "isAccountOpening":false,
-          "allowedRoles":[
-             "WM"
-          ]
-       },
-       {
-          "order":11,
-          "code":"Sanction",
-          "name":"Sanction",
-          "stageType":"CAPTURE",
-          "sendSms":"No",
-          "smsCategory":"LoanBooking",
-          "isAccountOpening":false,
-          "allowedRoles":[
-             "WM"
-          ]
-       },
-       {
-          "order":12,
-          "code": "Rejected",
-          "name": "Rejected",
-          "stageType": "CAPTURE",
-          "sendSms": "Yes",
-          "smsCategory": "UponRejection",
-          "isAccountOpening": false,
-          "allowedRoles": [
-             "WM"
-          ]
-       },
-       {
-          "order":13,
           "code":"LoanInitiation",
           "name":"Loan Input",
           "stageType":"CAPTURE",
-          "sendSms":"Yes",
+          "sendSms":"No",
           "smsCategory":"Sanction",
           "isAccountOpening":false,
           "isPreAccountOpening":true,
@@ -167,24 +118,11 @@
           ]
        },
        {
-        "order":14,
-        "code":"DSCOverride",
-        "name":"Dsc Override",
-        "stageType":"CAPTURE",
-        "sendSms":"Yes",
-        "smsCategory":"Sanction",
-        "isAccountOpening":false,
-        "isPreAccountOpening":true,
-        "allowedRoles":[
-           "WM"
-        ]
-     },
-       {
-        "order":15,
+        "order":10,
         "code":"DocumentUpload",
         "name":"Document Download and Upload",
         "stageType":"CAPTURE",
-        "sendSms":"Yes",
+        "sendSms":"No",
         "smsCategory":"LoanBooking",
         "isAccountOpening":true,
         "allowedRoles":[
@@ -192,7 +130,7 @@
         ]
      },
      {
-        "order":16,
+        "order":11,
         "code":"Checker1",
         "name":"Checker1",
         "stageType":"CAPTURE",
@@ -204,7 +142,7 @@
         ]
      },
      {
-       "order":17,
+       "order":12,
        "code":"Checker2",
        "name":"Checker2",
        "stageType":"CAPTURE",
@@ -216,7 +154,7 @@
        ]
     },
        {
-         "order":18,
+         "order":13,
          "code":"Completed",
          "name":"Completed",
          "stageType":"CAPTURE",

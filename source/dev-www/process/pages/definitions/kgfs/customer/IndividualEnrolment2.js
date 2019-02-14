@@ -64,7 +64,33 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
 
                             }
-                        }
+                        },
+                        "Rejected":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
+                        }    
                     }
                 }
                     
@@ -1270,7 +1296,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 {
                                     "type": "actionbox",
-                                    "condition": "model.customer.currentStage && (model.currentStage=='Screening' || model.currentStage=='Appraisal' || model.currentStage=='ScreeningReview' || model.currentStage=='CreditAppraisal' || model.currentStage=='DSCApproval' || model.currentStage=='LosDSCOverride' ||  (model.currentStage=='GuarantorAddition' && model.pageClass=='guarantor'))",
+                                    "condition": "model.customer.currentStage && (model.currentStage=='Screening' || model.currentStage=='Appraisal' || model.currentStage=='Application' || model.currentStage=='CreditAppraisal' || model.currentStage=='DSCApproval' || model.currentStage=='LosDSCOverride' ||  (model.currentStage=='GuarantorAddition' && model.pageClass=='guarantor'))",
                                     "orderNo": 1200,
                                     "items": [
                                         {

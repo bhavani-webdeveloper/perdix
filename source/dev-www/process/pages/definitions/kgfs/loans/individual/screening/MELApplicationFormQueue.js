@@ -143,7 +143,7 @@ define({
 				},
 				getActions: function () {
 					return [{
-						name: "MEL",
+						name: "VIEW/UPLOAD_DOCUMENTS",
 						desc: "",
 						icon: "fa fa-pencil-square-o",
 						fn: function (item, index) {

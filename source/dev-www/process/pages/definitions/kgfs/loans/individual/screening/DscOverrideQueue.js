@@ -136,7 +136,7 @@ define({
                     getActions: function () {
                         return [
                         {
-                            name: "VIEW/EDIT_APPLICATION",
+                            name: "DO DSC Override",
                             desc: "",
                             icon: "fa fa-book",
                             fn: function (item, index) {
