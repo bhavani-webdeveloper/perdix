@@ -58,6 +58,8 @@ define(
                     "loanProcess.loanAccount.currentStage": {
                         "Screening": {
                             "excludes": [
+                                "NewVehicleDetails.category",
+                                "NewVehicleDetails.segment",
                                 "VehicleLoanIncomesInformation",
                                 "VehicleLoanIncomesInformation1",
                                 "VehicleExpensesInformation1",
@@ -69,6 +71,10 @@ define(
                         },
                         "ScreeningReview": {
                             "excludes": [
+                                "NewVehicleDetails.category1",
+                                "NewVehicleDetails.segment1",
+                                "NewVehicleDetails.category2",
+                                "NewVehicleDetails.segment2",
                                 "VehicleLoanIncomesInformation1",
                                 "VehicleExpensesInformation1",
                                 "VehicleViability"
@@ -105,6 +111,10 @@ define(
                         },
                         "GoNoGoApproval1": {
                             "excludes": [
+                                "NewVehicleDetails.category1",
+                                "NewVehicleDetails.segment1",
+                                "NewVehicleDetails.category2",
+                                "NewVehicleDetails.segment2",
                                 "VehicleViability",
                                 "VehicleLoanIncomesInformation1",
                                 "VehicleExpensesInformation1"
@@ -141,6 +151,10 @@ define(
                         },
                         "GoNoGoApproval2": {
                             "excludes": [
+                                "NewVehicleDetails.category1",
+                                "NewVehicleDetails.segment1",
+                                "NewVehicleDetails.category2",
+                                "NewVehicleDetails.segment2",
                                 "VehicleViability",
                                 "VehicleLoanIncomesInformation1",
                                 "VehicleExpensesInformation1"
@@ -177,6 +191,10 @@ define(
                         },
                         "FieldInvestigation": {
                             "excludes": [
+                                "NewVehicleDetails.category1",
+                                "NewVehicleDetails.segment1",
+                                "NewVehicleDetails.category2",
+                                "NewVehicleDetails.segment2",
                                 "VehicleViability",
                                 "VehicleLoanIncomesInformation1",
                                 "VehicleExpensesInformation1"
@@ -187,6 +205,10 @@ define(
                         },
                         "TeleVerification": {
                             "excludes": [
+                                "NewVehicleDetails.category1",
+                                "NewVehicleDetails.segment1",
+                                "NewVehicleDetails.category2",
+                                "NewVehicleDetails.segment2",
                                 "VehicleViability",
                                 "VehicleLoanIncomesInformation1",
                                 "VehicleExpensesInformation1"
@@ -197,6 +219,10 @@ define(
                         },
                         "CreditAppraisal": {
                             "excludes": [
+                                "NewVehicleDetails.category1",
+                                "NewVehicleDetails.segment1",
+                                "NewVehicleDetails.category2",
+                                "NewVehicleDetails.segment2",
 
                             ],
                             "overrides": {
@@ -205,6 +231,10 @@ define(
                         },
                         "DeviationApproval1": {
                             "excludes": [
+                                "NewVehicleDetails.category1",
+                                "NewVehicleDetails.segment1",
+                                "NewVehicleDetails.category2",
+                                "NewVehicleDetails.segment2",
                                 "VehicleViability",
                                 "VehicleLoanIncomesInformation1",
                                 "VehicleExpensesInformation1"
@@ -241,6 +271,10 @@ define(
                         },
                         "DeviationApproval2": {
                             "excludes": [
+                                "NewVehicleDetails.category1",
+                                "NewVehicleDetails.segment1",
+                                "NewVehicleDetails.category2",
+                                "NewVehicleDetails.segment2",
                                 "VehicleViability",
                                 "VehicleLoanIncomesInformation1",
                                 "VehicleExpensesInformation1"
@@ -277,6 +311,10 @@ define(
                         },
                         "BusinessApproval1": {
                             "excludes": [
+                                "NewVehicleDetails.category1",
+                                "NewVehicleDetails.segment1",
+                                "NewVehicleDetails.category2",
+                                "NewVehicleDetails.segment2",
                                 "VehicleViability.calculateVehicleDetails"
                             ],
                             "overrides": {
@@ -311,6 +349,10 @@ define(
                         },
                         "BusinessApproval2": {
                             "excludes": [
+                                "NewVehicleDetails.category1",
+                                "NewVehicleDetails.segment1",
+                                "NewVehicleDetails.category2",
+                                "NewVehicleDetails.segment2",
                                 "VehicleViability.calculateVehicleDetails"
                             ],
                             "overrides": {
@@ -345,6 +387,10 @@ define(
                         },
                         "BusinessApproval3": {
                             "excludes": [
+                                "NewVehicleDetails.category1",
+                                "NewVehicleDetails.segment1",
+                                "NewVehicleDetails.category2",
+                                "NewVehicleDetails.segment2",
                                "VehicleViability.calculateVehicleDetails"
                             ],
                             "overrides": {
@@ -379,6 +425,10 @@ define(
                         },
                         "BusinessApproval4": {
                             "excludes": [
+                                "NewVehicleDetails.category1",
+                                "NewVehicleDetails.segment1",
+                                "NewVehicleDetails.category2",
+                                "NewVehicleDetails.segment2",
                                "VehicleViability.calculateVehicleDetails"
                             ],
                             "overrides": {
@@ -413,6 +463,10 @@ define(
                         },
                         "BusinessApproval5": {
                             "excludes": [
+                                "NewVehicleDetails.category1",
+                                "NewVehicleDetails.segment1",
+                                "NewVehicleDetails.category2",
+                                "NewVehicleDetails.segment2",
                                "VehicleViability.calculateVehicleDetails"
                             ],
                             "overrides": {
@@ -447,6 +501,10 @@ define(
                         },
                         "FieldInvestigation1": {
                             "excludes": [
+                                "NewVehicleDetails.category1",
+                                "NewVehicleDetails.segment1",
+                                "NewVehicleDetails.category2",
+                                "NewVehicleDetails.segment2",
                                 "VehicleLoanIncomesInformation1",
                                 "VehicleExpensesInformation1",
                                 "VehicleViability"
@@ -457,6 +515,10 @@ define(
                         },
                         "FieldInvestigation2": {
                             "excludes": [
+                                "NewVehicleDetails.category1",
+                                "NewVehicleDetails.segment1",
+                                "NewVehicleDetails.category2",
+                                "NewVehicleDetails.segment2",
                                 "VehicleLoanIncomesInformation1",
                                 "VehicleExpensesInformation1",
                                 "VehicleViability"
@@ -467,6 +529,10 @@ define(
                         },
                         "FieldInvestigation3": {
                             "excludes": [
+                                "NewVehicleDetails.category1",
+                                "NewVehicleDetails.segment1",
+                                "NewVehicleDetails.category2",
+                                "NewVehicleDetails.segment2",
                                 "VehicleLoanIncomesInformation1",
                                 "VehicleExpensesInformation1",
                                 "VehicleViability"
@@ -477,7 +543,11 @@ define(
                         },
                         "CreditApproval1": {
                             "excludes": [
-                              "VehicleViability.calculateVehicleDetails"  
+                                "NewVehicleDetails.category1",
+                                "NewVehicleDetails.segment1",
+                                "NewVehicleDetails.category2",
+                                "NewVehicleDetails.segment2",
+                                "VehicleViability.calculateVehicleDetails"  
                             ],
                             "overrides": {
                                 "VehicleLoanIncomesInformation": {
@@ -511,7 +581,11 @@ define(
                         },
                         "CreditApproval2": {
                             "excludes": [
-                              "VehicleViability.calculateVehicleDetails"  
+                                "NewVehicleDetails.category1",
+                                "NewVehicleDetails.segment1",
+                                "NewVehicleDetails.category2",
+                                "NewVehicleDetails.segment2",
+                                "VehicleViability.calculateVehicleDetails"  
                             ],
                             "overrides": {
                                 "VehicleLoanIncomesInformation": {
@@ -545,7 +619,11 @@ define(
                         },
                         "CreditApproval3": {
                             "excludes": [
-                              "VehicleViability.calculateVehicleDetails" 
+                                "NewVehicleDetails.category1",
+                                "NewVehicleDetails.segment1",
+                                "NewVehicleDetails.category2",
+                                "NewVehicleDetails.segment2",
+                                "VehicleViability.calculateVehicleDetails" 
                             ],
                             "overrides": {
                                 "VehicleLoanIncomesInformation": {
@@ -579,7 +657,11 @@ define(
                         },
                         "CreditApproval4": {
                             "excludes": [
-                              "VehicleViability.calculateVehicleDetails" 
+                                "NewVehicleDetails.category1",
+                                "NewVehicleDetails.segment1",
+                                "NewVehicleDetails.category2",
+                                "NewVehicleDetails.segment2",
+                                "VehicleViability.calculateVehicleDetails" 
                             ],
                             "overrides": {
                                 "VehicleLoanIncomesInformation": {
@@ -613,8 +695,12 @@ define(
                         },
                         "CreditApproval5": {
                             "excludes": [
-                              "VehicleViability",
-                              "VehicleViability.calculateVehicleDetails" 
+                                "NewVehicleDetails.category1",
+                                "NewVehicleDetails.segment1",
+                                "NewVehicleDetails.category2",
+                                "NewVehicleDetails.segment2",
+                                "VehicleViability",
+                                "VehicleViability.calculateVehicleDetails" 
                             ],
                             "overrides": {
                                 "VehicleLoanIncomesInformation": {
@@ -721,6 +807,10 @@ define(
                     "NewVehicleDetails.usedFor",
                     "NewVehicleDetails.segment",
                     "NewVehicleDetails.category",
+                    "NewVehicleDetails.segment1",
+                    "NewVehicleDetails.category1",
+                    "NewVehicleDetails.segment2",
+                    "NewVehicleDetails.category2",
                     "NewVehicleDetails.yearOfManufacture",
                     "NewVehicleDetails.yearOfManufacture1",
                     "NewVehicleDetails.make",
@@ -1232,6 +1322,204 @@ define(
                                         "key": "loanAccount.vehicleLoanDetails.yearOfManufacture",
                                         "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'",
                                         "title": "MANUFACTURER_YEAR",
+                                        "required": true
+                                    },
+                                    "segment1": {
+                                        "orderNo": 40,
+                                        "key": "loanAccount.vehicleLoanDetails.segment",
+                                        "type": "select",
+                                        "enumCode": "vehicle_segment",
+                                        "title": "SEGMENT",
+                                        "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'",
+                                        onChange: function(modelValue, form, model) {
+                                            model.loanAccount.vehicleLoanDetails.category = null;
+                                            model.loanAccount.vehicleLoanDetails.make = null;
+                                            model.loanAccount.vehicleLoanDetails.make1 = null;
+                                            model.loanAccount.vehicleLoanDetails.vehicleModel = null;
+                                            model.loanAccount.vehicleLoanDetails.yearOfManufacture = null;
+                                            model.loanAccount.vehicleLoanDetails.assetDetails = null;
+                                            model.loanAccount.vehicleLoanDetails.assetSubDetails = null;
+                                            model.loanAccount.vehicleLoanDetails.price = null;
+                                            model.loanAccount.vehicleLoanDetails.registrationNumber = null;
+                                            model.loanAccount.vehicleLoanDetails.permitType = null;
+                                            model.loanAccount.vehicleLoanDetails.insuredDeclaredValue = null;
+                                            model.loanAccount.vehicleLoanDetails.viabilityCategory = null;
+                                            model.loanAccount.vehicleLoanDetails.grossVehicleWeight = null;
+                                            model.loanAccount.vehicleLoanDetails.payLoad = null;
+                                            model.loanAccount.vehicleLoanDetails.typeofLoad = null;
+                                            model.loanAccount.vehicleLoanDetails.ratePerTrip = null;
+                                            model.loanAccount.vehicleLoanDetails.mileage = null;
+                                            model.loanAccount.vehicleLoanDetails.fuelConsumptionPerHour = null;
+                                            model.loanAccount.vehicleLoanDetails.noOfTyres = null;
+                                            model.loanAccount.vehicleLoanDetails.costOfTyre = null;
+                                            model.loanAccount.vehicleLoanDetails.lifeOfTyre = null;
+                                            model.loanAccount.vehicleLoanDetails.fuelConsumptionPerHour = null;
+                                            model.loanAccount.vehicleLoanDetails.validation = null;
+                                            model.loanAccount.vehicleLoanDetails.totalMonthlyExpense = null;
+                                            model.loanAccount.vehicleLoanDetails.freeCashFlow = null;
+                                            model.loanAccount.vehicleLoanDetails.fcfToEmi = null;
+                                            model.loanAccount.vehicleLoanDetails.dailyWorkingHours = null;
+                                            model.loanAccount.vehicleLoanDetails.monthlyWorkingDays = null;
+                                            model.loanAccount.vehicleLoanDetails.hourlyRate = null;
+                                            model.loanAccount.vehicleLoanDetails.monthlyWorkingHours = null;
+            
+                                            model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].routeTo = null;
+                                            model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].ratePerTrip = null;
+                                            model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].routeVia = null;
+                                            model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].routesKms = null;
+                                            model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips = null;
+                                            model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth = null;
+            
+                                            if (_.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses)) {
+                                                for (var i=0;i<model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses.length;i++) {
+                                                    var vehicleLoanExpense = model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[i];
+                                                    vehicleLoanExpense.expenseAmount = 0;
+                                                }
+                                            }
+            
+                                            if (_.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes)) {
+                                               for (var i=0;i<model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes.length;i++) {
+                                                    var vehicleLoanIncome = model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[i];
+                                                    vehicleLoanIncome.incomeAmount = 0;
+                                                } 
+                                            }
+                                                            
+                                        },
+                                        "required": true
+                                    },
+                                    "category1": {
+                                        "orderNo": 50,
+                                        "key": "loanAccount.vehicleLoanDetails.category",
+                                        "type": "lov",
+                                        "autolov": true,
+                                        "lovonly": true,
+                                        "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'YES'",
+                                        "title": "CATEGORY",
+                                        searchHelper: formHelper,
+                                        search: function(inputModel, form, model, context) {
+                                            var vehicleDetails = model.vehicleDetails;
+                                            var out = [];
+                                            var res = $filter('filter')(vehicleDetails, {
+                                                'segment': model.loanAccount.vehicleLoanDetails.segment
+                                            }, true);
+                                            out = _.uniqBy(res, 'category');
+                                            return $q.resolve({
+                                                headers: {
+                                                    "x-total-count": out.length
+                                                },
+                                                body: out
+                                            });
+                                        },                                
+                                        onSelect: function(valueObj, model, context) {
+                                            model.loanAccount.vehicleLoanDetails.category = valueObj.category;
+                                            model.loanAccount.vehicleLoanDetails.make = null;
+                                            model.loanAccount.vehicleLoanDetails.vehicleModel = null;
+                                        },
+                                        getListDisplayItem: function(item, index) {
+                                            return [
+                                                item.category
+                                            ];
+                                        },
+                                        "required": true
+                                    },
+                                    "segment2": {
+                                        "orderNo": 40,
+                                        "key": "loanAccount.vehicleLoanDetails.segment",
+                                        "type": "select",
+                                        "enumCode": "vehicle_segment",
+                                        "title": "SEGMENT",
+                                        "readonly": "true",
+                                        "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'NO'",
+                                        onChange: function(modelValue, form, model) {
+                                            model.loanAccount.vehicleLoanDetails.category = null;
+                                            model.loanAccount.vehicleLoanDetails.make = null;
+                                            model.loanAccount.vehicleLoanDetails.make1 = null;
+                                            model.loanAccount.vehicleLoanDetails.vehicleModel = null;
+                                            model.loanAccount.vehicleLoanDetails.yearOfManufacture = null;
+                                            model.loanAccount.vehicleLoanDetails.assetDetails = null;
+                                            model.loanAccount.vehicleLoanDetails.assetSubDetails = null;
+                                            model.loanAccount.vehicleLoanDetails.price = null;
+                                            model.loanAccount.vehicleLoanDetails.registrationNumber = null;
+                                            model.loanAccount.vehicleLoanDetails.permitType = null;
+                                            model.loanAccount.vehicleLoanDetails.insuredDeclaredValue = null;
+                                            model.loanAccount.vehicleLoanDetails.viabilityCategory = null;
+                                            model.loanAccount.vehicleLoanDetails.grossVehicleWeight = null;
+                                            model.loanAccount.vehicleLoanDetails.payLoad = null;
+                                            model.loanAccount.vehicleLoanDetails.typeofLoad = null;
+                                            model.loanAccount.vehicleLoanDetails.ratePerTrip = null;
+                                            model.loanAccount.vehicleLoanDetails.mileage = null;
+                                            model.loanAccount.vehicleLoanDetails.fuelConsumptionPerHour = null;
+                                            model.loanAccount.vehicleLoanDetails.noOfTyres = null;
+                                            model.loanAccount.vehicleLoanDetails.costOfTyre = null;
+                                            model.loanAccount.vehicleLoanDetails.lifeOfTyre = null;
+                                            model.loanAccount.vehicleLoanDetails.fuelConsumptionPerHour = null;
+                                            model.loanAccount.vehicleLoanDetails.validation = null;
+                                            model.loanAccount.vehicleLoanDetails.totalMonthlyExpense = null;
+                                            model.loanAccount.vehicleLoanDetails.freeCashFlow = null;
+                                            model.loanAccount.vehicleLoanDetails.fcfToEmi = null;
+                                            model.loanAccount.vehicleLoanDetails.dailyWorkingHours = null;
+                                            model.loanAccount.vehicleLoanDetails.monthlyWorkingDays = null;
+                                            model.loanAccount.vehicleLoanDetails.hourlyRate = null;
+                                            model.loanAccount.vehicleLoanDetails.monthlyWorkingHours = null;
+            
+                                            model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].routeTo = null;
+                                            model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].ratePerTrip = null;
+                                            model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].routeVia = null;
+                                            model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].routesKms = null;
+                                            model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips = null;
+                                            model.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].kmPerMonth = null;
+            
+                                            if (_.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses)) {
+                                                for (var i=0;i<model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses.length;i++) {
+                                                    var vehicleLoanExpense = model.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[i];
+                                                    vehicleLoanExpense.expenseAmount = 0;
+                                                }
+                                            }
+            
+                                            if (_.isArray(model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes)) {
+                                               for (var i=0;i<model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes.length;i++) {
+                                                    var vehicleLoanIncome = model.loanAccount.vehicleLoanDetails.vehicleLoanIncomes[i];
+                                                    vehicleLoanIncome.incomeAmount = 0;
+                                                } 
+                                            }
+                                                            
+                                        },
+                                        "required": true
+                                    },
+                                    "category2": {
+                                        "orderNo": 50,
+                                        "key": "loanAccount.vehicleLoanDetails.category",
+                                        "type": "lov",
+                                        "autolov": true,
+                                        "lovonly": true,
+                                        "readonly": "true",
+                                        "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf1 == 'NO'",
+                                        "title": "CATEGORY",
+                                        searchHelper: formHelper,
+                                        search: function(inputModel, form, model, context) {
+                                            var vehicleDetails = model.vehicleDetails;
+                                            var out = [];
+                                            var res = $filter('filter')(vehicleDetails, {
+                                                'segment': model.loanAccount.vehicleLoanDetails.segment
+                                            }, true);
+                                            out = _.uniqBy(res, 'category');
+                                            return $q.resolve({
+                                                headers: {
+                                                    "x-total-count": out.length
+                                                },
+                                                body: out
+                                            });
+                                        },                                
+                                        onSelect: function(valueObj, model, context) {
+                                            model.loanAccount.vehicleLoanDetails.category = valueObj.category;
+                                            model.loanAccount.vehicleLoanDetails.make = null;
+                                            model.loanAccount.vehicleLoanDetails.vehicleModel = null;
+                                        },
+                                        getListDisplayItem: function(item, index) {
+                                            return [
+                                                item.category
+                                            ];
+                                        },
                                         "required": true
                                     },
                                     "insuredDeclaredValue": {
