@@ -34,7 +34,7 @@ function($log, irfNavigator, formHelper,EntityManager, IndividualLoan,$state, Se
 						}
 					},
 					"centre": {
-						"title": "CENTRE",
+						"title": "ZONE",
 						"type": ["integer", "null"],
 						"x-schema-form": {
 							"type": "select",

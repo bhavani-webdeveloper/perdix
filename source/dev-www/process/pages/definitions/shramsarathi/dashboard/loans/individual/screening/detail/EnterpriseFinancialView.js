@@ -48,7 +48,7 @@ define({
 				"type": "box",
 				"colClass": "col-sm-12",
 				"notitle": true,
-				"title": "Income /Expense ",
+				"title": "Income / Expense ",
 				"items": [
 	
 				{
