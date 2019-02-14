@@ -12,7 +12,7 @@ irf.pageCollection.controller(irf.controller("shramsarathi.dashboard.loans.indiv
             "items": [
                 "Page/Engine/shramsarathi.dashboard.loans.individual.booking.LoanInput",
                 "Page/Engine/shramsarathi.dashboard.loans.individual.booking.InitiationQueue",
-                "Page/Engine/shramsarathi.dashboard.loans.individual.booking.LoanBooking",
+                "Page/Engine/shramsarathi.dashboard.loans.individual.booking.PendingQueue",
                 "Page/Engine/shramsarathi.dashboard.loans.individual.booking.DocumentUploadQueue",
                 "Page/Engine/shramsarathi.dashboard.loans.individual.booking.DocumentVerification" 
             ]
