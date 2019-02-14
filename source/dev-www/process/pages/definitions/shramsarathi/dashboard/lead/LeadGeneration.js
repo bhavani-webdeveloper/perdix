@@ -21,9 +21,6 @@ function(LeadProcess, AngularResourceService) {
 
             var getOverrides = function (model) {
                 return {
-<<<<<<< Updated upstream
-                
-=======
                     "leadProfile.individualDetails.maritalStatus":{
                         "required":true
                     },
@@ -33,7 +30,6 @@ function(LeadProcess, AngularResourceService) {
                     "leadProfile.individualDetails.age":{
                         "required":true
                     },
->>>>>>> Stashed changes
                     "leadProfile.leadDetails.customerTypeString":{
                         "readonly":false,
                         "required":true
