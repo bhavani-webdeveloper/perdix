@@ -2163,13 +2163,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                                 BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                             }, function (err) {
-                                PageHelper.showErrors({
-                                    data: {
-                                        error: err
-                                    }
-                                });
-                                //throw new Error('err');
-                                return false;
+                                // PageHelper.showErrors({
+                                //     data: {
+                                //         errors: err
+                                //     }
+                                // });
+                                // //throw new Error('err');
+                                // return false;
                             //    PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();

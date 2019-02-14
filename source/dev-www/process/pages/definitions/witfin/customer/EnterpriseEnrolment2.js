@@ -1616,8 +1616,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                     },
                     proceed: function(model, form){
-
+                        if(model.customer.udf.userDefinedFieldValues.udf1)
                         model.customer.udf.userDefinedFieldValues.udf1 = model.customer.udf.userDefinedFieldValues.udf1.toString();
+                        if(model.customer.udf.userDefinedFieldValues.udf2)
                         model.customer.udf.userDefinedFieldValues.udf2 = model.customer.udf.userDefinedFieldValues.udf2.toString();
 
                         if( model.customer.vehiclesOwned >= model.customer.vehiclesFinanced){
