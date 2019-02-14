@@ -89,7 +89,7 @@ Class Ckyc {
     }
     private static function address_split($c, $type, $length, $index) {
         if ($type == 'permanent')
-            $address_array = array_filter([$c->door_no,$c->street,$c->post_office,$c->landmark,$c->locality,$c->district,$c->state]);
+            $address_array = array_filter([$c->door_no,$c->street,$c->post_office,$c->landmark,$c->locality,$c->village_name,$c->district,$c->state,$c->pincode]);
         else if ($type == 'mailing')
             $address_array = array_filter([$c->mailing_doorno,$c->mailing_street,$c->mailing_postoffice,$c->mailing_locality,$c->mailing_district,$c->mailing_state,$c->mailing_pincode]);
         $default_data = join(',',$address_array);
