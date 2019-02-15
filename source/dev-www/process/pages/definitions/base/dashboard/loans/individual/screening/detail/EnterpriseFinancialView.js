@@ -530,7 +530,7 @@ self.renderForm = function() {
 	}];
 };
 
-self.renderRequiredEvents = ["financial-summary", "business-customer"];
+self.renderRequiredEvents = ["business-customer","financial-summary"];
 self.renderReady = function(eventName) {
 	self.renderRequiredEvents.splice(self.renderRequiredEvents.indexOf(eventName), 1);
 	if (!self.renderRequiredEvents.length) {
@@ -544,8 +544,6 @@ self.renderReady = function(eventName) {
 			},
 			eventListeners: {
 				"financial-summary": function(bundleModel, model, params) {
-
-
 					/*Existing or new customer*/
 					if (params[0].data[0]['Existing Customer'] == 'No') {
                         model.existingCustomerStr = "New Customer";

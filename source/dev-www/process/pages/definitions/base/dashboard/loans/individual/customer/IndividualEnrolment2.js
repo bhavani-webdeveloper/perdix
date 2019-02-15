@@ -1646,7 +1646,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "condition": "model.customer.physicalAssets[arrayIndex].nameOfOwnedAsset=='Two wheeler' || model.customer.physicalAssets[arrayIndex].nameOfOwnedAsset=='Four Wheeler'"
                     },
                     "IndividualFinancials.expenditures.expenditureSource": {
-                        "required": true
+                        "required": true,
+                        "enumCode": "householdExpenditure"
                     },
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth":{
                         "required" : false

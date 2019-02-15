@@ -3,6 +3,12 @@ define({
         pageType: "Engine",
         dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "Model_ELEM_FC", "CreditBureau", "irfElementsConfig", "$filter"],
         $pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, Model_ELEM_FC, CreditBureau, irfElementsConfig, $filter) {
+            var validateCustomerExist = function(model) {
+                if(!model.customer) {
+                    return false;
+                }
+                return true;
+            }
             return {
                 "type": "schema-form",
                 "title": "INDIVIDUAL_ENROLLMENT",
@@ -1055,6 +1061,9 @@ define({
                 },
                 eventListeners: {
                     "financial-summary": function(bundleModel, model, params) {
+                        if (!validateCustomerExist(model)){
+                            return;
+                        }
                         //model.customer = model.enrolmentProcess.customer;
                         model.bankDetails = params[10].BankAccounts;
                         var liability = params[19].subgroups;

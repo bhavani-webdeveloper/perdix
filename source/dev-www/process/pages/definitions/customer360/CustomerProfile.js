@@ -588,7 +588,8 @@ function($log, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfPr
                                             "key": "customer.expenditures[].expenditureSource",
                                             "type": "select",
                                             required: true,
-                                            "title": "EXPENSE_TYPE"
+                                            "title": "EXPENSE_TYPE",
+                                            "enumCode": "householdExpenditure"
                                         },
                                         {
                                             "key": "customer.expenditures[].annualExpenses",
