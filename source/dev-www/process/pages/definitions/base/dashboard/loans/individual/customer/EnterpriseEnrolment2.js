@@ -170,9 +170,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.companyOperatingSince":{
                         "required": true
                     },
-                    "EnterpriseInformation.companyEmailId":{
-                        "required": true
-                    },
+                    // "EnterpriseInformation.companyEmailId":{
+                    //     "required": true
+                    // },
                     "EnterpriseInformation.photoImageId":{
                         "required": true
                     },
