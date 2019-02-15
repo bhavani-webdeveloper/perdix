@@ -59,7 +59,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             },
                             "ContactInformation.state": {
                                 "readonly": true
+                            },
+                            "Liabilities.liabilities.otherLoanSource":{
+                                "required":true
                             }
+
                         }
                         },
                         "FieldAppraisal":
@@ -1591,6 +1595,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             }
                         }
                     },
+                    "Liabilities.liabilities.loanSource":{
+                        "onChange": function(modelValue, form, model, formCtrl, event) {
+                           if(model.customer.liabilities[form.arrayIndex].loanSource){
+                            model.customer.liabilities[form.arrayIndex].udf1 = null
+                            }    
+                        }
+                    },
+                    
                     "HouseVerification.rentLeaseStatus": {
                         "schema": {
                             "enumCode": "rent_lease_status"
@@ -1755,6 +1767,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Liabilities.liabilities",
                     //"Liabilities.liabilities.loanType",
                     "Liabilities.liabilities.loanSource",
+                    "Liabilities.liabilities.otherLoanSource",
                     "Liabilities.liabilities.loanAmountInPaisa",
                     "Liabilities.liabilities.installmentAmountInPaisa",
                     "Liabilities.liabilities.outstandingAmountInPaisa",
@@ -1959,6 +1972,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         },
                                     }
 
+                                },
+                                "Liabilities":{
+                                    "items": {
+                                        "liabilities": {
+                                            "items": {
+                                                "otherLoanSource": {
+                                                        "key": "customer.liabilities[].udf1",
+                                                        "type": "string",
+                                                        "orderNo": 11,
+                                                        "title":"LoanSource",
+                                                        "condition":"model.customer.liabilities[arrayIndex].loanSource== 'Other'",
+                                                        "required":true
+
+                                                }
+                                            }
+
+                                        }
+                                    }
                                 },
                                 "FamilyDetails":{
                                     "type": "box",
