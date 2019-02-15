@@ -6,7 +6,7 @@ define({
     ],
     $pageFn: function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, $stateParams, $state,
         PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, Model_ELEM_FC, filterFilter, irfCurrencyFilter, $filter) {
-        return {
+            return {
             "type": "schema-form",
             "title": "ENTERPRISE_ENROLLMENT_VIEW",
             "subTitle": "",
@@ -1158,6 +1158,7 @@ define({
             },
             eventListeners: {
                 "financial-summary": function(bundleModel, model, params) {
+                  
                     model.proxyScore = {};
                     model.proxyScore = params[2].data[5];
                     model.liability = params[19].subgroups;

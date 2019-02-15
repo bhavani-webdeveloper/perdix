@@ -167,12 +167,35 @@ define(["perdix/domain/model/loan/LoanProcess",
                         if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)){
                             PageHelper.showLoader();
                             bundleModel.loanId = $stateParams.pageId;
-
                             LoanProcessts.get(bundleModel.loanId)
                             .subscribe(function(loanProcess){
                                 var loanAccount = loanProcess;
+                                bundleModel.loanAccount = loanProcess.loanAccount;
                                 loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.customerId;
-
+                                bundleModel.customer_detail = {
+                                    applicant: {},
+                                    coApplicants: {
+                                        id: [],
+                                        urn: []
+                                    },
+                                    guarantors: {
+                                        id: [],
+                                        urn: []
+                                    }
+                                }
+                                for (var i = 0; i < loanProcess.loanAccount.loanCustomerRelations.length; i++) {
+                                    var cust = loanProcess.loanAccount.loanCustomerRelations[i];
+                                    if (cust.relation == 'APPLICANT' || cust.relation == 'Applicant' || cust.relation == 'Sole Proprieter') {
+                                        bundleModel.customer_detail.applicant.id = cust.customerId;
+                                        bundleModel.customer_detail.applicant.urn = cust.urn;
+                                    } else if (cust.relation == 'COAPPLICANT' || cust.relation == 'Co-Applicant') {
+                                        bundleModel.customer_detail.coApplicants.id.push(cust.customerId);
+                                        bundleModel.customer_detail.coApplicants.urn.push(cust.urn);
+                                    } else if (cust.relation == 'GUARANTOR' || cust.relation == 'Guarantor') {
+                                        bundleModel.customer_detail.guarantors.id.push(cust.customerId);
+                                        bundleModel.customer_detail.guarantors.urn.push(cust.urn);
+                                    }
+                                }
                                 $this.bundlePages.push({
                                     pageClass: 'summary',
                                     model: {
@@ -331,6 +354,18 @@ define(["perdix/domain/model/loan/LoanProcess",
                             if (enrolmentDetails.customerId){
                                 BundleManager.broadcastEvent('remove-customer-relation', enrolmentDetails);
                             }
+                        },
+                        "deviation-loaded": function(pageObj, bundleModel, params) {
+                            BundleManager.broadcastEvent("load-deviation", params);
+                        },
+                        "financialSummary": function(pageObj, bundleModel, params) {
+                            BundleManager.broadcastEvent("financial-summary", params);
+                        },
+                        "customer-history-data": function(pageObj, bundleModel, params){
+                            BundleManager.broadcastEvent("customer-history-fin-snap", params);
+                        },
+                        "business": function(pageObj, bundleModel, params) {
+                            BundleManager.broadcastEvent("business-customer", params);
                         }
                     }
                 }

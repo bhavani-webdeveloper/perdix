@@ -530,13 +530,741 @@ self.renderForm = function() {
 	}];
 };
 
-self.renderRequiredEvents = ["financial-summary", "business-customer"];
-self.renderReady = function(eventName) {
+self.renderRequiredEvents = ["business-customer","financial-summary"];
+self.eventData = {};
+self.renderReady = function(eventName, params) {
+	self.eventData[eventName] = params;
 	self.renderRequiredEvents.splice(self.renderRequiredEvents.indexOf(eventName), 1);
 	if (!self.renderRequiredEvents.length) {
-		self.renderForm();
+		self["business-customer"](self.eventData["business-customer"]);
+		self["financial-summary"](self.eventData["financial-summary"]);
+		self.renderForm(self.eventData);
 	}
 };
+self["financial-summary"] = function(params) {
+	/*Existing or new customer*/
+	if (params[0].data[0]['Existing Customer'] == 'No') {
+		model.existingCustomerStr = "New Customer";
+	} else {
+		model.existingCustomerStr = "Existing Customer";
+	}
+
+	/*Operational expenditure calculation*/
+	model._opex = params[21].data;
+	var cfd = params[15];
+	var invoiceCashTableData = [];
+	var invoiceCashGraphData = [{
+		"key": "Invoice",
+		"color": "midnightblue",
+		"values": []
+	}, {
+		"key": "Cash",
+		"color": "firebrick",
+		"values": []
+	}];
+	for (i = 0; i < cfd.data.length - 1; i++) {
+		var d = cfd.data[i];
+		var x = {};
+		if (_.isObject(d.data)) {
+			if (d.data["Month"] == "Avg. Total By Buyer") {
+				x.month = "Average";
+			} else {
+				x.month = d.data["Month"];
+			}
+			x.invoice = d.data["Invoice Sales Amount"] || 0;
+			x.cash = d.data["Cash Sales Amount"] || 0;
+			x.total = d.data["Amount"] || 0;
+		} else {
+			x.month = d["Month"];
+			x.invoice = d["Invoice Sales Amount"] || 0;
+			x.cash = d["Cash Sales Amount"] || 0;
+			x.total = d["Amount"] || 0;
+			invoiceCashGraphData[0].values.push({
+				"x": x.month,
+				"y": x.invoice,
+				"series": 0
+			});
+			invoiceCashGraphData[1].values.push({
+				"x": x.month,
+				"y": x.cash,
+				"series": 1
+			});
+			
+		}
+		invoiceCashTableData.push(x);
+	}
+
+	var buyerSummaryTableData = [];
+	var buyerSummaryGraphData = [];
+	var buyerDetailsGraphData = [];
+	var buyerColumnCount = 0;
+	for (var i = 1; i < cfd.columns.length; i++) {
+		if (cfd.columns[i].data == "Amount") {
+			buyerSummaryTableData.push({
+				"buyer": "Total"
+			});
+			buyerColumnCount = i;
+			break;
+		}
+		buyerSummaryTableData.push({
+			"buyer": cfd.columns[i].title
+		});
+		buyerSummaryGraphData.push({
+			"x": cfd.columns[i].title,
+			"color": randomColor()
+		});
+		buyerDetailsGraphData.push({
+			"key": cfd.columns[i].title,
+			"color": randomColor()
+		});
+	}
+	for (i = 0; i < cfd.data.length; i++) {
+		var d = cfd.data[i];
+		if (_.isObject(d.data)) {
+			d = d.data;
+		}
+		var key = d["Month"];
+		if (key == "Avg. Total By Buyer")
+			key = "average";
+		if (key == "Percentage on Average Monthly Revenue")
+			key = "percentage";
+		for (j = 0; j < buyerColumnCount; j++) {
+			buyerSummaryTableData[j][key] = d[cfd.columns[j+1].data] || 0;
+			if (key == "percentage" && j < buyerColumnCount - 1) {
+				buyerSummaryGraphData[j]["y"] = buyerSummaryTableData[j][key];
+			} else if (key != "percentage" && key != "average" && j < buyerColumnCount - 1) {
+				buyerDetailsGraphData[j].values = buyerDetailsGraphData[j].values || new Array(cfd.data.length - 2);
+				buyerDetailsGraphData[j].values[i] = {
+					"x": key,
+					"y": Number(buyerSummaryTableData[j][key]),
+					"series": i
+				};
+			}
+		}
+	}
+
+	var bpl = params[8].data[0];
+	/*var purchase=params[18].data;*/
+	/*Household income sum for applicant and co applicant , assuming it snever bethere for gurantor*/
+	var household_income=0;
+	var household=params[7].sections;
+	_.each(household, function(household){
+		household_income += parseInt(household.data[0]['Net Household Income']);
+
+	})
+	bpl.household_income=household_income;
+	bpl.ExistingLoanRepayments= params[0].data[0]['Existing Loan Repayments'];
+	bpl.avgMonDep=model.business.summary.bankStatement.averageMonthlyDeposit;
+	bpl.avgMonBal=model.business.summary.bankStatement.averageMonthlyBalance;
+
+	/*purchase splitup calculation under profit and loss*/
+	
+	var purchases= params[18].data;
+	if(purchases.length!= 0){
+			_.each(purchases, function(purchase){
+			if(_.has(purchase, "data")){
+			if(purchase.data["Month"]== "Average Total by Seller"){
+				bpl['purchase_inv']= (purchase.data["Invoice Sales Amount"]== 0)?"0.00":purchase.data["Invoice Sales Amount"];
+				bpl['purchase_cash']= (purchase.data["Cash Sales Amount"]== 0)?"0.00":purchase.data["Cash Sales Amount"];
+				bpl['purchase_cash_pct']= purchase.data["Cash (%)"].toFixed(2) + " %";
+				bpl['purchase_inv_pct']= purchase.data["Invoice (%)"].toFixed(2) + " %";
+			}
+
+			}
+
+	})
+	}else{
+		bpl['purchase_inv']= "0";
+		bpl['purchase_cash']= "0";
+		bpl['purchase_cash_pct']= "0.00 %";
+		bpl['purchase_inv_pct']= "0.00 %"
+
+	}
+	
+
+	var CalPercentage=function(total, value){
+		if(total== 0 && value!= 0) return "0.00 %";
+		if(total!= 0 && value== 0) return "0.00 %"
+		if(total== 0 && value== 0) return "0.00 %"
+		return ((value/total)*100).toFixed(2)+" %";
+	}
+
+	model.summary = {
+		"cashFlowDetails": {
+			"invoiceCash": {
+				"tableData": invoiceCashTableData,
+				"graphData": invoiceCashGraphData,
+				"graphOptions": {
+					"chart": {
+						"type": "multiBarChart",
+						"height": 280,
+						"duration": 500,
+						"stacked": false
+					}
+				}
+			},
+			"buyerSummary": {
+				"tableData": buyerSummaryTableData,
+				"graphData": buyerSummaryGraphData,
+				"graphOptions": {
+					"chart": {
+						"type": "pieChart",
+						"height": buyerSummaryGraphData.length * 50,
+						"duration": 500,
+						"labelsOutside": true,
+						"labelType": "value",
+						"legendPosition": "right"
+					}
+				}
+			},
+			"buyerDetails": {
+				"tableData": buyerSummaryTableData,
+				"graphData": buyerDetailsGraphData,
+				"graphOptions": {
+					"chart": {
+						"type": "multiBarChart",
+						"height": 280,
+						"duration": 500,
+						"stacked": false
+					}
+				}
+			}
+		},
+		"profitLoss": {
+			"summary": {
+				"tableData": [{
+					"title": "Income",
+					"amount": "",
+					"total": bpl['Total Business Revenue'],
+					"percentage": "",
+					"description": "",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+				}, {
+					"title": "Purchases",
+					"amount": "",
+					"total": bpl['Purchases'],
+					"percentage": bpl['Purchases pct'],
+					"description": "of turnover",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+				}, {
+					"title": "OPEX",
+					"amount": "",
+					"total": bpl['Opex'],
+					"percentage":CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Opex'])),
+					"description": "of turnover",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+				}, {
+					"title": "Total Expenses",
+					"amount": "",
+					"total": bpl['Total Expenses'],
+					"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Total Expenses'])),						
+					"description": "of turnover",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+				}, {
+					"title": "Gross Income",
+					"amount": "",
+					"total": bpl['Gross Income'],
+					"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Gross Income'])),
+					"description": "of turnover",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+				}, {
+					"title": "Existing Loan Repayments",
+					"amount": "",
+					"total": bpl['Business Liabilities'],
+					"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Business Liabilities'])),
+					"description": "of turnover",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+				},{
+					"title": "Net Income",
+					"amount": "",
+					"total": bpl['Net Business Income'],
+					"percentage": bpl['Net Business Income pct'],
+					"description": "of turnover",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+				},{
+					"title": "Household Net Income",
+					"amount": "",
+					"total": bpl['household_income'],
+					"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['household_income'])),
+					"description": "of turnover",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+				}, {
+					"title": "Revised Net Income",
+					"amount": "",
+					"total":  bpl['Net Income'],
+					"percentage":CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Net Income'])),
+					"description": "of turnover",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+				},{
+					"title": "MAITREYA_EMI",
+					"amount": "",
+					"total": bpl['Kinara EMI'],
+					"percentage": CalPercentage(parseInt(bpl['Net Income']), parseInt(bpl['Kinara EMI'])),
+					"description": "of Revised Net Income",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+
+				},{
+					"title": "Average Bank Balance",
+					"amount": "",
+					"total": bpl['avgMonBal']?bpl['avgMonBal']:("0.00") ,
+					"percentage": CalPercentage(parseInt(bpl['Net Income']), parseInt(bpl['avgMonBal'])) ,
+					"description": "of Revised Net Income",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+				},{
+					"title": "Average Bank Deposit",
+					"amount": "",
+					"total": bpl['avgMonDep']?bpl['avgMonDep']:("0.00") ,
+					"percentage": CalPercentage(parseInt(bpl['Net Income']), parseInt(bpl['avgMonDep'])) ,
+					"description": "of Revised Net Income",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+				
+				}]
+			},
+			"details": {
+				"tableData": [{
+					"title": "Income",
+					"amount": "",
+					"total": bpl['Total Business Revenue'],
+					"percentage": "",
+					"description": "",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+				}, {
+					"title": "Invoice",
+					"amount": bpl['Invoice'],
+					"total": "",
+					"percentage": bpl['Invoice pct'],
+					"description": "of turnover",
+					"$config": {
+						"title": {
+							"className": "text-right"
+						}
+					}
+				}, {
+					"title": "Cash",
+					"amount": bpl['Cash'],
+					"total": "",
+					"percentage": bpl['Cash pct'],
+					"description": "of turnover",
+					"$config": {
+						"title": {
+							"className": "text-right"
+						}
+					}
+				}, {
+					"title": "Scrap & Other Business Income",
+					"amount": bpl['Scrap or any business related income'],
+					"total": "",
+					"percentage": bpl['Scrap or any business related income pct'],
+					"description": "of turnover",
+					"$config": {
+						"title": {
+							"className": "text-right"
+						}
+					}
+				},{
+					"title": "Purchases",
+					"amount": "",
+					"total": bpl['Purchases'],
+					"percentage": bpl['Purchases pct'],
+					"description": "of turnover",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+				},	{
+					"title": "Invoice",
+					"amount": (bpl['purchase_inv']==null)?"0":bpl['purchase_inv'],
+					"total": "",
+					"percentage": (bpl['purchase_inv_pct']==null)?"0.00%":bpl['purchase_inv_pct'],
+					"description": "of total Purchases",
+					"$config": {
+						"title": {
+							"className": "text-right"
+						}
+					}
+				}, {
+					"title": "Cash",
+					"amount": (bpl['purchase_cash']==null)?"0":bpl['purchase_cash'],
+					"total": "",
+					"percentage": (bpl['purchase_cash_pct']==null)?"0.00%":bpl['purchase_cash_pct'],
+					"description": "of total Purchases",
+					"$config": {
+						"title": {
+							"className": "text-right"
+						}
+					}
+				}, {
+					"title": "OPEX",
+					"amount": "",
+					"total": bpl['Opex'],
+					"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Opex'])),
+					"description": "of turnover",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+				},{
+					"title": "Total Expenses",
+					"amount": "",
+					"total": bpl['Total Expenses'],
+					"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']),parseInt(bpl['Total Expenses'])),
+					"description": "of turnover",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+				}, {
+					"title": "Gross Income",
+					"amount": "",
+					"total": bpl['Gross Income'],
+					"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Gross Income'])) ,
+					"description": "of turnover",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+				}, {
+					"title": "Existing Loan Repayments",
+					"amount": "",
+					"total": bpl['Business Liabilities'],
+					"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Business Liabilities'])),
+					"description": "of turnover",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+				}, {
+					"title": "Net Income",
+					"amount": "",
+					"total": bpl['Net Business Income'],
+					"percentage": bpl['Net Business Income pct'],
+					"description": "of turnover",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+				},{
+					"title": "Household Net Income",
+					"amount": "",
+					"total": bpl['household_income'],
+					"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['household_income'])),
+					"description": "of turnover",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+				}, {
+					"title": "Revised Net Income",
+					"amount": "",
+					"total":  bpl['Net Income'],
+					"percentage":CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Net Income'])),
+					"description": "of turnover",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+				}, {
+					"title": "MAITREYA_EMI",
+					"amount": "",
+					"total": bpl['Kinara EMI'],
+					"percentage": CalPercentage(parseInt(bpl['Net Income']), parseInt(bpl['Kinara EMI'])),
+					"description": "of Revised Net Income",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+
+				},{
+					"title": "Average Bank Balance",
+					"amount": "",
+					"total": bpl['avgMonBal']?bpl['avgMonBal']:("0.00") ,
+					"percentage": CalPercentage(parseInt(bpl['Net Income']), parseInt(bpl['avgMonBal'])) ,
+					"description": "of Revised Net Income",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+				},{
+					"title": "Average Bank Deposit",
+					"amount": "",
+					"total": bpl['avgMonDep']?bpl['avgMonDep']:("0.00") ,
+					"percentage": CalPercentage(parseInt(bpl['Net Income']), parseInt(bpl['avgMonDep'])) ,
+					"description": "of Revised Net Income",
+					"$config": {
+						"title": {
+							"className": "text-bold"
+						}
+					}
+				
+				}]
+			}
+		}
+	};
+
+	model.businessPL = {
+		"scrapIncome": bpl['Scrap or any business related income'],
+		"scrapIncomePCT": bpl['Scrap or any business related income pct'],
+		"totalBusinessIncome": bpl['Total Business Revenue'],
+		"purchasesPCT": bpl['Purchases pct'],
+		"grossIncome": bpl['Gross Income'],
+		"Opex": bpl['Opex'],
+		"EBITDA": bpl['EBITDA'],
+		"EBITDA_PCT": bpl['EBITDA pct'],
+		"businessLiabilities": bpl['Business Liabilities'],
+		"netBusinessIncome": bpl['Net Business Income'],
+		"netBusinessIncomePCT": bpl['Net Business Income pct'],
+		"kinaraEmi": bpl['Kinara EMI'],
+		"kinaraEmiPCT": bpl['Kinara EMI pct'],
+		"netIncome": bpl['Net Income'],
+		"finalKinaraEmi": bpl['Final Kinara EMI'],
+		"finalKinaraEmiPCT": bpl['Final Kinara EMI pct']
+	};
+
+	/* Populate values for Balance Sheet */
+	var bs = params[9].data[0];
+	model.assetsAndLiabilities = {
+		"cashInBank": bs['Cash in bank'],
+		"payables": bs['Payables'],
+		"accountsReceivable": bs['Accounts receivables'],
+		"shortTermDebts": bs['Short-term debts '],
+		"rawMaterial": bs['Raw material'],
+		"currentPortionOfLongTermDeb": bs['Current portion of long-term debt'],
+		"workInProgress": bs['Work in progress'],
+		"finishedGoods": bs['Finished goods'],
+		"totalCurrentAssets": bs['Total current assets'],
+		"totalCurrentLiabilities": bs['Total current liabilities'],
+		"machinery": bs['Machinery'],
+		"longTermDebt": bs['Long-term debt'],
+		"land": bs['Land'],
+		"ownCapital": bs['Own capital'],
+		"building": bs['Building'],
+		"vehicle": bs['Vehicle'],
+		"furniture": bs['Furniture'],
+		"fixture": bs['Fixtures'],
+		"totalFixedAssets": bs['Total fixed assets'],
+		"totalLengTermLiabilities": bs['Total long-term liabilities'],
+		"totalAssets": bs['Total Assets'],
+		"totalLiabilities": bs['Total Liabilities']
+	};
+}
+self["business-customer"] = function(params) {
+	model.business = params;
+	//model.business.centreName = filterFilter(formHelper.enum('centre').data, {value: model.business.centreId})[0].name;
+
+	var bankStatementSummary = (function() {
+		var averageGraphData = [{
+			"key": "Avg Bank Deposits",
+			"color": "limegreen",
+			"values": []
+		}, {
+			"key": "Avg Bank Balances",
+			"color": "firebrick",
+			"values": []
+		}];
+		var bouncesGraphData = [{
+			"key": "No of EMI Bounces",
+			"color": "limegreen",
+			"values": []
+		}, {
+			"key": "No of non EMI Bounces",
+			"color": "firebrick",
+			"values": []
+		}];
+		var totalAverageDeposits = 0;
+		var totalAverageWithdrawals = 0;
+		var totalAvgbalanceon15 = 0;
+		var totalChequeBounces = 0;
+		var totalEMIBounces = 0;
+		var graphStatement = {};
+		for (i = 0; i < model.business.customerBankAccounts.length; i++) {
+			var acc = model.business.customerBankAccounts[i];
+			var totalDeposits = 0;
+			var totalWithdrawals = 0;
+			var balnceon15 = 0;
+			var noOfEmiChequeBounced = 0;
+			var noOfChequeBounced = 0;
+			for (j in acc.bankStatements) {
+				var stat = acc.bankStatements[j];
+				totalDeposits += stat.totalDeposits;
+				totalWithdrawals += stat.totalWithdrawals;
+				balnceon15 += stat.balanceAsOn15th;
+				noOfEmiChequeBounced += stat.noOfEmiChequeBounced;
+				noOfChequeBounced += stat.noOfChequeBounced;
+
+				var graphKey = stat.startMonth;							    
+				if(graphStatement[graphKey]){
+					graphStatement[graphKey].count++
+				}else{
+					graphStatement[graphKey]={};
+					graphStatement[graphKey].count=1;
+
+				}
+				graphStatement[graphKey].totalDeposits = graphStatement[graphKey].totalDeposits || 0;
+				graphStatement[graphKey].totalDeposits += stat.totalDeposits;
+				graphStatement[graphKey].totalWithdrawals = graphStatement[graphKey].totalWithdrawals || 0;
+				graphStatement[graphKey].totalWithdrawals += stat.totalWithdrawals;
+				graphStatement[graphKey].balnceon15 = graphStatement[graphKey].balnceon15 || 0;
+				graphStatement[graphKey].balnceon15 += stat.balanceAsOn15th;
+				graphStatement[graphKey].noOfEmiChequeBounced = graphStatement[graphKey].noOfEmiChequeBounced || 0;
+				graphStatement[graphKey].noOfEmiChequeBounced += stat.noOfEmiChequeBounced;
+				graphStatement[graphKey].noOfChequeBounced = graphStatement[graphKey].noOfChequeBounced || 0;
+				graphStatement[graphKey].noOfChequeBounced += stat.noOfChequeBounced;
+			}
+			acc.total = {
+				"startMonth": "Average",
+				"totalDeposits": totalDeposits,
+				"averageDeposits": totalDeposits / acc.bankStatements.length,
+				"totalWithdrawals": totalWithdrawals,
+				"averageWithdrawals": totalWithdrawals / acc.bankStatements.length,
+				"Avgbalnceon15": balnceon15 / acc.bankStatements.length,
+				"noOfEmiChequeBounced": noOfEmiChequeBounced,
+				"noOfChequeBounced": noOfChequeBounced
+			};
+			totalAverageDeposits += acc.total.averageDeposits;
+			totalAverageWithdrawals += acc.total.averageWithdrawals;
+			totalAvgbalanceon15 += acc.total.Avgbalnceon15,
+			totalEMIBounces += acc.total.noOfEmiChequeBounced;
+			totalChequeBounces += acc.total.noOfChequeBounced;
+			acc.bankStatements.push(acc.total);
+		}
+		
+	   // Graph data need to be sorted
+		var sortedGraphStatement = {};
+		Object.keys(graphStatement).sort().forEach(function(key) {
+		 sortedGraphStatement[key] = graphStatement[key];
+		 });
+
+		/*_.sortKeysBy(graphStatement);
+		_.sortKeysBy(obj, function(value, key) {
+			return value;
+		});*/
+
+
+		_.forOwn(sortedGraphStatement, function(v, k) {
+			k = moment(k, 'YYYY-MM-DD').format('MMM, YYYY');
+			averageGraphData[0].values.push({
+				"x": k,
+				"y": v.totalDeposits / v.count,
+				"series": 0
+			})
+			averageGraphData[1].values.push({
+				"x": k,
+				"y": v.balnceon15 / v.count,
+				"series": 1
+			})
+			bouncesGraphData[0].values.push({
+				"x": k,
+				"y": v.noOfEmiChequeBounced,
+				"series": 0
+			})
+			bouncesGraphData[1].values.push({
+				"x": k,
+				"y": v.noOfChequeBounced,
+				"series": 1
+			})
+		});
+		return {
+			"averageMonthlyDeposit": totalAverageDeposits,
+			"averageMonthlyWithdrawal": totalAverageWithdrawals,
+			"averageMonthlyBalance": totalAvgbalanceon15,
+			"totalAccounts": model.business.customerBankAccounts.length,
+			"totalEMIBounces": totalEMIBounces,
+			"totalChequeBounces": totalChequeBounces,
+			"average": {
+				"graphData": averageGraphData,
+				"graphOptions": {
+					"chart": {
+						"type": "multiBarChart",
+						"height": 280,
+						"duration": 500,
+						"stacked": false,
+						"reduceXTicks": false
+					}
+				}
+			},
+			"bounces": {
+				"graphData": bouncesGraphData,
+				"graphOptions": {
+					"chart": {
+						"type": "multiBarChart",
+						"height": 280,
+						"duration": 500,
+						"stacked": false,
+						"rotateLabels": -90,
+						"showControls": false,
+						"reduceXTicks": false
+					}
+				}
+			}
+		};
+	})();
+
+	model.business.summary = {
+		"bankStatement": bankStatementSummary
+	}
+}
 			},
 			form: [],
 			schema: function() {
@@ -544,732 +1272,10 @@ self.renderReady = function(eventName) {
 			},
 			eventListeners: {
 				"financial-summary": function(bundleModel, model, params) {
-
-
-					/*Existing or new customer*/
-					if (params[0].data[0]['Existing Customer'] == 'No') {
-                        model.existingCustomerStr = "New Customer";
-                    } else {
-                        model.existingCustomerStr = "Existing Customer";
-                    }
-
-                   /*Operational expenditure calculation*/
-					model._opex = params[21].data;
-					var cfd = params[15];
-					var invoiceCashTableData = [];
-					var invoiceCashGraphData = [{
-						"key": "Invoice",
-						"color": "midnightblue",
-						"values": []
-					}, {
-						"key": "Cash",
-						"color": "firebrick",
-						"values": []
-					}];
-					for (i = 0; i < cfd.data.length - 1; i++) {
-						var d = cfd.data[i];
-						var x = {};
-						if (_.isObject(d.data)) {
-							if (d.data["Month"] == "Avg. Total By Buyer") {
-								x.month = "Average";
-							} else {
-								x.month = d.data["Month"];
-							}
-							x.invoice = d.data["Invoice Sales Amount"] || 0;
-							x.cash = d.data["Cash Sales Amount"] || 0;
-							x.total = d.data["Amount"] || 0;
-						} else {
-							x.month = d["Month"];
-							x.invoice = d["Invoice Sales Amount"] || 0;
-							x.cash = d["Cash Sales Amount"] || 0;
-							x.total = d["Amount"] || 0;
-							invoiceCashGraphData[0].values.push({
-								"x": x.month,
-								"y": x.invoice,
-								"series": 0
-							});
-							invoiceCashGraphData[1].values.push({
-								"x": x.month,
-								"y": x.cash,
-								"series": 1
-							});
-							
-						}
-						invoiceCashTableData.push(x);
-					}
-
-					var buyerSummaryTableData = [];
-					var buyerSummaryGraphData = [];
-					var buyerDetailsGraphData = [];
-					var buyerColumnCount = 0;
-					for (var i = 1; i < cfd.columns.length; i++) {
-						if (cfd.columns[i].data == "Amount") {
-							buyerSummaryTableData.push({
-								"buyer": "Total"
-							});
-							buyerColumnCount = i;
-							break;
-						}
-						buyerSummaryTableData.push({
-							"buyer": cfd.columns[i].title
-						});
-						buyerSummaryGraphData.push({
-							"x": cfd.columns[i].title,
-							"color": randomColor()
-						});
-						buyerDetailsGraphData.push({
-							"key": cfd.columns[i].title,
-							"color": randomColor()
-						});
-					}
-					for (i = 0; i < cfd.data.length; i++) {
-						var d = cfd.data[i];
-						if (_.isObject(d.data)) {
-							d = d.data;
-						}
-						var key = d["Month"];
-						if (key == "Avg. Total By Buyer")
-							key = "average";
-						if (key == "Percentage on Average Monthly Revenue")
-							key = "percentage";
-						for (j = 0; j < buyerColumnCount; j++) {
-							buyerSummaryTableData[j][key] = d[cfd.columns[j+1].data] || 0;
-							if (key == "percentage" && j < buyerColumnCount - 1) {
-								buyerSummaryGraphData[j]["y"] = buyerSummaryTableData[j][key];
-							} else if (key != "percentage" && key != "average" && j < buyerColumnCount - 1) {
-								buyerDetailsGraphData[j].values = buyerDetailsGraphData[j].values || new Array(cfd.data.length - 2);
-								buyerDetailsGraphData[j].values[i] = {
-									"x": key,
-									"y": Number(buyerSummaryTableData[j][key]),
-									"series": i
-								};
-							}
-						}
-					}
-
-					var bpl = params[8].data[0];
-					/*var purchase=params[18].data;*/
-					/*Household income sum for applicant and co applicant , assuming it snever bethere for gurantor*/
-					var household_income=0;
-					var household=params[7].sections;
-					_.each(household, function(household){
-						household_income += parseInt(household.data[0]['Net Household Income']);
-
-					})
-					bpl.household_income=household_income;
-					bpl.ExistingLoanRepayments= params[0].data[0]['Existing Loan Repayments'];
-					bpl.avgMonDep=model.business.summary.bankStatement.averageMonthlyDeposit;
-					bpl.avgMonBal=model.business.summary.bankStatement.averageMonthlyBalance;
-
-					/*purchase splitup calculation under profit and loss*/
-                    
-                    var purchases= params[18].data;
-                    if(purchases.length!= 0){
-                    	  _.each(purchases, function(purchase){
-                    	 if(_.has(purchase, "data")){
-                    	 	if(purchase.data["Month"]== "Average Total by Seller"){
-                    	 		bpl['purchase_inv']= (purchase.data["Invoice Sales Amount"]== 0)?"0.00":purchase.data["Invoice Sales Amount"];
-                    	 		bpl['purchase_cash']= (purchase.data["Cash Sales Amount"]== 0)?"0.00":purchase.data["Cash Sales Amount"];
-                    	 		bpl['purchase_cash_pct']= purchase.data["Cash (%)"].toFixed(2) + " %";
-                    	 		bpl['purchase_inv_pct']= purchase.data["Invoice (%)"].toFixed(2) + " %";
-                    	 	}
-
-                    	 }
-
-                    })
-                    }else{
-                    	bpl['purchase_inv']= "0";
-                    	bpl['purchase_cash']= "0";
-                    	bpl['purchase_cash_pct']= "0.00 %";
-                    	bpl['purchase_inv_pct']= "0.00 %"
-
-                    }
-                  
-
-					var CalPercentage=function(total, value){
-						if(total== 0 && value!= 0) return "0.00 %";
-						if(total!= 0 && value== 0) return "0.00 %"
-						if(total== 0 && value== 0) return "0.00 %"
-						return ((value/total)*100).toFixed(2)+" %";
-					}
-
-					model.summary = {
-						"cashFlowDetails": {
-							"invoiceCash": {
-								"tableData": invoiceCashTableData,
-								"graphData": invoiceCashGraphData,
-								"graphOptions": {
-									"chart": {
-										"type": "multiBarChart",
-										"height": 280,
-										"duration": 500,
-										"stacked": false
-									}
-								}
-							},
-							"buyerSummary": {
-								"tableData": buyerSummaryTableData,
-								"graphData": buyerSummaryGraphData,
-								"graphOptions": {
-									"chart": {
-										"type": "pieChart",
-										"height": buyerSummaryGraphData.length * 50,
-										"duration": 500,
-										"labelsOutside": true,
-										"labelType": "value",
-										"legendPosition": "right"
-									}
-								}
-							},
-							"buyerDetails": {
-								"tableData": buyerSummaryTableData,
-								"graphData": buyerDetailsGraphData,
-								"graphOptions": {
-									"chart": {
-										"type": "multiBarChart",
-										"height": 280,
-										"duration": 500,
-										"stacked": false
-									}
-								}
-							}
-						},
-						"profitLoss": {
-							"summary": {
-								"tableData": [{
-									"title": "Income",
-									"amount": "",
-									"total": bpl['Total Business Revenue'],
-									"percentage": "",
-									"description": "",
-									"$config": {
-										"title": {
-											"className": "text-bold"
-										}
-									}
-								}, {
-									"title": "Purchases",
-									"amount": "",
-									"total": bpl['Purchases'],
-									"percentage": bpl['Purchases pct'],
-									"description": "of turnover",
-									"$config": {
-										"title": {
-											"className": "text-bold"
-										}
-									}
-								}, {
-									"title": "OPEX",
-									"amount": "",
-									"total": bpl['Opex'],
-									"percentage":CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Opex'])),
-									"description": "of turnover",
-									"$config": {
-										"title": {
-											"className": "text-bold"
-										}
-									}
-								}, {
-									"title": "Total Expenses",
-									"amount": "",
-									"total": bpl['Total Expenses'],
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Total Expenses'])),						
-									"description": "of turnover",
-									"$config": {
-									    "title": {
-										    "className": "text-bold"
-										}
-									}
-								}, {
-									"title": "Gross Income",
-									"amount": "",
-									"total": bpl['Gross Income'],
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Gross Income'])),
-									"description": "of turnover",
-									"$config": {
-									    "title": {
-										    "className": "text-bold"
-										}
-									}
-								}, {
-									"title": "Existing Loan Repayments",
-									"amount": "",
-									"total": bpl['Business Liabilities'],
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Business Liabilities'])),
-									"description": "of turnover",
-									"$config": {
-										"title": {
-											"className": "text-bold"
-										}
-									}
-								},{
-									"title": "Net Income",
-									"amount": "",
-									"total": bpl['Net Business Income'],
-									"percentage": bpl['Net Business Income pct'],
-									"description": "of turnover",
-									"$config": {
-									    "title": {
-										    "className": "text-bold"
-										}
-									}
-								},{
-									"title": "Household Net Income",
-									"amount": "",
-									"total": bpl['household_income'],
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['household_income'])),
-									"description": "of turnover",
-									"$config": {
-									    "title": {
-										    "className": "text-bold"
-										}
-									}
-								}, {
-									"title": "Revised Net Income",
-									"amount": "",
-									"total":  bpl['Net Income'],
-									"percentage":CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Net Income'])),
-									"description": "of turnover",
-									"$config": {
-									    "title": {
-										    "className": "text-bold"
-										}
-									}
-								},{
-									"title": "MAITREYA_EMI",
-									"amount": "",
-									"total": bpl['Kinara EMI'],
-									"percentage": CalPercentage(parseInt(bpl['Net Income']), parseInt(bpl['Kinara EMI'])),
-									"description": "of Revised Net Income",
-									"$config": {
-									    "title": {
-										    "className": "text-bold"
-										}
-									}
-
-								},{
-									"title": "Average Bank Balance",
-									"amount": "",
-									"total": bpl['avgMonBal']?bpl['avgMonBal']:("0.00") ,
-									"percentage": CalPercentage(parseInt(bpl['Net Income']), parseInt(bpl['avgMonBal'])) ,
-									"description": "of Revised Net Income",
-									"$config": {
-									    "title": {
-										    "className": "text-bold"
-										}
-									}
-								},{
-									"title": "Average Bank Deposit",
-									"amount": "",
-									"total": bpl['avgMonDep']?bpl['avgMonDep']:("0.00") ,
-									"percentage": CalPercentage(parseInt(bpl['Net Income']), parseInt(bpl['avgMonDep'])) ,
-									"description": "of Revised Net Income",
-									"$config": {
-									    "title": {
-										    "className": "text-bold"
-										}
-									}
-								
-								}]
-							},
-							"details": {
-								"tableData": [{
-									"title": "Income",
-									"amount": "",
-									"total": bpl['Total Business Revenue'],
-									"percentage": "",
-									"description": "",
-									"$config": {
-										"title": {
-											"className": "text-bold"
-										}
-									}
-								}, {
-									"title": "Invoice",
-									"amount": bpl['Invoice'],
-									"total": "",
-									"percentage": bpl['Invoice pct'],
-									"description": "of turnover",
-									"$config": {
-										"title": {
-											"className": "text-right"
-										}
-									}
-								}, {
-									"title": "Cash",
-									"amount": bpl['Cash'],
-									"total": "",
-									"percentage": bpl['Cash pct'],
-									"description": "of turnover",
-									"$config": {
-										"title": {
-											"className": "text-right"
-										}
-									}
-								}, {
-									"title": "Scrap & Other Business Income",
-									"amount": bpl['Scrap or any business related income'],
-									"total": "",
-									"percentage": bpl['Scrap or any business related income pct'],
-									"description": "of turnover",
-									"$config": {
-										"title": {
-											"className": "text-right"
-										}
-									}
-								},{
-									"title": "Purchases",
-									"amount": "",
-									"total": bpl['Purchases'],
-									"percentage": bpl['Purchases pct'],
-									"description": "of turnover",
-									"$config": {
-										"title": {
-											"className": "text-bold"
-										}
-									}
-								},	{
-                    	 			"title": "Invoice",
-									"amount": (bpl['purchase_inv']==null)?"0":bpl['purchase_inv'],
-									"total": "",
-									"percentage": (bpl['purchase_inv_pct']==null)?"0.00%":bpl['purchase_inv_pct'],
-									"description": "of total Purchases",
-									"$config": {
-										"title": {
-											"className": "text-right"
-										}
-									}
-                    	 		}, {
-                    	 			"title": "Cash",
-									"amount": (bpl['purchase_cash']==null)?"0":bpl['purchase_cash'],
-									"total": "",
-									"percentage": (bpl['purchase_cash_pct']==null)?"0.00%":bpl['purchase_cash_pct'],
-									"description": "of total Purchases",
-									"$config": {
-										"title": {
-											"className": "text-right"
-										}
-									}
-                    	 		}, {
-									"title": "OPEX",
-									"amount": "",
-									"total": bpl['Opex'],
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Opex'])),
-									"description": "of turnover",
-									"$config": {
-										"title": {
-											"className": "text-bold"
-										}
-									}
-								},{
-									"title": "Total Expenses",
-									"amount": "",
-									"total": bpl['Total Expenses'],
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']),parseInt(bpl['Total Expenses'])),
-									"description": "of turnover",
-									"$config": {
-									    "title": {
-										    "className": "text-bold"
-										}
-									}
-								}, {
-									"title": "Gross Income",
-									"amount": "",
-									"total": bpl['Gross Income'],
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Gross Income'])) ,
-									"description": "of turnover",
-									"$config": {
-									    "title": {
-										    "className": "text-bold"
-										}
-									}
-								}, {
-									"title": "Existing Loan Repayments",
-									"amount": "",
-									"total": bpl['Business Liabilities'],
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Business Liabilities'])),
-									"description": "of turnover",
-									"$config": {
-										"title": {
-											"className": "text-bold"
-										}
-									}
-								}, {
-									"title": "Net Income",
-									"amount": "",
-									"total": bpl['Net Business Income'],
-									"percentage": bpl['Net Business Income pct'],
-									"description": "of turnover",
-									"$config": {
-									    "title": {
-										    "className": "text-bold"
-										}
-									}
-								},{
-									"title": "Household Net Income",
-									"amount": "",
-									"total": bpl['household_income'],
-									"percentage": CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['household_income'])),
-									"description": "of turnover",
-									"$config": {
-									    "title": {
-										    "className": "text-bold"
-										}
-									}
-								}, {
-									"title": "Revised Net Income",
-									"amount": "",
-									"total":  bpl['Net Income'],
-									"percentage":CalPercentage(parseInt(bpl['Total Business Revenue']), parseInt(bpl['Net Income'])),
-									"description": "of turnover",
-									"$config": {
-									    "title": {
-										    "className": "text-bold"
-										}
-									}
-								}, {
-									"title": "MAITREYA_EMI",
-									"amount": "",
-									"total": bpl['Kinara EMI'],
-									"percentage": CalPercentage(parseInt(bpl['Net Income']), parseInt(bpl['Kinara EMI'])),
-									"description": "of Revised Net Income",
-									"$config": {
-									    "title": {
-										    "className": "text-bold"
-										}
-									}
-
-								},{
-									"title": "Average Bank Balance",
-									"amount": "",
-									"total": bpl['avgMonBal']?bpl['avgMonBal']:("0.00") ,
-									"percentage": CalPercentage(parseInt(bpl['Net Income']), parseInt(bpl['avgMonBal'])) ,
-									"description": "of Revised Net Income",
-									"$config": {
-									    "title": {
-										    "className": "text-bold"
-										}
-									}
-								},{
-									"title": "Average Bank Deposit",
-									"amount": "",
-									"total": bpl['avgMonDep']?bpl['avgMonDep']:("0.00") ,
-									"percentage": CalPercentage(parseInt(bpl['Net Income']), parseInt(bpl['avgMonDep'])) ,
-									"description": "of Revised Net Income",
-									"$config": {
-									    "title": {
-										    "className": "text-bold"
-										}
-									}
-								
-								}]
-							}
-						}
-					};
-
-					model.businessPL = {
-						"scrapIncome": bpl['Scrap or any business related income'],
-						"scrapIncomePCT": bpl['Scrap or any business related income pct'],
-						"totalBusinessIncome": bpl['Total Business Revenue'],
-						"purchasesPCT": bpl['Purchases pct'],
-						"grossIncome": bpl['Gross Income'],
-						"Opex": bpl['Opex'],
-						"EBITDA": bpl['EBITDA'],
-						"EBITDA_PCT": bpl['EBITDA pct'],
-						"businessLiabilities": bpl['Business Liabilities'],
-						"netBusinessIncome": bpl['Net Business Income'],
-						"netBusinessIncomePCT": bpl['Net Business Income pct'],
-						"kinaraEmi": bpl['Kinara EMI'],
-						"kinaraEmiPCT": bpl['Kinara EMI pct'],
-						"netIncome": bpl['Net Income'],
-						"finalKinaraEmi": bpl['Final Kinara EMI'],
-						"finalKinaraEmiPCT": bpl['Final Kinara EMI pct']
-					};
-
-					/* Populate values for Balance Sheet */
-					var bs = params[9].data[0];
-					model.assetsAndLiabilities = {
-						"cashInBank": bs['Cash in bank'],
-						"payables": bs['Payables'],
-						"accountsReceivable": bs['Accounts receivables'],
-						"shortTermDebts": bs['Short-term debts '],
-						"rawMaterial": bs['Raw material'],
-						"currentPortionOfLongTermDeb": bs['Current portion of long-term debt'],
-						"workInProgress": bs['Work in progress'],
-						"finishedGoods": bs['Finished goods'],
-						"totalCurrentAssets": bs['Total current assets'],
-						"totalCurrentLiabilities": bs['Total current liabilities'],
-						"machinery": bs['Machinery'],
-						"longTermDebt": bs['Long-term debt'],
-						"land": bs['Land'],
-						"ownCapital": bs['Own capital'],
-						"building": bs['Building'],
-						"vehicle": bs['Vehicle'],
-						"furniture": bs['Furniture'],
-						"fixture": bs['Fixtures'],
-						"totalFixedAssets": bs['Total fixed assets'],
-						"totalLengTermLiabilities": bs['Total long-term liabilities'],
-						"totalAssets": bs['Total Assets'],
-						"totalLiabilities": bs['Total Liabilities']
-					};
-					self.renderReady("financial-summary");
+					self.renderReady("financial-summary", params);
 				},
 				"business-customer": function(bundleModel, model, params) {
-					model.business = params;
-					//model.business.centreName = filterFilter(formHelper.enum('centre').data, {value: model.business.centreId})[0].name;
-
-					var bankStatementSummary = (function() {
-						var averageGraphData = [{
-							"key": "Avg Bank Deposits",
-							"color": "limegreen",
-							"values": []
-						}, {
-							"key": "Avg Bank Balances",
-							"color": "firebrick",
-							"values": []
-						}];
-						var bouncesGraphData = [{
-							"key": "No of EMI Bounces",
-							"color": "limegreen",
-							"values": []
-						}, {
-							"key": "No of non EMI Bounces",
-							"color": "firebrick",
-							"values": []
-						}];
-						var totalAverageDeposits = 0;
-						var totalAverageWithdrawals = 0;
-						var totalAvgbalanceon15 = 0;
-						var totalChequeBounces = 0;
-						var totalEMIBounces = 0;
-						var graphStatement = {};
-						for (i = 0; i < model.business.customerBankAccounts.length; i++) {
-							var acc = model.business.customerBankAccounts[i];
-							var totalDeposits = 0;
-							var totalWithdrawals = 0;
-							var balnceon15 = 0;
-							var noOfEmiChequeBounced = 0;
-							var noOfChequeBounced = 0;
-							for (j in acc.bankStatements) {
-								var stat = acc.bankStatements[j];
-								totalDeposits += stat.totalDeposits;
-								totalWithdrawals += stat.totalWithdrawals;
-								balnceon15 += stat.balanceAsOn15th;
-								noOfEmiChequeBounced += stat.noOfEmiChequeBounced;
-								noOfChequeBounced += stat.noOfChequeBounced;
-
-								var graphKey = stat.startMonth;							    
-								if(graphStatement[graphKey]){
-									graphStatement[graphKey].count++
-								}else{
-									graphStatement[graphKey]={};
-									graphStatement[graphKey].count=1;
-
-								}
-								graphStatement[graphKey].totalDeposits = graphStatement[graphKey].totalDeposits || 0;
-								graphStatement[graphKey].totalDeposits += stat.totalDeposits;
-								graphStatement[graphKey].totalWithdrawals = graphStatement[graphKey].totalWithdrawals || 0;
-								graphStatement[graphKey].totalWithdrawals += stat.totalWithdrawals;
-								graphStatement[graphKey].balnceon15 = graphStatement[graphKey].balnceon15 || 0;
-								graphStatement[graphKey].balnceon15 += stat.balanceAsOn15th;
-								graphStatement[graphKey].noOfEmiChequeBounced = graphStatement[graphKey].noOfEmiChequeBounced || 0;
-								graphStatement[graphKey].noOfEmiChequeBounced += stat.noOfEmiChequeBounced;
-								graphStatement[graphKey].noOfChequeBounced = graphStatement[graphKey].noOfChequeBounced || 0;
-								graphStatement[graphKey].noOfChequeBounced += stat.noOfChequeBounced;
-							}
-							acc.total = {
-								"startMonth": "Average",
-								"totalDeposits": totalDeposits,
-								"averageDeposits": totalDeposits / acc.bankStatements.length,
-								"totalWithdrawals": totalWithdrawals,
-								"averageWithdrawals": totalWithdrawals / acc.bankStatements.length,
-								"Avgbalnceon15": balnceon15 / acc.bankStatements.length,
-								"noOfEmiChequeBounced": noOfEmiChequeBounced,
-								"noOfChequeBounced": noOfChequeBounced
-							};
-							totalAverageDeposits += acc.total.averageDeposits;
-							totalAverageWithdrawals += acc.total.averageWithdrawals;
-							totalAvgbalanceon15 += acc.total.Avgbalnceon15,
-							totalEMIBounces += acc.total.noOfEmiChequeBounced;
-							totalChequeBounces += acc.total.noOfChequeBounced;
-							acc.bankStatements.push(acc.total);
-						}
-						
-                       // Graph data need to be sorted
-                        var sortedGraphStatement = {};
-                        Object.keys(graphStatement).sort().forEach(function(key) {
-                         sortedGraphStatement[key] = graphStatement[key];
-                         });
-
-                        /*_.sortKeysBy(graphStatement);
-                        _.sortKeysBy(obj, function(value, key) {
-                            return value;
-                        });*/
-
-
-						_.forOwn(sortedGraphStatement, function(v, k) {
-							k = moment(k, 'YYYY-MM-DD').format('MMM, YYYY');
-							averageGraphData[0].values.push({
-								"x": k,
-								"y": v.totalDeposits / v.count,
-								"series": 0
-							})
-							averageGraphData[1].values.push({
-								"x": k,
-								"y": v.balnceon15 / v.count,
-								"series": 1
-							})
-							bouncesGraphData[0].values.push({
-								"x": k,
-								"y": v.noOfEmiChequeBounced,
-								"series": 0
-							})
-							bouncesGraphData[1].values.push({
-								"x": k,
-								"y": v.noOfChequeBounced,
-								"series": 1
-							})
-						});
-						return {
-							"averageMonthlyDeposit": totalAverageDeposits,
-							"averageMonthlyWithdrawal": totalAverageWithdrawals,
-							"averageMonthlyBalance": totalAvgbalanceon15,
-							"totalAccounts": model.business.customerBankAccounts.length,
-							"totalEMIBounces": totalEMIBounces,
-							"totalChequeBounces": totalChequeBounces,
-							"average": {
-								"graphData": averageGraphData,
-								"graphOptions": {
-									"chart": {
-										"type": "multiBarChart",
-										"height": 280,
-										"duration": 500,
-										"stacked": false,
-										"reduceXTicks": false
-									}
-								}
-							},
-							"bounces": {
-								"graphData": bouncesGraphData,
-								"graphOptions": {
-									"chart": {
-										"type": "multiBarChart",
-										"height": 280,
-										"duration": 500,
-										"stacked": false,
-										"rotateLabels": -90,
-										"showControls": false,
-										"reduceXTicks": false
-									}
-								}
-							}
-						};
-					})();
-
-					model.business.summary = {
-						"bankStatement": bankStatementSummary
-					}
-					self.renderReady("business-customer");
+					self.renderReady("business-customer", params);
 				}
 			},
 			actions: {}

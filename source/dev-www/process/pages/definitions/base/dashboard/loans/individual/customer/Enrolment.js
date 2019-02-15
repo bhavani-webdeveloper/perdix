@@ -24,6 +24,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "ContactInformation.state":{
                         "required": false
                     },
+                    "ContactInformation.mobilePhone" : {
+                        "inputmode": "number",
+                        "numberType": "number",
+                        "type": "number",
+                    },
                     "Machinery.fixedAssetsMachinaries.hypothecatedToUs": {
                         "title": "HYPOTHECATED_TO_MAITREYA"
 
@@ -162,9 +167,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.companyOperatingSince":{
                         "required": true
                     },
-                    "EnterpriseInformation.companyEmailId":{
-                        "required": true
-                    },
+                    // "EnterpriseInformation.companyEmailId":{
+                    //     "required": true
+                    // },
                     "EnterpriseInformation.photoImageId":{
                         "required": true
                     },
@@ -400,7 +405,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         "required":true
                     },
                     "ContactInformation.distanceFromBranch":{
-                        "enumCode": "distance_from_branch",
+                        "enumCode": "distanceFromBranchOffice",
                     }  
                     
             }
