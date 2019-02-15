@@ -113,13 +113,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             orderNo:20,
                             title:"RELATION1",
                             required:true,
-                            type:"string"
+                            type:"select"
                         },
                         "IndividualReferences.verifications.mobileNo":{
                             orderNo:30,
                             title:"PHONE_NUMBER",
                             required:true,
-                            type:"string"
+                            "type": "number"                            
                         },
                         "IndividualReferences.verifications.address":{
                             required:true

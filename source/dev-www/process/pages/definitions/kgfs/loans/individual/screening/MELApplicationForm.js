@@ -72,6 +72,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 $this.bundlePages.push({
                                     pageClass: 'MEL-Application',
                                     model: {
+                                        enrolmentProcess: loanProcess.applicantEnrolmentProcess,
                                         loanProcess: loanProcess
                                     }
                                 });                               
@@ -99,6 +100,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 $this.bundlePages.push({
                                     pageClass: 'MEL-Application',
                                     model: {
+                                        enrolmentProcess: loanProcess.applicantEnrolmentProcess,
                                         loanProcess: loanProcess
                                     }
                                 });

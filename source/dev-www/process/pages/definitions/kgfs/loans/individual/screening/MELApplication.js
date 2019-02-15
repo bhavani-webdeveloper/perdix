@@ -68,7 +68,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     PageHelper.hideLoader();
   
                     /* Setting data for the form */
-                    // model.customer = model.enrolmentProcess.customer;
+                    model.customer = model.enrolmentProcess.customer;
                     var branchId = SessionStore.getBranchId();
                     
 

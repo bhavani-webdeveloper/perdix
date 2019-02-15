@@ -148,7 +148,6 @@ define([],function(){
                 function round(x) {
                   return Math.ceil(x);
                 }
-
             var configFile = function() {
                 return{
                     "loanProcess.loanAccount.currentStage":{
@@ -191,6 +190,15 @@ define([],function(){
                                 }
                             }
 
+                        }
+                    },
+                    "loanProcess.loanAccount.loanType":{
+                        "SECURED":{
+                            "overrides":{
+                                "PreliminaryInformation.productType":{
+                                    "readonly":true
+                                }
+                            }
                         }
                     }
                 }
@@ -264,7 +272,7 @@ define([],function(){
                         "required": true,
                         "enumCode":"booking_loan_type",
                         "onChange": function(valueObj,context,model){
-                                clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
+                                clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3"],model);
                                 // model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                                 if(valueObj == "JEWEL"){
                                     getGoldRate(model);
@@ -280,7 +288,7 @@ define([],function(){
                         "PreliminaryInformation.partner": {
                             "enumCode": "loan_partner",
                             "onChange": function(valueObj,context,model){
-                                clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
+                                clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3"],model);
                                 // model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                                 //clearAll('additions',['tenurePlaceHolder','interestPlaceHolder','amountPlaceHolder'],model)
                             },
@@ -291,7 +299,7 @@ define([],function(){
                             "enumCode": "loan_product_frequency",
                             "onChange": function(valueObj,context,model){
                                 computeEstimatedEMI(model);
-                                clearAll('loanAccount',['productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
+                                clearAll('loanAccount',['productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3"],model);
                                 // model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                                 //clearAll('additions',['tenurePlaceHolder','interestPlaceHolder','amountPlaceHolder'],model)
                             }
@@ -322,7 +330,7 @@ define([],function(){
                                 return deferred.promise;
                             },
                             onSelect: function (valueObj, model, context) {
-                                clearAll("loanAccount",["loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
+                                clearAll("loanAccount",["loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3"],model);
                                 model.loanAccount.productCode = valueObj.productCode;
                                 // model.additions.tenurePlaceHolder = valueObj.tenure_from == valueObj.tenure_to ? valueObj.tenure_from : valueObj.tenure_from + '-' + valueObj.tenure_to;
                                 // model.additions.amountPlaceHolder = valueObj.amount_from == valueObj.amount_to ? valueObj.amount_from : valueObj.amount_from + '-' + valueObj.amount_to;
@@ -349,7 +357,8 @@ define([],function(){
                             },
                         },                        
                         "PreliminaryInformation.comfortableEMI": {
-                            "required": true
+                            "required": true,
+                            "readonly":true
                         },
                         "PreliminaryInformation.modeOfDisbursement": {
                             "required": true
