@@ -56,21 +56,20 @@ define([],function(){
                     if(!_.isNaN(model.loanAccount.commercialCibilCharge))
                         fee+=model.loanAccount.commercialCibilCharge;
                 $log.info(model.loanAccount.commercialCibilCharge);
-
                 // Get the user's input from the form. Assume it is all valid.
                 // Convert interest from a percentage to a decimal, and convert from
                 // an annual rate to a monthly rate. Convert payment period in years
                 // to the number of monthly payments.
 
-                if(model.loanAccount.loanAmountRequested == '' || model.loanAccount.expectedInterestRate == '' || model.loanAccount.frequency == '' || model.loanAccount.tenureRequested == '')
+                if(model.loanAccount.loanAmountRequested == '' || model.loanAccount.interestRate == '' || model.loanAccount.frequency == '' || model.loanAccount.tenureRequested == '')
                     return;
 
                 var principal = model.loanAccount.loanAmountRequested;
-                var interest = model.loanAccount.expectedInterestRate / 100 / 12;
+                var interest = model.loanAccount.interestRate / 100 / 12;
                 var payments;
-                if (model.loanAccount.frequency == 'Yearly')
+                if (model.loanAccount.frequency == 'Y')
                     payments = model.loanAccount.tenureRequested * 12;
-                else if (model.loanAccount.frequency == 'Monthly')
+                else if (model.loanAccount.frequency == 'M')
                     payments = model.loanAccount.tenureRequested;
 
                 // Now compute the monthly payment figure, using esoteric math.
@@ -102,15 +101,14 @@ define([],function(){
                 // Convert interest from a percentage to a decimal, and convert from
                 // an annual rate to a monthly rate. Convert payment period in years
                 // to the number of monthly payments.
-
                 if(model.loanAccount.loanAmount == '' || model.loanAccount.interestRate == '' || model.loanAccount.frequency == '' || model.loanAccount.tenure == '')
                     return;
                 var principal = model.loanAccount.loanAmount;
                 var interest = model.loanAccount.interestRate / 100 / 12;
                 var payments;
-                if (model.loanAccount.frequency == 'Yearly')
+                if (model.loanAccount.frequency == 'Y')
                     payments = model.loanAccount.tenure * 12;
-                else if (model.loanAccount.frequency == 'Monthly')
+                else if (model.loanAccount.frequency == 'M')
                     payments = model.loanAccount.tenure;
 
                 // Now compute the monthly payment figure, using esoteric math.
