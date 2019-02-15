@@ -40,16 +40,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
                             minimum: 0,
-                            maximum: 3,
-                            order:30
+                            maximum: 1,
+                            order:60
                         },
                         // {
                         //     pageName: 'shramsarathi.dashboard.loans.individual.customer.EnterpriseEnrolment2',
                         //     title: 'BUSINESS',
                         //     pageClass: 'business',
-                        //     minimum: 0,
+                        //     minimum: 1,
                         //     maximum: 1,
-                        //     order:60
+                        //     order:40
                         // },
                         {
                             pageName: 'shramsarathi.dashboard.loans.individual.screening.LoanRequest',
@@ -102,7 +102,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         var page = value.bundlePages[i];
                         if (page.pageClass == "applicant"){
                             out[0] = page.model.customer.firstName;
-                        } //else if (page.pageClass == "business"){
+                        } //  else if (page.pageClass == "business"){
                         //     out[1] = page.model.customer.firstName;
                         // }
                     }
@@ -430,14 +430,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             BundleManager.broadcastEvent('cb-check-update', cbCustomer);
                         }
                     },
-                    // "business-updated": function(pageObj, bundlePageObj, obj){
-                    //     /* Update other pages */
-                    //     BundleManager.broadcastEvent("business-updated", obj);
-                    // },
-                    // "new-business": function(pageObj, bundlePageObj, obj){
-                    //     /* Update other pages */
-                    //     BundleManager.broadcastEvent("new-business", obj);
-                    // }
+                    "business-updated": function(pageObj, bundlePageObj, obj){
+                        /* Update other pages */
+                        BundleManager.broadcastEvent("business-updated", obj);
+                    },
+                    "new-business": function(pageObj, bundlePageObj, obj){
+                        /* Update other pages */
+                        BundleManager.broadcastEvent("new-business", obj);
+                    }
                 },
                 preSave: function(offlineData) {
                     var defer = $q.defer();
