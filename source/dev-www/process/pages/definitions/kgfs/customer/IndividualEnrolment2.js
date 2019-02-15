@@ -1082,7 +1082,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "KYC.additionalKYCs.kyc1ValidUptoDate",
                
                 "ContactInformation",
-                "ContactInformation.contactDetailsAlsoBusinessContactDetails",
                 "ContactInformation.residentialAddressFieldSet",
                 "ContactInformation.doorNo",
                 "ContactInformation.street",

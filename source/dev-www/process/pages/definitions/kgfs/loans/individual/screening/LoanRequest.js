@@ -62,15 +62,15 @@ define([],function(){
                 // an annual rate to a monthly rate. Convert payment period in years
                 // to the number of monthly payments.
 
-                if(model.loanAccount.loanAmountRequested == '' || model.loanAccount.expectedInterestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenureRequested == '')
+                if(model.loanAccount.loanAmountRequested == '' || model.loanAccount.expectedInterestRate == '' || model.loanAccount.frequency == '' || model.loanAccount.tenureRequested == '')
                     return;
 
                 var principal = model.loanAccount.loanAmountRequested;
                 var interest = model.loanAccount.expectedInterestRate / 100 / 12;
                 var payments;
-                if (model.loanAccount.frequencyRequested == 'Yearly')
+                if (model.loanAccount.frequency == 'Yearly')
                     payments = model.loanAccount.tenureRequested * 12;
-                else if (model.loanAccount.frequencyRequested == 'Monthly')
+                else if (model.loanAccount.frequency == 'Monthly')
                     payments = model.loanAccount.tenureRequested;
 
                 // Now compute the monthly payment figure, using esoteric math.
@@ -103,14 +103,14 @@ define([],function(){
                 // an annual rate to a monthly rate. Convert payment period in years
                 // to the number of monthly payments.
 
-                if(model.loanAccount.loanAmount == '' || model.loanAccount.interestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenure == '')
+                if(model.loanAccount.loanAmount == '' || model.loanAccount.interestRate == '' || model.loanAccount.frequency == '' || model.loanAccount.tenure == '')
                     return;
                 var principal = model.loanAccount.loanAmount;
                 var interest = model.loanAccount.interestRate / 100 / 12;
                 var payments;
-                if (model.loanAccount.frequencyRequested == 'Yearly')
+                if (model.loanAccount.frequency == 'Yearly')
                     payments = model.loanAccount.tenure * 12;
-                else if (model.loanAccount.frequencyRequested == 'Monthly')
+                else if (model.loanAccount.frequency == 'Monthly')
                     payments = model.loanAccount.tenure;
 
                 // Now compute the monthly payment figure, using esoteric math.
@@ -250,12 +250,6 @@ define([],function(){
                             "required": true,
                             "readonly": true
                         },
-                        "PreliminaryInformation.frequencyRequested": {
-                            "required": true,
-                            onChange:function(value,form,model){
-                                computeEstimatedEMI(model);
-                            }
-                        },
                         "PreliminaryInformation.tenureRequested": {
                             "required": true,
                             onChange:function(value,form,model){
@@ -270,7 +264,7 @@ define([],function(){
                         },
                         "PreliminaryInformation.productType": {
                         "required": true,
-                        "enumCode": "product_type",
+                        "enumCode":"booking_loan_type",
                         "onChange": function(valueObj,context,model){
                                 clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
                                 // model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
@@ -295,8 +289,10 @@ define([],function(){
                         },
                         "PreliminaryInformation.frequency": {
                             "required":true,
+                            "title":"FREQUENCY_REQUESTED",
                             "enumCode": "loan_product_frequency",
                             "onChange": function(valueObj,context,model){
+                                computeEstimatedEMI(model);
                                 clearAll('loanAccount',['productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
                                 // model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                                 //clearAll('additions',['tenurePlaceHolder','interestPlaceHolder','amountPlaceHolder'],model)
@@ -396,7 +392,7 @@ define([],function(){
                         "CollateralInformation": {
                             "title":"COLLATERAL",
                             "orderNo":20,
-                            "condition": "model.loanAccount.loanType=='Secured'"
+                            "condition": "model.loanAccount.loanType=='SECURED'"
                         },
                         "CollateralInformation.collateral": {
                             "title":"ADD_COLLATERAL",
@@ -436,7 +432,6 @@ define([],function(){
                     "PreliminaryInformation.loanPurpose1",
                     "PreliminaryInformation.loanPurpose2",
                     "PreliminaryInformation.loanAmountRequested",
-                    "PreliminaryInformation.frequencyRequested",
                     "PreliminaryInformation.tenureRequested",
                     "PreliminaryInformation.comfortableEMI",
                     "PreliminaryInformation.modeOfDisbursement",
@@ -579,8 +574,6 @@ define([],function(){
                                                 "key":"loanAccount.loanType",
                                                 "title": "PRODUCT_TYPE",
                                                 "type": "select",
-                                                "enumCode":"product_type",
-
                                                 "orderNo": 9
                                             },
                                             "frequency": {

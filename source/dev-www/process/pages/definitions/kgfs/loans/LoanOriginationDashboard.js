@@ -41,20 +41,19 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanOriginationDashboar
                             'villageName': '',
                             'customerName': '',
                             'page': 1,
-                            'per_page': 1,
-                            'centreCode': centre.centreCode
+                            'per_page': 1
                         }).$promise.then(function(response, headerGetter) {
-                            sqMenu.data = sqMenu.data + Number(response.headers['x-total-count']);
+                            sqMenu.data = Number(response.headers['x-total-count']);
                         }, function() {
                             sqMenu.data = '-';
                         });
                     });   
             }
 
-            var sqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.MELApplicationFormQueue"];
+            var mafqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.MELApplicationFormQueue"];
 
-            if (sqMenu) {
-                sqMenu.data = 0;
+            if (mafqMenu) {
+                mafqMenu.data = 0;
                     _.forEach(centres, function(centre) {
                         IndividualLoan.search({
                             'stage': 'MELApplication',
@@ -65,21 +64,20 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanOriginationDashboar
                             'customerName': '',
                             'page': 1,
                             'per_page': 1,
-                            'centreCode': centre.centreCode
                         }).$promise.then(function(response, headerGetter) {
-                            sqMenu.data = sqMenu.data + Number(response.headers['x-total-count']);
+                            mafqMenu.data = Number(response.headers['x-total-count']);
                         }, function() {
-                            sqMenu.data = '-';
+                            mafqMenu.data = '-';
                         });
                     });   
             }
 
 
 
-            var srqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.ApplicationQueue"];
-            if (srqMenu) {
+            var aqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.ApplicationQueue"];
+            if (aqMenu) {
                 IndividualLoan.search({
-                    'stage': 'ApplicationQueue',
+                    'stage': 'Application',
                     'enterprisePincode': '',
                     'applicantName': '',
                     'area': '',
@@ -88,9 +86,9 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanOriginationDashboar
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    srqMenu.data = Number(response.headers['x-total-count']);
+                    aqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
-                    srqMenu.data = '-';
+                    aqMenu.data = '-';
                 });
             }
 
@@ -185,8 +183,8 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanOriginationDashboar
             }
 
 
-            var lrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.RejectedQueue"];
-            if (lrqMenu) {
+            var rqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.RejectedQueue"];
+            if (rqMenu) {
                 IndividualLoan.search({
                     'stage':  'Rejected',
                     'enterprisePincode': '',
@@ -197,9 +195,9 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanOriginationDashboar
                     'page': 1,
                     'per_page': 1,
                 }).$promise.then(function(response, headerGetter) {
-                    lrqMenu.data = Number(response.headers['x-total-count']);
+                    rqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
-                    lrqMenu.data = '-';
+                    rqMenu.data = '-';
                 });
             }
 
