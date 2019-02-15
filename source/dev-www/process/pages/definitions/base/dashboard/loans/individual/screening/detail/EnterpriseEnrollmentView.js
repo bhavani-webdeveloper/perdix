@@ -6,12 +6,6 @@ define({
     ],
     $pageFn: function($log, $state, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, $stateParams, $state,
         PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, Model_ELEM_FC, filterFilter, irfCurrencyFilter, $filter) {
-            var validateCustomerExist = function(model) {
-                if(!model.customer) {
-                    return false;
-                }
-                return true;
-            }
             return {
             "type": "schema-form",
             "title": "ENTERPRISE_ENROLLMENT_VIEW",
@@ -1164,9 +1158,7 @@ define({
             },
             eventListeners: {
                 "financial-summary": function(bundleModel, model, params) {
-                    if (!validateCustomerExist(model)){
-                        return;
-                    }
+                  
                     model.proxyScore = {};
                     model.proxyScore = params[2].data[5];
                     model.liability = params[19].subgroups;
