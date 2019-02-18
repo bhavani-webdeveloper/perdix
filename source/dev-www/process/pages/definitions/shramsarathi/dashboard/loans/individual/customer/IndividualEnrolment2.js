@@ -119,7 +119,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "Screening": {
                             "excludes": [
+<<<<<<< HEAD
                                // "IndividualFinancials",
+=======
+                                //"IndividualFinancials",
+>>>>>>> 5c4bf819abaf0491294579d7c951b40282e59a38
                                 "HouseVerification.latitude",
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
@@ -328,7 +332,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "KYC": {
                             "excludes": [
-                                "IndividualFinancials",
+                                //"IndividualFinancials",
                                 "HouseVerification.latitude",
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
@@ -1629,6 +1633,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var overridesFields = function (bundlePageObj) {
                 return {
+                    "IndividualFinancials.expenditures.annualExpenses":{
+                        "required":true,
+                        "title":"EXPENSE_AMOUNT"
+                    },
+                    "IndividualFinancials.expenditures.frequency":{
+                        "required":true
+                    },
                     "FamilyDetails.familyMembers.incomes.occupation":{
                         "required":true
                     },
@@ -1811,7 +1822,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "FamilyDetails.familyMembers.relationShip":{
                         "title":"RELATIONSHIP_WITH_MIGRANT",
-                        "required":false
                     },
                     "FamilyDetails.familyMembers.familyMemberFirstName":{
                         "title":"MIGRANT_NAME",
@@ -2030,10 +2040,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth": {
                         "required": false
-                    },
-                    "IndividualInformation.maritalStatus": {
-                        "required": true
-                    },
+                    }
 
                 }
             }
@@ -2672,7 +2679,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "maritalStatus": {
                                                     "orderNo": 8,
                                                     key: "customer.familyMembers[].maritalStatus",
-                                                    "required":true,
                                                     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
                                                     type: "select",
                                                     title: "T_MARITAL_STATUS"
@@ -2734,32 +2740,37 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "key":"customer.familyMembers.incomes.workSector",
                                                             "title":"WORK_SECTOR",
                                                             "type":"select",
-                                                            "enum":"occupation"
+                                                            "enum":"occupation",
+                                                            "required":true
                                                         },
                                                         "occupationType":{
                                                             "key":"customer.familyMembers.incomes.occupationType",
                                                             "title":"OCCUPATION_TYPE",
                                                             "type":"select",
-                                                            "enum":"occupation"
+                                                            "enum":"occupation",
+                                                            "required":true
                                                             
                                                         },
                                                         "skillLevel":{
                                                             "key":"customer.familyMembers.incomes.skillLevel",
                                                             "title":"SKILL_LEVEL",
                                                             "type":"select",
-                                                            "enum":"occupation"
+                                                            "enum":"occupation",
+                                                            "required":true
                                                             
                                                         },
                                                         "avarageTimeSpend":{
                                                             "key":"customer.familyMembers.incomes.averageTimeSpent",
                                                             "title":"AVARAGE_TIME_SPENT",
-                                                            "type":"number"
+                                                            "type":"number",
+                                                            "required":true
                                                            
                                                         },
                                                         "avarageReturn":{
                                                             "key":"customer.familyMembers.incomes.averageReturn",
                                                             "title":"AVARAGE_RETURN",
                                                             "type":"select",
+                                                            "required":true,
                                                             titleMap: {
                                                                 "lessThanAMonth": "Less Than a Month",
                                                                 "biMonthly": "Bi Monthly",
@@ -2772,6 +2783,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "key":"customer.familyMembers.incomes.incomeType",
                                                             "title":"INCOME_FROM",
                                                             "type":"radios",
+                                                            "required":true,
                                                             titleMap: {
                                                                 "sourceIncome": "Source Income",
                                                                 "destinationIncome": "Destination Income"

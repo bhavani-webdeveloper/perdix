@@ -835,8 +835,6 @@
            "title":"User Defined Details",
            "type":"object",
            "required":[  
-              "udf1",
-              "udf2"
            ],
            "properties":{  
               "udf1":{  
