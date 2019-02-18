@@ -32,7 +32,7 @@ define({////shramsarathi.dashboard.loans.individual.screening.FieldAppraisal
 							}
 	                    },
 						"centre": {
-							"title": "CENTRE",
+							"title": "ZONE_NAME",
 							"type": ["integer", "null"],
 							"x-schema-form": {
 								"type": "select",
