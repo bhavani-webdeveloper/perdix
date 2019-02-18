@@ -82,7 +82,7 @@ define({
 						"centre": {
 							"title": "ZONE_NAME",
 							"type": "string",
-							"required": false,
+							"required": true,
 							"x-schema-form": {
 								type: "lov",
 	                            autolov: true,
