@@ -1596,7 +1596,359 @@ define([],function(){
                 ];
  
             }
- 
+
+            var formRequest = function(model){
+                return {
+                "overrides": overridesFields(model),
+                "includes": getIncludes(model),
+                "excludes": [
+                ],
+                "options": {
+                    "repositoryAdditions": {
+                        "PreliminaryInformation":{
+                            "items": {
+                                "transactionType": {
+                                    key: "loanAccount.transactionType",
+                                    title: "TRANSACTION_TYPE",
+                                    type: "select",
+                                    required: true,
+                                    "titleMap": {
+                                        "New Loan": "New Loan",
+                                        "Renewal": "Renewal",
+                                        "Loan Restructure": "Loan Restructure",
+                                        "Internal Foreclosure": "Internal Foreclosure"
+                                    },
+                                    "orderNo": 1,
+                                    condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal'",
+                                    onChange:function(value,form,model){
+                                        if(_.hasIn(model, 'loanAccount') && model.loanAccount.transactionType == 'New Loan') {
+                                            model.loanAccount.linkedAccountNumber = null;
+                                        }
+                                    }
+                                },
+                                "expectedEmi": {
+                                    "key": "loanAccount.expectedEmi",
+                                    "title": "ESTIMATED_KINARA_EMI",
+                                    "orderNo": 91,
+                                    type: "amount",
+                                    "readonly": true
+                                },
+                                "linkedAccountNumber1":{
+                                    key:"loanAccount.linkedAccountNumber",
+                                    title:"LINKED_ACCOUNT_NUMBER",
+                                    readonly:true,
+                                    required: false,
+                                    "orderNo":11,
+                                    condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                                },
+                                "baseLoanAccount":{
+                                    key: "loanAccount.baseLoanAccount",
+                                    title: "BASE_LOAN_ACCOUNT",
+                                    readonly:true,
+                                    required: false,
+                                    "orderNo":12,
+                                    condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+            
+                                 },
+                                 "transactionType2":{
+                                    key: "loanAccount.transactionType",
+                                    title: "TRANSACTION_TYPE",
+                                    readonly:true,
+                                    required: false,
+                                    "orderNo":13,
+                                    condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                                 },
+                                 "BusinessSaveWarning":{
+                                    "type": "section",
+                                    "htmlClass": "alert alert-warning",
+                                    "condition": "!model.loanAccount.customerId",
+                                    "html":"<h4><i class='icon fa fa-warning'></i>Business not yet enrolled.</h4> Kindly save the business details before proceed."
+                                },
+                                "MedicalTestWarning":{
+                                    "type": "section",
+                                    "htmlClass": "alert alert-warning",
+                                    "condition": "model.applicant.age1 >= 41 && model.applicant.age1 <= 60 && model.loanAccount.loanAmountRequested >= 2000001 && model.loanAccount.loanAmountRequested <= 3000000 || model.applicant.age1 >= 61 && model.applicant.age1 <= 65 && model.loanAccount.loanAmountRequested < 3000000",
+                                    "html":"<h4><i class='icon fa fa-warning'></i>Medical Test is Mandatory</h4>"
+                                }
+                            }
+                          
+                        },
+                        "LoanRecommendation":{
+                            "items":{
+                                "estimatedEmi":{
+                                    "key": "loanAccount.estimatedEmi",
+                                    "type": "amount",
+                                    "orderNo":40,
+                                    "title": "ESTIMATED_MAITREYA_EMI",
+                                    "readonly": true
+                                },
+                                "estimatedEmi1":{
+                                    "key": "loanAccount.estimatedEmi",
+                                    "type": "amount",
+                                    "orderNo":60,
+                                    "title": "EXPECTED_SECURITY_EMI",
+                                    "readonly": true
+                                }
+                            }
+
+                        },
+                        // "NomineeDetails": {
+                        //     "type": "box",
+                        //     "title": "NOMINEE_DETAILS",
+                        //     "orderNo": 300,
+                        //     "items": {
+                        //         "nominees": {
+                        //             "key": "loanAccount.nominees",
+                        //             "type": "array",
+                        //             "notitle": "true",
+                        //             "view": "fixed",
+                        //             "add": null,
+                        //             "remove": null,
+                        //             "items": {
+                        //                 "nomineeButton": {
+                        //                     "type": "button",
+                        //                     "title": "NOMINEE_ADDRESS_APPLICANT",
+                        //                     "onClick": "actions.nomineeAddress(model, formCtrl, form, $event)"
+                        //                 }
+                        //             }
+                        //         }
+                        //     }
+                        // },
+                        "LoanMitigants":{
+                            "items": {
+                                "loanMitigantsByParameter":{
+                                    key: "loanMitigantsByParameter",
+                                    type: "array",
+                                    startEmpty: true,
+                                    add:null,
+                                    remove:null,
+                                    "view":"fixed",
+                                    "titleExpr": "model.loanMitigantsByParameter[arrayIndex].Parameter",
+                                    items: [{
+                                        key: "loanMitigantsByParameter[].Mitigants",
+                                        "type":"section",
+                                        "html": "<div ng-bind-html='model.loanMitigantsByParameter[arrayIndex].Mitigants'></div>    "
+                                    }]
+                                }
+                            }
+                        },
+                        "CBCheck": {
+                            "type": "box",
+                            "title": "CB Check",
+                            "condition": "model.currentStage =='Screening'",
+                            "orderNo": 550,
+                            "items": {
+                               'CBCheckIgnore' : {
+                                "key": "loanAccount.cbCheckIgnore",
+                                "type": "radios",
+                                "titleMap": {
+                                    "YES": "YES",
+                                    "NO": "NO"
+                                },
+                                "title": "CB Check Ignore",
+                               }
+                            }
+                        },
+
+                        "PostReview": {
+                            "type": "box",
+                            "title": "POST_REVIEW",
+                            "condition": "model.loanAccount.id  && model.currentStage!=='Rejected'",
+                            "orderNo": 600,
+                            "items": {
+                                "action": {
+                                    "key": "review.action",
+                                    "type": "radios",
+                                    "condition": "model.currentStage !== 'Screening'",
+                                    "titleMap": {
+                                        "REJECT": "REJECT",
+                                        "SEND_BACK": "SEND_BACK",
+                                        "PROCEED": "PROCEED",
+                                        "HOLD": "HOLD"
+                                    }
+                                },
+                                "action1": {
+                                    "key": "review.action",
+                                    "type": "radios",
+                                    "condition": "model.currentStage == 'Screening'",
+                                    "titleMap": {
+                                        "REJECT": "REJECT",
+                                        "PROCEED": "PROCEED",
+                                        "HOLD": "HOLD"
+                                    }
+                                },
+                                "proceed": {
+                                    "type": "section",
+                                    "condition": "model.review.action=='PROCEED'",
+                                    "items": {
+                                        "remarks": {
+                                            "title": "REMARKS",
+                                            "key": "loanProcess.remarks",
+                                            "type": "textarea",
+                                            "required": true
+                                        },
+                                        "proceedButton": {
+                                            "key": "review.proceedButton",
+                                            "type": "button",
+                                            "title": "PROCEED",
+                                            "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                        }
+                                    }
+                                },
+                                "sendBack": {
+                                    "type": "section",
+                                    "condition": "model.review.action=='SEND_BACK'",
+                                    "items": {
+                                        "remarks": {
+                                            "title": "REMARKS",
+                                            "key": "loanProcess.remarks",
+                                            "type": "textarea",
+                                            "required": true
+                                        },
+                                       "stage": {
+                                            "key": "loanProcess.stage",
+                                            "required": true,
+                                            "type": "lov",
+                                            "title": "SEND_BACK_TO_STAGE",
+                                            "resolver": "IREPSendBacktoStageLOVConfiguration"
+                                        },
+                                       "sendBackButton": {
+                                            "key": "review.sendBackButton",
+                                            "type": "button",
+                                            "title": "SEND_BACK",
+                                            "onClick": "actions.sendBack(model, formCtrl, form, $event)"
+                                        }
+                                    }
+                                },
+                                "reject": {
+                                    "type": "section",
+                                    "condition": "model.review.action=='REJECT'",
+                                    "items": {
+                                        "remarks": {
+                                            "title": "REMARKS",
+                                            "key": "loanProcess.remarks",
+                                            "type": "textarea",
+                                            "required": true
+                                        },
+                                        "rejectReason": {
+                                            "key": "loanAccount.rejectReason",
+                                            "type": "lov",
+                                            "autolov": true,
+                                            "required":true,
+                                            "title": "REJECT_REASON",
+                                            "resolver": "IREPRejectReasonLOVConfiguration"
+                                        },
+                                        "rejectButton": {
+                                            "key": "review.rejectButton",
+                                            "type": "button",
+                                            "title": "REJECT",
+                                            "required": true,
+                                            "onClick": "actions.reject(model, formCtrl, form, $event)"
+                                        }
+                                    }
+                                },
+                                "hold": {
+                                    "type": "section",
+                                    "condition": "model.review.action=='HOLD'",
+                                    "items": {
+                                    "remarks": {
+                                        "title": "REMARKS",
+                                        "key": "loanProcess.remarks",
+                                        "type": "textarea",
+                                        "required": true
+                                    },
+                                    "holdButton": {
+                                        "key": "review.holdButton",
+                                        "type": "button",
+                                        "title": "HOLD",
+                                        "required": true,
+                                        "onClick": "actions.holdButton(model, formCtrl, form, $event)"
+                                    }
+                                }
+                                }
+                            }
+                        },
+                        "revertReject": {
+                            "type": "box",
+                            "title": "REVERT_REJECT",
+                            "orderNo":600,
+                            "condition": "model.currentStage=='Rejected'",
+                            "items": {
+                                "remarks": {
+                                    title: "REMARKS",
+                                    key: "review.remarks",
+                                    type: "textarea",
+                                    required: true
+                                },
+                                "rejectReason": {
+                                    title: "Reject Reason",
+                                    key: "loanAccount.rejectReason",
+                                    readonly: true,
+                                    type: "textarea",
+                                },
+                                "targetStage": {
+                                    key: "review.targetStage",
+                                    title: "SEND_BACK_TO_STAGE",
+                                    type: "lov",
+                                    lovonly:true,
+                                    autolov: true,
+                                    required: true,
+                                    searchHelper: formHelper,
+                                    search: function(inputModel, form, model, context) {
+                                        var stage1 = model.review.preStage;
+                                        var targetstage = formHelper.enum('targetstage').data;
+                                        var out = [{'name': stage1, 'value': stage1}];
+                                        for (var i = 0; i < targetstage.length; i++) {
+                                            var t = targetstage[i];
+                                            if (t.field1 == stage1) {
+                                                out.push({
+                                                    name: t.name,
+                                                })
+                                            }
+                                        }
+                                        return $q.resolve({
+                                            headers: {
+                                                "x-total-count": out.length
+                                            },
+                                            body: out
+                                        });
+                                    },
+                                    onSelect: function(valueObj, model, context) {
+                                        model.review.targetStage = valueObj.name;
+                                    },
+                                    getListDisplayItem: function(item, index) {
+                                        return [
+                                            item.name
+                                        ];
+                                    }
+
+                                },
+                                "sendBackButton": {
+                                    "key": "review.sendBackButton",
+                                    "type": "button",
+                                    "title": "SEND_BACK",
+                                    "onClick": "actions.sendBack(model, formCtrl, form, $event)"
+                                }
+                            }
+
+                        }
+                       
+
+                    },
+                    "additions": [
+                        {
+                            "type": "actionbox",
+                            "orderNo": 1000,
+                            "items": [
+                                {
+                                    "type": "submit",
+                                    "title": "SAVE"
+                                },
+                            ]
+                        }
+                    ]
+                }
+            }};
             return {
                 "type": "schema-form",
                 "title": "LOAN_REQUEST",
@@ -1688,365 +2040,30 @@ define([],function(){
  
                     self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
-                    p1.then(function(repo) {                       
-                        var formRequest = {
-                            "overrides": overridesFields(model),
-                            "includes": getIncludes(model),
-                            "excludes": [
-                            ],
-                            "options": {
-                                "repositoryAdditions": {
-                                    "PreliminaryInformation":{
-                                        "items": {
-                                            "transactionType": {
-                                                key: "loanAccount.transactionType",
-                                                title: "TRANSACTION_TYPE",
-                                                type: "select",
-                                                required: true,
-                                                "titleMap": {
-                                                    "New Loan": "New Loan",
-                                                    "Renewal": "Renewal",
-                                                    "Loan Restructure": "Loan Restructure",
-                                                    "Internal Foreclosure": "Internal Foreclosure"
-                                                },
-                                                "orderNo": 1,
-                                                condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal'",
-                                                onChange:function(value,form,model){
-                                                    if(_.hasIn(model, 'loanAccount') && model.loanAccount.transactionType == 'New Loan') {
-                                                        model.loanAccount.linkedAccountNumber = null;
-                                                    }
-                                                }
-                                            },
-                                            "expectedEmi": {
-                                                "key": "loanAccount.expectedEmi",
-                                                "title": "ESTIMATED_KINARA_EMI",
-                                                "orderNo": 91,
-                                                type: "amount",
-                                                "readonly": true
-                                            },
-                                            "linkedAccountNumber1":{
-                                                key:"loanAccount.linkedAccountNumber",
-                                                title:"LINKED_ACCOUNT_NUMBER",
-                                                readonly:true,
-                                                required: false,
-                                                "orderNo":11,
-                                                condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
-                                            },
-                                            "baseLoanAccount":{
-                                                key: "loanAccount.baseLoanAccount",
-                                                title: "BASE_LOAN_ACCOUNT",
-                                                readonly:true,
-                                                required: false,
-                                                "orderNo":12,
-                                                condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
-                        
-                                             },
-                                             "transactionType2":{
-                                                key: "loanAccount.transactionType",
-                                                title: "TRANSACTION_TYPE",
-                                                readonly:true,
-                                                required: false,
-                                                "orderNo":13,
-                                                condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
-                                             },
-                                             "BusinessSaveWarning":{
-                                                "type": "section",
-                                                "htmlClass": "alert alert-warning",
-                                                "condition": "!model.loanAccount.customerId",
-                                                "html":"<h4><i class='icon fa fa-warning'></i>Business not yet enrolled.</h4> Kindly save the business details before proceed."
-                                            },
-                                            "MedicalTestWarning":{
-                                                "type": "section",
-                                                "htmlClass": "alert alert-warning",
-                                                "condition": "model.applicant.age1 >= 41 && model.applicant.age1 <= 60 && model.loanAccount.loanAmountRequested >= 2000001 && model.loanAccount.loanAmountRequested <= 3000000 || model.applicant.age1 >= 61 && model.applicant.age1 <= 65 && model.loanAccount.loanAmountRequested < 3000000",
-                                                "html":"<h4><i class='icon fa fa-warning'></i>Medical Test is Mandatory</h4>"
-                                            }
-                                        }
-                                      
-                                    },
-                                    "LoanRecommendation":{
-                                        "items":{
-                                            "estimatedEmi":{
-                                                "key": "loanAccount.estimatedEmi",
-                                                "type": "amount",
-                                                "orderNo":40,
-                                                "title": "ESTIMATED_MAITREYA_EMI",
-                                                "readonly": true
-                                            },
-                                            "estimatedEmi1":{
-                                                "key": "loanAccount.estimatedEmi",
-                                                "type": "amount",
-                                                "orderNo":60,
-                                                "title": "EXPECTED_SECURITY_EMI",
-                                                "readonly": true
-                                            }
-                                        }
- 
-                                    },
-                                    // "NomineeDetails": {
-                                    //     "type": "box",
-                                    //     "title": "NOMINEE_DETAILS",
-                                    //     "orderNo": 300,
-                                    //     "items": {
-                                    //         "nominees": {
-                                    //             "key": "loanAccount.nominees",
-                                    //             "type": "array",
-                                    //             "notitle": "true",
-                                    //             "view": "fixed",
-                                    //             "add": null,
-                                    //             "remove": null,
-                                    //             "items": {
-                                    //                 "nomineeButton": {
-                                    //                     "type": "button",
-                                    //                     "title": "NOMINEE_ADDRESS_APPLICANT",
-                                    //                     "onClick": "actions.nomineeAddress(model, formCtrl, form, $event)"
-                                    //                 }
-                                    //             }
-                                    //         }
-                                    //     }
-                                    // },
-                                    "LoanMitigants":{
-                                        "items": {
-                                            "loanMitigantsByParameter":{
-                                                key: "loanMitigantsByParameter",
-                                                type: "array",
-                                                startEmpty: true,
-                                                add:null,
-                                                remove:null,
-                                                "view":"fixed",
-                                                "titleExpr": "model.loanMitigantsByParameter[arrayIndex].Parameter",
-                                                items: [{
-                                                    key: "loanMitigantsByParameter[].Mitigants",
-                                                    "type":"section",
-                                                    "html": "<div ng-bind-html='model.loanMitigantsByParameter[arrayIndex].Mitigants'></div>    "
-                                                }]
-                                            }
-                                        }
-                                    },
-                                    "CBCheck": {
-                                        "type": "box",
-                                        "title": "CB Check",
-                                        "condition": "model.currentStage =='Screening'",
-                                        "orderNo": 550,
-                                        "items": {
-                                           'CBCheckIgnore' : {
-                                            "key": "loanAccount.cbCheckIgnore",
-                                            "type": "radios",
-                                            "titleMap": {
-                                                "YES": "YES",
-                                                "NO": "NO"
-                                            },
-                                            "title": "CB Check Ignore",
-                                           }
-                                        }
-                                    },
+                   p1.then(function(repo) {
+                        self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest(model), configFile(), model);
+                    }, function(err) {
+                        console.log(err);
 
-                                    "PostReview": {
-                                        "type": "box",
-                                        "title": "POST_REVIEW",
-                                        "condition": "model.loanAccount.id  && model.currentStage!=='Rejected'",
-                                        "orderNo": 600,
-                                        "items": {
-                                            "action": {
-                                                "key": "review.action",
-                                                "type": "radios",
-                                                "condition": "model.currentStage !== 'Screening'",
-                                                "titleMap": {
-                                                    "REJECT": "REJECT",
-                                                    "SEND_BACK": "SEND_BACK",
-                                                    "PROCEED": "PROCEED",
-                                                    "HOLD": "HOLD"
-                                                }
-                                            },
-                                            "action1": {
-                                                "key": "review.action",
-                                                "type": "radios",
-                                                "condition": "model.currentStage == 'Screening'",
-                                                "titleMap": {
-                                                    "REJECT": "REJECT",
-                                                    "PROCEED": "PROCEED",
-                                                    "HOLD": "HOLD"
-                                                }
-                                            },
-                                            "proceed": {
-                                                "type": "section",
-                                                "condition": "model.review.action=='PROCEED'",
-                                                "items": {
-                                                    "remarks": {
-                                                        "title": "REMARKS",
-                                                        "key": "loanProcess.remarks",
-                                                        "type": "textarea",
-                                                        "required": true
-                                                    },
-                                                    "proceedButton": {
-                                                        "key": "review.proceedButton",
-                                                        "type": "button",
-                                                        "title": "PROCEED",
-                                                        "onClick": "actions.proceed(model, formCtrl, form, $event)"
-                                                    }
-                                                }
-                                            },
-                                            "sendBack": {
-                                                "type": "section",
-                                                "condition": "model.review.action=='SEND_BACK'",
-                                                "items": {
-                                                    "remarks": {
-                                                        "title": "REMARKS",
-                                                        "key": "loanProcess.remarks",
-                                                        "type": "textarea",
-                                                        "required": true
-                                                    },
-                                                   "stage": {
-                                                        "key": "loanProcess.stage",
-                                                        "required": true,
-                                                        "type": "lov",
-                                                        "title": "SEND_BACK_TO_STAGE",
-                                                        "resolver": "IREPSendBacktoStageLOVConfiguration"
-                                                    },
-                                                   "sendBackButton": {
-                                                        "key": "review.sendBackButton",
-                                                        "type": "button",
-                                                        "title": "SEND_BACK",
-                                                        "onClick": "actions.sendBack(model, formCtrl, form, $event)"
-                                                    }
-                                                }
-                                            },
-                                            "reject": {
-                                                "type": "section",
-                                                "condition": "model.review.action=='REJECT'",
-                                                "items": {
-                                                    "remarks": {
-                                                        "title": "REMARKS",
-                                                        "key": "loanProcess.remarks",
-                                                        "type": "textarea",
-                                                        "required": true
-                                                    },
-                                                    "rejectReason": {
-                                                        "key": "loanAccount.rejectReason",
-                                                        "type": "lov",
-                                                        "autolov": true,
-                                                        "required":true,
-                                                        "title": "REJECT_REASON",
-                                                        "resolver": "IREPRejectReasonLOVConfiguration"
-                                                    },
-                                                    "rejectButton": {
-                                                        "key": "review.rejectButton",
-                                                        "type": "button",
-                                                        "title": "REJECT",
-                                                        "required": true,
-                                                        "onClick": "actions.reject(model, formCtrl, form, $event)"
-                                                    }
-                                                }
-                                            },
-                                            "hold": {
-                                                "type": "section",
-                                                "condition": "model.review.action=='HOLD'",
-                                                "items": {
-                                                "remarks": {
-                                                    "title": "REMARKS",
-                                                    "key": "loanProcess.remarks",
-                                                    "type": "textarea",
-                                                    "required": true
-                                                },
-                                                "holdButton": {
-                                                    "key": "review.holdButton",
-                                                    "type": "button",
-                                                    "title": "HOLD",
-                                                    "required": true,
-                                                    "onClick": "actions.holdButton(model, formCtrl, form, $event)"
-                                                }
-                                            }
-                                            }
-                                        }
-                                    },
-                                    "revertReject": {
-                                        "type": "box",
-                                        "title": "REVERT_REJECT",
-                                        "orderNo":600,
-                                        "condition": "model.currentStage=='Rejected'",
-                                        "items": {
-                                            "remarks": {
-                                                title: "REMARKS",
-                                                key: "review.remarks",
-                                                type: "textarea",
-                                                required: true
-                                            },
-                                            "rejectReason": {
-                                                title: "Reject Reason",
-                                                key: "loanAccount.rejectReason",
-                                                readonly: true,
-                                                type: "textarea",
-                                            },
-                                            "targetStage": {
-                                                key: "review.targetStage",
-                                                title: "SEND_BACK_TO_STAGE",
-                                                type: "lov",
-                                                lovonly:true,
-                                                autolov: true,
-                                                required: true,
-                                                searchHelper: formHelper,
-                                                search: function(inputModel, form, model, context) {
-                                                    var stage1 = model.review.preStage;
-                                                    var targetstage = formHelper.enum('targetstage').data;
-                                                    var out = [{'name': stage1, 'value': stage1}];
-                                                    for (var i = 0; i < targetstage.length; i++) {
-                                                        var t = targetstage[i];
-                                                        if (t.field1 == stage1) {
-                                                            out.push({
-                                                                name: t.name,
-                                                            })
-                                                        }
-                                                    }
-                                                    return $q.resolve({
-                                                        headers: {
-                                                            "x-total-count": out.length
-                                                        },
-                                                        body: out
-                                                    });
-                                                },
-                                                onSelect: function(valueObj, model, context) {
-                                                    model.review.targetStage = valueObj.name;
-                                                },
-                                                getListDisplayItem: function(item, index) {
-                                                    return [
-                                                        item.name
-                                                    ];
-                                                }
-
-                                            },
-                                            "sendBackButton": {
-                                                "key": "review.sendBackButton",
-                                                "type": "button",
-                                                "title": "SEND_BACK",
-                                                "onClick": "actions.sendBack(model, formCtrl, form, $event)"
-                                            }
-                                        }
-
-                                    }
-                                   
-
-                                },
-                                "additions": [
-                                    {
-                                        "type": "actionbox",
-                                        "orderNo": 1000,
-                                        "items": [
-                                            {
-                                                "type": "submit",
-                                                "title": "SAVE"
-                                            },
-                                        ]
-                                    }
-                                ]
-                            }
-                        };
-                        return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model);
                     })
-                    .then(function(form){
-                        self.form = form;
-                    });
+
                 },
                 offline: false,
+                offlineInitialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+                    model.loanProcess = bundleModel.loanProcess;
+                    if (_.hasIn(model.loanProcess, 'loanAccount')) {
+                        model.loanAccount = model.loanProcess.loanAccount;
+                    }
+                    var self = this;
+                    var p1 = UIRepository.getLoanProcessUIRepository().$promise;
+                    p1.then(function (repo) {
+                        self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest(model), configFile(), model);
+                    }, function (err) {
+                        console.log(err);
+
+
+                    })
+                },
                 getOfflineDisplayItem: function(item, index){
                     return [
                         item.customer.firstName,

@@ -1267,6 +1267,13 @@ self["business-customer"] = function(params) {
 }
 			},
 			form: [],
+			offlineInitialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+                    
+				// var p1 = UIRepository.getEnrolmentProcessUIRepository().$promise;
+				 var self = this;
+				
+					 self.form = self.form;
+			 },
 			schema: function() {
 				return Enrollment.getSchema().$promise;
 			},
