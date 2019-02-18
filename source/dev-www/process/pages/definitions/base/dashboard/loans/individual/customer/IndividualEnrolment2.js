@@ -37,6 +37,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 return true;
             }
 
+            var calculateAge = function(model) {
+                if (_.hasIn(model.customer, 'familyMembers') && _.isArray(model.customer.familyMembers)){
+                    if(model.customer.familyMembers.length != 0) {
+                        for(var i=0; i< model.customer.familyMembers.length; i++) {
+                            if(model.customer.familyMembers[i].dateOfBirth != null) {
+                                model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                            }
+                        }
+                    }
+                }
+            }
+
             var configFile = function () {
                 return {
                     "loanProcess.loanAccount.currentStage": {
@@ -1906,15 +1918,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                    // }
                     /* End of setting data recieved from Bundle */
                     // set Age from DateOfBirth
-                    if (_.hasIn(model.customer, 'familyMembers') && _.isArray(model.customer.familyMembers)){
-                        if(model.customer.familyMembers.length != 0) {
-                            for(var i=0; i< model.customer.familyMembers.length; i++) {
-                                if(model.customer.familyMembers[i].dateOfBirth != null) {
-                                    model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                                }
-                            }
-                        }
-                    }
+                    calculateAge(model);
                     /* Setting data for the form */
                     var branchId = SessionStore.getBranchId();
                     if(!model.customer){
@@ -2583,6 +2587,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             .subscribe(function (enrolmentProcess) {
                                 formHelper.resetFormValidityState(form);
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                calculateAge(model);
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                                 BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer});
