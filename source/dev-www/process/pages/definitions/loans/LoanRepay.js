@@ -304,12 +304,38 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key:"repayment.transactionName",
                                 "type":"select",
                                 "required": true,
-                                condition: "!model._pageGlobals.hideTransactionName",
+                                condition: "!model._pageGlobals.hideTransactionName && model.siteCode != 'witfin'",
                                 titleMap: {
                                     "Scheduled Demand":"Scheduled Demand",
                                     "Fee Payment":"Fee Payment",
                                     "Pre-closure":"Pre-closure",
                                     "Prepayment":"Prepayment",
+                                    "PenalInterestPayment":"PenalInterestPayment"
+                                },
+                                onChange: function(value ,form, model){
+                                    if ( value == 'Pre-closure'){
+                                        model.repayment.amount = model.repayment.totalPayoffAmountToBePaid;
+                                    } else if (value == 'Scheduled Demand'){
+                                        model.repayment.amount = Utils.ceil(model.repayment.totalDue);
+                                    }else if(value == 'PenalInterestPayment'){
+                                        model.repayment.amount = model.repayment.bookedNotDuePenalInterest;
+                                    }else if(value == 'Fee Payment'){
+                                        model.repayment.amount = model.repayment.feeDue;
+                                    } else {
+                                        model.repayment.amount = null;
+                                    }
+                                    model.repayment.demandAmount = model.repayment.amount || 0;
+                                }
+                            },
+                            {
+                                key:"repayment.transactionName",
+                                "type":"select",
+                                "required": true,
+                                condition: "!model._pageGlobals.hideTransactionName && model.siteCode == 'witfin'",
+                                titleMap: {
+                                    "Scheduled Demand":"Scheduled Demand",
+                                    "Fee Payment":"Fee Payment",
+                                    "Pre-closure":"Pre-closure",
                                     "PenalInterestPayment":"PenalInterestPayment"
                                 },
                                 onChange: function(value ,form, model){
@@ -684,14 +710,15 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key: "repayment.delayReasonType",
                                 title: "REASON_FOR_DELAY",
                                 type: "select",
+                                condition:"model.siteCode != 'witfin'",
                                 titleMap: [{
                                     "name": "Business",
                                     "value": "Business"
                                 },
-                                    {
+                                {
                                         "name": "Personal",
                                         "value": "Personal"
-                                    }],
+                                }],
 
                             },
                             {
