@@ -2059,6 +2059,7 @@ define([],function(){
                         model.lead = obj;
                         model.loanAccount.loanAmountRequested = obj.loanAmountRequested;
                         model.loanAccount.loanPurpose1 = obj.loanPurpose1;
+                        model.loanAccount.loanPurpose2 = obj.loanPurpose2;
                         model.loanAccount.screeningDate = obj.screeningDate;
                     },
                     "new-business": function(bundleModel, model, params){

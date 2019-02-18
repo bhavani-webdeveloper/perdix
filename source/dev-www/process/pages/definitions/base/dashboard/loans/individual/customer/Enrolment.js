@@ -386,6 +386,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "Liabilities.liabilities.installmentAmountInPaisa":{
                         "title": "INSTALLEMENT_AMOUNT",
                     },
+                    "Liabilities.liabilities.loanSource":{
+                        "enumCode": "sorted_loan_source",
+                    },
                     "EnterpriseInformation.enterpriseRegistrations.registrationNumber":{
                         "required":true
                     },
