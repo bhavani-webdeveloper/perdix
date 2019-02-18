@@ -1596,6 +1596,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         }
                     },
                     "Liabilities.liabilities.loanSource":{
+                        "enumCode": "sorted_loan_source",
                         "onChange": function(modelValue, form, model, formCtrl, event) {
                            if(model.customer.liabilities[form.arrayIndex].loanSource){
                             model.customer.liabilities[form.arrayIndex].udf1 = null
