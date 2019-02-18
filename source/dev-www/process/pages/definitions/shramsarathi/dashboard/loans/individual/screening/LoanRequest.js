@@ -661,7 +661,7 @@ define([],function(){
                             "excludes": [
                                 "ProposedUtilizationPlan",
                                 //"DeductionsFromLoan",
-                                //"LoanMitigants",
+                                 "LoanMitigants",
                                 //"LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
@@ -679,7 +679,10 @@ define([],function(){
                                 "LoanRecommendation.securityEmiRequired",
                                 "LoanMitigants.loanMitigantsByParameter",
                                 "CollateralDetails",
-                                "CBCheck",               
+                                "CBCheck",
+                                "LoanCustomerRelations",
+
+
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {

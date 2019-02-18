@@ -350,7 +350,7 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.boo
                         "title": "CUSTOMER_SIGNATURE_DATE",
                         "condition":"model.disbursementCutOffTime && model.siteCode != 'witfin'",
                         "type": "date",
-                        "required": false,
+                        "required": true,
                         "readonly":true,
                         "onChange":function(modelValue,form,model){
                             populateDisbursementDate(modelValue,form,model);

@@ -1478,7 +1478,7 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.boo
                 "type": "box",
                 "title": "UPDATE_ACCOUNT", // sample label code
                 "colClass": "col-sm-6", // col-sm-6 is default, optional
-                "condition": "model.showLoanBookingDetails",
+                //"condition": "model.showLoanBookingDetails",
                 //"readonly": false, // default-false, optional, this & everything under items becomes readonly
                 "items": [
                     {
@@ -2090,11 +2090,11 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.boo
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeDoorNo",
-                                        "title":"DOOR_NO"
+                                        "title":"HAMLET_FALA"
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeLocality",
-                                        "title":"LOCALITY"
+                                        "title":"PANCHAYAT"
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeStreet",
@@ -2248,7 +2248,7 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.boo
                 {
                 "type": "box",
                 "title": "",
-                "condition": "model.siteCode == 'IFMRCapital'",
+                "condition": "model.siteCode == ''",
                 "readonly": true,
                 "items":[
                     {
@@ -2400,11 +2400,11 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.boo
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeDoorNo",
-                                        "title":"DOOR_NO"
+                                        "title":"HAMLET_FALA"
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeLocality",
-                                        "title":"LOCALITY"
+                                        "title":"PANCHAYAT"
                                     },
                                     {
                                         key:"loanAccount.nominees[].nomineeStreet",
