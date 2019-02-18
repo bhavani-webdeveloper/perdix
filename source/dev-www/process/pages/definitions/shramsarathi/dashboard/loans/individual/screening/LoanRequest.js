@@ -2153,7 +2153,7 @@ define([],function(){
                         model.loanAccount.loanPurpose1 = obj.loanPurpose1;
                         model.loanAccount.screeningDate = obj.screeningDate;
                     },
-                    "new-business": function(bundleModel, model, params){
+                    "new-applicant": function(bundleModel, model, params){
                         $log.info("Inside new-business of LoanRequest");
                         model.loanAccount.customerId = params.customer.id;
                         model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};

@@ -19,18 +19,6 @@
          ]
       },
       {
-         "order":2,
-         "code":"Dedupe",
-         "name":"Dedupe",
-         "stageType":"CAPTURE",
-         "sendSms":"No",
-         "smsCategory":"LoanBooking",
-         "isAccountOpening":false,
-         "allowedRoles":[
-            "WM"
-         ]
-      },
-      {
          "order":3,
          "code":"ScreeningReview",
          "name":"Screening Review",

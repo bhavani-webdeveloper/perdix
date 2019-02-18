@@ -392,11 +392,11 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 BundleManager.broadcastEvent("new-guarantor", params);
                                 bundleModel.guarantors.push(params.guarantor);
                                 break;
-                            // case 'business':
-                            //     $log.info("New Business Enrolment");
-                            //     bundleModel.business = params.customer;
-                            //     BundleManager.broadcastEvent("new-business", params);
-                            //     break;
+                            case 'loan-request':
+                                $log.info("New Business Enrolment");
+                                bundleModel.business = params.customer;
+                                BundleManager.broadcastEvent("new-business", params);
+                                break;
                             default:
                                 $log.info("Unknown page class");
                                 break;
