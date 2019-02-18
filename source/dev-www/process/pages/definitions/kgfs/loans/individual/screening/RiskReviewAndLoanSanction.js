@@ -14,7 +14,7 @@ define(["perdix/domain/model/loan/LoanProcess",
         $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, Lead, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
             return {
                 "type": "page-bundle",
-                "title": "SCREENING_REVIEW",
+                "title": "RISK_REVIEW_AND_LOAN_SANCTION",
                 "subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
                 "bundleDefinitionPromise": function() {
                     return $q.resolve([
@@ -31,7 +31,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
                             minimum: 0,
-                            maximum: 1,
+                            maximum: 0,
                             order:11
                         },
                         {
@@ -39,7 +39,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
                             minimum: 0,
-                            maximum: 1,
+                            maximum: 0,
                             order:12
                         },
                         {
