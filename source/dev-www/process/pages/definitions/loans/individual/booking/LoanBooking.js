@@ -1270,7 +1270,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         model.loanAccount.precloseurePenalInterest=model.loanAccount.disbursementSchedules[0].linkedAccountPenalInterestDue=response.part5?accounting.unformat(response.part5.slice(3)):0;
                         model.loanAccount.precloseureTotalPreclosureFee=(response.part7?accounting.unformat(response.part7.slice(3)):0);
                         model.loanAccount.precloseureTotalFee=((response.part6?accounting.unformat(response.part6.slice(3)):0) - (response.part7?accounting.unformat(response.part7.slice(3)):0));
-                        model.loanAccount.precloseureTotalPreclosureFee=model.loanAccount.disbursementSchedules[0].linkedAccountPreclosureFee=(response.part7?accounting.unformat(response.part7.slice(3)):0)||7;
+                        model.loanAccount.precloseureTotalPreclosureFee=model.loanAccount.disbursementSchedules[0].linkedAccountPreclosureFee=(response.part7?accounting.unformat(response.part7.slice(3)):0);
                         model.loanAccount.preTotalFee=model.loanAccount.disbursementSchedules[0].linkedAccountTotalFeeDue= (model.loanAccount.precloseureTotalFee + model.loanAccount.precloseureTotalPreclosureFee);
                     },function(error){
                         model.loanAccount.precloseuredetails=false;
