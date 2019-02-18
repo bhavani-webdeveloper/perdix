@@ -1739,8 +1739,8 @@ define([],function(){
                                               "readonly":false
                                             },
                                             "referenceCheck": {
-                                                "key":"loanAccount.referenceCheck",
-                                              "title":"REFERENCE_CHECK",
+                                              "key":"loanAccount.referenceCheck",
+                                              "title":"REFERNECE_CHECK",
                                               "type":"radios",
                                               "titleMap":{"good":"Good","bad":"Bad"},
                                               "required":true,
@@ -1830,43 +1830,43 @@ define([],function(){
                                             //     "readonly": true
                                             // },
                                             "modeOfDisbursement":{
-                                                "key":"loanAccount.modeOfDisbursement",
+                                                "key":"loanAccount.disbursementSchedules.modeOfDisbursement",
                                                 "title":"MODE_OF_DISBURSEMENT",
                                                 "type":"select",
                                                 "required":true
                                                             },
                                         "remarksOfInFavourLoan":{
-                                            "key":"loanAccount.remarksOfInFavourLoan",
+                                            "key":"loanAccount.userDefinedFieldValues.udf10",
                                             "title":"REMARK_OF_IN_FAVOUR_LOAN",
                                             "type":"text",
                                             "required":true
                                         },
                                         "potentialRisks":{
-                                            "key":"loanAccount.potentialRisks",
+                                            "key":"loanAccount.userDefinedFieldValues.udf11",
                                             "title":"POTENTIAL_RISK",
                                             "type":"select",
                                             "required":true
                                         },
                                         "collectionDate":{
-                                            "key":"loanAccount.collectionDate",
+                                            "key":"loanAccount.disbursementSchedules.firstrepaymentdate",
                                             "title":"COLLECTION_DATE",
                                             "type":"date",
                                             "required":true
                                         },
                                         "disbursementDate":{
-                                            "key":"loanAccount.disbursementDate",
+                                            "key":"loanAccount.disbursementSchedules.actualDisbursementDate",
                                             "title":"DISBURSEMENT_DATE",
                                             "type":"date",
                                             "required":true
                                         },
                                         "gracePeriod":{
-                                            "key":"loanAccount.gracePeriod",
+                                            "key":"loanAccount.disbursementSchedules.moratoriumPeriodInDays",
                                             "title":"GRACE_PERIOD",
                                             "type":"text",
                                             "required":true
                                         },
                                         "date":{
-                                            "key":"loanAccount.date",
+                                            "key":"loanAccount.userDefinedFieldValues.udf12",
                                             "title":"DATE",
                                             "type":"date",
                                             "required":true
