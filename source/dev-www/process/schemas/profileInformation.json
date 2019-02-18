@@ -34,8 +34,9 @@
                 },
                 "identityProofBackside": {
                     "type": ["string","null"],
+                    "title": "KYC1_PROOF_DOCUMENT_BACK_SIDE",
                     "category": "CustomerEnrollment",
-                    "title":"IDENTITY_PROOF_BACKSIDE"
+                    "subCategory": "KYC1"
                 },
                 "additionalKYCs": {
                     "type": "array",
@@ -150,6 +151,12 @@
                     "subCategory": "ADDRESSPROOF"
                 },
                 "addressProofReverseImageId": {
+                    "type": ["string","null"],
+                    "title": "ADDRESS_PROOF_REVERSE_IMAGE_ID",
+                    "category": "CustomerEnrollment",
+                    "subCategory": "ADDRESSPROOF"
+                },
+                "addressProofBackside": {
                     "type": ["string","null"],
                     "title": "ADDRESS_PROOF_REVERSE_IMAGE_ID",
                     "category": "CustomerEnrollment",

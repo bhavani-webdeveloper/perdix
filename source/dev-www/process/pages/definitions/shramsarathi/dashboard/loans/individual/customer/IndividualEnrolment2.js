@@ -2534,12 +2534,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "orderNo":60
                                         },
                                         "addressProofBackside":{
-                                            "key":"KYC.addressProofBackside",
+                                            "key":"customer.addressProofBackside",
                                             "title":"ADRESS_PROOF_BACKSIDE",
                                             "fileType":"application/pdf",
                                             "using":"scanner",
                                             "type":"file",
-                                            "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                            "condition":"model.KYC.addressProofSameAsIdProof=='NO'",
+                                            "orderNo":90
                                         },
                                     }
 
