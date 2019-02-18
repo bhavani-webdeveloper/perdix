@@ -373,7 +373,7 @@ function(LeadProcess, AngularResourceService) {
                                                 "orderNo": 55
                                             },
                                             "nickName": {
-                                                key: "leadProfile.individualDetails.nickName",
+                                                key: "lead.nickName",
                                                 title: "NICK_NAME",
                                                 schema: {
                                                     pattern: "^[a-zA-Z\. ]+$",
