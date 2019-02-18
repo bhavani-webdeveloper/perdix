@@ -14,7 +14,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             "Page/Engine/shramsarathi.dashboard.loans.individual.screening.ScreeningReviewQueue",
             "Page/Engine/shramsarathi.dashboard.loans.individual.screening.ApplicationQueue",  
             "Page/Engine/shramsarathi.dashboard.loans.individual.screening.ApplicationReviewQueue", 
-            "Page/Engine/shramsarathi.dashboard.loans.individual.screening.TeleverifictionQueue",
+            "Page/Engine/shramsarathi.dashboard.loans.individual.screening.TeleverificationQueue",
             "Page/Engine/shramsarathi.dashboard.loans.individual.screening.CreditCommitteeReviewQueue",
             "Page/Engine/shramsarathi.dashboard.loans.individual.screening.LoanSanctionQueue",
             "Page/Engine/shramsarathi.dashboard.loans.individual.screening.RejectedQueue"

@@ -48,7 +48,7 @@ define({
 							"type": "string"
 						},
 						"centre": {
-							"title": "ZONE",
+							"title": "ZONE_NAME",
 							"type": "string",
 							"required": true,
 							"x-schema-form": {

@@ -54,9 +54,10 @@ define({
 								"type": "date",
 								"screenFilter": true
 							}
-						},
+						}
+						,
 						"centre": {
-							"title": "ZONE",
+							"title": "ZONE_NAME",
 							"type": "string",
 							"required": true,
 							"x-schema-form": {
@@ -123,13 +124,13 @@ define({
 
 					var promise = Lead.search({
 						'branchName': searchOptions.branchName,
-						'centreName': centreName[0],
+						 'centreName': centreName[0],
 						'currentStage': "Inprocess",
-						'leadStatus': "FollowUp",
-						'leadName': searchOptions.leadName,
-						'businessName': searchOptions.businessName,
-						'followUpDate': searchOptions.followUpDate,
-						'area': searchOptions.area,
+						 'leadStatus': "FollowUp",
+						 'leadName': searchOptions.leadName,
+					    'businessName': searchOptions.businessName,
+						 'followUpDate': searchOptions.followUpDate,
+						 'area': searchOptions.area,
 						'cityTownVillage': searchOptions.cityTownVillage,
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,

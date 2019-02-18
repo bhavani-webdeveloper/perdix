@@ -32,7 +32,7 @@ define({
 							}
 	                    },
 						"centre": {
-							"title": "ZONE",
+							"title": "ZONE_NAME",
 							"type": ["integer", "null"],
 							"x-schema-form": {
 								"type": "select",

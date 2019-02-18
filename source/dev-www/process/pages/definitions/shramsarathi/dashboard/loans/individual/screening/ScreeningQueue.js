@@ -35,9 +35,9 @@ define({
                     "title": 'SEARCH_OPTIONS',
                     "properties": {
                         "centre": {
-                            "title": "ZONE",
+                            "title": "ZONE_NAME",
                             "type": "string",
-                            "required": true,
+                            "required": false,
                             "x-schema-form": {
                                 type: "lov",
                                 autolov: true,

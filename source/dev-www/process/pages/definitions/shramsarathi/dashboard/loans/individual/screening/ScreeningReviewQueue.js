@@ -47,7 +47,7 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.scr
 							}
 	                    },
                         "centre": {
-							"title": "CENTRE",
+							"title": "ZONE_NAME",
 							"type": ["integer", "null"],
 							"x-schema-form": {
 								"type": "select",

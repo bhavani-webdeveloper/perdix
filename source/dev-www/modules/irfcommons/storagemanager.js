@@ -588,6 +588,9 @@ irf.commons.run(["irfStorageService", "SessionStore", "$q", "$log", "filterFilte
 					o.data[i].value = Number(o.data[i].code);
 				}
 			};
+			var sortByName = function(s, o) {
+				o.data = _.orderBy(o.data, [x => x.name.toLowerCase()], ['asc']);
+			};
 
 			createEnum("bank", "bank", codeAsNumberToValue);
 			createEnum("centre", "centre", codeAsNumberToValue);
@@ -662,6 +665,7 @@ irf.commons.run(["irfStorageService", "SessionStore", "$q", "$log", "filterFilte
 			createEnum("investor_id", "investor_id", codeAsNumberToValue);
 			createEnum("lender_product_type", "lender_product_type", codeToValue);
 			createEnum("loan_partner","partner_master_new",codeToValue);
+			createEnum("sorted_loan_source","loan_source", sortByName);
 
 			return irfStorageService.storeMaster(masters);
 		});
