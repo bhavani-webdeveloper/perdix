@@ -327,6 +327,46 @@ define([],function(){
                                 }
                             }
 
+                        },
+                        "DSCApproval":{
+                            "overrides":{
+                                "PreliminaryInformation":{
+                                    "readonly":true
+                                },
+                                "CollateralInformation":{
+                                    "readonly":true
+                                },
+                                "LoanDocuments":{
+                                    "readonly":true
+                                },
+                                "LoanRecommendation":{
+                                    "readonly":true
+                                },
+                                "LoanMitigants":{
+                                    "readonly":true
+                                }
+                            }
+
+                        },
+                        "LosDSCOverride":{
+                            "overrides":{
+                                "PreliminaryInformation":{
+                                    "readonly":true
+                                },
+                                "CollateralInformation":{
+                                    "readonly":true
+                                },
+                                "LoanDocuments":{
+                                    "readonly":true
+                                },
+                                "LoanRecommendation":{
+                                    "readonly":true
+                                },
+                                "LoanMitigants":{
+                                    "readonly":true
+                                }
+                            }
+
                         }
                     },
                     "loanProcess.loanAccount.loanType":{
