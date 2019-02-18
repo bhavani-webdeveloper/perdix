@@ -235,16 +235,7 @@ define([],function(){
                 model.loanAccount.bcAccount = {};
                 model.loanAccount.processType = "1";
                 
-                if (typeof model.loanAccount.nominees == "undefined" || model.loanAccount.nominees == null){
-                    model.loanAccount.nominees = [];
-                    model.loanAccount.nominees.push({});
-                }
-                else {
-                    if(!initFlag){
-                        model.loanAccount.nominees = [];
-                        model.loanAccount.nominees.push({});
-                    }
-                    }
+        
                 if (typeof model.loanAccount.accountUserDefinedFields == "undefined") {
                     model.loanAccount.accountUserDefinedFields = {};
                     model.loanAccount.accountUserDefinedFields.userDefinedFieldValues = {};
@@ -1120,8 +1111,17 @@ define([],function(){
                             model.loanAccount.psychometricCompleted = "NO";
 
                         }
-                        
+
+                        if(!(validateCoGuarantor(model.additions.co_borrower_required,model.additions.number_of_guarantors,'validate',model.loanAccount.loanCustomerRelations,model)))
+                            return false;
                         PageHelper.showProgress('loan-process', 'Updating Loan');
+                        if(!savePolicies(model)){
+                            PageHelper.showProgress('loan-process','Oops Some Error',2000);
+                            return false;}
+                        if(!(policyBasedOnLoanType(model.loanAccount.loanType,model))){
+                            PageHelper.showProgress('loan-process','Oops Some Error',2000);
+                            return false;}
+                                                    
                         model.loanProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
