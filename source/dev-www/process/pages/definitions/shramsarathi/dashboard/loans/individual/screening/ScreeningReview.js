@@ -24,7 +24,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             {
                                // pageName: 'witfin.customer.IndividualEnrollment2',
                                 pageName:'shramsarathi.dashboard.loans.individual.customer.IndividualEnrolment2',
-                                title: 'APPLICANT',
+                                title: 'CUSTOMER_ENROLLMENT',
                                 pageClass: 'applicant',
                                 minimum: 1,
                                 maximum: 1,

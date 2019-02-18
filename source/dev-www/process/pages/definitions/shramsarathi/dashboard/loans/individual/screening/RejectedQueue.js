@@ -36,7 +36,8 @@ define({
 							}
 	                    },
 						"centre": {
-							"title": "ZONE",
+                            "title": "ZONE_NAME",
+                            "required":false,
 							"type": ["integer", "null"],
 							"x-schema-form": {
 								"type": "select",

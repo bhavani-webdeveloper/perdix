@@ -67,7 +67,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"SOURCE_ADDRESS"
                                 },
                                 "ContactInformation.doorNo":{
-                                    "title":"HAMLET"
+                                    "title":"HAMLET_FALA",
+                                    "required":false
                                 },
                                 "ContactInformation.permanentAddressFieldSet":{
                                     "title":"DESTINATION_ADDRESS"
@@ -108,7 +109,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"SOURCE_ADDRESS"
                                 },
                                 "ContactInformation.doorNo":{
-                                    "title":"HAMLET"
+                                    "title":"HAMLET_FALA",
+                                    "required":false
                                 },
                                 "ContactInformation.permanentAddressFieldSet":{
                                     "title":"DESTINATION_ADDRESS"
@@ -117,7 +119,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "Screening": {
                             "excludes": [
-                                "IndividualFinancials",
+                               // "IndividualFinancials",
                                 "HouseVerification.latitude",
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
@@ -169,7 +171,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.identityProofImageId": {
-                                    "required": false
+                                    "required": true
                                 },
                                 "KYC.identityProofNo": {
                                     "required": true
@@ -221,7 +223,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"SOURCE_ADDRESS"
                                 },
                                 "ContactInformation.doorNo":{
-                                    "title":"HAMLET"
+                                    "title":"HAMLET_FALA",
+                                    "required":false
                                 },
                                 "ContactInformation.permanentAddressFieldSet":{
                                     "title":"DESTINATION_ADDRESS"
@@ -291,7 +294,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"DEPOSIT_AMOUNT"
                                 },
                                 "BankAccounts.customerBankAccounts.bankStatements.balanceAsOn15th":{
-                                    "title":"BALANCE_IN_THE_A/C_AS_ON_DATE"
+                                    "title":"BALANCE_IN_THE_ACCOUNT"
                                 },
                                 "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced": {
                                     "required": true
@@ -309,7 +312,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title": "MIGRANT_DETAILS"
                                 },
                                 "BankAccounts.customerBankAccounts.accountNumber": {
-                                    required: false
+                                    required: true
                                 },
                                 "BankAccounts.customerBankAccounts.isDisbersementAccount": {
                                     "type": "radios"
@@ -325,7 +328,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "KYC": {
                             "excludes": [
-                                "IndividualFinancials",
+                                //"IndividualFinancials",
                                 "HouseVerification.latitude",
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
@@ -366,7 +369,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.identityProofImageId": {
-                                    "required": false
+                                    "required": true
                                 },
                                 "KYC.identityProofNo": {
                                     "required": true
@@ -420,7 +423,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"DESTINATION_ADDRESS"
                                 },
                                 "ContactInformation.doorNo":{
-                                    "title":"HAMLET"
+                                    "title":"HAMLET_FALA",
+                                    "required":false
                                 },
                                 "IndividualInformation.customerId": {
                                     "readonly": true
@@ -528,7 +532,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"DESTINATION_ADDRESS"
                                 },
                                 "ContactInformation.doorNo":{
-                                    "title":"HAMLET"
+                                    "title":"HAMLET_FALA",
+                                    "required":false
                                 },
                                 "IndividualFinancials": {
                                     "readonly": true
@@ -616,7 +621,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.identityProofImageId": {
-                                    "required": false
+                                    "required": true
                                 },
                                 "KYC.identityProofNo": {
                                     "required": true
@@ -685,7 +690,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ContactInformation.mailingDoorNo": {
                                     "condition": "!model.customer.mailSameAsResidence",
-                                    "title":"HAMLET"
+                                    "title":"HAMLET_FALA",
+                                    "required":false
                                 },
                                 "ContactInformation.mailingStreet": {
                                     "condition": "!model.customer.mailSameAsResidence"
@@ -725,7 +731,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"DESTINATION_ADDRESS"
                                 },
                                 "ContactInformation.doorNo":{
-                                    "title":"HAMLET"
+                                    "title":"HAMLET_FALA",
+                                    "required":false
                                 },
                                 // "FamilyDetails.familyMembers.relationShip": {
                                 //     "readonly": true
@@ -853,7 +860,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"DESTINATION_ADDRESS"
                                 },
                                 "ContactInformation.doorNo":{
-                                    "title":"HAMLET"
+                                    "title":"HAMLET_FALA",
+                                    "required":false
                                 },
                                 "reference": {
                                     "readonly": true
@@ -919,7 +927,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"SOURCE_ADDRESS"
                                 },
                                 "ContactInformation.doorNo":{
-                                    "title":"HAMLET"
+                                    "title":"HAMLET_FALA",
+                                    "required":false
                                 },
                                 "ContactInformation.permanentAddressFieldSet":{
                                     "title":"DESTINATION_ADDRESS"
@@ -1036,7 +1045,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ContactInformation.locality": {
                                    // "readonly": true,
-                                    "title":"PANCHAYAT"
+                                    "title":"PANCHAYAT",
+                                    "required":true,
+                                    "readonly":true
                                 },
                                 // "FamilyDetails.familyMembers.familyMemberFirstName": {
                                 //     "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
@@ -1056,7 +1067,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"SOURCE_ADDRESS"
                                 },
                                 "ContactInformation.doorNo":{
-                                    "title":"HAMLET"
+                                    "title":"HAMLET_FALA",
+                                    "required":false
                                 },
                                 "ContactInformation.permanentAddressFieldSet":{
                                     "title":"DESTINATION_ADDRESS"
@@ -1336,7 +1348,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.identityProofImageId": {
-                                    "required": false
+                                    "required": true
                                 },
                                 "KYC.identityProofNo": {
                                     "required": true
@@ -1405,7 +1417,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ContactInformation.locality": {
                                     //"readonly": true,
-                                    "title":"PANCHAYAT"
+                                    "title":"PANCHAYAT",
+                                    "required":true,
+                                    "readonly":true
                                 },
                                 "ContactInformation.villageName": {
                                     "readonly": true,
@@ -1419,7 +1433,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ContactInformation.mailingDoorNo": {
                                     "condition": "!model.customer.mailSameAsResidence",
-                                    "title":"HAMLET"
+                                    "title":"HAMLET_FALA",
+                                    "required":false
                                 },
                                 "ContactInformation.mailingStreet": {
                                     "condition": "!model.customer.mailSameAsResidence"
@@ -1434,7 +1449,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ContactInformation.mailingLocality": {
                                     "condition": "!model.customer.mailSameAsResidence",
                                     "readonly": true,
-                                    "title":"PANCHAYAT"
+                                    "title":"PANCHAYAT",
+                                    "required":true
                                 },
                                 "ContactInformation.mailingDistrict": {
                                     "condition": "!model.customer.mailSameAsResidence",
@@ -1615,6 +1631,30 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var overridesFields = function (bundlePageObj) {
                 return {
+                    "IndividualFinancials.expenditures.annualExpenses":{
+                        "required":true,
+                        "title":"EXPENSE_AMOUNT"
+                    },
+                    "IndividualFinancials.expenditures.frequency":{
+                        "required":true
+                    },
+                    "FamilyDetails.familyMembers.incomes.occupation":{
+                        "required":true
+                    },
+                    "KYC.addressProofImageId":{
+                        "required":false
+                    },
+                    "KYC.addressProof":{
+                        "required":false
+                    },
+                    "KYC.identityProofImageId":{
+                        "required":false
+                    },
+                    "ContactInformation.locality":{
+                        "title":"PANCHAYAT",
+                        "required":true,
+                        "readonly":true
+                    },
                     "KYC.addressProofFieldSet":{
                         "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
                     },
@@ -1956,7 +1996,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "ContactInformation.mailingDoorNo": {
                         "condition": "!model.customer.mailSameAsResidence",
-                        "title":"HAMLET"
+                        "title":"HAMLET_FALA"
                     },
                     "ContactInformation.mailingStreet": {
                         "condition": "!model.customer.mailSameAsResidence"
@@ -2020,6 +2060,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "KYC.addressProofFieldSet",
                     "KYC.addressProof",
                     "KYC.addressProofImageId",
+                    "KYC.addressProofBackside",
                     "KYC.addressProofNo",
                     "KYC.addressProofIssueDate",
                     "KYC.addressProofValidUptoDate",
@@ -2070,7 +2111,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.postOffice",
                     "ContactInformation.landmark",
                     "ContactInformation.collectionArea",
-                    //"ContactInformation.mandal",
+                    "ContactInformation.mandal",
                     "ContactInformation.pincode",
                     "ContactInformation.locality",
                     "ContactInformation.villageName",
@@ -2083,11 +2124,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.mailingDoorNo",
                     "ContactInformation.mailingStreet",
                     "ContactInformation.mailingPostoffice",
-                    //"ContactInformation.mailingMandal",
+                    "ContactInformation.mailingMandal",
                     "ContactInformation.mailingPincode",
                     "ContactInformation.mailingLocality",
                     "ContactInformation.mailingDistrict",
                     "ContactInformation.mailingState",
+                    "ContactInformation.mailingMobileNo",
 
                     "IndividualFinancials",
                     "IndividualFinancials.expenditures",
@@ -2324,17 +2366,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         //    // "orderNo": 100
                                         // },
                                         "mandal": {
-                                            "key": "customer.udf.userDefinedFieldValues.udf1",
-                                            "title": "MANDAL_TAHSIL",
+                                            "key": "customer.villageName",
+                                            "title": "SUB_DISTRICT",
                                             "type": "string",
-                                            "orderNo": 100
+                                            "required":true,
+                                            "readonly":true,
+                                            "orderNo": 130
                                         },
-                                        "mailingMandal": {
-                                            "key": "customer.udf.userDefinedFieldValues.udf2",
-                                            "title": "MANDAL_TAHSIL",
-                                            "type": "string",
-                                            "orderNo": 181
-                                        },
+                                        // "mailingMandal": {
+                                        //     "key": "customer.udf.userDefinedFieldValues.udf2",
+                                        //     "title": "SUB_DISTRICT",
+                                        //     "type": "string",
+                                        //     "orderNo": 181
+                                        // },
                                         "mailingLandmark": {
                                             "key": "customer.Landmark",
                                             "title": "LANDMARK",
@@ -2349,8 +2393,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "type":"select",
                                             "orderNo":110
                                         },
-                                        "mailingmobilePhone":{
-                                            "key":"ContactInformation.mailingmobilePhone",
+                                        "mailingMobileNo":{
+                                            "key":"ContactInformation.mailingMobileNo",
                                             "title":"DESTINATION_PHONE_NO",
                                             "type":"number",
                                             "condition": "!model.customer.mailSameAsResidence"
@@ -2488,6 +2532,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "NO":"No"
                                             },
                                             "orderNo":60
+                                        },
+                                        "addressProofBackside":{
+                                            "key":"KYC.addressProofBackside",
+                                            "title":"ADRESS_PROOF_BACKSIDE",
+                                            "fileType":"application/pdf",
+                                            "using":"scanner",
+                                            "type":"file",
+                                            "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
                                         },
                                     }
 
@@ -2688,32 +2740,37 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "key":"customer.familyMembers.incomes.workSector",
                                                             "title":"WORK_SECTOR",
                                                             "type":"select",
-                                                            "enum":"occupation"
+                                                            "enum":"occupation",
+                                                            "required":true
                                                         },
                                                         "occupationType":{
                                                             "key":"customer.familyMembers.incomes.occupationType",
                                                             "title":"OCCUPATION_TYPE",
                                                             "type":"select",
-                                                            "enum":"occupation"
+                                                            "enum":"occupation",
+                                                            "required":true
                                                             
                                                         },
                                                         "skillLevel":{
                                                             "key":"customer.familyMembers.incomes.skillLevel",
                                                             "title":"SKILL_LEVEL",
                                                             "type":"select",
-                                                            "enum":"occupation"
+                                                            "enum":"occupation",
+                                                            "required":true
                                                             
                                                         },
                                                         "avarageTimeSpend":{
                                                             "key":"customer.familyMembers.incomes.averageTimeSpent",
                                                             "title":"AVARAGE_TIME_SPENT",
-                                                            "type":"number"
+                                                            "type":"number",
+                                                            "required":true
                                                            
                                                         },
                                                         "avarageReturn":{
                                                             "key":"customer.familyMembers.incomes.averageReturn",
                                                             "title":"AVARAGE_RETURN",
                                                             "type":"select",
+                                                            "required":true,
                                                             titleMap: {
                                                                 "lessThanAMonth": "Less Than a Month",
                                                                 "biMonthly": "Bi Monthly",
@@ -2726,6 +2783,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "key":"customer.familyMembers.incomes.incomeType",
                                                             "title":"INCOME_FROM",
                                                             "type":"radios",
+                                                            "required":true,
                                                             titleMap: {
                                                                 "sourceIncome": "Source Income",
                                                                 "destinationIncome": "Destination Income"
@@ -3288,4 +3346,3 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
         }
     }
 })
-
