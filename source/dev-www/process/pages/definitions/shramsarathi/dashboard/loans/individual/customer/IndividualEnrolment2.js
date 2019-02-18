@@ -1781,6 +1781,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "FamilyDetails.familyMembers.relationShip":{
                         "title":"RELATIONSHIP_WITH_MIGRANT",
+                        "required":false
                     },
                     "FamilyDetails.familyMembers.familyMemberFirstName":{
                         "title":"MIGRANT_NAME",
@@ -1999,7 +2000,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth": {
                         "required": false
-                    }
+                    },
+                    "IndividualInformation.maritalStatus": {
+                        "required": true
+                    },
 
                 }
             }
@@ -2627,6 +2631,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "maritalStatus": {
                                                     "orderNo": 8,
                                                     key: "customer.familyMembers[].maritalStatus",
+                                                    "required":true,
                                                     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
                                                     type: "select",
                                                     title: "T_MARITAL_STATUS"
