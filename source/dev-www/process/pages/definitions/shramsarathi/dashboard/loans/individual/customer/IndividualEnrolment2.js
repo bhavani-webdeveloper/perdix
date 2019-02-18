@@ -1043,11 +1043,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.customerId": {
                                     "resolver": "IndividualCustomerIDLOVConfiguration"
                                 },
-                                // "ContactInformation.locality": {
-                                //    // "readonly": true,
-                                //     "title":"PANCHAYAT",
-                                //     "required":true
-                                // },
+                                "ContactInformation.locality": {
+                                   // "readonly": true,
+                                    "title":"PANCHAYAT",
+                                    "required":true,
+                                    "readonly":true
+                                },
                                 // "FamilyDetails.familyMembers.familyMemberFirstName": {
                                 //     "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
                                 // },
@@ -1414,11 +1415,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualInformation.spouseDateOfBirth": {
                                     "condition": "model.customer.maritalStatus==='MARRIED'"
                                 },
-                                // "ContactInformation.locality": {
-                                //     //"readonly": true,
-                                //     "title":"PANCHAYAT",
-                                //     "required":true
-                                // },
+                                "ContactInformation.locality": {
+                                    //"readonly": true,
+                                    "title":"PANCHAYAT",
+                                    "required":true,
+                                    "readonly":true
+                                },
                                 "ContactInformation.villageName": {
                                     "readonly": true,
                                     "title":"VILLAGE"
@@ -1649,9 +1651,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "required":false
                     },
                     "ContactInformation.locality":{
-                        "title":"PANCHYAT",
+                        "title":"PANCHAYAT",
                         "required":true,
-                        "readOnly":true
+                        "readonly":true
                     },
                     "KYC.addressProofFieldSet":{
                         "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
@@ -2364,11 +2366,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         //    // "orderNo": 100
                                         // },
                                         "mandal": {
-                                            "key": "customer.udf.userDefinedFieldValues.udf1",
+                                            "key": "customer.villageName",
                                             "title": "SUB_DISTRICT",
                                             "type": "string",
                                             "required":true,
-                                            "orderNo": 100
+                                            "readonly":true,
+                                            "orderNo": 130
                                         },
                                         // "mailingMandal": {
                                         //     "key": "customer.udf.userDefinedFieldValues.udf2",

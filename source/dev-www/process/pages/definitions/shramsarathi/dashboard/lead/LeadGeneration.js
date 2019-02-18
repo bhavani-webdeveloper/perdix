@@ -354,7 +354,7 @@ function(LeadProcess, AngularResourceService) {
                                     "individualDetails": {
                                         items: {
                                             "middleName": {
-                                                key: "leadProfile.individualDetails.middleName",
+                                                key: "customer.middleName",
                                                 title: "MIDDLE_NAME",
                                                 schema: {
                                                     pattern: "^[a-zA-Z\. ]+$",
@@ -363,7 +363,7 @@ function(LeadProcess, AngularResourceService) {
                                                 "orderNo": 50
                                             },
                                             "lastName": {
-                                                key: "leadProfile.individualDetails.lastName",
+                                                key: "customer.lastName",
                                                 title: "LAST_NAME",
                                                 required:true,
                                                 schema: {

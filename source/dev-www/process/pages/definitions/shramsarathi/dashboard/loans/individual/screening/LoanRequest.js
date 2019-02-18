@@ -1769,7 +1769,7 @@ define([],function(){
                                                 "title": "INSTALLMENT_AMOUNT",
                                                 "orderNo": 91,
                                                 type: "amount",
-                                                "readonly": true
+                                                "required":true
                                             },
                                             "linkedAccountNumber1":{
                                                 key:"loanAccount.linkedAccountNumber",
@@ -1831,37 +1831,44 @@ define([],function(){
                                             "modeOfDisbursement":{
                                                 "key":"loanAccount.modeOfDisbursement",
                                                 "title":"MODE_OF_DISBURSEMENT",
-                                                "type":"text"
+                                                "type":"select",
+                                                "required":true
                                                             },
                                         "remarksOfInFavourLoan":{
                                             "key":"loanAccount.remarksOfInFavourLoan",
                                             "title":"REMARK_OF_IN_FAVOUR_LOAN",
-                                            "type":"text"
+                                            "type":"text",
+                                            "required":true
                                         },
                                         "potentialRisks":{
                                             "key":"loanAccount.potentialRisks",
                                             "title":"POTENTIAL_RISK",
-                                            "type":"text"
+                                            "type":"select",
+                                            "required":true
                                         },
                                         "collectionDate":{
                                             "key":"loanAccount.collectionDate",
                                             "title":"COLLECTION_DATE",
-                                            "type":"date"
+                                            "type":"date",
+                                            "required":true
                                         },
                                         "disbursementDate":{
                                             "key":"loanAccount.disbursementDate",
                                             "title":"DISBURSEMENT_DATE",
-                                            "type":"date"
+                                            "type":"date",
+                                            "required":true
                                         },
                                         "gracePeriod":{
                                             "key":"loanAccount.gracePeriod",
                                             "title":"GRACE_PERIOD",
-                                            "type":"text"
+                                            "type":"text",
+                                            "required":true
                                         },
                                         "date":{
                                             "key":"loanAccount.date",
                                             "title":"DATE",
-                                            "type":"date"
+                                            "type":"date",
+                                            "required":true
                                         }
                                     
                                         }
