@@ -1733,17 +1733,18 @@ define([],function(){
                                             },
                                             "referenceFrom": {
                                                 "key":"loanAccount.referenceFrom",
-                                              "title":"REFERNECE_FROM",
+                                              "title":"REFERENCE_FROM",
                                               "type":"text",
-                                              "required":true
+                                              "required":true,
+                                              "readonly":false
                                             },
                                             "referenceCheck": {
                                                 "key":"loanAccount.referenceCheck",
-                                              "title":"REFERNECE_CHECK",
+                                              "title":"REFERENCE_CHECK",
                                               "type":"radios",
-                                              "inputMap":{"good":"Good","bad":"Bad"},
-                                              "required":true
-
+                                              "titleMap":{"good":"Good","bad":"Bad"},
+                                              "required":true,
+                                              "readonly":false
                                             },
                                             "transactionType": {
                                                 key: "loanAccount.transactionType",
@@ -1796,12 +1797,12 @@ define([],function(){
                                                 "orderNo":13,
                                                 condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
                                              },
-                                             "BusinessSaveWarning":{
-                                                "type": "section",
-                                                "htmlClass": "alert alert-warning",
-                                                "condition": "!model.loanAccount.customerId",
-                                                "html":"<h4><i class='icon fa fa-warning'></i>Business not yet enrolled.</h4> Kindly save the business details before proceed."
-                                            },
+                                            //  "BusinessSaveWarning":{
+                                            //     "type": "section",
+                                            //     "htmlClass": "alert alert-warning",
+                                            //     "condition": "!model.loanAccount.customerId",
+                                            //     "html":"<h4><i class='icon fa fa-warning'></i>Business not yet enrolled.</h4> Kindly save the business details before proceed."
+                                            // },
                                             "MedicalTestWarning":{
                                                 "type": "section",
                                                 "htmlClass": "alert alert-warning",

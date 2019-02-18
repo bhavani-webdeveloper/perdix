@@ -54,7 +54,8 @@ define({
 								"type": "date",
 								"screenFilter": true
 							}
-						},
+						}
+						,
 						"centre": {
 							"title": "ZONE_NAME",
 							"type": "string",
@@ -123,17 +124,17 @@ define({
 
 					var promise = Lead.search({
 						'branchName': searchOptions.branchName,
-						'centreName': centreName[0],
-						'currentStage': "Inprocess",
-						'leadStatus': "FollowUp",
-						'leadName': searchOptions.leadName,
-						'businessName': searchOptions.businessName,
-						'followUpDate': searchOptions.followUpDate,
-						'area': searchOptions.area,
-						'cityTownVillage': searchOptions.cityTownVillage,
-						'page': pageOpts.pageNo,
-						'per_page': pageOpts.itemsPerPage,
-						'centreName': searchOptions.centre
+						//  'centreName': centreName[0],
+						'currentStage': "Inprocess"
+						// 'leadStatus': "FollowUp",
+						// 'leadName': searchOptions.leadName,
+						// 'businessName': searchOptions.businessName,
+						// 'followUpDate': searchOptions.followUpDate,
+						// 'area': searchOptions.area,
+						// 'cityTownVillage': searchOptions.cityTownVillage,
+						// 'page': pageOpts.pageNo,
+						// 'per_page': pageOpts.itemsPerPage,
+						// 'centreName': searchOptions.centre
 					}).$promise;
 					return promise;
 				},

@@ -143,9 +143,6 @@
         "Page/Adhoc/audit.AuditDashboard",
         "Page/Engine/excelUpload.ExcelUpload",
         "Page/Adhoc/shramsarathi.dashboard.lead.LeadDashboard",
-        "Page/Adhoc/shramsarathi.dashboard.loans.LoanOriginationDashboard",
-        "Page/Adhoc/shramsarathi.dashboard.loans.individual.booking.LoanBookingDashboard",
-        "Page/Adhoc/shramsarathi.dashboard.loans.individual.collections.LoansCollectionsDashboard",
-        "Page/Adhoc/shramsarathi.dashboard.loans.individual.disbursement.LoansDisbursementDashboard"
+        "Page/Adhoc/shramsarathi.dashboard.loans.LoanOriginationDashboard"
     ]
 }
