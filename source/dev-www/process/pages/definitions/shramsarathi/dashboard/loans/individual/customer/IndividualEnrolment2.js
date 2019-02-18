@@ -119,11 +119,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "Screening": {
                             "excludes": [
-<<<<<<< HEAD
                                // "IndividualFinancials",
-=======
-                                //"IndividualFinancials",
->>>>>>> 5c4bf819abaf0491294579d7c951b40282e59a38
                                 "HouseVerification.latitude",
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
