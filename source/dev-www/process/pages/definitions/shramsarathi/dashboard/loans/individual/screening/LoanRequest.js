@@ -1731,13 +1731,16 @@ define([],function(){
                                             "referenceFrom": {
                                                 "key":"loanAccount.referenceFrom",
                                               "title":"REFERNECE_FROM",
-                                              "type":"text"
+                                              "type":"text",
+                                              "required":true
                                             },
                                             "referenceCheck": {
                                                 "key":"loanAccount.referenceCheck",
                                               "title":"REFERNECE_CHECK",
                                               "type":"radios",
-                                              "inputMap":{"good":"Good","bad":"Bad"}
+                                              "inputMap":{"good":"Good","bad":"Bad"},
+                                              "required":true
+
                                             },
                                             "transactionType": {
                                                 key: "loanAccount.transactionType",

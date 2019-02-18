@@ -1,5 +1,3 @@
-
-
 var irf = irf || {};
 irf.BASE_URL = 'http://devkinara.perdix.in:8080/perdix-server';
 irf.MANAGEMENT_BASE_URL = 'http://devkinara.perdix.in:8081/management';
@@ -248,3 +246,13 @@ irf.FWR_BASE_URL = 'http://perdix.kgfs.co.in/fwr_dev';
 // irf.BI_BASE_URL = 'http://sit.perdix.co.in:8081/sit_kgfs_bi';
 // irf.AUDIT_API_URL = 'http://sit.perdix.co.in.in:82';
 // irf.CAMS_EKYC_INTEG_URL = "https://eiscuat1.camsonline.com/ekycuat3/eKYCVal_Aadhar.aspx";
+
+
+//  --------------------------------------Shramsarathi-----------------------------
+// var irf = irf || {};
+// irf.BASE_URL = 'http://sit.perdix.co.in:8080/sit_shramsarathi_perdix-server';
+// irf.MANAGEMENT_BASE_URL = 'http://sit.perdix.co.in:8081/sit_shramsarathi_management';
+// irf.FORM_DOWNLOAD_URL = 'http://sit.perdix.co.in:8080/sit_shramsarathi_forms/formPrint.jsp';
+// irf.BI_BASE_URL = "http://sit.perdix.co.in:8081/sit_shramsarathi_bi";
+// irf.PSYCHOMETRIC_BASE_URL = "http://sit.perdix.co.in:8080/sit_shramsarathi_psychometric";
+
