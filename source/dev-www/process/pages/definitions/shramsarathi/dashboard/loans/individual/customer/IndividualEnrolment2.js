@@ -119,7 +119,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "Screening": {
                             "excludes": [
-                                "IndividualFinancials",
+                               // "IndividualFinancials",
                                 "HouseVerification.latitude",
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
@@ -312,7 +312,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title": "MIGRANT_DETAILS"
                                 },
                                 "BankAccounts.customerBankAccounts.accountNumber": {
-                                    required: false
+                                    required: true
                                 },
                                 "BankAccounts.customerBankAccounts.isDisbersementAccount": {
                                     "type": "radios"
@@ -2217,10 +2217,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto",
                     "BankAccounts.customerBankAccounts.isDisbersementAccount",
                     //
-                    "PhysicalAssets",
-                    "PhysicalAssets.financialAssets",
-                    "PhysicalAssets.financialAssets.installmentAmount",
-                    "PhysicalAssets.financialAssets.balance",
+                    // "PhysicalAssets",
+                    // "PhysicalAssets.financialAssets",
+                    // "PhysicalAssets.financialAssets.installmentAmount",
+                    // "PhysicalAssets.financialAssets.balance",
                     "EnterpriseFinancials",
                     "EnterpriseFinancials.currentAsset",
                     "EnterpriseFinancials.currentAsset.assetType",
