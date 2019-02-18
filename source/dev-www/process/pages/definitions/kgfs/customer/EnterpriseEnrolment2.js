@@ -76,13 +76,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                // data.netBusinessIncome = 
             }
             var monthlySurpluse = function (model) {
-                model.customer.enterprise.finalEMi = 1;
-                model.customer.enterprise.totalMonthlySurplus = ((model.customer.enterprise.netBusinessIncome ? model.customer.enterprise.netBusinessIncome : 0) + (model.customer.enterprise.additionalIncomeConsidered ? model.customer.enterprise.additionalIncomeConsidered : 0) - (model.customer.enterprise.totalPersonalExpense ? model.customer.enterprise.totalPersonalExpense : 0) - (model.customer.enterprise.totalEmiAmount ? model.customer.enterprise.totalEmiAmount : 0))
-                model.customer.enterprise.rent = (model.customer.enterprise.totalMonthlySurplus * (model.customer.enterprise.generalAdmin ? model.customer.enterprise.generalAdmin : 0));
-                model.customer.enterprise.finalEMi = Math.min((model.customer.enterprise.rent ? model.customer.enterprise.rent : 0), (model.customer.enterprise.estimatedEmi ? model.customer.enterprise.estimatedEmi : 0));
-                var x = (((Math.pow(((model.loanAccount.interestRate / 12)+1), model.loanAccount.tenure)) - 1) * (model.customer.enterprise.finalEMi))
+                model.customer.enterprise.avgDailySaleAmount = ((model.customer.enterprise.netBusinessIncome ? model.customer.enterprise.netBusinessIncome : 0) + (model.customer.enterprise.additionalIncomeConsidered ? model.customer.enterprise.additionalIncomeConsidered : 0) - (model.customer.enterprise.totalPersonalExpense ? model.customer.enterprise.totalPersonalExpense : 0) - (model.customer.enterprise.totalEmiAmount ? model.customer.enterprise.totalEmiAmount : 0))
+                model.customer.enterprise.rent = (model.customer.enterprise.avgDailySaleAmount * (model.customer.enterprise.generalAdmin ? model.customer.enterprise.generalAdmin : 0));
+                model.customer.enterprise.workingDaysInMonth = Math.min((model.customer.enterprise.rent ? model.customer.enterprise.rent : 0), (model.customer.enterprise.estimatedEmi ? model.customer.enterprise.estimatedEmi : 0));
+                var x = (((Math.pow(((model.loanAccount.interestRate / 12)+1), model.loanAccount.tenure)) - 1) * (model.customer.enterprise.workingDaysInMonth))
                 var y = ((Math.pow(((model.loanAccount.interestRate/ 12)+1), model.loanAccount.tenure)) * ((model.loanAccount.interestRate/ 12)))
-                model.customer.enterprise.eligibleLoanAmount = (x/y);
+                model.customer.enterprise.employeeSalary = (x/y);
                     "TotalMonthlySurplus.tin"
             }
             var computeEstimatedEmi = function (model) {
@@ -597,6 +596,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "condition":"model.currentStage == 'CreditAppraisal'",
                         "orderNo": 620,
                         colClass: "col-sm-12",
+                        readonly:true,
                         "title": "DAILY_SALES",
                         "items": {
                             "enterpriseDailySale": {
@@ -609,6 +609,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
                                             "dtType":"static",
+                                            "dtShowDeleteFlag":true,
                                             "columns": [
                                                 {
                                                     prop: "salesType",
@@ -619,7 +620,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                                     prop: "mon",
                                                     type: "number",
                                                     name: "MON",
-                                                    "readonly": true,
                                                     onClick: function (value, model, row) {
                                                         getDialySalesDetails(value, model, row, 'mon')
                                                     },
@@ -660,7 +660,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                                     prop: "sat",
                                                     type: "number",
                                                     name: "SAT",
-                                                    "readonly": true,
                                                     onClick: function (value, model, row) {
                                                         getDialySalesDetails(value, model, row, 'sat')
                                                     }
@@ -677,7 +676,109 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                                     prop: "total",
                                                     type: "number",
                                                     name: "TOTAL",
-                                                    condition:"1==2",
+                                                    "readOnly":true
+                                                }
+                                            ],
+
+                                        })
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "ReviewDailySales": {
+                        "type": "box",
+                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'LosDSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "orderNo": 620,
+                        colClass: "col-sm-12",
+                        "title": "DAILY_SALES",
+                        "items": {
+                            "enterpriseDailySale": {
+                                key: "customer.enterpriseDailySale",
+                                type: "datatable",
+                                title: "DAILY_SALES",
+                                startEmpty: true,
+                                dtlConfig: {
+                                    columnsFn: function () {
+                                        return $q.resolve({
+                                            "dtlKeyvalue": "ADD_PARAMETER",
+                                            "dtType":"static",
+                                            "dtShowDeleteFlag":true,
+                                            "columns": [
+                                                {
+                                                    prop: "salesType",
+                                                    type: "string",
+                                                    name: "CYCLE",
+                                                    "readOnly":true
+                                                },
+                                                {
+                                                    prop: "mon",
+                                                    type: "number",
+                                                    name: "MON",
+                                                    "readOnly": true,
+                                                    onClick: function (value, model, row) {
+                                                        getDialySalesDetails(value, model, row, 'mon')
+                                                    },
+                                                },
+                                                {
+                                                    prop: "tue",
+                                                    type: "number",
+                                                    name: "TUE",
+                                                    "readOnly": true,
+                                                    onClick: function (value, model, row) {
+                                                        getDialySalesDetails(value, model, row, 'tue')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "wed",
+                                                    type: "number",
+                                                    name: "WED",
+                                                    "readOnly": true,
+                                                    onClick: function (value, model, row) {
+                                                        getDialySalesDetails(value, model, row, 'wed')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "thu",
+                                                    type: "number",
+                                                    name: "THU",
+                                                    "readOnly": true,
+                                                    onClick: function (value, model, row) {
+                                                        getDialySalesDetails(value, model, row, 'thu')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "fri",
+                                                    type: "number",
+                                                    name: "FRI",
+                                                    "readOnly": true,
+                                                    onClick: function (value, model, row) {
+                                                        getDialySalesDetails(value, model, row, 'fri')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "sat",
+                                                    type: "number",
+                                                    name: "SAT",
+                                                    "readOnly": true,
+                                                    "readonly": true,
+                                                    onClick: function (value, model, row) {
+                                                        getDialySalesDetails(value, model, row, 'sat')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "sun",
+                                                    type: "number",
+                                                    name: "SUN",
+                                                    "readOnly": true,
+                                                    onClick: function (value, model, row) {
+                                                        getDialySalesDetails(value, model, row, 'sun')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "total",
+                                                    type: "number",
+                                                    name: "TOTAL",
                                                     "readOnly": true
                                                 }
                                             ],
@@ -708,6 +809,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "condition":"model.currentStage == 'CreditAppraisal'",
                         "title": "Sales per product & Gross margin",
                         "orderNo": 640,
+                        colClass: "col-sm-12",
                         "items": {
                             "enterpriseProductSales": {
                                 key: "customer.enterpriseProductSales",
@@ -718,6 +820,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
                                             "dtType":"static",
+                                            "dtShowDeleteFlag":true,
                                             "columns": [
                                                 {
                                                     prop: "productName",
@@ -769,62 +872,79 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         })
                                     }
                                 }
-                            },
-                            'totalDailySales': {
-                                key: "customer.enterprise.totalDailySales",
-                                title: "TOTAL_DAILY_Sales",
-                                "type": "number",
-                                required: true,
-                                readonly: true
-                            },
-                            'totalDailyCost': {
-                                key: "customer.enterprise.totalDailyCost",
-                                title: "TOTAL_DAILY_COST",
-                                "type": "number",
-                                required: true,
-                                readonly: true
-                            },
-                            'totalWeeklySales': {
-                                key: "customer.enterprise.totalWeeklySales",
-                                title: "TOTAL_WEEKLY_SALES",
-                                "type": "number",
-                                required: true,
-                                readonly: true
-                            },
-                            'totalWeeklyCost': {
-                                key: "customer.enterprise.totalWeeklyCost",
-                                title: "TOTAL_WEEKLY_COST",
-                                "type": "number",
-                                required: true,
-                                readonly: true
-                            },
-                            'totalMonthlySales': {
-                                key: "customer.enterprise.totalMonthlySales",
-                                title: "TOTAL_MONTHLY_SALE",
-                                "type": "number",
-                                required: true,
-                                readonly: true
-                            },
-                            'totalMonthlyCost': {
-                                key: "customer.enterprise.totalMonthlyCost",
-                                title: "TOTAL_MONTHLY_COST",
-                                "type": "number",
-                                required: true,
-                                readonly: true
-                            },
-                            'grossMarginSales': {
-                                key: "customer.enterprise.grossMarginSales",
-                                title: "GROSS_MARGIN_SALE",
-                                "type": "number",
-                                required: true,
-                                readonly: true
-                            },
-                            'grossMarginCost': {
-                                key: "customer.enterprise.grossMarginCost",
-                                title: "GROSS_MARGIN_COST",
-                                "type": "number",
-                                required: true,
-                                readonly: true
+                            }
+                        }
+                    },
+                    "ReviewEnterpriseProductSale": {
+                        "type": "box",
+                        "readonly":true,
+                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'LosDSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "title": "Sales per product & Gross margin",
+                        "orderNo": 640,
+                        colClass: "col-sm-12",
+                        "items": {
+                            "enterpriseProductSales": {
+                                key: "customer.enterpriseProductSales",
+                                type: "datatable",
+                                title: "Sales per product & Gross margin",
+                                dtlConfig: {
+                                    columnsFn: function () {
+                                        return $q.resolve({
+                                            "dtlKeyvalue": "ADD_PARAMETER",
+                                            "dtType":"static",
+                                            "dtShowDeleteFlag":true,
+                                            "columns": [
+                                                {
+                                                    prop: "productName",
+                                                    type: "text",
+                                                    name: "Product",
+                                                    "readOnly": true,
+                                                },
+                                                {
+                                                    prop: "salePrice",
+                                                    type: "number",
+                                                    name: "sales Price Per Unit",
+                                                    onClick: function (value, model, row) {
+                                                        getEnterpriseProductDetails(model);
+                                                    },
+                                                    "readOnly": true,
+                                                },
+                                                {
+                                                    prop: "costPrice",
+                                                    type: "number",
+                                                    name: "Cost Price Per Unit",
+                                                    onClick: function (value, model, row) {
+                                                        getEnterpriseProductDetails(model);
+                                                    },
+                                                    "readOnly": true,
+                                                },
+                                                {
+                                                    prop: "quantity",
+                                                    type: "number",
+                                                    name: "Quantity",
+                                                    onClick: function (value, model, row) {
+                                                        getEnterpriseProductDetails(model);
+                                                    },
+                                                    "readOnly": true,
+                                                },
+                                                {
+                                                    prop: "totalSale",
+                                                    type: "number",
+                                                    name: "TOTAL_SALE",
+                                                    "readOnly": true,
+                                                },
+                                                {
+                                                    prop: "totalCost",
+                                                    type: "number",
+                                                    name: "TOTAL_COST",
+                                                    "readOnly": true
+                                                },
+
+                                            ],
+
+                                        })
+                                    }
+                                }
                             }
                         }
                     },
@@ -845,6 +965,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
                                             "dtType":"static",
+                                            "dtShowDeleteFlag":false,
                                             "columns": [
                                                 {
                                                     prop: "seasonType",
@@ -898,7 +1019,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                                     prop: "June",
                                                     type: "number",
                                                     name: "June",
-                                                    "readonly": true,
                                                     onClick: function (value, model, row) {
                                                         getAnnualSales(value, model, row, 'June')
                                                     }
@@ -907,7 +1027,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                                     prop: "July",
                                                     type: "number",
                                                     name: "Jul",
-                                                    "readonly": true,
                                                     onClick: function (value, model, row) {
                                                         getAnnualSales(value, model, row, 'July')
                                                     }
@@ -916,7 +1035,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                                     prop: "Aug",
                                                     type: "number",
                                                     name: "Aug",
-                                                    "readonly": true,
                                                     onClick: function (value, model, row) {
                                                         getAnnualSales(value, model, row, 'Aug')
                                                     }
@@ -925,7 +1043,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                                     prop: "Sep",
                                                     type: "number",
                                                     name: "Sep",
-                                                    "readonly": true,
                                                     onClick: function (value, model, row) {
                                                         getAnnualSales(value, model, row, 'Sep')
                                                     }
@@ -934,10 +1051,156 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                                     prop: "Oct",
                                                     type: "number",
                                                     name: "Oct",
-                                                    "readonly": true,
                                                     onClick: function (value, model, row) {
                                                         getAnnualSales(value, model, row, 'Oct')
                                                     }
+                                                },
+                                                {
+                                                    prop: "Nov",
+                                                    type: "number",
+                                                    name: "Nov",
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'Nov')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "Dec",
+                                                    type: "number",
+                                                    name: "Dec",
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'Dec')
+                                                    }
+                                                },
+                                                {
+                                                    prop: "total",
+                                                    type: "number",
+                                                    name: "Total",
+                                                    "readOnly": true
+                                                }
+                                            ],
+
+                                        })
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "ReviewAnnualSales": {
+                        "type": "box",
+                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'LosDSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        colClass: "col-sm-12",
+                        "title": "ANNUAL_BUSINESS_CYCLE",
+                        "orderNo": 650,
+                        "items": {
+                            "monthlySale": {
+                                key: "customer.monthlySale",
+                                type: "datatable",
+                                title: "ANNUAL_BUSINESS_CYCLE",
+                                startEmpty: true,
+                                dtlConfig: {
+                                    columnsFn: function () {
+                                        return $q.resolve({
+                                            "dtlKeyvalue": "ADD_PARAMETER",
+                                            "dtType":"static",
+                                            "dtShowDeleteFlag":false,
+                                            "columns": [
+                                                {
+                                                    prop: "seasonType",
+                                                    type: "string",
+                                                    name: "CYCLE",
+                                                    "readOnly": true
+                                                },
+                                                {
+                                                    prop: "Jan",
+                                                    type: "number",
+                                                    name: "Jan",
+                                                    "readOnly": true,
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'Jan');
+                                                    },
+                                                },
+
+                                                {
+                                                    prop: "Feb",
+                                                    type: "number",
+                                                    name: "Feb",
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'Feb')
+                                                    },
+                                                    "readOnly": true
+
+                                                },
+                                                {
+                                                    prop: "Mar",
+                                                    type: "number",
+                                                    name: "Mar",
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'Mar')
+                                                    },
+                                                    "readOnly": true
+                                                },
+                                                {
+                                                    prop: "Apr",
+                                                    type: "number",
+                                                    name: "Apr",
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'Apr')
+                                                    },
+                                                    "readOnly": true
+                                                },
+                                                {
+                                                    prop: "May",
+                                                    type: "number",
+                                                    name: "May",
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'May')
+                                                    },
+                                                    "readOnly": true
+                                                },
+                                                {
+                                                    prop: "June",
+                                                    type: "number",
+                                                    name: "June",
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'June')
+                                                    },
+                                                    "readOnly": true
+                                                },
+                                                {
+                                                    prop: "July",
+                                                    type: "number",
+                                                    name: "Jul",
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'July')
+                                                    },
+                                                    "readOnly": true
+                                                },
+                                                {
+                                                    prop: "Aug",
+                                                    type: "number",
+                                                    name: "Aug",
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'Aug')
+                                                    },
+                                                    "readOnly": true
+                                                },
+                                                {
+                                                    prop: "Sep",
+                                                    type: "number",
+                                                    name: "Sep",
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'Sep')
+                                                    },
+                                                    "readOnly": true
+                                                },
+                                                {
+                                                    prop: "Oct",
+                                                    type: "number",
+                                                    name: "Oct",
+                                                    onClick: function (value, model, row) {
+                                                        getAnnualSales(value, model, row, 'Oct')
+                                                    },
+                                                    "readOnly": true
                                                 },
                                                 {
                                                     prop: "Nov",
@@ -968,22 +1231,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         })
                                     }
                                 }
-                            },
-                            'avgMonthlySales': {
-                                key: "customer.enterprise.avgMonthlySales",
-                                title: "TOTAL_MONTHLY_SALE",
-                                "type": "number",
-                                required: true,
-                                readonly: true
-                            },
-                            'avgAnnualSales': {
-                                key: "customer.enterprise.avgAnnualSales",
-                                title: "TOTAL_ANNUAL_SALE",
-                                "type": "number",
-                                required: true,
-                                readonly: true
                             }
-
                         }
                     },
                     "MonthlySalesCalculate": {
@@ -1279,8 +1527,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                                     name: "AMOUNT",
                                                     onClick: function (value, model, row) {
                                                         getBusinessExpenseData(value, model, row)
-                                                    },
-                                                    "readonly": true
+                                                    }
                                                 }
                                             ],
 
@@ -1301,6 +1548,52 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 "type": "number",
                                 required: true,
                                 readonly: true
+                            }
+                        }
+                    },
+                    "ReviewMonthlyBusinessExpense": {
+                        "type": "box",
+                        colClass: "col-sm-6",
+                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'LosDSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "title": "BUSINESS_EXPENSE_MONTHLY",
+                        "orderNo": 670,
+                        "items": {
+                            "monthlyBusinessExpense": {
+                                key: "customer.monthlyBusinessExpense",
+                                type: "datatable",
+                                title: "BUSINESS_EXPENSE_MONTHLY",
+                                dtlConfig: {
+                                    columnsFn: function () {
+                                        return $q.resolve({
+                                            "dtlKeyvalue": "ADD_PARAMETER",
+                                            "dtType":"static",
+                                            "columns": [
+                                                {
+                                                    prop: "expenditureSource",
+                                                    type: "text",
+                                                    name: "ITEM",
+                                                    "readOnly": true
+                                                },
+                                                {
+                                                    prop: "expenseType",
+                                                    type: "number",
+                                                    name: "ADDITIONAL_DETAILS",
+                                                    "readOnly": true
+                                                },
+                                                {
+                                                    prop: "annualExpenses",
+                                                    type: "number",
+                                                    name: "AMOUNT",
+                                                    onClick: function (value, model, row) {
+                                                        getBusinessExpenseData(value, model, row)
+                                                    },
+                                                    "readOnly": true
+                                                }
+                                            ],
+
+                                        })
+                                    }
+                                }
                             }
                         }
                     },
@@ -1334,6 +1627,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
                                             "dtType":"static",
+                                            "dtShowDeleteFlag":true,
                                             "columns": [
                                                 {
                                                     prop: "incomeSource",
@@ -1361,20 +1655,54 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         })
                                     }
                                 }
-                            },
-                            'totalMonthlyAdditionIncome': {
-                                key: "customer.enterprise.totalMonthlyAdditionIncome",
-                                title: "TotalMonthlyAdditionlIncome",
-                                "type": "number",
-                                required: true,
-                                readonly: true
-                            },
-                            'additionalIncomeConsidered': {
-                                key: "customer.enterprise.additionalIncomeConsidered",
-                                title: "AdditionalIncomeConsidered",
-                                "type": "number",
-                                required: true,
-                                readonly: true
+                            }
+                        }
+                    },
+                    "ReviewOtherBusinessIncomes": {
+                        "type": "box",
+                        colClass: "col-sm-6",
+                        "title": "ADDITIONAL_INCOME",
+                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'LosDSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "orderNo": 680,
+                        "items": {
+                            "otherBusinessIncomes": {
+                                key: "customer.otherBusinessIncomes",
+                                type: "datatable",
+                                title: "OtherBusinessIncomes",
+                                dtlConfig: {
+                                    columnsFn: function () {
+                                        return $q.resolve({
+                                            "dtlKeyvalue": "ADD_PARAMETER",
+                                            "dtType":"static",
+                                            "dtShowDeleteFlag":true,
+                                            "columns": [
+                                                {
+                                                    prop: "incomeSource",
+                                                    type: "text",
+                                                    name: "ITEM",
+                                                    "readOnly": true
+                                                },
+                                                {
+                                                    prop: "additionDetails",
+                                                    type: "number",
+                                                    name: "ADDITIONAL_DETAILS",
+                                                    "readOnly": true
+                                                },
+                                                {
+                                                    prop: "amount",
+                                                    type: "number",
+                                                    name: "AMOUNT",
+                                                    onClick: function (value, model, row) {
+                                                        getOtherBusinessIncomeDet(value, model, row);
+                                                    },
+                                                    "readOnly": true
+                                                }
+
+                                            ],
+
+                                        })
+                                    }
+                                }
                             }
                         }
                     },
@@ -1394,6 +1722,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
                                             "dtType":"static",
+                                            "dtShowDeleteFlag":true,
                                             "columns": [
                                                 {
                                                     prop: "expenditureSource",
@@ -1434,6 +1763,63 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             }
                         }
                     },
+                    "ReviewPersonalExpenses": {
+                        "type": "box",
+                        colClass: "col-sm-6",
+                        "title": "PERSONAL_EXPENSES",
+                        "orderNo": 710,
+                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'LosDSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "items": {
+                            "personalExpenses": {
+                                key: "customer.personalExpenses",
+                                type: "datatable",
+                                title: "MonthlyBusinessExpense",
+                                dtlConfig: {
+                                    columnsFn: function () {
+                                        return $q.resolve({
+                                            "dtlKeyvalue": "ADD_PARAMETER",
+                                            "dtType":"static",
+                                            "dtShowDeleteFlag":true,
+                                            "columns": [
+                                                {
+                                                    prop: "expenditureSource",
+                                                    type: "text",
+                                                    name: "ITEM",
+                                                    "readOnly": true
+                                                },
+                                                {
+                                                    prop: "expenseType",
+                                                    type: "number",
+                                                    name: "ADDITIONAL_DETAILS",
+                                                    "readOnly": true
+                                                },
+
+                                                {
+                                                    prop: "annualExpenses",
+                                                    type: "number",
+                                                    name: "AMOUNT",
+                                                    onClick: function (value, model, row) {
+                                                        getPersonalExpenses(value, model, row);
+                                                        //model.customer.enterprise.totalBusinessExpenses = total;
+                                                    },
+                                                    "readOnly": true
+                                                }
+
+                                            ],
+
+                                        })
+                                    }
+                                }
+                            },
+                            'totalPersonalExpense': {
+                                key: "customer.enterprise.totalPersonalExpense",
+                                title: "TotalPersonalExpense",
+                                "type": "number",
+                                required: true,
+                                readonly: true
+                            }
+                        }
+                    },
                     "LiabilityRepayment": {
                         "type": "box",
                         colClass: "col-sm-6",
@@ -1441,72 +1827,124 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "condition":"model.currentStage == 'CreditAppraisal'",
                         "orderNo": 730,
                         "items": {
-                            "liabilities": {
-                                "key": "customer.liabilities",
-                                "type": "array",
-                                "items": {
-                                    "customerLiabilityRepayments": {
-                                        key: "customer.liabilities[0].customerLiabilityRepayments",
-                                        type: "datatable",
-                                        "dtType":"static",
-                                        title: "LIABILITY_REPAYMENT",
-                                        dtlConfig: {
-                                            columnsFn: function () {
-                                                return $q.resolve({
-                                                    "dtlKeyvalue": "ADD_PARAMETER",
-                                                    "staticTable":true,
-                                                    "columns": [
-                                                        {
-                                                            prop: "udf2",
-                                                            type: "string",
-                                                            name: "ITEM"
-                                                        },
-                                                        {
-                                                            prop: "udf1",
-                                                            type: "string",
-                                                            name: "add"
-                                                           
-                                                        },
-                                                        {
-                                                            prop: "emiAmount",
-                                                            type: "number",
-                                                            name: "EMI"
-                                                           
+                            "liabilityRepayment": {
+                                key: "customer.liabilityRepayment",
+                                type: "datatable",
+                                title: "LIABILITY_REPAYMENT",
+                                dtlConfig: {
+                                    columnsFn: function () {
+                                        return $q.resolve({
+                                            "dtlKeyvalue": "ADD_PARAMETER",
+                                            "dtShowDeleteFlag":true,
+                                            "columns": [
+                                                {
+                                                    prop: "udf2",
+                                                    type: "text",
+                                                    name: "ITEM"
+                                                },
+                                                {
+                                                    prop: "udf1",
+                                                    type: "number",
+                                                    name: "LOAN_AMOUNT",
+                                                    onClick : function(value , model , row){
+                                                        model.customer.enterprise.totalLoanAmount = 0;
+                                                        var liabilities =  model.customer.liabilityRepayment;
+                                                        for(i in liabilities){
+                                                        model.customer.enterprise.totalLoanAmount = model.customer.enterprise.totalLoanAmount + Number(liabilities[i].udf1);
                                                         }
+                                                    }
+                                                },
+                                                {
+                                                    prop: "emiAmount",
+                                                    type: "number",
+                                                    name: "EMI",
+                                                    onClick : function(value , model , row){
+                                                        model.customer.enterprise.totalEmiAmount = 0;
+                                                        var liabilities =  model.customer.liabilities;
+                                                        for(i in liabilities){
+                                                        model.customer.enterprise.totalEmiAmount = model.customer.enterprise.totalEmiAmount + liabilities[i].emiAmount;
+                                                        }
+                                                    }
+                                                }
 
-                                                    ]
+                                            ],
 
-                                                })
-                                            }
-                                        }
+                                        })
                                     }
                                 }
-                            },
-                            'totalEmiAmount': {
-                                key: "customer.enterprise.totalEmiAmount",
-                                title: "TOTAL_EMI_AMOUNT",
-                                "type": "number",
-                                //required: true,
-                                readonly: true
-                            },
-                            'totalLoanAmount': {
-                                key: "customer.enterprise.totalLoanAmount",
-                                title: "TOTAL_LOAN_AMOUNT",
-                                "type": "number",
-                                //required: true,
-                                readonly: true
                             }
+                            
+                        }
+                    },
+                    "ReviewLiabilityRepayment": {
+                        "type": "box",
+                        colClass: "col-sm-6",
+                        "title": "LIABILITY_REPAYMENT",
+                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'LosDSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "orderNo": 730,
+                        "items": {
+                            "liabilityRepayment": {
+                                key: "customer.liabilityRepayment",
+                                type: "datatable",
+                                title: "LIABILITY_REPAYMENT",
+                                dtlConfig: {
+                                    columnsFn: function () {
+                                        return $q.resolve({
+                                            "dtlKeyvalue": "ADD_PARAMETER",
+                                            "dtShowDeleteFlag":true,
+                                            "columns": [
+                                                {
+                                                    prop: "udf2",
+                                                    type: "text",
+                                                    name: "ITEM",
+                                                    "readOnly":true
+                                                },
+                                                {
+                                                    prop: "udf1",
+                                                    type: "number",
+                                                    name: "LOAN_AMOUNT",
+                                                    "readOnly":true,
+                                                    onClick : function(value , model , row){
+                                                        model.customer.enterprise.totalLoanAmount = 0;
+                                                        var liabilities =  model.customer.liabilityRepayment;
+                                                        for(i in liabilities){
+                                                        model.customer.enterprise.totalLoanAmount = model.customer.enterprise.totalLoanAmount + Number(liabilities[i].udf1);
+                                                        }
+                                                    }
+                                                },
+                                                {
+                                                    prop: "emiAmount",
+                                                    type: "number",
+                                                    name: "EMI",
+                                                    "readOnly":true,
+                                                    onClick : function(value , model , row){
+                                                        model.customer.enterprise.totalEmiAmount = 0;
+                                                        var liabilities =  model.customer.liabilityRepayment;
+                                                        for(i in liabilities){
+                                                        model.customer.enterprise.totalEmiAmount = model.customer.enterprise.totalEmiAmount + liabilities[i].emiAmount;
+                                                        }
+                                                    }
+                                                }
+
+                                            ],
+
+                                        })
+                                    }
+                                }
+                            }
+                            
                         }
                     },
                     "TotalMonthlySurplus": {
                         "type": "box",
                         // colClass: "col-sm-12",
                         "title": 'TOTAL_MONTHLY_SURPLUS',
+                       // readOnly : "model.TableReadonlyFlag"
                         "condition":"model.currentStage == 'CreditAppraisal'",
                         "orderNo": 750,
                         "items": {
-                            'totalMonthlySurplus': {
-                                key: "customer.enterprise.totalMonthlySurplus",
+                            'avgDailySaleAmount': {
+                                key: "customer.enterprise.avgDailySaleAmount",
                                 title: "TOTAL_MONTHLY_SURPLUS",
                                 "type": "number",
                                 "readonly": true
@@ -1533,8 +1971,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     monthlySurpluse(model);
                                 }
                             },
-                            'finalEMi': {
-                                key: "customer.enterprise.finalEMi",
+                            'workingDaysInMonth': {
+                                key: "customer.enterprise.workingDaysInMonth",
                                 title: "Final EMI Eligibility",
                                 "type": "number",
                                 "readonly": true
@@ -1547,8 +1985,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     monthlySurpluse(model);
                                 }
                             },
-                            'eligibleLoanAmount': {
-                                key: "customer.enterprise.eligibleLoanAmount",
+                            'employeeSalary': {  
+                                key: "customer.enterprise.employeeSalary",
                                 title: "Loan Amount Eligible for the customer",
                                 "type": "number",
                                 "readonly": true
@@ -1685,25 +2123,46 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
 
                     "DailySales",
                     "DailySales.enterpriseDailySale",
+
+                    "ReviewDailySales",
+                    "ReviewDailySales.enterpriseDailySale",
     
                     "AnnualSales",
                     "AnnualSales.monthlySale",
 
+                    "ReviewAnnualSales",
+                    "ReviewAnnualSales.monthlySale",
+
                     "EnterpriseProductSale",
                     "EnterpriseProductSale.enterpriseProductSales",
+
+                    "ReviewEnterpriseProductSale",
+                    "ReviewEnterpriseProductSale.enterpriseProductSales",
                     
                     "MonthlyBusinessExpense",
                     "MonthlyBusinessExpense.monthlyBusinessExpense",
 
+                    "ReviewMonthlyBusinessExpense",
+                    "ReviewMonthlyBusinessExpense.monthlyBusinessExpense",
+
                     "OtherBusinessIncomes",
                     "OtherBusinessIncomes.otherBusinessIncomes",
+
+                    "ReviewOtherBusinessIncomes",
+                    "ReviewOtherBusinessIncomes.otherBusinessIncomes",
 
                     "PersonalExpenses",
                     "PersonalExpenses.personalExpenses",
 
+                    "ReviewPersonalExpenses",
+                    "ReviewPersonalExpenses.personalExpenses",
+
                     "LiabilityRepayment",
-                    "LiabilityRepayment.liabilities",
-                    "LiabilityRepayment.liabilities.customerLiabilityRepayments",
+                    "LiabilityRepayment.liabilityRepayment",
+                    //"LiabilityRepayment.liabilities.customerLiabilityRepayments",
+
+                    "ReviewLiabilityRepayment",
+                    "ReviewLiabilityRepayment.liabilityRepayment",
                     
                     "MonthlySalesCalculate",
                     "MonthlySalesCalculate.dailySales",
@@ -1739,17 +2198,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "NetBusinessIncome.netBusinessIncomeGrossMargin",
                     
                     "TotalMonthlySurplus",
-                    "TotalMonthlySurplus.totalMonthlySurplus",
+                    "TotalMonthlySurplus.avgDailySaleAmount",
                     "TotalMonthlySurplus.generalAdmin",
                     "TotalMonthlySurplus.rent",
                     "TotalMonthlySurplus.estimatedEmi",
-                    "TotalMonthlySurplus.finalEMi",
+                    "TotalMonthlySurplus.workingDaysInMonth",
                     "TotalMonthlySurplus.dic",
-                    "TotalMonthlySurplus.eligibleLoanAmount",
+                    "TotalMonthlySurplus.employeeSalary",
                     "TotalMonthlySurplus.tin"
                 ]
             }
-
+            
             var configFile = function () {
                 return {
                     "currentStage": {
@@ -1778,13 +2237,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 "SuppliersDeatils":{
                                     "readonly": true
                                 },
-                                "DailySales":{
+                                "PreliminaryInformation":{
                                     "readonly": true
                                 },
-                                "AnnualSales":{
+                                "EstimatedSales":{
                                     "readonly": true
                                 },
-                                "EnterpriseProductSale":{
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                },
+                                "NetBusinessIncome":{
+                                    "readonly": true
+                                },
+                                "TotalMonthlySurplus":{
                                     "readonly": true
                                 },
                                 "MonthlyBusinessExpense":{
@@ -1804,8 +2272,194 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 },
                                 "OtherExpenseDetails":{
                                     "readonly": true
+                                }
+                            }
+                        },
+                        "DSCApproval": {
+                            "excludes": [
+                            ],
+                            "overrides": {
+                                "EnterpriseInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation":{
+                                    "readonly": true
+                                },
+                                "BankAccounts":{
+                                    "readonly": true
+                                },
+                                "Liabilities":{
+                                    "readonly": true
+                                },
+                                "EnterpriseFinancials":{
+                                    "readonly": true
+                                },
+                                "BuyerDetails":{
+                                    "readonly": true
+                                },
+                                "SuppliersDeatils":{
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation":{
+                                    "readonly": true
+                                },
+                                "EstimatedSales":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                },
+                                "NetBusinessIncome":{
+                                    "readonly": true
                                 },
                                 "TotalMonthlySurplus":{
+                                    "readonly": true
+                                },
+                                "MonthlyBusinessExpense":{
+                                    "readonly": true
+                                },
+                                "OtherBusinessIncomes":{
+                                    "readonly": true
+                                },
+                                "PersonalExpenses":{
+                                    "readonly": true
+                                },
+                                "LiabilityRepayment":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "LosDSCOverride": {
+                            "excludes": [
+                            ],
+                            "overrides": {
+                                "EnterpriseInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation":{
+                                    "readonly": true
+                                },
+                                "BankAccounts":{
+                                    "readonly": true
+                                },
+                                "Liabilities":{
+                                    "readonly": true
+                                },
+                                "EnterpriseFinancials":{
+                                    "readonly": true
+                                },
+                                "BuyerDetails":{
+                                    "readonly": true
+                                },
+                                "SuppliersDeatils":{
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation":{
+                                    "readonly": true
+                                },
+                                "EstimatedSales":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                },
+                                "NetBusinessIncome":{
+                                    "readonly": true
+                                },
+                                "TotalMonthlySurplus":{
+                                    "readonly": true
+                                },
+                                "MonthlyBusinessExpense":{
+                                    "readonly": true
+                                },
+                                "OtherBusinessIncomes":{
+                                    "readonly": true
+                                },
+                                "PersonalExpenses":{
+                                    "readonly": true
+                                },
+                                "LiabilityRepayment":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "RiskReviewAndLoanSanction": {
+                            "excludes": [
+                            ],
+                            "overrides": {
+                                "EnterpriseInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation":{
+                                    "readonly": true
+                                },
+                                "BankAccounts":{
+                                    "readonly": true
+                                },
+                                "Liabilities":{
+                                    "readonly": true
+                                },
+                                "EnterpriseFinancials":{
+                                    "readonly": true
+                                },
+                                "BuyerDetails":{
+                                    "readonly": true
+                                },
+                                "SuppliersDeatils":{
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation":{
+                                    "readonly": true
+                                },
+                                "EstimatedSales":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                },
+                                "NetBusinessIncome":{
+                                    "readonly": true
+                                },
+                                "TotalMonthlySurplus":{
+                                    "readonly": true
+                                },
+                                "MonthlyBusinessExpense":{
+                                    "readonly": true
+                                },
+                                "OtherBusinessIncomes":{
+                                    "readonly": true
+                                },
+                                "PersonalExpenses":{
+                                    "readonly": true
+                                },
+                                "LiabilityRepayment":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
                                     "readonly": true
                                 }
                             }
@@ -1825,7 +2479,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
 
                     /* Setting data recieved from Bundle */
                     model.loanCustomerRelationType = "Customer";
-                    model.currentStage = bundleModel.currentStage;
+                    model.currentStage = bundleModel.currentStage;  
+                    // model.currentStage =  'KYCCheck';
                     /* End of setting data recieved from Bundle */
 
                     /* Setting data for the form */
@@ -1848,13 +2503,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     model.customer['monthlySale'] = []
                    // model.customer['enterpriseProductSales'] = []
                     model.customer['monthlyBusinessExpense'] = []
-                   // model.customer['otherBusinessIncomes'] = [];
+                    model.customer['liabilityRepayment'] = [];
                     model.customer['personalExpenses'] = []
                     model.customer['totalMonthlySurplus'] = '';
                     model.customer['debtServiceRatio'] = '';
                     // model.customer.enterprise = {
                         
                     // }
+                    if(model.customer.enterprise == null){
+                        model.customer.enterprise = {}; 
+                    }
                     model.customer.enterprise.businessType  = "Services";
                     if(model.currentStage == 'CreditAppraisal'){
                         model.customer.enterprise.initialEstimateMonthlySale = (model.customer.enterprise.ssiNumber) ? Number(model.customer.enterprise.ssiNumber * 4):0;
@@ -1943,6 +2601,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             getBusinessExpenseData('value', model, 'row');
                             getPersonalExpenses('value', model, 'row');
                             getOtherBusinessIncomeDet('', model, '') ;
+                        }
+                        if(model.customer.liabilities.length > 0 && model.customer.liabilities[0].customerLiabilityRepayments){
+                            _.forEach(model.customer.liabilities[0].customerLiabilityRepayments,function(liability){
+                                model.customer.liabilityRepayment.push(liability)
+                            })
                         }
                     }
                     
@@ -2154,8 +2817,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         _.forEach(model.customer.personalExpenses, function (expenses) {
                                 model.customer.expenditures.push(expenses)
                         })
-                        // model.customer.expenditures.push( model.customer.monthlyBusinessExpense);
-                        // model.customer.expenditures.push( model.customer.personalExpenses)
+                        _.forEach(model.customer.liabilityRepayment, function (liability) {
+                            model.customer.liabilities[0].customerLiabilityRepayments.push(liability)
+                        })
                         model.enrolmentProcess.customer = model.customer;
                         model.enrolmentProcess.proceed()
                             .finally(function () {
@@ -2184,3 +2848,4 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
         }
     }
 });
+

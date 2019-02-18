@@ -319,13 +319,13 @@
                         "loanType": {
                             "title": "Loan Type",
                             "type": "string",
-                            "captureStages": ["Stage02", "Completed"]
+                            "captureStages": ["Stage01","Stage02", "Completed"]
                         },
                         "loanSource": {
                             "title": "Loan Source",
                             "type": "string",
                             "refCodeCategory": "loan_source",
-                            "captureStages": ["Stage02", "Completed"]
+                            "captureStages": ["Stage01","Stage02", "Completed"]
                         },
                         "instituteName": {
                             "title": "Institute Name",
@@ -343,35 +343,35 @@
                             "title": "Frequency Of Installment",
                             "type": "string",
                             "refCodeCategory": "frequency",
-                            "captureStages": ["Stage02", "Completed"]
+                            "captureStages": ["Stage01","Stage02", "Completed"]
                         },
                         "loanAmountInPaisa": {
                             "title": "Loan Amount In Paisa",
                             "type": "integer",
                             "minimum": 1,
                             "maximum": 100000000,
-                            "captureStages": ["Stage02", "Completed"]
+                            "captureStages": ["Stage01","Stage02", "Completed"]
                         },
                         "installmentAmountInPaisa": {
                             "title": "Installment Amount In Paisa",
                             "type": "integer",
                             "minimum": 1,
                             "maximum": 100000000,
-                            "captureStages": ["Stage02", "Completed"]
+                            "captureStages": ["Stage01","Stage02", "Completed"]
                         },
                         "outstandingAmountInPaisa": {
                             "title": "outstandingAmountInPaisa",
                             "type": "number",
                             "minimum": 0,
                             "maximum": 10000000,
-                            "captureStages": ["Completed"]
+                            "captureStages": ["Stage01","Completed"]
                         },
                         "interestRate": {
                             "title": "interestRate",
                             "type": "number",
                             "minimum": 0,
                             "maximum": 10000000,
-                            "captureStages": ["Completed"]
+                            "captureStages": ["Stage01","Completed"]
                         },
                         "interestOnly": {
                             "title": "Interest Only",
@@ -398,7 +398,7 @@
                             "title": "Start Date",
                             "type": "string",
                             "format": "date",
-                            "captureStages": ["Stage02", "Completed"]
+                            "captureStages": ["Stage01","Stage02", "Completed"]
                         },
                         "maturityDate": {
                             "title": "Maturity Date",
@@ -411,7 +411,7 @@
                             "type": "number",
                             "minimum": 0,
                             "maximum": 10000,
-                            "captureStages": ["Completed"]
+                            "captureStages": ["Stage01","Completed"]
                         }
                     }
                 }
@@ -2392,6 +2392,26 @@
                         "title": "DEBT_SERVICE_RATIO",
                         "type": "number",
                         "captureStages": ["Completed"]
+                    },
+                    "avgDailySaleAmount":{
+                        "title": "TOTAL_MONTHLY_SURPLUS",
+                        "type": "number",
+                        "captureStages": ["Completed"] 
+                    },
+                    "rent":{
+                        "title": "EMI_ELIGIBILITY",
+                        "type": "number",
+                        "captureStages": ["Completed"] 
+                    },
+                    "workingDaysInMonth":{
+                        "title": "EMI_ELIGIBILITY",
+                        "type": "number",
+                        "captureStages": ["Completed"] 
+                    },
+                    "employeeSalary":{
+                        "title": "LOAN_AMOUNT_ELIGIBLE",
+                        "type": "number",
+                        "captureStages": ["Completed"] 
                     }
                 }
             },
@@ -2654,35 +2674,35 @@
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 100,
-                            "captureStages": ["Completed"]
+                            "captureStages": ["Stage01", "Stage02", "EDF", "Completed"]
                         },
                         "incomeType": {
                             "title": "Income Type",
                             "type": "string",
-                            "captureStages": ["Completed"]
+                            "captureStages": ["Stage01", "Stage02", "EDF", "Completed"]
                         },
                         "invoiceType": {
                             "title": "Invoice Type",
                             "type": "string",
-                            "captureStages": ["Completed"]
+                            "captureStages": ["Stage01", "Stage02", "EDF", "Completed"]
                         },
                         "amount": {
                             "title": "Amount",
                             "type": "number",
                             "minimum": 0,
-                            "captureStages": ["Completed"]
+                            "captureStages": ["Stage01", "Stage02", "EDF", "Completed"]
                         },
                         "incomeSalesDate": {
                             "title": "Income Sales Date",
                             "type": "string",
                             "format": "date",
-                            "captureStages": ["Completed"]
+                            "captureStages": ["Stage01", "Stage02", "EDF", "Completed"]
                         },
                         "frequency": {
                             "title": "Frequency",
                             "type": "string",
                             "refCodeCategory": "frequency",
-                            "captureStages": ["Completed"]
+                            "captureStages": ["Stage01", "Stage02", "EDF", "Completed"]
                         }
 
                     }
