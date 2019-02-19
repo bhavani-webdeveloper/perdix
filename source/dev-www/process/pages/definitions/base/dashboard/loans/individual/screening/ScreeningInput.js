@@ -249,7 +249,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             });
 
                     } else {
-                        LoanProcess.createNewProcess()
+                        LoanProcessts.createNewProcess()
                             .subscribe(function(loanProcess){
                                 bundleModel.loanProcess = loanProcess;
                                 loanProcess.loanAccount.currentStage = 'Screening';
