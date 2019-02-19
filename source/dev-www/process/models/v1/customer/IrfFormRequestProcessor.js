@@ -481,8 +481,9 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                     $log.info(result);
                                     var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
                                     model.customer.identityProofNo = aadhaarData.uid;
-                                    model.customer.aadhaarNo = aadhaarData.uid;
-                                }
+                                    EnrollmentHelper.customerAadhaarOnCapture(result,model,form);
+
+                                },
                             },
                             "identityProofNo1": {
                                 key: "customer.identityProofNo",
@@ -560,7 +561,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             },
                             "addressProofNo": {
                                 key: "customer.addressProofNo",
-                                type: "barcode",
+                                type: "qrcode",
                                 condition: "model.customer.addressProof == 'Aadhar Card'",
                                 schema: {
                                     "pattern": "^[2-9]{1}[0-9]{11}$",
@@ -568,7 +569,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 },
                                 onCapture: function (result, model, form) {
                                     $log.info(result);
-                                    model.customer.addressProofNo = result.text;
+                                    var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                                    model.customer.addressProofNo =  aadhaarData.uid;
                                 }
                             },
                             "addressProofNo1": {
@@ -705,7 +707,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             "kyc1ProofNumber": {
                                 orderNo: 40,
                                 key: "customer.additionalKYCs[].kyc1ProofNumber",
-                                type: "barcode",
+                                type: "qrcode",
                                 condition: "model.customer.additionalKYCs[arrayIndex].kyc1ProofType == 'Aadhar Card'",
                                 schema: {
                                     "pattern": "^[2-9]{1}[0-9]{11}$",
@@ -713,7 +715,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 },
                                 onCapture: function (result, model, form) {
                                     $log.info(result);
-                                    model.customer.additionalKYCs[form.arrayIndex].kyc1ProofNumber = result.text;
+                                    var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                                    model.customer.additionalKYCs[form.arrayIndex].kyc1ProofNumber = aadhaarData.uid;
                                 }
                             },
                             "kyc1ProofNumber1": {
