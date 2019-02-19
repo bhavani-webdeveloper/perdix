@@ -188,6 +188,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "IndividualInformation.spouseFirstName": {
+                                    "type":"string",
                                     "condition": "model.customer.maritalStatus==='MARRIED'"
                                 },
                                 "IndividualInformation.spouseDateOfBirth": {
@@ -326,6 +327,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "IndividualInformation.spouseFirstName": {
+                                    "type":"string",
                                     "condition": "model.customer.maritalStatus==='MARRIED'"
                                 },
                                 "IndividualInformation.spouseDateOfBirth": {
@@ -413,6 +415,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "IndividualInformation.spouseFirstName": {
+                                    "type":"string",
                                     "condition": "model.customer.maritalStatus==='MARRIED'"
                                 },
                                 "IndividualInformation.spouseDateOfBirth": {
@@ -522,6 +525,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "IndividualInformation.spouseFirstName": {
+                                    "type":"string",
                                     "condition": "model.customer.maritalStatus==='MARRIED'"
                                 },
                                 "IndividualInformation.spouseDateOfBirth": {
@@ -1148,6 +1152,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "IndividualInformation.spouseFirstName": {
+                                    "type":"string",
                                     "condition": "model.customer.maritalStatus==='MARRIED'"
                                 },
                                 "IndividualInformation.spouseDateOfBirth": {
@@ -1392,6 +1397,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "title": "CENTRE_ID",
                     },
                     "IndividualInformation.spouseFirstName":{
+                        "type":"string",
                         "condition": "model.customer.maritalStatus==='MARRIED'",
                         "required":true
                     },
