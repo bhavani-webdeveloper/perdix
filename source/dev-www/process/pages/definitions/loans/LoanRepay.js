@@ -226,20 +226,21 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                         }
                                     )
                                     .then(function(){
-                                        Locking.lock({
-                                            "processType": "Loan",
-                                            "processName": "Collections",
-                                            "recordId": model.loanAccount.id
-                                        }).$promise.then(function() {
+                                        if (SessionStore.getGlobalSetting("lockingRequired") == "true") {
+                                            Locking.lock({
+                                                "processType": "Loan",
+                                                "processName": "Collections",
+                                                "recordId": model.loanAccount.id
+                                            }).$promise.then(function () {
 
-                                        }, function(err) {
-                                            Utils.alert(err.data.error).finally(function(){
+                                            }, function (err) {
                                                 Utils.alert(err.data.error).finally(function () {
-                                                    irfNavigator.goBack();
-                                                    deferred.reject();
+                                                    Utils.alert(err.data.error).finally(function () {
+                                                        irfNavigator.goBack();
+                                                    });
                                                 });
                                             });
-                                        });
+                                        }
                                     })
                             } else {
                                 /* Loan Account not in perdix. Go back to Collections Dashboard */

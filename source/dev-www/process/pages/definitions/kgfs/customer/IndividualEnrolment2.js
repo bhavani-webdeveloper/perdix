@@ -320,6 +320,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "KYC.customerId":{
                             orderNo:10,
+                            required:true,
                             condition:"!model.customer.customerId",
                             initialize: function(model, form, parentModel, context) {
                                 model.customerBranchId = parentModel.customer.customerBranchId;
