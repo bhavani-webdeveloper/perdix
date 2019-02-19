@@ -159,6 +159,21 @@ irf.pageCollection.factory(irf.page('customer360.loans.Service'),
                                         
                                     }
                                 },
+                                {
+                                    name: "Activate Loan",
+                                    desc: "",
+                                    icon: "fa fa-check-square-o",
+                                    fn: function(item, index){                                       
+                                        $state.go("Page.Engine",{
+                                            pageName:"loans.individual.ActivateLoan",
+                                            pageId:item.accountNumber
+                                        });
+                                    },
+                                    isApplicable: function(item, index){
+                                       return true;
+                                        
+                                    }
+                                },
                             ];
                         }
                     }
