@@ -121,6 +121,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     model.additional.isDisbursementDone = false;
                     model.CBSDate = SessionStore.getCBSDate();
                     model.siteCode = SessionStore.getGlobalSetting("siteCode");
+                    if (model.siteCode=='KGFS')
+                        model.additional.isNeftCheckFlag = true;
                     model.validateDisbursementDate = function (model) {
                         if (model.siteCode == "IREPDhan" && (moment(model.loanAccountDisbursementSchedule.scheduledDisbursementDate).isAfter(model.CBSDate))) {
                             PageHelper.setError({
@@ -218,6 +220,19 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                     } else {
                                         model.customer.iscordova = false;
                                     }
+                                    if (model.siteCode == "KGFS"){
+                                    if (typeof res.customerBankAccounts == 'undefined' || res.customerBankAccounts.length == 0){
+                                        model.additional.isNeftCheckFlag == true;
+                                    }
+                                    else{
+                                        // TODO was told to so that hardcode zero
+                                        model.loanAccountDisbursementSchedule.customerNameInBank = res.firstName;
+                                        model.loanAccountDisbursementSchedule.customerAccountNumber = res.customerBankAccounts[0].customerAccountNumber;
+                                        model.loanAccountDisbursementSchedule.ifscCode = res.customerBankAccounts[0].ifscCode;
+                                        model.loanAccountDisbursementSchedule.customerBankBranchName = res.customerBankAccounts[0].customerBankBranchName;
+                                        model.additional.isNeftCheckFlag == false;
+                                    }
+                                }
                                 });
                             $log.info(model.customer);
                         },
@@ -302,10 +317,16 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             "type": "select",
                             "enumCode": "mode_of_disbursement",
                             onChange:function(valueObj,form,model,context){
-                                if (model.siteCode == 'KGFS' && valueObj == "RTGS" && model.loanAccountDisbursementSchedule.disbursementAmount <= 200000){
+                                if (model.siteCode == 'KGFS' ){
+                                if (valueObj == "RTGS" && model.loanAccountDisbursementSchedule.disbursementAmount <= 200000){
                                     PageHelper.showProgress('Disbursment',"RTGS is for Disbursement amount of 200000 or greater",4000);
                                     model.loanAccountDisbursementSchedule.modeOfDisbursement = null;
                                 }
+                                else if (valueObj == "NEFT" && model.additional.isNeftCheckFlag){
+                                    PageHelper.showErrors({data:{error:"Customer Bank Account Details are missing..."}});
+                                    model.loanAccountDisbursementSchedule.modeOfDisbursement = null;
+                                }
+                            }
                             }
                         },
                         {
