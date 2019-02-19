@@ -76,6 +76,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:57
                             },
                             {
+                                pageName: 'witfin.customer.televerification',
+                                title: 'TELE_VERIFICATION',
+                                pageClass: 'televerification',
+                                minimum: 1,
+                                maximum: 1,
+                                order:58
+                            },
+                            {
                                 pageName: 'loans.individual.screening.CBCheck',
                                 title: 'CB_CHECK',
                                 pageClass: 'cb-check',

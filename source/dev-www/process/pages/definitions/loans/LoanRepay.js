@@ -726,6 +726,13 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             {
                                 key: "repayment.delayReasonType",
                                 title: "REASON_FOR_DELAY",
+                                condition:"model.siteCode == 'witfin'",
+                                type: "select",
+                                enumCode:"reason_for_delay"
+                            },
+                            {
+                                key: "repayment.delayReasonType",
+                                title: "REASON_FOR_DELAY",
                                 required: true,
                                 type: "select",
                                 condition:"model.siteCode != 'witfin'",
@@ -736,14 +743,6 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     "Can pay":"Can pay",
                                     "Others":"Others"
                                 },
-
-                            },
-                            {
-                                key: "repayment.delayReasonType",
-                                title: "REASON_FOR_DELAY",
-                                condition:"model.siteCode == 'witfin'",
-                                type: "select",
-                                enumCode:"reason_for_delay"
 
                             },
                             // {
