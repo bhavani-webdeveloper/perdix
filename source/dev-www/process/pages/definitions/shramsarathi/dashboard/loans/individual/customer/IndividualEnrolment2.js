@@ -2040,6 +2040,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth": {
                         "required": false
                     }
+                    // "KYC.addressProofSameAsIdProof":{
+                    //     "onChange": function(modelValue, form, model, formCtrl, event) {
+                    //         if(model.addressProofSameAsIdProof==='YES'){
+                    //             model.addressProofNo=model.identityProofNo
+                    //         }
+                    //     }                    },
 
                 }
             }
