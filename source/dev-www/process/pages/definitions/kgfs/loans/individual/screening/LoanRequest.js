@@ -715,6 +715,13 @@ define([],function(){
                     "PostReview.reject.rejectReason",
                     "PostReview.reject.rejectButton",
 
+                    "RevertReject",
+                    "RevertReject.sendBack",
+                    "RevertReject.sendBack.remarks",
+                    "RevertReject.sendBack.rejectReason",                    
+                    "RevertReject.sendBack.stage",
+                    "RevertReject.sendBack.sendBackButton",                   
+
                ];
 
             }
@@ -996,7 +1003,7 @@ define([],function(){
                                                         "required": true,
                                                         "type": "lov",
                                                         "title": "SEND_BACK_TO_STAGE",
-                                                        "resolver": "IREPSendBacktoStageLOVConfiguration"
+                                                        "resolver": "KGFSSendBacktoStageLOVConfiguration"
                                                     }, 
                                                    "sendBackButton": {
                                                         "key": "review.sendBackButton",
@@ -1052,6 +1059,44 @@ define([],function(){
                                                 }
                                             }
                                             }
+                                        }
+                                    },
+                            "RevertReject": {
+                                        "type": "box",
+                                        "title": "REVERT_REJECT",
+                                        "condition": "model.loanAccount.currentStage =='Rejected'",
+                                        "orderNo": 600,
+                                        "items": {
+                                            "sendBack": {
+                                                "type": "section",
+                                                "items": {
+                                                    "remarks": {
+                                                        "title": "REMARKS",
+                                                        "key": "loanProcess.remarks",
+                                                        "type": "textarea",
+                                                        "required": true
+                                                    },
+                                                    "rejectReason":{
+                                                        "title":"REJECT_REASON",
+                                                        "key":"loanProcess.rejectReason",
+                                                        "readonly":true,
+                                                        "type":"textarea"
+                                                    }, 
+                                                   "stage": {
+                                                        "key": "review.targetStage",
+                                                        "required": true,
+                                                        "type": "lov",
+                                                        "title": "SEND_BACK_TO_STAGE",
+                                                        "resolver": "KGFSSendBacktoStageLOVConfiguration"
+                                                    }, 
+                                                   "sendBackButton": {
+                                                        "key": "review.sendBackButton",
+                                                        "type": "button",
+                                                        "title": "SEND_BACK",
+                                                        "onClick": "actions.sendBack(model, formCtrl, form, $event)"
+                                                    }
+                                                }
+                                            }            
                                         }
                                     }
                                 },
