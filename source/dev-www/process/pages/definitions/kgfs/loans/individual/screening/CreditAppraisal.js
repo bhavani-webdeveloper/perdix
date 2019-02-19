@@ -187,13 +187,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 }
 
 
-                                 $this.bundlePages.push({
-                                    pageClass: 'business',
-                                    model: {
-                                        enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
-                                        loanProcess: loanProcess
+                                    if (loanProcess.loanCustomerEnrolmentProcess) {
+                                        $this.bundlePages.push({
+                                            pageClass: "business",
+                                            model: {
+                                                enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                                loanProcess: loanProcess
+                                            }
+                                        });
                                     }
-                                });
+                                
 
                                 $this.bundlePages.push({
                                     pageClass: 'loan-request',
