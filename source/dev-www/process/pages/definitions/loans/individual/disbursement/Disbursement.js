@@ -119,6 +119,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     model.fee = model.fee || {};
                     model.additional = { "branchName": branch };
                     model.additional.isDisbursementDone = false;
+                    model.additional.isOverRideFpFlag = false;
                     model.CBSDate = SessionStore.getCBSDate();
                     model.siteCode = SessionStore.getGlobalSetting("siteCode");
                     if (model.siteCode=='KGFS')
@@ -179,6 +180,21 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                     }
                                 }
                             });
+                            if(model.siteCode == 'KGFS'){
+                                PageHelper.showLoader();
+                            Queries.getAccountOverridestatus(model.additional.accountNumber,model.additional.urnNo).then(function(resp){
+                                PageHelper.hideLoader();
+                                if (resp.results.length > 0){
+                                    model.additional.isOverRideFpFlag = resp.results[0].override_status == 1 ? true:false;
+                                }
+                                else{
+                                    model.additional.isOverRideFpFlag = false;
+                                }
+                            },function(err){
+                                PageHelper.hideLoader();
+                                model.additional.isOverRideFpFlag = false;
+                            })
+                        }
 
                             model.additional.netDisbursementAmount = Number(resp[0].netDisbursementAmount);
                             var j = 1;
@@ -411,7 +427,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         },
                         {
                             "key": "loanAccountDisbursementSchedule.overrideRequested",
-                            "condition": "model.siteCode=='KGFS'",
+                            "condition": "model.siteCode=='KGFS' && model.additional.isOverRideFpFlag",
                             "type": "checkbox",
                             "title": "OVERRIDE_FINGERPRINT",
                             "schema": {
