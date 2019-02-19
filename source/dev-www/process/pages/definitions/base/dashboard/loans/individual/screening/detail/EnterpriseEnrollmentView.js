@@ -1169,12 +1169,12 @@ define({
                     var monthly_installment = 0;
                     var outstanding_bal = 0;
                     _.each(model.liability, function(liability) {
-                        if (liability.summary['Customer ID'] == model.customer.id) {
+                      //  if (liability.summary['Customer ID'] == model.customer.id) {
                             model.liabilities = _.cloneDeep(liability.data)
                             monthly_installment += liability.summary['Total Monthly Installment'];
                             outstanding_bal += liability.summary['Total Outstanding Loan Amount'];
 
-                        }
+                       // }
                     })
 
                     model.active_accounts = model.liabilities.length;

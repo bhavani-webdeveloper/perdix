@@ -590,9 +590,27 @@ define({
                         "items": [{
                             "key": "loanAccount.nominees[0].nomineeRelationship",
                             "title": "Relationship To Insured"
-                        }, {
-                            "key": "",
-                            "title": "Address"
+                        }, {  
+                            "type": "section",                                
+                            "htmlClass": "row",
+                            "items": [
+                                {
+                                    "type": "section",
+                                    "htmlClass": "col-sm-4",
+                                    "html": '<h5>' + "Address" + '</h5>'
+                                },
+                                {
+                                    "type": "section",
+                                    "htmlClass": "col-sm-8",
+                                    "html": '<p style = "font-size: 14px; color: #555;"><strong>{{model.loanAccount.nominees[0].nomineeDoorNo}} <br />\
+                                    {{model.loanAccount.nominees[0].nomineeLocality}} <br />\
+                                    {{model.loanAccount.nominees[0].nomineeDistrict}} <br />\
+                                    {{model.loanAccount.nominees[0].nomineeState}} <br /> \
+                                    {{model.loanAccount.nominees[0].nomineePincode}} <br /> \
+                                    <br /><strong></p>\
+                                    '
+                                }]
+                                   
                         }]
                     }]
                 }]

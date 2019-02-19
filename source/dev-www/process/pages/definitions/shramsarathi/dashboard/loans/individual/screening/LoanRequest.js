@@ -1732,18 +1732,18 @@ define([],function(){
                                               "orderNo":40
                                             },
                                             "referenceFrom": {
-                                                "key":"loanAccount.referenceFrom",
+                                                "key":"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf9",
                                               "title":"REFERENCE_FROM",
                                               "type":"text",
-                                              "required":true,
+                                              "required":false,
                                               "readonly":false
                                             },
                                             "referenceCheck": {
-                                              "key":"loanAccount.referenceCheck",
+                                              "key":"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf8",
                                               "title":"REFERNECE_CHECK",
                                               "type":"radios",
                                               "titleMap":{"good":"Good","bad":"Bad"},
-                                              "required":true,
+                                              "required":false,
                                               "readonly":false
                                             },
                                             "transactionType": {
@@ -1765,13 +1765,13 @@ define([],function(){
                                                     }
                                                 }
                                             },
-                                            "expectedEmi": {
-                                                "key": "loanAccount.expectedEmi",
-                                                "title": "INSTALLMENT_AMOUNT",
-                                                "orderNo": 91,
-                                                type: "amount",
-                                                "required":true
-                                            },
+                                            // "expectedEmi": {
+                                            //     "key": "loanAccount.expectedEmi",
+                                            //     "title": "INSTALLMENT_AMOUNT",
+                                            //     "orderNo": 91,
+                                            //     type: "amount",
+                                            //     "required":true
+                                            // },
                                             "linkedAccountNumber1":{
                                                 key:"loanAccount.linkedAccountNumber",
                                                 title:"LINKED_ACCOUNT_NUMBER",
@@ -1833,7 +1833,8 @@ define([],function(){
                                                 "key":"loanAccount.disbursementSchedules.modeOfDisbursement",
                                                 "title":"MODE_OF_DISBURSEMENT",
                                                 "type":"select",
-                                                "required":true
+                                                "required":true,
+                                                "titleMap":{"cash":"Cash","cheque":"Cheque","neft":"NEFT"}
                                                             },
                                         "remarksOfInFavourLoan":{
                                             "key":"loanAccount.userDefinedFieldValues.udf10",
@@ -1845,7 +1846,8 @@ define([],function(){
                                             "key":"loanAccount.userDefinedFieldValues.udf11",
                                             "title":"POTENTIAL_RISK",
                                             "type":"select",
-                                            "required":true
+                                            "required":true,
+                                            "titleMap":{"yes":"yes","no":"no"}
                                         },
                                         "collectionDate":{
                                             "key":"loanAccount.disbursementSchedules.firstrepaymentdate",
@@ -2153,12 +2155,12 @@ define([],function(){
                         model.loanAccount.loanPurpose1 = obj.loanPurpose1;
                         model.loanAccount.screeningDate = obj.screeningDate;
                     },
-                    "new-business": function(bundleModel, model, params){
+                    "new-applicant": function(bundleModel, model, params){
                         $log.info("Inside new-business of LoanRequest");
                         model.loanAccount.customerId = params.customer.id;
                         model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
                         model.loanAccount.loanCentre.centreId = params.customer.centreId;
-                        model.enterprise = params.customer;
+                        model.customer = params.customer;
                     },
                     "business-updated": function(bundleModel, model, obj){
                         $log.info("Inside business-update of IREP/LoanRequest");
@@ -2166,7 +2168,7 @@ define([],function(){
                         model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
                         model.loanAccount.loanCentre.centreId = obj.customer.centreId;
                         model.loanAccount.loanCentre.loanId = model.loanAccount.id?model.loanAccount.id:null;
-                        model.enterprise = obj.customer;
+                        model.customer = obj.customer;
  
                     },
                     "load-deviation":function(bundleModel, model, params){

@@ -3,7 +3,7 @@ define(["perdix/domain/model/loan/LoanProcess",
     'perdix/domain/model/customer/EnrolmentProcess',
     "perdix/domain/model/loan/LoanCustomerRelation",
     ], function (LoanProcess, LoanFactory, EnrolmentProcess, LoanCustomerRelation) {
-        var LoanProcess = LoanProcess["LoanProcess"];
+        var LoanProcessts = LoanProcess["LoanProcess"];
         var EnrolmentProcess = EnrolmentProcess["EnrolmentProcess"];
         var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
         return {
@@ -157,6 +157,17 @@ define(["perdix/domain/model/loan/LoanProcess",
                         deferred.resolve(model);
                         return deferred.promise;
                     },
+                    "offlineInitialize": function(bundleModel) {
+                        var deferred = $q.defer();
+                        $this = this;
+                        $this.bundleModel = bundleModel;
+                        LoanProcessts.plainToClass(bundleModel.loanProcess)
+                                .subscribe(function(loanProcess){
+                                    $this.bundleModel.loanProcess = loanProcess;
+                                    deferred.resolve();
+                                });
+                        return deferred.promise;
+                    },
                     "pre_pages_initialize": function(bundleModel){
                         $log.info("Inside pre_page_initialize");
                         bundleModel.currentStage = "Application";
@@ -167,7 +178,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             PageHelper.showLoader();
                             bundleModel.loanId = $stateParams.pageId;
 
-                            LoanProcess.get(bundleModel.loanId)
+                            LoanProcessts.get(bundleModel.loanId)
                             .subscribe(function(loanProcess){
                                 bundleModel.loanProcess = loanProcess;
                                 var loanAccount = loanProcess;

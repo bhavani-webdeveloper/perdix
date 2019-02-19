@@ -2376,6 +2376,57 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                     }
             }
+            var formRequest = function(model){
+                return {
+                "overrides": overridesFields(model),
+                "includes": getIncludes(model),
+                "excludes": [],
+                "options": {
+                    "additions": [
+                        {
+                            "type": "actionbox",
+                           // "condition": "model.customer.currentStage == 'Application'",
+                           "condition": "model.customer.id && !(model.currentStage=='ApplicationReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'||model.currentStage == 'Rejected'||model.currentStage == 'loanView')",
+                            "orderNo": 220,
+                            "items": [
+                                {
+                                    "type": "button",
+                                    "title": "COMPLETE_ENROLMENT",//PROCEED
+                                    "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "actionbox",
+                            "condition": "!model.customer.currentStage",
+                            "orderNo": 220,
+                            "items": [
+                                {
+                                    "type": "submit",
+                                    "title": "SUBMIT"
+                                   
+                                }
+                            ]
+                        },
+                        {
+                            "type": "actionbox",
+                            "condition": "model.customer.currentStage && (model.currentStage=='KYC' || model.currentStage == 'Appraisal' || model.currentStage=='Screening')",
+                            "orderNo": 220,
+                            "items": [
+                                {
+                                    "type": "button",
+                                    "title": "UPDATE",
+                                    "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                }
+                            ]
+                        }
+                    ],
+                    "repositoryAdditions":repositoryAdditions(model)
+                }
+            
+            }
+        };
+            
 
             return {
                 "type": "schema-form",
@@ -2409,62 +2460,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     console.log(model);
 
                     var self = this;
-                        var formRequest = {
-                            "overrides": overridesFields(model),
-                            "includes": getIncludes(model),
-                            "excludes": [],
-                            "options": {
-                                "additions": [
-                                    {
-                                        "type": "actionbox",
-                                       // "condition": "model.customer.currentStage == 'Application'",
-                                       "condition": "model.customer.id && !(model.currentStage=='ApplicationReview' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview'||model.currentStage == 'Rejected'||model.currentStage == 'loanView')",
-                                        "orderNo": 220,
-                                        "items": [
-                                            {
-                                                "type": "button",
-                                                "title": "COMPLETE_ENROLMENT",//PROCEED
-                                                "onClick": "actions.proceed(model, formCtrl, form, $event)"
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "actionbox",
-                                        "condition": "!model.customer.currentStage",
-                                        "orderNo": 220,
-                                        "items": [
-                                            {
-                                                "type": "submit",
-                                                "title": "SUBMIT"
-                                               
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "actionbox",
-                                        "condition": "model.customer.currentStage && (model.currentStage=='KYC' || model.currentStage == 'Appraisal' || model.currentStage=='Screening')",
-                                        "orderNo": 220,
-                                        "items": [
-                                            {
-                                                "type": "button",
-                                                "title": "UPDATE",
-                                                "onClick": "actions.proceed(model, formCtrl, form, $event)"
-                                            }
-                                        ]
-                                    }
-                                ],
-                                "repositoryAdditions":repositoryAdditions(model)
-                            }
-                        };
                         UIRepository.getEnrolmentProcessUIRepository().$promise
                         .then(function(repo){
-                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
+                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest(), configFile(), model)
                         })
                         .then(function(form){
                             self.form = form;
                         });
                 },
                 offline: false,
+                offlineInitialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+                    model.loanProcess = bundleModel.loanProcess;
+                    if (_.hasIn(model.loanProcess, 'loanCustomerEnrolmentProcess')) {
+                        model.enrolmentProcess = model.loanProcess.loanCustomerEnrolmentProcess;
+                        model.customer = model.enrolmentProcess.customer;
+                    }
+                    var p1 = UIRepository.getEnrolmentProcessUIRepository().$promise;
+                    var self = this;
+                    p1.then(function (repo) {
+                        self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest(model), configFile(), model);
+                    })
+                },
                 getOfflineDisplayItem: function(item, index){
                     return [
                         item.customer.firstName,
@@ -2491,8 +2507,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             .then(function(enrolmentProcess){
                                 if (!enrolmentProcess){
                                     /* IF no enrolment present, reset to applicant */
-                                    model.customer.enterpriseCustomerRelations[0].linkedToCustomerId = params.customer.id;
-                                    model.customer.enterpriseCustomerRelations[0].linkedToCustomerName = params.customer.firstName;
+                                    if (_.hasIn(model.customer, 'enterpriseCustomerRelations') && _.isArray(model.customer.enterpriseCustomerRelations) && model.customer.enterpriseCustomerRelations.length != 0){
+                                        model.customer.enterpriseCustomerRelations[0].linkedToCustomerId = params.customer.id;
+                                        model.customer.enterpriseCustomerRelations[0].linkedToCustomerName = params.customer.firstName;
+                                    }
                                     //model.customer.firstName = params.customer.firstName;
                                     model.customer.villageName = params.customer.villageName;
                                     model.customer.pincode = params.customer.pincode;

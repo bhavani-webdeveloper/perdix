@@ -3747,6 +3747,26 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          }
                      }
              }
+             var formRequest_businessbasic = function(model){
+                 return {
+                "overrides": overridesFields_businessbasic(model),
+                "includes": getIncludes_businessbasic(model),
+                "excludes": [],
+                "options": {
+                    "repositoryAdditions":repositoryAdditions_businessbasic(model)
+                }
+            }
+            };
+            var formRequest_businessFinancials = function(model){
+                return {
+                "overrides": overridesFields_businessFinancials(model),
+                "includes": getIncludes_businessFinancials(model),
+                "excludes": [],
+                "options": {
+                    "repositoryAdditions":repositoryAdditions_businessFinancials(model)
+                }
+            }
+            };
             return {
                 //"type": "child-tabs",
                 "type":"schema-form",
@@ -3770,22 +3790,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             model.customer.customerBranchId = branchId;
                     };
 
-                    var formRequest_businessbasic = {
-                        "overrides": overridesFields_businessbasic(model),
-                        "includes": getIncludes_businessbasic(model),
-                        "excludes": [],
-                        "options": {
-                            "repositoryAdditions":repositoryAdditions_businessbasic(model)
-                        }
-                    };
-                    var formRequest_businessFinancials = {
-                        "overrides": overridesFields_businessFinancials(model),
-                        "includes": getIncludes_businessFinancials(model),
-                        "excludes": [],
-                        "options": {
-                            "repositoryAdditions":repositoryAdditions_businessFinancials(model)
-                        }
-                    };
+                    // var formRequest_businessbasic = {
+                    //     "overrides": overridesFields_businessbasic(model),
+                    //     "includes": getIncludes_businessbasic(model),
+                    //     "excludes": [],
+                    //     "options": {
+                    //         "repositoryAdditions":repositoryAdditions_businessbasic(model)
+                    //     }
+                    // };
+                    // var formRequest_businessFinancials = {
+                    //     "overrides": overridesFields_businessFinancials(model),
+                    //     "includes": getIncludes_businessFinancials(model),
+                    //     "excludes": [],
+                    //     "options": {
+                    //         "repositoryAdditions":repositoryAdditions_businessFinancials(model)
+                    //     }
+                    // };
                     var formaction=[
                         
                             {
@@ -3829,7 +3849,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         var generateChildForms=[];
                         generateChildForms.push(UIRepository.getEnrolmentProcessUIRepository().$promise
                         .then(function(repo){
-                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest_businessbasic, configFile_businessbasic(), model)
+                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest_businessbasic(model), configFile_businessbasic(), model)
                         }).then(function(form){
                             self.forms.push({
                                 "form": form,
@@ -3838,7 +3858,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             })}));
                             generateChildForms.push(UIRepository.getEnrolmentProcessUIRepository().$promise
                             .then(function(repo){
-                                return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest_businessFinancials, configFile_businessFinancials(), model)
+                                return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest_businessFinancials(model), configFile_businessFinancials(), model)
                             }).then(function(form){
                                 self.forms.push({
                                     "form": form,
@@ -3850,6 +3870,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         self.form=form;
                     });
                 },
+                offline: false,
+                offlineInitialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+                    model.loanProcess = bundleModel.loanProcess;
+                    if (_.hasIn(model.loanProcess, 'loanCustomerEnrolmentProcess')) {
+                        model.enrolmentProcess = model.loanProcess.loanCustomerEnrolmentProcess;
+                        model.customer = model.enrolmentProcess.customer;
+                    }
+                    var p1 = UIRepository.getEnrolmentProcessUIRepository().$promise;
+                    var self = this;
+                    p1.then(function (repo) {
+                        self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest_businessbasic(model), configFile_businessbasic(), model);
+                    })
+                    var p2 = UIRepository.getEnrolmentProcessUIRepository().$promise;
+                    var self = this;
+                    p2.then(function (repo) {
+                        self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest_businessFinancials(model), configFile_businessFinancials(), model);
+                    })
+                }
+                ,
                 form:[],
                 schema: function() {
                     return Enrollment.getSchema().$promise;

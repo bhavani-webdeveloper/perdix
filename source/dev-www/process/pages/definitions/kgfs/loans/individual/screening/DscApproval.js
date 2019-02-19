@@ -31,16 +31,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageName: 'kgfs.customer.IndividualEnrolment2',
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
-                            minimum: 0,
-                            maximum: 5,
+                            minimum: 1,
+                            maximum: 0,
                             order:20
                         },
                         {
                             pageName: 'kgfs.customer.IndividualEnrolment2',
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
-                            minimum: 0,
-                            maximum: 3,
+                            minimum: 1,
+                            maximum: 0,
                             order:30
                         },
                         {
