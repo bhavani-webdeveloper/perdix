@@ -58,11 +58,11 @@
       },
       {
          "order":6,
-         "code":"FieldAppraisal",
-         "name":"FieldAppraisal",
+         "code":"Televerification",
+         "name":"Televerification",
          "stageType":"CAPTURE",
          "sendSms":"No",
-         "smsCategory":"LoanBooking",
+         "smsCategory":"Televerification",
          "isAccountOpening":false,
          "riskScoreName":"RiskScore3",
          "allowedRoles":[
@@ -71,42 +71,6 @@
       },
       {
          "order":7,
-         "code":"FieldAppraisalReview",
-         "name":"FieldAppraisal Review",
-         "stageType":"CAPTURE",
-         "sendSms":"No",
-         "smsCategory":"LoanBooking",
-         "isAccountOpening":false,
-         "allowedRoles":[
-            "WM"
-         ]
-      },
-      {
-         "order":8,
-         "code":"ZonalRiskReview",
-         "name":"ZonalRisk Review",
-         "stageType":"CAPTURE",
-         "sendSms":"No",
-         "smsCategory":"LoanBooking",
-         "isAccountOpening":false,
-         "allowedRoles":[
-            "WM"
-         ]
-      },
-      {
-         "order":9,
-         "code":"CentralRiskReview",
-         "name":"Central Risk Review",
-         "stageType":"CAPTURE",
-         "sendSms":"Yes",
-         "smsCategory":"FieldAppraisal",
-         "isAccountOpening":false,
-         "allowedRoles":[
-            "WM"
-         ]
-      },
-      {
-         "order":10,
          "code":"CreditCommitteeReview",
          "name":"Credit Committee Review",
          "stageType":"CAPTURE",

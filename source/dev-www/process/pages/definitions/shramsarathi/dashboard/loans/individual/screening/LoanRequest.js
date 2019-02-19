@@ -1732,18 +1732,18 @@ define([],function(){
                                               "orderNo":40
                                             },
                                             "referenceFrom": {
-                                                "key":"loanAccount.userDefinedFieldValues.udf9",
+                                                "key":"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf9",
                                               "title":"REFERENCE_FROM",
                                               "type":"text",
-                                              "required":true,
+                                              "required":false,
                                               "readonly":false
                                             },
                                             "referenceCheck": {
-                                              "key":"loanAccount.userDefinedFieldValues.udf8",
+                                              "key":"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf8",
                                               "title":"REFERNECE_CHECK",
                                               "type":"radios",
                                               "titleMap":{"good":"Good","bad":"Bad"},
-                                              "required":true,
+                                              "required":false,
                                               "readonly":false
                                             },
                                             "transactionType": {
@@ -2160,7 +2160,7 @@ define([],function(){
                         model.loanAccount.customerId = params.customer.id;
                         model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
                         model.loanAccount.loanCentre.centreId = params.customer.centreId;
-                        model.enterprise = params.customer;
+                        model.customer = params.customer;
                     },
                     "business-updated": function(bundleModel, model, obj){
                         $log.info("Inside business-update of IREP/LoanRequest");
@@ -2168,7 +2168,7 @@ define([],function(){
                         model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
                         model.loanAccount.loanCentre.centreId = obj.customer.centreId;
                         model.loanAccount.loanCentre.loanId = model.loanAccount.id?model.loanAccount.id:null;
-                        model.enterprise = obj.customer;
+                        model.customer = obj.customer;
  
                     },
                     "load-deviation":function(bundleModel, model, params){
