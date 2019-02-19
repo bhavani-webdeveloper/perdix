@@ -186,11 +186,8 @@ define({
                             data: 'screeningDate'
                         }, {
                             title: 'APPLICANT_NAME',
-                            data: 'applicantName'
-                        }, {
-                            title: 'BUSINESS_NAME',
                             data: 'customerName'
-                        }, {
+                        },  {
                             title: 'AREA',
                             data: 'area'
                         }, {
