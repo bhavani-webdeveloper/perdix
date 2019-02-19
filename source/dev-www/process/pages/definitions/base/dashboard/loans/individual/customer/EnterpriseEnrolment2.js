@@ -2507,8 +2507,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             .then(function(enrolmentProcess){
                                 if (!enrolmentProcess){
                                     /* IF no enrolment present, reset to applicant */
-                                    model.customer.enterpriseCustomerRelations[0].linkedToCustomerId = params.customer.id;
-                                    model.customer.enterpriseCustomerRelations[0].linkedToCustomerName = params.customer.firstName;
+                                    if (_.hasIn(model.customer, 'enterpriseCustomerRelations') && _.isArray(model.customer.enterpriseCustomerRelations) && model.customer.enterpriseCustomerRelations.length != 0){
+                                        model.customer.enterpriseCustomerRelations[0].linkedToCustomerId = params.customer.id;
+                                        model.customer.enterpriseCustomerRelations[0].linkedToCustomerName = params.customer.firstName;
+                                    }
                                     //model.customer.firstName = params.customer.firstName;
                                     model.customer.villageName = params.customer.villageName;
                                     model.customer.pincode = params.customer.pincode;
