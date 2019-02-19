@@ -339,7 +339,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                     model.loanAccountDisbursementSchedule.modeOfDisbursement = null;
                                 }
                                 else if (valueObj == "NEFT" && model.additional.isNeftCheckFlag){
-                                    PageHelper.showErrors({data:{error:"Customer Bank Account Details are missing..."}});
+                                    PageHelper.showErrors({data:{error:"Customer Bank Account Details are missing."}});
                                     model.loanAccountDisbursementSchedule.modeOfDisbursement = null;
                                 }
                             }
