@@ -1990,6 +1990,8 @@ define([],function(){
                     if(model.loanAccount.transactionType == 'New Loan') {
                         model.loanAccount.linkedAccountNumber = null;
                     }
+                    //Calculate Estimated EMI
+                    computeEstimatedEMI(model);
                     if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
                         var loanMitigantsGrouped = {};
                         for (var i=0; i<model.loanAccount.loanMitigants.length; i++){

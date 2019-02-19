@@ -185,10 +185,16 @@ define({
                     model.firstName = res.firstName;
                     model.customer.presetAddress = 'Present Address';
                 });
-              
+                Enrollment.getCustomerById({
+                    id: model.businessCustomerId
+                }).$promise.then(function(res) {
+                    console.log(res);
+                    model.businessCustomer = res;
+                });
             },
 
-            form: [{
+            form: [
+                {
                     "type": "box",
                     "readonly": true,
                     "colClass": "col-sm-12",
@@ -205,11 +211,13 @@ define({
                                 "title": "CUSTOMER_ID"
                             }, {
                                 "key": "customer.firstName",
-                                "title": "FULL_NAME"
+                                "title": "FULL_NAME",
                             }, {
-                                "key": "customer.gender"
+                                "key": "customer.gender",
+                                "title": "Gender"
                             }, {
-                                "key": "customer.dateOfBirth"
+                                "key": "customer.dateOfBirth",
+                                "title" : "Date Of Birth"
                             }, {
                                 "key": "customer.identityProofNo",
                                 "title": "ID Proof N0."
@@ -262,7 +270,8 @@ define({
                                 "key": "customer.urnNo",
                                 "title": "URN"
                             }, {
-                                "key": "customer.religion"
+                                "key": "customer.religion",
+                                "title" : "Religion"
                             }, {
                                 "key": "customer.caste",
                                 "title": "CASTE"
@@ -273,7 +282,8 @@ define({
                                 "key": "customer.motherName",
                                 "title": "Mother's Full Name"
                             }, {
-                                "key": "customer.maritalStatus"
+                                "key": "customer.maritalStatus",
+                                "title" :"Marital Status"
                             }, {
                                 "key": "customer.spouseFirstName",
                                 "title": "SPOUSE_FULL_NAME",
@@ -309,50 +319,50 @@ define({
                             "type": "grid",
                             "orientation": "vertical",
                             "items": [{
-                                "key": "customer.id",
+                                "key": "businessCustomer.id",
                                 "title": "Entity ID"
                             }, {
-                                "key": "customer.firstName",
+                                "key": "businessCustomer.firstName",
                                 "title": "Company Name"
                             }, {
-                                "key": "customer.enterprise.businessType",
+                                "key": "businessCustomer.enterprise.businessType",
                                 "title": "Business Type"
                             }, {
-                                "key": "customer.enterprise.businessActivity",
+                                "key": "businessCustomer.enterprise.businessActivity",
                                 "title": "Business Activity"
                             }, {
-                                "key": "customer.enterprise.businessSector",
+                                "key": "businessCustomer.enterprise.businessSector",
                                 "title": "Business Sector"
                             }, {
-                                "key": "customer.enterprise.businessSubsector",
+                                "key": "businessCustomer.enterprise.businessSubsector",
                                 "title": "Business Subsector"
                             }, {
-                                "key": "customer.enterprise.referredBy",
+                                "key": "businessCustomer.enterprise.referredBy",
                                 "title": "Sourced by"
                             }, {
-                                "key": "customer.enterprise.isGSTAvailable",
+                                "key": "businessCustomer.enterprise.isGSTAvailable",
                                 "title": "GST Available"
                             }]
                         }, {
                             "type": "grid",
                             "orientation": "vertical",
                             "items": [{
-                                "key": "customer.urnNo",
+                                "key": "businessCustomer.urnNo",
                                 "title": "URN"
                             }, {
-                                "key": "customer.enterprise.businessConstitution",
+                                "key": "businessCustomer.enterprise.businessConstitution",
                                 "title": "Constitution"
                             }, {
-                                "key": "customer.enterprise.businessHistory",
+                                "key": "businessCustomer.enterprise.businessHistory",
                                 "title": "Business History"
                             }, {
-                                "key": "customer.enterprise.ownership",
+                                "key": "businessCustomer.enterprise.ownership",
                                 "title": "Premises Ownership"
                             }, {
-                                "key": "customer.enterprise.businessInPresentAreaSince",
+                                "key": "businessCustomer.enterprise.businessInPresentAreaSince",
                                 "title": "Operating Since"
                             }, {
-                                "key": "customer.enterprise.anyPartnerOfPresentBusiness",
+                                "key": "businessCustomer.enterprise.anyPartnerOfPresentBusiness",
                                 "title": "Has anyone else been a partner of your present business ?"
                             }]
     
@@ -371,26 +381,26 @@ define({
                             "type": "grid",
                             "orientation": "vertical",
                             "items": [{
-                                "key": "customer.mobilePhone",
+                                "key": "businessCustomer.mobilePhone",
                                 "title": "Mobile Phone"
                             }, {
-                                "key": "customer.landLineNo",
+                                "key": "businessCustomer.landLineNo",
                                 "title": "Phone 2"
                             }, {
-                                "key": "customer.distanceFromBranch",
+                                "key": "businessCustomer.distanceFromBranch",
                                 "title": "Distance From Hub"
                             }, {
-                                "key": "customer.enterprise.businessInPresentAreaSince",
+                                "key": "businessCustomer.enterprise.businessInPresentAreaSince",
                                 "title": "YEARS_OF_BUSINESS_PRESENT_AREA"
                             }, {
-                                "key": "customer.enterprise.businessInCurrentAddressSince",
+                                "key": "businessCustomer.enterprise.businessInCurrentAddressSince",
                                 "title": "YEARS_OF_BUSINESS_PRESENT_ADDRESS"
                             }, {
-                                "key": "customer.enterprise.companyEmailId",
+                                "key": "businessCustomer.enterprise.companyEmailId",
                                 "title": "Email ID"
                             }, {
                                 "title": "Present Address",
-                                "key": "customer.presetAddress"
+                                "key": "businessCustomer.presetAddress"
     
                             }]
                         }, {
@@ -400,11 +410,11 @@ define({
                                 "type": "section",
                                 "html": '<div style="float:right"></div>',
                                 "items": [{
-                                    "key": "customer.latitude",
+                                    "key": "businessCustomer.latitude",
                                     "notitle": true,
                                     "type": "geotag",
-                                    "latitude": "customer.latitude",
-                                    "longitude": "customer.longitude"
+                                    "latitude": "businessCustomer.latitude",
+                                    "longitude": "businessCustomer.longitude"
                                 }]
                             }]
                         }]

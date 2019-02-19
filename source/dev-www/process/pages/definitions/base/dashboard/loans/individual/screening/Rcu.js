@@ -44,12 +44,18 @@ define(["perdix/domain/model/loan/LoanProcess",
                             LoanProcessts.get(bundleModel.loanId)
                             .subscribe(function(loanProcess){
                                 var loanAccount = loanProcess;
-                                loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.loanCustomerEnrolmentProcess.customer.id;
-
+                                var customerIds = {};
+                                for (var i = 0; i < loanAccount.loanAccount.loanCustomerRelations.length; i++) {
+                                    var cust = loanAccount.loanAccount.loanCustomerRelations[i];
+                                    if (cust.relation == 'APPLICANT' || cust.relation == 'Applicant' || cust.relation == 'Sole Proprieter') {
+                                        customerIds.applicant = cust.customerId;
+                                    } 
+                                }
                                 $this.bundlePages.push({
                                     pageClass: 'basicDetails',
                                     model: {
-                                        customerId: loanAccount.applicantEnrolmentProcess.customer.customerId,
+                                        customerId: customerIds.applicant,
+                                        businessCustomerId : loanAccount.loanAccount.customerId,
                                         loanAccount: loanAccount.loanAccount
                                     }
                                 });

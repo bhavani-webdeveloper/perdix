@@ -62,6 +62,11 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                         "orderNo" : 10,
                         "onChange":function(modelValue,form, model, formCtrl, event){
                             model.lead.eligibleForProduct='YES';
+                            if (model.lead.interestedInProduct == 'NO') {
+                                model.lead.leadStatus = "Reject";
+                            } else {
+                                model.lead.leadStatus = "Incomplete";
+                            }
                         }
                     },
                     "productDetails.loanAmountRequested": {
