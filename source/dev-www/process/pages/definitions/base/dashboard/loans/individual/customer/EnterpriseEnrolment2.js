@@ -2489,6 +2489,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     ]
                 },
                 eventListeners: {
+                    "lead-loaded": function (bundleModel, model, obj) {
+                        return $q.when()
+                            .then(function(){
+                                if (obj.customerId){
+                                    return EnrolmentProcess.fromCustomerID(obj.customerId).toPromise();
+                                } else {
+                                    return null;
+                                }
+                            })
+                            .then(function(enrolmentProcess){
+                                if (enrolmentProcess!=null){
+                                    model.enrolmentProcess = enrolmentProcess;
+                                    model.customer = enrolmentProcess.customer;
+                                }
+                            })
+                    },
                     "applicant-updated": function(bundleModel, model, params){
                         $log.info("inside applicant-updated of EnterpriseEnrolment2");
                         /* Load an existing customer associated with applicant, if exists. Otherwise default details*/
