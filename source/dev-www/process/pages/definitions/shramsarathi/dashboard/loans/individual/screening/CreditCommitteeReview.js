@@ -49,14 +49,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                         pageClass: 'business-finance',
                         minimum: 1,
                         maximum: 1,
-                        order: 50
+                        order: 70
                     }, {
                         pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.LoanApplicationView',
                         title: 'Loan Recommendation',
                         pageClass: 'loan-recommendation',
                         minimum: 1,
                         maximum: 1,
-                        order: 70
+                        order: 50
                     }, {
                         pageName: 'loans.individual.screening.CreditBureauView',
                         title: 'CREDIT_BUREAU',
