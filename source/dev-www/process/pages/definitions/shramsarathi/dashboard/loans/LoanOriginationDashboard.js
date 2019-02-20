@@ -133,7 +133,7 @@ if (aqMenu) {
             });
         }
 
-        var tvq1Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.loans.individual.screening.TeleVerificationQueue"];
+        var tvq1Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.loans.individual.screening.TeleverificationQueue"];
         if (tvq1Menu) {
             IndividualLoan.search({
                 'stage': 'Televerification',
