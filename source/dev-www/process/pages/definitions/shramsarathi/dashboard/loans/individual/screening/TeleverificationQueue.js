@@ -6,7 +6,7 @@ define({
 		
 		return {
 			"type": "search-list",
-			"title": "IREP_TELEVERIFICATION_QUEUE",
+			"title": "TELEVERIFICATION_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				//model.branch = SessionStore.getCurrentBranch().branchName;
