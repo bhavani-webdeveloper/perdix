@@ -51,35 +51,35 @@ define(["perdix/domain/model/loan/LoanProcess",
                         pageClass: 'business-finance',
                         minimum: 1,
                         maximum: 1,
-                        order: 50
+                        order: 30
                     }, {
                         pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.LoanApplicationView',
                         title: 'Loan Recommendation',
                         pageClass: 'loan-recommendation',
                         minimum: 1,
                         maximum: 1,
-                        order: 70
+                        order: 40
                     }, {
                         pageName: 'loans.individual.screening.CreditBureauView',
                         title: 'CREDIT_BUREAU',
                         pageClass: 'cbview',
                         minimum: 1,
                         maximum: 1,
-                        order: 100
+                        order: 50
                     }, {
                         pageName: 'loans.individual.screening.Review',
                         title: 'REVIEW',
                         pageClass: 'loan-review',
                         minimum: 1,
                         maximum: 1,
-                        order: 80
+                        order: 60
                     }, {
                         pageName: 'loans.individual.misc.BalanceSheetHistory',
                         title: 'BALANCE_SHEET_HISTORY',
                         pageClass: 'balance-sheet-history',
                         minimum: 1,
                         maximum: 1,
-                        order: 90
+                        order: 70
                     },
                     {
                         pageName: 'shramsarathi.dashboard.loans.individual.screening.televerification',
@@ -87,7 +87,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         pageClass: 'televerification',
                         minimum: 1,
                         maximum: 1,
-                        order:110
+                        order:80
                         }];
                     // if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan') {
                     //     definition.push({
@@ -260,7 +260,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 $this.bundlePages.push({
                                     pageClass: 'loan-recommendation',
                                     model: {
-                                        loanProcess: loanProcess
+                                        customerId: loanAccount.customerId,
+                                        loanAccount:  loanAccount
                                     }
                                 });
 
