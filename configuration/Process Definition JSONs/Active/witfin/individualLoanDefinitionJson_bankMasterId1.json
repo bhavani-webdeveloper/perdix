@@ -61,7 +61,7 @@
         ]
      },
      {
-        "order":5,
+        "order":6,
         "code":"BusinessApproval2",
         "name":"Business Approval 2",
         "stageType":"CAPTURE",
