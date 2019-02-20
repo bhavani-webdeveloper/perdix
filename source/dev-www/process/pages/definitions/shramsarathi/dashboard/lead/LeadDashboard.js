@@ -1,7 +1,9 @@
-irf.pageCollection.controller(irf.controller("shramsarathi.dashboard.lead.LeadDashboard"), ['$log', '$scope', "formHelper", "$state", "$q", "Utils", 'PagesDefinition', 'SessionStore', "entityManager", "IndividualLoan", "LoanBookingCommons", "Lead", "Messaging",
+irf.pageCollection.controller(irf.controller("shramsarathi.dashboard.lead.LeadDashboard"),
+ ['$log', '$scope', "formHelper", "$state", "$q", "Utils", 'PagesDefinition', 'SessionStore', "entityManager", "IndividualLoan", "LoanBookingCommons", "Lead", "Messaging",
 function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionStore, entityManager, IndividualLoan, LoanBookingCommons, Lead, Messaging) {
-    $log.info("Dashboard.Page.LoanOriginationDashboard.html loaded");
-    $scope.$templateUrl = "process/pages/templates/Page.LoanOriginationDashboard.html";
+    $log.info("Dashboard.Page.LeadDashboard.html loaded");
+   $scope.$templateUrl = "process/pages/templates/Page.LoanOriginationDashboard.html";
+    // $scope.$templateUrl = "process/pages/templates/Page.Dashboard.html";
     var currentBranch = SessionStore.getCurrentBranch();
 
     var leadDefinition = {
@@ -12,28 +14,24 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             "Page/Engine/shramsarathi.dashboard.lead.IncompleteLeadQueue",
             "Page/Engine/shramsarathi.dashboard.lead.LeadFollowUpQueue",
             "Page/Engine/shramsarathi.dashboard.lead.ReadyForScreeningQueue",
-            // "Page/Engine/shramsarathi.dashboard.lead.LeadBulkUpload",
-            // "Page/Engine/shramsarathi.dashboard.lead.LeadAssignmentPendingQueue",
-            "Page/Engine/shramsarathi.dashboard.lead.LeadRejectedQueue",
+            "Page/Engine/shramsarathi.dashboard.lead.LeadRejectedQueue"
         ]
-       
     };
     
-
     PagesDefinition.getUserAllowedDefinition(leadDefinition).then(function(resp) {
         $scope.leadDashboardDefinition = resp;
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
         var centres = SessionStore.getCentres();
 
-        var lapqMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.lead.ReadyForScreeningQueue"];
-        var lfuqMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.lead.LeadFollowUpQueue"];
         var ilqMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.lead.IncompleteLeadQueue"];
+        var lfuqMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.lead.LeadFollowUpQueue"];
+        var rsMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.lead.ReadyForScreeningQueue"];
         var rMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.lead.LeadRejectedQueue"];
 
        
         if (rMenu) rMenu.data = 0;
-        if (lapqMenu) lapqMenu.data = 0;
+        if (rsMenu) rsMenu.data = 0;
         if (lfuqMenu) lfuqMenu.data = 0;
         if (ilqMenu) ilqMenu.data = 0;
 
@@ -81,6 +79,25 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
                 });
             }
 
+            if (rsMenu) {
+                Lead.search({
+                    'branchName': branchName,
+                    'currentStage': "ReadyForScreening",
+                    'leadName': '',
+                    'area': '',
+                    'cityTownVillage': '',
+                    'businessName': '',
+                    'page': 1,
+                    'per_page': 1,
+                    'centreName': centre.centreName
+                }).
+                $promise.then(function(response, headerGetter) {
+                    rsMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    rsMenu.data = '-';
+                });  
+            }
+
             if (rMenu) {
                 Lead.search({
                     'branchName': branchName,
@@ -104,25 +121,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             }
         })
 
-
-        if (lapqMenu) {
-            Lead.search({
-                'branchName': branchName,
-                'currentStage': "Assignment Pending",
-                'leadName': '',
-                'area': '',
-                'cityTownVillage': '',
-                'businessName': '',
-                'page': 1,
-                'per_page': 1,
-            }).$promise.then(function(response, headerGetter) {
-                lapqMenu.data = Number(response.headers['x-total-count']);
-            }, function() {
-                lapqMenu.data = '-';
-            });
-        }
-
-
+       
     });
    
 }

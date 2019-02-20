@@ -83,7 +83,7 @@
          ]
       },
       {
-         "order":11,
+         "order":8,
          "code":"Sanction",
          "name":"Sanction",
          "stageType":"CAPTURE",
@@ -95,7 +95,7 @@
          ]
       },
       {
-         "order":12,
+         "order":9,
          "code": "Rejected",
          "name": "Rejected",
          "stageType": "CAPTURE",
