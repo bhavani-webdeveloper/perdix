@@ -1,5 +1,3 @@
-
-
 var irf = irf || {};
 irf.BASE_URL = 'http://devkinara.perdix.in:8080/perdix-server';
 irf.MANAGEMENT_BASE_URL = 'http://devkinara.perdix.in:8081/management';
@@ -249,9 +247,18 @@ irf.FWR_BASE_URL = 'http://perdix.kgfs.co.in/fwr_dev';
 // irf.AUDIT_API_URL = 'http://sit.perdix.co.in.in:82';
 // irf.CAMS_EKYC_INTEG_URL = "https://eiscuat1.camsonline.com/ekycuat3/eKYCVal_Aadhar.aspx";
 
-var irf = irf || {};
-irf.BASE_URL = 'http://uat.maitreya.perdix.co.in:82/uat_maitreya_perdix-server';
-irf.MANAGEMENT_BASE_URL = 'http://uat.maitreya.perdix.co.in:8081/uat_maitreya_management';
-irf.FORM_DOWNLOAD_URL = 'http://uat.maitreya.perdix.co.in:82/uat_maitreya_forms/formPrint.jsp';
-irf.BI_BASE_URL = "http://uat.maitreya.perdix.co.in:8081/uat_maitreya_bi";
-irf.PSYCHOMETRIC_BASE_URL = "http://uat.maitreya.perdix.co.in:82/uat_maitreya_psychometric";
+// var irf = irf || {};
+// irf.BASE_URL = 'http://uat.maitreya.perdix.co.in:82/uat_maitreya_perdix-server';
+// irf.MANAGEMENT_BASE_URL = 'http://uat.maitreya.perdix.co.in:8081/uat_maitreya_management';
+// irf.FORM_DOWNLOAD_URL = 'http://uat.maitreya.perdix.co.in:82/uat_maitreya_forms/formPrint.jsp';
+// irf.BI_BASE_URL = "http://uat.maitreya.perdix.co.in:8081/uat_maitreya_bi";
+// irf.PSYCHOMETRIC_BASE_URL = "http://uat.maitreya.perdix.co.in:82/uat_maitreya_psychometric";
+
+
+// ------------------------------ Shramsarathi sit--------------------------------------
+// var irf = irf || {};
+// irf.BASE_URL = 'http://sit.perdix.co.in:8080/sit_shramsarathi_perdix-server';
+// irf.MANAGEMENT_BASE_URL = 'http://sit.perdix.co.in:8081/sit_shramsarathi_management';
+// irf.FORM_DOWNLOAD_URL = 'http://sit.perdix.co.in:8080/sit_shramsarathi_forms/formPrint.jsp';
+// irf.BI_BASE_URL = "http://sit.perdix.co.in:8081/sit_shramsarathi_bi";
+// irf.PSYCHOMETRIC_BASE_URL = "http://sit.perdix.co.in:8080/sit_shramsarathi_psychometric";
