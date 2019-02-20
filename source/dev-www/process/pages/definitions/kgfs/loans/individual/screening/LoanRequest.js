@@ -785,16 +785,8 @@ define([],function(){
                             }
                             loanMitigantsGrouped[item.parameter].push(item);
                         }
-                        model.loanMitigantsByParameter = [];
-                        _.forOwn(loanMitigantsGrouped, function(mitigants, key){
-                            var chosenMitigants = "<ul>";
+                        model.loanMitigantsGrouped=loanMitigantsGrouped;                       
 
-                            for (var i=0; i<mitigants.length; i++){
-                                chosenMitigants = chosenMitigants + "<li>" + mitigants[i].mitigant + "</li>";
-                            }
-                            chosenMitigants = chosenMitigants + "</ul>";
-                            model.loanMitigantsByParameter.push({'Parameter': key, 'Mitigants': chosenMitigants})
-                        })
                     }
                     /* End of Deviations and Mitigations grouping */
 
@@ -926,13 +918,12 @@ define([],function(){
                                     "deviationDetails": {
                                         "type": "section",
                                         "colClass": "col-sm-12",
-                                        "html": '<table class="table"><colgroup><col width="20%"><col width="5%"><col width="20%"></colgroup><thead><tr><th>Parameter Name</th><th></th><th>Mitigation</th></tr></thead><tbody>' +
-                                            '<tr ng-repeat="item in model.deviationDetails">' +
-                                            '<td>{{ item["parameter"] }}</td>' +
-                                            '<td>{{ item["deviation"] }}</td>' +
+                                        "html": '<table class="table"><colgroup><col width="20%"><col width="20%"></colgroup><thead><tr><th>Parameter Name</th><th>Mitigant</th></tr></thead><tbody>' +
+                                            '<tr ng-repeat="(parameter,item) in model.loanMitigantsGrouped">' +
+                                            '<td>{{ parameter }}</td>' +
                                             '<td><ul class="list-unstyled">' +
-                                            '<li ng-repeat="m in item.mitigants " id="{{m.mitigant}}">' +
-                                            '<input type="checkbox"  ng-model="m.selected" ng-checked="m.selected"> {{ m.mitigant }}' +
+                                            '<li ng-repeat="m in item" id="{{m.mitigant}}">' +
+                                            '<input type="checkbox"  ng-model="m.isMitigated" ng-checked="m.isMitigated"> {{ m.mitigant }}' +
                                             '</li></ul></td></tr></tbody></table>'
                                     },                                    
                                     "loanMitigants":{

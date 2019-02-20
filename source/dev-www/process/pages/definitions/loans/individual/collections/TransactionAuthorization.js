@@ -150,16 +150,18 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                     backToLoansList();
                                 })
                         }).then(function(){
-                            Locking.lock({
-                                "processType": "Loan",
-                                "processName": "Collections",
-                                "recordId": recordId.$$state.value.id
-                            }).$promise.then(function() {
+                            if (SessionStore.getGlobalSetting("lockingRequired") == "true") {
+                                Locking.lock({
+                                    "processType": "Loan",
+                                    "processName": "Collections",
+                                    "recordId": recordId.$$state.value.id
+                                }).$promise.then(function () {
 
-                            }, function(err) {
-                                irfProgressMessage.pop("Locking",err.data.error, 6000);
-                                irfNavigator.goBack();
-                            });
+                                }, function (err) {
+                                    irfProgressMessage.pop("Locking", err.data.error, 6000);
+                                    irfNavigator.goBack();
+                                });
+                            }
                         })
 
                     $q.all([p2])

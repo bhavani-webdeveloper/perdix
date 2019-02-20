@@ -3621,6 +3621,13 @@
                          "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","ApplicationReview","FieldAppraisalReview","ZonalRiskReview", "CentralRiskReview","CreditCommitteeReview","Rejected"
                       ]
                    },
+                    "isMitigated":{
+                      "title":"isMitigated",
+                      "type":"boolean",
+                      "captureStages":[
+                         "Screening","Application","CreditAppraisal","DSCApproval","LosDSCOverride"
+                      ]
+                   },
                    "riskScore":{
                       "title":"riskScore",
                       "type":"number",

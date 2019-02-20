@@ -33,10 +33,10 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.scr
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
 	                    },
-	                    "businessName": {
-	                        "title": "BUSINESS_NAME",
-	                        "type": "string"
-	                    },
+	                    // "businessName": {
+	                    //     "title": "BUSINESS_NAME",
+	                    //     "type": "string"
+	                    // },
 	                    'branch': {
 	                    	'title': "BRANCH",
 	                    	"type": ["string", "null"],
@@ -150,10 +150,12 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.scr
 						}, {
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
-						},{
-							title: 'BUSINESS_NAME',
-							data: 'customerName'
-						},{
+						},
+						// {
+						// 	title: 'BUSINESS_NAME',
+						// 	data: 'customerName'
+						// },
+						{
 							title: 'Loan Amount',
 							data: 'loanAmount'
 						}, /*{

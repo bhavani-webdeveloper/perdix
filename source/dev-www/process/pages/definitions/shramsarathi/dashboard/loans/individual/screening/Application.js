@@ -51,22 +51,22 @@ define(["perdix/domain/model/loan/LoanProcess",
                             //     maximum: 1,
                             //     order:40
                             // },
-                            // {
-                            //     pageName: 'shramsarathi.dashboard.loans.individual.customer.EnterpriseEnrolmentBusinessFinancial',
-                            //     title: 'Business Financials',
-                            //     pageClass: 'business-financial',
-                            //     minimum: 1,
-                            //     maximum: 1,
-                            //     order:50
-                            // },
                             {
-                                pageName: 'shramsarathi.dashboard.loans.individual.customer.Enrolment',
-                                title: 'BUSINESS',
-                                pageClass: 'business',
+                                pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.EnterpriseFinancialView',
+                                title: 'FINANCIAL_INFORMATION_SUMMARY',
+                                pageClass: 'business-financial',
                                 minimum: 1,
                                 maximum: 1,
-                                order:40
+                                order:80
                             },
+                            // {
+                            //     pageName: 'shramsarathi.dashboard.loans.individual.customer.Enrolment',
+                            //     title: 'BUSINESS',
+                            //     pageClass: 'business',
+                            //     minimum: 1,
+                            //     maximum: 1,
+                            //     order:40
+                            // },
                             // {
                             //     pageName: 'shramsarathi.dashboard.loans.individual.customer.VehicleValuation',
                             //     title: 'VEHICLE_VALUATION',
@@ -211,20 +211,20 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 //         loanProcess: loanProcess
                                 //     }
                                 // });
-                                // $this.bundlePages.push({
-                                //     pageClass: 'business-financial',
-                                //     model: {
-                                //         enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
-                                //         loanProcess: loanProcess
-                                //     }
-                                // });
                                 $this.bundlePages.push({
-                                    pageClass: 'business',
+                                    pageClass: 'business-financial',
                                     model: {
                                         enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
                                         loanProcess: loanProcess
                                     }
                                 });
+                                // $this.bundlePages.push({
+                                //     pageClass: 'business',
+                                //     model: {
+                                //         enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                //         loanProcess: loanProcess
+                                //     }
+                                // });
                                 // $this.bundlePages.push({
                                 //     pageClass: 'vehicle-valuation',
                                 //     model: {

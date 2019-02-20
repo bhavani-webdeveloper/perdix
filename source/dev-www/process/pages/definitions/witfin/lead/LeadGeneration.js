@@ -5,10 +5,10 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
         pageUID: "witfin.lead.LeadGeneration",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$filter", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "entityManager", "$q", "irfProgressMessage",
-        "PageHelper", "Utils", "entityManager", "BiometricService", "PagesDefinition", "Queries", "IrfFormRequestProcessor", "$injector", "irfNavigator", "User"],
+        "PageHelper", "Utils", "entityManager", "BiometricService", "PagesDefinition", "Queries", "IrfFormRequestProcessor", "$injector", "irfNavigator", "User", "Agent"],
 
         $pageFn: function($log, $state, $filter, $stateParams, Lead, LeadHelper, SessionStore, formHelper, entityManager, $q, irfProgressMessage,
-            PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries, IrfFormRequestProcessor, $injector, irfNavigator, User) {
+            PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries, IrfFormRequestProcessor, $injector, irfNavigator, User, Agent) {
 
             var branch = SessionStore.getBranch();
             AngularResourceService.getInstance().setInjector($injector);
@@ -50,7 +50,32 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                     },
                     "sourceDetails.agentName": {
                         "condition": "model.lead.leadSource.toUpperCase() == 'BUYING / SELLING AGENT(BROKER)'",
-                        "enumCode": "agent"
+                        "type":"lov",
+                        "lovonly":true,
+                        "inputMap": {
+                            "agentName": {
+                                "key": "lead.agentName", 
+                                "type": "string"
+                            }            
+                        },
+                        "outputMap": {
+                            'agentName': "lead.agentName"
+                        },
+                        "searchHelper": formHelper,
+                        "search": function(inputModel, form) {
+                            var promise = Agent.search({
+                                'agentName': inputModel.agentName,
+                            }).$promise;
+                            return promise;
+                        },
+                        getListDisplayItem: function(data, index) {
+                            return [
+                                data.agentName
+                            ];
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            model.lead.agentName = valueObj.agentName;
+                        }
                     },
                     "sourceDetails.referredBy2": {
                         "condition": "model.lead.leadSource.toUpperCase() == 'DEALER(NEW VEHICLE)'",

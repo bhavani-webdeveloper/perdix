@@ -663,6 +663,19 @@ define({
                                 "title": "Work Process",
                                 "data": "workProcess",
                             },
+                            {
+                                "title": "Description",
+                                "data": "description",
+                            },
+                            {
+                                "title": "Serial Number",
+                                "data": "serialNumber",
+                            },
+                            {
+                                "title": "Permanently Fixed To Building",
+                                "data": "permanentlyFixedToBuilding",
+                            },
+
                             // {
                             //     "title": "Depreciation%",
                             //     "data": "depreciationPercentage",
