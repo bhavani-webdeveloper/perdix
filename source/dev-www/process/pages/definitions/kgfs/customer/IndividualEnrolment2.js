@@ -1367,7 +1367,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 {
                                     "type": "actionbox",
-                                    "condition": "model.customer.currentStage && (model.currentStage=='Screening' || model.currentStage=='Appraisal' || model.currentStage=='Application' || model.currentStage=='CreditAppraisal' || model.currentStage=='DSCApproval' || model.currentStage=='LosDSCOverride' ||  (model.currentStage=='GuarantorAddition' && model.pageClass=='guarantor'))",
+                                    "condition": "model.customer.currentStage && (model.currentStage=='Screening' || model.currentStage=='Appraisal' || model.currentStage=='Application' || model.currentStage=='CreditAppraisal' || (model.currentStage=='GuarantorAddition' && model.pageClass=='guarantor'))",
                                     "orderNo": 1200,
                                     "items": [
                                         {

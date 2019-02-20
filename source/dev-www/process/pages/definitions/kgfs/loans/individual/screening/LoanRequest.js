@@ -923,7 +923,7 @@ define([],function(){
                                             '<td>{{ parameter }}</td>' +
                                             '<td><ul class="list-unstyled">' +
                                             '<li ng-repeat="m in item" id="{{m.mitigant}}">' +
-                                            '<input type="checkbox"  ng-model="m.isMitigated" ng-checked="m.isMitigated"> {{ m.mitigant }}' +
+                                            '<input type="checkbox"  ng-model="m.isMitigated"> {{ m.mitigant }}' +
                                             '</li></ul></td></tr></tbody></table>'
                                     },                                    
                                     "loanMitigants":{
@@ -1094,7 +1094,7 @@ define([],function(){
                                 "additions": [
                                     {
                                         "type": "actionbox",
-                                        "condition": "model.loanAccount.currentStage !='Rejected' && model.loanAccount.currentStage !='KYCCheck' ",
+                                        "condition": "model.loanAccount.currentStage !='Rejected' && model.loanAccount.currentStage !='KYCCheck' && model.loanAccount.currentStage !='DSCApproval' && model.loanAccount.currentStage !='LosDSCOverride' ",
                                         "orderNo": 1000,
                                         "items": [
                                             {
