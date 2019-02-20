@@ -16,6 +16,7 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.journal = model.journal || {};
+                model.siteCode=SessionStore.getGlobalSetting('siteCode');
                 $log.info("Inside submit()");
                 if (!(model && model.journal && model.journal.id && model.$$STORAGE_KEY$$)) {
                     PageHelper.showLoader();
@@ -113,6 +114,9 @@ define({
                 submit: function(model, form, formName) {
                     $log.info("Inside submit()");
                     model.journal.isApplicable=0;
+                    if(model.siteCode=='witfin') {
+                        model.journal.isApplicable=1;
+                    }
                     PageHelper.showLoader();
                     PageHelper.showProgress("Journal Close", "Working...");
                     if (model.journal.id) {
