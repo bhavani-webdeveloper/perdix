@@ -26,7 +26,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageName:'shramsarathi.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'APPLICANT',
                                 pageClass: 'applicant',
-                                minimum: 1,
+                                minimum: 0,
                                 maximum: 1,
                                 order:10
                             },
@@ -117,7 +117,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'financialInfoSummary',
                                 minimum: 1,
                                 maximum: 1,
-                                order: 40
+                                order: 100
                             }
                         ]);
                     },

@@ -75,14 +75,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 maximum: 1,
                                 order: 70
                             },
-                            {
-                                pageName: 'shramsarathi.dashboard.loans.individual.screening.Summary',
-                                title: 'SUMMARY',
-                                pageClass: 'summary',
-                                minimum: 1,
-                                maximum: 1,
-                                order: 6
-                            },
+                            // {
+                            //     pageName: 'shramsarathi.dashboard.loans.individual.screening.Summary',
+                            //     title: 'SUMMARY',
+                            //     pageClass: 'summary',
+                            //     minimum: 1,
+                            //     maximum: 1,
+                            //     order: 6
+                            // },
                             {
                                 pageName: 'loans.individual.screening.CreditBureauView',//CreditBureauView
                                 title: 'CREDIT_BUREAU',
@@ -255,16 +255,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             }
                                         }
 
-                                        $this.bundlePages.push({
-                                            pageClass: 'summary',
-                                            model: {
-                                                cbModel: {
-                                                    customerId: res.customerId,
-                                                    loanId: bundleModel.loanId,
-                                                    scoreName: 'RiskScore3'
-                                                }
-                                            }
-                                        });
+                                        // $this.bundlePages.push({
+                                        //     pageClass: 'summary',
+                                        //     model: {
+                                        //         cbModel: {
+                                        //             customerId: res.customerId,
+                                        //             loanId: bundleModel.loanId,
+                                        //             scoreName: 'RiskScore3'
+                                        //         }
+                                        //     }
+                                        // });
                                         // if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan') {
                                         //     $this.bundlePages.push({
                                         //         pageClass: 'summaryView',

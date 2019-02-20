@@ -189,9 +189,10 @@ define(["perdix/domain/model/loan/LoanProcess",
                                  $this.bundlePages.push({
                                     pageClass: 'applicant',
                                     model: {
+                                        loanProcess: loanProcess,
                                         customerId: loanAccount.customerId,
                                         enrolmentProcess: loanProcess.applicantEnrolmentProcess,
-                                        loanProcess: loanProcess
+                                       
                                     }
                                 });
 

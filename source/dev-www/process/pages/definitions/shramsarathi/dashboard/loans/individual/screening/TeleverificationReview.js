@@ -53,8 +53,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                         maximum: 1,
                         order: 30
                     }, {
-                        pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.LoanApplicationView',
-                        title: 'Loan Recommendation',
+                        pageName: 'shramsarathi.dashboard.loans.individual.screening.LoanRequest',
+                        title: 'Loan Request',
                         pageClass: 'loan-recommendation',
                         minimum: 1,
                         maximum: 1,
