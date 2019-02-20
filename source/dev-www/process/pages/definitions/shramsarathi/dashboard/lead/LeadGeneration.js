@@ -354,7 +354,7 @@ function(LeadProcess, AngularResourceService) {
                                     "individualDetails": {
                                         items: {
                                             "middleName": {
-                                                key: "customer.middleName",
+                                                key: "lead.middleName",
                                                 title: "MIDDLE_NAME",
                                                 schema: {
                                                     pattern: "^[a-zA-Z\. ]+$",
@@ -363,7 +363,7 @@ function(LeadProcess, AngularResourceService) {
                                                 "orderNo": 50
                                             },
                                             "lastName": {
-                                                key: "customer.lastName",
+                                                key: "lead.lastName",
                                                 title: "LAST_NAME",
                                                 required:true,
                                                 schema: {
@@ -403,7 +403,7 @@ function(LeadProcess, AngularResourceService) {
                                         "orderNo": 30,
                                         "items": {
                                             "migrantDependantLabourFamily": {
-                                                key: "lead.udf.userDefinedFieldValues.udf3",
+                                                key: "lead.userDefinedFieldValues.udf2",
                                                 title: "MIGRANT_DEPENDENT_LABOUR_FAMILY",
                                                 required:true,
                                                 type:"radios",
