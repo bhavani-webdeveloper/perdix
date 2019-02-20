@@ -1030,6 +1030,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         key: "loanAccount.frequencyRequested",
                         type: "select",
                         title: "FREQUENCY_REQUESTED",
+                        required: true,
                         enumCode: "frequency",
                         onChange:function(value,form,model){
                             computeEstimatedEMI(model);
@@ -1301,6 +1302,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     },
                     {
                         key: "loanAccount.frequencyRequested",
+                        required: true,
                         type: "select",
                         readonly:true,
                         title: "FREQUENCY_REQUESTED",
