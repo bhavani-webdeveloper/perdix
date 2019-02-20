@@ -14,7 +14,7 @@ define(["perdix/domain/model/loan/LoanProcess",
             $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, Message, irfNavigator) {
                 var getBundleDefinition = function() {
                     var definition = [{
-                        pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
+                        pageName: 'shramsarathi.dashboard.loans.individual.customer.individualEnrolment2',
                         title: 'APPLICANT',
                         pageClass: 'applicant',
                         minimum: 1,
@@ -22,7 +22,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         order: 10
                     }, 
                     {
-                        pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
+                        pageName: 'shramsarathi.dashboard.loans.individual.customer.individualEnrolment2',
                         title: 'CO_APPLICANT',
                         pageClass: 'co-applicant',
                         minimum: 1,
@@ -72,15 +72,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                         pageClass: 'loan-review',
                         minimum: 1,
                         maximum: 1,
-                        order: 60
-                    }, {
-                        pageName: 'loans.individual.misc.BalanceSheetHistory',
-                        title: 'BALANCE_SHEET_HISTORY',
-                        pageClass: 'balance-sheet-history',
-                        minimum: 1,
-                        maximum: 1,
-                        order: 70
+                        order: 80
                     },
+                    //  {
+                    //     pageName: 'loans.individual.misc.BalanceSheetHistory',
+                    //     title: 'BALANCE_SHEET_HISTORY',
+                    //     pageClass: 'balance-sheet-history',
+                    //     minimum: 1,
+                    //     maximum: 1,
+                    //     order: 90
+                    // },
                     {
                         pageName: 'shramsarathi.dashboard.loans.individual.screening.televerification',
                         title: 'TELE_VERIFICATION',
@@ -272,13 +273,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-                                $this.bundlePages.push({
-                                    pageClass: 'balance-sheet-history',
-                                    model: {
-                                        customerUrn: loanAccount.urnNo,
-                                        loanId: loanAccount.id
-                                    }
-                                });
+                                // $this.bundlePages.push({
+                                //     pageClass: 'balance-sheet-history',
+                                //     model: {
+                                //         customerUrn: loanAccount.urnNo,
+                                //         loanId: loanAccount.id
+                                //     }
+                                // });
 
                                  $this.bundlePages.push({
                                     pageClass: 'cbview',
