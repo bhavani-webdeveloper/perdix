@@ -27,15 +27,22 @@ define(["perdix/domain/model/loan/LoanProcess",
                         minimum: 1,
                         maximum: 1,
                         order: 20
-                    },
-                    //  {
-                    //     pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
-                    //     title: 'GUARANTOR',
-                    //     pageClass: 'guarantor',
+                    }, {
+                        pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
+                        title: 'GUARANTOR',
+                        pageClass: 'guarantor',
+                        minimum: 1,
+                        maximum: 1,
+                        order: 30
+                    }, 
+                    // {
+                    //     pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.EnterpriseEnrollmentView',
+                    //     title: 'BUSINESS',
+                    //     pageClass: 'business',
                     //     minimum: 1,
                     //     maximum: 1,
-                    //     order: 30
-                    // }, 
+                    //     order: 40
+                    // },
                      {
                         pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.EnterpriseFinancialView',
                         title: 'FINANCIAL_INFORMATION_SUMMARY',
@@ -189,10 +196,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                                  $this.bundlePages.push({
                                     pageClass: 'applicant',
                                     model: {
-                                        loanProcess: loanProcess,
                                         customerId: loanAccount.customerId,
                                         enrolmentProcess: loanProcess.applicantEnrolmentProcess,
-                                       
+                                        loanProcess: loanProcess
                                     }
                                 });
 
