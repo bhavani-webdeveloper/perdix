@@ -53,7 +53,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             },
                             {
                                 pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.EnterpriseFinancialView',
-                                title: 'Business Financials',
+                                title: 'FINANCIAL_INFORMATION_SUMMARY',
                                 pageClass: 'business-finance',
                                 minimum: 1,
                                 maximum: 1,

@@ -14,7 +14,7 @@ define(["perdix/domain/model/loan/LoanProcess",
             $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, Message, irfNavigator) {
                 var getBundleDefinition = function() {
                     var definition = [{
-                        pageName: 'shramsarathi.dashboard.loans.individual.customer.individualEnrolment2',
+                        pageName: 'shramsarathi.dashboard.loans.individual.customer.IndividualEnrolment2',
                         title: 'APPLICANT',
                         pageClass: 'applicant',
                         minimum: 1,
@@ -22,7 +22,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         order: 10
                     }, 
                     {
-                        pageName: 'shramsarathi.dashboard.loans.individual.customer.individualEnrolment2',
+                        pageName: 'shramsarathi.dashboard.loans.individual.customer.IndividualEnrolment2',
                         title: 'CO_APPLICANT',
                         pageClass: 'co-applicant',
                         minimum: 1,
@@ -46,12 +46,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                     //     order: 40
                     // }, 
                     {
-                        pageName: 'shramsarathi.dashboard.loans.individual.detail.EnterpriseFinancialView',
-                        title: 'Business Financials',
+                        pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.EnterpriseFinancialView',
+                        title: 'FINANCIAL_INFORMATION_SUMMARY',
                         pageClass: 'business-finance',
                         minimum: 1,
                         maximum: 1,
-                        order: 30
+                        order: 51
                     }, {
                         pageName: 'shramsarathi.dashboard.loans.individual.screening.LoanRequest',
                         title: 'Loan Request',
@@ -261,8 +261,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 $this.bundlePages.push({
                                     pageClass: 'loan-recommendation',
                                     model: {
-                                        customerId: loanAccount.customerId,
-                                        loanAccount:  loanAccount
+                                        loanProcess: loanProcess
                                     }
                                 });
 
