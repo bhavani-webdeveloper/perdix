@@ -1130,7 +1130,10 @@ define([],function(){
                     payments = model.loanAccount.tenure * 12;
                 else if (model.loanAccount.frequencyRequested == 'Monthly')
                     payments = model.loanAccount.tenure;
-   
+                else if (model.loanAccount.frequencyRequested == 'Weekly') {
+                    payments = model.loanAccount.tenure;
+                    interest = (model.loanAccount.interestRate/100) * 7/360;
+                }
                 // Now compute the monthly payment figure, using esoteric math.
                 var x = Math.pow(1 + interest, payments);
                 var monthly = (principal*x*interest)/(x-1);

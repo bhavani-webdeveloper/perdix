@@ -1104,7 +1104,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                         "title":"CUSTOMER_TYPE",
                                         "type":"select",
                                         "titleMap":{
-                                            "Individual":"Individual",
+                                            //"Individual":"Individual",
                                             "Enterprise":"Enterprise"
                                         }
                                     },

@@ -290,6 +290,7 @@ define({
                                 "condition": "model.customer.maritalStatus && model.customer.maritalStatus.toUpperCase() == 'MARRIED'"
                             }, {
                                 "key": "customer.spouseDateOfBirth",
+                                "title": "SPOUSE_DATE_OF_BIRTH",
                                 "condition": "model.customer.maritalStatus && model.customer.maritalStatus.toUpperCase() == 'MARRIED' "
                             }]
                         }, {

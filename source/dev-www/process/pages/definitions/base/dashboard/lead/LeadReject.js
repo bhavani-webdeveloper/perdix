@@ -516,7 +516,7 @@ define({
                             LeadHelper.proceedData(reqData).then(function(resp) {
                                 irfNavigator.go({
                                     state: "Page.Adhoc",
-                                    pageName: "base.dashboard.loans.LoanOriginationDashboard"
+                                    pageName: "base.dashboard.lead.LeadDashboard"
                                 });
                                 
                             }, function(err) {
