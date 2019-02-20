@@ -14,34 +14,38 @@ define(["perdix/domain/model/loan/LoanProcess",
             $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, Message, irfNavigator) {
                 var getBundleDefinition = function() {
                     var definition = [{
-                        pageName: 'shramsarathi.dashboard.loans.individual.detail.IndividualEnrollmentView',
+                        pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
                         title: 'APPLICANT',
                         pageClass: 'applicant',
                         minimum: 1,
                         maximum: 1,
                         order: 10
-                    }, {
-                        pageName: 'shramsarathi.dashboard.loans.individual.detail.IndividualEnrollmentView',
+                    }, 
+                    {
+                        pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
                         title: 'CO_APPLICANT',
                         pageClass: 'co-applicant',
                         minimum: 1,
                         maximum: 1,
                         order: 20
-                    }, {
-                        pageName: 'shramsarathi.dashboard.loans.individual.detail.IndividualEnrollmentView',
-                        title: 'GUARANTOR',
-                        pageClass: 'guarantor',
-                        minimum: 1,
-                        maximum: 1,
-                        order: 30
-                    }, {
-                        pageName: 'shramsarathi.dashboard.loans.individual.detail.EnterpriseEnrollmentView',
-                        title: 'BUSINESS',
-                        pageClass: 'business',
-                        minimum: 1,
-                        maximum: 1,
-                        order: 40
-                    }, {
+                    },
+                    //  {
+                    //     pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
+                    //     title: 'GUARANTOR',
+                    //     pageClass: 'guarantor',
+                    //     minimum: 1,
+                    //     maximum: 1,
+                    //     order: 30
+                    // }, 
+                    // {
+                    //     pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.EnterpriseEnrollmentView',
+                    //     title: 'BUSINESS',
+                    //     pageClass: 'business',
+                    //     minimum: 1,
+                    //     maximum: 1,
+                    //     order: 40
+                    // }, 
+                    {
                         pageName: 'shramsarathi.dashboard.loans.individual.detail.EnterpriseFinancialView',
                         title: 'Business Financials',
                         pageClass: 'business-finance',
@@ -49,7 +53,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         maximum: 1,
                         order: 50
                     }, {
-                        pageName: 'shramsarathi.dashboard.loans.individual.detail.LoanApplicationView',
+                        pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.LoanApplicationView',
                         title: 'Loan Recommendation',
                         pageClass: 'loan-recommendation',
                         minimum: 1,
@@ -85,16 +89,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                         maximum: 1,
                         order:110
                         }];
-                    if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan') {
-                        definition.push({
-                            pageName: 'shramsarathi.dashboard.loans.individual.detail.SummaryView',
-                            title: 'SummaryView',
-                            pageClass: 'summaryView',
-                            minimum: 1,
-                            maximum: 1,
-                            order: 5
-                        });
-                    } 
+                    // if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan') {
+                    //     definition.push({
+                    //         pageName: 'shramsarathi.dashboard.loans.individual.detail.SummaryView',
+                    //         title: 'SummaryView',
+                    //         pageClass: 'summaryView',
+                    //         minimum: 1,
+                    //         maximum: 1,
+                    //         order: 5
+                    //     });
+                    // } 
                     return definition;
                 };
                 return {
@@ -213,37 +217,37 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     });
                                 }
 
-                                for (i in customerIds.guarantors) {
-                                    $this.bundlePages.push({
-                                        pageClass: 'guarantor',
-                                        model: {
-                                            customerId: customerIds.guarantors[i]
-                                        }
-                                    });
-                                }
+                                // for (i in customerIds.guarantors) {
+                                //     $this.bundlePages.push({
+                                //         pageClass: 'guarantor',
+                                //         model: {
+                                //             customerId: customerIds.guarantors[i]
+                                //         }
+                                //     });
+                                // }
 
-                                if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan') {
-                                    $this.bundlePages.push({
-                                        pageClass: 'summaryView',
-                                        model: {
-                                            cbModel: {
-                                                customerId: loanAccount.customerId,
-                                                loanId: loanAccount.id,
-                                                scoreName: 'RiskScore3',
-                                                customerDetail: bundleModel.customer_detail
-                                            }
-                                        }
-                                    });
-                                }
+                                // if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan') {
+                                //     $this.bundlePages.push({
+                                //         pageClass: 'summaryView',
+                                //         model: {
+                                //             cbModel: {
+                                //                 customerId: loanAccount.customerId,
+                                //                 loanId: loanAccount.id,
+                                //                 scoreName: 'RiskScore3',
+                                //                 customerDetail: bundleModel.customer_detail
+                                //             }
+                                //         }
+                                //     });
+                                // }
 
-                                $this.bundlePages.push({
-                                    pageClass: 'business',
-                                    model: {
-                                        customerId: loanAccount.customerId,
-                                        enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
-                                        loanProcess: loanProcess
-                                    }
-                                });
+                                // $this.bundlePages.push({
+                                //     pageClass: 'business',
+                                //     model: {
+                                //         customerId: loanAccount.customerId,
+                                //         enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                //         loanProcess: loanProcess
+                                //     }
+                                // });
 
                                 $this.bundlePages.push({
                                     pageClass: 'business-finance',
