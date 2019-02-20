@@ -14,36 +14,31 @@ define(["perdix/domain/model/loan/LoanProcess",
             $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, Message, irfNavigator) {
                 var getBundleDefinition = function() {
                     var definition = [{
-                        pageName: 'shramsarathi.dashboard.loans.individual.customer.individualEnrolment2',
+                        pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
                         title: 'APPLICANT',
                         pageClass: 'applicant',
                         minimum: 1,
                         maximum: 1,
                         order: 10
                     }, {
-                        pageName: 'shramsarathi.dashboard.loans.individual.customer.individualEnrolment2',
+                        pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
                         title: 'CO_APPLICANT',
                         pageClass: 'co-applicant',
                         minimum: 1,
                         maximum: 1,
                         order: 20
-                    }, {
-                        pageName: 'shramsarathi.dashboard.loans.individual.customer.individualEnrolment2',
-                        title: 'GUARANTOR',
-                        pageClass: 'guarantor',
-                        minimum: 1,
-                        maximum: 1,
-                        order: 30
-                    }, {
-                        pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.EnterpriseEnrollmentView',
-                        title: 'BUSINESS',
-                        pageClass: 'business',
-                        minimum: 1,
-                        maximum: 1,
-                        order: 40
-                    }, {
+                    },
+                    //  {
+                    //     pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
+                    //     title: 'GUARANTOR',
+                    //     pageClass: 'guarantor',
+                    //     minimum: 1,
+                    //     maximum: 1,
+                    //     order: 30
+                    // }, 
+                     {
                         pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.EnterpriseFinancialView',
-                        title: 'Business Financials',
+                        title: 'FINANCIAL_INFORMATION_SUMMARY',
                         pageClass: 'business-finance',
                         minimum: 1,
                         maximum: 1,
@@ -194,9 +189,10 @@ define(["perdix/domain/model/loan/LoanProcess",
                                  $this.bundlePages.push({
                                     pageClass: 'applicant',
                                     model: {
+                                        loanProcess: loanProcess,
                                         customerId: loanAccount.customerId,
                                         enrolmentProcess: loanProcess.applicantEnrolmentProcess,
-                                        loanProcess: loanProcess
+                                       
                                     }
                                 });
 
