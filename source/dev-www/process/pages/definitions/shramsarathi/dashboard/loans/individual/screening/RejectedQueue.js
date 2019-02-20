@@ -51,10 +51,10 @@ define({
                             "title": "APPLICANT_NAME",
                             "type": "string"
                         },
-                        "businessName": {
-                            "title": "BUSINESS_NAME",
-                            "type": "string"
-                        },
+                        // "businessName": {
+                        //     "title": "BUSINESS_NAME",
+                        //     "type": "string"
+                        // },
                         "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"

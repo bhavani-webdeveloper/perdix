@@ -82,10 +82,10 @@ define({
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
 	                    },
-	                    "businessName": {
-	                        "title": "BUSINESS_NAME",
-	                        "type": "string"
-	                    },
+	                    // "businessName": {
+	                    //     "title": "BUSINESS_NAME",
+	                    //     "type": "string"
+	                    // },
 	                    "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"
@@ -186,10 +186,10 @@ define({
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
 						},
-						{
-							title: 'BUSINESS_NAME',
-							data: 'customerName'
-						},
+						// {
+						// 	title: 'BUSINESS_NAME',
+						// 	data: 'customerName'
+						// },
 						
 						{
 							title: 'Loan Amount',

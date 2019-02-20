@@ -6,7 +6,7 @@ define({
 		
 		return {
 			"type": "search-list",
-			"title": "IREP_TELEVERIFICATION_QUEUE",
+			"title": "TELEVERIFICATION_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				//model.branch = SessionStore.getCurrentBranch().branchName;
@@ -27,10 +27,10 @@ define({
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
 	                    },
-	                    "businessName": {
-	                        "title": "BUSINESS_NAME",
-	                        "type": "string"
-	                    },
+	                    // "businessName": {
+	                    //     "title": "BUSINESS_NAME",
+	                    //     "type": "string"
+	                    // },
 	                    "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"
@@ -147,10 +147,12 @@ define({
 						}, {
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
-						},{
-							title: 'BUSINESS_NAME',
-							data: 'customerName'
-						},{
+						},
+						// {
+						// 	title: 'BUSINESS_NAME',
+						// 	data: 'customerName'
+						// },
+						{
 							title: 'Loan Amount',
 							data: 'loanAmount'
 						}, {

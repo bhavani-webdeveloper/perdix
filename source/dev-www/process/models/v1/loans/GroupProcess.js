@@ -19,6 +19,10 @@ irf.models.factory('GroupProcess',
             method: 'POST',
             url: endpoint
         },
+        closeOldGroup: {
+            method: 'PUT',
+            url: endpoint+'/closeOldGroup'
+        },
         updateGroup: {
             method: 'PUT',
             url: endpoint

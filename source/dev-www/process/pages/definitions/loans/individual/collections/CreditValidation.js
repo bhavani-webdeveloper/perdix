@@ -9,14 +9,16 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
             initialize: function (model, form, formCtrl) {
                 $log.info("Credit Validation Page got initialized");
                 Queries.getLoanIdByLoanCollectionId($stateParams.pageId).then(function(res) {
-                    Locking.lock({
-                        "processType": "Loan",
-                        "processName": "Collections",
-                        "recordId": res.id
-                    }).$promise.then(function() {
-                    }, function(err) {
-                        Utils.alert(err.data.error).then(irfNavigator.goBack);
-                    });
+                    if (SessionStore.getGlobalSetting("lockingRequired") == "true") {
+                        Locking.lock({
+                            "processType": "Loan",
+                            "processName": "Collections",
+                            "recordId": res.id
+                        }).$promise.then(function () {
+                        }, function (err) {
+                            Utils.alert(err.data.error).then(irfNavigator.goBack);
+                        });
+                    }
                 });
 
                 if (!model._credit) {

@@ -24,9 +24,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                             {
                                // pageName: 'witfin.customer.IndividualEnrollment2',
                                 pageName:'shramsarathi.dashboard.loans.individual.customer.IndividualEnrolment2',
-                                title: 'CUSTOMER_ENROLLMENT',
+                                title: 'APPLICANT',
                                 pageClass: 'applicant',
-                                minimum: 1,
+                                minimum: 0,
                                 maximum: 1,
                                 order:10
                             },
@@ -46,14 +46,15 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 maximum: 1,
                                 order:20
                             },
-                            {
-                                pageName: 'shramsarathi.dashboard.loans.individual.customer.IndividualEnrolment2',
-                                title: 'GUARANTOR',
-                                pageClass: 'guarantor',
-                                minimum: 0,
-                                maximum: 1,
-                                order:30
-                            },
+                            // {
+                            //     pageName: 'shramsarathi.dashboard.loans.individual.customer.IndividualEnrolment2',
+                            //     title: 'GUARANTOR',
+                            //     pageClass: 'guarantor',
+                            //     minimum: 0,
+                            //     maximum: 1,
+                            //     order:30
+                            // },
+
                             // {
                             //     pageName: 'shramsarathi.dashboard.loans.individual.customer.EnterpriseEnrolment2',
                             //     title: 'BUSINESS',
@@ -116,7 +117,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'financialInfoSummary',
                                 minimum: 1,
                                 maximum: 1,
-                                order: 5
+                                order: 100
                             }
                         ]);
                     },

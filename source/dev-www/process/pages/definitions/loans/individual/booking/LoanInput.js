@@ -561,6 +561,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 },
                                 onSelect: function(valueObj, model, context) {
                                     model.loanAccount.productCode = valueObj.productCode;
+                                    getProductDetails(valueObj.productCode, model);
                                 },
                                 getListDisplayItem: function(item, index) {
                                     return [
@@ -568,7 +569,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     ];
                                 },
                                 onChange: function(value, form, model) {
-                                getProductDetails(value, model);
+                                    //getProductDetails(value, model);
                                 },
                                 //"parentEnumCode": "partner",
                                 //"parentValueExpr":"model.loanAccount.partnerCode"

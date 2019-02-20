@@ -68,7 +68,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
             
             var siteCode = SessionStore.getGlobalSetting("siteCode");
             var requires = {
-                "modeOfDisbursement": siteCode == 'kinara' || siteCode == 'sambandh' || siteCode == 'saija' || siteCode == 'pahal' || siteCode == 'maitreya'
+                "modeOfDisbursement": siteCode == 'kinara' || siteCode == 'sambandh' || siteCode == 'saija' || siteCode == 'pahal' || siteCode == 'maitreya' || siteCode == 'KGFS'
             };
             var readonly = {
                 "scheduledDisbursementDate": siteCode == 'KGFS'
@@ -119,8 +119,11 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     model.fee = model.fee || {};
                     model.additional = { "branchName": branch };
                     model.additional.isDisbursementDone = false;
+                    model.additional.isOverRideFpFlag = false;
                     model.CBSDate = SessionStore.getCBSDate();
                     model.siteCode = SessionStore.getGlobalSetting("siteCode");
+                    if (model.siteCode=='KGFS')
+                        model.additional.isNeftCheckFlag = true;
                     model.validateDisbursementDate = function (model) {
                         if (model.siteCode == "IREPDhan" && (moment(model.loanAccountDisbursementSchedule.scheduledDisbursementDate).isAfter(model.CBSDate))) {
                             PageHelper.setError({
@@ -177,6 +180,21 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                     }
                                 }
                             });
+                            if(model.siteCode == 'KGFS'){
+                                PageHelper.showLoader();
+                            Queries.getAccountOverridestatus(model.additional.accountNumber,model.additional.urnNo).then(function(resp){
+                                PageHelper.hideLoader();
+                                if (resp.results.length > 0){
+                                    model.additional.isOverRideFpFlag = resp.results[0].override_status == 1 ? true:false;
+                                }
+                                else{
+                                    model.additional.isOverRideFpFlag = false;
+                                }
+                            },function(err){
+                                PageHelper.hideLoader();
+                                model.additional.isOverRideFpFlag = false;
+                            })
+                        }
 
                             model.additional.netDisbursementAmount = Number(resp[0].netDisbursementAmount);
                             var j = 1;
@@ -186,7 +204,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                         model.additional.fees.push(model.additional.tempfees[i]);
                                 }
                             }
-
+                            if (model.siteCode != 'KGFS'){
                             if (!model.loanAccountDisbursementSchedule.modeOfDisbursement) {
                                 if (model.additional.netDisbursementAmount >= 200000) {
                                     model.loanAccountDisbursementSchedule.modeOfDisbursement = "RTGS";
@@ -194,6 +212,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                     model.loanAccountDisbursementSchedule.modeOfDisbursement = "NEFT";
                                 }
                             }
+                        }
 
                             model.loanAccountDisbursementSchedule.overrideStatus = "Requested";
                             model.loanAccountDisbursementSchedule.firstRepaymentDate = model.additional.firstRepaymentDate;
@@ -218,6 +237,26 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                     } else {
                                         model.customer.iscordova = false;
                                     }
+                                    if (model.siteCode == "KGFS"){
+                                    if (typeof res.customerBankAccounts == 'undefined' || res.customerBankAccounts.length == 0){
+                                        model.additional.isNeftCheckFlag == true;
+                                    }
+                                    else{
+                                        // TODO was told to so that hardcode zero
+                                        model.loanAccountDisbursementSchedule.customerNameInBank = res.firstName;
+                                        model.loanAccountDisbursementSchedule.customerAccountNumber = res.customerBankAccounts[0].customerAccountNumber;
+                                        model.loanAccountDisbursementSchedule.ifscCode = res.customerBankAccounts[0].ifscCode;
+                                        model.loanAccountDisbursementSchedule.customerBankBranchName = res.customerBankAccounts[0].customerBankBranchName;
+                                        model.additional.isNeftCheckFlag == false;
+                                        if (!model.loanAccountDisbursementSchedule.modeOfDisbursement) {
+                                            if (model.additional.netDisbursementAmount >= 200000) {
+                                                model.loanAccountDisbursementSchedule.modeOfDisbursement = "RTGS";
+                                            } else {
+                                                model.loanAccountDisbursementSchedule.modeOfDisbursement = "NEFT";
+                                            }
+                                        }
+                                    }
+                                }
                                 });
                             $log.info(model.customer);
                         },
@@ -302,10 +341,16 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             "type": "select",
                             "enumCode": "mode_of_disbursement",
                             onChange:function(valueObj,form,model,context){
-                                if (model.siteCode == 'KGFS' && valueObj == "RTGS" && model.loanAccountDisbursementSchedule.disbursementAmount <= 200000){
+                                if (model.siteCode == 'KGFS' ){
+                                if (valueObj == "RTGS" && model.loanAccountDisbursementSchedule.disbursementAmount <= 200000){
                                     PageHelper.showProgress('Disbursment',"RTGS is for Disbursement amount of 200000 or greater",4000);
                                     model.loanAccountDisbursementSchedule.modeOfDisbursement = null;
                                 }
+                                else if ((valueObj == "NEFT" || valueObj == "RTGS") && model.additional.isNeftCheckFlag){
+                                    PageHelper.showErrors({data:{error:"Customer Bank Account Details are missing."}});
+                                    model.loanAccountDisbursementSchedule.modeOfDisbursement = null;
+                                }
+                            }
                             }
                         },
                         {
@@ -390,7 +435,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         },
                         {
                             "key": "loanAccountDisbursementSchedule.overrideRequested",
-                            "condition": "model.siteCode=='KGFS'",
+                            "condition": "model.siteCode=='KGFS' && model.additional.isOverRideFpFlag",
                             "type": "checkbox",
                             "title": "OVERRIDE_FINGERPRINT",
                             "schema": {
