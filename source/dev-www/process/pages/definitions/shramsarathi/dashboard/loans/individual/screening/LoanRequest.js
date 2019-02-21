@@ -1727,7 +1727,7 @@ define([],function(){
                                         "items": {
                                             "loanPurpose3": {
                                                 "key":"loanAccount.loanPurpose2",
-                                              "title":"LOAN_SUB_PURPOSE2",
+                                              "title":"LOAN_SUB_PURPOSE_2",
                                               "type":"text",
                                               "orderNo":40
                                             },

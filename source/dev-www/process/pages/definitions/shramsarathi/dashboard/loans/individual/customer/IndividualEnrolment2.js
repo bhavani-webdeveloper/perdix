@@ -2295,7 +2295,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         return 'Guarantor';
                         break;
                     default:
-                        return null;
+                        return 'Applicant';
                 }
             }
 
