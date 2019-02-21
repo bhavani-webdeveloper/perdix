@@ -1723,7 +1723,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "ContactInformation.mobilePhone":{
                         "title": "SOURCE_PHONE_NO",
-                        "required":false
+                        "required":true
                         
                     },
                     
