@@ -183,7 +183,7 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanOriginationDashboar
             }
 
 
-            var rqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.RejectedQueue"];
+            var rqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.RejectedQueue"];
             if (rqMenu) {
                 IndividualLoan.search({
                     'stage':  'Rejected',

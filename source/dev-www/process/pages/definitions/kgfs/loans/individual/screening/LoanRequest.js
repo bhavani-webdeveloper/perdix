@@ -280,11 +280,19 @@ define([],function(){
                     loanAccount: model.loanAccount
                 });
                 }
+
+                if(model.loanAccount.id && initFlag){
+                    validateCoGuarantor(0,0,'map',model.loanAccount.loanCustomerRelations,model);
+                }
             }
+
+
+
            
                 function round(x) {
                   return Math.ceil(x);
                 }
+
             var configFile = function() {
                 return{
                     "loanProcess.loanAccount.currentStage":{
@@ -923,7 +931,7 @@ define([],function(){
                                             '<td>{{ parameter }}</td>' +
                                             '<td><ul class="list-unstyled">' +
                                             '<li ng-repeat="m in item" id="{{m.mitigant}}">' +
-                                            '<input type="checkbox"  ng-model="m.isMitigated"> {{ m.mitigant }}' +
+                                            '<input type="checkbox" ng-checked="m.mitigatedStatus"  ng-model="m.mitigatedStatus"> {{ m.mitigant }}' +
                                             '</li></ul></td></tr></tbody></table>'
                                     },                                    
                                     "loanMitigants":{
@@ -1150,6 +1158,9 @@ define([],function(){
                         model.loanAccount.loanCentre.loanId = model.loanAccount.id?model.loanAccount.id:null;
                         model.enterprise = obj.customer;
 
+                    },
+                    "dsc-response": function(bundleModel,model,obj){
+                        model.loanAccount.loanCustomerRelations = obj;
                     },
                     "load-deviation":function(bundleModel, model, params){
                         $log.info("Inside Deviation List");
