@@ -44,7 +44,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                 model.workingDate = SessionStore.getCBSDate();
                 
                
-                //PageHelper.showLoader();
+                PageHelper.showLoader();
                 irfProgressMessage.pop('loading-Credit validation-details', 'Loading Credit validation Details');
                 //PageHelper
                 var loanAccountNo;
@@ -75,6 +75,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                             function (data) { /* SUCCESS */
                                 model.loanAccount = data;
                                 model.loanAccount.netPayoffAmount = Utils.roundToDecimal(data.payOffAmount + data.preclosureFee - data.securityDeposit);
+                                model.loanAccount.netPayoffAmountDue = Utils.roundToDecimal(model.loanAccount.netPayoffAmount + model.loanAccount.totalDemandDue);
                                 model.creditValidation = model.creditValidation || {};
                                 model.creditValidation.enterprise_name = data.customer1FirstName;
                                 model.creditValidation.productCode = data.productCode;
@@ -178,6 +179,30 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                         condition: "model._credit.transactionName=='Pre-closure'",
                         items: [
                             {
+                                key: "loanAccount.totalPrincipalDue",
+                                readonly: true,
+                                title: "TOTAL_PRINCIPAL_DUE",
+                                type: "amount"
+                            },
+                            {
+                                key: "loanAccount.totalNormalInterestDue",
+                                readonly: true,
+                                title: "TOTAL_NORMAL_INTEREST_DUE",
+                                type: "amount"
+                            },
+                            {
+                                key: "loanAccount.totalPenalInterestDue",
+                                readonly: true,
+                                title: "TOTAL_PERNAL_INTEREST_DUE",
+                                type: "amount"
+                            },
+                            {
+                                key: "loanAccount.totalDemandDue",
+                                readonly: true,
+                                title: "TOTAL_DEMAND_DUE",
+                                type: "amount"
+                            },
+                            {
                                 key: "loanAccount.principalNotDue",
                                 readonly: true,
                                 title: "PRINCIPAL_NOT_DUE",
@@ -216,13 +241,19 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                             {
                                 key: "loanAccount.totalFeeDue",
                                 readonly: true,
-                                title: "TOTAL_FEE_DUE",
+                                title: "FEE_DUE",
                                 type: "amount"
                             },
                             {
                                 key: "loanAccount.netPayoffAmount",
                                 readonly: true,
                                 title: "NET_PAYOFF_AMOUNT",
+                                type: "amount"
+                            },
+                            {
+                                key: "loanAccount.netPayoffAmountDue",
+                                readonly: true,
+                                title: "NET_PAYOFF_AMOUNT_DUE",
                                 type: "amount"
                             },
                             {
