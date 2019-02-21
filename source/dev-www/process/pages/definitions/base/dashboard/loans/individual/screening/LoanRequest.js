@@ -2262,6 +2262,7 @@ define([],function(){
                         
                         // }
                         PageHelper.showProgress('enrolment', 'Updating Loan');
+                        PageHelper.showLoader();
                         model.loanProcess.proceed()
                             .finally(function () {
                                 PageHelper.hideLoader();
