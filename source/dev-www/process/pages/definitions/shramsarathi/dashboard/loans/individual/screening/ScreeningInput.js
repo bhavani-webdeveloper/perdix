@@ -33,7 +33,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'co-applicant',
                             minimum: 0,
                             maximum: 1,
-                            order:70
+                            order:20
                         },
                         {
                             pageName: 'shramsarathi.dashboard.loans.individual.customer.IndividualEnrolment2',
@@ -41,7 +41,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'guarantor',
                             minimum: 0,
                             maximum: 1,
-                            order:60
+                            order:30
                         },
                         // {
                         //     pageName: 'shramsarathi.dashboard.loans.individual.customer.EnterpriseEnrolment2',
@@ -57,7 +57,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'loan-request',
                             minimum: 1,
                             maximum: 1,
-                            order:20
+                            order:40
                         },
                         // {
                         //     pageName: 'shramsarathi.dashboard.loans.individual.screening.VehicleDetails',
@@ -73,7 +73,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'cb-check',
                             minimum: 1,
                             maximum: 1,
-                            order:40
+                            order:60
                         },
                         {
                             pageName: 'loans.individual.screening.CreditBureauView',
@@ -81,7 +81,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'cbview',
                             minimum: 1,
                             maximum: 1,
-                            order:50
+                            order:70
                         },
                         {
                             pageName: 'shramsarathi.dashboard.loans.individual.screening.Review',
@@ -89,7 +89,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'loan-review',
                             minimum: 1,
                             maximum: 1,
-                            order:30
+                            order:50
                             
                         }
                     ]);

@@ -46,14 +46,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 maximum: 1,
                                 order:20
                             },
-                            // {
-                            //     pageName: 'shramsarathi.dashboard.loans.individual.customer.IndividualEnrolment2',
-                            //     title: 'GUARANTOR',
-                            //     pageClass: 'guarantor',
-                            //     minimum: 0,
-                            //     maximum: 1,
-                            //     order:30
-                            // },
+                            {
+                                pageName: 'shramsarathi.dashboard.loans.individual.customer.IndividualEnrolment2',
+                                title: 'GUARANTOR',
+                                pageClass: 'guarantor',
+                                minimum: 0,
+                                maximum: 1,
+                                order:30
+                            },
 
                             // {
                             //     pageName: 'shramsarathi.dashboard.loans.individual.customer.EnterpriseEnrolment2',
