@@ -280,11 +280,19 @@ define([],function(){
                     loanAccount: model.loanAccount
                 });
                 }
+
+                if(model.loanAccount.id && initFlag){
+                    validateCoGuarantor(0,0,'map',model.loanAccount.loanCustomerRelations,model);
+                }
             }
+
+
+
            
                 function round(x) {
                   return Math.ceil(x);
                 }
+
             var configFile = function() {
                 return{
                     "loanProcess.loanAccount.currentStage":{
@@ -1150,6 +1158,9 @@ define([],function(){
                         model.loanAccount.loanCentre.loanId = model.loanAccount.id?model.loanAccount.id:null;
                         model.enterprise = obj.customer;
 
+                    },
+                    "dsc-response": function(bundleModel,model,obj){
+                        model.loanAccount.loanCustomerRelations = obj;
                     },
                     "load-deviation":function(bundleModel, model, params){
                         $log.info("Inside Deviation List");
