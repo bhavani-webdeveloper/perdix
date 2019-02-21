@@ -639,8 +639,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "FamilyDetails": {
-                                    "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "readonly": true
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -704,8 +703,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "FamilyDetails": {
-                                    "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "readonly": true
                                 },
                                 "ContactInformation.locality":{
                                     "readonly": true
@@ -783,8 +781,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "FamilyDetails": {
-                                    "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "readonly": true
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -861,7 +858,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -1023,7 +1019,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -1329,8 +1324,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": false
                                 },
                                 "FamilyDetails": {
-                                    "readonly": false,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "readonly": false
                                 },
                                 "Liabilities": {
                                     "readonly": false
