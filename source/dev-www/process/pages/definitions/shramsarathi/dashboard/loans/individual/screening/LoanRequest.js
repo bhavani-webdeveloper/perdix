@@ -2206,6 +2206,7 @@ define([],function(){
                             model.loanAccount.psychometricCompleted = "NO";
  
                         }
+                        model.loanProcess.refreshRelatedCustomers();
                         model.loanAccount.noOfGuarantersRequired = -1;
                         var completeLead = false;
                         if (!_.hasIn(model.loanAccount, "id")){

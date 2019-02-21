@@ -3280,6 +3280,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
+                                model.loanProcess.refreshRelatedCustomers();
                                 formHelper.resetFormValidityState(formCtrl);
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
@@ -3329,6 +3330,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (enrolmentProcess) {
+                                model.loanProcess.refreshRelatedCustomers();
                                 formHelper.resetFormValidityState(form);
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
