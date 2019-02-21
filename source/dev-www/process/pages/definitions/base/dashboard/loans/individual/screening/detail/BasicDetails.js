@@ -952,7 +952,7 @@ define({
                             reqData.stage = 'LoanInitiation';
                         }
                         PageHelper.showProgress("update-loan", "Working...");
-
+                        PageHelper.showLoader();
                         if (reqData.loanAccount.currentStage == 'Screening') {
                             
                             // Dedupe call
@@ -1019,6 +1019,7 @@ define({
                                             PageHelper.showProgress("update-loan", "Done.", 3000);
                                             return navigateToQueue(model);
                                         }, function(httpRes) {
+                                            PageHelper.hideLoader();
                                             PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
                                             PageHelper.showErrors(httpRes);
                                         })

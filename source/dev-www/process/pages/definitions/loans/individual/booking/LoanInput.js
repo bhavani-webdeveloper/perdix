@@ -45,7 +45,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             if (_.hasIn(loanAccount, 'collateral') && _.isArray(loanAccount.collateral)) {
                 var result = _.every(loanAccount.collateral, function(collateral){
                     if (collateral.collateralValue < collateral.loanToValue) {
-                        PageHelper.showProgress("pre-save-validation", "Purchase price cant be lesser than Present Value. Please check the collaterals section.",5000);
+                        PageHelper.showProgress("pre-save-validation", "Purchase price cant be lesser than Present Value. Please check the hypothecation section.",5000);
                         return false;
                     }
                     return true;
@@ -3265,7 +3265,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     //Product specific validations
                     if(model.additional.product){
                         if (model.additional.product.collateralRequired && model.loanAccount.collateral.length == 0){
-                                PageHelper.showProgress("loan-create","Collateral details are mandatory",5000);
+                                PageHelper.showProgress("loan-create","Hypothecation details are mandatory",5000);
                                 return false;
                         }
                         if (!_.isNaN(model.additional.product.amountFrom) && model.additional.product.amountFrom > 0){
