@@ -862,7 +862,7 @@ define([], function() {
                                         "resolver": "VehicleValuatorLOVConfiguration",
                                         title: "VALUATOR",
                                         "required": true,
-                                        "condition": "model.loanProcess.loanAccount.currentStage == 'ScreeningReview' && (model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance')"
+                                        "condition": "model.loanProcess.loanAccount.currentStage == 'TeleVerification' && (model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance')"
                                     },
                                     "calculateEmi": {
                                         "title": "CALCULATE_EMI",

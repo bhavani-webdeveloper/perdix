@@ -22,11 +22,10 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
             "items": [
                 "Page/Engine/witfin.lead.ReadyForScreeningQueue",
                 "Page/Engine/witfin.loans.individual.screening.ScreeningQueue",
-                "Page/Engine/witfin.loans.individual.screening.ScreeningReviewQueue",
                 "Page/Engine/witfin.loans.individual.screening.TeleVerificationQueue",
                 "Page/Engine/witfin.loans.individual.screening.FieldInvestigation1Queue",
+                "Page/Engine/witfin.loans.individual.screening.ScreeningReviewQueue",
                 "Page/Engine/witfin.loans.individual.screening.BusinessApproval1Queue",
-                "Page/Engine/witfin.loans.individual.screening.BusinessApproval2Queue",
                 "Page/Engine/witfin.loans.individual.screening.CreditApproval1Queue",
                 "Page/Engine/witfin.loans.individual.screening.CreditApproval2Queue",
                 "Page/Engine/witfin.loans.individual.screening.CreditApproval3Queue",
