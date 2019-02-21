@@ -29,14 +29,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                         maximum: 1,
                         order: 20
                     },
-                    //  {
-                    //     pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
-                    //     title: 'GUARANTOR',
-                    //     pageClass: 'guarantor',
-                    //     minimum: 1,
-                    //     maximum: 1,
-                    //     order: 30
-                    // }, 
+                     {
+                        pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
+                        title: 'GUARANTOR',
+                        pageClass: 'guarantor',
+                        minimum: 1,
+                        maximum: 1,
+                        order: 30
+                    }, 
                     // {
                     //     pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.EnterpriseEnrollmentView',
                     //     title: 'BUSINESS',
@@ -218,14 +218,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     });
                                 }
 
-                                // for (i in customerIds.guarantors) {
-                                //     $this.bundlePages.push({
-                                //         pageClass: 'guarantor',
-                                //         model: {
-                                //             customerId: customerIds.guarantors[i]
-                                //         }
-                                //     });
-                                // }
+                                for (i in customerIds.guarantors) {
+                                    $this.bundlePages.push({
+                                        pageClass: 'guarantor',
+                                        model: {
+                                            customerId: customerIds.guarantors[i]
+                                        }
+                                    });
+                                }
 
                                 // if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan') {
                                 //     $this.bundlePages.push({

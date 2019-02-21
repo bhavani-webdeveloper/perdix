@@ -115,6 +115,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         model.repayment.bookedNotDuePenalInterest = Utils.roundToDecimal(data.bookedNotDuePenalInterest);
                         model.repayment.securityDeposit = Utils.roundToDecimal(data.securityDeposit);
                         model.repayment.netPayoffAmount = Utils.roundToDecimal(data.payOffAmount + data.preclosureFee - data.securityDeposit);
+                        model.repayment.netPayoffAmountDue = Utils.roundToDecimal(model.repayment.netPayoffAmount + model.repayment.totalDemandDue);
                         model.repayment.totalPayoffAmountToBePaid = Utils.roundToDecimal(data.payOffAndDueAmount + data.preclosureFee - data.securityDeposit);
                         model.repayment.totalSecurityDepositDue = Utils.roundToDecimal(data.totalSecurityDepositDue);
                         if (!_.isNull(pageData) && pageData.onlyDemandAllowed == true) {
@@ -391,6 +392,30 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 condition: "model.repayment.transactionName=='Pre-closure'",
                                 items: [
                                     {
+                                        key: "repayment.totalPrincipalDue",
+                                        readonly: true,
+                                        title: "TOTAL_PRINCIPAL_DUE",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.totalNormalInterestDue",
+                                        readonly: true,
+                                        title: "TOTAL_NORMAL_INTEREST_DUE",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.totalPenalInterestDue",
+                                        readonly: true,
+                                        title: "TOTAL_PERNAL_INTEREST_DUE",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.totalDemandDue",
+                                        readonly: true,
+                                        title: "TOTAL_DEMAND_DUE",
+                                        type: "amount"
+                                    },
+                                    {
                                         key: "repayment.principalNotDue",
                                         readonly: true,
                                         title: "PRINCIPAL_NOT_DUE",
@@ -429,13 +454,19 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     {
                                         key: "repayment.totalFeeDue",
                                         readonly: true,
-                                        title: "TOTAL_FEE_DUE",
+                                        title: "FEE_DUE",
                                         type: "amount"
                                     },
                                     {
                                         key: "repayment.netPayoffAmount",
                                         readonly: true,
                                         title: "NET_PAYOFF_AMOUNT",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.netPayoffAmountDue",
+                                        readonly: true,
+                                        title: "NET_PAYOFF_AMOUNT_DUE",
                                         type: "amount"
                                     },
                                     {

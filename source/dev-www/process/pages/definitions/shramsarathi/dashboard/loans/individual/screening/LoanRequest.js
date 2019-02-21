@@ -1727,7 +1727,7 @@ define([],function(){
                                         "items": {
                                             "loanPurpose3": {
                                                 "key":"loanAccount.loanPurpose2",
-                                              "title":"LOAN_SUB_PURPOSE2",
+                                              "title":"LOAN_SUB_PURPOSE_2",
                                               "type":"text",
                                               "orderNo":40
                                             },
@@ -2206,6 +2206,7 @@ define([],function(){
                             model.loanAccount.psychometricCompleted = "NO";
  
                         }
+                        model.loanProcess.refreshRelatedCustomers();
                         model.loanAccount.noOfGuarantersRequired = -1;
                         var completeLead = false;
                         if (!_.hasIn(model.loanAccount, "id")){

@@ -16,7 +16,7 @@ define({
                     {
                         "key": "product.loanType",
                         "type": "select",
-                        "enumCode": "loan_type",
+                        "enumCode": "booking_loan_type",
                         "required": true,
                         "title": "LOAN_TYPE",
                     },
@@ -24,7 +24,7 @@ define({
                         "key": "product.productCategory",
                         "type": "select",
                         "enumCode": "loan_product_category_master",
-                        "parentEnumCode":"loan_type",
+                        "parentEnumCode":"booking_loan_type",
                         "required": true,
                         "title": "PRODUCT_CATEGORY",
                     },
