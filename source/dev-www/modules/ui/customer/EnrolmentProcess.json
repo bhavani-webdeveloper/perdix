@@ -2118,6 +2118,7 @@
                         "title": "SUBSECTOR",
                         "type": "select",
                         "parentEnumCode": "businessSector",
+                        "parentValueExpr": "model.customer.enterprise.businessSector",
                         "enumCode": "businessSubSector"
                     },
                     "receivablesOutstanding": {
