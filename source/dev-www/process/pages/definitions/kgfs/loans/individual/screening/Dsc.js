@@ -139,7 +139,6 @@ define([], function () {
                     if (bundlePageObj) {
                         model._bundlePageObj = _.cloneDeep(bundlePageObj);
                     }
-
                     model.customer = model.customer || {};
                     model.customer.coapplicants = model.customer.coapplicants || [];
                     model.customer.guarantors = model.customer.guarantors || [];
@@ -377,7 +376,7 @@ define([], function () {
                                     },
                                     {
                                         "type": "button",
-                                        "condition" : "model.customer.loanSaved && model.loanAccount.currentStage == 'DscApproval' ",  
+                                        "condition" : "model.customer.loanSaved && model.loanAccount.currentStage == 'DSCApproval' ",  
                                         "title": "DSC_REQUEST",
                                         "onClick": "actions.getDscDetails(model,model.loanAccount.id)"
                                     },
@@ -386,7 +385,7 @@ define([], function () {
                                         "title": "VIEW_DSC_RESPONSE",
                                         "icon": "fa fa-eye",
                                         "style": "btn-primary",
-                                        "condition":"model.customer.dscStatus && model.loanAccount.currentStage == 'DscApproval'",
+                                        "condition":"model.customer.dscStatus && model.loanAccount.currentStage == 'DSCApproval'",
                                         "onClick": function(model, formCtrl, form, event) {
                                             console.log(form);
                                             console.warn(event);
