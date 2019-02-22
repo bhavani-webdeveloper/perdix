@@ -2,8 +2,7 @@ irf.pageCollection.controller(irf.controller("shramsarathi.dashboard.lead.LeadDa
  ['$log', '$scope', "formHelper", "$state", "$q", "Utils", 'PagesDefinition', 'SessionStore', "entityManager", "IndividualLoan", "LoanBookingCommons", "Lead", "Messaging",
 function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionStore, entityManager, IndividualLoan, LoanBookingCommons, Lead, Messaging) {
     $log.info("Dashboard.Page.LeadDashboard.html loaded");
-   $scope.$templateUrl = "process/pages/templates/Page.LoanOriginationDashboard.html";
-    // $scope.$templateUrl = "process/pages/templates/Page.Dashboard.html";
+    $scope.$templateUrl = "process/pages/templates/Page.Dashboard.html";
     var currentBranch = SessionStore.getCurrentBranch();
 
     var leadDefinition = {
@@ -19,15 +18,15 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
     };
     
     PagesDefinition.getUserAllowedDefinition(leadDefinition).then(function(resp) {
-        $scope.leadDashboardDefinition = resp;
+        $scope.dashboardDefinition = resp;
         var branchId = SessionStore.getBranchId();
         var branchName = SessionStore.getBranch();
         var centres = SessionStore.getCentres();
 
-        var ilqMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.lead.IncompleteLeadQueue"];
-        var lfuqMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.lead.LeadFollowUpQueue"];
-        var rsMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.lead.ReadyForScreeningQueue"];
-        var rMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.lead.LeadRejectedQueue"];
+        var ilqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.lead.IncompleteLeadQueue"];
+        var lfuqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.lead.LeadFollowUpQueue"];
+        var rsMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.lead.ReadyForScreeningQueue"];
+        var rMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.lead.LeadRejectedQueue"];
 
        
         if (rMenu) rMenu.data = 0;
