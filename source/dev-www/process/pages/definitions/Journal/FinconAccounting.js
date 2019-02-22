@@ -15,6 +15,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
             initialize: function(model, form, formCtrl) {
                 var self = this;
                 var journalDetailsClass;
+                model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 model.glAcNo = "";
                 model.entries = [];
                 model.glcodes = [];
@@ -140,6 +141,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                 "FinconAccounting.transactionSection.valueDate",
                                 "FinconAccounting.transactionSection.billNumber",
                                 "FinconAccounting.transactionSection.billDate",
+                                "FinconAccounting.transactionSection.costCentre",
                                 "FinconAccounting.instrumentSection",
                                 "FinconAccounting.instrumentSection.billUpload",
                                 "FinconAccounting.instrumentSection.instrumentType",
@@ -159,6 +161,24 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                 ""
                             ],
                             "options": {
+                                "repositoryAdditions": {
+                                    "FinconAccounting": {
+                                        "items": {
+                                            "transactionSection":{
+                                                "items": {
+                                                    "costCentre": {
+                                                        "key": "journal.journalHeader.costCentre",
+                                                        "title": "COST_CENTRE",
+                                                        "type": "select",
+                                                        "orderNo": 80,
+                                                        "condition":"model.siteCode=='witfin'",
+                                                        "enumCode": "cost_centre"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
                                 "additions": [{
                                     "condition": "!$stateParams.pageId",
                                     "type": "actionbox",

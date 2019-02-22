@@ -41,6 +41,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.entityId":{
                         "condition": "model.customer.id",
                     },
+                    "EnterpriseInformation.photoImageId":{
+                        "key": "customer.photoImageId",
+                        "title": "BUSINESS_LOCATION_PHOTO",
+                        "type": "file",
+                        "fileType": "application/pdf",
+                        "category": "CustomerEnrollment",
+                        "using": "scanner"
+
+                    },
                     "EnterpriseInformation.referredName":{
                         "condition": "model.customer.enterprise.referredBy == 'Channel Partner'||model.customer.enterprise.referredBy =='Peer Referral'||model.customer.enterprise.referredBy =='Known supply chain'",
                     },
@@ -53,9 +62,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.oldCustomerId":{
                         "condition": "model.customer.oldCustomerId"
                     },
-                    "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId":{
-                        "readonly": true
-                    },
+                    // "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId":{
+                    //     "readonly": true
+                    // },
                     "EnterpriseInformation.enterpriseRegistrations.registrationType": {
                          "enumCode": "business_registration_type",
                          "required": false

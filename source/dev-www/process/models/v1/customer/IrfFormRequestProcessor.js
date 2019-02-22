@@ -4630,7 +4630,18 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             },
                             "addressProofNo": {
                                 key: "customer.addressProofNo",
-                                type: "string"
+                                type: "qrcode",
+                                condition: "model.customer.addressProof == 'Aadhar Card'",
+                                schema: {
+                                    "pattern": "^[2-9]{1}[0-9]{11}$",
+                                    "type": ["string", "null"],
+                                },
+                                onCapture: function (result, model, form) {
+                                    $log.info(result);
+                                    var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                                    model.customer.addressProofNo =  aadhaarData.uid;
+                                    EnrollmentHelper.customerAadhaarOnCapture(result,model,form);
+                                }
                             },
                             "addressProofIssueDate": {
                                 key: "customer.addressProofIssueDate",

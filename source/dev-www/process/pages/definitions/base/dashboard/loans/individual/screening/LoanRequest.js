@@ -1086,7 +1086,10 @@ define([],function(){
                     payments = model.loanAccount.tenureRequested * 12;
                 else if (model.loanAccount.frequencyRequested == 'Monthly')
                     payments = model.loanAccount.tenureRequested;
-   
+                else if (model.loanAccount.frequencyRequested == 'Weekly') {
+                    payments = model.loanAccount.tenure;
+                    interest = (model.loanAccount.interestRate/100) * 7/360;
+                }
                 // Now compute the monthly payment figure, using esoteric math.
                 var x = Math.pow(1 + interest, payments);
                 var monthly = (principal*x*interest)/(x-1);
@@ -1208,6 +1211,17 @@ define([],function(){
                             //"type": "select",
                             //"enumCode": "customerinfo_expect_interestra"
                         },
+                        "PreliminaryInformation.frequencyRequested": {
+                            onChange:function(value,form,model){
+                                computeEstimatedEMI(model);
+                            }
+                        },
+                        "PreliminaryInformation.tenureRequested": {
+                            "required": true,
+                            onChange:function(value,form,model){
+                                computeEstimatedEMI(model);
+                            }
+                        },
                       
                         "PreliminaryInformation.emiPaymentDateRequested": {
                             "enumCode": "customerinfo_emirequest_date"
@@ -1323,9 +1337,6 @@ define([],function(){
                             type:"select",
                             enumCode:"loan_product_category",
                             condition:"model.currentStage=='Application' || model.currentStage=='FieldAppraisal'"
-                        },
-                        "PreliminaryInformation.tenureRequested": {
-                            "required": true
                         },
                         "PreliminaryInformation.emiRequested": {
                             "required": true

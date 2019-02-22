@@ -726,9 +726,9 @@
                 "key": "customer.photoImageId",
                 "title": "BUSINESS_LOCATION_PHOTO",
                 "type": "file",
-                "fileType": "image/*",
+                "fileType": "application/pdf",
                 "category": "CustomerEnrollment",
-                "subCategory": "PHOTO",
+                "using": "scanner",
                 "orderNo": 130
             },
             "ownership": {

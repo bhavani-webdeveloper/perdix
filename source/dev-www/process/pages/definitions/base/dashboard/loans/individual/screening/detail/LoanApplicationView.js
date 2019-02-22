@@ -52,7 +52,7 @@ define({
                     if (model.currentStage == 'Scrutiny')
                         $state.go('Page.Engine', {
                             pageName: 'base.dashboard.loans.individual.screening.ScrutinyQueue',
-                            pageId: null
+                            pageId: null,
                         });
                     if (model.currentStage == 'FieldAppraisal')
                         $state.go('Page.Engine', {

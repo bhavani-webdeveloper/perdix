@@ -81,21 +81,20 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
         );
     }
     //end
-            console.log("TEst");
-            console.log(model.customer);
             model.enabletrue= false;
             if($stateParams.pageData){
                 if($stateParams.pageData.enabletrue){
                     model.enabletrue= $stateParams.pageData.enabletrue;
                 }
+                PageHelper.showLoader();
                 Enrollment.EnrollmentById({id:$stateParams.pageId},function(resp,header){
                     // var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
                     model.customer = resp;
                     model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
-
                     model = EnrollmentHelper.fixData(model);
                     PagesDefinition.getRolePageConfig("Page/Engine/customer360.EnrollmentProfile").then(function(data){
                         $log.info(data);
+                        PageHelper.hideLoader();
                         $log.info(data.EditBasicCustomerInfo);
                         if(data){
                             model.EditBasicCustomerInfo= !data.EditBasicCustomerInfo;
@@ -106,10 +105,10 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
 
                         }
                     },function(err){
+                        PageHelper.hideLoader();
                         model.EditBasicCustomerInfo= true;
                         model.enabletrue = true;
                     });
-
                     if (model.customer.currentStage==='Stage01') {
                         irfProgressMessage.pop("enrollment-save","Customer "+model.customer.id+" not enrolled yet", 5000);
                         $state.go("Page.Engine", {pageName:'ProfileInformation', pageId:pageId});
@@ -119,7 +118,6 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                         //$log.info(model);
                         // deferred.resolve(model);
                     }
-                    PageHelper.hideLoader();
                 },function(resp){
                     PageHelper.hideLoader();
                     irfProgressMessage.pop("enrollment-save","An Error Occurred. Failed to fetch Data",5000);
@@ -1632,6 +1630,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                             key:"customer.isBiometricValidated",
                             title: "Validate Fingerprint",
                             type:"validatebiometric",
+                            readonly:true,
                             category: 'CustomerEnrollment',
                             subCategory: 'FINGERPRINT',
                             helper: formHelper,
