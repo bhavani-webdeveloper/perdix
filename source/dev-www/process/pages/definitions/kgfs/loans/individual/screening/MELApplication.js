@@ -116,14 +116,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "title":"UPLOAD_MEL_APPLICATION_FORM",
                                         },
                                         "uploadMELApplicationForm":{
-                                            "title": "UPLOAD",
-                                            "key":"loanAccount.uploadMELApplicationForm",
+                                            "key":"loanAccount.documents[].documentId",
+                                            "type":"file",
                                             "notitle": true,
-                                            "type": "file",
-                                            "category": "Collection",
-                                            "subCategory": "offline",
-                                            "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                           
+                                            "category": "Loan",
+                                            "subCategory": "DOC3",
+                                            "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                                         }
                                     }                                    
                                 }

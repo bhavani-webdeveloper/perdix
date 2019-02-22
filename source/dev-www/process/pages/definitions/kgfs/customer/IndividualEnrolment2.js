@@ -142,6 +142,32 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
 
                             }
+                        },
+                        "RiskReviewAndLoanSanction":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
                         }    
                     }
                 }

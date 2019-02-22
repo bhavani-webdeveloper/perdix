@@ -38,7 +38,18 @@ let config = {
             },
             "beforeProceed": {
                 "overrides": [
-                   
+                    {
+                        "type": "expr",
+                        "expr": "this.loanAccount.currentStage=='RiskReviewAndLoanSanction'",
+                        "add": [
+                            {
+                                "name": "OriginationToBookingPolicy",
+                                "arguments": {
+                                    "postStage":"LoanInitiation"
+                                }
+                            }
+                        ]
+                    }
                 ]
             }
         },
