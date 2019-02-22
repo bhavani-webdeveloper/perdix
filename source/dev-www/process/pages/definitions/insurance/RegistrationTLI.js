@@ -412,6 +412,9 @@ var getIncludes = function (model) {
                                                    customerId: model.customer.id
                                                };
                                            },
+                                           onValidate: function(valueObj,status,form,model){
+
+                                           }
                                        }
                                    }
                                },
