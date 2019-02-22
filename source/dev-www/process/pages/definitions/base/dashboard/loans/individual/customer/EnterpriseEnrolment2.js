@@ -53,9 +53,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.oldCustomerId":{
                         "condition": "model.customer.oldCustomerId"
                     },
-                    "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId":{
-                        "readonly": true
-                    },
+                    // "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId":{
+                    //     "readonly": true
+                    // },
                     "EnterpriseInformation.enterpriseRegistrations.registrationType": {
                          "enumCode": "business_registration_type",
                          "required": false
