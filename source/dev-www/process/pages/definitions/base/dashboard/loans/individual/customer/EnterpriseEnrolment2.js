@@ -42,9 +42,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         "condition": "model.customer.id",
                     },
                     "EnterpriseInformation.photoImageId":{
+                        "key": "customer.photoImageId",
+                        "title": "BUSINESS_LOCATION_PHOTO",
                         "type": "file",
                         "fileType": "application/pdf",
+                        "category": "CustomerEnrollment",
                         "using": "scanner"
+
                     },
                     "EnterpriseInformation.referredName":{
                         "condition": "model.customer.enterprise.referredBy == 'Channel Partner'||model.customer.enterprise.referredBy =='Peer Referral'||model.customer.enterprise.referredBy =='Known supply chain'",
