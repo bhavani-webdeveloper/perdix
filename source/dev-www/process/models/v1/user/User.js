@@ -29,7 +29,12 @@ function($resource, $httpParamSerializer, BASE_URL, searchResource, irfStorageSe
         unlock: {
             method: "POST",
             url: BASE_URL + "/api/admin/unlock/"
+        },
+        createUserAttendance:{
+            method:"POST",
+            url: BASE_URL + "/api/userattendancedetail/createUserAttendance"
         }
+        
     });
 
     resource.offline = {
