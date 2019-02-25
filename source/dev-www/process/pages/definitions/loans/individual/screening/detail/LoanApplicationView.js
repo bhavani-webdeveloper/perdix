@@ -1234,10 +1234,10 @@ define({
                             loanAccount: _.cloneDeep(model.loanAccount)
                         };
                         reqData.loanAccount.status = null;
-                        if (model.loanAccount.currentStage == 'CreditCommitteeReview') {
-                            reqData.loanAccount.status = 'SENT BACK'
-                        }
-
+                        // if (model.loanAccount.currentStage == 'CreditCommitteeReview') {
+                        //     reqData.loanAccount.status = 'SENT BACK'
+                        // }
+                        reqData.loanAccount.status = 'SENT BACK';
                         reqData.loanProcessAction = "PROCEED";
                         reqData.remarks = model.review.remarks;
                         reqData.stage = model.review.targetStage;
