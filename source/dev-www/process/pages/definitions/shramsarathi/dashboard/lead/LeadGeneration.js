@@ -550,7 +550,12 @@ function(LeadProcess, AngularResourceService) {
                             model.lead.leadStatus = "Screening";
                         } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy.toUpperCase() == 'IN THIS MONTH' ) {
                             model.lead.leadStatus = "FollowUp";
-                        } else {
+                        }else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy.toUpperCase() == 'NEXT 2 -3 MONTHS' ) {
+                            model.lead.leadStatus = "FollowUp";
+                        }else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy.toUpperCase() == 'NEXT 4-6 MONTHS' ) {
+                            model.lead.leadStatus = "FollowUp";
+                        }    
+                        else {
                             model.lead.leadStatus = "Incomplete";
                         }
                     },
@@ -585,7 +590,7 @@ function(LeadProcess, AngularResourceService) {
                                     
                                     irfNavigator.go({
                                         state: "Page.Adhoc",
-                                        pageName: "shramsarathi.dashboard.loans.LoanOriginationDashboard"
+                                        pageName: "shramsarathi.dashboard.lead.LeadDashboard"
                                     });
 
                                 }, function(err) {
@@ -600,7 +605,7 @@ function(LeadProcess, AngularResourceService) {
                                     .subscribe(function(leadProcess){
                                         irfNavigator.go({
                                             state: "Page.Adhoc",
-                                            pageName: "shramsarathi.dashboard.loans.LoanOriginationDashboard"
+                                            pageName: "shramsarathi.dashboard.lead.LeadDashboard"
                                         });
 
                                     }, function(err) {
