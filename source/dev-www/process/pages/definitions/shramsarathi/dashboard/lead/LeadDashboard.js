@@ -124,22 +124,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
                     rMenu.data = '-';
                 });
             }
-            if (lapqMenu) {
-                Lead.search({
-                    'branchName': branchName,
-                    'currentStage': "Assignment Pending",
-                    'leadName': '',
-                    'area': '',
-                    'cityTownVillage': '',
-                    'businessName': '',
-                    'page': 1,
-                    'per_page': 1,
-                }).$promise.then(function(response, headerGetter) {
-                    lapqMenu.data = Number(response.headers['x-total-count']);
-                }, function() {
-                    lapqMenu.data = '-';
-                });
-            }
+            
         })
 
        
