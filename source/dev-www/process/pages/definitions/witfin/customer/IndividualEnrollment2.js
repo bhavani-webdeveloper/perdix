@@ -1042,7 +1042,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         onCapture: function(result, model, form) {
                             var aadhaarData = EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
                             model.customer.addressProofNo = aadhaarData.uid;
-                            model.customer.district = aadhaarData.dist|toUpperCase;
+                            var customer_district = aadhaarData.dist;
+                            model.customer.district=customer_district.toUpperCase();
                             model.customer.state = aadhaarData.state;
                             if (aadhaarData.dob) {
                                 $log.debug('aadhaarData dob: ' + aadhaarData.dob);
