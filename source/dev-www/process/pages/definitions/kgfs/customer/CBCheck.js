@@ -111,7 +111,7 @@ define({
                 }
                 else if(customerType == 'GUARANTOR'){
                     model.customer.guarantors[index].inqUnqRefNo = response.inqUnqRefNo;
-                    model.customer.guarantors[index].highmarkStatus = response.status;
+                    model.customer.guarantors[index].indvHighmarkStatus = response.status;
                     if(response.status != 'SUCCESS' && response.status != 'PROCESSED')
                         model.customer.guarantors[index].applicantIndvHighmarkFailed = true;
                     else

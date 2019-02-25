@@ -24,6 +24,15 @@ function(LeadProcess, AngularResourceService) {
                     "leadProfile.individualDetails.maritalStatus":{
                         "required":true
                     },
+                    "leadProfile.individualDetails.lastName":{
+                        "required": true
+                    },
+                    "leadProfile.individualDetails.dob":{
+                        "required": true
+                    },
+                    "leadProfile.individualDetails.nickName":{
+                        "required": true
+                    },
                     "leadProfile.individualDetails.educationStatus":{
                         "required":true
                     },
@@ -31,8 +40,9 @@ function(LeadProcess, AngularResourceService) {
                         "required":true
                     },
                     "leadProfile.leadDetails.customerTypeString":{
-                        "readonly":false,
-                        "required":true
+                        "readonly":true,
+                        "required":true,
+                        "title": "LEAD_TYPE"
                     },
                     "leadProfile.leadDetails.enterpriseDetails.businessName":{
                         "required":true
@@ -51,6 +61,13 @@ function(LeadProcess, AngularResourceService) {
                     },
                     "leadProfile.leadDetails.individualDetails.gender": {
                         "required": true
+                    },
+                    "leadProfile.individualDetails.existingApplicant":{
+                        // "condition":"(model.lead.centreName!==NULL)",
+                    bindMap: {
+                        "ZoneName": "lead.centreName",
+                        "LeadType": "lead.customerTypeString"
+                    }
                     },
                     "leadProfile.leadDetails.individualDetails.dob": {
                         "required": true
@@ -142,7 +159,7 @@ function(LeadProcess, AngularResourceService) {
                     },
                     "leadProfile.branchName":{
                         "title":"BRANCH",
-                        "readonly" :false,
+                        "readonly" :true,
                         "orderNo" : 0
                     },
                     "leadProfile.centerName":{
@@ -161,9 +178,9 @@ function(LeadProcess, AngularResourceService) {
                         "required":true
                         //"orderNo":20
                     },
-                    // "leadProfile.contactDetails.mobileNo":{
-                    //     "type" : "number"
-                    // },
+                    "leadProfile.contactDetails.mobileNo":{
+                      "order":9
+                    },
                     "leadProfile.contactDetails.cityTownVillage":{
                         "title":"VILLAGE",
                         required:true
@@ -177,13 +194,16 @@ function(LeadProcess, AngularResourceService) {
                     },
                     "leadProfile.contactDetails.addressLine1":{
                         "title":"HAMLET_FALA",
-                        //"orderNo":5
+                        "orderNo":12
+                    },
+                    "leadProfile.contactDetails.alternateMobileNo":{
+                        orderNo: 10
                     },
                     "leadProfile.contactDetails.pincode": {
                         key: "lead.pincode",
                         type: "lov",
                         fieldType: "number",
-                        orderNo: 10,
+                        orderNo: 11,
                         inputMap: {
                             "pincode": "lead.pincode",
                             "division": {
@@ -365,7 +385,7 @@ function(LeadProcess, AngularResourceService) {
                                             "lastName": {
                                                 key: "lead.lastName",
                                                 title: "LAST_NAME",
-                                                required:true,
+                                                "required":true,
                                                 schema: {
                                                     pattern: "^[a-zA-Z\. ]+$",
                                                 },
@@ -380,7 +400,7 @@ function(LeadProcess, AngularResourceService) {
                                                 },
                                                 validationMessage: {202: "Only alphabets and space are allowed."},
                                                 "orderNo": 60,
-                                                required:true
+                                                "required":true
                                             }
                                             
                                     },
@@ -537,7 +557,12 @@ function(LeadProcess, AngularResourceService) {
                             model.lead.leadStatus = "Screening";
                         } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy.toUpperCase() == 'IN THIS MONTH' ) {
                             model.lead.leadStatus = "FollowUp";
-                        } else {
+                        }else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy.toUpperCase() == 'NEXT 2 -3 MONTHS' ) {
+                            model.lead.leadStatus = "FollowUp";
+                        }else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy.toUpperCase() == 'NEXT 4-6 MONTHS' ) {
+                            model.lead.leadStatus = "FollowUp";
+                        }    
+                        else {
                             model.lead.leadStatus = "Incomplete";
                         }
                     },
@@ -572,7 +597,7 @@ function(LeadProcess, AngularResourceService) {
                                     
                                     irfNavigator.go({
                                         state: "Page.Adhoc",
-                                        pageName: "shramsarathi.dashboard.loans.LoanOriginationDashboard"
+                                        pageName: "shramsarathi.dashboard.lead.LeadDashboard"
                                     });
 
                                 }, function(err) {
@@ -587,7 +612,7 @@ function(LeadProcess, AngularResourceService) {
                                     .subscribe(function(leadProcess){
                                         irfNavigator.go({
                                             state: "Page.Adhoc",
-                                            pageName: "shramsarathi.dashboard.loans.LoanOriginationDashboard"
+                                            pageName: "shramsarathi.dashboard.lead.LeadDashboard"
                                         });
 
                                     }, function(err) {

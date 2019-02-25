@@ -61,7 +61,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             },
                             {
                                 pageName: 'base.dashboard.loans.individual.screening.detail.PortfolioAnalysis',
-                                title: 'CUSTOMER HISTORY',
+                                title: 'Customer History',
                                 pageClass: 'portfolio-analysis',
                                 minimum: 1,
                                 maximum: 1,

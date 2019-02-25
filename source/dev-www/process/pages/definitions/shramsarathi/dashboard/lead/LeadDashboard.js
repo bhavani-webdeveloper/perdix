@@ -13,6 +13,8 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             "Page/Engine/shramsarathi.dashboard.lead.IncompleteLeadQueue",
             "Page/Engine/shramsarathi.dashboard.lead.LeadFollowUpQueue",
             "Page/Engine/shramsarathi.dashboard.lead.ReadyForScreeningQueue",
+            "Page/Engine/shramsarathi.dashboard.lead.LeadBulkUpload",
+            "Page/Engine/shramsarathi.dashboard.lead.LeadAssignmentPendingQueue",
             "Page/Engine/shramsarathi.dashboard.lead.LeadRejectedQueue"
         ]
     };
@@ -27,12 +29,13 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
         var lfuqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.lead.LeadFollowUpQueue"];
         var rsMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.lead.ReadyForScreeningQueue"];
         var rMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.lead.LeadRejectedQueue"];
-
+        var lapqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.lead.LeadAssignmentPendingQueue"];
        
         if (rMenu) rMenu.data = 0;
         if (rsMenu) rsMenu.data = 0;
         if (lfuqMenu) lfuqMenu.data = 0;
         if (ilqMenu) ilqMenu.data = 0;
+        if (lapqMenu) lapqMenu.data = 0;
 
           _.forEach(centres, function(centre) {
             if (lfuqMenu) {
@@ -91,7 +94,10 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
                     'centreName': centre.centreName
                 }).
                 $promise.then(function(response, headerGetter) {
-                    rsMenu.data = Number(response.headers['x-total-count']);
+                    if (!_.isNumber(rsMenu.data)) {
+                        rsMenu.data = 0;
+                    }
+                    rsMenu.data = rsMenu.data + Number(response.headers['x-total-count']);
                 }, function() {
                     rsMenu.data = '-';
                 });  
@@ -118,6 +124,23 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
                     rMenu.data = '-';
                 });
             }
+            if (lapqMenu) {
+                Lead.search({
+                    'branchName': branchName,
+                    'currentStage': "Assignment Pending",
+                    'leadName': '',
+                    'area': '',
+                    'cityTownVillage': '',
+                    'businessName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    lapqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    lapqMenu.data = '-';
+                });
+            }
+            
         })
 
        
