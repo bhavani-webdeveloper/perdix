@@ -281,6 +281,7 @@ define([],function(){
                                         {
                                             model.review.preStage = model.loanAccount.remarksHistory[i].preStage;
                                             model.review.targetStage = model.loanAccount.remarksHistory[i].preStage;
+                                            model.loanProcess.stage = model.loanAccount.remarksHistory[i].preStage;
                                         }
                                     }
                                 }
@@ -1002,7 +1003,7 @@ define([],function(){
                                                 "items": {
                                                     "remarks": {
                                                         "title": "REMARKS",
-                                                        "key": "loanAccount.remarks",
+                                                        "key": "loanProcess.remarks",
                                                         "type": "textarea",
                                                         "required": true
                                                     }, 
@@ -1020,12 +1021,12 @@ define([],function(){
                                                 "items": {
                                                     "remarks": {
                                                         "title": "REMARKS",
-                                                        "key": "loanAccount.remarks",
+                                                        "key": "loanProcess.remarks",
                                                         "type": "textarea",
                                                         "required": true
                                                     }, 
                                                    "stage": {
-                                                        "key": "loanAccount.stage",
+                                                        "key": "loanProcess.stage",
                                                         "required": true,
                                                         "type": "lov",
                                                         "title": "SEND_BACK_TO_STAGE",
@@ -1045,7 +1046,7 @@ define([],function(){
                                                 "items": {
                                                     "remarks": {
                                                         "title": "REMARKS",
-                                                        "key": "loanAccount.remarks",
+                                                        "key": "loanProcess.remarks",
                                                         "type": "textarea",
                                                         "required": true
                                                     }, 
@@ -1072,7 +1073,7 @@ define([],function(){
                                                 "items": {
                                                 "remarks": {
                                                     "title": "REMARKS",
-                                                    "key": "loanAccount.remarks",
+                                                    "key": "loanProcess.remarks",
                                                     "type": "textarea",
                                                     "required": true
                                                 }, 
@@ -1087,7 +1088,7 @@ define([],function(){
                                             }
                                         }
                                     },
-                            "RevertReject": {
+                                    "RevertReject": {
                                         "type": "box",
                                         "title": "REVERT_REJECT",
                                         "condition": "model.loanAccount.currentStage =='Rejected'",
@@ -1098,7 +1099,7 @@ define([],function(){
                                                 "items": {
                                                     "remarks": {
                                                         "title": "REMARKS",
-                                                        "key": "loanAccount.remarks",
+                                                        "key": "loanProcess.remarks",
                                                         "type": "textarea",
                                                         "required": true
                                                     },
@@ -1109,7 +1110,7 @@ define([],function(){
                                                         "type":"textarea"
                                                     }, 
                                                    "stage": {
-                                                        "key": "review.targetStage",
+                                                        "key": "loanProcess.stage",
                                                         "required": true,
                                                         "type": "lov",
                                                         "title": "SEND_BACK_TO_STAGE",
@@ -1280,10 +1281,11 @@ define([],function(){
                     },
                     sendBack: function(model, formCtrl, form, $event){                       
                         PageHelper.showLoader();
-                        // if ( model.loanAccount.review.remarks==null ||  model.loanAccount.review.remarks =="" ||  model.loanAccount.review.targetStage==null ||  model.loanAccount.review.targetStage==""){
-                        //     PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory");
-                        //     return false;
-                        // }
+                       if (model.loanProcess.remarks==null || model.loanProcess.remarks =="" || model.review.targetStage ==null || model.review.targetStage ==""){
+                               PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
+                               PageHelper.hideLoader();
+                               return false;
+                        }
                         model.loanProcess.sendBack()
                             .finally(function () {
                                 PageHelper.hideLoader();
