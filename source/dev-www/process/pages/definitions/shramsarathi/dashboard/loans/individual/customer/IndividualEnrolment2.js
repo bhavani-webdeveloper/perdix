@@ -263,10 +263,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "IndividualInformation.spouseFirstName": {
-                                    "condition": "model.customer.maritalStatus==='Married'"
+                                    "condition": "model.customer.maritalStatus==='MARRIED'"
                                 },
                                 "IndividualInformation.spouseDateOfBirth": {
-                                    "condition": "model.customer.maritalStatus==='Married'"
+                                    "condition": "model.customer.maritalStatus==='MARRIED'"
                                 },
                                 // "FamilyDetails.familyMembers.relationShip": {
                                 //     "readonly": true
