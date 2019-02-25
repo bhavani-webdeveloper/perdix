@@ -177,25 +177,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.addressProofFieldSet":{
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO' || model.customer.identityProof=='Pan Card'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='Pan Card'"
                                 },
                                 "KYC.addressProof": {
                                     "readonly": false,
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO' || model.customer.identityProof=='Pan Card'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='Pan Card'"
                                 },
                                 "KYC.addressProofImageId": {
                                     "required": true,
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'"
                                 },
                                 "KYC.addressProofNo": {
                                     "required": true,
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'"
                                 },
                                 "KYC.addressProofIssueDate":{
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'"
                                 },
                                 "KYC.addressProofValidUptoDate":{
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'"
                                 },
                                 "KYC.additionalKYCs.kyc1ImagePath": {
                                     "required": true
@@ -375,25 +375,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.addressProofFieldSet":{
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                                 },
                                 "KYC.addressProof": {
                                     "required": true,
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                                 },
                                 "KYC.addressProofImageId": {
                                     "required": true,
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                                 },
                                 "KYC.addressProofNo": {
                                     "required": true,
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                                 },
                                 "KYC.addressProofIssueDate":{
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                                 },
                                 "KYC.addressProofValidUptoDate":{
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                                 },
                                 "KYC.additionalKYCs.kyc1ImagePath": {
                                     "required": true
@@ -627,29 +627,29 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.addressProofFieldSet":{
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                                 },
                                 "KYC.addressProof": {
                                     "required": true,
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                                 },
                                 "KYC.addressProofImageId": {
                                     "required": true,
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                                 },
                                 "KYC.addressProofNo": {
                                     "required": true,
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                                 },
                                 "KYC.addressProof": {
                                     "readonly": true,
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                                 },
                                 "KYC.addressProofIssueDate":{
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                                 },
                                 "KYC.addressProofValidUptoDate":{
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                                 },
                                 "KYC.additionalKYCs.kyc1ImagePath": {
                                     "required": true
@@ -1354,29 +1354,29 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.addressProofFieldSet":{
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                                 },
                                 "KYC.addressProof": {
                                     "required": true,
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                                 },
                                 "KYC.addressProofImageId": {
                                     "required": true,
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                                 },
                                 "KYC.addressProofNo": {
                                     "required": true,
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                                 },
                                 "KYC.addressProof": {
                                     // "readonly": true,
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                                 },
                                 "KYC.addressProofIssueDate":{
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                                 },
                                 "KYC.addressProofValidUptoDate":{
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                                 },
                                 "KYC.additionalKYCs.kyc1ImagePath": {
                                     "required": true
@@ -1656,26 +1656,26 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "readonly":true
                     },
                     "KYC.addressProofFieldSet":{
-                        "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                        "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                     },
                     "KYC.addressProof":{
-                        "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                        "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                     },
                     "KYC.addressProof": {
                         "required": true,
-                        "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                        "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                     },
                     "KYC.addressProofImageId":{
-                        "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                        "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                     },
                     "KYC.addressProofNo":{
-                        "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                        "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                     },
                     "KYC.addressProofIssueDate":{
-                        "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                        "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                     },
                     "KYC.addressProofValidUptoDate":{
-                        "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                        "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                     },
                     "Machinery.fixedAssetsMachinaries":{
                         "title":"FIXED_ASSET"
@@ -2039,13 +2039,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth": {
                         "required": false
-                    }
+                    },
                     // "IndividualInformation.existingLoan":{
                     //     "title":""
                     // },
-                    // "KYC.addressProofSameAsIdProof":{
+                    // "KYC.addressPfSameAsIdProof":{
                     //     "onChange": function(modelValue, form, model, formCtrl, event) {
-                    //         if(model.addressProofSameAsIdProof==='YES'){
+                    //         if(model.addressPfSameAsIdProof==='YES'){
                     //             model.addressProofNo=model.identityProofNo
                     //         }
                     //     }                    },
@@ -2525,7 +2525,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                                         },
                                         "identityProofBackside":{
-                                            "key":"customer.identityProofBackside",
+                                            "key":"customer.identityProofReverseImageId",
                                             "type": "file",
                                             "fileType": "application/pdf",
                                             "using": "scanner",
@@ -2534,14 +2534,23 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         },
                                         "addressProofSameAsIdProof":{
                                             "condition":"model.customer.identityProof!='Pan Card'",
-                                            "key":"KYC.addressProofSameAsIdProof",
+                                            "key":"customer.addressPfSameAsIdProof",
                                             "title":"ADDRESS_PROOF_SAME_AS_IDPROOF",
                                             "type":"radios",
                                             "titleMap":{
                                                 "YES":"Yes",
                                                 "NO":"No"
                                             },
-                                            "orderNo":60
+                                            "orderNo":60,
+                                            "onChange": function(modelValue, form, model, formCtrl, event) {
+                                                        if(model.customer.addressPfSameAsIdProof==='YES'){
+                                                            model.customer.addressProofNo=model.customer.identityProofNo,
+                                                            model.customer.addressProofImageId=model.customer.identityProofImageId,
+                                                            model.customer.addressProofBackside=model.customer.identityProofReverseImageId,
+                                                            model.customer.addressProofIssueDate=model.customer.idProofIssueDate,
+                                                            model.customer.addressProofValidUptoDate=model.customer.idProofValidUptoDate
+                                                        }
+                                                    }    
                                         },
                                         "addressProofBackside":{
                                             "key":"customer.addressProofBackside",
@@ -2549,7 +2558,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "fileType":"application/pdf",
                                             "using":"scanner",
                                             "type":"file",
-                                            "condition":"model.KYC.addressProofSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'",
+                                            "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'",
                                             "orderNo":90
                                         },
                                     }
