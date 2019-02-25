@@ -427,7 +427,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     },   
                     "EnterpriseInformation.enterpriseCustomerRelations.otherBusinessClosureDate": {
                         "condition": "model.customer.enterpriseCustomerRelations[arrayIndex].otherBusinessClosed == 'YES'"
-                    },      
+                    },  
+                    "ProxyIndicators.incomeStability" : {
+                        "title": "Income Stability"
+                    }    
                }
             }
             var repositoryAdditions = function(bundlePageObj){

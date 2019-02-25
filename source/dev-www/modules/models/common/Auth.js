@@ -25,15 +25,17 @@ irf.models.factory('AuthTokenHelper', ['SessionStore', '$log', function(SessionS
 	};
 }]);
 
-irf.models.factory('Auth', function($resource,$httpParamSerializer,$http,BASE_URL,AuthTokenHelper){
+irf.models.factory('Auth', function($resource,$httpParamSerializer,$http,BASE_URL,AuthTokenHelper,Utils){
 	var endpoint = BASE_URL;
+	var loginUrl="/oauth/token?cacheBuster=" + Date.now();
+	var macaddress=null;
 	var resource = $resource(endpoint, {}, {
 		'login':{
-			url: endpoint + "/oauth/token?cacheBuster=" + Date.now(),
+			url: endpoint + loginUrl,
 			method: 'POST',
 			headers: {
 				'Accept':'application/json',
-				'Content-Type': 'application/x-www-form-urlencoded'
+				'Content-Type': 'application/x-www-form-urlencoded',
 			},
 			transformRequest: function (data) {
 				return $httpParamSerializer(data);
@@ -55,11 +57,24 @@ irf.models.factory('Auth', function($resource,$httpParamSerializer,$http,BASE_UR
 		credentials.client_secret = 'mySecretOAuthSecret';
 		credentials.client_id='application';
 		credentials.skip_relogin = 'yes';
-
-		return resource.login(credentials,function(response){
-			//$http.defaults.headers.common['Authorization']= 'Bearer '+response.access_token;
-			AuthTokenHelper.setAuthData(response);
-		});
+		macaddress=credentials.macaddress;
+		var imeiNumber=credentials.imeinumber;
+		delete credentials.imeinumber;
+		if (Utils.isCordova) {
+			$http.defaults.headers.common['X-MAC-ADDRESS'] = macaddress;
+			return resource.login({ "imeiNumber": imeiNumber }, credentials, function (response) {
+				$http.defaults.headers.common['X-MAC-ADDRESS'] = undefined;
+				AuthTokenHelper.setAuthData(response);
+			});
+		}
+		else{
+			return resource.login(credentials,function(response){
+				//$http.defaults.headers.common['Authorization']= 'Bearer '+response.access_token;
+				$http.defaults.headers.common['X-MAC-ADDRESS']= undefined;
+				AuthTokenHelper.setAuthData(response);
+			});
+		}
+		
 	};
 
 	return resource;
