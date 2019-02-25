@@ -12,7 +12,8 @@ function($log, $scope, PagesDefinition, SessionStore, LoanProcess, LoanCollectio
             "Page/Engine/user.UserSearch",
             "Page/Engine/user.UserMaintanence",
             "Page/Engine/user.LogoutUser",
-            "Page/Engine/user.MultipleUserLogout"
+            "Page/Engine/user.MultipleUserLogout",
+            "Page/Engine/user.UserAttendance"
 
         ]
     };

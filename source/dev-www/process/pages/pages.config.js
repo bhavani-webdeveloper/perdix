@@ -92,6 +92,12 @@ irf.pages.config([
 		templateUrl: "process/pages/templates/Page.Dashboard.html",
 		controller: "UserDashboardCtrl"
 	},{
+		name: "Page.JewelDashboard",
+		url: "/JewelDashboard",
+		templateUrl: "process/pages/templates/Page.Dashboard.html",
+		controller: "JewelDashboardCtrl"
+	},
+	{
 		name: "Page.LUCDashboard",
 		url: "/LUCDashboard",
 		templateUrl: "process/pages/templates/Page.Dashboard.html",

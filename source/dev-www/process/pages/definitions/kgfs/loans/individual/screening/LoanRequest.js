@@ -270,6 +270,21 @@ define([],function(){
                         id: model.loanAccount.id
                     }).$promise.then(function (resp) {
                         model.loanAccount.remarksHistory = resp;
+                         if(model.loanAccount.remarksHistory && model.loanAccount.remarksHistory.length)
+                            {
+                                for(i=0;i<model.loanAccount.remarksHistory.length;i++)
+                                {
+                                    if(model.loanAccount.remarksHistory[i].postStage=="Rejected" &&
+                                        model.loanAccount.remarksHistory[i].preStage != "Rejected")
+                                    {
+                                        if(model.loanAccount.currentStage=='Rejected')
+                                        {
+                                            model.review.preStage = model.loanAccount.remarksHistory[i].preStage;
+                                            model.review.targetStage = model.loanAccount.remarksHistory[i].preStage;
+                                        }
+                                    }
+                                }
+                            }
 
                         console.log("resposne for CheckerHistory");
                         console.log(model);
@@ -311,6 +326,9 @@ define([],function(){
                                     "readonly":true
                                 },
                                 "LoanMitigants":{
+                                    "readonly":true
+                                },
+                                "JewelDetails":{
                                     "readonly":true
                                 }
                             }
@@ -664,6 +682,7 @@ define([],function(){
                     "PreliminaryInformation.numberOfGuarantorsCoApplicants",                    
                     "PreliminaryInformation.loanPurpose1",
                     "PreliminaryInformation.loanPurpose2",
+                    "PreliminaryInformation.loanPurpose3",
                     "PreliminaryInformation.loanAmountRequested",
                     "PreliminaryInformation.tenureRequested",
                     "PreliminaryInformation.comfortableEMI",
@@ -741,6 +760,7 @@ define([],function(){
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                     // AngularResourceService.getInstance().setInjector($injector);
                     model.customer = {};
+                    model.review = model.review|| {};
                     model.loanAccount = model.loanProcess.loanAccount;
                     defaultConfiguration(model,true);
 
@@ -835,6 +855,13 @@ define([],function(){
                                                 "type": "lov",
                                                 "enumCode":"loan_product",
                                                 "orderNo": 10
+                                            },
+                                            "loanPurpose3": {
+                                                "key":"loanAccount.loanPurpose3",
+                                                "title": "LOAN_PURPOSE_3",
+                                                "type": "lov",
+                                                "orderNo": 41,
+                                                "resolver": "LoanPurpose3LOVConfiguration"
                                             },
                                             "productName":{
                                                 "title": "PRODUCT_NAME",
@@ -975,7 +1002,7 @@ define([],function(){
                                                 "items": {
                                                     "remarks": {
                                                         "title": "REMARKS",
-                                                        "key": "loanProcess.remarks",
+                                                        "key": "loanAccount.remarks",
                                                         "type": "textarea",
                                                         "required": true
                                                     }, 
@@ -993,12 +1020,12 @@ define([],function(){
                                                 "items": {
                                                     "remarks": {
                                                         "title": "REMARKS",
-                                                        "key": "loanProcess.remarks",
+                                                        "key": "loanAccount.remarks",
                                                         "type": "textarea",
                                                         "required": true
                                                     }, 
                                                    "stage": {
-                                                        "key": "loanProcess.stage",
+                                                        "key": "loanAccount.stage",
                                                         "required": true,
                                                         "type": "lov",
                                                         "title": "SEND_BACK_TO_STAGE",
@@ -1018,7 +1045,7 @@ define([],function(){
                                                 "items": {
                                                     "remarks": {
                                                         "title": "REMARKS",
-                                                        "key": "loanProcess.remarks",
+                                                        "key": "loanAccount.remarks",
                                                         "type": "textarea",
                                                         "required": true
                                                     }, 
@@ -1045,7 +1072,7 @@ define([],function(){
                                                 "items": {
                                                 "remarks": {
                                                     "title": "REMARKS",
-                                                    "key": "loanProcess.remarks",
+                                                    "key": "loanAccount.remarks",
                                                     "type": "textarea",
                                                     "required": true
                                                 }, 
@@ -1071,13 +1098,13 @@ define([],function(){
                                                 "items": {
                                                     "remarks": {
                                                         "title": "REMARKS",
-                                                        "key": "loanProcess.remarks",
+                                                        "key": "loanAccount.remarks",
                                                         "type": "textarea",
                                                         "required": true
                                                     },
                                                     "rejectReason":{
                                                         "title":"REJECT_REASON",
-                                                        "key":"loanProcess.rejectReason",
+                                                        "key":"loanAccount.rejectReason",
                                                         "readonly":true,
                                                         "type":"textarea"
                                                     }, 
@@ -1251,8 +1278,12 @@ define([],function(){
                             });
 
                     },
-                    sendBack: function(model, formCtrl, form, $event){                        
+                    sendBack: function(model, formCtrl, form, $event){                       
                         PageHelper.showLoader();
+                        // if ( model.loanAccount.review.remarks==null ||  model.loanAccount.review.remarks =="" ||  model.loanAccount.review.targetStage==null ||  model.loanAccount.review.targetStage==""){
+                        //     PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory");
+                        //     return false;
+                        // }
                         model.loanProcess.sendBack()
                             .finally(function () {
                                 PageHelper.hideLoader();

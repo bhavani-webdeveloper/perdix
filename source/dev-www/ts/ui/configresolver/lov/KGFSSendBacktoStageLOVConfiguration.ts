@@ -6,9 +6,11 @@ export class KGFSSendBacktoStageLOVConfiguration extends LOVElementConfiguration
 
     };
 	search: Function = function(inputModel, form, model, context) {
+
+
 		let $q = AngularResourceService.getInstance().getNGService("$q");
 		let formHelper = AngularResourceService.getInstance().getNGService("formHelper");
-        let stage1 = model.loanProcess.loanAccount.currentStage;
+        let stage1= model.review.preStage;
         let targetstage = formHelper.enum('targetstagemel').data;
         let out = [];
         for (let i = 0; i < targetstage.length; i++) {
@@ -28,8 +30,8 @@ export class KGFSSendBacktoStageLOVConfiguration extends LOVElementConfiguration
         });
     };
     onSelect: Function = function(valueObj, model, context) {
-        model.review.targetStage1 = valueObj.name;
-        model.loanProcess.stage = valueObj.value;        
+        model.review.targetStage = valueObj.name;
+        model.loanAccount.stage = valueObj.value;        
         NGHelper.refreshUI();
     };
     getListDisplayItem: Function = function(item, index) {

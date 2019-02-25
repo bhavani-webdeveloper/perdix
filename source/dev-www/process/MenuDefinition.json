@@ -74,6 +74,7 @@
 
             ]
         },
+        "Page/JewelDashboard",
         "Page/LUCDashboard",
         "Page/CreditMonitoringDashboard",
         "Page/InventoryDashboard",

@@ -31,9 +31,9 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
         var lapqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.LeadAssignmentPendingQueue"];
         var lfuqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.LeadFollowUpQueue"];
         var ilqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.IncompleteLeadQueue"];
-        var rMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.LeadRejectedQueue"];
         var rsMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.ReadyForScreeningQueue"];
-
+        var rMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.LeadRejectedQueue"];
+        
        
         if (rMenu) rMenu.data = 0;
         if (rsMenu) rsMenu.data = 0;
@@ -106,6 +106,28 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
                     rMenu.data = '-';
                 });
             }
+
+            if (rsMenu) {
+                Lead.search({
+                    'branchName': branchName,
+                    'currentStage': "ReadyForScreening",
+                    'leadName': '',
+                    'area': '',
+                    'cityTownVillage': '',
+                    'businessName': '',
+                    'page': 1,
+                    'per_page': 1,
+                    'centreName': centre.centreName
+                }).$promise.then(function(response, headerGetter) {
+                    if (!_.isNumber(rsMenu.data)) {
+                        rsMenu.data = 0;
+                    }
+                    rsMenu.data = rsMenu.data + Number(response.headers['x-total-count']);
+                }, function() {
+                    rsMenu.data = '-';
+                });
+                
+            }
         })
 
 
@@ -126,25 +148,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             });
         }
 
-        if (rsMenu) {
-            Lead.search({
-                'branchName': branchName,
-                'currentStage': "ReadyForScreening",
-                'leadName': '',
-                'area': '',
-                'cityTownVillage': '',
-                'businessName': '',
-                'page': 1,
-                'per_page': 1,
-                'centreName': centre.centreName
-            }).
-            $promise.then(function(response, headerGetter) {
-                rsMenu.data = Number(response.headers['x-total-count']);
-            }, function() {
-                rsMenu.data = '-';
-            });
-            
-        }
+       
 
     });
    

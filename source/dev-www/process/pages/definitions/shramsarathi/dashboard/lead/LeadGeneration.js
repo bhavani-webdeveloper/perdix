@@ -24,6 +24,15 @@ function(LeadProcess, AngularResourceService) {
                     "leadProfile.individualDetails.maritalStatus":{
                         "required":true
                     },
+                    "leadProfile.individualDetails.lastName":{
+                        "required": false
+                    },
+                    "leadProfile.individualDetails.dob":{
+                        "required": true
+                    },
+                    "leadProfile.individualDetails.nickName":{
+                        "required": false
+                    },
                     "leadProfile.individualDetails.educationStatus":{
                         "required":true
                     },
@@ -31,8 +40,9 @@ function(LeadProcess, AngularResourceService) {
                         "required":true
                     },
                     "leadProfile.leadDetails.customerTypeString":{
-                        "readonly":false,
-                        "required":true
+                        "readonly":true,
+                        "required":true,
+                        "title": "LEAD_TYPE"
                     },
                     "leadProfile.leadDetails.enterpriseDetails.businessName":{
                         "required":true
@@ -142,7 +152,7 @@ function(LeadProcess, AngularResourceService) {
                     },
                     "leadProfile.branchName":{
                         "title":"BRANCH",
-                        "readonly" :false,
+                        "readonly" :true,
                         "orderNo" : 0
                     },
                     "leadProfile.centerName":{
@@ -178,6 +188,9 @@ function(LeadProcess, AngularResourceService) {
                     "leadProfile.contactDetails.addressLine1":{
                         "title":"HAMLET_FALA",
                         //"orderNo":5
+                    },
+                    "leadProfile.contactDetails.alternateMobileNo":{
+                        orderNo: 8
                     },
                     "leadProfile.contactDetails.pincode": {
                         key: "lead.pincode",
