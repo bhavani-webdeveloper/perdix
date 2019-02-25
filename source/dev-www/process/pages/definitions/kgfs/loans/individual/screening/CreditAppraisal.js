@@ -225,9 +225,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                             });
 
                     } else {
-                        if($stateParams.pageData){
-                            var productCategory = $stateParams.pageData.productCategory; 
-                        }
                         LoanProcess.createNewProcess()
                             .subscribe(function(loanProcess){
                                 loanProcess.loanAccount.currentStage = 'CreditAppraisal';
@@ -247,7 +244,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         }
                                     });
                                 }
-                                if(productCategory == 'MEL'){
+                                if(loanProcess.loanAccount.productCategory == 'MEL'){
                                     if (loanProcess.loanCustomerEnrolmentProcess) {
                                         $this.bundlePages.push({
                                             pageClass: "business",
