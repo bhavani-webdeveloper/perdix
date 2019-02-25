@@ -13,6 +13,8 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             "Page/Engine/shramsarathi.dashboard.lead.IncompleteLeadQueue",
             "Page/Engine/shramsarathi.dashboard.lead.LeadFollowUpQueue",
             "Page/Engine/shramsarathi.dashboard.lead.ReadyForScreeningQueue",
+            "Page/Engine/shramsarathi.dashboard.lead.LeadBulkUpload",
+            "Page/Engine/shramsarathi.dashboard.lead.LeadAssignmentPendingQueue",
             "Page/Engine/shramsarathi.dashboard.lead.LeadRejectedQueue"
         ]
     };
