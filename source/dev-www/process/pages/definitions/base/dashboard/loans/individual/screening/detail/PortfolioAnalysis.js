@@ -186,7 +186,7 @@ define({
                 },
                 {
                     "type": "box",
-                    "title": "Customer HistoricaL Financials",
+                    "title": "Customer Historical Financials",
                     "readOnly": true,
                     "colClass": "col-sm-12",
                     "items":[{

@@ -1399,6 +1399,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "condition": "model.customer.maritalStatus==='MARRIED'",
                         "required":true
                     },
+                    "IndividualInformation.fatherFirstName": {
+                        "title": "Father's Name",
+                    },
                     "KYC.identityProofFieldSet": {
                         "orderNo": 20
                     },
