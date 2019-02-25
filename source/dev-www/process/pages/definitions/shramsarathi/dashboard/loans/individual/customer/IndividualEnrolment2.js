@@ -180,7 +180,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "condition":"model.KYC.addressProofSameAsIdProof=='NO' || model.customer.identityProof=='Pan Card'"
                                 },
                                 "KYC.addressProof": {
-                                    "required": true,
+                                    "readonly": false,
                                     "condition":"model.KYC.addressProofSameAsIdProof=='NO' || model.customer.identityProof=='Pan Card'"
                                 },
                                 "KYC.addressProofImageId": {
