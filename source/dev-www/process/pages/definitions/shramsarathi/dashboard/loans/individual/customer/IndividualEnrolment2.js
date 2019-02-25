@@ -1946,9 +1946,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     //         }
                     //     }
                     // },
-                    // "IndividualInformation.caste": {
-                    //     "enumCode": "caste"
-                    // },
+                    "IndividualInformation.caste": {
+                        "enumCode": "caste"
+                    },
                     "Liabilities.liabilities.startDate": {
                         "onChange": function (modelValue, form, model, formCtrl, $event) {
                             var index = form.key[2];
