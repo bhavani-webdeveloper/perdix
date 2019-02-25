@@ -12,10 +12,12 @@ irf.commons.factory('authService',
 function(Auth, Account, $q, $log, SessionStore, irfStorageService, AuthTokenHelper, BankMaster, SysQueries) {
 	var userData = null;
 
-	var login = function(username, password) {
+	var login = function(username, password,macaddress,imeinumber) {
 		var promise = Auth.getToken({
 			"username": username,
-			"password": password
+			"password": password,
+			"macaddress":macaddress,
+			"imeinumber":imeinumber
 		}).$promise;
 
 		return promise;
