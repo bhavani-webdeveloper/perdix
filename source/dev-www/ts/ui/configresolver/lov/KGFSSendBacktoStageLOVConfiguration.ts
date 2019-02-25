@@ -6,8 +6,6 @@ export class KGFSSendBacktoStageLOVConfiguration extends LOVElementConfiguration
 
     };
 	search: Function = function(inputModel, form, model, context) {
-
-
 		let $q = AngularResourceService.getInstance().getNGService("$q");
 		let formHelper = AngularResourceService.getInstance().getNGService("formHelper");
         let stage1= model.review.preStage;
@@ -31,7 +29,7 @@ export class KGFSSendBacktoStageLOVConfiguration extends LOVElementConfiguration
     };
     onSelect: Function = function(valueObj, model, context) {
         model.review.targetStage = valueObj.name;
-        model.loanAccount.stage = valueObj.value;        
+        model.loanProcess.stage = valueObj.value;        
         NGHelper.refreshUI();
     };
     getListDisplayItem: Function = function(item, index) {

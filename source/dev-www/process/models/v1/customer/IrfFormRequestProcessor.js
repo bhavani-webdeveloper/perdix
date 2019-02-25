@@ -4589,7 +4589,12 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             },
                             "identityProofNo": {
                                 key: "customer.identityProofNo",
-                                type: "string"
+                                type: "string",
+                                onCapture: function (result, model, form) {
+                                    $log.info(result);
+                                    var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                                    model.customer.identityProofNo = aadhaarData.uid;
+                                }
                             },
                             "idProofIssueDate": {
                                 key: "customer.idProofIssueDate",
@@ -4608,7 +4613,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         type: "fieldset",
                         orderNo: 30,
                         title: "ADDRESS_PROOF",
-                        condition: "!model.customer.addressProofSameAsIdProof",
+                       // condition: "!model.customer.addressProofSameAsIdProof",
                         items: {
                             "addressProof": {
                                 key: "customer.addressProof",

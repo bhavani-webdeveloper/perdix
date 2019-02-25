@@ -1,9 +1,12 @@
-irf.models.factory("Misc",["$resource", "$httpParamSerializer", "BASE_URL","searchResource", "Upload", "$q", "PageHelper",
-    function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHelper){
+irf.models.factory("Misc",["$resource", "$httpParamSerializer", "BASE_URL","searchResource", "Upload", "$q", "PageHelper","SessionStore",
+    function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHelper,SessionStore){
         
         var endpoint = BASE_URL + '/api/maintenance';
         var res = $resource(endpoint,null,{
-            // Please add your api here :)
+            getSummary: {
+                method: 'GET',
+                url: irf.BI_BASE_URL + "/summary."+SessionStore.getGlobalSetting("siteCode")+".php",
+            }
         })
 
         res.allFormsDownload = function(opts){

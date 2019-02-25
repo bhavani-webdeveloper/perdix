@@ -177,25 +177,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.addressProofFieldSet":{
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO' || model.customer.identityProof=='Pan Card'"
                                 },
                                 "KYC.addressProof": {
-                                    "required": true,
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "readonly": false,
+                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO' || model.customer.identityProof=='Pan Card'"
                                 },
                                 "KYC.addressProofImageId": {
                                     "required": true,
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'"
                                 },
                                 "KYC.addressProofNo": {
                                     "required": true,
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'"
                                 },
                                 "KYC.addressProofIssueDate":{
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'"
                                 },
                                 "KYC.addressProofValidUptoDate":{
-                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'"
+                                    "condition":"model.KYC.addressProofSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'"
                                 },
                                 "KYC.additionalKYCs.kyc1ImagePath": {
                                     "required": true
@@ -263,10 +263,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "IndividualInformation.spouseFirstName": {
-                                    "condition": "model.customer.maritalStatus==='Married'"
+                                    "condition": "model.customer.maritalStatus==='MARRIED'"
                                 },
                                 "IndividualInformation.spouseDateOfBirth": {
-                                    "condition": "model.customer.maritalStatus==='Married'"
+                                    "condition": "model.customer.maritalStatus==='MARRIED'"
                                 },
                                 // "FamilyDetails.familyMembers.relationShip": {
                                 //     "readonly": true
@@ -2533,6 +2533,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                            // "orderNo":70
                                         },
                                         "addressProofSameAsIdProof":{
+                                            "condition":"model.customer.identityProof!='Pan Card'",
                                             "key":"KYC.addressProofSameAsIdProof",
                                             "title":"ADDRESS_PROOF_SAME_AS_IDPROOF",
                                             "type":"radios",
@@ -2548,7 +2549,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "fileType":"application/pdf",
                                             "using":"scanner",
                                             "type":"file",
-                                            "condition":"model.KYC.addressProofSameAsIdProof=='NO'",
+                                            "condition":"model.KYC.addressProofSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'",
                                             "orderNo":90
                                         },
                                     }

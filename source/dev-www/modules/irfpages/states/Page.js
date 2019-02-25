@@ -102,7 +102,7 @@ function ($log, $scope, $stateParams, $q, $http, $uibModal, authService, AuthPop
                     };
 
                     $scope.relogin = function (username, password) {
-                        $log.info("Inside onlineLogin");
+                        $log.info("Inside onlineLogin"); 
                         if (!password) {
                             $scope.errorMessage = "Password cannot be empty";
                             return false;
