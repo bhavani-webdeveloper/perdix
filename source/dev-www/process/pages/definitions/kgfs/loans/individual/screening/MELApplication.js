@@ -47,7 +47,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "DownloadMELApplicationForm.downloadMELApplicationForm",
                     "UploadMELApplicationForm",
                     "UploadMELApplicationForm.uploadMELApplicationFormFieldSet",
-                    "UploadMELApplicationForm.uploadMELApplicationForm"
+                    "UploadMELApplicationForm.uploadMELApplicationForm",
+                    "PostReview",
+                    "PostReview.action",
+                    "PostReview.proceed",
+                    "PostReview.proceed.remarks",
+                    "PostReview.proceed.proceedButton",
+                    "PostReview.sendBack",
+                    "PostReview.sendBack.remarks",
+                    "PostReview.sendBack.stage",
+                    "PostReview.sendBack.sendBackButton",
+                    "PostReview.reject",
+                    "PostReview.reject.remarks",
+                    "PostReview.reject.rejectReason",
+                    "PostReview.reject.rejectButton",
                     
                 ];
 
@@ -124,6 +137,111 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                                         }
                                     }                                    
+                                },
+                                "PostReview": {
+                                        "type": "box",
+                                        "title": "POST_REVIEW",
+                                        "orderNo": 600,
+                                        "items": {
+                                            "action": {
+                                                "key": "review.action",
+                                                "type": "radios",
+                                                "titleMap": {
+                                                    "REJECT": "REJECT",
+                                                    "SEND_BACK": "SEND_BACK",
+                                                    "PROCEED": "PROCEED"
+                                                }
+                                            }, 
+                                            "proceed": {
+                                                "type": "section",
+                                                "condition": "model.review.action=='PROCEED'",
+                                                "items": {
+                                                    "remarks": {
+                                                        "title": "REMARKS",
+                                                        "key": "loanAccount.remarks",
+                                                        "type": "textarea",
+                                                        "required": true
+                                                    }, 
+                                                    "proceedButton": {
+                                                        "key": "review.proceedButton",
+                                                        "type": "button",
+                                                        "title": "PROCEED",
+                                                        "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                                    }
+                                                }
+                                            },
+                                            "sendBack": {
+                                                "type": "section",
+                                                "condition": "model.review.action=='SEND_BACK'",
+                                                "items": {
+                                                    "remarks": {
+                                                        "title": "REMARKS",
+                                                        "key": "loanAccount.remarks",
+                                                        "type": "textarea",
+                                                        "required": true
+                                                    }, 
+                                                   "stage": {
+                                                        "key": "loanAccount.stage",
+                                                        "required": true,
+                                                        "type": "lov",
+                                                        "title": "SEND_BACK_TO_STAGE",
+                                                        "resolver": "KGFSSendBacktoStageLOVConfiguration"
+                                                    }, 
+                                                   "sendBackButton": {
+                                                        "key": "review.sendBackButton",
+                                                        "type": "button",
+                                                        "title": "SEND_BACK",
+                                                        "onClick": "actions.sendBack(model, formCtrl, form, $event)"
+                                                    }
+                                                }
+                                            },
+                                            "reject": {
+                                                "type": "section",
+                                                "condition": "model.review.action=='REJECT'",
+                                                "items": {
+                                                    "remarks": {
+                                                        "title": "REMARKS",
+                                                        "key": "loanAccount.remarks",
+                                                        "type": "textarea",
+                                                        "required": true
+                                                    }, 
+                                                    "rejectReason": {
+                                                        "key": "loanAccount.rejectReason",
+                                                        "type": "lov",
+                                                        "autolov": true,
+                                                        "required":true,
+                                                        "title": "REJECT_REASON",
+                                                        "resolver": "KGFSRejectReasonLOVConfiguration"
+                                                    },
+                                                    "rejectButton": {
+                                                        "key": "review.rejectButton",
+                                                        "type": "button",
+                                                        "title": "REJECT",
+                                                        "required": true,
+                                                        "onClick": "actions.reject(model, formCtrl, form, $event)"
+                                                    }
+                                                }
+                                            },
+                                            "hold": {
+                                                "type": "section",
+                                                "condition": "model.review.action=='HOLD'",
+                                                "items": {
+                                                "remarks": {
+                                                    "title": "REMARKS",
+                                                    "key": "loanAccount.remarks",
+                                                    "type": "textarea",
+                                                    "required": true
+                                                }, 
+                                                "holdButton": {
+                                                    "key": "review.holdButton",
+                                                    "type": "button",
+                                                    "title": "HOLD",
+                                                    "required": true,
+                                                    "onClick": "actions.holdButton(model, formCtrl, form, $event)"
+                                                }
+                                            }
+                                            }
+                                        }
                                 }
                             },
                             "additions": [
@@ -249,29 +367,82 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     return Enrollment.getSchema().$promise;
                 },
                 actions: {
-                    save: function (model, formCtrl, form, $event) {
-                        PageHelper.clearErrors();
-                        if(PageHelper.isFormInvalid(formCtrl)) {
-                            return false;
-                        }
-                        formCtrl.scope.$broadcast('schemaFormValidate');
+                    submit: function(model, formCtrl, form){
+                        model.loanAccount.customerId=model.loanAccount.loanCustomerRelations[0].customerId;
+                        /* Loan SAVE */
+                        if (!model.loanAccount.id){
+                            model.loanAccount.isRestructure = false;
+                            model.loanAccount.documentTracking = "PENDING";
+                            model.loanAccount.psychometricCompleted = "NO";
 
-                        if (formCtrl && formCtrl.$invalid) {
-                            PageHelper.showProgress("enrolment", "Your form have errors. Please fix them.", 5000);
-                            return false;
                         }
 
-                        // $q.all start
-                        model.enrolmentProcess.save()
+                        if(!(validateCoGuarantor(model.additions.co_borrower_required,model.additions.number_of_guarantors,'validate',model.loanAccount.loanCustomerRelations,model)))
+                            return false;
+                        PageHelper.showProgress('loan-process', 'Updating Loan');
+                        if(!savePolicies(model)){
+                            PageHelper.showProgress('loan-process','Oops Some Error',2000);
+                            return false;}
+                        if(!(policyBasedOnLoanType(model.loanAccount.loanType,model))){
+                            PageHelper.showProgress('loan-process','Oops Some Error',2000);
+                            return false;}
+                                                    
+                        model.loanProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
-                                formHelper.resetFormValidityState(formCtrl);
+                                BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount});                                    
                                 Utils.removeNulls(value, true);
-                                PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
-                                PageHelper.clearErrors();
-                                BundleManager.pushEvent()
+                                PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
+
+                            }, function (err) {
+                                PageHelper.showErrors(err);
+                                PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);                                
+                                PageHelper.hideLoader();
+                            });
+
+                    },
+                    holdButton: function(model, formCtrl, form, $event){
+                        $log.info("Inside save()");
+                         if (!model.loanAccount.id){
+                            model.loanAccount.isRestructure = false;
+                            model.loanAccount.documentTracking = "PENDING";
+                            model.loanAccount.psychometricCompleted = "NO";
+
+                        }
+                        model.loanAccount.status = "HOLD";
+                        PageHelper.showProgress('loan-process', 'Updating Loan');
+                        model.loanProcess.hold()
+                            .finally(function () {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function (value) {
+                                Utils.removeNulls(value, true);
+                                PageHelper.showProgress('loan-process', 'Loan hold.', 5000);
+                                irfNavigator.goBack();
+                            }, function (err) {
+                                PageHelper.showErrors(err);
+                                PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);
+                                
+                                PageHelper.hideLoader();
+                            });
+
+                    },
+                    sendBack: function(model, formCtrl, form, $event){                       
+                        PageHelper.showLoader();
+                        // if ( model.loanAccount.review.remarks==null ||  model.loanAccount.review.remarks =="" ||  model.loanAccount.review.targetStage==null ||  model.loanAccount.review.targetStage==""){
+                        //     PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory");
+                        //     return false;
+                        // }
+                        model.loanProcess.sendBack()
+                            .finally(function () {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function (value) {
+                                Utils.removeNulls(value, true);
+                                PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                irfNavigator.goBack();
                             }, function (err) {
                                 PageHelper.showErrors(err);
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
@@ -279,61 +450,75 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 PageHelper.hideLoader();
                             });
                     },
-                    proceed: function(model, form, formName){
-                        PageHelper.clearErrors();
-                        if(PageHelper.isFormInvalid(form)) {
-                            return false;
+                    proceed: function(model, formCtrl, form, $event){
+                        var trancheTotalAmount=0;
+                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == 'Sanction' && model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length){
+                            
+                            for (var i = model.loanAccount.disbursementSchedules.length - 1; i >= 0; i--) {
+                                model.loanAccount.disbursementSchedules[i].modeOfDisbursement = "CASH";
+                                trancheTotalAmount+=(model.loanAccount.disbursementSchedules[i].disbursementAmount || 0);
+                            }
+                            if (trancheTotalAmount > model.loanAccount.loanAmount){
+                                PageHelper.showProgress("loan-create","Total tranche amount is more than the Loan amount",5000);
+                                return false;
+                              }  
+                            
+                            if (trancheTotalAmount < model.loanAccount.loanAmount){
+                                PageHelper.showProgress("loan-create","Total tranche amount should match with the Loan amount",5000);
+                                return false;
+                            }
+                        
                         }
-                        PageHelper.showProgress('enrolment', 'Updating Customer');
-                        PageHelper.showLoader();
-                        model.enrolmentProcess.proceed()
+                        PageHelper.showProgress('enrolment', 'Updating Loan');
+                        model.loanProcess.proceed()
                             .finally(function () {
-                                console.log("Inside hideLoader call");
                                 PageHelper.hideLoader();
                             })
-                            .subscribe(function (enrolmentProcess) {
-                                formHelper.resetFormValidityState(form);
+                            .subscribe(function (value) {
+                                Utils.removeNulls(value, true);
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                PageHelper.clearErrors();
-                                BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
-                                BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer});
-
+                                irfNavigator.goBack();
                             }, function (err) {
                                 PageHelper.showErrors(err);
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 
+                                PageHelper.hideLoader();
                             });
                     },
-                    submit: function (model, form, formName) {
-                        PageHelper.clearErrors();
-                        if(PageHelper.isFormInvalid(form)) {
+                    reject: function(model, formCtrl, form, $event){
+                        if(PageHelper.isFormInvalid(formCtrl)) {
                             return false;
                         }
-                        PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
-                        model.enrolmentProcess.save()
+                         model.loanProcess.reject()
                             .finally(function () {
                                 PageHelper.hideLoader();
                             })
-                            .subscribe(function (enrolmentProcess) {
-                                formHelper.resetFormValidityState(form);
+                            .subscribe(function (value) {
+                                Utils.removeNulls(value, true);
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                PageHelper.clearErrors();
-                                BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
-                                BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer});
-
-                                model.enrolmentProcess.proceed()
-                                .subscribe(function(enrolmentProcess) {
-                                    PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                }, function(err) {
-                                    PageHelper.showErrors(err);
-                                    PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                                })
+                                irfNavigator.goBack();
                             }, function (err) {
                                 PageHelper.showErrors(err);
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);                                
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                
                                 PageHelper.hideLoader();
                             });
+                    },
+                    nomineeAddress: function(model, formCtrl, form, $event){
+                        PageHelper.showLoader();
+                        if(model.loanProcess.applicantEnrolmentProcess){
+                            model.loanAccount.nominees[0].nomineeDoorNo=  model.loanProcess.applicantEnrolmentProcess.customer.doorNo;
+                            model.loanAccount.nominees[0].nomineeLocality= model.loanProcess.applicantEnrolmentProcess.customer.locality;
+                            model.loanAccount.nominees[0].nomineeStreet= model.loanProcess.applicantEnrolmentProcess.customer.street;
+                            model.loanAccount.nominees[0].nomineePincode= model.loanProcess.applicantEnrolmentProcess.customer.pincode;
+                            model.loanAccount.nominees[0].nomineeDistrict= model.loanProcess.applicantEnrolmentProcess.customer.district;
+                            model.loanAccount.nominees[0].nomineeState = model.loanProcess.applicantEnrolmentProcess.customer.state;
+                        }else
+                        {
+                            PageHelper.hideLoader();
+                        }
+                        PageHelper.hideLoader();
                     }
                 }
             };
