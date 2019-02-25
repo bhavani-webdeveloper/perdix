@@ -557,7 +557,7 @@ function(LeadProcess, AngularResourceService) {
                             model.lead.leadStatus = "Screening";
                         } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy.toUpperCase() == 'IN THIS MONTH' ) {
                             model.lead.leadStatus = "FollowUp";
-                        }else if (model.lead.interestedInProduct == 'NO' && model.lead.productRequiredBy.toUpperCase() == 'NEXT 2 -3 MONTHS' ) {
+                        }else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy.toUpperCase() == 'NEXT 2 -3 MONTHS' ) {
                             model.lead.leadStatus = "FollowUp";
                         }else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy.toUpperCase() == 'NEXT 4-6 MONTHS' ) {
                             model.lead.leadStatus = "FollowUp";
