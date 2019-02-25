@@ -1,5 +1,10 @@
 irf.pageCollection.factory("Pages__CustomerRUD", ["$log", "$q", "Enrollment", "Queries", 'PageHelper', 'irfProgressMessage', '$stateParams', '$state', 'formHelper', "BASE_URL", "$window", "SessionStore","CustomerBankBranch", "Utils", "EnrollmentHelper","PagesDefinition",
     function($log, $q, Enrollment, Queries, PageHelper, irfProgressMessage, $stateParams, $state, formHelper, BASE_URL, $window, SessionStore, CustomerBankBranch,Utils, EnrollmentHelper,PagesDefinition) {
+        var checkCentre = function(model){
+            model.additional.isStrategicEdit = false;
+            if(typeof model.customer.centreId == "undefined" || model.customer.customerId)
+                model.additional.isStrategicEdit  = true;
+        }
         return {
             "id": "CustomerRUD",
             "type": "schema-form",
@@ -28,6 +33,8 @@ irf.pageCollection.factory("Pages__CustomerRUD", ["$log", "$q", "Enrollment", "Q
                     model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
                     //model = fixData(model);
                     model = EnrollmentHelper.fixData(model);
+                    model.additional = {isStrategicEdit:false};
+                    checkCentre(model);
                     PagesDefinition.getRolePageConfig("Page/Engine/customer360.EnrollmentProfile").then(function(data){
                         $log.info(data);
                         PageHelper.hideLoader();
@@ -1409,7 +1416,7 @@ irf.pageCollection.factory("Pages__CustomerRUD", ["$log", "$q", "Enrollment", "Q
                     }]
                 },
                 {
-                    "type": "box","readonly": true,"condition": "!model.config.isEditable",
+                    "type": "box","readonly": true,"condition": "!model.config.isEditable && !model.additional.isStrategicEdit",
                     "title": "CUSTOMER_INFORMATION",
                     "items": [{
                         "key": "customer.aadhaarNo",
@@ -1521,6 +1528,126 @@ irf.pageCollection.factory("Pages__CustomerRUD", ["$log", "$q", "Enrollment", "Q
                         "schema": {
                             "default": false
                         }
+                    }]
+                }, 
+                {
+                    "type": "box","condition": "!model.config.isEditable && model.additional.isStrategicEdit",
+                    "title": "CUSTOMER_INFORMATION",
+                    "items": [{
+                        "key": "customer.aadhaarNo",
+                        "type": "aadhar",
+                        "outputMap": {
+                            "uid": "customer.aadhaarNo",
+                            "name": "customer.firstName",
+                            "gender": "customer.gender",
+                            "dob": "customer.dateOfBirth",
+                            "yob": "customer.yearOfBirth",
+                            "co": "",
+                            "house": "customer.doorNo",
+                            "street": "customer.street",
+                            "lm": "",
+                            "loc": "customer.locality",
+                            "vtc": "customer.villageName",
+                            "dist": "customer.district",
+                            "state": "customer.state",
+                            "pc": "customer.pincode"
+                        },
+                        onChange: "actions.setProofs(model)",
+                        readonly:true
+                    }, {
+                        key: "customer.photoImageId",
+                        type: "file",
+                        fileType: "image/*",
+                        "viewParams": function(modelValue, form, model) {
+                            return {
+                                customerId: model.customer.id
+                            };
+                        },
+                        readonly:true
+                        //"offline": true
+                    }, {
+                        key: "customer.centreId",
+                        type: "select",
+                        "enumCode": "centre",
+                        "parentEnumCode": "branch_id",
+                        "parentValueExpr": "model.customer.customerBranchId",
+                    }, {
+                        key: "customer.enrolledAs",
+                        type: "radios",
+                        "readonly": true
+                    }, {
+                        key: "customer.firstName",
+                        "readonly": true,
+                        title: "FULL_NAME"
+                    }, {
+                        key: "customer.gender",
+                        type: "radios",
+                        "readonly": true,
+                    }, {
+                        key: "customer.age",
+                        "readonly": true,
+                        title: "AGE",
+                        type: "number",
+                        "onChange": function(modelValue, form, model) {
+                            if (model.customer.age > 0) {
+                                if (model.customer.dateOfBirth) {
+                                    model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-') + moment(model.customer.dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                                } else {
+                                    model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-MM-DD');
+                                }
+                            }
+                        }
+                    }, {
+                        key: "customer.dateOfBirth",
+                        "readonly": true,
+                        type: "date",
+                        "onChange": function(modelValue, form, model) {
+                            if (model.customer.dateOfBirth) {
+                                model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                            }
+                        }
+                    }, {
+                        key: "customer.fatherFirstName",
+                        "readonly": true,
+                        title: "FATHER_FULL_NAME"
+                    }, {
+                        key: "customer.maritalStatus",
+                        "readonly": true,
+                        type: "select"
+                    }, {
+                        key: "customer.spouseFirstName",
+                        title: "Spouse Full name",
+                        condition: "model.customer.maritalStatus==='MARRIED'",
+                        type: "qrcode",
+                        onCapture: function(result, model, form) {
+                            $log.info(result); // spouse id proof
+                            var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                            $log.info(aadhaarData);
+                            model.customer.udf.userDefinedFieldValues.udf33 = 'Aadhar card';
+                            model.customer.udf.userDefinedFieldValues.udf36 = aadhaarData.uid;
+                            model.customer.spouseFirstName = aadhaarData.name;
+                            if (aadhaarData.yob) {
+                                model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
+                            }
+                        },
+                        readonly:true
+                    }, {
+                        key: "customer.spouseDateOfBirth",
+                        type: "date",
+                        condition: "model.customer.maritalStatus==='MARRIED'",
+                        "onChange": function(modelValue, form, model) {
+                            if (model.customer.spouseDateOfBirth) {}
+                        },
+                        readonly:true
+                    }, {
+                        key: "customer.udf.userDefinedFieldValues.udf1",
+                        condition: "model.customer.maritalStatus==='MARRIED'",
+                        title: "SPOUSE_LOAN_CONSENT",
+                        type: "checkbox",
+                        "schema": {
+                            "default": false
+                        },
+                        readonly:true
                     }]
                 }, 
                 {
@@ -2856,6 +2983,7 @@ irf.pageCollection.factory("Pages__CustomerRUD", ["$log", "$q", "Enrollment", "Q
                             model.customer = _.clone(res.customer);
                             model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
                             model = EnrollmentHelper.fixData(model);
+                            checkCentre(model);
                             $state.go("Page.Engine", {
                                 pageName: "CustomerRUD",
                                 pageId: model.customer.id,
