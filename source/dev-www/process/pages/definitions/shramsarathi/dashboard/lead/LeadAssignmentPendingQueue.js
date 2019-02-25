@@ -38,12 +38,12 @@ define({
 							"title": "LEAD_NAME",
 							"type": "string"
 						},
-						"businessName": {
-							"title": "BUSINESS_NAME",
-							"type": "string"
-						},
+						// "businessName": {
+						// 	"title": "BUSINESS_NAME",
+						// 	"type": "string"
+						// },
 						"area": {
-							"title": "AREA",
+							"title": "PANCHAYAT",
 							"type": "string"
 						},
 						"cityTownVillage": {
@@ -98,7 +98,6 @@ define({
 						return [
 							item.leadId,
 							item.leadName,
-							item.businessName,
 							item.branchName,
 							item.addressLine1,
 							item.cityTownVillage,
@@ -119,9 +118,6 @@ define({
 						}, {
 							title: 'Lead Name',
 							data: 'leadName'
-						}, {
-							title: 'Business Name',
-							data: 'businessName'
 						}, {
 							title: 'Address Line1',
 							data: 'addressLine1'

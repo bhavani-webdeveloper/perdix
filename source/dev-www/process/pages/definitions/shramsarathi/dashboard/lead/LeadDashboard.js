@@ -29,7 +29,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
         var lfuqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.lead.LeadFollowUpQueue"];
         var rsMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.lead.ReadyForScreeningQueue"];
         var rMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.lead.LeadRejectedQueue"];
-        var lapqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.LeadAssignmentPendingQueue"];
+        var lapqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.lead.LeadAssignmentPendingQueue"];
        
         if (rMenu) rMenu.data = 0;
         if (rsMenu) rsMenu.data = 0;
@@ -122,6 +122,22 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
                     rMenu.data = rMenu.data + Number(response.headers['x-total-count']);
                 }, function() {
                     rMenu.data = '-';
+                });
+            }
+            if (lapqMenu) {
+                Lead.search({
+                    'branchName': branchName,
+                    'currentStage': "Assignment Pending",
+                    'leadName': '',
+                    'area': '',
+                    'cityTownVillage': '',
+                    'businessName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    lapqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    lapqMenu.data = '-';
                 });
             }
             
