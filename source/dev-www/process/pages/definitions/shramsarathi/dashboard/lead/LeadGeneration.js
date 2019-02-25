@@ -66,8 +66,8 @@ function(LeadProcess, AngularResourceService) {
                         // "condition":"(model.lead.centreName!==NULL)",
                     bindMap: {
                         "ZoneName": "lead.centreName",
-                        "LeadType": "lead.applicantCustomerId"
-                    },
+                        "LeadType": "lead.customerTypeString"
+                    }
                     },
                     "leadProfile.leadDetails.individualDetails.dob": {
                         "required": true
