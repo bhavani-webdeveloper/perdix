@@ -58,28 +58,23 @@ define([],function(){
                            PageHelper.showProgress("pre-save-validation", "You have to add atleast " + model.loanAccount.noOfGuarantersRequired + "guarantor before proceed",5000);
                            return false;
                         } else {
-                            for (var i=0;i<loanProcess.guarantorsEnrolmentProcesses.length; i++){
-                                var guarantor = loanProcess.guarantorsEnrolmentProcesses[i].customer;
-                                if (!_.hasIn(guarantor, 'urnNo') || _.isNull(guarantor, 'urnNo')){
-                                    PageHelper.showProgress("pre-save-validation", "All guarantors should complete the enrolment before proceed",5000);
-                                    return false;
-                                    break;
-                                } else {
-                                    // if (_.hasIn(guarantor, 'cbCheckList') && _.isArray(guarantor.cbCheckList) && guarantor.cbCheckList.length != 0){
-                                    //     for (var j=0;j<guarantor.cbCheckList.length; i++){
-                                    //         if(guarantor.cbCheckList[j].cbCheckValid != true) {
-                                    //             PageHelper.showProgress("pre-save-validation", "All guarantors should complete the CB Check before proceed",5000);
-                                    //             return false;
-                                    //             break;
-                                    //         } else {
-                                    //             return true; 
-                                    //         }
-                                    //     }
-                                    // } else {
-                                    //     PageHelper.showProgress("pre-save-validation", "All guarantors should complete the CB Check before proceed",5000);
-                                    //     return false;
-                                    //     break;
-                                    // }
+                            for (var i=0;i<loanProcess.loanAccount.loanCustomerRelations.length; i++){
+                                if(loanProcess.loanAccount.loanCustomerRelations[i].relation == "Guarantor") {
+                                    if (!_.hasIn(loanProcess.loanAccount.loanCustomerRelations[i], 'urn') || _.isNull(loanProcess.loanAccount.loanCustomerRelations[i], 'urn')){
+                                        PageHelper.showProgress("pre-save-validation", "All guarantors should complete the enrolment before proceed",5000);
+                                        return false;
+                                        break;
+                                    } else {
+                                        return true;
+                                        // if(loanProcess.loanAccount.loanCustomerRelations[i].highmarkCompleted == true && loanProcess.loanAccount.loanCustomerRelations[i].cibilCompleted == true)
+                                        // {
+                                        //     return true;
+                                        // } else {
+                                        //     PageHelper.showProgress("pre-save-validation", "All guarantors should complete the CB Check before proceed",5000);
+                                        //     return false;
+                                        //     break; 
+                                        // }
+                                    }
                                 }
                             }
                         }
@@ -2132,7 +2127,24 @@ define([],function(){
                                 }
                             })
                         }
-                    }
+                    },
+                    "cb-check-done": function(pageObj, bundlePageObj, cbCustomer) {
+                        $log.info(cbCustomer);
+                        if (cbCustomer.customerId) {
+                            BundleManager.broadcastEvent('cb-check-update', cbCustomer);
+                        }
+                    },
+                    "cb-check-update": function(bundleModel, model, params){
+                        $log.info("Inside cb-check-update of LoanRequest");
+                        for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                            if (model.loanAccount.loanCustomerRelations[i].customerId == params.customerId) {
+                                if(params.cbType == 'BASE')
+                                    model.loanAccount.loanCustomerRelations[i].highmarkCompleted = true;
+                                else if(params.cbType == 'CIBIL')
+                                    model.loanAccount.loanCustomerRelations[i].cibilCompleted = true;
+                            }
+                        }
+                    },
                 },
                 form: [],
                 schema: function() {
