@@ -156,6 +156,11 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                 ]
                             },
                             {
+                                key: "user.imeiNumber",
+                                title: "IMEI_NUMBER",
+                                //required: false
+                            },
+                            {
                                 key: "user.accessType",
                                 type: "select",
                                 title: "ACCESS_TYPE",
@@ -172,16 +177,42 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                 title: "PARTNER_CODE",
                                 enumCode: "partner"
                             },
-                            {
-                                key: "user.imeiNumber",
-                                type: "string",
-                                schema:{
-                                    pattern: "^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$",
-                                },
-                                title: "MAC Address",   
-                                validationMessage: { 202: "Only Valid Mac address is Allowed." }
+                            // {
+                            //     key: "user.imeiNumber",
+                            //     type: "string",
+                            //     schema:{
+                            //         pattern: "^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$",
+                            //     },
+                            //     title: "MAC Address",   
+                            //     validationMessage: { 202: "Only Valid Mac address is Allowed." }
 
-                            }
+                            // },
+
+                            
+                            {
+                                key: "user.allowedDevices",
+                                type: "array",
+                                //view: "fixed",
+                                title: "MAC_ADRESS",
+                                startEmpty: true,
+                                onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
+                                    //modelValue.bankId=model.bankId;
+                                },
+                                items: [
+                                    {
+                                        "key": "user.allowedDevices[].deviceId",
+                                        "title": "DEVICE_ID",
+                                        "type": "String",
+                                    },
+                                    {
+                                        "key": "user.login",
+                                        "title": "USER_ID",
+                                        readonly: true,
+                                        "type": "String",
+                                    },
+                                ]
+                            },
+                            
                         ]
                     },
                     {

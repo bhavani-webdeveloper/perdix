@@ -19,6 +19,22 @@ function($scope, authService, $log, $state, $stateParams, irfStorageService, Ses
 
 	var successLogin = function(refresh) {
 		$scope.showLoading = true;
+		if (Utils.isCordova) {
+			window.MacAddress.getMacAddress(
+				function(macAddress) {
+					macaddress=macAddress;
+					//console.log("mac address :"+macAddress);
+					window.plugins.imeiplugin.getImei(function (imei) {
+					//	console.log("IMEI :" + imei);
+						imeinumber=imei;
+						authService.login(username,password,macaddress,imeinumber).then(function() { successLogin(refresh) }, failedLogin);
+					},function(error){
+						console.log("imie error");
+					});
+					},function(fail) {alert(fail);
+					}
+				);
+			}
 		authService.postLogin(refresh).then(function() {
 			irfNavigator.goHome();
 			if (refresh) {
@@ -31,7 +47,30 @@ function($scope, authService, $log, $state, $stateParams, irfStorageService, Ses
 
 	var doLogin = function(username, password, refresh) {
 		$scope.showLoading = 'cc';
-		authService.login(username,password).then(function() { successLogin(refresh) }, failedLogin);
+		$log.info("doLogin()")
+		var macaddress=null;
+		var imeinumber=null;
+		if (Utils.isCordova) {
+			window.MacAddress.getMacAddress(
+				function(macAddress) {
+					//console.log("mac address : "+macAddress);
+					macaddress=macAddress;
+					window.plugins.imeiplugin.getImei(function (imei) {
+						//console.log("IMEI :" + imei);
+						imeinumber=imei;
+						authService.login(username,password,macaddress,imeinumber).then(function() { successLogin(refresh) }, failedLogin);
+					},function(error){
+						console.log("imie error");
+					});
+					
+				},function(fail) {alert(fail);
+					}
+				);
+		}
+		else{
+			authService.login(username,password).then(function() { successLogin(refresh) }, failedLogin);
+		}
+		
 	};
 
 	$scope.$on('server-connection-error', function(event, arg) {
