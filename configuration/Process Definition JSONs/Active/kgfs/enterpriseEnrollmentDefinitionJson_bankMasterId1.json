@@ -37,27 +37,27 @@
                     "heightInInch": {
                         "title": "Height (In)",
                         "type": "number",
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "weightInKg": {
                         "title": "Weight (Kg)",
                         "type": "number",
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "tobaccoConsumption": {
                         "title": "Tobacco Consumption",
                         "type": "boolean",
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "alcoholConsumption": {
                         "title": "Alcohol Consumption",
                         "type": "boolean",
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "narcoticsConsumption": {
                         "title": "Narcotics Consumption",
                         "type": "boolean",
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     }
                 }
             },
@@ -74,58 +74,58 @@
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 100,
-                            "captureStages": ["Stage01", "Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "familyMemberMiddleName": {
                             "title": "Middle Name",
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 100,
-                            "captureStages": ["Stage01", "Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "familyMemberLastName": {
                             "title": "Last Name",
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 100,
-                            "captureStages": ["Stage01", "Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "relationShip": {
                             "title": "Relationship",
                             "type": "string",
                             "refCodeCategory": "relation",
-                            "captureStages": ["Stage01", "Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "gender": {
                             "title": "Gender",
                             "type": "string",
                             "enum": ["Male", "Female", "Others"],
                             "refCodeCategory": "gender",
-                            "captureStages": ["Stage01", "Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "dateOfBirth": {
                             "title": "Date Of Birth",
                             "type": "string",
                             "format": "date",
-                            "captureStages": ["Stage01", "Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "educationStatus": {
                             "title": "Education Status",
                             "type": "string",
                             "refCodeCategory": "education",
-                            "captureStages": ["Stage01", "Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "mobilePhone": {
                             "title": "Mobile Phone",
                             "type": "string",
                             "minLength": 10,
                             "maxLength": 10,
-                            "captureStages": ["Stage01", "Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "maritalStatus": {
                             "title": "Marital Status",
                             "type": "string",
-                            "captureStages": ["Stage01", "Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "contributionToExpenditure": {
                             "title": "Contribution To Expenditure",
@@ -139,7 +139,7 @@
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 10,
-                            "captureStages": ["Stage01", "Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "anualEducationFee": {
                             "title": "anualEducationFee",
@@ -189,20 +189,20 @@
                         "expenditureSource": {
                             "title": "Expenditure Source",
                             "type": "string",
-                            "captureStages": ["Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "annualExpenses": {
                             "title": "Annual Expenses",
                             "type": "integer",
                             "minimum": 0,
                             "maximum": 10000000,
-                            "captureStages": ["Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "frequency": {
                             "title": "Frequency",
                             "type": "string",
                             "refCodeCategory": "frequency",
-                            "captureStages": ["Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "expenseType": {
                             "title": "Expense Type",
@@ -225,25 +225,25 @@
                             "title": "Occupation",
                             "type": "string",
                             "refCodeCategory": "occupation",
-                            "captureStages": ["Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "incomeEarned": {
                             "title": "Income",
                             "type": "integer",
                             "minimum": 0,
                             "maximum": 100000000,
-                            "captureStages": ["Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "frequency": {
                             "title": "Frequency",
                             "type": "string",
                             "refCodeCategory": "frequency",
-                            "captureStages": ["Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "monthsPerYear": {
                             "title": "Per Year",
                             "type": "integer",
-                            "captureStages": ["Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         }
                     }
                 }
@@ -259,45 +259,45 @@
                             "title": "Instrument Type",
                             "type": "string",
                             "refCodeCategory": "financialAssetInstrumentType",
-                            "captureStages": ["Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "nameOfInstitution": {
                             "title": "Institute Name",
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 100,
-                            "captureStages": ["Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "instituteType": {
                             "title": "Institution Type",
                             "type": "string",
                             "refCodeCategory": "finanical_asset",
-                            "captureStages": ["Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "amountInPaisa": {
                             "title": "Amount",
                             "type": "integer",
                             "minimum": 0,
                             "maximum": 100000000,
-                            "captureStages": ["Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "frequencyOfDeposite": {
                             "title": "Frequency Of Deposit",
                             "type": "string",
                             "refCodeCategory": "frequency",
-                            "captureStages": ["Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "startDate": {
                             "title": "Start Date",
                             "type": "string",
                             "format": "date",
-                            "captureStages": ["Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "maturityDate": {
                             "title": "Maturity Date",
                             "type": "string",
                             "format": "date",
-                            "captureStages": ["Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         }
                     }
                 }
@@ -325,12 +325,12 @@
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 100,
-                            "captureStages": ["Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "liabilityLoanPurpose": {
                             "title": "Loan Purpose",
                             "type": "string",
-                            "captureStages": ["Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "frequencyOfInstallment": {
                             "title": "Frequency Of Installment",
@@ -397,7 +397,7 @@
                             "title": "Maturity Date",
                             "type": "string",
                             "format": "date",
-                            "captureStages": ["Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "noOfInstalmentPaid": {
                             "title": "noOfInstalmentPaid",
@@ -440,7 +440,7 @@
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 10,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "centreId": {
                         "title": "Centre",
@@ -508,7 +508,7 @@
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "pincode": {
                         "title": "Pincode",
@@ -538,7 +538,7 @@
                         "type": "string",
                         "minLength": 5,
                         "maxLength": 15,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "inCurrentAddressSince": {
                         "title": "In Correct Address Since",
@@ -564,14 +564,14 @@
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "email": {
                         "title": "Email",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "mailSameAsResidence": {
                         "title": "Mail Same as Residence",
@@ -604,21 +604,21 @@
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "fatherFirstName": {
                         "title": "Father's First Name",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "fatherLastName": {
                         "title": "Father's Last Name",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "fatherMiddleName": {
                         "title": "Father's Middle Name",
@@ -643,24 +643,24 @@
                         "title": "Religion",
                         "type": "string",
                         "refCodeCategory": "religion",
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "caste": {
                         "title": "Caste",
                         "type": "string",
                         "refCodeCategory": "caste",
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "nameInLocalLanguage": {
                         "type": "string",
                         "title": "NAME_IN_LOCAL_LANGUAGE",
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "language": {
                         "title": "Language",
                         "type": "string",
                         "refCodeCategory": "language",
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "maritalStatus": {
                         "title": "Marital Status",
@@ -707,7 +707,7 @@
                         "type": "string",
                         "minLength": 0,
                         "maxLength": 10,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "authenticationRegisterId": {
                         "title": "Authentication Register Id",
@@ -719,7 +719,7 @@
                     "verified": {
                         "title": "Verified",
                         "type": "boolean",
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "partnerCode": {
                         "title": "partnerCode",
@@ -949,7 +949,7 @@
                     "ageProof": {
                         "title": "Age Proof",
                         "type": "string",
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "ageProofImageId": {
                         "title": "Age Proof Image",
@@ -959,41 +959,41 @@
                     "houseNo": {
                         "title": "HouseNo",
                         "type": "string",
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "houseNoIsVerified": {
                         "title": "House No is Verified",
                         "type": "number",
                         "minLength": 0,
                         "maxLength": 1,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "relationship": {
                         "title": "Relationship",
                         "type": "string",
                         "refCodeCategory": "relationship",
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "referenceFirstName": {
                         "title": "Reference First Name",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "referenceMiddleName": {
                         "title": "Reference Middle Name",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "referenceLastName": {
                         "title": "Reference Last Name",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     }
                 }
             },
@@ -1010,68 +1010,68 @@
                     "kyc1ProofType": {
                         "title": "Kyc1 Proof Type",
                         "type": "string",
-                        "captureStages": ["Stage01", "Stage02", "Completed"],
+                        "captureStages": ["BasicEnrolment", "Completed"],
                         "refCodeCategory": "identity_proof"
                     },
                     "kyc1ImagePath": {
                         "title": "Kyc1 Proof Document",
                         "type": "string",
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "kyc1ProofNumber": {
                         "title": "Kyc1 Proof Number",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "kyc1IssueDate": {
                         "title": "Kyc1 Issue Date",
                         "type": "string",
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "kyc1ValidUptoDate": {
                         "title": "Kyc1 valid upto Date",
                         "type": "string",
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "kyc2ProofType": {
                         "title": "Kyc2 Proof Type",
                         "type": "string",
-                        "captureStages": ["Stage01", "Stage02", "Completed"],
+                        "captureStages": ["BasicEnrolment", "Completed"],
                         "refCodeCategory": "kyc"
                     },
                     "kyc2ImagePath": {
                         "title": "Kyc2 Proof Document",
                         "type": "string",
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "kyc2ProofNumber": {
                         "title": "Kyc2 Proof Number",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "kyc2IssueDate": {
                         "title": "Kyc2 Issue Date",
                         "type": "string",
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "kyc2ValidUptoDate": {
                         "title": "Kyc2 valid upto Date",
                         "type": "string",
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "kyc1ReverseImagePath": {
                         "title": "kyc1 Reverse Image Path",
                         "type": "string",
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "kyc2ReverseImagePath": {
                         "title": "kyc2 Reverse Image Path",
                         "type": "string",
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     }
                 }
             },
@@ -1090,162 +1090,162 @@
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "referenceMiddleName": {
                         "title": "Reference Middle Name",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "referenceLastName": {
                         "title": "Reference Last Name",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "relationship": {
                         "title": "Relationship",
                         "type": "string",
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "occupation": {
                         "title": "Occupation",
                         "type": "string",
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "houseNo": {
                         "title": "Longitude",
                         "type": "string",
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "houseNoIsVerified": {
                         "title": "Longitude",
                         "type": "number",
                         "minLength": 0,
                         "maxLength": 1,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "businessSector": {
                         "title": "businessSector",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "businessSubSector": {
                         "title": "businessSubSector",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "selfReportedIncome": {
                         "title": "selfReportedIncome",
                         "type": "number",
                         "minimum": 0,
                         "maximum": 10000000,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "businessName": {
                         "title": "businessName",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "mobileNo": {
                         "title": "mobileNo",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 10,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "customerResponse": {
                         "title": "customerResponse",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 45,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "remarks": {
                         "title": "remarks",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 500,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "address": {
                         "title": "address",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 300,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "knownSince": {
                         "title": "knownSince",
                         "type": "number",
                         "minimum": 0,
                         "maximum": 99,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "opinion": {
                         "title": "opinion",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "financialStatus": {
                         "title": "financialStatus",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "goodsSold": {
                         "title": "goodsSold",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "goodsBought": {
                         "title": "goodsBought",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "paymentTerms": {
                         "title": "paymentTerms",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 50,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "modeOfPayment": {
                         "title": "modeOfPayment",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 50,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "outstandingPayable": {
                         "title": "outstandingPayable",
                         "type": "number",
                         "minimum": 1,
                         "maximum": 10000000,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "outstandingReceivable": {
                         "title": "outstandingReceivable",
                         "type": "number",
                         "minimum": 1,
                         "maximum": 10000000,
-                        "captureStages": ["Stage01", "Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     }
                 }
             },
@@ -1259,24 +1259,24 @@
                         "nameOfOwnedAsset": {
                             "title": "Name Of Owned Asset",
                             "type": "string",
-                            "captureStages": ["Stage01", "Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "assetType": {
                             "title": "Asset Type",
                             "type": "string",
-                            "captureStages": ["Stage01", "Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "unit": {
                             "title": "Unit",
                             "type": "string",
-                            "captureStages": ["Stage01", "Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "numberOfOwnedAsset": {
                             "title": "Number Of Owned Asset",
                             "type": "integer",
                             "minimum": 1,
                             "maximum": 10000,
-                            "captureStages": ["Stage01", "Stage02", "Completed"]
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         },
                         "vehicleModel": {
                             "title": "Name Of Owned Asset",
@@ -1318,48 +1318,48 @@
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "date": {
                         "title": "Date",
                         "type": "string",
                         "format": "date",
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "place": {
                         "title": "Place",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "houseVerificationPhoto": {
                         "title": "House Verification Photo",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "latitude": {
                         "title": "Latitude",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "longitude": {
                         "title": "Longitude",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "altitude": {
                         "title": "Longitude",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     }
                 }
             },
@@ -1385,77 +1385,77 @@
                     "fingerPrintisRequired": {
                         "title": "Finger Print is Required",
                         "type": "boolean",
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "leftHandIndexImageId": {
                         "title": "leftHandIndexImageId",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "leftHandMiddleImageId": {
                         "title": "leftHandMiddleImageId",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "leftHandRingImageId": {
                         "title": "leftHandRingImageId",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "leftHandSmallImageId": {
                         "title": "leftHandSmallImageId",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "leftHandThumpImageId": {
                         "title": "leftHandThumpImageId",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "rightHandIndexImageId": {
                         "title": "rightHandIndexImageId",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "rightHandMiddleImageId": {
                         "title": "rightHandMiddleImageId",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "rightHandRingImageId": {
                         "title": "rightHandRingImageId",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "rightHandSmallImageId": {
                         "title": "rightHandSmallImageId",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "rightHandThumpImageId": {
                         "title": "rightHandThumpImageId",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     }
                 }
             },
@@ -1474,183 +1474,183 @@
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 500,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf3": {
                         "title": "HOUSE_OWNERSHIP",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 500,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf4": {
                         "title": "HOUSE_DURATION_OF_STAY_MONTHS",
                         "type": "number",
                         "minimum": 0,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf5": {
                         "title": "HOUSE_CONDITION",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf6": {
                         "title": "TOILET",
                         "type": "boolean",
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf7": {
                         "title": "BUSINESS_OR_EMPLOYER_NAME",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf8": {
                         "title": "BUSINESS_VILLAGE",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf9": {
                         "title": "BUSINESS_LANDMARK",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf10": {
                         "title": "BUSINESS_PINCODE",
                         "type": "number",
                         "minLength": 1,
                         "maxLength": 6,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf11": {
                         "title": "BUSINESS_PHONE",
                         "type": "number",
                         "minLength": 1,
                         "maxLength": 10,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf12": {
                         "title": "IF_SHOP_RENTED_NAME_OF_LANDLORD",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf13": {
                         "title": "CUST_OCCUPATION_TYPE",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf14": {
                         "title": "RELATIONSHIP_WITH_BUSINESS_OWNER",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf15": {
                         "title": "CROP_NAME",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf16": {
                         "title": "WORK_PLACE_TYPE",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf17": {
                         "title": "WORK_PERIOD",
                         "type": "number",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf18": {
                         "title": "WORK_PLACE_BUILD_TYPE",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf19": {
                         "title": "WORK_PLACE_CONDITION",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf20": {
                         "title": "WORK_PLACE",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf21": {
                         "title": "WORK_PLACE_OTHERS",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf22": {
                         "title": "BUSINESS_REG_NO",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf23": {
                         "title": "BUSINESS_DESCRIPTION",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 500,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf24": {
                         "title": "RELATION_WITH_FARMER",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf25": {
                         "title": "LAND_OWNERSHIP",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf26": {
                         "title": "IRRIGATED",
                         "type": "boolean",
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf27": {
                         "title": "HARVEST_MONTH",
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf28": {
                         "title": "LAND_AREA",
                         "type": "number",
                         "minimum": 0,
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf29": {
                         "title": "ADDRESS_PROOF_BACK_SIDE",
@@ -1665,12 +1665,12 @@
                     "udf31": {
                         "title": "HOUSE_BUILD_TYPE",
                         "type": "string",
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf32": {
                         "title": "NUMBER_OF_ROOMS_IN_HOUSE",
                         "type": "number",
-                        "captureStages": ["Stage02", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "udf33": {
                         "title": "SPOUSE_ID_PROOF_TYPE",
