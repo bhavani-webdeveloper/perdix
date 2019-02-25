@@ -1412,7 +1412,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "orderNo": 40
                     },
                     "KYC.identityProofNo": {
-                        "orderNo": 50
+                        "orderNo": 50,
+                        onCapture: function (result, model, form) {
+                            $log.info(result);
+                            var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                            model.customer.identityProofNo = aadhaarData.uid;
+                        }
                     },
                     "KYC.addressProofFieldSet": {
                         "orderNo": 60
@@ -1426,7 +1431,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "orderNo": 80
                     },
                     "KYC.addressProofNo": {
-                        "orderNo": 90
+                        "orderNo": 90,
+                        condition: "model.customer.addressProof == 'Aadhar Card'",
+                                schema: {
+                                    "pattern": "^[2-9]{1}[0-9]{11}$",
+                                    "type": ["string", "null"],
+                                },
+                                onCapture: function (result, model, form) {
+                                    $log.info(result);
+                                    var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                                    model.customer.addressProofNo =  aadhaarData.uid;
+                                    EnrollmentHelper.customerAadhaarOnCapture(result,model,form);
+                                }
                     },
                     "KYC.additionalKYCs": {
                         "orderNo": 100
