@@ -1212,6 +1212,7 @@ define([],function(){
                             //"enumCode": "customerinfo_expect_interestra"
                         },
                         "PreliminaryInformation.frequencyRequested": {
+                            "required": true,
                             onChange:function(value,form,model){
                                 computeEstimatedEMI(model);
                             }
