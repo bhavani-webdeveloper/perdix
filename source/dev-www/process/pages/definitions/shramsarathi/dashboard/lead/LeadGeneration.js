@@ -25,13 +25,13 @@ function(LeadProcess, AngularResourceService) {
                         "required":true
                     },
                     "leadProfile.individualDetails.lastName":{
-                        "required": false
+                        "required": true
                     },
                     "leadProfile.individualDetails.dob":{
                         "required": true
                     },
                     "leadProfile.individualDetails.nickName":{
-                        "required": false
+                        "required": true
                     },
                     "leadProfile.individualDetails.educationStatus":{
                         "required":true
@@ -61,6 +61,13 @@ function(LeadProcess, AngularResourceService) {
                     },
                     "leadProfile.leadDetails.individualDetails.gender": {
                         "required": true
+                    },
+                    "leadProfile.individualDetails.existingApplicant":{
+                        // "condition":"(model.lead.centreName!==NULL)",
+                    bindMap: {
+                        "ZoneName": "lead.centreName",
+                        "LeadType": "lead.applicantCustomerId"
+                    },
                     },
                     "leadProfile.leadDetails.individualDetails.dob": {
                         "required": true
@@ -171,9 +178,9 @@ function(LeadProcess, AngularResourceService) {
                         "required":true
                         //"orderNo":20
                     },
-                    // "leadProfile.contactDetails.mobileNo":{
-                    //     "type" : "number"
-                    // },
+                    "leadProfile.contactDetails.mobileNo":{
+                      "order":9
+                    },
                     "leadProfile.contactDetails.cityTownVillage":{
                         "title":"VILLAGE",
                         required:true
@@ -187,16 +194,16 @@ function(LeadProcess, AngularResourceService) {
                     },
                     "leadProfile.contactDetails.addressLine1":{
                         "title":"HAMLET_FALA",
-                        //"orderNo":5
+                        "orderNo":12
                     },
                     "leadProfile.contactDetails.alternateMobileNo":{
-                        orderNo: 8
+                        orderNo: 10
                     },
                     "leadProfile.contactDetails.pincode": {
                         key: "lead.pincode",
                         type: "lov",
                         fieldType: "number",
-                        orderNo: 10,
+                        orderNo: 11,
                         inputMap: {
                             "pincode": "lead.pincode",
                             "division": {
@@ -378,7 +385,7 @@ function(LeadProcess, AngularResourceService) {
                                             "lastName": {
                                                 key: "lead.lastName",
                                                 title: "LAST_NAME",
-                                                required:true,
+                                                "required":true,
                                                 schema: {
                                                     pattern: "^[a-zA-Z\. ]+$",
                                                 },
@@ -393,7 +400,7 @@ function(LeadProcess, AngularResourceService) {
                                                 },
                                                 validationMessage: {202: "Only alphabets and space are allowed."},
                                                 "orderNo": 60,
-                                                required:true
+                                                "required":true
                                             }
                                             
                                     },
