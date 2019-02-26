@@ -106,7 +106,7 @@ irf.pageCollection.factory("LeadHelper", ["$log", "Queries", "$q", "Lead", 'Page
             $log.info(req);
             PageHelper.clearErrors();
             PageHelper.showLoader();
-            irfProgressMessage.pop('LeadBulkUpdate', 'Working ... ');
+            irfProgressMessage.pop('LeadBulkUpdate', 'Working ... ',5000);
             Lead.bulkLeadStatusUpdate(req, function(res, headers) {
                 PageHelper.hideLoader();
                 irfProgressMessage.pop('Bulk-lead-Reject', 'Done. lead Rejected', 5000);

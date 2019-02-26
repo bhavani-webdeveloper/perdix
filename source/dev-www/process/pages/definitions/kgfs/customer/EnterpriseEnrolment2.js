@@ -101,7 +101,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     model.loanAccount.emiEstimated = "";
                 }
             }
-            var computeTotalMonthlySurpluse = function (value, form, model) {
+            var computeTotalMonthlySurpluse = function (model) {
                 var businessIncome = 0;
                 var businessExpense = 0;
                 if (model.customer.incomeThroughSales) {
@@ -357,6 +357,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "EnterpriseFinancials.incomeThroughSales": {
                         "orderNo": 510,
                         "title": "BUSINESS_INCOME",
+                        onRemove: function (form, index, model) {
+                            console.log(model)
+                            computeTotalMonthlySurpluse(model);
+                        }
                     },
                     "EnterpriseFinancials.incomeThroughSales.incomeType": {
                         "type": "select",
@@ -364,7 +368,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EnterpriseFinancials.incomeThroughSales.amount": {
                         onChange: function (value, form, model) {
-                            computeTotalMonthlySurpluse(value, form, model);
+                            computeTotalMonthlySurpluse(model);
                         }
                     },
                     "EnterpriseFinancials.incomeThroughSales.frequency": {
@@ -375,6 +379,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "EnterpriseFinancials.rawMaterialExpenses": {
                         "orderNo": 520,
                         "title": "BUSINESS_EXPENSE",
+                        onRemove: function (form, index, model) {
+                            console.log(model)
+                            computeTotalMonthlySurpluse(value, form, model);
+                        }
                     },
                     "EnterpriseFinancials.rawMaterialExpenses.rawMaterialType": {
                         "type": "select",
