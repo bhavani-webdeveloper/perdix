@@ -129,7 +129,7 @@ define(['perdix/domain/model/lead/LeadRepository'], function(LeadRepository) {
                             .subscribe(function(val) {
                                 irfNavigator.go({
                                     state: "Page.Adhoc",
-                                    pageName: "shramsarathi.dashboard.loans.individual.LoanOriginationDashboard"
+                                    pageName: "shramsarathi.dashboard.lead.LeadDashboard"
                                 });
                             }, function(err) {
                                 PageHelper.showErrors(err);
