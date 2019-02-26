@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbursementQueue"),
-    ["$log", "formHelper", "$state", "SessionStore", "$q", "IndividualLoan","PageHelper","entityManager","irfProgressMessage","Locking",
-        function($log, formHelper,  $state, SessionStore, $q, IndividualLoan,PageHelper,entityManager,irfProgressMessage,Locking){
+    ["$log", "formHelper", "$state", "SessionStore", "$q", "IndividualLoan","PageHelper","entityManager","irfProgressMessage","Locking","$filter",
+        function($log, formHelper,  $state, SessionStore, $q, IndividualLoan,PageHelper,entityManager,irfProgressMessage,Locking,$filter){
             return {
                 "type": "search-list",
                 "title": "READY_FOR_DISBURSEMENT_QUEUE",
@@ -37,6 +37,55 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                     "screenFilter": true
                                 }
                             },
+                            "loanType": {
+                                "key": "product.loanType",
+                                "title": "LOAN_TYPE",
+                                "type": ["string","null"],
+                                "x-schema-form": {
+                                    "type": "select",
+                                    "titleMap": [{
+                                        "name": "JLG",
+                                        "value": "JLG"
+                                    }, {
+                                        "name": "JEWEL",
+                                        "value": "JEWEL"
+                                    }, {
+                                        "name": "SECURED",
+                                        "value": "SECURED",
+                                    }, {
+                                        "name": "UNSECURED",
+                                        "value": "UNSECURED",
+                                    }]
+                                }
+                            },
+                            "loan_product": {
+                                "title": "Loan Product",
+                                "type": "string",
+        
+                                "x-schema-form": {
+                                    "type": "lov",
+                                    "lovonly": true,
+                                    search: function (inputModel, form, model, context) {
+                                        var loanProduct = formHelper.enum('loan_product').data;
+                                        var products = $filter('filter')(loanProduct, {parentCode: model.partner_code ? model.partner_code : undefined}, true);
+        
+                                        return $q.resolve({
+                                            headers: {
+                                                "x-total-count": products.length
+                                            },
+                                            body: products
+                                        });
+                                    },
+                                    onSelect: function (valueObj, model, context) {
+                                        model.loan_product = valueObj.field1;
+                                    },
+                                    getListDisplayItem: function (item, index) {
+                                        return [
+                                            item.name
+                                        ];
+                                    },
+                                }
+                            },
                             "centre": {
                                 "title": "CENTRE",
                                 "type": ["integer", "null"],
@@ -66,6 +115,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                             'currentStage': 'ReadyForDisbursement',
                             'branchId':searchOptions.branch,
                             'centreId': searchOptions.centre,
+                            'loanType':searchOptions.loanType,
+                            'productCode': searchOptions.loan_product,
                             'customerSignatureDate': searchOptions.customerSignatureDate,
                             'scheduledDisbursementDate': searchOptions.scheduledDisbursementDate,
                             'page': pageOpts.pageNo,
@@ -97,7 +148,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                             return [
                                 item.customerName + " ( Loan Account #: "+item.accountNumber+")",
                                 "<em>Disbursed Amount:  &#8377;"+((!item.disbursedAmount)?0:item.disbursedAmount)+", Disbursement Amount :  &#8377;"+item.disbursementAmount
-                                +", Scheduled Disbursement Date :" + ((!item.scheduledDisbursementDate) ? " NA " : item.scheduledDisbursementDate) +"</em>"
+                                +", Scheduled Disbursement Date :" + ((!item.scheduledDisbursementDate) ? " NA " : item.scheduledDisbursementDate) + (item.groupCode?  ", Group Code :" +item.groupCode : "" ) + "</em>"
                             ]
                         },
                         getActions: function(){

@@ -13,6 +13,12 @@ define({
         var nDays = 15;
         var fixData = function(model) {
             model.group.tenure = parseInt(model.group.tenure);
+            model.group.cgtDate11 = moment(model.group.cgtDate1).format("DD-MM-YYYY HH:mm:ss");
+            model.group.cgtEndDate11 = moment(model.group.cgtEndDate1).format("DD-MM-YYYY HH:mm:ss");
+            model.group.cgtDate12 = moment(model.group.cgtDate2).format("DD-MM-YYYY HH:mm:ss");
+            model.group.cgtEndDate12 = moment(model.group.cgtEndDate2).format("DD-MM-YYYY HH:mm:ss");
+            model.group.cgtDate13 = moment(model.group.cgtDate3).format("DD-MM-YYYY HH:mm:ss");
+            model.group.cgtEndDate13 = moment(model.group.cgtEndDate3).format("DD-MM-YYYY HH:mm:ss");
             if (model.group.udf1 == "true") model.group.udf1 = true;
             if (model.group.udf2 == "true") model.group.udf2 = true;
             if (model.group.udf3 == "true") model.group.udf3 = true;
@@ -836,7 +842,129 @@ define({
                         }
                     }]
                 }]
-            }, {
+            },
+            {
+                "type": "box",
+                "title": "CGT And GRT Details",
+                "colClass": "col-sm-12",
+                "items": [{
+                    "type": "section",
+                    "htmlClass": "col-sm-6",
+                    "items": [{
+                        "title": "CGT_1_PHOTO",
+                        readonly: true,
+                        "key": "group.cgt1Photo",
+                        "category": "Group",
+                        "subCategory": "CGT1PHOTO",
+                        "type": "file",
+                        "fileType": "image/*",
+                    },{
+                        "key": "group.cgtDate11",
+                        "title": "CGT_1_START_DATE",
+                        //"type": "date",
+                        "readonly": true
+                    }, ,{
+                        "key": "group.cgtEndDate11",
+                        "title": "CGT_1_END_DATE",
+                        //"type": "date",
+                        "readonly": true
+                    },{
+                        "title": "CGT_2_PHOTO",
+                        readonly: true,
+                        "key": "group.cgt2Photo",
+                        "category": "Group",
+                        "subCategory": "CGT1PHOTO",
+                        "type": "file",
+                        "fileType": "image/*",
+                    },
+                    {
+                        "key": "group.cgtDate12",
+                        "title": "CGT_2_START_DATE",
+                        //"type": "date",
+                        "readonly": true
+                    },{
+                        "key": "group.cgtEndDate12",
+                        "title": "CGT_2_END_DATE",
+                        //"type": "date",
+                        "readonly": true
+                    },{
+                        "title": "CGT_3_PHOTO",
+                        readonly: true,
+                        "key": "group.cgt3Photo",
+                        "category": "Group",
+                        "subCategory": "CGT1PHOTO",
+                        "type": "file",
+                        "fileType": "image/*",
+                    }, {
+                        "key": "group.cgtDate13",
+                        "title": "CGT_3_START_DATE",
+                        //"type": "date",
+                        "readonly": true
+                    },{
+                        "key": "group.cgtEndDate13",
+                        "title": "CGT_3_END_DATE",
+                        //"type": "date",
+                        "readonly": true
+                    }]
+                }, {
+                    "type": "section",
+                    "htmlClass": "col-sm-6",
+                    "items": [
+                        
+                        {   
+                            readonly: true,
+                            "key": "group.cgt1EndPhoto",
+                            "title": "CGT_1_PHOTO",
+                            "category": "Group",
+                            "subCategory": "CGT1PHOTO",
+                            "type": "file",
+                            "fileType": "image/*"
+                        },{
+                            "key": "group.cgt1Latitude",
+                            "title": "CGT_1_LOCATION",
+                            "type": "geotag",
+                            "latitude": "group.cgt1Latitude",
+                            "longitude": "group.cgt1Longitude",
+                            "readonly": true
+                        },
+                        {
+                        "title": "CGT_2_PHOTO",
+                        readonly: true,
+                        "key": "group.cgt2EndPhoto",
+                        "category": "Group",
+                        "subCategory": "CGT1PHOTO",
+                        "type": "file",
+                        "fileType": "image/*"
+                    }, {
+                        "key": "group.cgt2Latitude",
+                        "title": "CGT_2_LOCATION",
+                        "type": "geotag",
+                        "latitude": "group.cgt2Latitude",
+                        "longitude": "group.cgt2Longitude",
+                        "readonly": true
+                    }]
+                }, {
+                    "type": "section",
+                    "htmlClass": "col-sm-6",
+                    "items": [{
+                        readonly: true,
+                        "key": "group.cgt3EndPhoto",
+                        "title": "CGT_3_PHOTO",
+                        "category": "Group",
+                        "subCategory": "CGT1PHOTO",
+                        "type": "file",
+                        "fileType": "image/*"
+                    }, {
+                        "key": "group.cgt1Latitude",
+                        "title": "CGT_3_LOCATION",
+                        "type": "geotag",
+                        "latitude": "group.cgt3Latitude",
+                        "longitude": "group.cgt3Longitude",
+                        "readonly": true
+                    }]
+                }]
+            },
+            {
                 "type": "box",
                 "title": "GROUP_MEMBERS",
                 "condition": "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
