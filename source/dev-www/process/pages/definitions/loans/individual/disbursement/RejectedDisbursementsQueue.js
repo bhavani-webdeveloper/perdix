@@ -1,5 +1,5 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.RejectedDisbursementQueue"),
-    ["$log", "formHelper", "$state", "SessionStore", "$q", "IndividualLoan","PageHelper","entityManager","$filter"
+    ["$log", "formHelper", "$state", "SessionStore", "$q", "IndividualLoan","PageHelper","entityManager","$filter",
         function($log, formHelper,  $state, SessionStore, $q, IndividualLoan,PageHelper,entityManager,$filter){
             return {
                 "type": "search-list",
