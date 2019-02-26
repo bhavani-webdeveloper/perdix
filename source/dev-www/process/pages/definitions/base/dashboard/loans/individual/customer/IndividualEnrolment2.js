@@ -1386,6 +1386,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto":{
                         "required": true
                     },
+                    "BankAccounts.customerBankAccounts.bankStatements.closingBalance":{
+                        "orderNo":125,
+                        "title":"Closing Bank Balance",
+                        "onChange": function(modelValue, form, model, formCtrl, event) {
+                            var index = form.key[2];
+                            var indexBank = form.key[4];
+                            if (model.customer.customerBankAccounts[index].bankStatements[indexBank].closingBalance) {
+                             model.customer.customerBankAccounts[index].bankStatements[indexBank].totalWithdrawals = model.customer.customerBankAccounts[index].bankStatements[indexBank].totalDeposits - model.customer.customerBankAccounts[index].bankStatements[indexBank].closingBalance;
+                            }
+                        }
+                    },
+            
                      "IndividualInformation.centreId": {
                         "resolver": "CentreLOVConfiguration",
                         "title": "CENTRE_ID",
@@ -1836,11 +1848,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "BankAccounts.customerBankAccounts.bankStatements",
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth",
                     // "BankAccounts.customerBankAccounts.bankStatements.openingBalance",
-                    // "BankAccounts.customerBankAccounts.bankStatements.closingBalance",
                     //"BankAccounts.customerBankAccounts.bankStatements.emiAmountdeducted",
                     "BankAccounts.customerBankAccounts.bankStatements.cashDeposits",
                     "BankAccounts.customerBankAccounts.bankStatements.nonCashDeposits",
                     "BankAccounts.customerBankAccounts.bankStatements.totalDeposits",
+                    "BankAccounts.customerBankAccounts.bankStatements.closingBalance",
                     "BankAccounts.customerBankAccounts.bankStatements.totalWithdrawals",
                     "BankAccounts.customerBankAccounts.bankStatements.balanceAsOn15th",
                     "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced",

@@ -832,7 +832,7 @@ self["financial-summary"] = function(params) {
 						}
 					}
 				},{
-					"title": "MAITREYA_EMI",
+					"title": "Maitreya EMI",
 					"amount": "",
 					"total": bpl['Kinara EMI'],
 					"percentage": CalPercentage(parseInt(bpl['Net Income']), parseInt(bpl['Kinara EMI'])),
@@ -1024,7 +1024,7 @@ self["financial-summary"] = function(params) {
 						}
 					}
 				}, {
-					"title": "MAITREYA_EMI",
+					"title": "Maitreya EMI",
 					"amount": "",
 					"total": bpl['Kinara EMI'],
 					"percentage": CalPercentage(parseInt(bpl['Net Income']), parseInt(bpl['Kinara EMI'])),

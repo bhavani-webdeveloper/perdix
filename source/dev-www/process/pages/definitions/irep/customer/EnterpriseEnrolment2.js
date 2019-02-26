@@ -37,6 +37,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          "type": "password",
                          "required": true
                     },
+                    "EnterpriseInformation.centreId":{
+                        "enumCode": "usercentre",
+                    },
                     "EnterpriseInformation.rentLeaseStatus": {
                          "schema": {
                               "enumCode": "rent_lease_status"
@@ -2485,6 +2488,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             })
                             .then(function(enrolmentProcess){
                                 if (!enrolmentProcess){
+                                    if (params.customer.centreId)
+                                        model.customer.centreId = params.customer.centreId;
                                     /* IF no enrolment present, reset to applicant */
                                     model.customer.enterpriseCustomerRelations[0].linkedToCustomerId = params.customer.id;
                                     model.customer.enterpriseCustomerRelations[0].linkedToCustomerName = params.customer.firstName;

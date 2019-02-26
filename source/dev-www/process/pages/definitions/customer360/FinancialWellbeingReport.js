@@ -28,7 +28,7 @@ function($log, $scope, $stateParams, irfNavigator, $sce, PageHelper, SessionStor
     }, handleError).finally(PageHelper.hideLoader);
 
     $scope.launchPrint = function() {
-        var fwrPrintWindow = window.open($scope.fwrDashboardURL);
+        var fwrPrintWindow = window.open($scope.fwrDashboardURL + '&print=true');
         /* Below code crashes, so commented */
         // fwrPrintWindow.focus();
         // fwrPrintWindow.print();
