@@ -2390,7 +2390,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         //     "orderNo": 181
                                         // },
                                         "mailingLandmark": {
-                                            "key": "customer.Landmark",
+                                            "key": "customer.landmark",
                                             "title": "LANDMARK",
                                             "type": "string",
                                             "condition": "!model.customer.mailSameAsResidence"
