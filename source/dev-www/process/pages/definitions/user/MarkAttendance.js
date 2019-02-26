@@ -3,9 +3,7 @@ irf.pageCollection.factory(irf.page("user.MarkAttendance"),
         'SessionStore',"$state","$stateParams","Masters","authService", "User", "SchemaResource","Queries","Enrollment",
         function($log, $q, ManagementHelper, PageHelper, formHelper,Utils,
             SessionStore,$state,$stateParams,Masters,authService, User, SchemaResource,Queries,Enrollment){
-
-           
-                
+       
             return {
                 "name":"MARK_ATTENDANCE",
                 "type": "schema-form",
@@ -53,10 +51,19 @@ irf.pageCollection.factory(irf.page("user.MarkAttendance"),
                             .$promise
                             .then(function(user){
                                 PageHelper.showProgress('loading-user', 'Done.', 5000);
+                                model.user = user;
+                                model.customer = {};
                                 Enrollment.getCustomerById({id:user.customerId}).$promise.then(function(resp){
                                     model.customer = resp;
                                 })
                                 model.customer.userType = user.roleCode;
+                                model.customer.biometricAuthentication = "";
+                                model.customer.branch = user.branchName;
+                                model.customer.employeeId = user.employeeId;
+                                model.customer.loggedInUser =SessionStore.getLoginname();
+                                model.customer.userId = $stateParams.pageId;
+
+
                                 var branches = formHelper.enum('branch_id').data;
                                 for (var i = 0; i < branches.length; i++) {
                                     var branch = branches[i];
@@ -112,14 +119,13 @@ irf.pageCollection.factory(irf.page("user.MarkAttendance"),
                                         model.customer.time     = new Date().toLocaleTimeString();
                                         model.customer.date     = new Date();
                                     }
-                                    console.log(model.customer.datetime);
                                 }
                             
                             }, 
                             {
                                 key:"customer.datetime",
-                                title:"LOGIN_TIME",
-                                
+                                "title": "LOG_TIME",
+                                "titleExpr": "model.customer.type == 'IN' ? 'Login Time' : 'Logout Time'",
                                 "readonly": true,
                                 condition:"model.customer.type"
 
@@ -128,7 +134,7 @@ irf.pageCollection.factory(irf.page("user.MarkAttendance"),
                                 title:   "REMARKS",
                                 key  :   "customer.remarks",
                                 type :   "textarea",
-                                required: true
+                                required: false
                             },
                         ]
                     },
@@ -150,7 +156,8 @@ irf.pageCollection.factory(irf.page("user.MarkAttendance"),
                                  type:"text",
                                  "orderNo":20,
                                  "title":"OVERRIDE_REMARKS",
-                                 condition:"model.customer.fpOverrideRequested"
+                                 condition:"model.customer.fpOverrideRequested", 
+                                 required: true
                                 },
                                 {
                                     condition: "!model.customer.fpOverrideRequested",
@@ -178,6 +185,9 @@ irf.pageCollection.factory(irf.page("user.MarkAttendance"),
                                             customerId: model.customer.id
                                         };
                                     },
+                                    onValidate: function(valueObj,status,form,model){
+                                       
+                                    }
                                 }
                          ]
                     },
@@ -233,15 +243,6 @@ irf.pageCollection.factory(irf.page("user.MarkAttendance"),
                             }
                         }
 
-                        if (_.has(model.user, 'id') && !_.isNull(model.user.id)){
-
-                        } else {
-                            /* New User */
-                            if (model.user.password != model.user.confirmPassword){
-                                PageHelper.showProgress("user-validate", "Password and Confirm Password doesnt match", 5000);
-                                return;
-                            }
-                        }
                         PageHelper.showLoader();
                         try {
                             Queries.getBankName(model.bankId).then(function(data){
@@ -261,39 +262,14 @@ irf.pageCollection.factory(irf.page("user.MarkAttendance"),
 
                                 Utils.confirm("Are you sure?")
                                     .then(function(){
-                                        // if (_.has(model.user, 'id') && !_.isNull(model.user.id)){
-                                        //     /* Existing User */
-                                        //     User.update(model.user)
-                                        //         .$promise
-                                        //         .then(function(response){
-                                        //             PageHelper.showProgress("user-update", 'Done', 5000);
-                                        //             model.user = response;
-                                        //             var branches = formHelper.enum('branch_id').data;
-                                        //             for (var i = 0; i < branches.length; i++) {
-                                        //                 var branch = branches[i];
-                                        //                 if (branch.name == model.user.branchName) {
-                                        //                     model.user.branchId = branch.value;
-                                        //                 }
-                                        //             }
-                                        //         }, function(httpResponse){
-                                        //             PageHelper.showProgress("user-update", 'Failed.', 5000);
-                                        //             PageHelper.showErrors(httpResponse);
-                                        //         })
-                                        //         .finally(function(){
-                                        //             PageHelper.hideLoader();
-                                        //         })
-                                        // } else {
-                                            /* New User */
                                             console.log(model.customer);    
-                                            User.createUserAttendance(model.user)
-                                                .$promise
+                                            User.createUserAttendance(model.customer).$promise
                                                 .then(function(response){
                                                     PageHelper.showProgress("user-update", 'Done', 5000);
-                                                    model.user = response;
-                                                    $state.go("Page.Engine", {pageName: 'user.UserMaintanence'}, {reload: true});
-                                                }, function(httpResponse){
-                                                    PageHelper.showProgress("user-update", 'Failed.', 5000);
-                                                    PageHelper.showErrors(httpResponse);
+                
+                                                }, function(err){
+                                                    PageHelper.showProgress("user-update", 'User Details Already Captured.', 5000);
+                                                    PageHelper.showErrors(err);
                                                 })
                                                 .finally(function(){
                                                     PageHelper.hideLoader();

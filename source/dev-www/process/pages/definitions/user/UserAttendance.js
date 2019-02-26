@@ -141,7 +141,7 @@ irf.pageCollection.factory(irf.page("user.UserAttendance"),
 					getColumns: function() {
 						return [
                             {
-                                title: 'User ID',
+                                title: 'User Name',
                                 data: 'userName'
                             },
                             {
