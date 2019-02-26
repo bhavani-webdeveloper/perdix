@@ -35,10 +35,10 @@ define({
 							"title": "LEAD_NAME",
 							"type": "string"
 						},
-						"businessName": {
-							"title": "BUSINESS_NAME",
-							"type": "string"
-						},
+						// "businessName": {
+						// 	"title": "BUSINESS_NAME",
+						// 	"type": "string"
+						// },
 						"area": {
 							"title": "PANCHAYAT",
 							"type": "string"
@@ -128,7 +128,7 @@ define({
 						'currentStage': "Inprocess",
 						 'leadStatus': "FollowUp",
 						 'leadName': searchOptions.leadName,
-					    'businessName': searchOptions.businessName,
+					    // 'businessName': searchOptions.businessName,
 						 'followUpDate': searchOptions.followUpDate,
 						 'area': searchOptions.area,
 						'cityTownVillage': searchOptions.cityTownVillage,
@@ -161,7 +161,7 @@ define({
 						return [
 							item.leadId,
 							item.leadName,
-							item.businessName,
+							// item.businessName,
 							item.branchName,
 							item.addressLine1,
 							item.cityTownVillage,
@@ -183,10 +183,12 @@ define({
 						}, {
 							title: 'Lead Name',
 							data: 'leadName'
-						}, {
-							title: 'Business Name',
-							data: 'businessName'
-						}, {
+						},
+						//  {
+						// 	title: 'Business Name',
+						// 	data: 'businessName'
+						// },
+						 {
 							title: 'Follow Up Date',
 							data: 'followUpDate'
 						}, {

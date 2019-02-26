@@ -1,4 +1,4 @@
-define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProcess) {
+define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/AngularResourceService'], function(EnrolmentProcess, AngularResourceService) {
     EnrolmentProcess = EnrolmentProcess['EnrolmentProcess'];
 
     return {
@@ -9,6 +9,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
         $pageFn: function($log, $q, Enrollment,IrfFormRequestProcessor, EnrollmentHelper, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, BundleManager, $filter, $injector, UIRepository) {
+        AngularResourceService.getInstance().setInjector($injector);
             var overridesFields = function(bundlePageObj){
                return {
                     "ContactInformation.pincode": {
@@ -62,9 +63,110 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.oldCustomerId":{
                         "condition": "model.customer.oldCustomerId"
                     },
-                    // "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId":{
-                    //     "readonly": true
-                    // },
+                    "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId":{
+                        type: "lov",
+                        title: "CUSTOMER_ID",
+                            inputMap: {
+                                "firstName": {
+                                    "key": "customer.firstName",
+                                    "title": "CUSTOMER_NAME"
+                                },
+                                "customerBranchId": {
+                                    "key": "customer.customerBranchId",
+                                    "type": "select",
+                                    "screenFilter": true,
+                                    "readonly": true
+                                },
+                                "centreName": {
+                                    "key": "customer.place",
+                                    "title":"CENTRE_NAME",
+                                    "type": "string",
+                                    "readonly": true,
+                        
+                                },
+                                "centreId":{
+                                    "key": "customer.centreId",
+                                    "type": "lov",
+                                    "autolov": true,
+                                    "lovonly": true,
+                                    "bindMap": {},
+                                    "search": function(inputModel, form, model, context) {
+                                        let SessionStore = AngularResourceService.getInstance().getNGService("SessionStore");
+                                        let formHelper = AngularResourceService.getInstance().getNGService("formHelper");
+                                        let $q = AngularResourceService.getInstance().getNGService("$q");
+                                        let centres = SessionStore.getCentres();
+                                        // $log.info("hi");
+                                        // $log.info(centres);
+                        
+                                        let centreCode = formHelper.enum('centre').data;
+                                        let out = [];
+                                        if (centres && centres.length) {
+                                            for (var i = 0; i < centreCode.length; i++) {
+                                                for (var j = 0; j < centres.length; j++) {
+                                                    if (centreCode[i].value == centres[j].id) {
+                        
+                                                        out.push({
+                                                            name: centreCode[i].name,
+                                                            id:centreCode[i].value
+                                                        })
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        return $q.resolve({
+                                            headers: {
+                                                "x-total-count": out.length
+                                            },
+                                            body: out
+                                        });
+                                    },
+                                    "onSelect": function(valueObj, model, context) {
+                                        model.centreId = valueObj.id;
+                                        model.centreName = valueObj.name;
+                                    },
+                                    "getListDisplayItem": function(item, index) {
+                                        return [
+                                            item.name
+                                        ];
+                                    }
+                                }
+                            },
+                            outputMap: {
+                                "id": "customer.enterpriseCustomerRelations[arrayIndex].linkedToCustomerId",
+                                "firstName": "customer.enterpriseCustomerRelations[arrayIndex].linkedToCustomerName"
+                            },
+                            searchHelper: formHelper,
+                            search: function(inputModel, form, model) {
+                                if (!inputModel.branchName)
+                                    inputModel.branchName = SessionStore.getBranch();
+                                var promise = Enrollment.search({
+                                    'branchName': inputModel.branchName,
+                                    'firstName': inputModel.firstName,
+                                    'centreId': inputModel.centreId,
+                                    'customerType': 'Individual'
+                                }).$promise;
+                                return promise;
+                            },
+                            getListDisplayItem: function(data, index) {
+                                return [
+                                    [data.firstName, data.fatherFirstName].join(' '),
+                                    data.id
+                                ];
+                            },
+                            onSelect: function(valueObj, model, context){
+                                PageHelper.showProgress('customer-load', 'Loading customer...');
+                                Enrollment.getCustomerById({id: valueObj.id})
+                                    .$promise
+                                    .then(function(res){
+                                        PageHelper.showProgress("customer-load", "Done..", 5000);
+                                        model.customer.enterpriseCustomerRelations[arrayIndex].linkedToCustomerId = res.customer.id;
+                                        model.customer.enterpriseCustomerRelations[arrayIndex].linkedToCustomerName = res.customer.firstName;
+                                    }, function(httpRes){
+                                        PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
+                                })
+                            }
+                       
+                    },
                     "EnterpriseInformation.enterpriseRegistrations.registrationType": {
                          "enumCode": "business_registration_type",
                          "required": false
@@ -229,6 +331,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          "type": "password",
                          "required": true
                     },
+                    "BankAccounts.customerBankAccounts.bankStatements.closingBalance":{
+                        "orderNo":125,
+                        "title":"Closing Bank Balance",
+                        "onChange": function(modelValue, form, model, formCtrl, event) {
+                            var index = form.key[2];
+                            var indexBank = form.key[4];
+                            if (model.customer.customerBankAccounts[index].bankStatements[indexBank].closingBalance) {
+                             model.customer.customerBankAccounts[index].bankStatements[indexBank].totalWithdrawals = model.customer.customerBankAccounts[index].bankStatements[indexBank].totalDeposits - model.customer.customerBankAccounts[index].bankStatements[indexBank].closingBalance;
+                            }
+                        }
+                    },
+            
                     "EnterpriseInformation.rentLeaseStatus": {
                          "schema": {
                               "enumCode": "rent_lease_status"
@@ -828,7 +942,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "BankAccounts.customerBankAccounts.bankStatements",
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth",
                    // "BankAccounts.customerBankAccounts.bankStatements.openingBalance",
-                    //"BankAccounts.customerBankAccounts.bankStatements.closingBalance",
+                    "BankAccounts.customerBankAccounts.bankStatements.closingBalance",
                    // "BankAccounts.customerBankAccounts.bankStatements.emiAmountdeducted",
                     "BankAccounts.customerBankAccounts.bankStatements.cashDeposits",
                     "BankAccounts.customerBankAccounts.bankStatements.nonCashDeposits",
@@ -2477,6 +2591,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest(), configFile(), model)
                         })
                         .then(function(form){
+                            console.log(form);
                             self.form = form;
                         });
                 },

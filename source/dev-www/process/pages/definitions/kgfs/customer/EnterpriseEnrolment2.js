@@ -2641,7 +2641,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 },
                                 {
                                     "type": "actionbox",
-                                    "condition": "model.customer.currentStage",
+                                    "condition": "model.customer.currentStage && (model.currentStage=='Screening' || model.currentStage=='Application' || model.currentStage=='CreditAppraisal' || (model.currentStage=='GuarantorAddition' && model.pageClass=='guarantor'))",
                                     "orderNo": 1000,
                                     "items": [
                                         {
