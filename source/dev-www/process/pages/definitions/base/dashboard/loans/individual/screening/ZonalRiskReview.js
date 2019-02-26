@@ -55,7 +55,7 @@ irf.pageCollection.factory(irf.page('base.dashboard.loans.individual.screening.Z
             // },
              {
                 pageName: 'loans.individual.screening.detail.PortfolioAnalysis',
-                title: 'CUSTOMER HISTORY',
+                title: 'Customer History',
                 pageClass: 'portfolio-analysis',
                 minimum: 1,
                 maximum: 1,
