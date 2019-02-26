@@ -1694,7 +1694,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "orderNo":40
                     },
                     "KYC.addressProofIssueDate":{
-                        "orderNo":70
+                        "orderNo":80
                     },
                     "KYC.addressProofValidUptoDate":{
                         "orderNo":80
@@ -1784,10 +1784,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "readonly": true
                     },
                     "KYC.addressProofImageId": {
-                        "orderNo": 80
+                        "orderNo": 70
                     },
                     "KYC.addressProofNo": {
-                        "orderNo": 90
+                        "orderNo": 78
                     },
                     "KYC.additionalKYCs": {
                         "orderNo": 100
@@ -2559,7 +2559,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "using":"scanner",
                                             "type":"file",
                                             "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'",
-                                            "orderNo":90
+                                            "orderNo":73
                                         },
                                     }
 
