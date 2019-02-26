@@ -71,16 +71,19 @@ define([],function(){
                     if(!_.isNaN(model.loanAccount.commercialCibilCharge))
                         fee+=model.loanAccount.commercialCibilCharge;
                 $log.info(model.loanAccount.commercialCibilCharge);
+                model.loanAccount.interestRateEstimatedEMI={};
+                if(model.loanAccount.interestRate !='')
+                model.loanAccount.interestRateEstimatedEMI=model.loanAccount.interestRate;
                 // Get the user's input from the form. Assume it is all valid.
                 // Convert interest from a percentage to a decimal, and convert from
                 // an annual rate to a monthly rate. Convert payment period in years
                 // to the number of monthly payments.
 
-                if(model.loanAccount.loanAmountRequested == '' || model.loanAccount.interestRate == '' || model.loanAccount.frequency == '' || model.loanAccount.tenureRequested == '')
+                if(model.loanAccount.loanAmountRequested == '' || model.loanAccount.interestRateEstimatedEMI == '' || model.loanAccount.frequency == '' || model.loanAccount.tenureRequested == '')
                     return;
 
                 var principal = model.loanAccount.loanAmountRequested;
-                var interest = model.loanAccount.interestRate / 100 / 12;
+                var interest = model.loanAccount.interestRateEstimatedEMI / 100 / 12;
                 var payments;
                 if (model.loanAccount.frequency == 'Y')
                     payments = model.loanAccount.tenureRequested * 12;
