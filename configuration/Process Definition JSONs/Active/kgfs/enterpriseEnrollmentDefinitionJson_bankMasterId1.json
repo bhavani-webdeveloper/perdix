@@ -449,6 +449,11 @@
                         "maximum": 999999,
                         "captureStages": ["BasicEnrolment", "Completed"]
                     },
+                    "centreName":{
+                        "title": "Title",
+                        "type": "string",
+                        "captureStages": ["BasicEnrolment", "Completed"]
+                    },
                     "ownership": {
                         "title": "Ownershop",
                         "type": "string",

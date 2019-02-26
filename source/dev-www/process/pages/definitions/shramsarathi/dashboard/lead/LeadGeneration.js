@@ -135,6 +135,7 @@ function(LeadProcess, AngularResourceService) {
                     "productDetails.productRequiredBy": {
                         "orderNo": 50,
                         "title":"PRODUCT_REQUIRED_BY_DATE",
+                        required:false
                         // "titleMap":{
                         //     "thisWeek":"This Week",
                         //     "thisMonth":"This Month",
@@ -495,8 +496,6 @@ function(LeadProcess, AngularResourceService) {
                                 var deferred = $q.defer();
                                 var promise = deferred.promise;
                                 deferred.resolve(Lead.getConfigFile())
-
-                                +
                                 console.log(model.lead.getLead());
 
                                 promise.then(function(resp) {

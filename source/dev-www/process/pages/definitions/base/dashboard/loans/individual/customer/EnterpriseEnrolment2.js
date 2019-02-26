@@ -229,6 +229,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          "type": "password",
                          "required": true
                     },
+                    "BankAccounts.customerBankAccounts.bankStatements.closingBalance":{
+                        "orderNo":125,
+                        "title":"Closing Bank Balance",
+                        "onChange": function(modelValue, form, model, formCtrl, event) {
+                            var index = form.key[2];
+                            var indexBank = form.key[4];
+                            if (model.customer.customerBankAccounts[index].bankStatements[indexBank].closingBalance) {
+                             model.customer.customerBankAccounts[index].bankStatements[indexBank].totalWithdrawals = model.customer.customerBankAccounts[index].bankStatements[indexBank].totalDeposits - model.customer.customerBankAccounts[index].bankStatements[indexBank].closingBalance;
+                            }
+                        }
+                    },
+            
                     "EnterpriseInformation.rentLeaseStatus": {
                          "schema": {
                               "enumCode": "rent_lease_status"
@@ -828,7 +840,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "BankAccounts.customerBankAccounts.bankStatements",
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth",
                    // "BankAccounts.customerBankAccounts.bankStatements.openingBalance",
-                    //"BankAccounts.customerBankAccounts.bankStatements.closingBalance",
+                    "BankAccounts.customerBankAccounts.bankStatements.closingBalance",
                    // "BankAccounts.customerBankAccounts.bankStatements.emiAmountdeducted",
                     "BankAccounts.customerBankAccounts.bankStatements.cashDeposits",
                     "BankAccounts.customerBankAccounts.bankStatements.nonCashDeposits",
