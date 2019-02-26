@@ -12,7 +12,7 @@ define({
 			"title": "LEAD_ASSIGNMENT_PENDING",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				model.branch = branch;console.log(" r ::  base.dashboard.lead.LeadAssignmentPendingQueue");
+				model.branch = branch;console.log(" r ::  shramsarathi.dashboard.lead.LeadAssignmentPendingQueue");
 				$log.info("search-list sample got initialized");
 			},
 			definition: {

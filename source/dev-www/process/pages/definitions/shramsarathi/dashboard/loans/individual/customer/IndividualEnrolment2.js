@@ -1694,7 +1694,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "orderNo":40
                     },
                     "KYC.addressProofIssueDate":{
-                        "orderNo":70
+                        "orderNo":80
                     },
                     "KYC.addressProofValidUptoDate":{
                         "orderNo":80
@@ -1784,10 +1784,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "readonly": true
                     },
                     "KYC.addressProofImageId": {
-                        "orderNo": 80
+                        "orderNo": 70
                     },
                     "KYC.addressProofNo": {
-                        "orderNo": 90
+                        "orderNo": 78
                     },
                     "KYC.additionalKYCs": {
                         "orderNo": 100
@@ -2119,7 +2119,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.street",
                     "ContactInformation.postOffice",
                     "ContactInformation.landmark",
-                    "ContactInformation.collectionArea",
+                    //"ContactInformation.collectionArea",
                     "ContactInformation.mandal",
                     "ContactInformation.pincode",
                     "ContactInformation.locality",
@@ -2145,6 +2145,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualFinancials.expenditures.expenditureSource",
                     "IndividualFinancials.expenditures.annualExpenses",
                     "IndividualFinancials.expenditures.frequency",
+                    "IndividualFinancials.expenditures.from",
 
                     "FamilyDetails",
                     "FamilyDetails.familyMembers",
@@ -2389,19 +2390,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         //     "orderNo": 181
                                         // },
                                         "mailingLandmark": {
-                                            "key": "customer.Landmark",
+                                            "key": "customer.landmark",
                                             "title": "LANDMARK",
                                             "type": "string",
                                             "condition": "!model.customer.mailSameAsResidence"
                                             //"orderNo": 181
                                         },
-                                        "collectionArea":{
-                                            "key":"ContactInformation.collectionArea",
-                                            "title":"COLLECTION_CENTRE",
-                                            //"required": true,
-                                            "type":"select",
-                                            "orderNo":110
-                                        },
+                                        // "collectionArea":{
+                                        //     "key":"ContactInformation.collectionArea",
+                                        //     "title":"COLLECTION_CENTRE",
+                                        //     //"required": true,
+                                        //     "type":"select",
+                                        //     "orderNo":110
+                                        // },
                                         "mailingMobileNo":{
                                             "key":"ContactInformation.mailingMobileNo",
                                             "title":"DESTINATION_PHONE_NO",
@@ -2448,7 +2449,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     "title":"HEALTH_STATUS",
                                                     "orderNo":200,
                                                     "type":"radios",
-                                                    "titleMap":{"good":"Good","bad":"bad"}
+                                                    "titleMap":{
+                                                        "good":"Good",
+                                                        "bad":"bad"
+                                                    }
                                                 },
                                                 "Age":{
                                                     "key":"customer.familyMembers[].age",
@@ -2514,6 +2518,23 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         }
                                     }
                                 },
+                                "IndividualFinancials":{
+                                    "items":{
+                                        "expenditures":{
+                                            "items":{
+                                                "from":{
+                                                    "key":"IndividualFinancials.expenditures.from",
+                                                    "title":"EXPENSE_FROM",
+                                                    "type":"radios",
+                                                    "titleMap":{
+                                                        "Source":"SOURCE_EXPENSE",
+                                                        "Destination":"DESTINATION_EXPENSE"
+                                                    }
+                                                },
+                                            }
+                                        },
+                                    }
+                                },
                                 "KYC": {
                                     "items": {
                                         "firstName": {
@@ -2559,7 +2580,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "using":"scanner",
                                             "type":"file",
                                             "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'",
-                                            "orderNo":90
+                                            "orderNo":73
                                         },
                                     }
 
@@ -2719,7 +2740,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                                                 },
                                                 "migrantType":{
-                                                    "key":"customer.familyMembers.migrantType",
+                                                    "key":"customer.familyMembers[].migrantType",
                                                     "type":"select",
                                                     "title":"MIGRATION_TYPE",
                                                     "required":true,
@@ -2757,14 +2778,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             type: "select"
                                                         },
                                                         "workSector":{
-                                                            "key":"customer.familyMembers.incomes.workSector",
+                                                            "key":"customer.familyMembers[].incomes[].workSector",
                                                             "title":"WORK_SECTOR",
                                                             "type":"select",
-                                                            "enum":"occupation",
+                                                            "enumCode":"workSector",
                                                             "required":true
                                                         },
                                                         "occupationType":{
-                                                            "key":"customer.familyMembers.incomes.occupationType",
+                                                            "key":"customer.familyMembers[].incomes[].occupationType",
                                                             "title":"OCCUPATION_TYPE",
                                                             "type":"select",
                                                             "enum":"occupation",
@@ -2772,22 +2793,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             
                                                         },
                                                         "skillLevel":{
-                                                            "key":"customer.familyMembers.incomes.skillLevel",
+                                                            "key":"customer.familyMembers[].incomes[].skillLevel",
                                                             "title":"SKILL_LEVEL",
                                                             "type":"select",
-                                                            "enum":"occupation",
+                                                            "enumCode":"skillLevel",
                                                             "required":true
                                                             
                                                         },
                                                         "avarageTimeSpend":{
-                                                            "key":"customer.familyMembers.incomes.averageTimeSpent",
+                                                            "key":"customer.familyMembers[].incomes[].averageTimeSpent",
                                                             "title":"AVARAGE_TIME_SPENT",
                                                             "type":"number",
                                                             "required":true
                                                            
                                                         },
                                                         "avarageReturn":{
-                                                            "key":"customer.familyMembers.incomes.averageReturn",
+                                                            "key":"customer.familyMembers[].incomes[].averageReturn",
                                                             "title":"AVARAGE_RETURN",
                                                             "type":"select",
                                                             "required":true,
@@ -2800,7 +2821,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             
                                                         },
                                                         "incomeFrom":{
-                                                            "key":"customer.familyMembers.incomes.incomeType",
+                                                            "key":"customer.familyMembers[].incomes[].incomeType",
                                                             "title":"INCOME_FROM",
                                                             "type":"radios",
                                                             "required":true,
