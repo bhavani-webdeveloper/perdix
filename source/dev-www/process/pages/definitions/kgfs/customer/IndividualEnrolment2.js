@@ -384,6 +384,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "centreId":{
                                     key: "customer.centreId",
+                                    "title":"CENTRE_CODE1",
                                     type: "lov",
                                     autolov: true,
                                     lovonly: true,
