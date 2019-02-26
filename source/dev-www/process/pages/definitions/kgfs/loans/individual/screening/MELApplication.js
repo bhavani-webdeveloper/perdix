@@ -1,13 +1,14 @@
 define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/AngularResourceService'], function (EnrolmentProcess, AngularResourceService) {
     var EnrolmentProcess = EnrolmentProcess['EnrolmentProcess'];
+            var branchIDArray = [];
     return {
         pageUID: "kgfs.loans.individual.screening.MELApplication",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
-            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository"],
+            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","Maintenance","AuthTokenHelper"],
 
         $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
-                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository) {
+                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,Maintenance,AuthTokenHelper) {
 
             AngularResourceService.getInstance().setInjector($injector);
             var branch = SessionStore.getBranch();
@@ -44,7 +45,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualInformation.urnNo",
                     "DownloadMELApplicationForm",
                     "DownloadMELApplicationForm.downloadMELApplicationFormFieldSet",
-                    "DownloadMELApplicationForm.downloadMELApplicationForm",
+                    "DownloadMELApplicationForm.downloadMELApplicationFormName",
+                    "DownloadMELApplicationForm.downloadMELApplicationForm",                    
                     "UploadMELApplicationForm",
                     "UploadMELApplicationForm.uploadMELApplicationFormFieldSet",
                     "UploadMELApplicationForm.uploadMELApplicationForm",
@@ -83,6 +85,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     /* Setting data for the form */
                     model.customer = model.enrolmentProcess.customer;
                     var branchId = SessionStore.getBranchId();
+
+                    model.authToken = AuthTokenHelper.getAuthData().access_token;
+                    model.userLogin = SessionStore.getLoginname();
+                    model.master = model.master || {};
+                    model.uploadres = model.uploadres || {};
+
+                    var promise = Maintenance.getMasterData().$promise;
+                    promise.then(function(res) {
+                        $log.info("hi printing");
+                        $log.info(res);
+                    })
+
+                model.master.demandDate = model.master.demandDate || Utils.getCurrentDate();
+                //model.achDemand.updateDemand = model.achDemand.updateDemand || [];
+                for (var i = 0; i < formHelper.enum('branch_id').data.length; i++) {
+                    branchIDArray.push(parseInt(formHelper.enum('branch_id').data[i].code));
+                }
+                            
                     
 
                     /* End of setting data for the form */
@@ -108,14 +128,43 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "type":"fieldset",
                                             "title":"DOWNLOAD_MEL_APPLICATION_FORM",
                                         },
+                                        "downloadMELApplicationFormName":{
+                                            "key": "master.uploadName",
+                                            "title": "NAME",
+                                            "type": "lov",
+                                            autolov: true,
+                                            bindMap: {},
+                                            searchHelper: formHelper,
+                                            search: function(inputModel, form, model) {
+                                                return Maintenance.getMasterData().$promise;
+                                            },
+                                            getListDisplayItem: function(item, index) {
+                                                return [
+                                                    item.group,
+                                                    item.name,
+                                                    item.value,
+                                                    item.template_file
+                                                ];
+                                            },
+                                            onSelect: function(result, model, context) {
+                                                $log.info(result);
+                                                model.master.templateFile = result.template_file;
+                                                model.master.uploadName = result.name;
+                                                model.master.uploadNameValue = result.value;
+                                            }
+                                        },
                                         "downloadMELApplicationForm":{
-                                            "title": "DOWNLOAD",
-                                            "key": "loanAccount.downloadMELApplicationForm",
-                                            "htmlClass": "btn-block",
-                                            "icon": "fa fa-download",
                                             "type": "button",
+                                            "title": "DOWNLOAD",
+                                            "icon": "fa fa-download",
                                             "notitle": true,
                                             "readonly": false,
+
+                                            "onClick": function(model, form, schemaForm, event) {
+                                                var fileId = irf.BI_BASE_URL + "/upload_template/" + model.master.templateFile;
+                                                Utils.downloadFile(fileId);
+                                                //Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/forms/AllFormsDownload.php?record_id=" + model.loanAccount.id);
+                                            }
                                         }
                                     }                                    
                                 },
@@ -129,12 +178,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "title":"UPLOAD_MEL_APPLICATION_FORM",
                                         },
                                         "uploadMELApplicationForm":{
-                                            "key":"loanAccount.documents[].documentId",
-                                            "type":"file",
-                                            "notitle": true,
-                                            "category": "Loan",
-                                            "subCategory": "DOC3",
-                                            "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                        "key": "loanAccount.documents[].documentId",
+                                        "notitle": true,
+                                        "type": "file",
+                                        "category": "ACH",
+                                        "subCategory": "cat2",
+                                        "condition":"model.master.uploadNameValue",
+                                        "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                        customHandle: function(file, progress, modelValue, form, model) {
+                                            Maintenance.masterDataUpload(file, progress, {
+                                                fileType: model.master.uploadNameValue
+                                            }).then(function(resp) {
+                                                $log.info(resp.data.stats);
+                                                model.master.value = true;
+                                                model.uploadres = resp.data.stats;
+                                            });
+                                        }
                                         }
                                     }                                    
                                 },
