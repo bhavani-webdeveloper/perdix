@@ -243,6 +243,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                            "required": true,
                          //  "readonly": true
                        },
+                       "IndividualInformation.existingLoan":{
+                        "required":true,
+                        "title":"EXISTING_LOAN_FROM_BANK",
+                        "orderNo": 41
+                       },
                        "IndividualInformation.title":{
                         "orderNo": 50
                        },
@@ -1142,6 +1147,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "IndividualInformation.urnNo",
                 "IndividualInformation.firstName",
                 "IndividualInformation.photoImageId",
+                "IndividualInformation.existingLoan",
                 "IndividualInformation.gender",
                 "IndividualInformation.dateOfBirth",
                 "IndividualInformation.religion",
