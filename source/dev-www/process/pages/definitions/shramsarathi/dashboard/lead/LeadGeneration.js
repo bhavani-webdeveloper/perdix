@@ -496,8 +496,6 @@ function(LeadProcess, AngularResourceService) {
                                 var deferred = $q.defer();
                                 var promise = deferred.promise;
                                 deferred.resolve(Lead.getConfigFile())
-
-                                +
                                 console.log(model.lead.getLead());
 
                                 promise.then(function(resp) {
