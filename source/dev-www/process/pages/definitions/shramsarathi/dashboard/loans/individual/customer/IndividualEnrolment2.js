@@ -2546,14 +2546,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                         if(model.customer.addressPfSameAsIdProof==='YES'){
                                                             model.customer.addressProofNo=model.customer.identityProofNo,
                                                             model.customer.addressProofImageId=model.customer.identityProofImageId,
-                                                            model.customer.addressProofBackside=model.customer.identityProofReverseImageId,
+                                                            model.customer.addressProofReverseImageId=model.customer.identityProofReverseImageId,
                                                             model.customer.addressProofIssueDate=model.customer.idProofIssueDate,
                                                             model.customer.addressProofValidUptoDate=model.customer.idProofValidUptoDate
                                                         }
                                                     }    
                                         },
                                         "addressProofBackside":{
-                                            "key":"customer.addressProofBackside",
+                                            "key":"customer.addressProofReverseImageId",
                                             "title":"ADRESS_PROOF_BACKSIDE",
                                             "fileType":"application/pdf",
                                             "using":"scanner",

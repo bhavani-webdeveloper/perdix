@@ -3263,11 +3263,11 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         }
                     }
                 }
-
+                model.loanAccount.status = null;
                 if (model.currentStage == 'CreditCommitteeReview') {
                     model.loanAccount.status = 'APPROVED';
                 }
-
+                model.loanAccount.status = 'APPROVED';
                 if (!preLoanSaveOrProceed(model)){
                     PageHelper.hideLoader();
                     return;
