@@ -1,4 +1,4 @@
-define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProcess) {
+define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/AngularResourceService'], function(EnrolmentProcess, AngularResourceService) {
     EnrolmentProcess = EnrolmentProcess['EnrolmentProcess'];
  
     return {
@@ -11,7 +11,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
         $pageFn: function($log, $q, LoanAccount,LoanProcess, Scoring,irfFormToggler, Enrollment,EnrollmentHelper, AuthTokenHelper, SchemaResource, PageHelper,formHelper,elementsUtils,
                           irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
                           BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository, $injector, irfNavigator) {
-            var overridesFields_businessbasic = function(bundlePageObj){
+                            AngularResourceService.getInstance().setInjector($injector);
+                            var overridesFields_businessbasic = function(bundlePageObj){
             return {
                     "ContactInformation.pincode": {
                         "title": "pincode",
