@@ -1064,7 +1064,7 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                             items: [{
                                 key: "lead.productRejectReason",
                                 type: "select",
-                                condition: "model.lead.interestedInProduct==='NO'",
+                                condition: "(model.lead.interestedInProduct==='NO' || model.lead.interestedInProduct==='No')",
                                 titleMap: {
                                     "Has many running loans": "Has many running loans",
                                     "Available from banks": "Available from banks",
@@ -1115,11 +1115,11 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                         required: false,
                         enumCode: "decisionmaker",
                         "onChange": function (modelValue, form, model) {
-                            if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
+                            if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO' || model.lead.interestedInProduct == 'No' || model.lead.eligibleForProduct == 'No') {
                                 model.lead.leadStatus = "Reject";
-                            } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this week') {
+                            } else if ((model.lead.interestedInProduct == 'YES' || model.lead.interestedInProduct == 'Yes') && model.lead.productRequiredBy == 'In this week') {
                                 model.lead.leadStatus = "Screening";
-                            } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this month' || model.lead.productRequiredBy == 'Next 2 -3 months' || model.lead.productRequiredBy == 'Next 4-6 months') {
+                            } else if ((model.lead.interestedInProduct == 'YES' || model.lead.interestedInProduct == 'Yes') && model.lead.productRequiredBy == 'In this month' || model.lead.productRequiredBy == 'Next 2 -3 months' || model.lead.productRequiredBy == 'Next 4-6 months') {
                                 model.lead.leadStatus = "FollowUp";
                             } else {
                                 model.lead.leadStatus = "Incomplete";
@@ -1156,10 +1156,10 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                             key: "lead.loanAmountRequested",
                             type: "amount",
                             required: false,
-                            condition: "model.lead.interestedInProduct==='YES'&& model.lead.productSubCategory !== 'investment'",
+                            condition: "(model.lead.interestedInProduct==='YES' || model.lead.interestedInProduct==='Yes')&& model.lead.productSubCategory !== 'investment'",
                         }, {
                             key: "lead.loanPurpose1",
-                            condition: "model.lead.interestedInProduct==='YES'&& model.lead.productSubCategory !== 'investment'",
+                            condition: "(model.lead.interestedInProduct==='YES' || model.lead.interestedInProduct==='Yes')&& model.lead.productSubCategory !== 'investment'",
                             type: "select",
                             required: false,
                             enumCode: "loan_purpose_1"
@@ -1174,7 +1174,7 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                             key: "lead.productRequiredBy",
                             type: "select",
                             required: false,
-                            condition: "model.lead.interestedInProduct==='YES'",
+                            condition: "(model.lead.interestedInProduct==='YES' || model.lead.interestedInProduct =='Yes')",
                             titleMap: {
                                 "In this week": "In this week",
                                 "In this month": "In this month",
@@ -1185,17 +1185,17 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                             onChange: "actions.changeStatus(modelValue, form, model)"
                         }, {
                             key: "lead.screeningDate",
-                            condition: "(model.lead.interestedInProduct==='YES' && model.lead.productRequiredBy ==='In this week')",
+                            condition: "((model.lead.interestedInProduct==='YES' || model.lead.interestedInProduct==='Yes' ) && model.lead.productRequiredBy ==='In this week')",
                             type: "date",
                             onChange: "actions.changeStatus(modelValue, form, model)"
                         }, {
                             key: "lead.followUpDate",
-                            condition: "(model.lead.interestedInProduct==='YES' && model.lead.productRequiredBy =='In this month'||model.lead.productRequiredBy =='Next 2 -3 months'||model.lead.productRequiredBy =='Next 4-6 months')",
+                            condition: "((model.lead.interestedInProduct==='YES' || model.lead.interestedInProduct==='Yes') && model.lead.productRequiredBy =='In this month'||model.lead.productRequiredBy =='Next 2 -3 months'||model.lead.productRequiredBy =='Next 4-6 months')",
                             type: "date",
                             onChange: "actions.changeStatus(modelValue, form, model)"
                         }, {
                             type: "fieldset",
-                            condition: "model.lead.interestedInProduct==='YES'",
+                            condition: "(model.lead.interestedInProduct==='YES' || model.lead.interestedInProduct==='Yes')",
                             title: "PRODUCT_ELIGIBILITY",
                             items: [{
                                 key: "lead.eligibleForProduct",
@@ -1206,16 +1206,16 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                         }, {
                             type: "fieldset",
                             title: "PRODUCT_REJECTION_REASON",
-                            condition: "model.lead.interestedInProduct==='NO'||model.lead.eligibleForProduct ==='NO'",
+                            condition: "model.lead.interestedInProduct==='NO'|| model.lead.interestedInProduct==='No'||model.lead.eligibleForProduct ==='NO' || model.lead.eligibleForProduct ==='No'",
                             items: [{
                                 key: "lead.productRejectReason",
                                 type: "select",
-                                condition: "model.lead.interestedInProduct==='NO'",
+                                condition: "model.lead.interestedInProduct==='NO' || model.lead.interestedInProduct==='No'",
                                 enumCode: "leadRejectReasonOfCustomer",
                             }, {
                                 key: "lead.productRejectReason",
                                 type: "select",
-                                condition: "model.lead.eligibleForProduct ==='NO'",
+                                condition: "(model.lead.eligibleForProduct ==='NO' || model.lead.eligibleForProduct ==='No')",
                                 enumCode: "leadRejectReasonByFieldOfficer",
                             }, {
                                 key: "lead.additionalRemarks",
@@ -1352,11 +1352,11 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
             actions: {
                 changeStatus: function (modelValue, form, model) {
 
-                    if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
+                    if (model.lead.interestedInProduct == 'NO'|| model.lead.interestedInProduct == 'No'|| model.lead.eligibleForProduct ==='No' || model.lead.eligibleForProduct == 'NO') {
                         model.lead.leadStatus = "Reject";
-                    } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this week') {
+                    } else if ((model.lead.interestedInProduct == 'YES' || model.lead.interestedInProduct == 'Yes') && model.lead.productRequiredBy == 'In this week') {
                         model.lead.leadStatus = "Screening";
-                    } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this month' || model.lead.productRequiredBy == 'Next 2 -3 months' || model.lead.productRequiredBy == 'Next 4-6 months') {
+                    } else if ((model.lead.interestedInProduct == 'YES' || model.lead.interestedInProduct == 'Yes') && model.lead.productRequiredBy == 'In this month' || model.lead.productRequiredBy == 'Next 2 -3 months' || model.lead.productRequiredBy == 'Next 4-6 months') {
                         model.lead.leadStatus = "FollowUp";
                     } else {
                         model.lead.leadStatus = "Incomplete";
