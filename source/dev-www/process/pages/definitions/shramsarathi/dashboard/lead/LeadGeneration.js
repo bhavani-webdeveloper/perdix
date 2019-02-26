@@ -135,6 +135,7 @@ function(LeadProcess, AngularResourceService) {
                     "productDetails.productRequiredBy": {
                         "orderNo": 50,
                         "title":"PRODUCT_REQUIRED_BY_DATE",
+                        required:false
                         // "titleMap":{
                         //     "thisWeek":"This Week",
                         //     "thisMonth":"This Month",
