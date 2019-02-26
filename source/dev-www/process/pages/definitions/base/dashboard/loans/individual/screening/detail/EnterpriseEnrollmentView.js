@@ -660,12 +660,8 @@ define({
                                 "data": "machineModel",
                             },
                             {
-                                "title": "Work Process",
-                                "data": "workProcess",
-                            },
-                            {
                                 "title": "Description",
-                                "data": "description",
+                                "data": "machineDescription",
                             },
                             {
                                 "title": "Serial Number",
@@ -673,7 +669,7 @@ define({
                             },
                             {
                                 "title": "Permanently Fixed To Building",
-                                "data": "permanentlyFixedToBuilding",
+                                "data": "machinePermanentlyFixedToBuilding",
                             },
 
                             // {
