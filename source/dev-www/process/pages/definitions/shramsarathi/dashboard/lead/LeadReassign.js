@@ -64,7 +64,7 @@ define(['perdix/domain/model/lead/LeadRepository'], function(LeadRepository) {
                                 readonly: true,
                             },{
                                 key: "lead.leads[].area",
-                                "title": "AREA",
+                                "title": "PANCHAYAT",
                                 readonly: true,
                             },{
                                 key: "lead.leads[].cityTownVillage",
@@ -90,6 +90,7 @@ define(['perdix/domain/model/lead/LeadRepository'], function(LeadRepository) {
                         },{
                             key: "lead.centreId",
                             "enumCode": "centre",
+                            "title":"ZONE_NAME",
                             type: "select",
                             "parentEnumCode": "branch_id",
                             "parentValueExpr": "model.customer.branchId",
