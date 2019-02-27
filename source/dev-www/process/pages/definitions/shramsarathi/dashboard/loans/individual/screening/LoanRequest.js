@@ -1290,7 +1290,8 @@ define([],function(){
                             "orderNo":20,
                             onChange:function(value,form,model){
                                 computeEMI(model);
-                            }
+                            },
+                            "enumCode":"duration"
                         },
                         "LoanRecommendation.interestRate":{
                             title:"INTEREST_RATE",

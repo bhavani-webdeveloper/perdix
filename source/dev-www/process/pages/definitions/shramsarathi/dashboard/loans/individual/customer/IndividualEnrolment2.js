@@ -2051,7 +2051,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "FamilyDetails.familyMembers.educationStatus":{
                         "enumCode":"education_status"
-                    }
+                    },
+                    "EnterpriseFinancials.currentAsset.assetType":{
+                        "enumCode":"asset_type"
+                    },
+                    "Liabilities.liabilities.liabilityType":{
+                        "enumCode":"financial_liabilities"
+                    },
                     // "IndividualInformation.existingLoan":{
                     //     "title":""
                     // },
