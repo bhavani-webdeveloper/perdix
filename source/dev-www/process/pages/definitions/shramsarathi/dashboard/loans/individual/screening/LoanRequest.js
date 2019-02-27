@@ -1855,7 +1855,7 @@ define([],function(){
                                             "titleMap":{"yes":"yes","no":"no"}
                                         },
                                         "collectionDate":{
-                                            "key":"loanAccount.disbursementSchedules.firstrepaymentdate",
+                                            "key":"loanAccount.disbursementSchedules.firstrRepaymentDate",
                                             "title":"COLLECTION_DATE",
                                             "type":"date",
                                             "required":true
