@@ -754,7 +754,7 @@ define([],function(){
                                 //"LoanRecommendation.securityEmiRequired",
                                 "LoanMitigants.loanMitigantsByParameter",
                                 "CollateralDetails",
-                                "LoanRecommendation",
+                                //"LoanRecommendation",
 
                             ],
                             "overrides": {
@@ -1177,9 +1177,12 @@ define([],function(){
             }
              var overridesFields = function (bundlePageObj) {
                 return {
-                    "PostReview.reject.rejectReason":{
-                        "enumCode":"loan_rejection_reason",
-                    },
+                    // "PostReview.reject.rejectReason":{
+                    //     "enumCode":"loan_rejection_reason"
+                    // },
+                    // "revertReject.rejectReason":{
+                    //     "enumCode":"loan_rejection_reason"
+                    // },
                         "PreliminaryInformation.linkedAccountNumber": {
                             "resolver": "LinkedAccountNumberLOVConfiguration",
                             "condition": "model.loanAccount.transactionType.toLowerCase() != 'renewal' && model.loanAccount.transactionType != 'New Loan'",
@@ -1290,7 +1293,9 @@ define([],function(){
                             "orderNo":20,
                             onChange:function(value,form,model){
                                 computeEMI(model);
-                            }
+                            },
+                            "type":"select",
+                            "enumCode":"duration"
                         },
                         "LoanRecommendation.interestRate":{
                             title:"INTEREST_RATE",
@@ -1838,9 +1843,8 @@ define([],function(){
                                                 "key":"loanAccount.disbursementSchedules.modeOfDisbursement",
                                                 "title":"MODE_OF_DISBURSEMENT",
                                                 "type":"select",
-                                                "required":true,
-                                                "titleMap":{"cash":"Cash","cheque":"Cheque","neft":"NEFT"}
-                                                            },
+                                                "enumCode":"mode_of_disbursement"
+                                            },
                                         "remarksOfInFavourLoan":{
                                             "key":"loanAccount.userDefinedFieldValues.udf10",
                                             "title":"REMARK_OF_IN_FAVOUR_LOAN",
@@ -2022,11 +2026,13 @@ define([],function(){
                                                     },
                                                     "rejectReason": {
                                                         "key": "loanAccount.rejectReason",
-                                                        "type": "lov",
-                                                        "autolov": true,
+                                                        //"type": "lov",
+                                                       // "autolov": true,
+                                                       "type":"select",
                                                         "required":true,
                                                         "title": "REJECT_REASON",
-                                                        "resolver": "IREPRejectReasonLOVConfiguration"
+                                                        "enumCode":"loan_rejection_reason"
+                                                        //"resolver": "IREPRejectReasonLOVConfiguration"
                                                     },
                                                     "rejectButton": {
                                                         "key": "review.rejectButton",
