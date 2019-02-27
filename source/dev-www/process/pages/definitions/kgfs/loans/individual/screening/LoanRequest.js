@@ -67,6 +67,9 @@ define([],function(){
 
             var computeEstimatedEMI = function(model){
                 var fee = 0;
+                if(model.loanAccount.interestRate !='')
+                    model.loanAccount.interestRateEstimatedEMI=model.loanAccount.interestRate;
+
                 if(model.loanAccount.commercialCibilCharge)
                     if(!_.isNaN(model.loanAccount.commercialCibilCharge))
                         fee+=model.loanAccount.commercialCibilCharge;
@@ -764,11 +767,8 @@ define([],function(){
                     model.customer = {};
                     model.review = model.review|| {};
                     model.loanAccount = model.loanProcess.loanAccount;
-
-
                     model.loanAccount.interestRateEstimatedEMI={};
-                    if(model.loanAccount.interestRate !='')
-                    model.loanAccount.interestRateEstimatedEMI=model.loanAccount.interestRate;
+                    
                 
                     defaultConfiguration(model,true);
 
@@ -1332,6 +1332,7 @@ define([],function(){
                             }
                         
                         }
+                        PageHelper.showLoader();
                         PageHelper.showProgress('enrolment', 'Updating Loan');
                         model.loanProcess.proceed()
                             .finally(function () {
