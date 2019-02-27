@@ -1178,7 +1178,7 @@ define([],function(){
              var overridesFields = function (bundlePageObj) {
                 return {
                     "PostReview.reject.rejectReason":{
-                        "enumCode":"loan_rejection_reason",
+                        "enumCode":"loan_rejection_reason"
                     },
                         "PreliminaryInformation.linkedAccountNumber": {
                             "resolver": "LinkedAccountNumberLOVConfiguration",
@@ -1290,7 +1290,8 @@ define([],function(){
                             "orderNo":20,
                             onChange:function(value,form,model){
                                 computeEMI(model);
-                            }
+                            },
+                            "enumCode":"duration"
                         },
                         "LoanRecommendation.interestRate":{
                             title:"INTEREST_RATE",
@@ -1838,9 +1839,8 @@ define([],function(){
                                                 "key":"loanAccount.disbursementSchedules.modeOfDisbursement",
                                                 "title":"MODE_OF_DISBURSEMENT",
                                                 "type":"select",
-                                                "required":true,
-                                                "titleMap":{"cash":"Cash","cheque":"Cheque","neft":"NEFT"}
-                                                            },
+                                                "enumCode":"mode_of_disbursement"
+                                            },
                                         "remarksOfInFavourLoan":{
                                             "key":"loanAccount.userDefinedFieldValues.udf10",
                                             "title":"REMARK_OF_IN_FAVOUR_LOAN",

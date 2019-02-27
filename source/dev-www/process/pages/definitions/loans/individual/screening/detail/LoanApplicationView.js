@@ -17,6 +17,98 @@ define({
             else
             return "NA";
         }
+
+        var postAPI = function(model){
+            if (_.isNull(model.summaryData) || _.isNull(model.finData)){
+                return null;
+            }
+
+            model._scores = model.summaryData;
+            model.expectedTurnoverObj = {};
+            model._deviationDetails = model._scores[12].data;
+            model.expectedTurnoverObj['loanAmountRecommended']=  (model.summaryData[0].data[0]['Recommended Loan Amount'] != null) ? Number((model.summaryData[0].data[0]['Recommended Loan Amount']).replace(/,/g, '')) : null;
+            var monthTurnover =  (model.summaryData[0].data[0]['Monthly Turnover'] != null) ? Number((model.summaryData[0].data[0]['Monthly Turnover']).replace(/,/g, '')) : null;
+            model.expectedTurnoverObj['annualTurnover']=  ( monthTurnover * 12);
+            model.deviationDetails = [];
+            var allMitigants = {};
+            model.allMitigants = allMitigants;
+            for (i in model._deviationDetails) {
+                var item = model._deviationDetails[i];
+                var mitigants = item.Mitigant.split('|');
+                for (j in mitigants) {
+                    allMitigants[mitigants[j]] = {
+                        mitigant: mitigants[j],
+                        parameter: item.Parameter,
+                        score: item.ParameterScore,
+                        selected: false
+                    };
+                    mitigants[j] = allMitigants[mitigants[j]];
+                }
+                if (item.ChosenMitigant && item.ChosenMitigant != null) {
+                    var chosenMitigants = item.ChosenMitigant.split('|');
+                    for (j in chosenMitigants) {
+                        allMitigants[chosenMitigants[j]].selected = true;
+                    }
+                }
+                model.deviationDetails.push({
+                    parameter: item.Parameter,
+                    score: item.ParameterScore,
+                    deviation: item.Deviation,
+                    mitigants: mitigants,
+                    color_english: item.color_english,
+                    color_hexadecimal: item.color_hexadecimal
+                });
+            }
+
+            model.additional = {};
+            var prepareFinancialData={};
+            if(model.summaryData){
+                prepareFinancialData={
+                    'Category': 'Current Application',
+                    'Outstanding': 'NA',
+                    'disbursement_amount': 'NA',
+                    'loan_product': model.summaryData[0].data[0]['Loan Product'],
+                    'loan_status': 'NA',
+                    'tenure': model.summaryData[0].data[0]['Tenure'] 
+                }
+            }
+            model.customerHistoryFinancials['tableData'].push(prepareFinancialData);
+
+
+            /* FinData */
+
+            prepareFinancialData={
+                'tableData':[],
+                'financialsGraph':{}
+                };
+            var oustandingAmount = 0;
+            if(model.finData){
+                _.forEach(model.finData, function(param){
+                //param[5].data[0].exposer = (param[5].data[0].exposer).toFixed(2);
+                    prepareFinancialData['tableData'].push(param[5].data[0]);
+                    oustandingAmount = oustandingAmount + param[5].data[0].Outstanding;
+                });
+            };
+            model.expectedTurnoverObj['totalOutstandingAmount'] = oustandingAmount;
+            
+            if(model.expectedTurnoverObj['annualTurnover'] && model.expectedTurnoverObj['annualTurnover'] != 0){
+                var kinaraExposureToAnnualTurovr = ((oustandingAmount + model.expectedTurnoverObj['loanAmountRecommended'])/model.expectedTurnoverObj['annualTurnover']).toFixed(2);
+                var kinaraExposureToAnnualTurnover = (kinaraExposureToAnnualTurovr*100)+"%";
+                model.expectedTurnoverObj['kinaraExposureToAnnualTurover'] = kinaraExposureToAnnualTurnover;
+            }
+            else{
+                model.expectedTurnoverObj['kinaraExposureToAnnualTurover']  = 0+'%'; 
+            }
+            
+            model.expectedTurnoverObj['actualValue'] = "ActualValue";
+            prepareFinancialData['tableData']=$filter("orderBy") (prepareFinancialData['tableData'], ['loanId']);
+            model.customerHistoryFinancials['tableData1'].push(model.expectedTurnoverObj);
+            _.forEach(prepareFinancialData['tableData'], function(histData){
+                model.customerHistoryFinancials['tableData'].push(histData);
+                });
+        }
+
+
         var navigateToQueue = function(model) {
                     // Considering this as the success callback
                     // Deleting offline record on success submission
@@ -230,6 +322,9 @@ define({
             "title": "LOAN_RECOMMENDATION",
             "subTitle": "",
             initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
+                
+                model.finData = null;
+                model.summaryData = null;
                 model.currentStage = bundleModel.currentStage;
                 model.bundleModel = bundleModel;
                 model.loanAccount = bundleModel.loanAccount;
@@ -959,87 +1054,13 @@ define({
                 return SchemaResource.getLoanAccountSchema().$promise;
             },
             eventListeners: {
-                    "financial-summary": function(bundleModel, model, params) {
-                    model._scores = params;
-                    model._deviationDetails = model._scores[12].data;
-                    model.expectedTurnoverObj['loanAmountRecommended']=  (params[0].data[0]['Recommended Loan Amount'] != null) ? Number((params[0].data[0]['Recommended Loan Amount']).replace(/,/g, '')) : null;
-                    var monthTurnover =  (params[0].data[0]['Monthly Turnover'] != null) ? Number((params[0].data[0]['Monthly Turnover']).replace(/,/g, '')) : null;
-                    model.expectedTurnoverObj['annualTurnover']=  ( monthTurnover * 12);
-                    model.deviationDetails = [];
-                    var allMitigants = {};
-                    model.allMitigants = allMitigants;
-                    for (i in model._deviationDetails) {
-                        var item = model._deviationDetails[i];
-                        var mitigants = item.Mitigant.split('|');
-                        for (j in mitigants) {
-                            allMitigants[mitigants[j]] = {
-                                mitigant: mitigants[j],
-                                parameter: item.Parameter,
-                                score: item.ParameterScore,
-                                selected: false
-                            };
-                            mitigants[j] = allMitigants[mitigants[j]];
-                        }
-                        if (item.ChosenMitigant && item.ChosenMitigant != null) {
-                            var chosenMitigants = item.ChosenMitigant.split('|');
-                            for (j in chosenMitigants) {
-                                allMitigants[chosenMitigants[j]].selected = true;
-                            }
-                        }
-                        model.deviationDetails.push({
-                            parameter: item.Parameter,
-                            score: item.ParameterScore,
-                            deviation: item.Deviation,
-                            mitigants: mitigants,
-                            color_english: item.color_english,
-                            color_hexadecimal: item.color_hexadecimal
-                        });
-                    }
-
-                    model.additional = {};
-                    let prepareFinancialData={};
-                    if(params){
-                        prepareFinancialData={
-                            'Category': 'Current Application',
-                            'Outstanding': 'NA',
-                            'disbursement_amount': 'NA',
-                            'loan_product': params[0].data[0]['Loan Product'],
-                            'loan_status': 'NA',
-                            'tenure': params[0].data[0]['Tenure'] 
-                        }
-                    }
-                    model.customerHistoryFinancials['tableData'].push(prepareFinancialData);
-                    
+                "financial-summary": function(bundleModel, model, params) {
+                    model.summaryData = params;
+                    postAPI(model);
                 },
                 "customer-history-fin-snap": function(bundleModel, model, params){
-                    let prepareFinancialData={
-                        'tableData':[],
-                        'financialsGraph':{}
-                        };
-                    var oustandingAmount = 0;
-                    if(params){
-                       _.forEach(params, function(param){
-                        //param[5].data[0].exposer = (param[5].data[0].exposer).toFixed(2);
-                            prepareFinancialData['tableData'].push(param[5].data[0]);
-                            oustandingAmount = oustandingAmount + param[5].data[0].Outstanding;
-                        });
-                    };
-                    model.expectedTurnoverObj['totalOutstandingAmount'] = oustandingAmount;
-                    if(model.expectedTurnoverObj['annualTurnover'] && model.expectedTurnoverObj['annualTurnover'] != 0){
-                        var kinaraExposureToAnnualTurovr = ((oustandingAmount + model.expectedTurnoverObj['loanAmountRecommended'])/model.expectedTurnoverObj['annualTurnover']).toFixed(2);
-                        var kinaraExposureToAnnualTurnover = (kinaraExposureToAnnualTurovr*100)+"%";
-                        model.expectedTurnoverObj['kinaraExposureToAnnualTurover'] = kinaraExposureToAnnualTurnover;
-                    }
-                    else{
-                        model.expectedTurnoverObj['kinaraExposureToAnnualTurover']  = 0+'%'; 
-                    }
-                   
-                    model.expectedTurnoverObj['actualValue'] = "ActualValue";
-                    prepareFinancialData['tableData']=$filter("orderBy") (prepareFinancialData['tableData'], ['loanId']);
-                    model.customerHistoryFinancials['tableData1'].push(model.expectedTurnoverObj);
-                    _.forEach(prepareFinancialData['tableData'], function(histData){
-                        model.customerHistoryFinancials['tableData'].push(histData);
-                        });
+                    model.finData = params;
+                    postAPI(model);
                 }
             },
             actions: {
