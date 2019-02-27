@@ -2040,6 +2040,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth": {
                         "required": false
                     },
+                    "KYC.identityProof":{
+                        "enumCode":"identity_proof",
+                        "orderNo":21
+                    },
+                    "KYC.addressProof":{
+                        "enumCode":"address_proof",
+                        "orderNo":14
+                    },
                     // "IndividualInformation.existingLoan":{
                     //     "title":""
                     // },
@@ -2798,7 +2806,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "key":"customer.familyMembers[].incomes[].skillLevel",
                                                             "title":"SKILL_LEVEL",
                                                             "type":"select",
-                                                            "enumCode":"skillLevel",
+                                                            "titleMap":{
+                                                                "skilled":"SKILLED",
+                                                                "unskilled":"UNSKILLED",
+                                                                "semi_skilled":"SEMI_SKILLED"
+                                                            },
                                                             "required":true
                                                             
                                                         },
@@ -2814,25 +2826,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "title":"AVARAGE_RETURN",
                                                             "type":"select",
                                                             "required":true,
-                                                            titleMap: {
-                                                                "lessThanAMonth": "Less Than a Month",
-                                                                "biMonthly": "Bi Monthly",
-                                                                "etc":"etc"
-                                                            },
+                                                            "enumCode":"Average Return"
 
                                                             
                                                         },
                                                         "incomeFrom":{
                                                             "key":"customer.familyMembers[].incomes[].incomeType",
-                                                            "title":"INCOME_FROM",
-                                                            "type":"radios",
+                                                            "title":"INCOME_TYPE",
+                                                            "type":"select",
                                                             "required":true,
-                                                            titleMap: {
-                                                                "sourceIncome": "Source Income",
-                                                                "destinationIncome": "Destination Income"
-                                                            },
-                                                            
-                                                            
+                                                            "enumCode":"Income Type"
+                                                          
                                                         }
 
                                                     }
@@ -2872,11 +2876,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "title":"HOUSE_STATUS",
                                             "key":"customer.houseStatus",
                                             "type":"select",
-                                            "titleMap":{
-                                                "PAKKA":"PAKKA",
-                                                "KACCHA":"KACCHA",
-                                                "TARPAL_SEET":"TARPAL_SEET"
-                                            }
+                                            "enumCode":"House Verification"
                                         },
                                         "noOfRooms":{
                                             "key":"customer.noOfRooms",
