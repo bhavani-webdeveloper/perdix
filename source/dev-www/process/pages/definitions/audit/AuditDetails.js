@@ -169,6 +169,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                 "Page/Engine/audit.detail.FixedAsset",
                 "Page/Engine/audit.detail.FieldVerification",
                 "Page/Adhoc/audit.detail.ProcessCompliance",
+                "Page/Engine/audit.detail.AllSampleIssueSummary",
                 "Page/Engine/audit.detail.AuditSummary"
             ]
         });
@@ -227,6 +228,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FieldVerification"],
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FixedAsset"],
                 $scope.dashboardDefinition.$menuMap["Page/Adhoc/audit.detail.ProcessCompliance"],
+                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AllSampleIssueSummary"],
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditSummary"]
             ];
 
