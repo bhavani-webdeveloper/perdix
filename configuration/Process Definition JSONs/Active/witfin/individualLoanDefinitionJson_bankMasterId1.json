@@ -20,15 +20,12 @@
      },
      {
         "order":2,
-        "code":"ScreeningReview",
-        "name":"Screening Review",
+        "code":"TeleVerification",
+        "name":"Tele Verification",
         "stageType":"CAPTURE",
         "sendSms":"No",
         "smsCategory":"LoanBooking",
-        "isAccountOpening":false,
-        "allowedRoles":[
-           "WM"
-        ]
+        "isAccountOpening":false
      },
      {
         "order":3,
@@ -41,57 +38,18 @@
      },
      {
         "order":4,
-        "code":"FieldInvestigation2",
-        "name":"Field Investigation",
+        "code":"ScreeningReview",
+        "name":"Screening Review",
         "stageType":"CAPTURE",
         "sendSms":"No",
         "smsCategory":"LoanBooking",
-        "isAccountOpening":false
+        "isAccountOpening":false,
+        "allowedRoles":[
+           "WM"
+        ]
      },
      {
         "order":5,
-        "code":"FieldInvestigation3",
-        "name":"Field Investigation",
-        "stageType":"CAPTURE",
-        "sendSms":"No",
-        "smsCategory":"LoanBooking",
-        "isAccountOpening":false
-     },
-     {
-        "order":6,
-        "code":"TeleVerification",
-        "name":"Tele Verification",
-        "stageType":"CAPTURE",
-        "sendSms":"No",
-        "smsCategory":"LoanBooking",
-        "isAccountOpening":false
-     },
-     {
-        "order":7,
-        "code":"CreditApproval1",
-        "name":"Credit Approval 1",
-        "stageType":"CAPTURE",
-        "sendSms":"Yes",
-        "smsCategory":"LoanBooking",
-        "isAccountOpening":false,
-        "allowedRoles":[
-           "WM"
-        ]
-     },
-     {
-        "order":8,
-        "code":"CreditApproval2",
-        "name":"Credit Approval 2",
-        "stageType":"CAPTURE",
-        "sendSms":"Yes",
-        "smsCategory":"LoanBooking",
-        "isAccountOpening":false,
-        "allowedRoles":[
-           "WM"
-        ]
-     },
-     {
-        "order":9,
         "code":"BusinessApproval1",
         "name":"Business Approval 1",
         "stageType":"CAPTURE",
@@ -103,7 +61,31 @@
         ]
      },
      {
-        "order":10,
+        "order":6,
+        "code":"CreditApproval1",
+        "name":"Credit Approval 1",
+        "stageType":"CAPTURE",
+        "sendSms":"Yes",
+        "smsCategory":"LoanBooking",
+        "isAccountOpening":false,
+        "allowedRoles":[
+           "WM"
+        ]
+     },
+     {
+        "order":7,
+        "code":"CreditApproval2",
+        "name":"Credit Approval 2",
+        "stageType":"CAPTURE",
+        "sendSms":"Yes",
+        "smsCategory":"LoanBooking",
+        "isAccountOpening":false,
+        "allowedRoles":[
+           "WM"
+        ]
+     },
+     {
+        "order":8,
         "code":"CreditApproval3",
         "name":"Credit Approval 3",
         "stageType":"CAPTURE",
@@ -115,19 +97,7 @@
         ]
      },
      {
-        "order":11,
-        "code":"BusinessApproval2",
-        "name":"Business Approval 2",
-        "stageType":"CAPTURE",
-        "sendSms":"Yes",
-        "smsCategory":"LoanBooking",
-        "isAccountOpening":false,
-        "allowedRoles":[
-           "WM"
-        ]
-     },
-     {
-        "order":12,
+        "order":9,
         "code":"Rejected",
         "name":"Rejected",
         "stageType":"CAPTURE",
@@ -139,7 +109,7 @@
         ]
      },
      {
-        "order":13,
+        "order":10,
         "code":"LoanInitiation",
         "name":"Loan Input",
         "stageType":"CAPTURE",
@@ -151,7 +121,7 @@
         ]
      },
      {
-        "order":14,
+        "order":11,
         "code":"PendingForPartner",
         "name":"Pending for Partner",
         "stageType":"CAPTURE",
@@ -163,7 +133,7 @@
         ]
      },
      {
-        "order":15,
+        "order":12,
         "code":"LoanBooking",
         "name":"Loan Booking",
         "stageType":"CAPTURE",
@@ -175,7 +145,7 @@
         ]
      },
      {
-        "order":16,
+        "order":13,
         "code":"DocumentUpload",
         "name":"Document Download and Upload",
         "stageType":"CAPTURE",
@@ -187,7 +157,7 @@
         ]
      },
      {
-        "order":17,
+        "order":14,
         "code":"DocumentVerification",
         "name":"Document Verification",
         "stageType":"CAPTURE",
@@ -199,7 +169,7 @@
         ]
      },
      {
-          "order": 18,
+          "order": 15,
           "code":"Completed",
           "name":"Completed",
           "stageType":"CAPTURE",
