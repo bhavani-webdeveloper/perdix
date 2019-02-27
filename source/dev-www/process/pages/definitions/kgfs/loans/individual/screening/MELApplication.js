@@ -77,6 +77,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "subTitle": "",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                     // $log.info("Inside initialize of IndividualEnrolment2 -SPK " + formCtrl.$name);
+
+                    model.customer = {};
+                    model.review = model.review|| {};
+                    model.loanAccount = model.loanProcess.loanAccount;
+                    
                     if (bundlePageObj) {
                         model._bundlePageObj = _.cloneDeep(bundlePageObj);
                     };
@@ -204,6 +209,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "PostReview": {
                                         "type": "box",
                                         "title": "POST_REVIEW",
+                                        "condition": "model.loanAccount.id && model.loanAccount.isReadOnly!='Yes' && model.loanAccount.currentStage != 'Rejected'",
                                         "orderNo": 600,
                                         "items": {
                                             "action": {
@@ -221,7 +227,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "items": {
                                                     "remarks": {
                                                         "title": "REMARKS",
-                                                        "key": "loanAccount.remarks",
+                                                        "key": "loanProcess.remarks",
                                                         "type": "textarea",
                                                         "required": true
                                                     }, 
@@ -239,12 +245,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "items": {
                                                     "remarks": {
                                                         "title": "REMARKS",
-                                                        "key": "loanAccount.remarks",
+                                                        "key": "loanProcess.remarks",
                                                         "type": "textarea",
                                                         "required": true
                                                     }, 
                                                    "stage": {
-                                                        "key": "loanAccount.stage",
+                                                        "key": "loanProcess.stage",
                                                         "required": true,
                                                         "type": "lov",
                                                         "title": "SEND_BACK_TO_STAGE",
@@ -264,7 +270,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "items": {
                                                     "remarks": {
                                                         "title": "REMARKS",
-                                                        "key": "loanAccount.remarks",
+                                                        "key": "loanProcess.remarks",
                                                         "type": "textarea",
                                                         "required": true
                                                     }, 
@@ -291,7 +297,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "items": {
                                                 "remarks": {
                                                     "title": "REMARKS",
-                                                    "key": "loanAccount.remarks",
+                                                    "key": "loanProcess.remarks",
                                                     "type": "textarea",
                                                     "required": true
                                                 }, 
@@ -305,7 +311,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             }
                                             }
                                         }
-                                }
+                                    }
                             },
                             "additions": [
                                 {
