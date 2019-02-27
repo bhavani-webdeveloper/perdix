@@ -2339,6 +2339,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                     model.enrolmentProcess.currentStage = model.currentStage;
                     model.customer = model.enrolmentProcess.customer;
+                    model.customer.addressPfSameAsIdProof="NO";
                     // }
                     /* End of setting data recieved from Bundle */
                     // set Age from DateOfBirth
@@ -2369,7 +2370,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 model.UIUDF.family_fields.dependent_family_member++;
                         });
                     }
-
+                    model.customer.addressPfSameAsIdProof="NO";
                     /* Form rendering starts */
                     var self = this;
                     var formRequest = {
@@ -2575,7 +2576,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "orderNo":60,
                                             "onChange": function(modelValue, form, model, formCtrl, event) {
                                                         if(model.customer.addressPfSameAsIdProof==='YES'){
-                                                            model.customer.addressProof=model.customer.identityProof,
+                                                            // model.customer.addressProof=model.customer.identityProof,
                                                             model.customer.addressProofNo=model.customer.identityProofNo,
                                                             model.customer.addressProofImageId=model.customer.identityProofImageId,
                                                             model.customer.addressProofReverseImageId=model.customer.identityProofReverseImageId,
