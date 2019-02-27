@@ -1177,9 +1177,12 @@ define([],function(){
             }
              var overridesFields = function (bundlePageObj) {
                 return {
-                    "PostReview.reject.rejectReason":{
-                        "enumCode":"loan_rejection_reason"
-                    },
+                    // "PostReview.reject.rejectReason":{
+                    //     "enumCode":"loan_rejection_reason"
+                    // },
+                    // "revertReject.rejectReason":{
+                    //     "enumCode":"loan_rejection_reason"
+                    // },
                         "PreliminaryInformation.linkedAccountNumber": {
                             "resolver": "LinkedAccountNumberLOVConfiguration",
                             "condition": "model.loanAccount.transactionType.toLowerCase() != 'renewal' && model.loanAccount.transactionType != 'New Loan'",
@@ -2023,11 +2026,13 @@ define([],function(){
                                                     },
                                                     "rejectReason": {
                                                         "key": "loanAccount.rejectReason",
-                                                        "type": "lov",
-                                                        "autolov": true,
+                                                        //"type": "lov",
+                                                       // "autolov": true,
+                                                       "type":"select",
                                                         "required":true,
                                                         "title": "REJECT_REASON",
-                                                        "resolver": "IREPRejectReasonLOVConfiguration"
+                                                        "enumCode":"loan_rejection_reason"
+                                                        //"resolver": "IREPRejectReasonLOVConfiguration"
                                                     },
                                                     "rejectButton": {
                                                         "key": "review.rejectButton",
