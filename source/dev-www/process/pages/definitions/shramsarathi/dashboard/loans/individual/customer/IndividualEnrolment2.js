@@ -2781,14 +2781,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "key":"customer.familyMembers[].incomes[].workSector",
                                                             "title":"WORK_SECTOR",
                                                             "type":"select",
-                                                            "enumCode":"workSector",
+                                                            "enumCode":"work_sector",
                                                             "required":true
                                                         },
                                                         "occupationType":{
                                                             "key":"customer.familyMembers[].incomes[].occupationType",
                                                             "title":"OCCUPATION_TYPE",
                                                             "type":"select",
-                                                            "enum":"occupation",
+                                                            "enumCode":"Occupation Type",
                                                             "required":true
                                                             
                                                         },
@@ -2888,13 +2888,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "liabilities":{
                                             "items":{
                                                 "mortage": {
-                                                    "key": "Liabilities.liabilities.mortage",
+                                                    "key": "customer.liabilities[].mortage",
                                                     "title": "MORTAGE",
                                                     //"condition": "model.Liabilities.liabilities.loanType=='SECURED'",
                                                     "orderNo": 10
                                                 },
                                                 "mortageAmount": {
-                                                    "key": "customer.liabilities.mortageAmount",
+                                                    "key": "customer.liabilities[].mortageAmount",
                                                     "title": "MORTAGE_AMOUNT",
                                                     //"condition": "model.Liabilities.liabilities.loanType=='SECURED'",
                                                 },
@@ -3128,7 +3128,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "orderNo": 50
                                         },
                                         "groupID": {
-                                            "key": "loanAccount.jlgGroupId ",
+                                            "key": "loanAccount.jlgGroupId",
                                             "title": "GROUP_ID",
                                             "type": "string",
                                             "orderNo": 40,
