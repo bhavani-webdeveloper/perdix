@@ -803,10 +803,12 @@ define({
                                                 return irfCurrencyFilter(data)
                                             else return "NA"
                                         }
-                                    }, {
-                                        "title": "AREA_UNITS_OF_ASSETS",
-                                        "data": "unit"
-                                    }];
+                                    },
+                                    // {
+                                    //     "title": "AREA_UNITS_OF_ASSETS",
+                                    //     "data": "unit"
+                                    // }
+                                ];
                                 },
                                 getActions: function() {
                                     return [];

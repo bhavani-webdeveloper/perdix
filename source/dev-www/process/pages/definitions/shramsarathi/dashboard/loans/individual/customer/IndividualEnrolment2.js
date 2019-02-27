@@ -177,25 +177,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.addressProofFieldSet":{
-                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='Pan Card'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
                                 },
                                 "KYC.addressProof": {
                                     "readonly": false,
-                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='Pan Card'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
                                 },
                                 "KYC.addressProofImageId": {
                                     "required": true,
-                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
                                 },
                                 "KYC.addressProofNo": {
                                     "required": true,
-                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
                                 },
                                 "KYC.addressProofIssueDate":{
-                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
                                 },
                                 "KYC.addressProofValidUptoDate":{
-                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
                                 },
                                 "KYC.additionalKYCs.kyc1ImagePath": {
                                     "required": true
@@ -2040,6 +2040,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth": {
                         "required": false
                     },
+                    "KYC.identityProof":{
+                        "enumCode":"identity_proof",
+                        "orderNo":21
+                    },
+                    "KYC.addressProof":{
+                        "enumCode":"address_proof",
+                        "orderNo":14
+                    },
                     // "IndividualInformation.existingLoan":{
                     //     "title":""
                     // },
@@ -2245,6 +2253,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Machinery.fixedAssetsMachinaries",
                     "Machinery.fixedAssetsMachinaries.machineType",
                     "Machinery.fixedAssetsMachinaries.presentValue",
+                    "Machinery.fixedAssetsMachinaries.balance",
                     
                     //"PhysicalAssets.physicalAssets.unit",
 
@@ -2554,7 +2563,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                            // "orderNo":70
                                         },
                                         "addressProofSameAsIdProof":{
-                                            "condition":"model.customer.identityProof!='Pan Card'",
+                                            "condition":"model.customer.identityProof!='PAN Card'",
                                             "key":"customer.addressPfSameAsIdProof",
                                             "title":"ADDRESS_PROOF_SAME_AS_IDPROOF",
                                             "type":"radios",
@@ -2565,6 +2574,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "orderNo":60,
                                             "onChange": function(modelValue, form, model, formCtrl, event) {
                                                         if(model.customer.addressPfSameAsIdProof==='YES'){
+                                                            model.customer.addressProof=model.customer.identityProof,
                                                             model.customer.addressProofNo=model.customer.identityProofNo,
                                                             model.customer.addressProofImageId=model.customer.identityProofImageId,
                                                             model.customer.addressProofReverseImageId=model.customer.identityProofReverseImageId,
@@ -2579,7 +2589,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "fileType":"application/pdf",
                                             "using":"scanner",
                                             "type":"file",
-                                            "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'",
+                                            "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'",
                                             "orderNo":73
                                         },
                                     }
@@ -2796,7 +2806,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "key":"customer.familyMembers[].incomes[].skillLevel",
                                                             "title":"SKILL_LEVEL",
                                                             "type":"select",
-                                                            "enumCode":"skillLevel",
+                                                            "titleMap":{
+                                                                "skilled":"SKILLED",
+                                                                "unskilled":"UNSKILLED",
+                                                                "semi_skilled":"SEMI_SKILLED"
+                                                            },
                                                             "required":true
                                                             
                                                         },
@@ -2812,25 +2826,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "title":"AVARAGE_RETURN",
                                                             "type":"select",
                                                             "required":true,
-                                                            titleMap: {
-                                                                "lessThanAMonth": "Less Than a Month",
-                                                                "biMonthly": "Bi Monthly",
-                                                                "etc":"etc"
-                                                            },
+                                                            "enumCode":"Average Return"
 
                                                             
                                                         },
                                                         "incomeFrom":{
                                                             "key":"customer.familyMembers[].incomes[].incomeType",
-                                                            "title":"INCOME_FROM",
-                                                            "type":"radios",
+                                                            "title":"INCOME_TYPE",
+                                                            "type":"select",
                                                             "required":true,
-                                                            titleMap: {
-                                                                "sourceIncome": "Source Income",
-                                                                "destinationIncome": "Destination Income"
-                                                            },
-                                                            
-                                                            
+                                                            "enumCode":"Income Type"
+                                                          
                                                         }
 
                                                     }
@@ -2870,11 +2876,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "title":"HOUSE_STATUS",
                                             "key":"customer.houseStatus",
                                             "type":"select",
-                                            "titleMap":{
-                                                "PAKKA":"PAKKA",
-                                                "KACCHA":"KACCHA",
-                                                "TARPAL_SEET":"TARPAL_SEET"
-                                            }
+                                            "enumCode":"House Verification"
                                         },
                                         "noOfRooms":{
                                             "key":"customer.noOfRooms",
@@ -2888,13 +2890,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "liabilities":{
                                             "items":{
                                                 "mortage": {
-                                                    "key": "customer.liabilities[].mortage",
+                                                    "key": "Liabilities.liabilities.mortage",
                                                     "title": "MORTAGE",
                                                     //"condition": "model.Liabilities.liabilities.loanType=='SECURED'",
                                                     "orderNo": 10
                                                 },
                                                 "mortageAmount": {
-                                                    "key": "customer.liabilities[].mortageAmount",
+                                                    "key": "customer.liabilities.mortageAmount",
                                                     "title": "MORTAGE_AMOUNT",
                                                     //"condition": "model.Liabilities.liabilities.loanType=='SECURED'",
                                                 },
@@ -3128,7 +3130,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "orderNo": 50
                                         },
                                         "groupID": {
-                                            "key": "loanAccount.jlgGroupId",
+                                            "key": "loanAccount.jlgGroupId ",
                                             "title": "GROUP_ID",
                                             "type": "string",
                                             "orderNo": 40,
