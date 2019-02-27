@@ -10,6 +10,10 @@
             die();
         }
         $encore = $_GET['encore'];
+        if ($encore > 5000) {
+            header("Location: $base/serverError.php?encore=5000");
+            die();
+        }
         // CREATE VIEW `encoresite` AS select '/opt/mount_point/encoresite' AS `path`
         $encoresite = DB::table('encoresite')->first();
         $encore_log = shell_exec('tail -n '.$encore.' '.$encoresite->path.'/logs/encore.log');
