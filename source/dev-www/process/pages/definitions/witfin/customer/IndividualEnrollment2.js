@@ -1000,7 +1000,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "condition": "model.customer.familyMembers[arrayIndex].relationShip.toUpperCase() != 'SELF'"
                     },
                     "FamilyDetails.familyMembers.salary":{
-                        "title":"NET_ANNUAL_SALARY"
+                        "title":"NET_ANNUAL_INCOME"
                     },
                     "ContactInformation.locality": {
                         "readonly" : true
