@@ -8,7 +8,10 @@ export class KGFSSendBacktoStageLOVConfiguration extends LOVElementConfiguration
 	search: Function = function(inputModel, form, model, context) {
 		let $q = AngularResourceService.getInstance().getNGService("$q");
 		let formHelper = AngularResourceService.getInstance().getNGService("formHelper");
+        let stage1 = model.loanProcess.loanAccount.currentStage;
+        if(model.loanAccount.currentStage=='Rejected')
         let stage1= model.review.preStage;
+
         let targetstage = formHelper.enum('targetstagemel').data;
         let out = [];
         for (let i = 0; i < targetstage.length; i++) {
