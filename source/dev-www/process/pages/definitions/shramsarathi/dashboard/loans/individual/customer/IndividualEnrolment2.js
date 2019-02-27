@@ -177,25 +177,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.addressProofFieldSet":{
-                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='Pan Card'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
                                 },
                                 "KYC.addressProof": {
                                     "readonly": false,
-                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='Pan Card'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
                                 },
                                 "KYC.addressProofImageId": {
                                     "required": true,
-                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
                                 },
                                 "KYC.addressProofNo": {
                                     "required": true,
-                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
                                 },
                                 "KYC.addressProofIssueDate":{
-                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
                                 },
                                 "KYC.addressProofValidUptoDate":{
-                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
                                 },
                                 "KYC.additionalKYCs.kyc1ImagePath": {
                                     "required": true
@@ -2563,7 +2563,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                            // "orderNo":70
                                         },
                                         "addressProofSameAsIdProof":{
-                                            "condition":"model.customer.identityProof!='Pan Card'",
+                                            "condition":"model.customer.identityProof!='PAN Card'",
                                             "key":"customer.addressPfSameAsIdProof",
                                             "title":"ADDRESS_PROOF_SAME_AS_IDPROOF",
                                             "type":"radios",
@@ -2589,7 +2589,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "fileType":"application/pdf",
                                             "using":"scanner",
                                             "type":"file",
-                                            "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='Pan Card'",
+                                            "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'",
                                             "orderNo":73
                                         },
                                     }
