@@ -2245,6 +2245,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Machinery.fixedAssetsMachinaries",
                     "Machinery.fixedAssetsMachinaries.machineType",
                     "Machinery.fixedAssetsMachinaries.presentValue",
+                    "Machinery.fixedAssetsMachinaries.balance",
                     
                     //"PhysicalAssets.physicalAssets.unit",
 
@@ -2565,6 +2566,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "orderNo":60,
                                             "onChange": function(modelValue, form, model, formCtrl, event) {
                                                         if(model.customer.addressPfSameAsIdProof==='YES'){
+                                                            model.customer.addressProof=model.customer.identityProof,
                                                             model.customer.addressProofNo=model.customer.identityProofNo,
                                                             model.customer.addressProofImageId=model.customer.identityProofImageId,
                                                             model.customer.addressProofReverseImageId=model.customer.identityProofReverseImageId,
@@ -2888,13 +2890,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "liabilities":{
                                             "items":{
                                                 "mortage": {
-                                                    "key": "customer.liabilities[].mortage",
+                                                    "key": "Liabilities.liabilities.mortage",
                                                     "title": "MORTAGE",
                                                     //"condition": "model.Liabilities.liabilities.loanType=='SECURED'",
                                                     "orderNo": 10
                                                 },
                                                 "mortageAmount": {
-                                                    "key": "customer.liabilities[].mortageAmount",
+                                                    "key": "customer.liabilities.mortageAmount",
                                                     "title": "MORTAGE_AMOUNT",
                                                     //"condition": "model.Liabilities.liabilities.loanType=='SECURED'",
                                                 },
@@ -3128,7 +3130,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "orderNo": 50
                                         },
                                         "groupID": {
-                                            "key": "loanAccount.jlgGroupId",
+                                            "key": "loanAccount.jlgGroupId ",
                                             "title": "GROUP_ID",
                                             "type": "string",
                                             "orderNo": 40,
