@@ -2781,14 +2781,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "key":"customer.familyMembers[].incomes[].workSector",
                                                             "title":"WORK_SECTOR",
                                                             "type":"select",
-                                                            "enumCode":"workSector",
+                                                            "enumCode":"work_sector",
                                                             "required":true
                                                         },
                                                         "occupationType":{
                                                             "key":"customer.familyMembers[].incomes[].occupationType",
                                                             "title":"OCCUPATION_TYPE",
                                                             "type":"select",
-                                                            "enum":"occupation",
+                                                            "enumCode":"Occupation Type",
                                                             "required":true
                                                             
                                                         },
