@@ -1292,6 +1292,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "BankAccounts.customerBankAccounts.bankStatements": {
                        "startEmpty": true 
+                    },
+                    "FamilyDetails.familyMembers.salary":{
+                        "title":"NET_ANNUAL_INCOME"
                     }
                 }
             }

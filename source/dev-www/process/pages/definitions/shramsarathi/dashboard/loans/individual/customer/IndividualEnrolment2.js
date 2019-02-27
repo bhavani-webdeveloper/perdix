@@ -1821,6 +1821,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "FamilyDetails.familyMembers.relationShip":{
                         "title":"RELATIONSHIP_WITH_MIGRANT",
+                        "enumCode":"relationship"
                     },
                     "FamilyDetails.familyMembers.familyMemberFirstName":{
                         "title":"MIGRANT_NAME",
@@ -2046,8 +2047,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "KYC.addressProof":{
                         "enumCode":"address_proof",
-                        "orderNo":14
+                        "orderNo":61
                     },
+                    "FamilyDetails.familyMembers.educationStatus":{
+                        "enumCode":"education_status"
+                    }
                     // "IndividualInformation.existingLoan":{
                     //     "title":""
                     // },
@@ -2335,6 +2339,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                     model.enrolmentProcess.currentStage = model.currentStage;
                     model.customer = model.enrolmentProcess.customer;
+                    model.customer.addressPfSameAsIdProof="NO";
                     // }
                     /* End of setting data recieved from Bundle */
                     // set Age from DateOfBirth
@@ -2365,7 +2370,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 model.UIUDF.family_fields.dependent_family_member++;
                         });
                     }
-
+                    model.customer.addressPfSameAsIdProof="NO";
                     /* Form rendering starts */
                     var self = this;
                     var formRequest = {
@@ -2534,11 +2539,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "from":{
                                                     "key":"IndividualFinancials.expenditures.from",
                                                     "title":"EXPENSE_FROM",
-                                                    "type":"radios",
-                                                    "titleMap":{
-                                                        "Source":"SOURCE_EXPENSE",
-                                                        "Destination":"DESTINATION_EXPENSE"
-                                                    }
+                                                    "type":"select",
+                                                    "enumCode":"expense_type"
                                                 },
                                             }
                                         },
@@ -2574,7 +2576,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "orderNo":60,
                                             "onChange": function(modelValue, form, model, formCtrl, event) {
                                                         if(model.customer.addressPfSameAsIdProof==='YES'){
-                                                            model.customer.addressProof=model.customer.identityProof,
+                                                            // model.customer.addressProof=model.customer.identityProof,
                                                             model.customer.addressProofNo=model.customer.identityProofNo,
                                                             model.customer.addressProofImageId=model.customer.identityProofImageId,
                                                             model.customer.addressProofReverseImageId=model.customer.identityProofReverseImageId,
@@ -2785,7 +2787,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                         },
                                                         "frequency": {
                                                             key: "customer.familyMembers[].incomes[].frequency",
-                                                            type: "select"
+                                                            type: "select",
+                                                            "enumCode":"frequency"
                                                         },
                                                         "workSector":{
                                                             "key":"customer.familyMembers[].incomes[].workSector",
@@ -2798,7 +2801,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "key":"customer.familyMembers[].incomes[].occupationType",
                                                             "title":"OCCUPATION_TYPE",
                                                             "type":"select",
-                                                            "enumCode":"Occupation Type",
+                                                            "enumCode":"occupation_type",
                                                             "required":true
                                                             
                                                         },
@@ -2826,7 +2829,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "title":"AVARAGE_RETURN",
                                                             "type":"select",
                                                             "required":true,
-                                                            "enumCode":"Average Return"
+                                                            "enumCode":"average_return"
 
                                                             
                                                         },
@@ -2835,7 +2838,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "title":"INCOME_TYPE",
                                                             "type":"select",
                                                             "required":true,
-                                                            "enumCode":"Income Type"
+                                                            "enumCode":"income_type"
                                                           
                                                         }
 
@@ -2876,7 +2879,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "title":"HOUSE_STATUS",
                                             "key":"customer.houseStatus",
                                             "type":"select",
-                                            "enumCode":"House Verification"
+                                            "enumCode":"house _verification"
                                         },
                                         "noOfRooms":{
                                             "key":"customer.noOfRooms",
