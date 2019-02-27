@@ -2057,7 +2057,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "Liabilities.liabilities.liabilityType":{
                         "enumCode":"financial_liabilities"
-                    }
+                    },
+                    "Machinery.fixedAssetsMachinaries.machineType":{
+                        "enumCode":"fixed_asset_type"
+                    },
                     
                     // "IndividualInformation.existingLoan":{
                     //     "title":""

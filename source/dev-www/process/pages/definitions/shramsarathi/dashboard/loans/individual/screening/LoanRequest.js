@@ -754,7 +754,7 @@ define([],function(){
                                 //"LoanRecommendation.securityEmiRequired",
                                 "LoanMitigants.loanMitigantsByParameter",
                                 "CollateralDetails",
-                                "LoanRecommendation",
+                                //"LoanRecommendation",
 
                             ],
                             "overrides": {
