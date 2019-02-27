@@ -753,7 +753,9 @@ define([],function(){
                                 "NomineeDetails.nominees.nomineeButton"   ,
                                 //"LoanRecommendation.securityEmiRequired",
                                 "LoanMitigants.loanMitigantsByParameter",
-                                "CollateralDetails"               
+                                "CollateralDetails",
+                                "LoanRecommendation",
+
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -1175,6 +1177,9 @@ define([],function(){
             }
              var overridesFields = function (bundlePageObj) {
                 return {
+                    "PostReview.reject.rejectReason":{
+                        "enumCode":"loan_rejection_reason",
+                    },
                         "PreliminaryInformation.linkedAccountNumber": {
                             "resolver": "LinkedAccountNumberLOVConfiguration",
                             "condition": "model.loanAccount.transactionType.toLowerCase() != 'renewal' && model.loanAccount.transactionType != 'New Loan'",
@@ -1850,7 +1855,7 @@ define([],function(){
                                             "titleMap":{"yes":"yes","no":"no"}
                                         },
                                         "collectionDate":{
-                                            "key":"loanAccount.disbursementSchedules.firstrepaymentdate",
+                                            "key":"loanAccount.disbursementSchedules.firstrRepaymentDate",
                                             "title":"COLLECTION_DATE",
                                             "type":"date",
                                             "required":true

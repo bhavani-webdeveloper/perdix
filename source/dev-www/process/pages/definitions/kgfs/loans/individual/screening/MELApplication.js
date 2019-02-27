@@ -5,10 +5,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
         pageUID: "kgfs.loans.individual.screening.MELApplication",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
-            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","Maintenance","AuthTokenHelper"],
+            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","Maintenance","AuthTokenHelper","irfNavigator"],
 
         $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
-                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,Maintenance,AuthTokenHelper) {
+                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,Maintenance,AuthTokenHelper,irfNavigator) {
 
             AngularResourceService.getInstance().setInjector($injector);
             var branch = SessionStore.getBranch();
@@ -33,6 +33,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualInformation.urnNo":{
                         "title":"URN_NO",
                         "readonly":true
+                    },
+                    "DownloadMELApplicationForm.downloadMELApplicationFormName":{
+                        "required":true
                     }
                 }
 
@@ -157,6 +160,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "type": "button",
                                             "title": "DOWNLOAD",
                                             "icon": "fa fa-download",
+                                            "condition":"model.master.uploadNameValue",
                                             "notitle": true,
                                             "readonly": false,
 
@@ -511,23 +515,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     proceed: function(model, formCtrl, form, $event){
                         var trancheTotalAmount=0;
-                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == 'Sanction' && model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length){
-                            
-                            for (var i = model.loanAccount.disbursementSchedules.length - 1; i >= 0; i--) {
-                                model.loanAccount.disbursementSchedules[i].modeOfDisbursement = "CASH";
-                                trancheTotalAmount+=(model.loanAccount.disbursementSchedules[i].disbursementAmount || 0);
-                            }
-                            if (trancheTotalAmount > model.loanAccount.loanAmount){
-                                PageHelper.showProgress("loan-create","Total tranche amount is more than the Loan amount",5000);
-                                return false;
-                              }  
-                            
-                            if (trancheTotalAmount < model.loanAccount.loanAmount){
-                                PageHelper.showProgress("loan-create","Total tranche amount should match with the Loan amount",5000);
-                                return false;
-                            }
-                        
+
+                        PageHelper.clearErrors();
+                        if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
                         }
+                        formCtrl.scope.$broadcast('schemaFormValidate');
+
+                        if (formCtrl && formCtrl.$invalid) {
+                            PageHelper.showProgress("enrolment", "Your form have errors. Please fix them.", 5000);
+                            return false;
+                        }
+                        PageHelper.showLoader();                   
                         PageHelper.showProgress('enrolment', 'Updating Loan');
                         model.loanProcess.proceed()
                             .finally(function () {
