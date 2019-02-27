@@ -2051,7 +2051,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "FamilyDetails.familyMembers.educationStatus":{
                         "enumCode":"education_status"
+                    },
+                    "EnterpriseFinancials.currentAsset.assetType":{
+                        "enumCode":"current_asset_type"
+                    },
+                    "Liabilities.liabilities.liabilityType":{
+                        "enumCode":"financial_liabilities"
                     }
+                    
                     // "IndividualInformation.existingLoan":{
                     //     "title":""
                     // },
@@ -2879,7 +2886,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "title":"HOUSE_STATUS",
                                             "key":"customer.houseStatus",
                                             "type":"select",
-                                            "enumCode":"house _verification"
+                                            "enumCode":"house_verification"
                                         },
                                         "noOfRooms":{
                                             "key":"customer.noOfRooms",

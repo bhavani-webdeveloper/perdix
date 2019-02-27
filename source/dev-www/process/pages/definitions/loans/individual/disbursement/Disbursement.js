@@ -257,7 +257,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.firstRepaymentDate",
-                        "condition":"model.siteCode=='KGFS'",
+                        "condition":"model.siteCode=='KGFS' || model.siteCode=='kinara'",
                         "title":"FIRST_REPAYMENT_DATE",
                         "type":"date",
                     },
