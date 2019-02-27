@@ -31,7 +31,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "type": "number",
                     },
                     "Machinery.fixedAssetsMachinaries.hypothecatedToUs": {
-                        "title": "HYPOTHECATED_TO_MAITREYA"
+                        "title": "CAN_BE_HYPOTHECATED_TO_US"
 
                     },
                     // "EnterpriseInformation.businessHistory": {
@@ -199,6 +199,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "EnterpriseAssets.enterpriseAssets.valueOfAsset":{
                         "title": "Present Value"
                     },
+                    "EnterpriseAssets.enterpriseAssets.details":{
+                        title: "DESCRIPTION",
+                        key: "customer.enterpriseAssets[].details",
+                        orderNo:125,
+                        condition:  "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
+                        type: "string",
+                        required: true,
+                    }, 
                     "CurrentAssets":{
                         "orderNo":100
                     },
@@ -741,6 +749,55 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             },
                         }
                     },
+                    "EnterpriseAssets":{
+                        "items": {
+                            "enterpriseAssets" : {
+                                "items": {
+                                    "assetName":{
+                                        key: "customer.enterpriseAssets[].assetName",
+                                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
+                                        title: "TYPE",
+                                        required:true,
+                                        type: "select",
+                                        enumCode: "enterprise_asset_name",
+                                        orderNo:130,
+                                    },
+                                    "isHypothecated":{
+                                        key: "customer.enterpriseAssets[].isHypothecated",
+                                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
+                                        title: "IS_THE_MACHINE_HYPOTHECATED" ,
+                                        type: "radios",
+                                        titleMap: {
+                                            "No": "No",
+                                            "Yes": "Yes"
+                                        },
+                                        orderNo:135,
+                                    },
+                                    "hypothecatedToUs":{
+                                        key: "customer.enterpriseAssets[].hypothecatedToUs",
+                                        title: "CAN_BE_HYPOTHECATED_TO_US",
+                                        condition : "model.customer.enterpriseAssets[arrayIndex].isHypothecated == 'No'",
+                                        type: "radios",
+                                        titleMap: {
+                                            "No": "No",
+                                            "Yes": "Yes"
+                                        },
+                                        orderNo:140,
+                                    },
+                                    "assetImageId":{
+                                        key: "customer.enterpriseAssets[].assetImageId",
+                                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
+                                        title: "IMAGE",
+                                        "type": "file",
+                                        "fileType": "image/*",
+                                        "category": "Loan",
+                                        "subCategory": "COLLATERALPHOTO",
+                                        orderNo:145,
+                                    },
+                                }
+                            }
+                        }
+                    }
             }
             }
             var getIncludes_businessbasic = function (model) {
@@ -906,6 +963,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "EnterpriseAssets.enterpriseAssets",
                     "EnterpriseAssets.enterpriseAssets.assetType",                    
                     "EnterpriseAssets.enterpriseAssets.valueOfAsset",  
+                    "EnterpriseAssets.enterpriseAssets.details",
+                    "EnterpriseAssets.enterpriseAssets.assetName",
+                    "EnterpriseAssets.enterpriseAssets.isHypothecated",
+                    "EnterpriseAssets.enterpriseAssets.hypothecatedToUs",
+                    "EnterpriseAssets.enterpriseAssets.assetImageId",
 
                     "Machinery",
                     "Machinery.fixedAssetsMachinaries",
