@@ -38,6 +38,7 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"),
                     $stateParams.pageData.readonly = true;
                 }
                 model.readonly = $stateParams.pageData.readonly;
+                model.readonlyExceptComments = !!$stateParams.pageData.readonlyExceptComments;
                 model.audit_id = Number($stateParams.pageId);
                 model.jewel_appraisal = model.jewel_appraisal || {};
                 // var master = Audit.offline.getAuditMaster() || {};
@@ -52,7 +53,7 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"),
 
                     self.form = [{
                         type: "box",
-                        readonly: model.readonly,
+                        readonly: model.readonly || model.readonlyExceptComments,
                         title: "JEWEL_APPRAISALS",
                         items: [{
                             key: "jewel_appraisal.jewel_details",
@@ -93,7 +94,7 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"),
                         }]
                     }, {
                         type: "box",
-                        readonly: model.readonly,
+                        readonly: model.readonly || model.readonlyExceptComments,
                         title: "JEWEL_ASSETS",
                         items: [{
                             key: "jewel_appraisal.jewel_assets.number_of_pouches_in_hand",

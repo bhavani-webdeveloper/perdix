@@ -263,6 +263,13 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                         if ($stateParams.pageData.view == 'all' && $scope.model.ai.status != 'O' && $scope.model.ai.status != 'P') {
                             pageData.readonly = true;
                         }
+                        if ($scope.siteCode == 'KGFS') {
+                            if (menu.stateParams.pageName == 'audit.detail.ProcessCompliance') {
+                                pageData.readonly = $scope.model.ai.status !== 'O';
+                            } else {
+                                pageData.readonlyExceptComments = $scope.model.ai.status !== 'O';
+                            }
+                        }
                         pageData.type = $stateParams.pageData.type;
                         pageData.view = $stateParams.pageData.view;
                         if ($scope.$isOnline) {

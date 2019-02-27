@@ -16,6 +16,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                     $stateParams.pageData.readonly = true;
                 }
                 model.readonly = $stateParams.pageData.readonly;
+                model.readonlyExceptComments = !!$stateParams.pageData.readonlyExceptComments;
                 model.audit_id = Number($stateParams.pageId);
                 model.field_verification = model.field_verification || [];
                 var master = Audit.offline.getAuditMaster() || {};
@@ -124,7 +125,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                                         });
                                     },
                                     isApplicable: function(item, index) {
-                                        return !$stateParams.pageData.readonly;
+                                        return !$stateParams.pageData.readonly && !model.readonlyExceptComments;
                                     }
                                 }];
                             }
@@ -139,23 +140,25 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                             "title": "LOAN_TYPE",
                             "type": "select",
                             "titleMap": fieldverificationTitleMap,
-                            "required": true
-
+                            "required": true,
+                            readonly: model.readonlyExceptComments
                         }, {
                             "key": "add_fv.urn",
                             "title": "URN",
                             "type": "string",
-
+                            readonly: model.readonlyExceptComments
                         }, {
                             "key": "add_fv.book_entity_id",
                             "title": "BOOK_ENTITY",
                             "type": "select",
                             "titleMap": bookEntityTitleMap,
-                            "required": true
+                            "required": true,
+                            readonly: model.readonlyExceptComments
                         }, {
                             "key": "add_fv.field_verify_date",
                             "title": "FIELD_VERIFY_DATE",
                             "type": "date",
+                            readonly: model.readonlyExceptComments,
                             "ngModel": function(ngModel) {
                                 ngModel.$validators.futureDate = function(value) {
                                     return !moment(value, SessionStore.getSystemDateFormat()).isAfter(moment());
@@ -167,13 +170,22 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                         }, {
                             "key": "add_fv.amount",
                             "title": "AMOUNT",
-                            "type":"amount"
+                            "type":"amount",
+                            readonly: model.readonlyExceptComments
                         }, {
                             "key": "add_fv.comments",
                             "title": "COMMENTS",
                         }, {
                             "type": "actions",
-                            "condition": "model.add_fv.fv_newgen_uid",
+                            "condition": "model.readonlyExceptComments",
+                            "items": [{
+                                "title": "UPDATE",
+                                "type": "button",
+                                "onClick": "actions.edit(model, formCtrl, form, $event)"
+                            }]
+                        }, {
+                            "type": "actions",
+                            "condition": "!model.readonlyExceptComments && model.add_fv.fv_newgen_uid",
                             "items": [{
                                 "title": "UPDATE",
                                 "type": "button",
@@ -196,7 +208,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
 
                         }, {
                             "type": "actions",
-                            "condition": "!model.add_fv.fv_newgen_uid",
+                            "condition": "!model.readonlyExceptComments && !model.add_fv.fv_newgen_uid",
                             "items": [{
                                 "title": "ADD",
                                 "type": "button",
@@ -216,7 +228,6 @@ irf.pageCollection.factory(irf.page("audit.detail.FieldVerification"), ["$log", 
                                     };
                                 }
                             }]
-
                         }]
                     }]
                 }
