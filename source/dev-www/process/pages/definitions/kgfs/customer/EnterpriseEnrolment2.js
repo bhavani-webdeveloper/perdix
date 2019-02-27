@@ -158,8 +158,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EnterpriseInformation.branchName": {
                         "readonly": true,
-                        "required": true,
-                        "orderNo": 10
+                        "orderNo": 10,
+                        "required":true,
                     },
                     "EnterpriseInformation.centreId": {
                         "type": "text",
@@ -176,7 +176,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "orderNo": 20
                     },
                     "EnterpriseInformation.urnNo": {
-                        "condition": true,
+                        "condition": "model.customer.urnNo",
                         "required": true,
                         "type": "text",
                         "orderNo": 40
@@ -206,7 +206,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "enumCode": "business_in_present_area_since",
                     },
                     "EnterpriseInformation.businessConstitution": {
-                        "orderNo": 100
+                        "orderNo": 100,
+                        "required": false
                     },
                     "EnterpriseInformation.vatNumber": {
                         "orderNo": 110
@@ -251,13 +252,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "orderNo": 220
                     },
                     "ContactInformation.villageName": {
-                        "orderNo": 230
+                        "orderNo": 230,
+                        "required": true
                     },
                     "ContactInformation.district": {
-                        "orderNo": 240
+                        "orderNo": 240,
+                        "required":false
                     },
                     "ContactInformation.state": {
-                        "orderNo": 250
+                        "orderNo": 250,
+                         "required":false
                     },
                     "BankAccounts.customerBankAccounts.ifscCode": {
                         "required": true,
@@ -395,10 +399,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EnterpriseFinancials.totalMonthlySurplus": {
                         "orderNo": 524,
-
+                        "required": true
                     },
                     "EnterpriseFinancials.debtServiceRatio": {
                         "orderNo": 528,
+                        "required": true
                     },
                     "PreliminaryInformation": {
                         "orderNo": 540
@@ -469,6 +474,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "OtherExpenseDetails":{
                         "orderNo": 745
+                    },
+                    "BuyerDetails.buyerDetails.receivablesOutstanding":{
+                        "title":"AMOUNT_TRANSACTION_PER_FREQUENCY"
                     }
                 }
             }
@@ -481,21 +489,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 "type": "select",
                                 "enumCode": "loan_distance_from_branch",
                                 "title": "DISTANCE_FROM_BRANCH",
+                                "required": true
                             },
                             "centreName": {
                                 "key": "customer.centreName",
                                 "type": "text",
-                                "title": "CENTRE_NAME"
+                                "title": "CENTRE_NAME",
+                                "required": true
                             },
                             "branchName": {
                                 "key": "customer.branchName",
                                 "type": "text",
                                 "title": "BRANCH_NAME",
+                                "required":true
                             },
                             "vatNumber": {
                                 "key": "loanAccount.vatNumber",
                                 "type": "text",
                                 "title": "GST_NUMBER",
+                                "required":true
                             },
                             "enterpriseDocuments": {
                                 "type": "array",
@@ -508,12 +520,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         "enumCode": "businessType",
                                         "title": "BUSINESS_TYPE",
                                         "key": "customer.enterpriseDocuments[].udf1",
-                                        "required": true
+                                        "required":true
                                     },
                                     "udf2": {
                                         "key": "customer.enterpriseDocuments[].udf2",
                                         "title": "BUSINESS_ACTIVITY",
-                                        "required": true,
+                                        "required":true,
                                         type: "select",
                                         enumCode: "businessActivity",
                                     },
@@ -614,8 +626,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     columnsFn: function () {
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
-                                            "dtType":"static",
-                                            // "dtShowDeleteFlag":true,
+                                            "dtStaticTable":true,
+                                            "dtHideDeleteFlag":true,
                                             "columns": [
                                                 {
                                                     prop: "salesType",
@@ -708,8 +720,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     columnsFn: function () {
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
-                                            "dtType":"static",
-                                            "dtShowDeleteFlag":true,
+                                            "dtStaticTable":true,
+                                            "dtHideDeleteFlag":true,
                                             "columns": [
                                                 {
                                                     prop: "salesType",
@@ -825,8 +837,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     columnsFn: function () {
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
-                
-                                            "dtShowDeleteFlag":true,
+                                            "dtHideDeleteFlag":true,
                                             "columns": [
                                                 {
                                                     prop: "productName",
@@ -897,8 +908,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     columnsFn: function () {
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
-                                            "dtType":"static",
-                                            "dtShowDeleteFlag":true,
+                                            "dtStaticTable":true,
+                                            "dtHideDeleteFlag":true,
                                             "columns": [
                                                 {
                                                     prop: "productName",
@@ -970,8 +981,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     columnsFn: function () {
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
-                                            "dtType":"static",
-                                            "dtShowDeleteFlag":false,
+                                            "dtStaticTable":true,
+                                            "dtHideDeleteFlag":true,
                                             "columns": [
                                                 {
                                                     prop: "seasonType",
@@ -1107,8 +1118,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     columnsFn: function () {
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
-                                            "dtType":"static",
-                                            "dtShowDeleteFlag":false,
+                                            "dtStaticTable":true,
+                                            "dtHideDeleteFlag":true,
                                             "columns": [
                                                 {
                                                     prop: "seasonType",
@@ -1513,7 +1524,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     columnsFn: function () {
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
-                                            "dtType":"static",
+                                            "dtStaticTable":true,
+                                            "dtHideDeleteFlag":true,
                                             "columns": [
                                                 {
                                                     prop: "expenditureSource",
@@ -1572,7 +1584,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     columnsFn: function () {
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
-                                            "dtType":"static",
+                                            "dtStaticTable":true,
+                                            "dtHideDeleteFlag":true,
                                             "columns": [
                                                 {
                                                     prop: "expenditureSource",
@@ -1632,8 +1645,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     columnsFn: function () {
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
-                                            "dtType":"static",
-                                            "dtShowDeleteFlag":true,
+                                            "dtStaticTable":true,
+                                            "dtHideDeleteFlag":true,
                                             "columns": [
                                                 {
                                                     prop: "incomeSource",
@@ -1679,8 +1692,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     columnsFn: function () {
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
-                                            "dtType":"static",
-                                            "dtShowDeleteFlag":true,
+                                            "dtStaticTable":true,
+                                            "dtHideDeleteFlag":true,
                                             "columns": [
                                                 {
                                                     prop: "incomeSource",
@@ -1727,8 +1740,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     columnsFn: function () {
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
-                                            "dtType":"static",
-                                            "dtShowDeleteFlag":true,
+                                            "dtStaticTable":true,
+                                            "dtHideDeleteFlag":true,
                                             "columns": [
                                                 {
                                                     prop: "expenditureSource",
@@ -1784,8 +1797,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     columnsFn: function () {
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
-                                            "dtType":"static",
-                                            "dtShowDeleteFlag":true,
+                                            "dtStaticTable":true,
+                                            "dtHideDeleteFlag":true,
                                             "columns": [
                                                 {
                                                     prop: "expenditureSource",
@@ -1841,7 +1854,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     columnsFn: function () {
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
-                                            "dtShowDeleteFlag":true,
+                                            "dtHideDeleteFlag":true,
                                             "columns": [
                                                 {
                                                     prop: "udf2",
@@ -1897,7 +1910,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     columnsFn: function () {
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
-                                            "dtShowDeleteFlag":true,
+                                            "dtHideDeleteFlag":true,
                                             "columns": [
                                                 {
                                                     prop: "udf2",

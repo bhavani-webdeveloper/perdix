@@ -2753,26 +2753,92 @@
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 100,
-                            "captureStages": ["Completed"]
+                            "captureStages": ["BasicEnrolment,Completed"]
                         },
                         "rawMaterialType": {
                             "title": "Raw Material Type",
                             "type": "string",
                             "refCodeCategory": "income_type",
-                            "captureStages": ["Completed"]
+                            "captureStages": ["BasicEnrolment,Completed"]
                         },
                         "amount": {
                             "title": "Amount",
                             "type": "number",
                             "minimum": 0,
                             "maximum": 10000000,
-                            "captureStages": ["Completed"]
+                            "captureStages": ["BasicEnrolment,Completed"]
                         },
                         "rawMaterialDate": {
                             "title": "Date",
                             "type": "string",
                             "format": "date",
-                            "captureStages": ["Completed"]
+                            "captureStages": ["BasicEnrolment,Completed"]
+                        }
+                    }
+                }
+            },
+            "enterpriseRegistrations": {
+                "title": "Enterprise Registration",
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "required": [],
+                    "properties": {
+                        "registrationType": {
+                            "title": "Registration Type",
+                            "type": "string",
+                            "captureStages": ["BasicEnrolment,Completed"]
+                        },
+                        "registrationNumber": {
+                            "title": "Registration Number",
+                            "type": "number",
+                            "captureStages": ["BasicEnrolment,Completed"]
+                        },
+                        "registeredDate": {
+                            "title": "Registration Date",
+                            "type": "string",
+                            "format": "date",
+                            "captureStages": ["BasicEnrolment,Completed"]
+                        },
+                        "expiryDate": {
+                            "title": "Expiry Date",
+                            "type": "string",
+                            "format": "date",
+                            "captureStages": ["BasicEnrolment,Completed"]
+                        },
+                        "documentId":{
+                            "type": "string",
+                            "captureStages": ["BasicEnrolment", "Completed"]
+                        }
+                    }
+                }
+            },
+            "enterpriseDocuments": {
+                "title": "Enterprise Document",
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "required": [],
+                    "properties": {
+                        "udf1": {
+                            "title": "Business Type",
+                            "type": "string",
+                            "captureStages": ["BasicEnrolment,Completed"]
+                        },
+                        "udf2": {
+                            "title": "Business Activity",
+                            "type": "string",
+                            "captureStages": ["BasicEnrolment,Completed"]
+                        },
+                        "udf3": {
+                            "title": "Business Sector",
+                            "type": "string",
+                            "captureStages": ["BasicEnrolment,Completed"]
+                        },
+                        "udf4": {
+                            "title": "Expiry Date",
+                            "type": "string",
+                            "captureStages": ["BasicEnrolment,Completed"]
                         }
                     }
                 }
