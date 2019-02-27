@@ -948,6 +948,14 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             "required":false,
                             "type": "select"
                         }, {
+                            "key": "loanAccount.groupCode",
+                            "required":false,
+                            "readonly": true,
+                            "title": "GROUP_CODE",
+                            "type" : "string",
+                            "condition": "model.loanAccount.loanType == 'JLG'"
+
+                        }, {
                             "key": "loanAccount.tenure",
                             "required":false,
                             "title": "DURATION_IN_MONTHS"

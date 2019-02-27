@@ -456,6 +456,11 @@
                         "maximum": 999999,
                         "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
+                    "centreName": {
+                        "title": "CentreName",
+                        "type": "string",
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
+                    },
                     "ownership": {
                         "title": "Ownershop",
                         "type": "string",
