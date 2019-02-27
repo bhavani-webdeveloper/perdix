@@ -44,18 +44,18 @@ function($log, IndividualLoan, SessionStore,$state,$stateParams,SchemaResource,P
                     "type": "textarea",
                     "readonly":true
                 },
-                {
-                    "key": "loanAccountDisbursementSchedule.remarks1",
-                    "title": "FRO_REMARKS",
-                    "readonly":true,
-                    "condition": "model.loanAccountDisbursementSchedule.remarks1!=''"
-                },
-                {
-                    "key": "loanAccountDisbursementSchedule.remarks2",
-                    "title": "CRO_REMARKS",
-                    "readonly":true,
-                    "condition": "model.loanAccountDisbursementSchedule.remarks2!=''"
-                },
+                // {
+                //     "key": "loanAccountDisbursementSchedule.remarks1",
+                //     "title": "FRO_REMARKS",
+                //     "readonly":true,
+                //     "condition": "model.loanAccountDisbursementSchedule.remarks1!=''"
+                // },
+                // {
+                //     "key": "loanAccountDisbursementSchedule.remarks2",
+                //     "title": "CRO_REMARKS",
+                //     "readonly":true,
+                //     "condition": "model.loanAccountDisbursementSchedule.remarks2!=''"
+                // },
                 {
                     "type": "actionbox",
                     "items": [{
