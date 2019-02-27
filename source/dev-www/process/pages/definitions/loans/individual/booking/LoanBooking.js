@@ -819,12 +819,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             },
             {
             "type": "box",
-            "title": "APPLICANT & CO-APPLICANT DETAILS",
+            "title": "Applicant & Co-Applicant Details",
             "readonly": true,
             "items": [
                 {
                     "type": "fieldset",
-                    "title": "APPLICANTS",
+                    "title": "Applicants",
                     // condition:"!model.loanAccount.coBorrowers[].length == 0",
                     "readonly": true,
                     "items": [
