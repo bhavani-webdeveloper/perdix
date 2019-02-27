@@ -355,6 +355,9 @@ define([],function(){
                                 },
                                 "LoanMitigants":{
                                     "readonly":true
+                                },
+                                "JewelDetails":{
+                                    "readonly":true
                                 }
                             }
 
@@ -375,6 +378,9 @@ define([],function(){
                                 },
                                 "LoanMitigants":{
                                     "readonly":true
+                                },
+                                "JewelDetails":{
+                                    "readonly":true
                                 }
                             }
 
@@ -394,6 +400,9 @@ define([],function(){
                                     "readonly":true
                                 },
                                 "LoanMitigants":{
+                                    "readonly":true
+                                },
+                                "JewelDetails":{
                                     "readonly":true
                                 }
                             }
