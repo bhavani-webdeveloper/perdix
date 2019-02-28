@@ -18,6 +18,23 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 return {
                 }
             }
+
+             function getLoanCustomerRelation(pageClass){
+                switch (pageClass){
+                    case 'applicant':
+                        return 'Applicant';
+                        break;
+                    case 'co-applicant':
+                        return 'Co-Applicant';
+                        break;
+                    case 'guarantor':
+                        return 'Guarantor';
+                        break;
+                    default:
+                        return null;
+                }
+            }
+
             var overridesFields = function (model) {
 
                 return {
@@ -81,13 +98,42 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.customer = {};
                     model.review = model.review|| {};
                     model.loanAccount = model.loanProcess.loanAccount;
-                    
+
                     if (bundlePageObj) {
                         model._bundlePageObj = _.cloneDeep(bundlePageObj);
                     };
                     model.UIUDF = {
                         'family_fields': {}
                     };
+
+                    /* Setting data recieved from Bundle */
+                    model.loanCustomerRelationType =getLoanCustomerRelation(bundlePageObj.pageClass);
+                    model.pageClass = bundlePageObj.pageClass;
+                    model.currentStage = bundleModel.currentStage;
+                    model.enrolmentProcess.currentStage =  model.currentStage;
+                    /* End of setting data recieved from Bundle */
+
+                    /* Setting data for the form */
+                    model.customer = model.enrolmentProcess.customer;
+                    var branchId = SessionStore.getBranchId();
+                    if(branchId && !model.customer.customerBranchId)
+                        {
+                            model.customer.customerBranchId = branchId;
+                    };
+
+                    /* End of setting data for the form */
+                    model.UIUDF.family_fields.dependent_family_member = 0;
+                     _.each(model.customer.familyMembers, function(member) {
+                        if (member.incomes && member.incomes.length == 0)
+                            model.UIUDF.family_fields.dependent_family_member++;
+                    });
+
+                    if(model.customer.fcuStatus == 1){
+                        model.customer.fcuStatu = true  
+                    }
+                    else{
+                        model.customer.fcuStatu = false
+                    }
                     PageHelper.hideLoader();
   
                     /* Setting data for the form */
@@ -111,7 +157,30 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     branchIDArray.push(parseInt(formHelper.enum('branch_id').data[i].code));
                 }
                             
-                    
+                // model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, model.loanCustomerRelationType);
+
+                if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
+                        model.loanAccount.loanCustomerRelations!=null &&
+                        model.loanAccount.loanCustomerRelations.length > 0) {
+                        var lcr = model.loanAccount.loanCustomerRelations;
+                        var idArr = [];
+                    for (var i=0;i<lcr.length;i++){
+                        idArr.push(lcr[i].customerId);
+                    }
+                    Queries.getCustomerBasicDetails({'ids': idArr})
+                    .then(function(result){
+                        if (result && result.ids){
+                             for (var i = 0; i < lcr.length; i++) {
+                                var cust = result.ids[lcr[i].customerId];
+                            if (cust) {
+                                lcr[i].name = cust.first_name;
+                             }
+                        }
+                     }
+                     });
+                    }
+
+                    BundleManager.broadcastEvent('loan-account-loaded', {loanAccount: model.loanAccount}); 
 
                     /* End of setting data for the form */
                     model.UIUDF.family_fields.dependent_family_member = 0;

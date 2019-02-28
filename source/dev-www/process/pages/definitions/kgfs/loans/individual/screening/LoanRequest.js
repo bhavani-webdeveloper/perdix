@@ -447,6 +447,7 @@ define([],function(){
                         "LoanRecommendation.interestRate": {
                             onChange:function(value,form,model){
                                 computeEMI(model);
+                                computeEstimatedEMI(model);
                             }
                         },
                         "LoanRecommendation.expectedEmi": {
@@ -773,6 +774,7 @@ define([],function(){
                 "subTitle": "BUSINESS",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                     // AngularResourceService.getInstance().setInjector($injector);
+
                     model.customer = {};
                     model.review = model.review|| {};
                     model.loanAccount = model.loanProcess.loanAccount;
@@ -1034,7 +1036,7 @@ define([],function(){
                                             },
                                             "sendBack": {
                                                 "type": "section",
-                                                "condition": "model.review.action=='SEND_BACK'",
+                                                "condition": "model.review.action=='SEND_BACK' && model.loanAccount.currentStage !='Screening'",
                                                 "items": {
                                                     "remarks": {
                                                         "title": "REMARKS",
