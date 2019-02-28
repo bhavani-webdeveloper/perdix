@@ -450,7 +450,7 @@
             },
             "averageReturn": {
               "title": "average return",
-              "type": "integer",
+              "type": "string",
               "minimum": 0,
               "maximum": 10000000,
               "captureStages": [
