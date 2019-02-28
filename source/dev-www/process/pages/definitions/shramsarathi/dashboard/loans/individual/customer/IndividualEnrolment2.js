@@ -2836,14 +2836,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                         },
                                                         "avarageTimeSpend":{
                                                             "key":"customer.familyMembers[].incomes[].averageTimeSpent",
-                                                            "title":"AVARAGE_TIME_SPENT",
+                                                            "title":"AVERAGE_TIME_SPENT",
                                                             "type":"number",
                                                             "required":true
                                                            
                                                         },
                                                         "avarageReturn":{
                                                             "key":"customer.familyMembers[].incomes[].averageReturn",
-                                                            "title":"AVARAGE_RETURN",
+                                                            "title":"AVERAGE_RETURN",
                                                             "type":"select",
                                                             "required":true,
                                                             "enumCode":"average_return"
