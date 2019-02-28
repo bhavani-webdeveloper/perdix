@@ -1017,6 +1017,14 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     //     condition: "model.loanAccount.assetAvailableForHypothecation=='YES'",
                     //     title: "ESTIMATED_VALUE_OF_ASSETS"
                     // },
+
+                    {
+                        key: "loanAccount.productCategory",
+                        title:"PRODUCT_CATEGORY",
+                        required:true,
+                        type:"select",
+                        enumCode:"loan_product_category",
+                     },
                     {
                         key: "loanAccount.loanAmountRequested",
                         type: "amount",
@@ -1294,6 +1302,14 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     //     condition: "model.loanAccount.assetAvailableForHypothecation=='YES'",
                     //     title: "ESTIMATED_VALUE_OF_ASSETS"
                     // },
+
+                    {
+                        key: "loanAccount.productCategory",
+                        title:"PRODUCT_CATEGORY",
+                        readonly:true,
+                        type:"select",
+                        enumCode:"loan_product_category",
+                     },
                     {
                         key: "loanAccount.loanAmountRequested",
                         type: "amount",
@@ -1679,20 +1695,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         title: "ESTIMATED_DATE_OF_COMPLETION"
                     },
                     {
-                       key: "loanAccount.productCategory",
-                       title:"PRODUCT_TYPE",
-                        readonly:true,
-                       condition:"model.currentStage!='Application' && model.currentStage!='FieldAppraisal'"
-                    },
-                    {
-                       key: "loanAccount.productCategory",
-                       title:"PRODUCT_TYPE",
-                       required:true,
-                       type:"select",
-                       enumCode:"loan_product_category",
-                       condition:"model.currentStage=='Application' || model.currentStage=='FieldAppraisal'"
-                    },
-                    {
                         key: "loanAccount.customerSignDateExpected",
                         type: "date",
                         title: "CUSTOMER_SIGN_DATE_EXPECTED"
@@ -1725,20 +1727,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         key: "loanAccount.estimatedDateOfCompletion",
                         type: "date",
                         title: "ESTIMATED_DATE_OF_COMPLETION"
-                    },
-                    {
-                       key: "loanAccount.productCategory",
-                       title:"PRODUCT_TYPE",
-                       readonly:true,
-                       condition:"model.currentStage!='Application'"
-                    },
-                    {
-                       key: "loanAccount.productCategory",
-                       title:"PRODUCT_TYPE",
-                       required:true,
-                       type:"select",
-                       enumCode:"loan_product_category",
-                       condition:"model.currentStage=='Application'"
                     },
                     {
                         key: "loanAccount.customerSignDateExpected",

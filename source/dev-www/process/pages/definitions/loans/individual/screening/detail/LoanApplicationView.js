@@ -457,6 +457,9 @@ define({
                             "key": "loanAccount.loanPurpose2",
                             "title": "Loan SubPurpose"
                         }, {
+                            "key": "loanAccount.productCategory",
+                            "title":"PRODUCT_CATEGORY",
+                        }, {
                             "key": "loanAccount.loanAmountRequested",
                             "title": "Loan Amount Requested",
                             "type": "amount"
@@ -808,7 +811,7 @@ define({
                                     "render": currencyRightRender
                                 },
                                 {
-                                    "title": "LOAN_PRODUCT",
+                                    "title": "PRODUCT_CATEGORY",
                                     "data": "loan_product",
                                     "render": self.strongRender
                                 },
