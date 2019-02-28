@@ -67,8 +67,7 @@ define([],function(){
 
             var computeEstimatedEMI = function(model){
                 var fee = 0;
-                if(model.loanAccount.interestRate !='')
-                    model.loanAccount.interestRateEstimatedEMI=model.loanAccount.interestRate;
+                
 
                 if(model.loanAccount.commercialCibilCharge)
                     if(!_.isNaN(model.loanAccount.commercialCibilCharge))
@@ -80,11 +79,11 @@ define([],function(){
                 // an annual rate to a monthly rate. Convert payment period in years
                 // to the number of monthly payments.
 
-                if(model.loanAccount.loanAmountRequested == '' || model.loanAccount.interestRateEstimatedEMI == '' || model.loanAccount.frequency == '' || model.loanAccount.tenureRequested == '')
+                if(model.loanAccount.loanAmountRequested == '' || model.loanAccount.expectedInterestRate == '' || model.loanAccount.frequency == '' || model.loanAccount.tenureRequested == '')
                     return;
 
                 var principal = model.loanAccount.loanAmountRequested;
-                var interest = model.loanAccount.interestRateEstimatedEMI / 100 / 12;
+                var interest = model.loanAccount.expectedInterestRate / 100 / 12;
                 var payments;
                 if (model.loanAccount.frequency == 'Y')
                     payments = model.loanAccount.tenureRequested * 12;
@@ -447,7 +446,6 @@ define([],function(){
                         "LoanRecommendation.interestRate": {
                             onChange:function(value,form,model){
                                 computeEMI(model);
-                                computeEstimatedEMI(model);
                             }
                         },
                         "LoanRecommendation.expectedEmi": {
@@ -459,20 +457,11 @@ define([],function(){
                         },
                         "VehicleExpensesInformation.VehicleExpenses.expenseAmount": {
                             "required": true
-                        },
-                        
-                        "DeductionsFromLoan.estimatedEmi": {
-                            "readonly": true,
-                            "condition": "model.loanAccount.securityEmiRequired == 'YES'"
-                        },                            
+                        },                                                    
                         "PreliminaryInformation.loanAmountRequested": {
                             onChange:function(value,form,model){
                                 computeEstimatedEMI(model);
                             }
-                        },
-                        "PreliminaryInformation.estimatedEmi": {
-                            "required": true,
-                            "readonly": true
                         },
                         "PreliminaryInformation.tenureRequested": {
                             "required": true,
@@ -480,17 +469,18 @@ define([],function(){
                                 computeEstimatedEMI(model);
                             }
                         },
-                        
                         "PreliminaryInformation.expectedInterestRate": {
                             "required": true,
-                            "title": "NOMINAL_RATE",
-                            "readonly": true
-                        },
+                            "orderNo":140,
+                            onChange:function(value,form,model){
+                                computeEstimatedEMI(model);
+                            }
+                        },                        
                         "PreliminaryInformation.productType": {
                         "required": true,
                         "enumCode":"booking_loan_type",
                         "onChange": function(valueObj,context,model){
-                                clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3"],model);
+                                clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
                                 model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                                    if(valueObj == "JEWEL"){
                                     getGoldRate(model);
@@ -506,7 +496,7 @@ define([],function(){
                         "PreliminaryInformation.partner": {
                             "enumCode": "loan_partner",
                             "onChange": function(valueObj,context,model){
-                                clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3"],model);
+                                clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
                                 model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                                 //clearAll('additions',['tenurePlaceHolder','interestPlaceHolder','amountPlaceHolder'],model)
                             },
@@ -517,7 +507,7 @@ define([],function(){
                             "enumCode": "loan_product_frequency",
                             "onChange": function(valueObj,context,model){
                                 computeEstimatedEMI(model);
-                                clearAll('loanAccount',['productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3"],model);
+                                clearAll('loanAccount',['productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
                                 model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                                 //clearAll('additions',['tenurePlaceHolder','interestPlaceHolder','amountPlaceHolder'],model)
                             }
@@ -548,7 +538,7 @@ define([],function(){
                                 return deferred.promise;
                             },
                             onSelect: function (valueObj, model, context) {
-                                clearAll("loanAccount",["loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3"],model);
+                                clearAll("loanAccount",["loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
                                 model.loanAccount.productCode = valueObj.productCode;
                                 model.additions.tenurePlaceHolder = valueObj.tenure_from == valueObj.tenure_to ? valueObj.tenure_from : valueObj.tenure_from + '-' + valueObj.tenure_to;
                                 model.additions.amountPlaceHolder = valueObj.amount_from == valueObj.amount_to ? valueObj.amount_from : valueObj.amount_from + '-' + valueObj.amount_to;
@@ -576,7 +566,7 @@ define([],function(){
                         },                        
                         "PreliminaryInformation.comfortableEMI": {
                             "required": true,
-                            "readonly":true
+                            "readonly":true,
                         },
                         "PreliminaryInformation.modeOfDisbursement": {
                             "required": true
@@ -701,6 +691,7 @@ define([],function(){
                     "PreliminaryInformation.loanAmountRequested",
                     "PreliminaryInformation.tenureRequested",
                     "PreliminaryInformation.comfortableEMI",
+                    "PreliminaryInformation.expectedInterestRate",
                     "PreliminaryInformation.modeOfDisbursement",
 
                     "JewelDetails",
@@ -1178,7 +1169,7 @@ define([],function(){
                 eventListeners: {
                     "new-applicant": function (bundleModel, model, obj) {
                         model.customer = obj.customer;
-                        clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3"],model);
+                        clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
                         model.loanAccount.customerId = model.customer.id;
                         model.loanAccount.urnNo = model.customer.urnNo;
                         defaultConfiguration(model,false);
