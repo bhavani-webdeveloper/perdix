@@ -373,7 +373,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EnterpriseFinancials.incomeThroughSales.amount": {
                         onChange: function (value, form, model) {
-                            computeTotalMonthlySurpluse(model);
+                            computeTotalMonthlySurpluse(value, form, model);
                         }
                     },
                     "EnterpriseFinancials.incomeThroughSales.frequency": {
