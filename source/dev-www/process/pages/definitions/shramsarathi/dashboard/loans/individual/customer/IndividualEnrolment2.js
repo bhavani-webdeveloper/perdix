@@ -2061,7 +2061,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Machinery.fixedAssetsMachinaries.machineType":{
                         "enumCode":"fixed_asset_type"
                     },
-                    
+                    "Liabilities.liabilities.interestRate":{
+                        "type":"select",
+                        "enumCode":"rate_of_interest",
+                    },
+                    "KYC.additionalKYCs.kyc1ProofType":{
+                        "enumCode":"age_proof",
+                        "orderNo":91
+                    },
                     // "IndividualInformation.existingLoan":{
                     //     "title":""
                     // },
