@@ -42,6 +42,7 @@ define({
 					"centre": {
 						"title": "CENTRE",
 						"type": ["integer", "null"],
+						"required":true,
 						"x-schema-form": {
 							"type": "select",
 							"enumCode": "centre",
@@ -60,7 +61,7 @@ define({
 					},
 					"loanType": {
 						"title": "PRODUCT_TYPE",
-						"enumCode": "product_type",
+						"enumCode": "booking_loan_type",
 						"type": "string",
 						"x-schema-form": {
 							"type": "select"
