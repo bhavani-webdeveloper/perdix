@@ -41,6 +41,8 @@ foreach ($proofTypeNames as $proofTypeName){
         $identity_proof->put($proofTypeName->name, $proofTypeName->filename);
 }
 //echo $authHeader;
+print_r($identity_proof);
+print_r($address_proof);
 
 if ( 0777  !== (fileperms($filePath) & 0777)) {
     die( "<br/> file is not writable and it has the following file permissions : $filePath" );
@@ -205,7 +207,7 @@ foreach ($partners as $partner) {
         //echo $partner . $file->getFilename();
         
         if ($file->isFile()) {
-            echo "File Name : ".$file->getFilename();
+            echo "<br/>File Name : ".$file->getFilename();
             //echo "<br/> temp : ". $tempCompletedDir;
             $source = $partner . DIRECTORY_SEPARATOR . $file->getFilename();
             $dest = $tempWipDir . $file->getFilename();
@@ -311,7 +313,7 @@ foreach ($partners as $partner) {
                             echo "<br/>Customer Photo ID : ".$apiCustomer->photoImageId;
                         }   
           
-                        echo "<br/><br/>Address Proof : ".$customer->address_proof;
+                        echo "<br/>Address Proof : ".$customer->address_proof;
                         $address_proof_path = getFileByType("address_proof",$customer);
                         echo "<br/>Customer Address Proof Path : ".$address_proof_path;
                         if($address_proof_path){
@@ -319,7 +321,7 @@ foreach ($partners as $partner) {
                             echo "<br/>Customer Address Proof ID : ".$apiCustomer->addressProofImageId;
                         }
                 
-                        echo "<br/><br/>Identity Proof : ".$customer->identity_prof;
+                        echo "<br/>Identity Proof : ".$customer->identity_prof;
                         $identityPath = getFileByType("identity_prof",$customer);
                         echo "<br/>Customer Identity Proof Path : ".$identityPath;
                         if($identityPath){
