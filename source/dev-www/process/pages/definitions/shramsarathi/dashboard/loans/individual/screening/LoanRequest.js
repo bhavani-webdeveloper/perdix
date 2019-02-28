@@ -1846,20 +1846,20 @@ define([],function(){
                                                 "enumCode":"mode_of_disbursement"
                                             },
                                         "remarksOfInFavourLoan":{
-                                            "key":"loanAccount.userDefinedFieldValues.udf10",
+                                            "key":"loanAccount.udf.userDefinedFieldValues.udf10",
                                             "title":"REMARK_OF_IN_FAVOUR_LOAN",
                                             "type":"text",
                                             "required":true
                                         },
                                         "potentialRisks":{
-                                            "key":"loanAccount.userDefinedFieldValues.udf11",
+                                            "key":"loanAccount.udf.userDefinedFieldValues.udf11",
                                             "title":"POTENTIAL_RISK",
                                             "type":"select",
                                             "required":true,
                                             "titleMap":{"yes":"yes","no":"no"}
                                         },
                                         "collectionDate":{
-                                            "key":"loanAccount.disbursementSchedules.firstrRepaymentDate",
+                                            "key":"loanAccount.disbursementSchedules.firstRepaymentDate",
                                             "title":"COLLECTION_DATE",
                                             "type":"date",
                                             "required":true
@@ -1877,7 +1877,7 @@ define([],function(){
                                             "required":true
                                         },
                                         "date":{
-                                            "key":"loanAccount.userDefinedFieldValues.udf12",
+                                            "key":"loanAccount.udf.userDefinedFieldValues.udf12",
                                             "title":"DATE",
                                             "type":"date",
                                             "required":true
