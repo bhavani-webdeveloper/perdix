@@ -233,10 +233,10 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     },
                     {
                         key:"promise.contactable",
-                        title:"CONTACTABLE",
+                        title:"ACTION",
                         required: true,
                         "type":"select",
-                        "enumCode":"decisionmaker"
+                        "enumCode":"contactable"
                     }, {
                         key: "promise.latitude",
                         title: "LOCATION",

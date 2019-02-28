@@ -101,7 +101,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     model.loanAccount.emiEstimated = "";
                 }
             }
-            var computeTotalMonthlySurpluse = function (model) {
+            var computeTotalMonthlySurpluse = function (value,form,model) {
                 var businessIncome = 0;
                 var businessExpense = 0;
                 if (model.customer.incomeThroughSales) {
@@ -154,7 +154,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "ContactInformation.pincode": {
                         "title": "pincode",
                         "required": true,
-                        "resolver": "PincodeLOVConfiguration"
+                        "resolver": "PincodeLOVConfiguration",
+                        "searchHelper": formHelper,
+                        "orderNo": 210
                     },
                     "EnterpriseInformation.branchName": {
                         "readonly": true,
@@ -232,7 +234,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "orderNo": 160
                     },
                     "ContactInformation.landLineNo": {
-                        "orderNo": 170
+                        "orderNo": 170,
+                        title:"Phone 2"
                     },
                     "ContactInformation.doorNo": {
                         "required": true,
@@ -244,12 +247,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "ContactInformation.landmark": {
                         "orderNo": 200
                     },
-                    "ContactInformation.pincode": {
-                        "required": true,
-                        "orderNo": 210
-                    },
                     "ContactInformation.locality": {
-                        "orderNo": 220
+                        "orderNo": 220,
+                        "title":"Locality"
                     },
                     "ContactInformation.villageName": {
                         "orderNo": 230,
@@ -363,8 +363,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "title": "BUSINESS_INCOME",
                         onRemove: function (form, index, model) {
                             console.log(model)
-                            computeTotalMonthlySurpluse(model);
-                        }
+                            computeTotalMonthlySurpluse(1,2,model);
+                        },
+                        "startEmpty":false
                     },
                     "EnterpriseFinancials.incomeThroughSales.incomeType": {
                         "type": "select",
@@ -372,7 +373,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EnterpriseFinancials.incomeThroughSales.amount": {
                         onChange: function (value, form, model) {
-                            computeTotalMonthlySurpluse(model);
+                            computeTotalMonthlySurpluse(value, form, model);
                         }
                     },
                     "EnterpriseFinancials.incomeThroughSales.frequency": {
@@ -385,17 +386,23 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "title": "BUSINESS_EXPENSE",
                         onRemove: function (form, index, model) {
                             console.log(model)
-                            computeTotalMonthlySurpluse(value, form, model);
-                        }
+                            computeTotalMonthlySurpluse(1,2, model);
+                        },
+                        "startEmpty":false
                     },
                     "EnterpriseFinancials.rawMaterialExpenses.rawMaterialType": {
                         "type": "select",
-                        "enumCode": "businessExpenseType"
+                        "enumCode": "businessExpenseType",
+                        "orderNo": 521,
                     },
                     "EnterpriseFinancials.rawMaterialExpenses.amount": {
+                        "orderNo": 522,
                         onChange: function (value, form, model) {
                             computeTotalMonthlySurpluse(value, form, model);
                         }
+                    },
+                    "EnterpriseFinancials.rawMaterialExpenses.frequency":{
+                        "orderNo": 523,
                     },
                     "EnterpriseFinancials.totalMonthlySurplus": {
                         "orderNo": 524,
@@ -477,7 +484,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "BuyerDetails.buyerDetails.receivablesOutstanding":{
                         "title":"AMOUNT_TRANSACTION_PER_FREQUENCY"
-                    }
+                    },
+                    // "ContactInformation.locality":{
+                    //     title:"LOCALITY"
+                    // },
+                    
                 }
             }
             var repositoryAdditions = function (bundlePageObj) {
