@@ -114,9 +114,6 @@ define({
                 submit: function(model, form, formName) {
                     $log.info("Inside submit()");
                     model.journal.isApplicable=0;
-                    if(model.siteCode=='witfin') {
-                        model.journal.isApplicable=1;
-                    }
                     PageHelper.showLoader();
                     PageHelper.showProgress("Journal Close", "Working...");
                     if (model.journal.id) {
