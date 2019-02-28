@@ -34,7 +34,8 @@ function(LeadProcess, AngularResourceService) {
                         "required": false
                     },
                     "leadProfile.individualDetails.educationStatus":{
-                        "required":true
+                        "required":true,
+                        "enumCode":"education_status"
                     },
                     "leadProfile.individualDetails.age":{
                         "required":true

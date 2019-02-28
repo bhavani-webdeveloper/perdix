@@ -164,7 +164,7 @@
             "educationStatus": {
               "title": "Education Status",
               "type": "string",
-              "refCodeCategory": "education",
+              "refCodeCategory": "education_status",
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
