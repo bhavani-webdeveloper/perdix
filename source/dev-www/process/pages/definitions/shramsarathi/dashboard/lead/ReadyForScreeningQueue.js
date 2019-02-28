@@ -80,7 +80,7 @@ define({
 							}
 						},
 						"centre": {
-							"title": "ZONE",
+							"title": "ZONE_NAME",
 							"type": "string",
 							"required": true,
 							"x-schema-form": {
@@ -205,7 +205,7 @@ define({
 									_request: item
 								});
 								$state.go("Page.Bundle", {
-									pageName: "base.dashboard.loans.individual.screening.ScreeningInput",
+									pageName: "shramsarathi.dashboard.loans.individual.screening.ScreeningInput",
 									pageData: {
 										lead_id: item.id
 									}
@@ -220,11 +220,11 @@ define({
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('base.dashboard.lead.LeadGeneration', {
+								entityManager.setModel('shramsarathi.dashboard.lead.LeadGeneration', {
 									_request: item
 								});
 								$state.go("Page.Engine", {
-									pageName: "base.dashboard.loans.individual.customer.IndividualEnrollment2",
+									pageName: "shramsarathi.dashboard.loans.individual.customer.IndividualEnrollment2",
 									pageData: {
 										lead_id: item.id
 									}
@@ -239,11 +239,11 @@ define({
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('base.dashboard.lead.LeadReject', {
+								entityManager.setModel('shramsarathi.dashboard.lead.LeadReject', {
 									_request: item
 								});
 								$state.go("Page.Engine", {
-									pageName: "base.dashboard.lead.LeadReject",
+									pageName: "shramsarathi.dashboard.lead.LeadReject",
 									pageId: item.id
 								});
 							},

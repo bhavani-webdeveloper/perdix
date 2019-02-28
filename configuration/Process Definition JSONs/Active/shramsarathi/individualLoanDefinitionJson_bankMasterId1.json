@@ -19,18 +19,6 @@
          ]
       },
       {
-         "order":2,
-         "code":"Dedupe",
-         "name":"Dedupe",
-         "stageType":"CAPTURE",
-         "sendSms":"No",
-         "smsCategory":"LoanBooking",
-         "isAccountOpening":false,
-         "allowedRoles":[
-            "WM"
-         ]
-      },
-      {
          "order":3,
          "code":"ScreeningReview",
          "name":"Screening Review",
@@ -70,11 +58,11 @@
       },
       {
          "order":6,
-         "code":"FieldAppraisal",
-         "name":"FieldAppraisal",
+         "code":"Televerification",
+         "name":"Televerification",
          "stageType":"CAPTURE",
          "sendSms":"No",
-         "smsCategory":"LoanBooking",
+         "smsCategory":"Televerification",
          "isAccountOpening":false,
          "riskScoreName":"RiskScore3",
          "allowedRoles":[
@@ -83,46 +71,9 @@
       },
       {
          "order":7,
-         "code":"FieldAppraisalReview",
-         "name":"FieldAppraisal Review",
-         "stageType":"CAPTURE",
-         "sendSms":"No",
-         "smsCategory":"LoanBooking",
-         "isAccountOpening":false,
-         "allowedRoles":[
-            "WM"
-         ]
-      },
-      {
-         "order":8,
-         "code":"ZonalRiskReview",
-         "name":"ZonalRisk Review",
-         "stageType":"CAPTURE",
-         "sendSms":"No",
-         "smsCategory":"LoanBooking",
-         "isAccountOpening":false,
-         "allowedRoles":[
-            "WM"
-         ]
-      },
-      {
-         "order":9,
-         "code":"CentralRiskReview",
-         "name":"Central Risk Review",
-         "stageType":"CAPTURE",
-         "sendSms":"Yes",
-         "smsCategory":"FieldAppraisal",
-         "isAccountOpening":false,
-         "allowedRoles":[
-            "WM"
-         ]
-      },
-      {
-         "order":10,
          "code":"CreditCommitteeReview",
          "name":"Credit Committee Review",
          "stageType":"CAPTURE",
-         "authorizationCount":2,
          "sendSms":"Yes",
          "smsCategory":"Approval",
          "isAccountOpening":false,
@@ -131,7 +82,7 @@
          ]
       },
       {
-         "order":11,
+         "order":8,
          "code":"Sanction",
          "name":"Sanction",
          "stageType":"CAPTURE",
@@ -143,7 +94,7 @@
          ]
       },
       {
-         "order":12,
+         "order":9,
          "code": "Rejected",
          "name": "Rejected",
          "stageType": "CAPTURE",
@@ -392,7 +343,7 @@
                   "minimum":1,
                   "maximum":10000000,
                   "captureStages":[
-                     "Screening","LoanInitiation","Application", "FieldAppraisal","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal","Sanction"
+                     "Screening","LoanInitiation","Application", "FieldAppraisal","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },
                 "leadId":{

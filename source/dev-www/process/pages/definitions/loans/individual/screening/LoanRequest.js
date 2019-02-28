@@ -1030,6 +1030,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         key: "loanAccount.frequencyRequested",
                         type: "select",
                         title: "FREQUENCY_REQUESTED",
+                        required: true,
                         enumCode: "frequency",
                         onChange:function(value,form,model){
                             computeEstimatedEMI(model);
@@ -1301,6 +1302,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     },
                     {
                         key: "loanAccount.frequencyRequested",
+                        required: true,
                         type: "select",
                         readonly:true,
                         title: "FREQUENCY_REQUESTED",
@@ -3003,10 +3005,10 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
 
                     var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                     reqData.loanAccount.status = null;
-                    if (model.loanAccount.currentStage == 'CreditCommitteeReview') {
-                        reqData.loanAccount.status = 'SENT BACK'
-                    }
-
+                    // if (model.loanAccount.currentStage == 'CreditCommitteeReview') {
+                    //     reqData.loanAccount.status = 'SENT BACK'
+                    // }
+                    reqData.loanAccount.status = 'SENT BACK';
                     reqData.loanProcessAction = "PROCEED";
                     reqData.remarks = model.review.remarks;
                     reqData.stage = model.review.targetStage;
@@ -3261,11 +3263,11 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         }
                     }
                 }
-
+                model.loanAccount.status = null;
                 if (model.currentStage == 'CreditCommitteeReview') {
                     model.loanAccount.status = 'APPROVED';
                 }
-
+                model.loanAccount.status = 'APPROVED';
                 if (!preLoanSaveOrProceed(model)){
                     PageHelper.hideLoader();
                     return;

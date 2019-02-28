@@ -48,10 +48,10 @@ define({
 							"title": "LEAD_NAME",
 							"type": "string"
 						},
-						"businessName": {
-							"title": "BUSINESS_NAME",
-							"type": "string"
-						},
+						// "businessName": {
+						// 	"title": "BUSINESS_NAME",
+						// 	"type": "string"
+						// },
 						"area": {
 							"title": "PANCHAYAT",
 							"type": "string"
@@ -61,7 +61,7 @@ define({
 							"type": "string"
 						},
 						"centre": {
-							"title": "ZONE",
+							"title": "ZONE_NAME",
 							"type": "string",
 							"required": true,
 							"x-schema-form": {
@@ -116,7 +116,7 @@ define({
 						'branchName': searchOptions.branchName,
 						'currentStage': "Incomplete",
 						'leadName': searchOptions.leadName,
-						'businessName': searchOptions.businessName,
+						// 'businessName': searchOptions.businessName,
 						'centreName': centreName[0],
 						'area': searchOptions.area,
 						'cityTownVillage': searchOptions.cityTownVillage,
@@ -149,7 +149,7 @@ define({
 						return [
 							item.leadId,
 							item.leadName,
-							item.businessName,
+							// item.businessName,
 							item.branchName,
 							item.addressLine1,
 							item.cityTownVillage,
@@ -171,10 +171,12 @@ define({
 						}, {
 							title: 'Lead Name',
 							data: 'leadName'
-						}, {
-							title: 'Business Name',
-							data: 'businessName'
-						}, {
+						}, 
+						// {
+						// 	title: 'Business Name',
+						// 	data: 'businessName'
+						// },
+						 {
 							title: 'Address Line1',
 							data: 'addressLine1'
 						}, {
@@ -204,7 +206,7 @@ define({
 									_request: item
 								});
 								$state.go("Page.Engine", {
-									pageName: "witfin.lead.LeadGeneration",
+									pageName: "shramsarathi.dashboard.lead.LeadGeneration",
 									pageId: item.id
 								});
 							},

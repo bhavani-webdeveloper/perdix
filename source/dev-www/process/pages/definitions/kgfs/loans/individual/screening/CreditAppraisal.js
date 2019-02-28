@@ -30,16 +30,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageName: 'kgfs.customer.IndividualEnrolment2',
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
-                            minimum: 0,
-                            maximum: 1,
+                            minimum: 1,
+                            maximum: 0,
                             order:11
                         },
                         {
                             pageName: 'kgfs.customer.IndividualEnrolment2',
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
-                            minimum: 0,
-                            maximum: 1,
+                            minimum: 1,
+                            maximum: 0,
                             order:12
                         },
                         {
@@ -187,13 +187,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 }
 
 
-                                 $this.bundlePages.push({
-                                    pageClass: 'business',
-                                    model: {
-                                        enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
-                                        loanProcess: loanProcess
+                                    if (loanProcess.loanCustomerEnrolmentProcess) {
+                                        $this.bundlePages.push({
+                                            pageClass: "business",
+                                            model: {
+                                                enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                                loanProcess: loanProcess
+                                            }
+                                        });
                                     }
-                                });
+                                
 
                                 $this.bundlePages.push({
                                     pageClass: 'loan-request',
@@ -222,9 +225,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                             });
 
                     } else {
-                        if($stateParams.pageData){
-                            var productCategory = $stateParams.pageData.productCategory; 
-                        }
                         LoanProcess.createNewProcess()
                             .subscribe(function(loanProcess){
                                 loanProcess.loanAccount.currentStage = 'CreditAppraisal';
@@ -244,7 +244,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         }
                                     });
                                 }
-                                if(productCategory == 'MEL'){
+                                if(loanProcess.loanAccount.productCategory == 'MEL'){
                                     if (loanProcess.loanCustomerEnrolmentProcess) {
                                         $this.bundlePages.push({
                                             pageClass: "business",

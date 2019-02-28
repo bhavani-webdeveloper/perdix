@@ -1,354 +1,233 @@
-define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/AngularResourceService'], function (EnrolmentProcess, AngularResourceService) {
-    var EnrolmentProcess = EnrolmentProcess['EnrolmentProcess'];
+define(["perdix/domain/model/loan/LoanProcess",
+    "perdix/domain/model/loan/LoanProcessFactory",
+    'perdix/domain/model/customer/EnrolmentProcess',
+    "perdix/domain/model/loan/LoanCustomerRelation",
+    ], function(LoanProcess, LoanFactory, EnrolmentProcess, LoanCustomerRelation) {
+    var LoanProcess = LoanProcess["LoanProcess"];
+    var EnrolmentProcess = EnrolmentProcess["EnrolmentProcess"];
+    var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
+
     return {
         pageUID: "kgfs.loans.individual.screening.MELApplicationForm",
-        pageType: "Engine",
-        dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
-            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository"],
-
-        $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
-                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository) {
-
-            AngularResourceService.getInstance().setInjector($injector);
-            var branch = SessionStore.getBranch();
-
-
-            var configFile = function () {
-                return {
-                }
-            }
-            var overridesFields = function (model) {
-
-                return {
-                    "KYC":{
-                        "title":"SEARCH_CUSTOMER"
-                    },
-                    "KYC.customerId":{
-                        "title":"SEARCH_CUSTOMER"
-                    }
-                }
-
-            }
-            var getIncludes = function (model) {
-
-                return [
-                    "KYC",
-                    "KYC.customerId",
-                    "DownloadMELApplicationForm",
-                    "DownloadMELApplicationForm.downloadMELApplicationFormFieldSet",
-                    "DownloadMELApplicationForm.downloadMELApplicationForm",
-                    "UploadMELApplicationForm",
-                    "UploadMELApplicationForm.uploadMELApplicationFormFieldSet",
-                    "UploadMELApplicationForm.uploadMELApplicationForm"
-                    
-                ];
-
-            }
-
+        pageType: "Bundle",
+        dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "Lead", "PageHelper", "irfStorageService", "$filter", "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "irfNavigator"],
+        $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, Lead, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
             return {
-                "type": "schema-form",
+                "type": "page-bundle",
                 "title": "MEL_APPLICATION_FORM",
-                "subTitle": "",
-                initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
-                    // $log.info("Inside initialize of IndividualEnrolment2 -SPK " + formCtrl.$name);
-                    if (bundlePageObj) {
-                        model._bundlePageObj = _.cloneDeep(bundlePageObj);
-                    };
-                    model.UIUDF = {
-                        'family_fields': {}
-                    };
-
-  
-                    /* Setting data for the form */
-                    // model.customer = model.enrolmentProcess.customer;
-                    var branchId = SessionStore.getBranchId();
-                    if(branchId && !model.customer.customerBranchId)
+                "subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
+                "bundleDefinitionPromise": function() {
+                    return $q.resolve([                  
                         {
-                            model.customer.customerBranchId = branchId;
-                    };
-
-                    /* End of setting data for the form */
-                    model.UIUDF.family_fields.dependent_family_member = 0;
-                     _.each(model.customer.familyMembers, function(member) {
-                        if (member.incomes && member.incomes.length == 0)
-                            model.UIUDF.family_fields.dependent_family_member++;
-                    });
-
-                    /* Form rendering starts */
-                    var self = this;
-                    var formRequest = {
-                        "overrides": overridesFields(model),
-                        "includes": getIncludes(model),
-                        "excludes": [
-                            "KYC.addressProofSameAsIdProof",
-                        ],
-                        "options": {
-                            "repositoryAdditions": {
-                                "DownloadMELApplicationForm":{
-                                    "type":"box",
-                                    "orderNo":20,
-                                    "title":"DOWNLOAD_MEL_APPLICATION_FORM",
-                                    "items":{
-                                        "downloadMELApplicationFormFieldSet":{
-                                            "type":"fieldset",
-                                            "title":"DOWNLOAD_MEL_APPLICATION_FORM",
-                                        },
-                                        "downloadMELApplicationForm":{
-                                            "title": "DOWNLOAD",
-                                            "key": "loanAccount.downloadMELApplicationForm",
-                                            "htmlClass": "btn-block",
-                                            "icon": "fa fa-download",
-                                            "type": "button",
-                                            "notitle": true,
-                                            "readonly": false,
-                                        }
-                                    }                                    
-                                },
-                                "UploadMELApplicationForm":{
-                                    "type":"box",
-                                    "orderNo":20,
-                                    "title":"UPLOAD_MEL_APPLICATION_FORM",
-                                    "items":{
-                                        "uploadMELApplicationFormFieldSet":{
-                                            "type":"fieldset",
-                                            "title":"UPLOAD_MEL_APPLICATION_FORM",
-                                        },
-                                        "uploadMELApplicationForm":{
-                                            "title": "UPLOAD",
-                                            "key":"loanAccount.uploadMELApplicationForm",
-                                            "notitle": true,
-                                            "type": "file",
-                                            "category": "Collection",
-                                            "subCategory": "offline",
-                                            "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                           
-                                        }
-                                    }                                    
-                                }
-                            },
-                            "additions": [
-                                {
-                                    "type": "actionbox",
-                                    "condition": "!model.customer.currentStage",
-                                    "orderNo": 1000,
-                                    "items": [
-                                        {
-                                            "type": "submit",
-                                            "title": "SUBMIT"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type": "actionbox",
-                                    "condition": "model.customer.currentStage && (model.currentStage=='KYC' || model.currentStage=='Appraisal' || (model.currentStage=='GuarantorAddition' && model.pageClass=='guarantor'))",
-                                    "orderNo": 1200,
-                                    "items": [
-                                        {
-                                            "type": "button",
-                                            "title": "UPDATE_ENROLMENT",
-                                            "onClick": "actions.proceed(model, formCtrl, form, $event)"
-                                        }
-                                    ]
-                                }
-                            ]
+                            pageName: 'kgfs.loans.individual.screening.MELApplication',
+                            title: 'MEL_APPLICATION',
+                            pageClass: 'MEL-Application',
+                            minimum: 1,
+                            maximum: 1,
+                            order:10
                         }
-                    };
-
-                    UIRepository.getEnrolmentProcessUIRepository().$promise
-                        .then(function(repo){
-                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
-                        })
-                        .then(function(form){
-                            self.form = form;
-                        });
-
-                    /* Form rendering ends */
+                    ]);
                 },
-
-                preDestroy: function (model, form, formCtrl, bundlePageObj, bundleModel) {
-                    // console.log("Inside preDestroy");
-                    // console.log(arguments);
-                    if (bundlePageObj) {
-                        var enrolmentDetails = {
-                            'customerId': model.customer.id,
-                            'customerClass': bundlePageObj.pageClass,
-                            'firstName': model.customer.firstName
+                "bundlePages": [],
+                "offline": true,
+                "getOfflineDisplayItem": function(value, index){
+                    var out = new Array(2);
+                    for (var i=0; i<value.bundlePages.length; i++){
+                        var page = value.bundlePages[i];
+                        if (page.pageClass == "applicant"){
+                            out[0] = page.model.customer.firstName;
+                        } else if (page.pageClass == "business"){
+                            out[1] = page.model.customer.firstName;
                         }
-                        // BundleManager.pushEvent('new-enrolment',  {customer: model.customer})
-                        BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails);
-                        model.loanProcess.removeRelatedEnrolmentProcess(model.enrolmentProcess, model.loanCustomerRelationType);
                     }
-                    return $q.resolve();
+                    return out;
                 },
+                "pre_pages_initialize": function(bundleModel){
+                    $log.info("Inside pre_page_initialize");
+                    bundleModel.currentStage = "MELApplication";
+                    var deferred = $q.defer();
+
+                    var $this = this;
+
+                    if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)){
+                        PageHelper.showLoader();
+                        bundleModel.loanId = $stateParams.pageId;
+
+                        LoanProcess.get(bundleModel.loanId)
+                            .subscribe(function(loanProcess){
+                                bundleModel.loanProcess = loanProcess;
+                                var loanAccount = loanProcess;
+                                loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.loanAccount.customerId;
+                                    if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
+                                        var _leadId = $stateParams.pageData['lead_id'];
+                                        loanProcess.loanAccount.leadId = _leadId;
+
+                                    }
+                                if (loanAccount.loanAccount.currentStage != 'MELApplication'){
+                                    PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
+                                    irfNavigator.goBack();
+                                    return;
+                                }
+
+                                $this.bundlePages.push({
+                                    pageClass: 'MEL-Application',
+                                    model: {
+                                        enrolmentProcess: loanProcess.applicantEnrolmentProcess,
+                                        loanProcess: loanProcess
+                                    }
+                                });                               
+                            
+                                deferred.resolve();
+
+                            });
+
+                    } else {
+                        if($stateParams.pageData){
+                            var productCategory = $stateParams.pageData.productCategory; 
+                        }
+                        LoanProcess.createNewProcess()
+                            .subscribe(function(loanProcess){
+                                loanProcess.loanAccount.currentStage = 'MELApplication';
+                                bundleModel.loanProcess = loanProcess;
+                                 if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
+
+                                    var _leadId = $stateParams.pageData['lead_id'];
+                                    loanProcess.loanAccount.leadId = _leadId;
+
+                                    }
+                               
+                                
+                                $this.bundlePages.push({
+                                    pageClass: 'MEL-Application',
+                                    model: {
+                                        enrolmentProcess: loanProcess.applicantEnrolmentProcess,
+                                        loanProcess: loanProcess
+                                    }
+                                });
+                                
+
+                                deferred.resolve();
+                            });
+                    }
+                    return deferred.promise;
+
+                },
+                "post_pages_initialize": function(bundleModel){
+                    $log.info("Inside post_page_initialize");
+                    BundleManager.broadcastEvent('origination-stage', 'MELApplication');
+                    if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
+                        PageHelper.showLoader();
+                        PageHelper.showProgress("MEL-Application", 'Loading lead details');
+                        var _leadId = $stateParams.pageData['lead_id'];
+                        Lead.get({id: _leadId})
+                            .$promise
+                            .then(function(res){
+                                PageHelper.showProgress('MEL-Application', 'Done.', 5000);
+                                BundleManager.broadcastEvent('lead-loaded', res);
+                            }, function(httpRes){
+                                PageHelper.showErrors(httpRes);
+                            })
+                            .finally(function(){
+                                PageHelper.hideLoader();
+                            })
+                    }
+
+                 },
                 eventListeners: {
-                    "lead-loaded": function (bundleModel, model, obj) {
-              
-                        return $q.when()
-                            .then(function(){
-                                if (obj.applicantCustomerId){
-                                    return EnrolmentProcess.fromCustomerID(obj.applicantCustomerId).toPromise();
-                                } else {
-                                    return null;
-                                }
-                            })
-                            .then(function(enrolmentProcess){
-                                if (enrolmentProcess!=null){
-                                    model.enrolmentProcess = enrolmentProcess;
-                                    model.customer = enrolmentProcess.customer;
-                                    model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, model.loanCustomerRelationType);
-                                    BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
-                                }
-                                if(obj.leadCategory == 'Existing' || obj.leadCategory == 'Return') {
-                                    model.customer.existingLoan = 'YES';
-                                } else {
-                                    model.customer.existingLoan = 'NO';
-                                }
-                                model.customer.mobilePhone = obj.mobileNo;
-                                model.customer.gender = obj.gender;
-                                model.customer.firstName = obj.leadName;
-                                model.customer.maritalStatus = obj.maritalStatus;
-                                model.customer.customerBranchId = obj.branchId;
-                                model.customer.centreId = obj.centreId;
-                                model.customer.centreName = obj.centreName;
-                                model.customer.street = obj.addressLine2;
-                                model.customer.doorNo = obj.addressLine1;
-                                model.customer.pincode = obj.pincode;
-                                model.customer.district = obj.district;
-                                model.customer.state = obj.state;
-                                model.customer.locality = obj.area;
-                                model.customer.villageName = obj.cityTownVillage;
-                                model.customer.landLineNo = obj.alternateMobileNo;
-                                model.customer.dateOfBirth = obj.dob;
-                                model.customer.age = moment().diff(moment(obj.dob, SessionStore.getSystemDateFormat()), 'years');
-                                model.customer.gender = obj.gender;
-                                model.customer.referredBy = obj.referredBy;
-                                model.customer.landLineNo = obj.alternateMobileNo;
-                                model.customer.landmark = obj.landmark;
-                                model.customer.postOffice = obj.postOffice;
-
-                                for (var i = 0; i < model.customer.familyMembers.length; i++) {
-                                    // $log.info(model.customer.familyMembers[i].relationShip);
-                                    // model.customer.familyMembers[i].educationStatus = obj.educationStatus;
-                                    if (model.customer.familyMembers[i].relationShip.toUpperCase() == "SELF") {
-                                        model.customer.familyMembers[i].educationStatus=obj.educationStatus;
-                                     }
-                                }
-                            })
-
-
-
-
-
-
-
-
+                    "load-address": function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("load-address-business", params);
                     },
-                    "origination-stage": function (bundleModel, model, obj) {
-                        model.currentStage = obj
+                    "load_business": function(pageObj, bundleModel, params){
+                        console.log(params)
+                        model.productCategory = params
+                    },
+                    "on-customer-load": function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("test-listener", {name: "SHAHAL AGAIN"});
+                    },
+                    "customer-loaded": function(pageObj, bundleModel, params){
+                        console.log("custome rloaded :: " + params.customer.firstName);
+                        if (pageObj.pageClass =='applicant'){
+                            BundleManager.broadcastEvent("applicant-updated", params.customer);
+                        }
+                    },
+                    "new-enrolment": function(pageObj, bundleModel, params){
+                        switch (pageObj.pageClass){
+                            case 'applicant':
+                                $log.info("New applicant");
+                                bundleModel.applicant = params.customer;
+                                BundleManager.broadcastEvent("new-applicant", params);
+                                break;
+                            case 'co-applicant':
+                                $log.info("New co-applicant");
+                                if (!_.hasIn(bundleModel, 'coApplicants')) {
+                                    bundleModel.coApplicants = [];
+                                }
+                                BundleManager.broadcastEvent("new-co-applicant", params);
+                                bundleModel.coApplicants.push(params.customer);
+                                break;
+                            case 'guarantor':
+                                $log.info("New guarantor");
+                                if (!_.hasIn(bundleModel, 'guarantors')){
+                                    bundleModel.guarantors = [];
+                                }
+                                bundleModel.guarantors.push(params.guarantor);
+                                break;
+                            case 'business':
+                                $log.info("New Business Enrolment");
+                                bundleModel.business = params.customer;
+                                BundleManager.broadcastEvent("new-business", params);
+                                break;
+                            default:
+                                $log.info("Unknown page class");
+                                break;
+
+                        }
+                    },
+                    "new-loan": function(pageObj, bundleModel, params){
+                        $log.info("Inside new-loan of CBCheck");
+                        BundleManager.broadcastEvent("new-loan", params);
+                    },
+                    "applicant-updated": function(pageObj, bundlePageObj, obj){
+                        /* Update other pages */
+                        BundleManager.broadcastEvent("applicant-updated", obj);
+                    },
+                    "co-applicant-updated": function(pageObj, bundlePageObj, obj){
+                        /* Update other pages */
+                        BundleManager.broadcastEvent("co-applicant-updated", obj);
+                    },
+                    "guarantor-updated": function(pageObj, bundlePageObj, obj){
+                        /* Update other pages */
+                        BundleManager.broadcastEvent("guarantor-updated", obj);
+                    },
+                    "business-updated": function(pageObj, bundlePageObj, obj) {
+                        /* Update other pages */
+                        BundleManager.broadcastEvent("business-updated", obj);
+                    },
+                    "enrolment-removed": function(pageObj, bundlePageObj, enrolmentDetails){
+                        if (enrolmentDetails.customerId){
+                            BundleManager.broadcastEvent('remove-customer-relation', enrolmentDetails);
+                        }
+                    },
+                    "cb-check-done": function(pageObj, bundlePageObj, cbCustomer){
+                        $log.info(cbCustomer);
+                        if(cbCustomer.customerId){
+                            BundleManager.broadcastEvent('cb-check-update', cbCustomer);
+                        }
                     }
                 },
-                offline: false,
-                getOfflineDisplayItem: function (item, index) {
-                    return [
-                        item.customer.urnNo,
-                        Utils.getFullName(item.customer.firstName, item.customer.middleName, item.customer.lastName),
-                        item.customer.villageName
-                    ]
-                },
-                form: [],
-
-                schema: function () {
-                    return Enrollment.getSchema().$promise;
-                },
-                actions: {
-                    save: function (model, formCtrl, form, $event) {
-                        PageHelper.clearErrors();
-                        if(PageHelper.isFormInvalid(formCtrl)) {
-                            return false;
+                preSave: function(offlineData) {
+                    var defer = $q.defer();
+                    for (var i=0; i<offlineData.bundlePages.length; i++){
+                        var page = offlineData.bundlePages[i];
+                        if (page.pageClass == "applicant" && !page.model.customer.firstName){
+                            PageHelper.showProgress("MELApplication", "Applicant first name is required to save offline", 5000);
+                            defer.reject();
                         }
-                        formCtrl.scope.$broadcast('schemaFormValidate');
-
-                        if (formCtrl && formCtrl.$invalid) {
-                            PageHelper.showProgress("enrolment", "Your form have errors. Please fix them.", 5000);
-                            return false;
-                        }
-
-                        // $q.all start
-                        model.enrolmentProcess.save()
-                            .finally(function () {
-                                PageHelper.hideLoader();
-                            })
-                            .subscribe(function (value) {
-                                formHelper.resetFormValidityState(formCtrl);
-                                Utils.removeNulls(value, true);
-                                PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
-                                PageHelper.clearErrors();
-                                BundleManager.pushEvent()
-                            }, function (err) {
-                                PageHelper.showErrors(err);
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                                
-                                PageHelper.hideLoader();
-                            });
-                    },
-                    proceed: function(model, form, formName){
-                        PageHelper.clearErrors();
-                        if(PageHelper.isFormInvalid(form)) {
-                            return false;
-                        }
-                        PageHelper.showProgress('enrolment', 'Updating Customer');
-                        PageHelper.showLoader();
-                        model.enrolmentProcess.proceed()
-                            .finally(function () {
-                                console.log("Inside hideLoader call");
-                                PageHelper.hideLoader();
-                            })
-                            .subscribe(function (enrolmentProcess) {
-                                formHelper.resetFormValidityState(form);
-                                PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                PageHelper.clearErrors();
-                                BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
-                                BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer});
-
-                            }, function (err) {
-                                PageHelper.showErrors(err);
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                                
-                            });
-                    },
-                    submit: function (model, form, formName) {
-                        PageHelper.clearErrors();
-                        if(PageHelper.isFormInvalid(form)) {
-                            return false;
-                        }
-                        PageHelper.showProgress('enrolment', 'Updating Customer');
-                        PageHelper.showLoader();
-                        model.enrolmentProcess.save()
-                            .finally(function () {
-                                PageHelper.hideLoader();
-                            })
-                            .subscribe(function (enrolmentProcess) {
-                                formHelper.resetFormValidityState(form);
-                                PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                PageHelper.clearErrors();
-                                BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
-                                BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer});
-
-                                model.enrolmentProcess.proceed()
-                                .subscribe(function(enrolmentProcess) {
-                                    PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                }, function(err) {
-                                    PageHelper.showErrors(err);
-                                    PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                                })
-                            }, function (err) {
-                                PageHelper.showErrors(err);
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);                                
-                                PageHelper.hideLoader();
-                            });
                     }
+                    defer.resolve();
+                    return defer.promise;
                 }
-            };
+            }
         }
     }
 })

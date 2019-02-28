@@ -76,6 +76,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:57
                             },
                             {
+                                pageName: 'witfin.customer.televerification',
+                                title: 'TELE_VERIFICATION',
+                                pageClass: 'televerification',
+                                minimum: 1,
+                                maximum: 1,
+                                order:58
+                            },
+                            {
                                 pageName: 'loans.individual.screening.CBCheck',
                                 title: 'CB_CHECK',
                                 pageClass: 'cb-check',
@@ -163,7 +171,27 @@ define(["perdix/domain/model/loan/LoanProcess",
                     "pre_pages_initialize": function(bundleModel){
                         $log.info("Inside pre_page_initialize");
                         bundleModel.currentStage = "Rejected";
+                        var televerification_tab_status="false";
                         var deferred = $q.defer();
+
+                        IndividualLoan.loanRemarksSummary({id: $stateParams.pageId})
+                        .$promise
+                        .then(function (resp){
+                            
+                            if(resp && resp.length)
+                            {
+                                for(i=0;i<resp.length;i++)
+                                {
+                                    if(resp[i].postStage=="Rejected" &&
+                                    (resp[i].preStage=="BusinessApproval1"||resp[i].preStage=="BusinessApproval1"||resp[i].preStage=="CreditApproval1"||resp[i].preStage=="CreditApproval2"||resp[i].preStage=="CreditApproval3"||resp[i].preStage=="TeleVerification"))
+                                    {      
+                                        televerification_tab_status="true";
+                                    }
+                                }
+                            }
+                        },function (errResp){
+                            console.log(errResp);
+                        });
 
                         var $this = this;
                         if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)){
@@ -236,6 +264,15 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
+                                if(televerification_tab_status=="true") {
+                                    $this.bundlePages.push({
+                                        pageClass: 'televerification',
+                                        model: {
+                                            enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                            loanProcess: loanProcess
+                                        }
+                                    });
+                                }
 
 
                                  $this.bundlePages.push({

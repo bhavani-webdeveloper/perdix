@@ -97,6 +97,7 @@ irf.pageCollection.directive("irfScoringDisplay", function(){
                     }
                 })
             }
+            _vsd['customerParameterMapping'] = _.sortBy(_vsd['customerParameterMapping'], [function(o) { return o.Details.Relation; }]);
             _tData.IndividualScores.push(_vsd);
         }
         
@@ -397,7 +398,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         _.forIn(model.enterpriseDetailsData, function(value, key){
             var item = {
                 key: "enterpriseDetailsData." + key,
-                title: key,
+                title: (key.charAt(0).toUpperCase()+key.slice(1)).replace(/_/g, ' '),
                 type: "string",
                 readonly: true,
             };

@@ -14,7 +14,7 @@ define(["perdix/domain/model/loan/LoanProcess",
         $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, Lead, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
             return {
                 "type": "page-bundle",
-                "title": "SCREENING_REVIEW",
+                "title": "APPLICATION",
                 "subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
                 "bundleDefinitionPromise": function() {
                     return $q.resolve([
@@ -30,16 +30,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageName: 'kgfs.customer.IndividualEnrolment2',
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
-                            minimum: 0,
-                            maximum: 1,
+                            minimum: 1,
+                            maximum: 0,
                             order:11
                         },
                         {
                             pageName: 'kgfs.customer.IndividualEnrolment2',
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
-                            minimum: 0,
-                            maximum: 1,
+                            minimum: 1,
+                            maximum: 0,
                             order:12
                         },
                         {
@@ -66,22 +66,22 @@ define(["perdix/domain/model/loan/LoanProcess",
                             maximum: 1,
                             order:9
                         },
-                            // {
-                            //     pageName: 'kgfs.loans.individual.screening.Summary',
-                            //     title: 'SUMMARY',
-                            //     pageClass: 'summary',
-                            //     minimum: 1,
-                            //     maximum: 1,
-                            //     order: 5
-                            // },                            
-                            {
+                        {
+                            pageName: 'kgfs.loans.individual.screening.Summary',
+                            title: 'SUMMARY',
+                            pageClass: 'summary',
+                            minimum: 1,
+                            maximum: 1,
+                            order: 5
+                        },                            
+                        {
                                 pageName: 'kgfs.loans.individual.screening.Review',
                                 title: 'REVIEW',
                                 pageClass: 'loan-review',
                                 minimum: 1,
                                 maximum: 1,
                                 order:80
-                            }
+                        }
                     ]);
                 },
                 "bundlePages": [],
@@ -145,6 +145,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             .subscribe(function(loanProcess){
                                 bundleModel.loanProcess = loanProcess;
                                 var loanAccount = loanProcess;
+                                var productCategory = loanProcess.loanAccount.productCategory;
                                 loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.loanAccount.customerId;
                                     if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
                                         var _leadId = $stateParams.pageData['lead_id'];
@@ -156,7 +157,21 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     irfNavigator.goBack();
                                     return;
                                 }
-
+                               $this.bundlePages.push({
+                                    pageClass: 'summary',
+                                    model: {
+                                        // cbModel: {
+                                        //     customerId:loanProcess.loanAccount.customerId,
+                                        //     loanId:bundleModel.loanId,
+                                        //     scoreName:'RiskScore3'
+                                        // }41254
+                                          cbModel: {
+                                            customerId:loanProcess.loanAccount.customerId,
+                                            loanId:41254,
+                                            scoreName:'ConsolidatedScore'
+                                        }
+                                    }
+                                });
                                 $this.bundlePages.push({
                                     pageClass: 'applicant',
                                     model: {
@@ -186,15 +201,18 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 }
 
-
-                                 $this.bundlePages.push({
-                                    pageClass: 'business',
-                                    model: {
-                                        enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
-                                        loanProcess: loanProcess
+                                if(productCategory == 'MEL'){
+                                    if (loanProcess.loanCustomerEnrolmentProcess) {
+                                        $this.bundlePages.push({
+                                            pageClass: "business",
+                                            model: {
+                                                enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                                loanProcess: loanProcess
+                                            }
+                                        });
                                     }
-                                });
-
+                                }
+                                
                                 $this.bundlePages.push({
                                     pageClass: 'loan-request',
                                     model: {

@@ -51,8 +51,9 @@ $schedule = getScheduleDataByAccountID($account_id);
 
 $tenure = $schedule->tenureMagnitude;
 try{
+    DB::beginTransaction();
     ScheduleDetails::query()->truncate();
-    for( $i = 0; $i<$tenure; $i++) 
+    for( $i = 0; $i<$tenure; $i++)
     {
         $value1 = $schedule->repaymentSchedule[$i]->accountId;
         $value2 = $schedule->repaymentSchedule[$i]->sequenceNum;
@@ -74,8 +75,9 @@ try{
         $scheduleDetail->type = $value8;
         $scheduleDetail->save();
     }
+    DB::commit();
     ob_end_clean();
-    $response->setStatusCode(200)->json(["message" => 'Inserted sucessfully']);
+    $response->setStatusCode(200)->json(["message" => 'Inserted sucessfully'.$tenure]);
     return;
 }
 catch (Exception $e){

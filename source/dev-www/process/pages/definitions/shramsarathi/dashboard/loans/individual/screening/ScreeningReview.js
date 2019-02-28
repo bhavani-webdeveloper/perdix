@@ -26,18 +26,18 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageName:'shramsarathi.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'APPLICANT',
                                 pageClass: 'applicant',
-                                minimum: 1,
+                                minimum: 0,
                                 maximum: 1,
                                 order:10
                             },
-                            {
-                                pageName: 'shramsarathi.dashboard.loans.individual.screening.Summary',
-                                title: 'SUMMARY',
-                                pageClass: 'summary',
-                                minimum: 1,
-                                maximum: 1,
-                                order: 1
-                            },
+                            // {
+                            //     pageName: 'shramsarathi.dashboard.loans.individual.screening.Summary',
+                            //     title: 'SUMMARY',
+                            //     pageClass: 'summary',
+                            //     minimum: 1,
+                            //     maximum: 1,
+                            //     order: 1
+                            // },
                             {
                                 pageName: 'shramsarathi.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'CO_APPLICANT',
@@ -54,14 +54,15 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 maximum: 1,
                                 order:30
                             },
-                            {
-                                pageName: 'shramsarathi.dashboard.loans.individual.customer.EnterpriseEnrolment2',
-                                title: 'BUSINESS',
-                                pageClass: 'business',
-                                minimum: 1,
-                                maximum: 1,
-                                order:40
-                            },
+
+                            // {
+                            //     pageName: 'shramsarathi.dashboard.loans.individual.customer.EnterpriseEnrolment2',
+                            //     title: 'BUSINESS',
+                            //     pageClass: 'business',
+                            //     minimum: 1,
+                            //     maximum: 1,
+                            //     order:40
+                            // },
                             {
                                 pageName: 'shramsarathi.dashboard.loans.individual.screening.LoanRequest',
                                 title: 'LOAN_REQUEST',
@@ -116,7 +117,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'financialInfoSummary',
                                 minimum: 1,
                                 maximum: 1,
-                                order: 5
+                                order: 100
                             }
                         ]);
                     },
@@ -195,12 +196,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 var loanAccount = loanProcess;
                                 loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.customerId;
 
-                                $this.bundlePages.push({
-                                    pageClass: 'summary',
-                                    model: {
-                                        cbModel: {customerId:loanAccount.loanAccount.customerId,loanId:bundleModel.loanId, scoreName:'RiskScore1'}
-                                    }
-                                });
+                                // $this.bundlePages.push({
+                                //     pageClass: 'summary',
+                                //     model: {
+                                //         cbModel: {customerId:loanAccount.loanAccount.customerId,loanId:bundleModel.loanId, scoreName:'RiskScore1'}
+                                //     }
+                                // });
 
                                 // $this.bundlePages.push({
                                 //     pageClass: 'balance-sheet-history',
@@ -240,13 +241,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 }
 
 
-                                $this.bundlePages.push({
-                                    pageClass: 'business',
-                                    model: {
-                                        enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
-                                        loanProcess: loanProcess
-                                    }
-                                });
+                                // $this.bundlePages.push({
+                                //     pageClass: 'business',
+                                //     model: {
+                                //         enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                //         loanProcess: loanProcess
+                                //     }
+                                // });
 
                                 $this.bundlePages.push({
                                     pageClass: 'loan-request',

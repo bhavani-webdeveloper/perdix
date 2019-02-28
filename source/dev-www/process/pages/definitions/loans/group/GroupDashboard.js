@@ -31,7 +31,8 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             "Page/Engine/loans.group.Checker4Queue",
             "Page/Engine/loans.group.JLGDisbursementQueue",
             "Page/Engine/loans.group.CloseGroup",
-            "Page/Engine/loans.group.GroupLoanRepaymentQueue"
+            "Page/Engine/loans.group.GroupLoanRepaymentQueue",
+            "Page/Engine/loans.group.CloseOldGroup"
         ]
     };
 
@@ -116,6 +117,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
         var application = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.ApplicationPendingQueue"];
         var disbursement = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.JLGDisbursementQueue"];
         var close = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.CloseGroup"];
+        //var closeOldGroup = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.CloseOldGroup"];
         var dscoverrideMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.group.DscOverrideQueue"];
 
         if (edtGrpMenu) {
@@ -380,6 +382,7 @@ function($log, $scope, PageHelper, $stateParams, GroupProcess, Groups,
             });
         }
 
+       
         if (dscoverrideMenu) {
             dscoverrideMenu.data = '-';
             Groups.getDscOverrideList({

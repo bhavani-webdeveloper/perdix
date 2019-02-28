@@ -35,10 +35,10 @@ define({
 							"title": "LEAD_NAME",
 							"type": "string"
 						},
-						"businessName": {
-							"title": "BUSINESS_NAME",
-							"type": "string"
-						},
+						// "businessName": {
+						// 	"title": "BUSINESS_NAME",
+						// 	"type": "string"
+						// },
 						"area": {
 							"title": "PANCHAYAT",
 							"type": "string"
@@ -54,9 +54,10 @@ define({
 								"type": "date",
 								"screenFilter": true
 							}
-						},
+						}
+						,
 						"centre": {
-							"title": "ZONE",
+							"title": "ZONE_NAME",
 							"type": "string",
 							"required": true,
 							"x-schema-form": {
@@ -123,13 +124,13 @@ define({
 
 					var promise = Lead.search({
 						'branchName': searchOptions.branchName,
-						'centreName': centreName[0],
+						 'centreName': centreName[0],
 						'currentStage': "Inprocess",
-						'leadStatus': "FollowUp",
-						'leadName': searchOptions.leadName,
-						'businessName': searchOptions.businessName,
-						'followUpDate': searchOptions.followUpDate,
-						'area': searchOptions.area,
+						 'leadStatus': "FollowUp",
+						 'leadName': searchOptions.leadName,
+					    // 'businessName': searchOptions.businessName,
+						 'followUpDate': searchOptions.followUpDate,
+						 'area': searchOptions.area,
 						'cityTownVillage': searchOptions.cityTownVillage,
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,
@@ -160,7 +161,7 @@ define({
 						return [
 							item.leadId,
 							item.leadName,
-							item.businessName,
+							// item.businessName,
 							item.branchName,
 							item.addressLine1,
 							item.cityTownVillage,
@@ -182,10 +183,12 @@ define({
 						}, {
 							title: 'Lead Name',
 							data: 'leadName'
-						}, {
-							title: 'Business Name',
-							data: 'businessName'
-						}, {
+						},
+						//  {
+						// 	title: 'Business Name',
+						// 	data: 'businessName'
+						// },
+						 {
 							title: 'Follow Up Date',
 							data: 'followUpDate'
 						}, {
@@ -209,7 +212,7 @@ define({
 									_request: item
 								});
 								$state.go("Page.Engine", {
-									pageName: "witfin.lead.LeadGeneration",
+									pageName: "shramsarathi.dashboard.lead.LeadGeneration",
 									pageId: item.id
 								});
 							},

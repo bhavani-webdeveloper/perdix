@@ -295,7 +295,7 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
 '</div>';*/
     var HIGHMARK_HTML =
 '<div>'+
-    '<h3 ng-show="CBDATA.highMark.highmarkScore" style="font-weight:bold;color:#ccc;">HIGHMARK REPORT</h3>'+
+    '<h3 ng-show="CBDATA.highMark.reportHtml" style="font-weight:bold;color:#ccc;">HIGHMARK REPORT</h3>'+
     '<iframe ng-show="CBDATA.highMark.reportHtml" id="{{CBDATA._highmarkId}}" style="border:0;width:100%;height:500px;"></iframe>'+
     '<div ng-hide="CBDATA.highMark.reportHtml">'+
         '<center><b style="color:tomato">{{CBDATA.customer.first_name||CBDATA.customerId}} - HighMark Scores NOT available</b></center>'+
@@ -670,9 +670,11 @@ var INDIVIDUAL_HTML =
                     objectifiedBureaus[customerIds[i]]._equifaxId = 'equifax_' + customerIds[i];
                     objectifiedBureaus[customerIds[i]]._individualId = 'individual_' + customerIds[i];
                 }
+                // refreshUI();
                 deferred.resolve();
             });
         } else {
+            // refreshUI();
             deferred.reject();
         }
         return deferred.promise;
@@ -681,7 +683,7 @@ var INDIVIDUAL_HTML =
     var refreshUI = function() {
         _.forOwn(objectifiedBureaus, function(v, k) {
             if (v.highMark && v.highMark.reportHtml) {
-                $('#highmark_'+k)[0].contentWindow.document.write(v.highMark.reportHtml);
+               $('#highmark_'+k)[0].contentWindow.document.write(v.highMark.reportHtml);
             }
 
             if (v.equifax && v.equifax.reportHtml) {
@@ -712,7 +714,7 @@ var INDIVIDUAL_HTML =
                 model.CIBIL = true;
                 model.BASE = true;
             }
-            return refreshCB(model);
+            return refreshCB(model)
         },
         initializeUI: function (model, form, formCtrl, bundlePageObj, bundleModel) {
             refreshUI();
@@ -752,7 +754,7 @@ var INDIVIDUAL_HTML =
                 "items": [
                     {
                         type: "section",
-                        html: '<div ng-init="CBDATA=model.applicant">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>'+'<div ng-show="model.CHMHUB">'+IDENCHECK_HTML+'</div>'+'<div ng-show="model.INDIVIDUAL">'+INDIVIDUAL_HTML+'</div>'+'</div>'
+                        html: '<div ng-init="CBDATA=model.applicant">' +'<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+CIBIL_HTML+'</div>'+'<div ng-show="model.EUQIFAX">'+EQUIFAX_HTML+'</div>'+'<div ng-show="model.INDIVIDUAL">'+INDIVIDUAL_HTML+'</div>'+'<div ng-show="model.CHMHUB">'+IDENCHECK_HTML+'</div></div>'
                     }
                 ]
             },
@@ -765,7 +767,7 @@ var INDIVIDUAL_HTML =
                 "items": [
                     {
                         type: "section",
-                        html: '<div ng-repeat="CBDATA in model.coapplicants">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>' +'<div ng-show="model.CHMHUB">'+IDENCHECK_HTML+'</div>'+'<div ng-show="model.INDIVIDUAL">'+INDIVIDUAL_HTML+'</div>'+'<hr><hr></div>'
+                         html: '<div ng-repeat="CBDATA in model.coapplicants">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>'+'<div ng-show="model.INDIVIDUAL">'+INDIVIDUAL_HTML+'</div>'+'<div ng-show="model.CHMHUB">'+IDENCHECK_HTML+'</div>'+'<hr><hr></div>'
                     }
                 ]
             },
@@ -778,7 +780,7 @@ var INDIVIDUAL_HTML =
                 "items": [
                     {
                         type: "section",
-                        html: '<div ng-repeat="CBDATA in model.guarantors">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>'+'<div ng-show="model.CHMHUB">'+IDENCHECK_HTML+'</div>'+'<div ng-show="model.INDIVIDUAL">'+INDIVIDUAL_HTML+'</div>'+'<hr><hr></div>'
+                        html: '<div ng-repeat="CBDATA in model.guarantors">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>'+'<div ng-show="model.INDIVIDUAL">'+INDIVIDUAL_HTML+'</div>'+'<div ng-show="model.CHMHUB">'+IDENCHECK_HTML+'</div>'+'<hr><hr></div>'
                     }
                 ]
             }

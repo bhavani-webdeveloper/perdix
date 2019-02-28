@@ -289,6 +289,16 @@
 <script src="process/pages/definitions/Journal/RejectedFinconAccount.js"></script>
 
  <script src="process/pages/states/Page.FinconAccountingDashboard.js"></script>
+ <script src="process/pages/definitions/jewelloan/BranchJewelQueue.js"></script>
+ <script src="process/pages/definitions/jewelloan/JewelPouchRequest.js"></script>
+ <script src="process/pages/definitions/jewelloan/PendingTransitQueue.js"></script>
+ <script src="process/pages/definitions/jewelloan/JewelPouchApproval.js"></script>
+ <script src="process/pages/definitions/jewelloan/JewelPouchReject.js"></script>
+ <script src="process/pages/definitions/jewelloan/IncomingTransitQueue.js"></script>
+ <script src="process/pages/definitions/jewelloan/ReturnRequestQueue.js"></script>
+ <script src="process/models/v1/jewelloan/JewelLoan.js"></script>
+
+<script src="process/pages/states/Page.JewelDashboard.js"></script>
 
 <!-- for bi reports -->
 <script src="process/pages/states/ReportsDashboard.js"></script>
@@ -344,7 +354,7 @@
 <script src="process/pages/definitions/kgfs/kgfsWorkflow/GpsFPApprovalDashboard.js"></script>
 <script src="process/pages/definitions/kgfs/customer/CustomerEnrollmentDashboard.js"></script>
 <script src="process/pages/definitions/kgfs/customer/CustomerSearchQueue.js"></script>
-<script src="process/pages/definitions/kgfs/loans/individual/screening/CreditBureauView.js"></script>
+<script src="process/pages/definitions/kgfs/loans/individual/screening/CBCheck.js"></script>
 
 
 <script src="process/pages/definitions/lender/liabilities/LoanBookingDashboard.js"></script>
@@ -379,6 +389,8 @@
 <script src="process/pages/definitions/user/UserSearch.js"></script>
 <script src="process/pages/definitions/user/LogoutUser.js"></script>
 <script src="process/pages/definitions/user/MultipleUserLogout.js"></script>
+<script src="process/pages/definitions/user/UserAttendance.js"></script>
+<script src="process/pages/definitions/user/MarkAttendance.js"></script>
 
 <script src="process/pages/definitions/customer/EnrollmentHouseVerificationQueue.js"></script>
 <script src="process/pages/definitions/customer/CustomerSearch.js"></script>
@@ -459,6 +471,8 @@
 <script src="process/pages/definitions/loans/individual/booking/LoanInput.js"></script>
 <script src="process/pages/definitions/loans/individual/booking/SimpleLoanInput.js"></script>
 <script src="process/pages/definitions/loans/individual/booking/DocumentUpload.js"></script>
+<script src="process/pages/definitions/kgfs/loans/individual/booking/CreditBureauView.js"></script>
+
 
 <script src="process/pages/definitions/loans/individual/screening/LoanSanctionQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/SanctionInput.js"></script>
@@ -481,6 +495,8 @@
 <script src="process/pages/definitions/loans/individual/screening/FieldAppraisalReview.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/ApplicationReviewQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/LoanAnalyticsView.js"></script>
+<script src="process/pages/definitions/kgfs/loans/individual/screening/CreditBureauView.js"></script>
+
 
 <script src="process/pages/definitions/loans/individual/screening/BranchNewConversationQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/BranchRepliedConversationQueue.js"></script>
@@ -550,6 +566,7 @@
 <script src="process/pages/definitions/loans/individual/collections/TransactionAuthorization.js"></script>
 <script src="process/pages/definitions/loans/individual/collections/DepositStage.js"></script>
 <script src="process/pages/definitions/loans/individual/collections/ChargeFee.js"></script>
+<script src="process/pages/definitions/loans/individual/ActivateLoan.js"></script>
 <script src="process/pages/definitions/loans/individual/collections/MonthlyDemandList.js"></script>
 <script src="process/pages/definitions/loans/individual/collections/offlineCollectionUpload.js"></script>
 
@@ -640,6 +657,7 @@
 <script src="process/pages/definitions/audit/ScheduledAuditsViewQueue.js"></script>
 <script src="process/pages/definitions/audit/DeferredAuditsQueue.js"></script>
 <script src="process/pages/definitions/audit/RejectedAuditsQueue.js"></script>
+<script src="process/pages/definitions/audit/ExpiredAuditsQueue.js"></script>
 <script src="process/pages/definitions/audit/OutstandingIssuesQueue.js"></script>
 <script src="process/pages/definitions/audit/OutstandingIssuesViewQueue.js"></script>
 <script src="process/pages/definitions/audit/UnconfirmedIssuesQueue.js"></script>
@@ -677,6 +695,7 @@
 <script src="process/pages/definitions/audit/detail/FixedAsset.js"></script>
 <script src="process/pages/definitions/audit/detail/SnapAuditDetails.js"></script>
 <script src="process/pages/definitions/audit/detail/FieldVerification.js"></script>
+<script src="process/pages/definitions/audit/detail/AllSampleIssueSummary.js"></script>
 
 <script src="process/pages/definitions/audit/detail/processcompliance/SampleSet.js"></script>
 <script src="process/pages/definitions/audit/detail/processcompliance/SampleSetSummary.js"></script>
@@ -725,11 +744,28 @@
 <!-- new dashboard mappings -->
 
 <!-- Shramsarathi mappings -->
+<script src="process/pages/definitions/shramsarathi/dashboard/lead/LeadDashboard.js"></script>
 <script src="process/pages/definitions/shramsarathi/dashboard/loans/LoanOriginationDashboard.js"></script>
 <script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/booking/LoanBookingDashboard.js"></script>
 <script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/collections/LoansCollectionsDashboard.js"></script>
 <script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/disbursement/LoansDisbursementDashboard.js"></script>
-<script src="process/pages/definitions/shramsarathi/dashboard/lead/LeadDashboard.js"></script>
+<script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/booking/LoanInput.js"></script>
+<script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/booking/InitiationQueue.js"></script>
+<script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/booking/LoanBooking.js"></script>
+<script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/booking/PendingQueue.js"></script>
+<script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/booking/DocumentUploadQueue.js"></script>
+<script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/booking/DocumentUpload.js"></script>
+<script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/booking/DocumentVerification.js"></script>
+<script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/collections/BounceQueue.js"></script>
+<script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/collections/CreditValidationQueue.js"></script>
+<script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/collections/TransactionAuthorizationQueue.js"></script>
+<script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/disbursement/ReadyForDisbursementQueue.js"></script>
+<script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/disbursement/Disbursement.js"></script>
+<script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/disbursement/DisbursementConfirmationQueue.js"></script>
+<script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/disbursement/DisbursementConfirmation.js"></script>
+<script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/disbursement/DisbursementConfirmationUpload.js"></script>
+<script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/disbursement/RejectedDisbursementsQueue.js"></script>
+<script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/disbursement/UpdateAccountDetails.js"></script>
 <script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/screening/Review.js"></script>
 <script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/screening/Summary.js"></script>
 <script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/screening/ScreeningReviewQueue.js"></script>

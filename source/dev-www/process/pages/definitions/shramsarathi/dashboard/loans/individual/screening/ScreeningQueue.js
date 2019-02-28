@@ -35,9 +35,9 @@ define({
                     "title": 'SEARCH_OPTIONS',
                     "properties": {
                         "centre": {
-                            "title": "ZONE",
+                            "title": "ZONE_NAME",
                             "type": "string",
-                            "required": true,
+                            "required": false,
                             "x-schema-form": {
                                 type: "lov",
                                 autolov: true,
@@ -82,10 +82,10 @@ define({
                             "title": "APPLICANT_NAME",
                             "type": "string"
                         },
-                        "businessName": {
-                            "title": "BUSINESS_NAME",
-                            "type": "string"
-                        },
+                        // "businessName": {
+                        //     "title": "BUSINESS_NAME",
+                        //     "type": "string"
+                        // },
                         "customerId": {
                             "title": "CUSTOMER_ID",
                             "type": "string"
@@ -186,11 +186,8 @@ define({
                             data: 'screeningDate'
                         }, {
                             title: 'APPLICANT_NAME',
-                            data: 'applicantName'
-                        }, {
-                            title: 'BUSINESS_NAME',
                             data: 'customerName'
-                        }, {
+                        },  {
                             title: 'AREA',
                             data: 'area'
                         }, {

@@ -1039,6 +1039,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         onCapture: function(result, model, form) {
                             var aadhaarData = EnrollmentHelper.customerAadhaarOnCapture(result, model, form);
                             model.customer.addressProofNo = aadhaarData.uid;
+                            var customer_district = aadhaarData.dist;
+                            model.customer.district=customer_district.toUpperCase();
+                            model.customer.state = aadhaarData.state;
                             if (aadhaarData.dob) {
                                 $log.debug('aadhaarData dob: ' + aadhaarData.dob);
                                 if (!isNaN(aadhaarData.dob.substring(2, 3))) {
@@ -1289,6 +1292,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "BankAccounts.customerBankAccounts.bankStatements": {
                        "startEmpty": true 
+                    },
+                    "FamilyDetails.familyMembers.salary":{
+                        "title":"NET_ANNUAL_INCOME"
                     }
                 }
             }
@@ -2163,13 +2169,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                                 BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                             }, function (err) {
-                                PageHelper.showErrors({
-                                    data: {
-                                        error: err
-                                    }
-                                });
-                                //throw new Error('err');
-                                return false;
+                                // PageHelper.showErrors({
+                                //     data: {
+                                //         errors: err
+                                //     }
+                                // });
+                                // //throw new Error('err');
+                                // return false;
                             //    PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();

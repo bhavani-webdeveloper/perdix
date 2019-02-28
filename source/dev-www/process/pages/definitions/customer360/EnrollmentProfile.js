@@ -50,6 +50,11 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
             model.customer.centreId = model.customer.centreId || centres[0].centreId;
         }
     };
+    var checkCentre = function(model){
+        model.additional.isStrategicEdit = false;
+        if (typeof model.customer.centreId == "undefined" || model.customer.centreId == null)
+            model.additional.isStrategicEdit = true;
+    };
     return {
         "id": "ProfileBasic",
         "type": "schema-form",
@@ -61,41 +66,42 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
             console.log(model);
             initData(model);
              //start
-    var branchId = SessionStore.getBranchId();
-    if (!Utils.isCordova) {
-        BranchCreationResource.getBranchByID({
-                id: branchId
-            },
-            function (branchDetails) {
-                if (branchDetails.fingerPrintDeviceType) {
-                    if (branchDetails.fingerPrintDeviceType == "MANTRA") {
-                        model.fingerPrintDeviceType = branchDetails.fingerPrintDeviceType;
-                    }
-                }
+            var branchId = SessionStore.getBranchId();
+            if (!Utils.isCordova) {
+                BranchCreationResource.getBranchByID({
+                        id: branchId
+                    },
+                    function (branchDetails) {
+                        if (branchDetails.fingerPrintDeviceType) {
+                            if (branchDetails.fingerPrintDeviceType == "MANTRA") {
+                                model.fingerPrintDeviceType = branchDetails.fingerPrintDeviceType;
+                            }
+                        }
 
-                PageHelper.hideLoader();
-            },
-            function (err) {
-                $log.info(err);
+                        PageHelper.hideLoader();
+                    },
+                    function (err) {
+                        $log.info(err);
+                    }
+                );
             }
-        );
-    }
-    //end
-            console.log("TEst");
-            console.log(model.customer);
+            //end
             model.enabletrue= false;
             if($stateParams.pageData){
                 if($stateParams.pageData.enabletrue){
                     model.enabletrue= $stateParams.pageData.enabletrue;
                 }
+                PageHelper.showLoader();
                 Enrollment.EnrollmentById({id:$stateParams.pageId},function(resp,header){
                     // var model = {$$OFFLINE_FILES$$:_model.$$OFFLINE_FILES$$};
                     model.customer = resp;
                     model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
-
                     model = EnrollmentHelper.fixData(model);
+                    model.additional = {isStrategicEdit : false};
+                    checkCentre(model);
                     PagesDefinition.getRolePageConfig("Page/Engine/customer360.EnrollmentProfile").then(function(data){
                         $log.info(data);
+                        PageHelper.hideLoader();
                         $log.info(data.EditBasicCustomerInfo);
                         if(data){
                             model.EditBasicCustomerInfo= !data.EditBasicCustomerInfo;
@@ -106,10 +112,10 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
 
                         }
                     },function(err){
+                        PageHelper.hideLoader();
                         model.EditBasicCustomerInfo= true;
                         model.enabletrue = true;
                     });
-
                     if (model.customer.currentStage==='Stage01') {
                         irfProgressMessage.pop("enrollment-save","Customer "+model.customer.id+" not enrolled yet", 5000);
                         $state.go("Page.Engine", {pageName:'ProfileInformation', pageId:pageId});
@@ -119,7 +125,6 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                         //$log.info(model);
                         // deferred.resolve(model);
                     }
-                    PageHelper.hideLoader();
                 },function(resp){
                     PageHelper.hideLoader();
                     irfProgressMessage.pop("enrollment-save","An Error Occurred. Failed to fetch Data",5000);
@@ -174,6 +179,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                         {
                             key:"customer.centreId",
                             type:"select",
+                            readonly:false,
                             "parentEnumCode": "branch_id",
                             "parentValueExpr": "model.customer.customerBranchId",
                         },
@@ -283,7 +289,17 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                                     customerId: model.customer.id
                                 };
                             }
+                        },
+                        {
+                            "title": "RISK_PROFILE",
+                            "type": "select",
+                            "key": "customer.riskProfile",
+                            "enumCode":"customer_risk_profile",
+                            onChange: function (valueObj, form, model) {
+                            }
                         }
+                        
+                        
                     ]
                 },
                 {
@@ -1504,7 +1520,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                 },
                 {
                     "type": "box",
-                    "readonly":true,"condition":"model.enabletrue",
+                    "readonly":true,"condition":"model.enabletrue && !model.additional.isStrategicEdit",
                     "title": "CUSTOMER_INFORMATION",
                     "items": [
                         {
@@ -1632,6 +1648,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                             key:"customer.isBiometricValidated",
                             title: "Validate Fingerprint",
                             type:"validatebiometric",
+                            readonly:true,
                             category: 'CustomerEnrollment',
                             subCategory: 'FINGERPRINT',
                             helper: formHelper,
@@ -1652,6 +1669,186 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                                     customerId: model.customer.id
                                 };
                             }
+                        },
+                        {
+                            "title": "RISK_PROFILE",
+                            "type": "select",
+                            "key": "customer.riskProfile",
+                            "enumCode":"customer_risk_profile",
+                            onChange: function (valueObj, form, model) {
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "box",
+                    "condition":"model.additional.isStrategicEdit && model.enabletrue",
+                    "title": "CUSTOMER_INFORMATION",
+                    "items": [
+                        {
+                            key: "customer.idAndBcCustId",
+                            title: "Id & BC Id",
+                            titleExpr: "('ID'|translate) + ' & ' + ('BC_CUST_ID'|translate)",
+                            readonly: true
+                        },
+                        {
+                            key: "customer.urnNo",
+                            title: "URN_NO",
+                            readonly: true
+                        },
+                        {
+                            key: "customer.firstName",
+                            title: "FULL_NAME",
+                            condition:"!model.EditBasicCustomerInfo",
+                            readonly: true
+                        },
+                        {
+                            key: "customer.firstName",
+                            title: "FULL_NAME",
+                            readonly:true,
+                            condition:"model.EditBasicCustomerInfo",
+                        },
+                        {
+                            key:"customer.photoImageId",
+                            type:"file",
+                            fileType:"image/*",
+                            "viewParams": function(modelValue, form, model) {
+                                return {
+                                    customerId: model.customer.id
+                                };
+                            },
+                            readonly: true
+                        },
+                        {
+                            key:"customer.centreId",
+                            type:"select",
+                            "parentEnumCode": "branch_id",
+                            "parentValueExpr": "model.customer.customerBranchId",
+                        },
+                        {
+                            key:"customer.enrolledAs",
+                            type:"radios",
+                            readonly: true
+                            //readonly: true
+                        },
+                        {
+                            key:"customer.gender",
+                            type:"radios",
+                            readonly: true
+                            //readonly: true
+                        },
+                        {
+                            key:"customer.age",
+                            title: "AGE",
+                            type:"number",
+                            readonly: true
+                        },
+                        {
+                            key:"customer.dateOfBirth",
+                            condition:"model.EditBasicCustomerInfo",
+                            type:"date",
+                            readonly: true
+                        },
+                        {
+                            key:"customer.dateOfBirth",
+                            onChange: function(modelValue, form, model) {
+                                if (model.customer.dateOfBirth) {
+                                    model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                }
+                            },
+                            condition:"!model.EditBasicCustomerInfo",
+                            type:"date",
+                            readonly: true
+                        },
+                        {
+                            key: "customer.fatherFirstName",
+                            condition:"model.EditBasicCustomerInfo",
+                            title: "FATHER_FULL_NAME",
+                            readonly: true
+                        },
+                        {
+                            key: "customer.fatherFirstName",
+                            condition:"!model.EditBasicCustomerInfo",
+                            title: "FATHER_FULL_NAME",
+                            readonly: true
+                        },
+                        {
+                            key:"customer.maritalStatus",
+                            type:"select",
+                            readonly: true
+                        },
+                        {
+                            key: "customer.spouseFirstName",
+                            title: "Spouse Full Name",
+                            condition:"model.customer.maritalStatus==='MARRIED'",
+                            type:"qrcode",
+                            onCapture: function(result, model, form) {
+                                $log.info(result); // spouse id proof
+                                var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
+                                $log.info(aadhaarData);
+                                model.customer.udf.userDefinedFieldValues.udf33 = 'Aadhar card';
+                                model.customer.udf.userDefinedFieldValues.udf36 = aadhaarData.uid;
+                                model.customer.spouseFirstName = aadhaarData.name;
+                                if (aadhaarData.yob) {
+                                    model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
+                                }
+                            },
+                            readonly: true
+                        },
+                        {
+                            key:"customer.spouseDateOfBirth",
+                            type:"date",
+                            condition:"model.customer.maritalStatus==='MARRIED'",
+                            "onChange": function(modelValue, form, model) {
+                                if (model.customer.spouseDateOfBirth) {
+                                }
+                            },
+                            readonly: true
+                        },
+                        {
+                            key:"customer.udf.userDefinedFieldValues.udf1",
+                            condition:"model.customer.maritalStatus==='MARRIED'",
+                            title:"SPOUSE_LOAN_CONSENT",
+                            type:"checkbox",
+                            "schema":{
+                                "default":false
+                            },
+                            readonly: true
+                        },
+                        {
+                            key:"customer.isBiometricValidated",
+                            title: "Validate Fingerprint",
+                            type:"validatebiometric",
+                            readonly:true,
+                            category: 'CustomerEnrollment',
+                            subCategory: 'FINGERPRINT',
+                            helper: formHelper,
+                            biometricMap: {
+                                leftThumb: "model.customer.leftHandThumpImageId",
+                                leftIndex: "model.customer.leftHandIndexImageId",
+                                leftMiddle: "model.customer.leftHandMiddleImageId",
+                                leftRing: "model.customer.leftHandRingImageId",
+                                leftLittle: "model.customer.leftHandSmallImageId",
+                                rightThumb: "model.customer.rightHandThumpImageId",
+                                rightIndex: "model.customer.rightHandIndexImageId",
+                                rightMiddle: "model.customer.rightHandMiddleImageId",
+                                rightRing: "model.customer.rightHandRingImageId",
+                                rightLittle: "model.customer.rightHandSmallImageId"
+                            },
+                            viewParams: function(modelValue, form, model) {
+                                return {
+                                    customerId: model.customer.id
+                                };
+                            }
+                        },
+                        {
+                            "title": "RISK_PROFILE",
+                            "type": "select",
+                            "key": "customer.riskProfile",
+                            "enumCode":"customer_risk_profile",
+                            onChange: function (valueObj, form, model) {
+                            },
+                            readonly:true
                         }
                     ]
                 },
@@ -2980,6 +3177,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                             model.customer.addressProofSameAsIdProof = (model.customer.title=="true")?true:false;
                             model = EnrollmentHelper.fixData(model);
                         }
+                        checkCentre(model);
                         PageHelper.hideLoader();
                         irfProgressMessage.pop('PROFILE', 'Done. Customer Updated, ID : ' + res.customer.id, 2000);
                     }, function (res, headers) {

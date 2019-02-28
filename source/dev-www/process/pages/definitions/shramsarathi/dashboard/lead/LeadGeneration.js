@@ -21,9 +21,29 @@ function(LeadProcess, AngularResourceService) {
 
             var getOverrides = function (model) {
                 return {
-                    "leadProfile.leadDetails.customerTypeString":{
-                        "readonly":false,
+                    "leadProfile.individualDetails.maritalStatus":{
                         "required":true
+                    },
+                    "leadProfile.individualDetails.lastName":{
+                        "required": false
+                    },
+                    "leadProfile.individualDetails.dob":{
+                        "required": true
+                    },
+                    "leadProfile.individualDetails.nickName":{
+                        "required": false
+                    },
+                    "leadProfile.individualDetails.educationStatus":{
+                        "required":true,
+                        "enumCode":"education_status"
+                    },
+                    "leadProfile.individualDetails.age":{
+                        "required":true
+                    },
+                    "leadProfile.leadDetails.customerTypeString":{
+                        "readonly":true,
+                        "required":true,
+                        "title": "LEAD_TYPE"
                     },
                     "leadProfile.leadDetails.enterpriseDetails.businessName":{
                         "required":true
@@ -43,6 +63,13 @@ function(LeadProcess, AngularResourceService) {
                     "leadProfile.leadDetails.individualDetails.gender": {
                         "required": true
                     },
+                    "leadProfile.individualDetails.existingApplicant":{
+                        // "condition":"(model.lead.centreName!==NULL)",
+                    bindMap: {
+                        "ZoneName": "lead.centreName",
+                        "LeadType": "lead.customerTypeString"
+                    }
+                    },
                     "leadProfile.leadDetails.individualDetails.dob": {
                         "required": true
                     },
@@ -56,7 +83,7 @@ function(LeadProcess, AngularResourceService) {
                         "condition": "(model.lead.interestedInProduct==='YES' && model.lead.leadStatus ==='FollowUp')",
                     },
                     "leadInteractions.leadInteractions.typeOfInteraction": {
-                        "required" : true,
+                        "required" : false,
                         onChange: function (value, form, model) {
                             model.lead.leadInteractions[form.arrayIndex].customerResponse = '';
                             model.lead.leadInteractions[form.arrayIndex].additionalRemarks = '';
@@ -67,7 +94,7 @@ function(LeadProcess, AngularResourceService) {
                         }
                     },
                     "leadInteractions.leadInteractions.customerResponse":{
-                        "required": true,
+                        "required": false,
                         "type": "text"
                     },
                     "sourceDetails.agentName": {
@@ -79,22 +106,46 @@ function(LeadProcess, AngularResourceService) {
                         "enumCode": "dealer"
                     },
                     "productDetails.interestedInProduct": {
-                        "orderNo" : 10
+                        "orderNo" : 10,
+                        "required":false,
+                        // enumCode: "decisionmaker",
+                        // "onChange": function(modelValue, form, model) {
+                        //         if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
+                        //             model.lead.leadStatus = "Reject";
+                        //         } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this week') {
+                        //             model.lead.leadStatus = "Screening";
+                        //         } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this month' || model.lead.productRequiredBy == 'In Next months') {
+                        //             model.lead.leadStatus = "FollowUp";
+                        //         } else {
+                        //             model.lead.leadStatus = "Incomplete";
+                        //         }
+                               
+                        //     }
                     },
                     "productDetails.loanAmountRequested": {
-                        "orderNo": 60
+                        "orderNo": 60,
+                        "required":false
                     },
                     "productDetails.loanPurpose1": {
-                        "orderNo": 20
+                        "orderNo": 20,
+                        "required":false
                     },
                     // "productDetails.loanPurpose2": {
                     //     "orderNo": 30
                     // },
                     "productDetails.productRequiredBy": {
-                        "orderNo": 50
+                        "orderNo": 50,
+                        "title":"PRODUCT_REQUIRED_BY_DATE",
+                        required:false
+                        // "titleMap":{
+                        //     "thisWeek":"This Week",
+                        //     "thisMonth":"This Month",
+                        //     "nextMonth":"Next Month"
+                        // }
                     },
                     "productDetails.screeningDate": {
-                        "orderNo": 60
+                        "orderNo": 60,
+                        //"condition":"model.lead.productRequiredBy=='thisWeek'"
                     },
                     "productDetails.productRejectionReason":{
                         "condition" : "model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO' "
@@ -110,7 +161,7 @@ function(LeadProcess, AngularResourceService) {
                     },
                     "leadProfile.branchName":{
                         "title":"BRANCH",
-                        "readonly" :false,
+                        "readonly" :true,
                         "orderNo" : 0
                     },
                     "leadProfile.centerName":{
@@ -126,41 +177,46 @@ function(LeadProcess, AngularResourceService) {
                     },
                     "leadProfile.contactDetails.area":{
                         "title":"PANCHAYAT",
+                        "required":true
                         //"orderNo":20
                     },
-                    // "leadProfile.contactDetails.mobileNo":{
-                    //     "type" : "number"
-                    // },
+                    "leadProfile.contactDetails.mobileNo":{
+                      "order":9
+                    },
                     "leadProfile.contactDetails.cityTownVillage":{
                         "title":"VILLAGE",
+                        required:true
                         //"orderNo":30
                     },
                     "leadProfile.contactDetails.district":{
                        // "orderNo":40
                     },
                     "leadProfile.contactDetails.subDistrict":{
-                        "orderNo":50
+                        "orderNo":50,
                     },
                     "leadProfile.contactDetails.addressLine1":{
                         "title":"HAMLET_FALA",
-                        //"orderNo":5
+                        "orderNo":12
+                    },
+                    "leadProfile.contactDetails.alternateMobileNo":{
+                        orderNo: 10
                     },
                     "leadProfile.contactDetails.pincode": {
                         key: "lead.pincode",
                         type: "lov",
                         fieldType: "number",
-                        orderNo: 10,
+                        orderNo: 11,
                         inputMap: {
                             "pincode": "lead.pincode",
                             "division": {
                                 key: "lead.area",
-                                title:"PANCHAYAT"
+                                title:"PANCHAYAT",
                             },
                             "district": {
-                                key: "lead.district"
+                                key: "lead.district",
                             },
                             "state": {
-                                key: "lead.state"
+                                key: "lead.state",
                             }
                         },
                         outputMap: {
@@ -232,6 +288,7 @@ function(LeadProcess, AngularResourceService) {
                     //"leadProfile.contactDetails.addressLine2",
                     "leadProfile.contactDetails.pincode",
                     "leadProfile.contactDetails.area",
+                    "leadProfile.contactDetails.taluk",
                     "leadProfile.contactDetails.cityTownVillage",
                     "leadProfile.contactDetails.district",
                     "leadProfile.contactDetails.state",
@@ -319,7 +376,7 @@ function(LeadProcess, AngularResourceService) {
                                     "individualDetails": {
                                         items: {
                                             "middleName": {
-                                                key: "leadProfile.individualDetails.middleName",
+                                                key: "lead.middleName",
                                                 title: "MIDDLE_NAME",
                                                 schema: {
                                                     pattern: "^[a-zA-Z\. ]+$",
@@ -328,8 +385,9 @@ function(LeadProcess, AngularResourceService) {
                                                 "orderNo": 50
                                             },
                                             "lastName": {
-                                                key: "leadProfile.individualDetails.lastName",
+                                                key: "lead.lastName",
                                                 title: "LAST_NAME",
+                                                "required":true,
                                                 schema: {
                                                     pattern: "^[a-zA-Z\. ]+$",
                                                 },
@@ -337,24 +395,39 @@ function(LeadProcess, AngularResourceService) {
                                                 "orderNo": 55
                                             },
                                             "nickName": {
-                                                key: "leadProfile.individualDetails.nickName",
+                                                key: "lead.nickName",
                                                 title: "NICK_NAME",
                                                 schema: {
                                                     pattern: "^[a-zA-Z\. ]+$",
                                                 },
                                                 validationMessage: {202: "Only alphabets and space are allowed."},
-                                                "orderNo": 60
-                                            },
-                                    }
+                                                "orderNo": 60,
+                                                "required":true
+                                            }
+                                            
                                     },
+                                    
+                                    
+                                    },
+                                    "contactDetails":{
+                                        "items":{
+                                             "subDistrict": {
+                                                     "key":"lead.cityTownVillage",
+                                                     "title":"SUBDISTRICT",
+                                                     "readonly":true,
+                                                     "required":true
+                                                 }
+                                        } 
+                                     },
                                     "migrantDetails": {
                                         "type": "fieldset",
                                         "title": "MIGRANT_DETAILS",
                                         "orderNo": 30,
                                         "items": {
                                             "migrantDependantLabourFamily": {
-                                                key: "lead.udf.userDefinedFieldValues.udf3",
+                                                key: "lead.udf.userDefinedFieldValues.udf2",
                                                 title: "MIGRANT_DEPENDENT_LABOUR_FAMILY",
+                                                required:true,
                                                 type:"radios",
                                                 titleMap:[
                                                     {
@@ -385,7 +458,31 @@ function(LeadProcess, AngularResourceService) {
                                     //     }
                                     // },
                                     
-                                }
+                                },
+                                // "productDetails":{
+                                //     items: {
+                                //                 "interestedInProduct":{
+                                //                     key: "lead.interestedInProduct",
+                                //                     title: "INTERESTED_IN_LOAN_PRODUCT",
+                                //                     type: "select",
+                                //                     required: false,
+                                //                     enumCode: "decisionmaker",
+                                //                     "onChange": function(modelValue, form, model) {
+                                //                             if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
+                                //                                 model.lead.leadStatus = "Reject";
+                                //                             } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this week') {
+                                //                                 model.lead.leadStatus = "Screening";
+                                //                             } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy == 'In this month' || model.lead.productRequiredBy == 'In Next months') {
+                                //                                 model.lead.leadStatus = "FollowUp";
+                                //                             } else {
+                                //                                 model.lead.leadStatus = "Incomplete";
+                                //                             }
+                                                           
+                                //                         }
+                                                       
+                                //                 }
+                                //     }
+                                // }
 
 
                             }
@@ -400,8 +497,6 @@ function(LeadProcess, AngularResourceService) {
                                 var deferred = $q.defer();
                                 var promise = deferred.promise;
                                 deferred.resolve(Lead.getConfigFile())
-
-                                +
                                 console.log(model.lead.getLead());
 
                                 promise.then(function(resp) {
@@ -458,11 +553,16 @@ function(LeadProcess, AngularResourceService) {
 
                          if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
                             model.lead.leadStatus = "Reject";
-                        } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy.toUpperCase() == 'NOW') {
+                        } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy.toUpperCase() == 'IN THIS WEEK') {
                             model.lead.leadStatus = "Screening";
-                        } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy.toUpperCase() == 'LATER' ) {
+                        } else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy.toUpperCase() == 'IN THIS MONTH' ) {
                             model.lead.leadStatus = "FollowUp";
-                        } else {
+                        }else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy.toUpperCase() == 'NEXT 2 -3 MONTHS' ) {
+                            model.lead.leadStatus = "FollowUp";
+                        }else if (model.lead.interestedInProduct == 'YES' && model.lead.productRequiredBy.toUpperCase() == 'NEXT 4-6 MONTHS' ) {
+                            model.lead.leadStatus = "FollowUp";
+                        }    
+                        else {
                             model.lead.leadStatus = "Incomplete";
                         }
                     },
@@ -497,7 +597,7 @@ function(LeadProcess, AngularResourceService) {
                                     
                                     irfNavigator.go({
                                         state: "Page.Adhoc",
-                                        pageName: "shramsarathi.dashboard.loans.LoanOriginationDashboard"
+                                        pageName: "shramsarathi.dashboard.lead.LeadDashboard"
                                     });
 
                                 }, function(err) {
@@ -512,7 +612,7 @@ function(LeadProcess, AngularResourceService) {
                                     .subscribe(function(leadProcess){
                                         irfNavigator.go({
                                             state: "Page.Adhoc",
-                                            pageName: "shramsarathi.dashboard.loans.LoanOriginationDashboard"
+                                            pageName: "shramsarathi.dashboard.lead.LeadDashboard"
                                         });
 
                                     }, function(err) {

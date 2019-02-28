@@ -32,7 +32,7 @@ define({////shramsarathi.dashboard.loans.individual.screening.FieldAppraisal
 							}
 	                    },
 						"centre": {
-							"title": "CENTRE",
+							"title": "ZONE_NAME",
 							"type": ["integer", "null"],
 							"x-schema-form": {
 								"type": "select",
@@ -46,10 +46,10 @@ define({////shramsarathi.dashboard.loans.individual.screening.FieldAppraisal
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
 	                    },
-	                    "businessName": {
-	                        "title": "BUSINESS_NAME",
-	                        "type": "string"
-	                    },
+	                    // "businessName": {
+	                    //     "title": "BUSINESS_NAME",
+	                    //     "type": "string"
+	                    // },
 	                    "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"
@@ -158,10 +158,10 @@ define({////shramsarathi.dashboard.loans.individual.screening.FieldAppraisal
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
 						},
-						{
-							title: 'BUSINESS_NAME',
-							data: 'customerName'
-						},
+						// {
+						// 	title: 'BUSINESS_NAME',
+						// 	data: 'customerName'
+						// },
 						{
 							title: 'Loan Amount',
 							data: 'loanAmount'

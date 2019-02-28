@@ -948,6 +948,14 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             "required":false,
                             "type": "select"
                         }, {
+                            "key": "loanAccount.groupCode",
+                            "required":false,
+                            "readonly": true,
+                            "title": "GROUP_CODE",
+                            "type" : "string",
+                            "condition": "model.loanAccount.loanType == 'JLG'"
+
+                        }, {
                             "key": "loanAccount.tenure",
                             "required":false,
                             "title": "DURATION_IN_MONTHS"
@@ -2159,7 +2167,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                     "title": "ADD_DOCUMENTS",
                                     "remove": null,
                                     "notitle": true,
-                                    "condition": "!(!_.isUndefined(model.pageConfig.readonly) && model.pageConfig.readonly==false)",
+                                    "condition": "(!_.isUndefined(model.pageConfig.readonly) && model.pageConfig.readonly==false)",
                                     "readonly": true,
                                     "view": "fixed",
                                     "items": [{
@@ -2201,7 +2209,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                     "title": "ADD_DOCUMENTS",
                                     "remove": null,
                                     "notitle": true,
-                                    "condition": "!_.isUndefined(model.pageConfig.readonly) && model.pageConfig.readonly==false",
+                                    "condition": "!(!_.isUndefined(model.pageConfig.readonly) && model.pageConfig.readonly==false)",
                                     "view": "fixed",
                                     "items": [{
                                         "type": "section",

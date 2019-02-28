@@ -56,6 +56,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                             }
                             var masterDocumentsArray=[];
                             var allExistingDocs = []; 
+                            model.remainingDocsArray=remainingDocsArray;
+                            model.allExistingDocs = allExistingDocs;
                             Queries.getLoanProductDocuments(model.loanAccount.productCode, "LoanBooking", "DocumentUpload")
                                 .then(
                                     function(docs) {

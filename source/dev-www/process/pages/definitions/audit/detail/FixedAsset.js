@@ -55,6 +55,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"),
                     $stateParams.pageData.readonly = true;
                 }
                 model.readonly = $stateParams.pageData.readonly;
+                model.readonlyExceptComments = !!$stateParams.pageData.readonlyExceptComments;
                 model.audit_id = Number($stateParams.pageId);
                 master = Audit.offline.getAuditMaster() || {};
                 model.fixed_assets = model.fixed_assets || {};
@@ -106,6 +107,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"),
                                 "items": [{
                                     "key": "fixed_assets.asset_details[" + i + "].quantity_on_hand",
                                     "type": "number",
+                                    "readonly": model.readonlyExceptComments,
                                     "notitle": true
                                 }]
                             }, {
@@ -114,6 +116,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"),
                                 "items": [{
                                     "key": "fixed_assets.asset_details[" + i + "].lost_quantity",
                                     "type": "number",
+                                    "readonly": model.readonlyExceptComments,
                                     "notitle": true
                                 }]
                             }, {
@@ -122,6 +125,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"),
                                 "items": [{
                                     "key": "fixed_assets.asset_details[" + i + "].transferred_quantity",
                                     "type": "number",
+                                    "readonly": model.readonlyExceptComments,
                                     "notitle": true
                                 }]
                             }, {
@@ -130,6 +134,7 @@ irf.pageCollection.factory(irf.page("audit.detail.FixedAsset"),
                                 "items": [{
                                     "key": "fixed_assets.asset_details[" + i + "].excess_quantity",
                                     "type": "number",
+                                    "readonly": model.readonlyExceptComments,
                                     "notitle": true
                                 }]
                             }, {

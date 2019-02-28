@@ -474,35 +474,35 @@ define([],function(){
                                 "CollateralDetails"                  
                             ],
                             "overrides": {
-                                "PreliminaryInformation": {
-                                    "orderNo": 1,
-                                    "readonly": true
-                                },
-                                "LoanCustomerRelations": {
-                                    "orderNo": 2,
-                                    "readonly": true
-                                },
-                                "LoanMitigants": {
-                                    "orderNo": 4
-                                },
-                                "LoanDocuments": {
-                                    "orderNo": 5
-                                },
-                                "AdditionalLoanInformation": {
-                                    "orderNo": 6,
-                                    "readonly": true
-                                },
-                                "CollateralDetails": {
-                                    "orderNo": 7,
-                                    "readonly": true
-                                },
-                                "NomineeDetails": {
-                                    "orderNo": 8,
-                                    "readonly": true
-                                },                               
-                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
-                                   "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
-                                }     
+                                // "PreliminaryInformation": {
+                                //     "orderNo": 1,
+                                //     "readonly": true
+                                // },
+                                // "LoanCustomerRelations": {
+                                //     "orderNo": 2,
+                                //     "readonly": true
+                                // },
+                                // "LoanMitigants": {
+                                //     "orderNo": 4
+                                // },
+                                // "LoanDocuments": {
+                                //     "orderNo": 5
+                                // },
+                                // "AdditionalLoanInformation": {
+                                //     "orderNo": 6,
+                                //     "readonly": true
+                                // },
+                                // "CollateralDetails": {
+                                //     "orderNo": 7,
+                                //     "readonly": true
+                                // },
+                                // "NomineeDetails": {
+                                //     "orderNo": 8,
+                                //     "readonly": true
+                                // },                               
+                                // "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
+                                //    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                // }     
                                     
                             }
                         },
@@ -661,7 +661,7 @@ define([],function(){
                             "excludes": [
                                 "ProposedUtilizationPlan",
                                 //"DeductionsFromLoan",
-                                //"LoanMitigants",
+                                 "LoanMitigants",
                                 //"LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
@@ -679,7 +679,10 @@ define([],function(){
                                 "LoanRecommendation.securityEmiRequired",
                                 "LoanMitigants.loanMitigantsByParameter",
                                 "CollateralDetails",
-                                "CBCheck",               
+                                "CBCheck",
+                                "LoanCustomerRelations",
+
+
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -750,7 +753,9 @@ define([],function(){
                                 "NomineeDetails.nominees.nomineeButton"   ,
                                 //"LoanRecommendation.securityEmiRequired",
                                 "LoanMitigants.loanMitigantsByParameter",
-                                "CollateralDetails"               
+                                "CollateralDetails",
+                                //"LoanRecommendation",
+
                             ],
                             "overrides": {
                                 "PreliminaryInformation": {
@@ -1172,6 +1177,12 @@ define([],function(){
             }
              var overridesFields = function (bundlePageObj) {
                 return {
+                    // "PostReview.reject.rejectReason":{
+                    //     "enumCode":"loan_rejection_reason"
+                    // },
+                    // "revertReject.rejectReason":{
+                    //     "enumCode":"loan_rejection_reason"
+                    // },
                         "PreliminaryInformation.linkedAccountNumber": {
                             "resolver": "LinkedAccountNumberLOVConfiguration",
                             "condition": "model.loanAccount.transactionType.toLowerCase() != 'renewal' && model.loanAccount.transactionType != 'New Loan'",
@@ -1282,7 +1293,9 @@ define([],function(){
                             "orderNo":20,
                             onChange:function(value,form,model){
                                 computeEMI(model);
-                            }
+                            },
+                            "type":"select",
+                            "enumCode":"duration"
                         },
                         "LoanRecommendation.interestRate":{
                             title:"INTEREST_RATE",
@@ -1723,21 +1736,25 @@ define([],function(){
                                     "PreliminaryInformation":{
                                         "items": {
                                             "loanPurpose3": {
-                                                "key":"loanAccount.loanPurpose3",
-                                              "title":"LOAN_SUB_PURPOSE2",
+                                                "key":"loanAccount.loanPurpose2",
+                                              "title":"LOAN_SUB_PURPOSE_2",
                                               "type":"text",
                                               "orderNo":40
                                             },
                                             "referenceFrom": {
-                                                "key":"loanAccount.referenceFrom",
-                                              "title":"REFERNECE_FROM",
-                                              "type":"text"
+                                                "key":"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf9",
+                                              "title":"REFERENCE_FROM",
+                                              "type":"text",
+                                              "required":false,
+                                              "readonly":false
                                             },
                                             "referenceCheck": {
-                                                "key":"loanAccount.referenceCheck",
+                                              "key":"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf8",
                                               "title":"REFERNECE_CHECK",
                                               "type":"radios",
-                                              "inputMap":{"good":"Good","bad":"Bad"}
+                                              "titleMap":{"good":"Good","bad":"Bad"},
+                                              "required":false,
+                                              "readonly":false
                                             },
                                             "transactionType": {
                                                 key: "loanAccount.transactionType",
@@ -1758,13 +1775,13 @@ define([],function(){
                                                     }
                                                 }
                                             },
-                                            "expectedEmi": {
-                                                "key": "loanAccount.expectedEmi",
-                                                "title": "INSTALLMENT_AMOUNT",
-                                                "orderNo": 91,
-                                                type: "amount",
-                                                "readonly": true
-                                            },
+                                            // "expectedEmi": {
+                                            //     "key": "loanAccount.expectedEmi",
+                                            //     "title": "INSTALLMENT_AMOUNT",
+                                            //     "orderNo": 91,
+                                            //     type: "amount",
+                                            //     "required":true
+                                            // },
                                             "linkedAccountNumber1":{
                                                 key:"loanAccount.linkedAccountNumber",
                                                 title:"LINKED_ACCOUNT_NUMBER",
@@ -1790,12 +1807,12 @@ define([],function(){
                                                 "orderNo":13,
                                                 condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
                                              },
-                                             "BusinessSaveWarning":{
-                                                "type": "section",
-                                                "htmlClass": "alert alert-warning",
-                                                "condition": "!model.loanAccount.customerId",
-                                                "html":"<h4><i class='icon fa fa-warning'></i>Business not yet enrolled.</h4> Kindly save the business details before proceed."
-                                            },
+                                            //  "BusinessSaveWarning":{
+                                            //     "type": "section",
+                                            //     "htmlClass": "alert alert-warning",
+                                            //     "condition": "!model.loanAccount.customerId",
+                                            //     "html":"<h4><i class='icon fa fa-warning'></i>Business not yet enrolled.</h4> Kindly save the business details before proceed."
+                                            // },
                                             "MedicalTestWarning":{
                                                 "type": "section",
                                                 "htmlClass": "alert alert-warning",
@@ -1823,39 +1840,47 @@ define([],function(){
                                             //     "readonly": true
                                             // },
                                             "modeOfDisbursement":{
-                                                "key":"loanAccount.modeOfDisbursement",
+                                                "key":"loanAccount.disbursementSchedules.modeOfDisbursement",
                                                 "title":"MODE_OF_DISBURSEMENT",
-                                                "type":"text"
-                                                            },
+                                                "type":"select",
+                                                "enumCode":"mode_of_disbursement"
+                                            },
                                         "remarksOfInFavourLoan":{
-                                            "key":"loanAccount.remarksOfInFavourLoan",
+                                            "key":"loanAccount.udf.userDefinedFieldValues.udf10",
                                             "title":"REMARK_OF_IN_FAVOUR_LOAN",
-                                            "type":"text"
+                                            "type":"text",
+                                            "required":true
                                         },
                                         "potentialRisks":{
-                                            "key":"loanAccount.potentialRisks",
+                                            "key":"loanAccount.udf.userDefinedFieldValues.udf11",
                                             "title":"POTENTIAL_RISK",
-                                            "type":"text"
+                                            "type":"select",
+                                            "required":true,
+                                            "titleMap":{"yes":"yes","no":"no"}
                                         },
                                         "collectionDate":{
-                                            "key":"loanAccount.collectionDate",
+                                            "key":"loanAccount.disbursementSchedules.firstRepaymentDate",
                                             "title":"COLLECTION_DATE",
-                                            "type":"date"
+                                            "type":"date",
+                                            "required":true
                                         },
                                         "disbursementDate":{
-                                            "key":"loanAccount.disbursementDate",
+                                            "key":"loanAccount.disbursementSchedules.actualDisbursementDate",
                                             "title":"DISBURSEMENT_DATE",
-                                            "type":"date"
+                                            "type":"date",
+                                            "required":true
                                         },
                                         "gracePeriod":{
-                                            "key":"loanAccount.gracePeriod",
+                                            "key":"loanAccount.disbursementSchedules.moratoriumPeriodInDays",
                                             "title":"GRACE_PERIOD",
-                                            "type":"text"
+                                            "type":"text",
+                                            "required":true
                                         },
                                         "date":{
-                                            "key":"loanAccount.date",
+                                            "key":"loanAccount.udf.userDefinedFieldValues.udf12",
                                             "title":"DATE",
-                                            "type":"date"
+                                            "type":"date",
+                                            "required":true
                                         }
                                     
                                         }
@@ -2001,11 +2026,13 @@ define([],function(){
                                                     },
                                                     "rejectReason": {
                                                         "key": "loanAccount.rejectReason",
-                                                        "type": "lov",
-                                                        "autolov": true,
+                                                        //"type": "lov",
+                                                       // "autolov": true,
+                                                       "type":"select",
                                                         "required":true,
                                                         "title": "REJECT_REASON",
-                                                        "resolver": "IREPRejectReasonLOVConfiguration"
+                                                        "enumCode":"loan_rejection_reason"
+                                                        //"resolver": "IREPRejectReasonLOVConfiguration"
                                                     },
                                                     "rejectButton": {
                                                         "key": "review.rejectButton",
@@ -2139,12 +2166,12 @@ define([],function(){
                         model.loanAccount.loanPurpose1 = obj.loanPurpose1;
                         model.loanAccount.screeningDate = obj.screeningDate;
                     },
-                    "new-business": function(bundleModel, model, params){
+                    "new-applicant": function(bundleModel, model, params){
                         $log.info("Inside new-business of LoanRequest");
                         model.loanAccount.customerId = params.customer.id;
                         model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
                         model.loanAccount.loanCentre.centreId = params.customer.centreId;
-                        model.enterprise = params.customer;
+                        model.customer = params.customer;
                     },
                     "business-updated": function(bundleModel, model, obj){
                         $log.info("Inside business-update of IREP/LoanRequest");
@@ -2152,7 +2179,7 @@ define([],function(){
                         model.loanAccount.loanCentre = model.loanAccount.loanCentre || {};
                         model.loanAccount.loanCentre.centreId = obj.customer.centreId;
                         model.loanAccount.loanCentre.loanId = model.loanAccount.id?model.loanAccount.id:null;
-                        model.enterprise = obj.customer;
+                        model.customer = obj.customer;
  
                     },
                     "load-deviation":function(bundleModel, model, params){
@@ -2190,6 +2217,7 @@ define([],function(){
                             model.loanAccount.psychometricCompleted = "NO";
  
                         }
+                        model.loanProcess.refreshRelatedCustomers();
                         model.loanAccount.noOfGuarantersRequired = -1;
                         var completeLead = false;
                         if (!_.hasIn(model.loanAccount, "id")){

@@ -115,6 +115,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         model.repayment.bookedNotDuePenalInterest = Utils.roundToDecimal(data.bookedNotDuePenalInterest);
                         model.repayment.securityDeposit = Utils.roundToDecimal(data.securityDeposit);
                         model.repayment.netPayoffAmount = Utils.roundToDecimal(data.payOffAmount + data.preclosureFee - data.securityDeposit);
+                        model.repayment.netPayoffAmountDue = Utils.roundToDecimal(model.repayment.netPayoffAmount + model.repayment.totalDemandDue);
                         model.repayment.totalPayoffAmountToBePaid = Utils.roundToDecimal(data.payOffAndDueAmount + data.preclosureFee - data.securityDeposit);
                         model.repayment.totalSecurityDepositDue = Utils.roundToDecimal(data.totalSecurityDepositDue);
                         if (!_.isNull(pageData) && pageData.onlyDemandAllowed == true) {
@@ -226,20 +227,21 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                         }
                                     )
                                     .then(function(){
-                                        Locking.lock({
-                                            "processType": "Loan",
-                                            "processName": "Collections",
-                                            "recordId": model.loanAccount.id
-                                        }).$promise.then(function() {
+                                        if (SessionStore.getGlobalSetting("lockingRequired") == "true") {
+                                            Locking.lock({
+                                                "processType": "Loan",
+                                                "processName": "Collections",
+                                                "recordId": model.loanAccount.id
+                                            }).$promise.then(function () {
 
-                                        }, function(err) {
-                                            Utils.alert(err.data.error).finally(function(){
+                                            }, function (err) {
                                                 Utils.alert(err.data.error).finally(function () {
-                                                    irfNavigator.goBack();
-                                                    deferred.reject();
+                                                    Utils.alert(err.data.error).finally(function () {
+                                                        irfNavigator.goBack();
+                                                    });
                                                 });
                                             });
-                                        });
+                                        }
                                     })
                             } else {
                                 /* Loan Account not in perdix. Go back to Collections Dashboard */
@@ -321,12 +323,38 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key:"repayment.transactionName",
                                 "type":"select",
                                 "required": true,
-                                condition: "!model._pageGlobals.hideTransactionName",
+                                condition: "!model._pageGlobals.hideTransactionName && model.siteCode != 'witfin'",
                                 titleMap: {
                                     "Scheduled Demand":"Scheduled Demand",
                                     "Fee Payment":"Fee Payment",
                                     "Pre-closure":"Pre-closure",
                                     "Prepayment":"Prepayment",
+                                    "PenalInterestPayment":"PenalInterestPayment"
+                                },
+                                onChange: function(value ,form, model){
+                                    if ( value == 'Pre-closure'){
+                                        model.repayment.amount = model.repayment.totalPayoffAmountToBePaid;
+                                    } else if (value == 'Scheduled Demand'){
+                                        model.repayment.amount = Utils.ceil(model.repayment.totalDue);
+                                    }else if(value == 'PenalInterestPayment'){
+                                        model.repayment.amount = model.repayment.bookedNotDuePenalInterest;
+                                    }else if(value == 'Fee Payment'){
+                                        model.repayment.amount = model.repayment.feeDue;
+                                    } else {
+                                        model.repayment.amount = null;
+                                    }
+                                    model.repayment.demandAmount = model.repayment.amount || 0;
+                                }
+                            },
+                            {
+                                key:"repayment.transactionName",
+                                "type":"select",
+                                "required": true,
+                                condition: "!model._pageGlobals.hideTransactionName && model.siteCode == 'witfin'",
+                                titleMap: {
+                                    "Scheduled Demand":"Scheduled Demand",
+                                    "Fee Payment":"Fee Payment",
+                                    "Pre-closure":"Pre-closure",
                                     "PenalInterestPayment":"PenalInterestPayment"
                                 },
                                 onChange: function(value ,form, model){
@@ -363,6 +391,30 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 title: "PRECLOSURE_BREAKUP",
                                 condition: "model.repayment.transactionName=='Pre-closure'",
                                 items: [
+                                    {
+                                        key: "repayment.totalPrincipalDue",
+                                        readonly: true,
+                                        title: "TOTAL_PRINCIPAL_DUE",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.totalNormalInterestDue",
+                                        readonly: true,
+                                        title: "TOTAL_NORMAL_INTEREST_DUE",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.totalPenalInterestDue",
+                                        readonly: true,
+                                        title: "TOTAL_PERNAL_INTEREST_DUE",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.totalDemandDue",
+                                        readonly: true,
+                                        title: "TOTAL_DEMAND_DUE",
+                                        type: "amount"
+                                    },
                                     {
                                         key: "repayment.principalNotDue",
                                         readonly: true,
@@ -402,13 +454,19 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     {
                                         key: "repayment.totalFeeDue",
                                         readonly: true,
-                                        title: "TOTAL_FEE_DUE",
+                                        title: "FEE_DUE",
                                         type: "amount"
                                     },
                                     {
                                         key: "repayment.netPayoffAmount",
                                         readonly: true,
                                         title: "NET_PAYOFF_AMOUNT",
+                                        type: "amount"
+                                    },
+                                    {
+                                        key: "repayment.netPayoffAmountDue",
+                                        readonly: true,
+                                        title: "NET_PAYOFF_AMOUNT_DUE",
                                         type: "amount"
                                     },
                                     {
@@ -700,8 +758,16 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             {
                                 key: "repayment.delayReasonType",
                                 title: "REASON_FOR_DELAY",
+                                condition:"model.siteCode == 'witfin'",
+                                type: "select",
+                                enumCode:"reason_for_delay"
+                            },
+                            {
+                                key: "repayment.delayReasonType",
+                                title: "REASON_FOR_DELAY",
                                 required: true,
                                 type: "select",
+                                condition:"model.siteCode != 'witfin'",
                                 titleMap: {
                                     "Business not running":"Business not running",
                                     "Hardship": "Hardship",

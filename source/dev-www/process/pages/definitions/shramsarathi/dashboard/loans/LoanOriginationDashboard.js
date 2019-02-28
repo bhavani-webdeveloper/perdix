@@ -14,7 +14,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             "Page/Engine/shramsarathi.dashboard.loans.individual.screening.ScreeningReviewQueue",
             "Page/Engine/shramsarathi.dashboard.loans.individual.screening.ApplicationQueue",  
             "Page/Engine/shramsarathi.dashboard.loans.individual.screening.ApplicationReviewQueue", 
-            "Page/Engine/shramsarathi.dashboard.loans.individual.screening.TeleverifictionQueue",
+            "Page/Engine/shramsarathi.dashboard.loans.individual.screening.TeleverificationQueue",
             "Page/Engine/shramsarathi.dashboard.loans.individual.screening.CreditCommitteeReviewQueue",
             "Page/Engine/shramsarathi.dashboard.loans.individual.screening.LoanSanctionQueue",
             "Page/Engine/shramsarathi.dashboard.loans.individual.screening.RejectedQueue"
@@ -133,10 +133,10 @@ if (aqMenu) {
             });
         }
 
-        var tvq1Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.loans.individual.screening.TeleVerificationQueue"];
+        var tvq1Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.loans.individual.screening.TeleverificationQueue"];
         if (tvq1Menu) {
             IndividualLoan.search({
-                'stage': 'TeleVerification',
+                'stage': 'Televerification',
                 'enterprisePincode': '',
                 'applicantName': '',
                 'area': '',
@@ -172,43 +172,43 @@ if (aqMenu) {
 
 
        
-        // var caq3Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.loans.individual.screening.CreditApproval3Queue"];
+        var lsqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.loans.individual.screening.LoanSanctionQueue"];
 
-        // if (caq3Menu) {
-        //     IndividualLoan.search({
-        //         'stage': 'CreditApproval3',
-        //         'enterprisePincode': '',
-        //         'applicantName': '',
-        //         'area': '',
-        //         'villageName': '',
-        //         'customerName': '',
-        //         'page': 1,
-        //         'per_page': 1,
-        //     }).$promise.then(function(response, headerGetter) {
-        //         caq3Menu.data = Number(response.headers['x-total-count']);
-        //     }, function() {
-        //         caq3Menu.data = '-';
-        //     });
-        // }
+        if (lsqMenu) {
+            IndividualLoan.search({
+                'stage': 'Sanction',
+                'enterprisePincode': '',
+                'applicantName': '',
+                'area': '',
+                'villageName': '',
+                'customerName': '',
+                'page': 1,
+                'per_page': 1,
+            }).$promise.then(function(response, headerGetter) {
+                lsqMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                lsqMenu.data = '-';
+            });
+        }
 
-        // var caq4Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.CreditApproval4Queue"];
+        var ccrMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/shramsarathi.dashboard.loans.individual.screening.CreditCommitteeReviewQueue"];
 
-        // if (caq4Menu) {
-        //     IndividualLoan.search({
-        //         'stage': 'CreditApproval4',
-        //         'enterprisePincode': '',
-        //         'applicantName': '',
-        //         'area': '',
-        //         'villageName': '',
-        //         'customerName': '',
-        //         'page': 1,
-        //         'per_page': 1,
-        //     }).$promise.then(function(response, headerGetter) {
-        //         caq4Menu.data = Number(response.headers['x-total-count']);
-        //     }, function() {
-        //         caq4Menu.data = '-';
-        //     });
-        // }
+        if (ccrMenu) {
+            IndividualLoan.search({
+                'stage': 'CreditCommitteeReview',
+                'enterprisePincode': '',
+                'applicantName': '',
+                'area': '',
+                'villageName': '',
+                'customerName': '',
+                'page': 1,
+                'per_page': 1,
+            }).$promise.then(function(response, headerGetter) {
+                ccrMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                ccrMenu.data = '-';
+            });
+        }
 
 
         // var caq5Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.CreditApproval5Queue"];

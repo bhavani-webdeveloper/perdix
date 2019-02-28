@@ -1616,10 +1616,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
 
                     },
                     proceed: function(model, form){
-
-                        model.customer.udf.userDefinedFieldValues.udf1 = model.customer.udf.userDefinedFieldValues.udf1.toString();
-                        model.customer.udf.userDefinedFieldValues.udf2 = model.customer.udf.userDefinedFieldValues.udf2.toString();
-
                         if( model.customer.vehiclesOwned >= model.customer.vehiclesFinanced){
                             model.customer.vehiclesFree = model.customer.vehiclesOwned - model.customer.vehiclesFinanced;
                         }
@@ -1647,12 +1643,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                             }, function (err) {
-                                PageHelper.showErrors({
-                                    data: {
-                                        error: err
-                                    }
-                                });
-                                return false;
+                                // PageHelper.showErrors({
+                                //     data: {
+                                //         error: err
+                                //     }
+                                // });
+                                // return false;
                                 PageHelper.showErrors(err);
                                 PageHelper.hideLoader();
                             });

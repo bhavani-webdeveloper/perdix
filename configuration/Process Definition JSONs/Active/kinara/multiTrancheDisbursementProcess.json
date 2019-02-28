@@ -188,6 +188,14 @@
                         "MTBooking","LOCDisbursement"
                      ]
                   },
+                  "firstRepaymentDate":{
+                     "title":"Scheduled Disbursement Date",
+                     "type":"string",
+                     "captureStages":[
+                        "ReadyForDisbursement"
+                     ]
+
+                  },
                   "actualDisbursementDate":{
                      "title":"Actual Disbursement Date",
                      "type":"string",

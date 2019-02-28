@@ -169,6 +169,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                 "Page/Engine/audit.detail.FixedAsset",
                 "Page/Engine/audit.detail.FieldVerification",
                 "Page/Adhoc/audit.detail.ProcessCompliance",
+                "Page/Engine/audit.detail.AllSampleIssueSummary",
                 "Page/Engine/audit.detail.AuditSummary"
             ]
         });
@@ -227,6 +228,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FieldVerification"],
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.FixedAsset"],
                 $scope.dashboardDefinition.$menuMap["Page/Adhoc/audit.detail.ProcessCompliance"],
+                $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AllSampleIssueSummary"],
                 $scope.dashboardDefinition.$menuMap["Page/Engine/audit.detail.AuditSummary"]
             ];
 
@@ -260,6 +262,13 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                         // Edit process compliance & other when status == O, P
                         if ($stateParams.pageData.view == 'all' && $scope.model.ai.status != 'O' && $scope.model.ai.status != 'P') {
                             pageData.readonly = true;
+                        }
+                        if ($scope.siteCode == 'KGFS') {
+                            if (menu.stateParams.pageName == 'audit.detail.ProcessCompliance') {
+                                pageData.readonly = $scope.model.ai.status !== 'O';
+                            } else {
+                                pageData.readonlyExceptComments = $scope.model.ai.status !== 'O';
+                            }
                         }
                         pageData.type = $stateParams.pageData.type;
                         pageData.view = $stateParams.pageData.view;

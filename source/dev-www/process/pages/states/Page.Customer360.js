@@ -90,6 +90,57 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			"Page/Engine/customer360.ViewInsurance"
 		]
 	};
+
+	var witfinCustomerDefinition = {
+		"title": "CUSTOMER_360",
+		"items": [
+			getCustomerProfilePageUrl(),
+			{
+				"title": "LOANS",
+				"iconClass": "fa fa-key",
+				"items": [
+					{
+						"title": "NEW_LOAN",
+						"iconClass": "fa fa-key",
+						"items": [
+							"Page/Engine/Loans.NewJewel",
+							"Page/Engine/Loans.NewMEL"
+						]
+					},
+					"Page/Engine/customer360.loans.View",
+					"Page/Engine/customer360.loans.Service"
+				]
+			},
+			{
+                "title": "CREDIT_BUREAU",
+                "iconClass": "fa fa-user",
+                "items": [
+                    {
+                        "title": "CREDIT_BUREAU",
+                        "iconClass": "fa fa-user",
+                        "items": [
+                            ]
+                    },
+                    "Page/Engine/customer360.Idencheck",
+					"Page/Engine/customer360.CreditBureauResults"
+                ]
+            } ,
+			{
+				"title": "REQUEST_RECAPTURE",
+				"shortTitle": "REQUEST",
+				"iconClass": "fa fa-lightbulb-o",
+				"items": [
+					"Page/Engine/customer360.RequestRecapturePhoto",
+					"Page/Engine/customer360.RequestRecaptureFingerprint",
+					"Page/Engine/customer360.RequestRecaptureGPS"
+				]
+			},
+			"Page/Engine/customer360.CustomerHistorySummary",
+			"Page/Engine/customer360.CustomerDeathMarking",
+			"Page/Engine/customer360.loans.CustomerGroupsView",
+			"Page/Engine/customer360.ViewInsurance"
+		]
+	};
 	//"Page/CustomerHistory",
 
 	var enrollmentDefinition = {
@@ -144,6 +195,33 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			},
 			"Page/CustomerHistory",
 			"Page/Engine/customer360.Recapture"
+		]
+	};
+
+	var witfinEnterpriseDefinition = {
+		"title": "BUSINESS_360",
+		"items": [
+			getBusinessProfilePageUrl(),
+			{
+				"title": "LOANS",
+				"iconClass": "fa fa-key",
+				"items": [
+					"Page/Engine/loans.individual.booking.LoanInput",
+					"Page/Engine/customer360.loans.View",
+					"Page/Engine/customer360.loans.Service"
+				]
+			},
+			{
+				"title": "REQUEST_RECAPTURE",
+				"shortTitle": "REQUEST",
+				"iconClass": "fa fa-lightbulb-o",
+				"items": [
+					"Page/Engine/customer360.RequestRecapturePhoto",
+					"Page/Engine/customer360.RequestRecaptureFingerprint",
+					"Page/Engine/customer360.RequestRecaptureGPS"
+				]
+			},
+			"Page/CustomerHistory"
 		]
 	};
 
@@ -401,8 +479,14 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			id: $scope.customerId
 		}).$promise.then(function(response) {
 			var fullDefinition = customerDefinition;
+			if (siteCode == "witfin") {
+				var fullDefinition = witfinCustomerDefinition;
+			}
 			if (response.customerType === 'Enterprise') {
 				fullDefinition = enterpriseDefinition;
+			}
+			if (response.customerType === 'Enterprise' && siteCode == "witfin") {
+				fullDefinition = witfinEnterpriseDefinition;
 			}
 			if (siteCode == "KGFS") {
 				fullDefinition = enrollmentDefinition;

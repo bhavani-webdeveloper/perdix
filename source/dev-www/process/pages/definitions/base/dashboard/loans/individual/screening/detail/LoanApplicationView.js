@@ -52,7 +52,7 @@ define({
                     if (model.currentStage == 'Scrutiny')
                         $state.go('Page.Engine', {
                             pageName: 'base.dashboard.loans.individual.screening.ScrutinyQueue',
-                            pageId: null
+                            pageId: null,
                         });
                     if (model.currentStage == 'FieldAppraisal')
                         $state.go('Page.Engine', {
@@ -590,9 +590,27 @@ define({
                         "items": [{
                             "key": "loanAccount.nominees[0].nomineeRelationship",
                             "title": "Relationship To Insured"
-                        }, {
-                            "key": "",
-                            "title": "Address"
+                        }, {  
+                            "type": "section",                                
+                            "htmlClass": "row",
+                            "items": [
+                                {
+                                    "type": "section",
+                                    "htmlClass": "col-sm-4",
+                                    "html": '<h5>' + "Address" + '</h5>'
+                                },
+                                {
+                                    "type": "section",
+                                    "htmlClass": "col-sm-8",
+                                    "html": '<p style = "font-size: 14px; color: #555;"><strong>{{model.loanAccount.nominees[0].nomineeDoorNo}} <br />\
+                                    {{model.loanAccount.nominees[0].nomineeLocality}} <br />\
+                                    {{model.loanAccount.nominees[0].nomineeDistrict}} <br />\
+                                    {{model.loanAccount.nominees[0].nomineeState}} <br /> \
+                                    {{model.loanAccount.nominees[0].nomineePincode}} <br /> \
+                                    <br /><strong></p>\
+                                    '
+                                }]
+                                   
                         }]
                     }]
                 }]
@@ -1489,7 +1507,7 @@ define({
                             reqData.stage = 'LoanInitiation';
                         }                    
                         PageHelper.showProgress("update-loan", "Working...");
-
+                        PageHelper.showLoader();
                         if (reqData.loanAccount.currentStage == 'Screening') {
                             
                             // Dedupe call
@@ -1556,6 +1574,7 @@ define({
                                             PageHelper.showProgress("update-loan", "Done.", 3000);
                                             return navigateToQueue(model);
                                         }, function(httpRes) {
+                                            PageHelper.hideLoader();
                                             PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
                                             PageHelper.showErrors(httpRes);
                                         })

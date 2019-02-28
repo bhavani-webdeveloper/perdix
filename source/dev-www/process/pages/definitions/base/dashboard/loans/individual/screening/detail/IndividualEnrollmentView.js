@@ -803,10 +803,12 @@ define({
                                                 return irfCurrencyFilter(data)
                                             else return "NA"
                                         }
-                                    }, {
-                                        "title": "AREA_UNITS_OF_ASSETS",
-                                        "data": "unit"
-                                    }];
+                                    },
+                                    // {
+                                    //     "title": "AREA_UNITS_OF_ASSETS",
+                                    //     "data": "unit"
+                                    // }
+                                ];
                                 },
                                 getActions: function() {
                                     return [];
@@ -1049,7 +1051,13 @@ define({
                     }*/
     
                 ],
-    
+                offlineInitialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+                    
+                   // var p1 = UIRepository.getEnrolmentProcessUIRepository().$promise;
+                    var self = this;
+                   
+                        self.form = self.formSource;
+                },
                 schema: function() {
                     return Enrollment.getSchema().$promise;
                 },

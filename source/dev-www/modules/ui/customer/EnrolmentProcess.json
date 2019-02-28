@@ -726,9 +726,9 @@
                 "key": "customer.photoImageId",
                 "title": "BUSINESS_LOCATION_PHOTO",
                 "type": "file",
-                "fileType": "image/*",
+                "fileType": "application/pdf",
                 "category": "CustomerEnrollment",
-                "subCategory": "PHOTO",
+                "using": "scanner",
                 "orderNo": 130
             },
             "ownership": {
@@ -1242,7 +1242,7 @@
                         "key": "customer.incomeThroughSales[].frequency",
                         "title": "FREQUENCY",
                         "type": "select",
-                        "enumcode":"frequency"
+                        "enumCode":"frequency"
                     }
                 }
             },
@@ -2118,6 +2118,7 @@
                         "title": "SUBSECTOR",
                         "type": "select",
                         "parentEnumCode": "businessSector",
+                        "parentValueExpr": "model.customer.enterprise.businessSector",
                         "enumCode": "businessSubSector"
                     },
                     "receivablesOutstanding": {

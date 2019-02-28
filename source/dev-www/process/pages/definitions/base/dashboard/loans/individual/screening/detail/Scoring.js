@@ -23,8 +23,8 @@ define({
             model.totalScores = res[5];
             model.deviationDetails = res[6];
             model.business = {};
-            model.business.kgfsName =  res[7].data[0]['Branch'];
-            model.business.centreName = res[7].data[0]['Spoke'];
+            model.business.kgfsName =  res[0].data[0]['Hub Name'];
+            model.business.centreName = res[0].data[0]['Spoke Name'];
 
 
             var managementScore = model.scoreDetails[0];

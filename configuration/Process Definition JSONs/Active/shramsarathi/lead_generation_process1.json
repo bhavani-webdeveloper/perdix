@@ -68,6 +68,41 @@
                     "ReadyForScreening"
                  ]
               },
+              "middleName":{  
+               "title":"Middle Name",
+               "type":"String",
+               "minLength":1,
+               "maxLength":100,
+               "captureStages":[  
+                  "Assignment Pending",
+                  "Incomplete",
+                  "Inprocess",
+                  "ReadyForScreening"
+               ]
+            },
+            "lastName":{  
+               "title":"Last Name",
+               "type":"String",
+               "minLength":1,
+               "maxLength":100,
+               "captureStages":[  
+                  "Assignment Pending",
+                  "Incomplete",
+                  "Inprocess",
+                  "ReadyForScreening"
+               ]
+            },"nickName":{  
+               "title":"Nick Name",
+               "type":"String",
+               "minLength":1,
+               "maxLength":100,
+               "captureStages":[  
+                  "Assignment Pending",
+                  "Incomplete",
+                  "Inprocess",
+                  "ReadyForScreening"
+               ]
+            },
               "spokeName":{  
                  "title":"Spoke Name",
                  "type":"String",
@@ -248,7 +283,7 @@
               "educationStatus":{  
                  "title":"Education Status",
                  "type":"string",
-                 "refCodeCategory":"education",
+                 "refCodeCategory":"education_status",
                  "captureStages":[  
                     "Assignment Pending",
                     "Incomplete",
@@ -835,8 +870,6 @@
            "title":"User Defined Details",
            "type":"object",
            "required":[  
-              "udf1",
-              "udf2"
            ],
            "properties":{  
               "udf1":{  

@@ -43,6 +43,8 @@
         "Page/Adhoc/payment.PaymentDashboard",
         "Page/Adhoc/irep.loans.LoanOriginationDashboard",
         "Page/Adhoc/witfin.loans.LoanOriginationDashboard",
+        "Page/Adhoc/shramsarathi.dashboard.lead.LeadDashboard",
+        "Page/Adhoc/shramsarathi.dashboard.loans.LoanOriginationDashboard",
         "Page/Adhoc/witfin.loans.VehicleValuationDashboard",
         "Page/Adhoc/pahal.loans.LoanOriginationDashboard",
         "Page/Adhoc/kgfs.loans.LoanBookingDashboard",
@@ -72,6 +74,7 @@
 
             ]
         },
+        "Page/JewelDashboard",
         "Page/LUCDashboard",
         "Page/CreditMonitoringDashboard",
         "Page/InventoryDashboard",
@@ -141,11 +144,6 @@
         "Page/ReportsDashboard",
         "Page/ScoreDashboard",
         "Page/Adhoc/audit.AuditDashboard",
-        "Page/Engine/excelUpload.ExcelUpload",
-        "Page/Adhoc/shramsarathi.dashboard.lead.LeadDashboard",
-        "Page/Adhoc/shramsarathi.dashboard.loans.LoanOriginationDashboard",
-        "Page/Adhoc/shramsarathi.dashboard.loans.individual.booking.LoanBookingDashboard",
-        "Page/Adhoc/shramsarathi.dashboard.loans.individual.collections.LoansCollectionsDashboard",
-        "Page/Adhoc/shramsarathi.dashboard.loans.individual.disbursement.LoansDisbursementDashboard"
+        "Page/Engine/excelUpload.ExcelUpload"
     ]
 }

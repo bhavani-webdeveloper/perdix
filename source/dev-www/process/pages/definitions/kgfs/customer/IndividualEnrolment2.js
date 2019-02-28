@@ -37,8 +37,141 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
 
             var configFile = function () {
-                return {                   
+                return{
+                    "loanProcess.loanAccount.currentStage":{
+                        "KYCCheck":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
+                        },
+                        "Rejected":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
+                        },
+                        "DSCApproval":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
+                        },
+                        "LosDSCOverride":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
+                        },
+                        "RiskReviewAndLoanSanction":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
+                        }    
+                    }
                 }
+                    
             }
             var overridesFields = function (bundlePageObj) {
                return {
@@ -58,13 +191,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             orderNo:20,
                             title:"RELATION1",
                             required:true,
-                            type:"string"
+                            type:"select"
                         },
                         "IndividualReferences.verifications.mobileNo":{
                             orderNo:30,
                             title:"PHONE_NUMBER",
                             required:true,
-                            type:"string"
+                            "type": "number"                            
                         },
                         "IndividualReferences.verifications.address":{
                             required:true
@@ -108,7 +241,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                };
                            },
                            "required": true,
-                           "readonly": true
+                         //  "readonly": true
+                       },
+                       "IndividualInformation.existingLoan":{
+                        "required":true,
+                        "title":"EXISTING_LOAN_FROM_BANK",
+                        "orderNo": 41
                        },
                        "IndividualInformation.title":{
                         "orderNo": 50
@@ -213,6 +351,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "KYC.customerId":{
                             orderNo:10,
+                            required:true,
                             condition:"!model.customer.customerId",
                             initialize: function(model, form, parentModel, context) {
                                 model.customerBranchId = parentModel.customer.customerBranchId;
@@ -250,6 +389,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "centreId":{
                                     key: "customer.centreId",
+                                    "title":"CENTRE_CODE1",
                                     type: "lov",
                                     autolov: true,
                                     lovonly: true,
@@ -565,6 +705,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "ContactInformation.mailSameAsResidence":{
                             "onChange": function (modelValue, form, model) {
+                                BundleManager.pushEvent('load-address', model._bundlePageObj,{customer: model.customer});
+                            }
+                        },
+                        "ContactInformation.residentialAddressAlsoBusinessAddress":{
+                            "onChange": function (modelValue, form, model) {
+                                if(model.customer.fcuStatu){
+                                    model.customer.fcuStatus = 1;  
+                                }
+                                else{
+                                    model.customer.fcuStatus = 0; 
+                                }
                                 BundleManager.pushEvent('load-address', model._bundlePageObj,{customer: model.customer});
                             }
                         },
@@ -996,6 +1147,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "IndividualInformation.urnNo",
                 "IndividualInformation.firstName",
                 "IndividualInformation.photoImageId",
+                "IndividualInformation.existingLoan",
                 "IndividualInformation.gender",
                 "IndividualInformation.dateOfBirth",
                 "IndividualInformation.religion",
@@ -1027,7 +1179,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "KYC.additionalKYCs.kyc1ValidUptoDate",
                
                 "ContactInformation",
-                "ContactInformation.contactDetailsAlsoBusinessContactDetails",
                 "ContactInformation.residentialAddressFieldSet",
                 "ContactInformation.doorNo",
                 "ContactInformation.street",
@@ -1131,6 +1282,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             model.UIUDF.family_fields.dependent_family_member++;
                     });
 
+                    if(model.customer.fcuStatus == 1){
+                        model.customer.fcuStatu = true  
+                    }
+                    else{
+                        model.customer.fcuStatu = false
+                    }
+
                     /* Form rendering starts */
                     var self = this;
                     var formRequest = {
@@ -1178,6 +1336,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             }
                                         },
                                         "residentialAddressAlsoBusinessAddress":{
+                                            "key":"customer.fcuStatu",
                                             title:"RESIDENTIAL_ADDRESS_ALSO_BUSINESS_ADDRESS",
                                             type:"checkbox",
                                             orderNo:149,
@@ -1241,7 +1400,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 {
                                     "type": "actionbox",
-                                    "condition": "model.customer.currentStage && (model.currentStage=='Screening' || model.currentStage=='Appraisal' || model.currentStage=='ScreeningReview' || model.currentStage=='CreditAppraisal' || model.currentStage=='DSCApproval' || model.currentStage=='LosDSCOverride' ||  (model.currentStage=='GuarantorAddition' && model.pageClass=='guarantor'))",
+                                    "condition": "model.customer.currentStage && (model.currentStage=='Screening' || model.currentStage=='Appraisal' || model.currentStage=='Application' || model.currentStage=='CreditAppraisal' || (model.currentStage=='GuarantorAddition' && model.pageClass=='guarantor'))",
                                     "orderNo": 1200,
                                     "items": [
                                         {

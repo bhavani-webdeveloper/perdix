@@ -1,4 +1,4 @@
-define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProcess) {
+define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/AngularResourceService'], function(EnrolmentProcess, AngularResourceService) {
     EnrolmentProcess = EnrolmentProcess['EnrolmentProcess'];
  
     return {
@@ -11,7 +11,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
         $pageFn: function($log, $q, LoanAccount,LoanProcess, Scoring,irfFormToggler, Enrollment,EnrollmentHelper, AuthTokenHelper, SchemaResource, PageHelper,formHelper,elementsUtils,
                           irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch, IndividualLoan,
                           BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository, $injector, irfNavigator) {
-            var overridesFields_businessbasic = function(bundlePageObj){
+                            AngularResourceService.getInstance().setInjector($injector);
+                            var overridesFields_businessbasic = function(bundlePageObj){
             return {
                     "ContactInformation.pincode": {
                         "title": "pincode",
@@ -24,8 +25,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "ContactInformation.state":{
                         "required": false
                     },
+                    "ContactInformation.mobilePhone" : {
+                        "inputmode": "number",
+                        "numberType": "number",
+                        "type": "number",
+                    },
                     "Machinery.fixedAssetsMachinaries.hypothecatedToUs": {
-                        "title": "HYPOTHECATED_TO_MAITREYA"
+                        "title": "CAN_BE_HYPOTHECATED_TO_US"
 
                     },
                     // "EnterpriseInformation.businessHistory": {
@@ -34,6 +40,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     // },
                     "EnterpriseInformation.entityId":{
                         "condition": "model.customer.id",
+                    },
+                    "EnterpriseInformation.photoImageId":{
+                        "key": "customer.photoImageId",
+                        "title": "BUSINESS_LOCATION_PHOTO",
+                        "type": "file",
+                        "fileType": "application/pdf",
+                        "category": "CustomerEnrollment",
+                        "using": "scanner"
+
                     },
                     "EnterpriseInformation.referredName":{
                         "condition": "model.customer.enterprise.referredBy == 'Channel Partner'||model.customer.enterprise.referredBy =='Peer Referral'||model.customer.enterprise.referredBy =='Known supply chain'",
@@ -48,7 +63,108 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         "condition": "model.customer.oldCustomerId"
                     },
                     "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId":{
-                        "readonly": true
+                        type: "lov",
+                        title: "CUSTOMER_ID",
+                            inputMap: {
+                                "firstName": {
+                                    "key": "customer.firstName",
+                                    "title": "CUSTOMER_NAME"
+                                },
+                                "customerBranchId": {
+                                    "key": "customer.customerBranchId",
+                                    "type": "select",
+                                    "screenFilter": true,
+                                    "readonly": true
+                                },
+                                "centreName": {
+                                    "key": "customer.place",
+                                    "title":"CENTRE_NAME",
+                                    "type": "string",
+                                    "readonly": true,
+                        
+                                },
+                                "centreId":{
+                                    "key": "customer.centreId",
+                                    "type": "lov",
+                                    "autolov": true,
+                                    "lovonly": true,
+                                    "bindMap": {},
+                                    "search": function(inputModel, form, model, context) {
+                                        let SessionStore = AngularResourceService.getInstance().getNGService("SessionStore");
+                                        let formHelper = AngularResourceService.getInstance().getNGService("formHelper");
+                                        let $q = AngularResourceService.getInstance().getNGService("$q");
+                                        let centres = SessionStore.getCentres();
+                                        // $log.info("hi");
+                                        // $log.info(centres);
+                        
+                                        let centreCode = formHelper.enum('centre').data;
+                                        let out = [];
+                                        if (centres && centres.length) {
+                                            for (var i = 0; i < centreCode.length; i++) {
+                                                for (var j = 0; j < centres.length; j++) {
+                                                    if (centreCode[i].value == centres[j].id) {
+                        
+                                                        out.push({
+                                                            name: centreCode[i].name,
+                                                            id:centreCode[i].value
+                                                        })
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        return $q.resolve({
+                                            headers: {
+                                                "x-total-count": out.length
+                                            },
+                                            body: out
+                                        });
+                                    },
+                                    "onSelect": function(valueObj, model, context) {
+                                        model.centreId = valueObj.id;
+                                        model.centreName = valueObj.name;
+                                    },
+                                    "getListDisplayItem": function(item, index) {
+                                        return [
+                                            item.name
+                                        ];
+                                    }
+                                }
+                            },
+                            outputMap: {
+                                "id": "customer.enterpriseCustomerRelations[arrayIndex].linkedToCustomerId",
+                                "firstName": "customer.enterpriseCustomerRelations[arrayIndex].linkedToCustomerName"
+                            },
+                            searchHelper: formHelper,
+                            search: function(inputModel, form, model) {
+                                if (!inputModel.branchName)
+                                    inputModel.branchName = SessionStore.getBranch();
+                                var promise = Enrollment.search({
+                                    'branchName': inputModel.branchName,
+                                    'firstName': inputModel.firstName,
+                                    'centreId': inputModel.centreId,
+                                    'customerType': 'Individual'
+                                }).$promise;
+                                return promise;
+                            },
+                            getListDisplayItem: function(data, index) {
+                                return [
+                                    [data.firstName, data.fatherFirstName].join(' '),
+                                    data.id
+                                ];
+                            },
+                            onSelect: function(valueObj, model, context){
+                                PageHelper.showProgress('customer-load', 'Loading customer...');
+                                Enrollment.getCustomerById({id: valueObj.id})
+                                    .$promise
+                                    .then(function(res){
+                                        PageHelper.showProgress("customer-load", "Done..", 5000);
+                                        model.customer.enterpriseCustomerRelations[arrayIndex].linkedToCustomerId = res.customer.id;
+                                        model.customer.enterpriseCustomerRelations[arrayIndex].linkedToCustomerName = res.customer.firstName;
+                                    }, function(httpRes){
+                                        PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
+                                })
+                            }
+                       
                     },
                     "EnterpriseInformation.enterpriseRegistrations.registrationType": {
                         "enumCode": "business_registration_type",
@@ -83,6 +199,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseAssets.enterpriseAssets.valueOfAsset":{
                         "title": "Present Value"
                     },
+                    "EnterpriseAssets.enterpriseAssets.details":{
+                        title: "DESCRIPTION",
+                        key: "customer.enterpriseAssets[].details",
+                        orderNo:125,
+                        condition:  "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
+                        type: "string",
+                        required: true,
+                    }, 
                     "CurrentAssets":{
                         "orderNo":100
                     },
@@ -162,9 +286,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseInformation.companyOperatingSince":{
                         "required": true
                     },
-                    "EnterpriseInformation.companyEmailId":{
-                        "required": true
-                    },
+                    // "EnterpriseInformation.companyEmailId":{
+                    //     "required": true
+                    // },
                     "EnterpriseInformation.photoImageId":{
                         "required": true
                     },
@@ -381,6 +505,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "Liabilities.liabilities.installmentAmountInPaisa":{
                         "title": "INSTALLEMENT_AMOUNT",
                     },
+                    "Liabilities.liabilities.loanSource":{
+                        "enumCode": "sorted_loan_source",
+                    },
                     "EnterpriseInformation.enterpriseRegistrations.registrationNumber":{
                         "required":true
                     },
@@ -400,7 +527,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         "required":true
                     },
                     "ContactInformation.distanceFromBranch":{
-                        "enumCode": "distance_from_branch",
+                        "enumCode": "distanceFromBranchOffice",
                     }  
                     
             }
@@ -622,6 +749,55 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             },
                         }
                     },
+                    "EnterpriseAssets":{
+                        "items": {
+                            "enterpriseAssets" : {
+                                "items": {
+                                    "assetName":{
+                                        key: "customer.enterpriseAssets[].assetName",
+                                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
+                                        title: "TYPE",
+                                        required:true,
+                                        type: "select",
+                                        enumCode: "enterprise_asset_name",
+                                        orderNo:130,
+                                    },
+                                    "isHypothecated":{
+                                        key: "customer.enterpriseAssets[].isHypothecated",
+                                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
+                                        title: "IS_THE_MACHINE_HYPOTHECATED" ,
+                                        type: "radios",
+                                        titleMap: {
+                                            "No": "No",
+                                            "Yes": "Yes"
+                                        },
+                                        orderNo:135,
+                                    },
+                                    "hypothecatedToUs":{
+                                        key: "customer.enterpriseAssets[].hypothecatedToUs",
+                                        title: "CAN_BE_HYPOTHECATED_TO_US",
+                                        condition : "model.customer.enterpriseAssets[arrayIndex].isHypothecated == 'No'",
+                                        type: "radios",
+                                        titleMap: {
+                                            "No": "No",
+                                            "Yes": "Yes"
+                                        },
+                                        orderNo:140,
+                                    },
+                                    "assetImageId":{
+                                        key: "customer.enterpriseAssets[].assetImageId",
+                                        condition : "model.customer.enterpriseAssets[arrayIndex].assetType  == 'Furniture' || model.customer.enterpriseAssets[arrayIndex].assetType  == 'Fixtures'",
+                                        title: "IMAGE",
+                                        "type": "file",
+                                        "fileType": "image/*",
+                                        "category": "Loan",
+                                        "subCategory": "COLLATERALPHOTO",
+                                        orderNo:145,
+                                    },
+                                }
+                            }
+                        }
+                    }
             }
             }
             var getIncludes_businessbasic = function (model) {
@@ -787,6 +963,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "EnterpriseAssets.enterpriseAssets",
                     "EnterpriseAssets.enterpriseAssets.assetType",                    
                     "EnterpriseAssets.enterpriseAssets.valueOfAsset",  
+                    "EnterpriseAssets.enterpriseAssets.details",
+                    "EnterpriseAssets.enterpriseAssets.assetName",
+                    "EnterpriseAssets.enterpriseAssets.isHypothecated",
+                    "EnterpriseAssets.enterpriseAssets.hypothecatedToUs",
+                    "EnterpriseAssets.enterpriseAssets.assetImageId",
 
                     "Machinery",
                     "Machinery.fixedAssetsMachinaries",
@@ -3739,6 +3920,26 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                          }
                      }
              }
+             var formRequest_businessbasic = function(model){
+                 return {
+                "overrides": overridesFields_businessbasic(model),
+                "includes": getIncludes_businessbasic(model),
+                "excludes": [],
+                "options": {
+                    "repositoryAdditions":repositoryAdditions_businessbasic(model)
+                }
+            }
+            };
+            var formRequest_businessFinancials = function(model){
+                return {
+                "overrides": overridesFields_businessFinancials(model),
+                "includes": getIncludes_businessFinancials(model),
+                "excludes": [],
+                "options": {
+                    "repositoryAdditions":repositoryAdditions_businessFinancials(model)
+                }
+            }
+            };
             return {
                 //"type": "child-tabs",
                 "type":"schema-form",
@@ -3762,22 +3963,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             model.customer.customerBranchId = branchId;
                     };
 
-                    var formRequest_businessbasic = {
-                        "overrides": overridesFields_businessbasic(model),
-                        "includes": getIncludes_businessbasic(model),
-                        "excludes": [],
-                        "options": {
-                            "repositoryAdditions":repositoryAdditions_businessbasic(model)
-                        }
-                    };
-                    var formRequest_businessFinancials = {
-                        "overrides": overridesFields_businessFinancials(model),
-                        "includes": getIncludes_businessFinancials(model),
-                        "excludes": [],
-                        "options": {
-                            "repositoryAdditions":repositoryAdditions_businessFinancials(model)
-                        }
-                    };
+                    // var formRequest_businessbasic = {
+                    //     "overrides": overridesFields_businessbasic(model),
+                    //     "includes": getIncludes_businessbasic(model),
+                    //     "excludes": [],
+                    //     "options": {
+                    //         "repositoryAdditions":repositoryAdditions_businessbasic(model)
+                    //     }
+                    // };
+                    // var formRequest_businessFinancials = {
+                    //     "overrides": overridesFields_businessFinancials(model),
+                    //     "includes": getIncludes_businessFinancials(model),
+                    //     "excludes": [],
+                    //     "options": {
+                    //         "repositoryAdditions":repositoryAdditions_businessFinancials(model)
+                    //     }
+                    // };
                     var formaction=[
                         
                             {
@@ -3821,7 +4022,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         var generateChildForms=[];
                         generateChildForms.push(UIRepository.getEnrolmentProcessUIRepository().$promise
                         .then(function(repo){
-                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest_businessbasic, configFile_businessbasic(), model)
+                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest_businessbasic(model), configFile_businessbasic(), model)
                         }).then(function(form){
                             self.forms.push({
                                 "form": form,
@@ -3830,7 +4031,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             })}));
                             generateChildForms.push(UIRepository.getEnrolmentProcessUIRepository().$promise
                             .then(function(repo){
-                                return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest_businessFinancials, configFile_businessFinancials(), model)
+                                return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest_businessFinancials(model), configFile_businessFinancials(), model)
                             }).then(function(form){
                                 self.forms.push({
                                     "form": form,
@@ -3842,6 +4043,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                         self.form=form;
                     });
                 },
+                offline: false,
+                offlineInitialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+                    model.loanProcess = bundleModel.loanProcess;
+                    if (_.hasIn(model.loanProcess, 'loanCustomerEnrolmentProcess')) {
+                        model.enrolmentProcess = model.loanProcess.loanCustomerEnrolmentProcess;
+                        model.customer = model.enrolmentProcess.customer;
+                    }
+                    var p1 = UIRepository.getEnrolmentProcessUIRepository().$promise;
+                    var self = this;
+                    p1.then(function (repo) {
+                        self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest_businessbasic(model), configFile_businessbasic(), model);
+                    })
+                    var p2 = UIRepository.getEnrolmentProcessUIRepository().$promise;
+                    var self = this;
+                    p2.then(function (repo) {
+                        self.form = IrfFormRequestProcessor.getFormDefinition(repo, formRequest_businessFinancials(model), configFile_businessFinancials(), model);
+                    })
+                }
+                ,
                 form:[],
                 schema: function() {
                     return Enrollment.getSchema().$promise;

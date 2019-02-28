@@ -33,7 +33,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
                             minimum: 1,
-                            maximum: 5,
+                            maximum: 0,
                             order: 20
                         },
                         {
@@ -41,7 +41,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
                             minimum: 1,
-                            maximum: 3,
+                            maximum: 0,
                             order: 30
                         },
                         {
@@ -61,8 +61,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order: 60
                         },
                         {
-                            pageName: 'kgfs.customer.CBCheck',
-                            title: 'CB_CHECK',
+                            pageName: 'kgfs.loans.individual.booking.CreditBureauView',
+                            title: 'CREDIT_BUREAU',
                             pageClass: 'cb-check',
                             minimum: 1,
                             maximum: 1,

@@ -143,7 +143,7 @@ define({
 				},
 				getActions: function () {
 					return [{
-						name: "REVIEW",
+						name: "Application",
 						desc: "",
 						icon: "fa fa-pencil-square-o",
 						fn: function (item, index) {

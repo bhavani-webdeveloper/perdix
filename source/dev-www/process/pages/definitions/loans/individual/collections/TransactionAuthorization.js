@@ -59,6 +59,8 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                             }).$promise.then(
                                 function (data) {
                                     model.loanAccount = data;
+                                    model.loanAccount.netPayoffAmount = Utils.roundToDecimal(data.payOffAmount + data.preclosureFee - data.securityDeposit);
+                                    model.loanAccount.netPayoffAmountDue = Utils.roundToDecimal(data.netPayoffAmount + data.totalDemandDue);
                                     model.transAuth = model.transAuth || {};
                                     model.transAuth.customer_name = data.customer1FirstName;
                                     model.transAuth.productCode = data.productCode;
@@ -150,16 +152,18 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                     backToLoansList();
                                 })
                         }).then(function(){
-                            Locking.lock({
-                                "processType": "Loan",
-                                "processName": "Collections",
-                                "recordId": recordId.$$state.value.id
-                            }).$promise.then(function() {
+                            if (SessionStore.getGlobalSetting("lockingRequired") == "true") {
+                                Locking.lock({
+                                    "processType": "Loan",
+                                    "processName": "Collections",
+                                    "recordId": recordId.$$state.value.id
+                                }).$promise.then(function () {
 
-                            }, function(err) {
-                                irfProgressMessage.pop("Locking",err.data.error, 6000);
-                                irfNavigator.goBack();
-                            });
+                                }, function (err) {
+                                    irfProgressMessage.pop("Locking", err.data.error, 6000);
+                                    irfNavigator.goBack();
+                                });
+                            }
                         })
 
                     $q.all([p2])
@@ -315,6 +319,30 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                             condition: "model._transAuth.transactionName=='Pre-closure' || model._transAuth.transactionName=='PenalInterestPayment' ",
                                             items: [
                                                 {
+                                                    key: "loanAccount.totalPrincipalDue",
+                                                    readonly: true,
+                                                    title: "TOTAL_PRINCIPAL_DUE",
+                                                    type: "amount"
+                                                },
+                                                {
+                                                    key: "loanAccount.totalNormalInterestDue",
+                                                    readonly: true,
+                                                    title: "TOTAL_NORMAL_INTEREST_DUE",
+                                                    type: "amount"
+                                                },
+                                                {
+                                                    key: "loanAccount.totalPenalInterestDue",
+                                                    readonly: true,
+                                                    title: "TOTAL_PERNAL_INTEREST_DUE",
+                                                    type: "amount"
+                                                },
+                                                {
+                                                    key: "loanAccount.totalDemandDue",
+                                                    readonly: true,
+                                                    title: "TOTAL_DEMAND_DUE",
+                                                    type: "amount"
+                                                },
+                                                {
                                                     key: "loanAccount.principalNotDue",
                                                     readonly: true,
                                                     title: "PRINCIPAL_NOT_DUE",
@@ -353,13 +381,19 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                                                 {
                                                     key: "loanAccount.totalFeeDue",
                                                     readonly: true,
-                                                    title: "TOTAL_FEE_DUE",
+                                                    title: "FEE_DUE",
                                                     type: "amount"
                                                 },
                                                 {
                                                     key: "loanAccount.netPayoffAmount",
                                                     readonly: true,
                                                     title: "NET_PAYOFF_AMOUNT",
+                                                    type: "amount"
+                                                },
+                                                {
+                                                    key: "loanAccount.netPayoffAmountDue",
+                                                    readonly: true,
+                                                    title: "NET_PAYOFF_AMOUNT_DUE",
                                                     type: "amount"
                                                 },
                                                 {

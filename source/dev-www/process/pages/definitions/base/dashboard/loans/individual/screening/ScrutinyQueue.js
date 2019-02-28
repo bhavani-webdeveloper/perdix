@@ -179,7 +179,7 @@ define({
 					},
 					getActions: function() {
 						return [{
-							name: "SCRUTINY",
+							name: "SCRUTINY_QUEUE",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {

@@ -36,7 +36,8 @@ define({
 							}
 	                    },
 						"centre": {
-							"title": "ZONE",
+                            "title": "ZONE_NAME",
+                            "required":false,
 							"type": ["integer", "null"],
 							"x-schema-form": {
 								"type": "select",
@@ -50,10 +51,10 @@ define({
                             "title": "APPLICANT_NAME",
                             "type": "string"
                         },
-                        "businessName": {
-                            "title": "BUSINESS_NAME",
-                            "type": "string"
-                        },
+                        // "businessName": {
+                        //     "title": "BUSINESS_NAME",
+                        //     "type": "string"
+                        // },
                         "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"

@@ -31,7 +31,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
                             minimum: 0,
-                            maximum: 1,
+                            maximum: 5,
                             order:20
                         },
                         {
@@ -39,7 +39,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
                             minimum: 0,
-                            maximum: 1,
+                            maximum: 3,
                             order:30
                         },
                         {
@@ -59,8 +59,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:60
                         },
                         {
-                            pageName: 'kgfs.loans.individual.screening.CreditBureauView',
-                            title: 'CREDIT_BUREAU',
+                            pageName: 'kgfs.loans.individual.screening.CBCheck',
+                            title: 'CB_CHECK',
                             pageClass: 'cbview',
                             minimum: 1,
                             maximum: 1,
@@ -148,12 +148,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess: loanProcess
                                     }
                                 });
-
                                 if(_.hasIn(loanAccount, 'coApplicantsEnrolmentProcesses')) {
                                     for (var i=0;i<loanAccount.coApplicantsEnrolmentProcesses.length; i++){
                                         $this.bundlePages.push({
                                             pageClass: 'co-applicant',
                                             model: {
+                                                enrolmentProcess: loanProcess.coApplicantsEnrolmentProcesses[i],
                                                 loanRelation: loanAccount.coApplicantsEnrolmentProcesses[i]
                                             }
                                         });
@@ -164,6 +164,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         $this.bundlePages.push({
                                             pageClass: 'guarantor',
                                             model: {
+                                                enrolmentProcess: loanProcess.guarantorsEnrolmentProcesses[i],
                                                 loanRelation: loanAccount.guarantorsEnrolmentProcesses[i]
                                             }
                                         });
@@ -206,6 +207,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             .subscribe(function(loanProcess){
                                 loanProcess.loanAccount.currentStage = 'Screening';
                                 bundleModel.loanProcess = loanProcess;
+                                loanProcess.loanAccount.productCategory = productCategory;
                                  if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
 
                                     var _leadId = $stateParams.pageData['lead_id'];
@@ -358,6 +360,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                         if(cbCustomer.customerId){
                             BundleManager.broadcastEvent('cb-check-update', cbCustomer);
                         }
+                    },
+                    "dsc-status":function(pageObj,bundlePageObj, obj){
+                        BundleManager.broadcastEvent('dsc-response',pageObj);
                     }
                 },
                 preSave: function(offlineData) {
