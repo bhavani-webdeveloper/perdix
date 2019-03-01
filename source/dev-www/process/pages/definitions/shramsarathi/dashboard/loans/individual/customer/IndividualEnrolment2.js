@@ -2062,8 +2062,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "enumCode":"fixed_asset_type"
                     },
                     "Liabilities.liabilities.interestRate":{
-                        "type":"select",
-                        "enumCode":"rate_of_interest",
+                        "type":"text",
+                        //"enumCode":"rate_of_interest",
                     },
                     "KYC.additionalKYCs.kyc1ProofType":{
                         "enumCode":"age_proof",
