@@ -284,7 +284,7 @@ define({
                                     }
                                 },
                                 {
-                                    "title": "Kinara emi",
+                                    "title": "Maitreya emi",
                                     "data": "kinara_emi",
                                     render: function(data, type, full, meta) {
                                         
@@ -293,7 +293,7 @@ define({
                                     }
                                 },
                                 {
-                                    "title": "Kinara emi pct",
+                                    "title": "Maitreya emi pct",
                                     "data": "kinara_emi_pct",
                                     render: function(data, type, full, meta) {
                                         
@@ -576,7 +576,7 @@ define({
                                     "data": "no_of_cheque_bounced"
                                 }, 
                                 {
-                                    "title": "# of KINARA Cheque Bounces",
+                                    "title": "# of Maitreya Cheque Bounces",
                                     "data": "no_of_kinara_cheque_bounces"
                                 },                                
                                 {
