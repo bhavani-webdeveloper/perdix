@@ -2206,7 +2206,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Liabilities",
                     "Liabilities.liabilities",
                     "Liabilities.liabilities.loanType",
-                    "Liabilities.liabilities.liabilityType",
+                    //"Liabilities.liabilities.liabilityType",
                     "Liabilities.liabilities.mortage",
                     "Liabilities.liabilities.mortageAmount",
                     "Liabilities.liabilities.loanSource",
@@ -2220,7 +2220,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Liabilities.liabilities.liabilityLoanPurpose",
                     "Liabilities.liabilities.interestOnly",
                     "Liabilities.liabilities.interestRate",
-                    "Liabilities.liabilities.liabilityType",
+                    //"Liabilities.liabilities.liabilityType",
                     
 
                     "HouseVerification",
