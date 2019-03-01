@@ -125,6 +125,13 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                 }
                             },
                             {
+                                key:"previousPromise.visitedDate",
+                                title:"VISITED_DATE",
+                                type:"date",
+                                //type:"amount",
+                                readonly:true
+                            },
+                            {
                                 key:"previousPromise.contactable",
                                 title:"ACTION",
                                 "type":"select",
