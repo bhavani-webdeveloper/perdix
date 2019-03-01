@@ -754,7 +754,7 @@ define([],function(){
                                 //"LoanRecommendation.securityEmiRequired",
                                 "LoanMitigants.loanMitigantsByParameter",
                                 "CollateralDetails",
-                                "LoanRecommendation",
+                                //"LoanRecommendation",
 
                             ],
                             "overrides": {
@@ -1475,6 +1475,8 @@ define([],function(){
                     "PreliminaryInformation",
                     "PreliminaryInformation.transactionType",
                     "PreliminaryInformation.transactionType2",
+                    "PreliminaryInformation.groupID",
+                    "PreliminaryInformation.groupName",
                     "PreliminaryInformation.linkedAccountNumber",
                     "PreliminaryInformation.linkedAccountNumber1",
                     "PreliminaryInformation.baseLoanAccount",
@@ -1818,6 +1820,18 @@ define([],function(){
                                                 "htmlClass": "alert alert-warning",
                                                 "condition": "model.applicant.age1 >= 41 && model.applicant.age1 <= 60 && model.loanAccount.loanAmountRequested >= 2000001 && model.loanAccount.loanAmountRequested <= 3000000 || model.applicant.age1 >= 61 && model.applicant.age1 <= 65 && model.loanAccount.loanAmountRequested < 3000000",
                                                 "html":"<h4><i class='icon fa fa-warning'></i>Medical Test is Mandatory</h4>"
+                                            },
+                                            "groupName": {
+                                                "key": "loanAccount.groupName",
+                                                "title": "GROUP_NAME",
+                                                "type": "string",
+                                                "orderNo": 41
+                                            },
+                                            "groupID": {
+                                                "key": "loanAccount.jlgGroupId ",
+                                                "title": "GROUP_ID",
+                                                "type": "string",
+                                                "orderNo": 40,
                                             }
                                           
                                         }
@@ -1846,20 +1860,20 @@ define([],function(){
                                                 "enumCode":"mode_of_disbursement"
                                             },
                                         "remarksOfInFavourLoan":{
-                                            "key":"loanAccount.userDefinedFieldValues.udf10",
+                                            "key":"loanAccount.udf.userDefinedFieldValues.udf10",
                                             "title":"REMARK_OF_IN_FAVOUR_LOAN",
                                             "type":"text",
                                             "required":true
                                         },
                                         "potentialRisks":{
-                                            "key":"loanAccount.userDefinedFieldValues.udf11",
+                                            "key":"loanAccount.udf.userDefinedFieldValues.udf11",
                                             "title":"POTENTIAL_RISK",
                                             "type":"select",
                                             "required":true,
                                             "titleMap":{"yes":"yes","no":"no"}
                                         },
                                         "collectionDate":{
-                                            "key":"loanAccount.disbursementSchedules.firstrRepaymentDate",
+                                            "key":"loanAccount.disbursementSchedules.firstRepaymentDate",
                                             "title":"COLLECTION_DATE",
                                             "type":"date",
                                             "required":true
@@ -1877,7 +1891,7 @@ define([],function(){
                                             "required":true
                                         },
                                         "date":{
-                                            "key":"loanAccount.userDefinedFieldValues.udf12",
+                                            "key":"loanAccount.udf.userDefinedFieldValues.udf12",
                                             "title":"DATE",
                                             "type":"date",
                                             "required":true

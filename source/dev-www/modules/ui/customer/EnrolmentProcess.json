@@ -1659,6 +1659,12 @@
                         "fileType": "application/pdf",
                         "using": "scanner",
                         "orderNo": 120
+                    },
+                    "tenure":{
+                        "key": "customer.liabilities[].tenure",
+                        "title": "LOAN_TENURE",
+                        "type":"text",
+                        "orderNo": 125
                     }
                 }
             }

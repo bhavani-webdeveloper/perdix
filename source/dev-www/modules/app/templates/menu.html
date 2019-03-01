@@ -14,18 +14,11 @@
         </div>
         <!-- search form -->
         <form action="#" method="get" class="sidebar-form">
-            <div class="input-group">
-                <input ng-model="menuFilter" type="text" class="form-control" placeholder="{{ 'SEARCH' | translate }}...">
-          <span class="input-group-btn">
-            <a ng-click="menuFilter=''" class="btn btn-flat"><i ng-if="menuFilter" class="fa fa-close"></i>
-            </a>
-          </span>
-            </div>
+            <input ng-model="menuFilter" type="text" class="form-control" placeholder="{{ 'SEARCH' | translate }}...">
         </form>
         <!-- /.search form -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
-            <li class="header">{{ definition.title | translate }}</li>
             <li ng-repeat="menu in definition.items | filter:menuFilter" ng-class="{active:isActive(menu.id)}" class="treeview">
                 <a ng-click="loadPage($event, menu)" href="#" class="online-link">
                     <i class="{{menu.iconClass || 'fa fa-bars'}}"></i> <span>{{ menu.title | translate }}</span>

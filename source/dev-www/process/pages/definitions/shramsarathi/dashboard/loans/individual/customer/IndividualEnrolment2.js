@@ -1735,7 +1735,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "type": "string"
                     },
                     "IndividualInformation.existingLoan": {
-                        "title": "EXISTING_LOAN"
+                        "title": "EXISTING_LOAN_SHRAMSARATI"
                     },
                     "BankAccounts.customerBankAccounts.isDisbersementAccount": {
                         //"title": "Is Disbursement"
@@ -2057,8 +2057,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "Liabilities.liabilities.liabilityType":{
                         "enumCode":"financial_liabilities"
-                    }
-                    
+                    },
+                    "Machinery.fixedAssetsMachinaries.machineType":{
+                        "enumCode":"fixed_asset_type"
+                    },
+                    "Liabilities.liabilities.interestRate":{
+                        "type":"select",
+                        "enumCode":"rate_of_interest",
+                    },
+                    "KYC.additionalKYCs.kyc1ProofType":{
+                        "enumCode":"age_proof",
+                        "orderNo":91
+                    },
                     // "IndividualInformation.existingLoan":{
                     //     "title":""
                     // },
@@ -2100,8 +2110,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "KYC.additionalKYCs.kyc1ValidUptoDate",
 
                     "IndividualInformation",
-                    "IndividualInformation.groupID",
-                    "IndividualInformation.groupName",
+                    // "IndividualInformation.groupID",
+                    // "IndividualInformation.groupName",
                     "IndividualInformation.customerBranchId",
                     "IndividualInformation.centreId",
                     "IndividualInformation.centreId1",
@@ -2544,7 +2554,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "expenditures":{
                                             "items":{
                                                 "from":{
-                                                    "key":"IndividualFinancials.expenditures.from",
+                                                    "key":"customer.expenditures[].expenseFrom",
                                                     "title":"EXPENSE_FROM",
                                                     "type":"select",
                                                     "enumCode":"expense_type"
@@ -2583,7 +2593,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "orderNo":60,
                                             "onChange": function(modelValue, form, model, formCtrl, event) {
                                                         if(model.customer.addressPfSameAsIdProof==='YES'){
-                                                            // model.customer.addressProof=model.customer.identityProof,
+                                                            model.customer.addressProof=model.customer.identityProof,
                                                             model.customer.addressProofNo=model.customer.identityProofNo,
                                                             model.customer.addressProofImageId=model.customer.identityProofImageId,
                                                             model.customer.addressProofReverseImageId=model.customer.identityProofReverseImageId,
@@ -2826,14 +2836,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                         },
                                                         "avarageTimeSpend":{
                                                             "key":"customer.familyMembers[].incomes[].averageTimeSpent",
-                                                            "title":"AVARAGE_TIME_SPENT",
+                                                            "title":"AVERAGE_TIME_SPENT",
                                                             "type":"number",
                                                             "required":true
                                                            
                                                         },
                                                         "avarageReturn":{
                                                             "key":"customer.familyMembers[].incomes[].averageReturn",
-                                                            "title":"AVARAGE_RETURN",
+                                                            "title":"AVERAGE_RETURN",
                                                             "type":"select",
                                                             "required":true,
                                                             "enumCode":"average_return"
@@ -3132,19 +3142,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             parentEnumCode: "branch_id",
                                             orderNo: 12,
                                             parentValueExpr: "model.customer.customerBranchId",
-                                        },
-                                        "groupName": {
-                                            "key": "loanAccount.groupName",
-                                            "title": "GROUP_NAME",
-                                            "type": "string",
-                                            "orderNo": 50
-                                        },
-                                        "groupID": {
-                                            "key": "loanAccount.jlgGroupId ",
-                                            "title": "GROUP_ID",
-                                            "type": "string",
-                                            "orderNo": 40,
                                         }
+                                        // "groupName": {
+                                        //     "key": "loanAccount.groupName",
+                                        //     "title": "GROUP_NAME",
+                                        //     "type": "string",
+                                        //     "orderNo": 50
+                                        // },
+                                        // "groupID": {
+                                        //     "key": "loanAccount.jlgGroupId ",
+                                        //     "title": "GROUP_ID",
+                                        //     "type": "string",
+                                        //     "orderNo": 40,
+                                        // }
                                     }
                                 },
                                 "PhysicalAssets":{

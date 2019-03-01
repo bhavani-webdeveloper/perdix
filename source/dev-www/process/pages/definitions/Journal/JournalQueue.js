@@ -177,6 +177,7 @@ define({
                         'transactionDescription':searchOptions.transactionDescription,
                         'debitGLNo': searchOptions.debitGLNo,
                         'creditGLNo': searchOptions.creditGLNo,
+                        'isApplicable':1,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage
                     }).$promise;

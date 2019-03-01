@@ -13,10 +13,8 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                 if (typeof($stateParams.pageData.readonly) == 'undefined') {
                     $stateParams.pageData.readonly = true;
                 }
-                var pageData = {
-                    "readonly": $stateParams.pageData.readonly
-                };
                 model.readonly = $stateParams.pageData.readonly;
+                model.readonlyExceptComments = !!$stateParams.pageData.readonlyExceptComments;
                 model.audit_id = Number($stateParams.pageId);
                 model.general_observations = model.general_observations || {};
                 model.auditObservation = model.auditObservation || {};
@@ -60,7 +58,7 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                     }
                     self.form = [{
                         type: "box",
-                        "readonly": pageData.readonly,
+                        "readonly": model.readonly,
                         "colClass": "col-sm-12",
                         title: "GENERAL_OBSERVATION",
                         items: [{
@@ -78,6 +76,7 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                                 "type": "lov",
                                 lovonly: true,
                                 "required": true,
+                                readonly: model.readonlyExceptComments,
                                 outputMap: {},
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model, context) {
@@ -124,6 +123,7 @@ irf.pageCollection.factory(irf.page("audit.detail.GeneralObservation"), ["$log",
                                             "type": "lov",
                                             lovonly: true,
                                             "required": true,
+                                            readonly: model.readonlyExceptComments,
                                             inputMap: {
                                                 "branch_id": {
                                                     "key": "branch_id"

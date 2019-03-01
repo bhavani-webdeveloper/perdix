@@ -178,7 +178,7 @@ irf.pageCollection.factory(irf.page("audit.detail.AllSampleIssueSummary"),
                                             window.allSampleIssueSummary['edit_'+n+'_'+ii] = function(e) {
                                                 launchCommentEdit(e, n, full.sample_id, ii);
                                             };
-                                            deviation = '<div class="deviation" style="position:relative"><span>' + r.deviation + '</span><button style="position:absolute;bottom:0;right:0;background:transparent" onclick="allSampleIssueSummary.edit_'+n+'_'+ii+'(event);return false"><i class="fa fa-pencil"></i></button></div>';
+                                            deviation = '<div class="deviation" style="position:relative"><span>' + r.deviation + '</span><button style="border:none;background:transparent" onclick="allSampleIssueSummary.edit_'+n+'_'+ii+'(event);return false"><i class="fa fa-pencil"></i></button></div>';
                                         }
                                         row.push(deviation);
                                         row.push(r.assignee_det[0].assignee_id || '&nbsp;');

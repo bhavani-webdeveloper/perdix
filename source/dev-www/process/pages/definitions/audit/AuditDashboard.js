@@ -30,6 +30,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 "Page/Engine/audit.ApprovedAuditsQueue",
                 "Page/Engine/audit.ApprovedAuditsViewQueue",
                 "Page/Engine/audit.RejectedAuditsQueue",
+                "Page/Engine/audit.ExpiredAuditsQueue",
                 "Page/Engine/audit.AuditDumpsQueue",
                 "Page/Engine/audit.AuditScoresQueue",
                 "Page/Engine/audit.AuditsViewQueue",
@@ -59,6 +60,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 var aaq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ApprovedAuditsQueue"];
                 var aavq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ApprovedAuditsViewQueue"];
                 var reaq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.RejectedAuditsQueue"];
+                var eaq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ExpiredAuditsQueue"];
                 var adq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.AuditDumpsQueue"];
                 var asq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.AuditScoresQueue"];
                 var avq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.AuditsViewQueue"];
@@ -82,6 +84,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (ravq) ravq.data = '-';
                 if (aaq) aaq.data = '-';
                 if (aavq) aavq.data = '-';
+                if (reaq) reaq.data = '-';
+                if (eaq) eaq.data = '-';
                 if (raq) raq.data = '-';
                 if (adq) adq.data = '-';
                 if (asq) asq.data = '-';
@@ -97,6 +101,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     Audit.online.findAuditInfo({
                         'auditor_id': auditor_id,
                         'current_stage': 'scheduled',
+                        'page': 1,
+                        'per_page': 1
                     }).$promise.then(function(data) {
                         saqMenu.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
@@ -104,7 +110,9 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (savqMenu) {
                     Audit.online.findAuditInfo({
-                        'current_stage': 'scheduled'
+                        'current_stage': 'scheduled',
+                        'page': 1,
+                        'per_page': 1
                     }).$promise.then(function(data) {
                         savqMenu.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
@@ -113,10 +121,14 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (daq) {
                     $q.all([
                         Audit.online.findAuditInfo({
-                            'current_stage': 'postpone'
+                            'current_stage': 'postpone',
+                            'page': 1,
+                            'per_page': 1
                         }).$promise,
                         Audit.online.findAuditInfo({
-                            'current_stage': 'cancel'
+                            'current_stage': 'cancel',
+                            'page': 1,
+                            'per_page': 1
                         }).$promise
                     ]).then(function(data) {
                         daq.data = (Number(data[0].headers['x-total-count']) || data[0].body.length) + (Number(data[1].headers['x-total-count']) || data[1].body.length);
@@ -126,7 +138,9 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     Audit.online.findAuditInfo({
                         'auditor_id': auditor_id,
                         'status': 'O',
-                        'audit_type': 1
+                        'audit_type': 1,
+                        'page': 1,
+                        'per_page': 1
                     }).$promise.then(function(data) {
                         oraq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
@@ -135,7 +149,9 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     Audit.online.findAuditInfo({
                         'auditor_id': auditor_id,
                         'audit_type': 0,
-                        'status': 'O'
+                        'status': 'O',
+                        'page': 1,
+                        'per_page': 1
                     }).$promise.then(function(data) {
                         osaq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
@@ -144,7 +160,9 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (doaq) {
                     Audit.online.findAuditInfo({
                         'current_stage': 'draft',
-                        'status': 'D'
+                        'status': 'D',
+                        'page': 1,
+                        'per_page': 1
                     }).$promise.then(function(data) {
                         doaq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
@@ -154,7 +172,9 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     Audit.online.findAuditInfo({
                         'auditor_id': auditor_id,
                         'current_stage': 'draft-review',
-                        'status': 'D'
+                        'status': 'D',
+                        'page': 1,
+                        'per_page': 1
                     }).$promise.then(function(data) {
                         daaq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
@@ -162,7 +182,9 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (pavq || paq) {
                     Audit.online.findAuditInfo({
-                        'current_stage': 'publish'
+                        'current_stage': 'publish',
+                        'page': 1,
+                        'per_page': 1
                     }).$promise.then(function(data) {
                         if (pavq) {
                             pavq.data = Number(data.headers['x-total-count']) || data.body.length;
@@ -175,7 +197,9 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (raq || ravq) {
                     Audit.online.findAuditInfo({
-                        'current_stage': 'L1-approve'
+                        'current_stage': 'L1-approve',
+                        'page': 1,
+                        'per_page': 1
                     }).$promise.then(function(data) {
                         if (raq) {
                             raq.data = Number(data.headers['x-total-count']) || data.body.length;
@@ -188,7 +212,9 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (aaq || aavq) {
                     Audit.online.findAuditInfo({
-                        'current_stage': 'approve'
+                        'current_stage': 'approve',
+                        'page': 1,
+                        'per_page': 1
                     }).$promise.then(function(data) {
                         if (aaq) {
                             aaq.data = Number(data.headers['x-total-count']) || data.body.length;
@@ -201,9 +227,21 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (reaq) {
                     Audit.online.findAuditInfo({
-                        'current_stage': 'reject'
+                        'current_stage': 'reject',
+                        'page': 1,
+                        'per_page': 1
                     }).$promise.then(function(data) {
                         reaq.data = Number(data.headers['x-total-count']) || data.body.length;
+                    });
+                }
+
+                if (eaq) {
+                    Audit.online.findAuditInfo({
+                        'current_stage': 'expired',
+                        'page': 1,
+                        'per_page': 1
+                    }).$promise.then(function(data) {
+                        eaq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
                 }
 
@@ -216,14 +254,17 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (asq) {
                     Audit.online.findAuditScores({
                         'page': 1,
-                        'per_page': 100
+                        'per_page': 1
                     }).$promise.then(function(data) {
                         asq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
                 }
 
                 if (avq) {
-                    Audit.online.findAuditInfo({}).$promise.then(function(data) {
+                    Audit.online.findAuditInfo({
+                        'page': 1,
+                        'per_page': 1
+                    }).$promise.then(function(data) {
                         avq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
                 }
@@ -231,7 +272,9 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (aiq) {
                     Audit.online.findIssues({
                         'current_stage': "assign",
-                        "assignee_designation_id": role_id
+                        "assignee_designation_id": role_id,
+                        'page': 1,
+                        'per_page': 1
                     }).$promise.then(function(data) {
                         aiq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
@@ -239,7 +282,9 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (aivq) {
                     Audit.online.findIssues({
-                        'current_stage': "assign"
+                        'current_stage': "assign",
+                        'page': 1,
+                        'per_page': 1
                     }).$promise.then(function(data) {
                         aivq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
@@ -247,7 +292,9 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
 
                 if (oiq || oivq) {
                     Audit.online.findIssues({
-                        'current_stage': 'close'
+                        'current_stage': 'close',
+                        'page': 1,
+                        'per_page': 1
                     }).$promise.then(function(data) {
                         if (oiq) {
                             oiq.data = Number(data.headers['x-total-count']) || data.body.length;
@@ -261,6 +308,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (ciq) {
                     Audit.online.findIssues({
                         'current_stage': "confirm",
+                        'page': 1,
+                        'per_page': 1
                     }).$promise.then(function(data) {
                         ciq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
@@ -269,6 +318,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (uciq) {
                     Audit.online.findIssues({
                         'current_stage': "unconfirm",
+                        'page': 1,
+                        'per_page': 1
                     }).$promise.then(function(data) {
                         uciq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });

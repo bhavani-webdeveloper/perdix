@@ -263,6 +263,13 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                         if ($stateParams.pageData.view == 'all' && $scope.model.ai.status != 'O' && $scope.model.ai.status != 'P') {
                             pageData.readonly = true;
                         }
+                        if ($scope.siteCode == 'KGFS') {
+                            if (menu.stateParams.pageName == 'audit.detail.ProcessCompliance') {
+                                pageData.readonly = $scope.model.ai.status !== 'O';
+                            } else {
+                                pageData.readonlyExceptComments = $scope.model.ai.status !== 'O';
+                            }
+                        }
                         pageData.type = $stateParams.pageData.type;
                         pageData.view = $stateParams.pageData.view;
                         if ($scope.$isOnline) {
@@ -281,9 +288,9 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
         });
 
         $scope.formName = irf.form($scope.pageName);
-
-
-        $scope.initialize = function(model, form, formCtrl) {};
+        $scope.initialize = function(model, form, formCtrl) {
+            model.siteCode = SessionStore.getGlobalSetting('siteCode');
+        };
         $scope.form = [{
             "type": "box",
             "title": "AUDIT_INFORMATION",
@@ -314,66 +321,11 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
             }, {
                 key: "ai.message",
                 type: "textarea",
-                "condition": "actions.showAddMessage(model)",
-                "required": true
-            }]
-        }, {
-            "type": "box",
-            "title": "AUDIT_REPORT",
-            "condition": "model.ai.status !== 'O'",
-            "items": [{
-                "key": "issueGroupType",
-                "type": "radios",
-                "titleMap": [{
-                    "name": "Process View",
-                    "value": "PROCESS"
-                },{
-                    "name": "File View",
-                    "value": "SAMPLE",
-                },{
-                    "name": "Risk Classification View",
-                    "value": "RISK"
-                }],
-                onChange: function(value, form, model) {
-                    $scope.model.report = reportView(value, 'draft'); // TODO: next phase dev: responsibilityType [draft|fix]
-                }
+                "condition": "(model.ai.current_stage == 'start' || model.ai.current_stage == 'create' || model.ai.current_stage == 'publish' || model.ai.current_stage == 'L1-approve') && !model.readonly && model.siteCode != 'KGFS'"
             }, {
-                "type": "tableview",
-                "condition": "model.report",
-                "key": "report",
-                "tableConfig": {
-                    "searching": false
-                },
-                getColumns: function() {
-                    return [{
-                        "title": "NAME",
-                        "data": 'name'
-                    }, {
-                        "title": "NO_OF_ISSUES",
-                        "data": 'count'
-                    }];
-                },
-                getActions: function() {
-                    return [{
-                        "name": "VIEW_ISSUES",
-                        fn: function(item, index, model) {
-                            irfNavigator.go({
-                                'state': 'Page.Engine',
-                                'pageName': 'audit.AuditIssues',
-                                'pageId': $this.auditId + ":" + item.type + ":" + item.id,
-                                'pageData': {
-                                    "readonly": $scope.model.readonly,
-                                    "type": $scope.model.type,
-                                    "report": item,
-                                    "stage": $scope.model.stage
-                                }
-                            });
-                        },
-                        isApplicable: function(item, index) {
-                            return true;
-                        }
-                    }];
-                }
+                key: "ai.message",
+                type: "textarea",
+                "condition": "(model.ai.current_stage == 'start' || model.ai.current_stage == 'create' || model.ai.current_stage == 'publish' || model.ai.current_stage == 'L1-approve') && !model.readonly && !model.ai._dirty && model.siteCode == 'KGFS'"
             }]
 
         }, {

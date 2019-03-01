@@ -37,7 +37,7 @@ insuranceSequenceList = insuranceSequenceDetailsRepository.findByBankIdAndDateAn
 			String stringLPad(String input, int lengthOfString, String padChar) {
 				String retVal = input;
 				if(retVal==null)
-				    retVal="";	
+				    retVal="";
 
 				int numStringLength = retVal.length();
 				if(numStringLength > lengthOfString){

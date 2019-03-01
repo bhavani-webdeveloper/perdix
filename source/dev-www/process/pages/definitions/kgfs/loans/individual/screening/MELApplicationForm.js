@@ -42,6 +42,38 @@ define(["perdix/domain/model/loan/LoanProcess",
                     }
                     return out;
                 },
+                "onAddNewTab": function(definition, bundleModel){ /* returns model on promise resolution. */
+                    var deferred = $q.defer();
+                    var model = null;
+                    var loanProcess = bundleModel.loanProcess;
+
+                    switch (definition.pageClass){
+                        case 'co-applicant':
+                            /* TODO Add new coApplicant to loan process and return the model accordingly */
+                            EnrolmentProcess.createNewProcess()
+                                .subscribe(function(enrolmentProcess) {
+                                    loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, LoanCustomerRelationTypes.CO_APPLICANT);
+                                    deferred.resolve({
+                                        enrolmentProcess: enrolmentProcess,
+                                        loanProcess: loanProcess
+                                    })
+                                });
+                            break;
+                        case 'guarantor':
+                            /* TODO Add new guarantor to loan process and return model accordingly */
+                            EnrolmentProcess.createNewProcess()
+                                .subscribe(function(enrolmentProcess) {
+                                    loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, LoanCustomerRelationTypes.GUARANTOR);
+                                    deferred.resolve({
+                                        enrolmentProcess: enrolmentProcess,
+                                        loanProcess: loanProcess
+                                    })
+                                });
+                            break;
+                    }
+                    deferred.resolve(model);
+                    return deferred.promise;
+                },
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
                     bundleModel.currentStage = "MELApplication";
@@ -69,6 +101,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     return;
                                 }
 
+                          
                                 $this.bundlePages.push({
                                     pageClass: 'MEL-Application',
                                     model: {
@@ -133,7 +166,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     }
 
                  },
-                eventListeners: {
+                 eventListeners: {
                     "load-address": function(pageObj, bundleModel, params){
                         BundleManager.broadcastEvent("load-address-business", params);
                     },
@@ -213,6 +246,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                         if(cbCustomer.customerId){
                             BundleManager.broadcastEvent('cb-check-update', cbCustomer);
                         }
+                    },
+                    "dsc-status":function(pageObj,bundlePageObj, obj){
+                        BundleManager.broadcastEvent('dsc-response',pageObj);
                     }
                 },
                 preSave: function(offlineData) {

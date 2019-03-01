@@ -33,6 +33,7 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
                     $stateParams.pageData.readonly = true;
                 }
                 model.readonly = $stateParams.pageData.readonly;
+                model.readonlyExceptComments = !!$stateParams.pageData.readonlyExceptComments;
                 model.audit_id = Number($stateParams.pageId);
                 var master = Audit.offline.getAuditMaster() || {};
                 model.portfolio_stats = model.portfolio_stats || {};
@@ -362,7 +363,7 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
                     self.form = [{
                         "type": "box",
                         "title": "CASH_HOLDING",
-                        "readonly": model.readonly,
+                        "readonly": model.readonly || model.readonlyExceptComments,
                         "items": [{
                             "key": "portfolio_stats.cash_holding.coin_balance",
                             "type": "number",
@@ -384,7 +385,7 @@ irf.pageCollection.factory(irf.page("audit.detail.PortfolioStats"), ["$log", "Pa
                     }, {
                         "type": "box",
                         "title": "GOLD_COIN_TALLY",
-                        "readonly": model.readonly,
+                        "readonly": model.readonly || model.readonlyExceptComments,
                         "items": goldCoinTallyBoxItems
                     }, {
                         "type": "box",
