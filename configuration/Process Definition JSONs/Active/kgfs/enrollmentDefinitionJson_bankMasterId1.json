@@ -707,6 +707,13 @@
                         "format": "date",
                         "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
+                    "udf32": {
+                        "title": "Spouse Aadhaar Number",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": ["Completed"]
+                    },
                     "careOf": {
                         "title": "Care Of",
                         "type": "string",

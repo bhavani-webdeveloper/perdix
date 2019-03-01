@@ -363,7 +363,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "title": "BUSINESS_INCOME",
                         onRemove: function (form, index, model) {
                             console.log(model)
-                            computeTotalMonthlySurpluse(1,2,model);
+                            computeTotalMonthlySurpluse("value","form",model);
                         },
                         "startEmpty":false
                     },
@@ -373,7 +373,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EnterpriseFinancials.incomeThroughSales.amount": {
                         onChange: function (value, form, model) {
-                            computeTotalMonthlySurpluse(value, form, model);
+                            computeTotalMonthlySurpluse("value","form", model);
                         }
                     },
                     "EnterpriseFinancials.incomeThroughSales.frequency": {
@@ -386,12 +386,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "title": "BUSINESS_EXPENSE",
                         onRemove: function (form, index, model) {
                             console.log(model)
-                            computeTotalMonthlySurpluse(1,2, model);
+                            computeTotalMonthlySurpluse("value","form", model);
                         },
                         "startEmpty":false
                     },
-                    "EnterpriseFinancials.rawMaterialExpenses.rawMaterialType": {
+                    "EnterpriseFinancials.rawMaterialExpenses.vendorName": {
                         "type": "select",
+                        "title":"INCOME_TYPE",
                         "enumCode": "businessExpenseType",
                         "orderNo": 521,
                     },
@@ -2121,7 +2122,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
 
                     "EnterpriseFinancials",
                     "EnterpriseFinancials.rawMaterialExpenses",
-                    "EnterpriseFinancials.rawMaterialExpenses.rawMaterialType",
+                    "EnterpriseFinancials.rawMaterialExpenses.vendorName",
                     "EnterpriseFinancials.rawMaterialExpenses.amount",
                     "EnterpriseFinancials.rawMaterialExpenses.frequency",
                     "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId",
@@ -2523,6 +2524,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     var centre = SessionStore.getCentres();
                     model.customer.centreId = centre[0].centreCode;
                     model.customer.centreName = centre[0].centreName;
+                    model.centreName = model.customer.centreName ;
                     var branchId = SessionStore.getBranchId();
                     if (branchId && !model.customer.customerBranchId) {
                         model.customer.customerBranchId = branchId;
@@ -2544,6 +2546,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         model.customer.enterprise = {}; 
                     }
                     model.customer.enterprise.businessType  = "Services";
+                    computeTotalMonthlySurpluse("value","form",model);
                     if(model.currentStage == 'CreditAppraisal'){
                         model.customer.enterprise.initialEstimateMonthlySale = (model.customer.enterprise.ssiNumber) ? Number(model.customer.enterprise.ssiNumber * 4):0;
                         if(model.customer.enterprise){
@@ -2784,12 +2787,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         model.enrolmentProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
+                                model.customer.centreName =  model.centreName
                             })
                             .subscribe(function () {
                                 model.loanProcess.refreshRelatedCustomers();
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 model.enrolmentProcess.proceed()
                                     .subscribe(function (enrolmentProcess) {
+                                        //model.customer.centreName = centre[0].centreName
                                         PageHelper.showProgress('enrolment', 'Done.', 5000);
                                     }, function (err) {
                                         PageHelper.showErrors(err);
@@ -2858,14 +2863,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         model.enrolmentProcess.proceed()
                             .finally(function () {
                                 PageHelper.hideLoader();
+                                model.customer.centreName = model.centreName
                             })
                             .subscribe(function (enrolmentProcess) {
-                                // LoanAccount.update(model.loanAccount).$promise.then(function (res) {
-                                //     PageHelper.showProgress('LoanAccount', 'Updated.', 5000);
-                                // }, function (err) {
-                                //     PageHelper.showErrors(err.message);
-                                // });
-                             //   formHelper.resetFormValidityState(form);
+                                model.customer.centreName =  model.customer.centreName
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
                                 $state.reload();
