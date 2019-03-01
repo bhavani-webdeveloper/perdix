@@ -2062,7 +2062,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "enumCode":"fixed_asset_type"
                     },
                     "Liabilities.liabilities.interestRate":{
-                        "type":"text",
+                        "type":"number",
                         //"enumCode":"rate_of_interest",
                     },
                     "KYC.additionalKYCs.kyc1ProofType":{
@@ -2220,7 +2220,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Liabilities.liabilities.liabilityLoanPurpose",
                     "Liabilities.liabilities.interestOnly",
                     "Liabilities.liabilities.interestRate",
-                    //"Liabilities.liabilities.liabilityType",
+                    // "Liabilities.liabilities.masonValuation",
                     
 
                     "HouseVerification",
@@ -2910,27 +2910,29 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "liabilities":{
                                             "items":{
                                                 "mortage": {
-                                                    "key": "Liabilities.liabilities.mortage",
+                                                    "key": "customer.liabilities[].udf1",
                                                     "title": "MORTAGE",
                                                     //"condition": "model.Liabilities.liabilities.loanType=='SECURED'",
                                                     "orderNo": 10
                                                 },
                                                 "mortageAmount": {
-                                                    "key": "customer.liabilities.mortageAmount",
+                                                    "key": "customer.liabilities[].mortageAmount",
                                                     "title": "MORTAGE_AMOUNT",
                                                     //"condition": "model.Liabilities.liabilities.loanType=='SECURED'",
                                                 },
                                                 "amountPaid":{
-                                                    "key":"customer.liabilities.principalExpense",
+                                                    "key":"customer.liabilities[].principalExpense",
                                                     "title":"AMOUNT_PAID"
                                                 },
                                                 "amountPaidInterest":{
-                                                    "key":"customer.liabilities.interestExpense",
+                                                    "key":"customer.liabilities[].interestExpense",
                                                     "title":"AMOUNT_PAID_INTEREST"
                                                 },
                                                 "masonValuation":{
-                                                    "key":"Liabilities.liabilities.masonValuation",
-                                                    "title":"MASON_VALUATION_DOCUMENT"
+                                                    "key":"customer.liabilities[].udf2",
+                                                    "title":"MASON_VALUATION_DOCUMENT",
+                                                    "type":"file",
+                                                    "fileType": "image/*",
                                                 }
                                                
                                             }
