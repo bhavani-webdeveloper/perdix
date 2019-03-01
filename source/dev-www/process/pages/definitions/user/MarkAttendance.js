@@ -186,7 +186,7 @@ irf.pageCollection.factory(irf.page("user.MarkAttendance"),
                                         };
                                     },
                                     onValidate: function(valueObj,status,form,model){
-                                       
+                                        model.customer.biometricAuthentication = valueObj.name + " "+ valueObj.type;
                                     }
                                 }
                          ]
@@ -248,7 +248,7 @@ irf.pageCollection.factory(irf.page("user.MarkAttendance"),
                             Queries.getBankName(model.bankId).then(function(data){
                                 model.user.bankName = data;
                                 // PageHelper.showLoader();
-                                PageHelper.showProgress("user-update", 'Working...');
+                                PageHelper.showProgress("user-update", 'Working...',4000);
 
                                 if (!(model.customer.fpOverrideRequested) && !(model.customer.isBiometricValidated)){
                                     PageHelper.hideLoader();
@@ -274,10 +274,12 @@ irf.pageCollection.factory(irf.page("user.MarkAttendance"),
                                                 .finally(function(){
                                                     PageHelper.hideLoader();
                                                 })
+                                            },function(httpResponse){
 
-                                        //}
-
-                                    })
+                                            })
+                                            .finally(function(){ 
+                                                PageHelper.hideBlockingLoader();
+                                            })
 
                             })
                         }
