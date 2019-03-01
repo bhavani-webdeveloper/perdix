@@ -108,7 +108,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         "items": [
                             {
                                 key: "previousPromise.customerCategoryLoanOfficer",
-                                title: "CUSTOMER_CATEGORY",
+                                title: "CUSTOMER_CATEGORY_LOAN_OFFICER",
                                 "condition": "model.previousPromise.customerCategoryLoanOfficer",
                             },
                             {
