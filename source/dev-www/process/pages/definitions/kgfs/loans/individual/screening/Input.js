@@ -57,6 +57,7 @@ define({
                         state: "Page.Bundle",
                         pageName: "kgfs.loans.individual.screening.ScreeningInput",
                         pageData: {
+                            "loanType":model.product.loanType,
                             "productCategory": model.product.productCategory
                         }
                     })

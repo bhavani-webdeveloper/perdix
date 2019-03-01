@@ -2373,7 +2373,7 @@
                     },
                     "vatNumber": {
                         "title": "GST_NUMBER",
-                        "type": "string",
+                        "type": "number",
                         "captureStages": ["BasicEnrolment","Completed"]
                     },
                     "ssiNumber": {
@@ -2792,24 +2792,24 @@
                         "registrationType": {
                             "title": "Registration Type",
                             "type": "string",
-                            "captureStages": ["BasicEnrolment,Completed"]
+                            "captureStages": ["BasicEnrolment","Completed"]
                         },
                         "registrationNumber": {
                             "title": "Registration Number",
                             "type": "number",
-                            "captureStages": ["BasicEnrolment,Completed"]
+                            "captureStages": ["BasicEnrolment","Completed"]
                         },
                         "registeredDate": {
                             "title": "Registration Date",
                             "type": "string",
                             "format": "date",
-                            "captureStages": ["BasicEnrolment,Completed"]
+                            "captureStages": ["BasicEnrolment","Completed"]
                         },
                         "expiryDate": {
                             "title": "Expiry Date",
                             "type": "string",
                             "format": "date",
-                            "captureStages": ["BasicEnrolment,Completed"]
+                            "captureStages": ["BasicEnrolment","Completed"]
                         },
                         "documentId":{
                             "type": "string",
@@ -2828,22 +2828,22 @@
                         "udf1": {
                             "title": "Business Type",
                             "type": "string",
-                            "captureStages": ["BasicEnrolment,Completed"]
+                            "captureStages": ["BasicEnrolment","Completed"]
                         },
                         "udf2": {
                             "title": "Business Activity",
                             "type": "string",
-                            "captureStages": ["BasicEnrolment,Completed"]
+                            "captureStages": ["BasicEnrolment","Completed"]
                         },
                         "udf3": {
                             "title": "Business Sector",
                             "type": "string",
-                            "captureStages": ["BasicEnrolment,Completed"]
+                            "captureStages": ["BasicEnrolment","Completed"]
                         },
                         "udf4": {
                             "title": "Expiry Date",
                             "type": "string",
-                            "captureStages": ["BasicEnrolment,Completed"]
+                            "captureStages": ["BasicEnrolment","Completed"]
                         }
                     }
                 }
