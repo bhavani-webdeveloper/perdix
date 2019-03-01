@@ -1246,7 +1246,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             }
                                         },
                                         "spouseAadharNumber":{
-                                            "key":"customer.aadhaarNo",
+                                            "key":"customer.udf32",
                                             "title": "SPOUSE_AADHAR_NUMBER",
                                             condition: "model.customer.maritalStatus==='MARRIED'",
                                             "type": "string",
