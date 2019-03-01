@@ -288,7 +288,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "IndividualInformation.religion":{
                             orderNo: 90,
-                            "type": "string",
+                            "type": "select",
                             "required": false
                         },
                         "IndividualInformation.language":{
@@ -1046,72 +1046,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "HouseVerification.houseDetailsFieldSet.diaryAnimals":{
                             inputmode: "number",
                             numberType: "tel"
-                        },
-                        "FamilyDetails.familyMembers.customerId": {
-                            key: "customer.familyMembers[].customerId",
-                            orderNo: 20,
-                            condition: "model.customer.familyMembers[arrayIndex].relationShip !== 'self'",
-                            type: "lov",
-                            "inputMap": {
-                                "firstName": {
-                                    "key": "customer.firstName",
-                                    "title": "CUSTOMER_NAME"
-                                },
-                                "branchName": {
-                                    "key": "customer.kgfsName",
-                                    "type": "select"
-                                }
-                            },
-                            "outputMap": {
-                                "id": "customer.familyMembers[arrayIndex].customerId",
-                                "firstName": "customer.familyMembers[arrayIndex].familyMemberFirstName"
-                            },
-                            "searchHelper": formHelper,
-                            "search": function (inputModel, form) {
-                                $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                var promise = Enrollment.search({
-                                    'branchName': inputModel.branchName || SessionStore.getBranch(),
-                                    'firstName': inputModel.firstName,
-                                }).$promise;
-                                return promise;
-                            },
-                            onSelect: function (valueObj, model, context) {
-                                var rowIndex = context.arrayIndex;
-                                PageHelper.showLoader();
-                                Enrollment.getCustomerById({
-                                    id: valueObj.id
-                                }, function (resp, header) {
-
-                                    model.customer.familyMembers[rowIndex].gender = resp.gender;
-                                    model.customer.familyMembers[rowIndex].dateOfBirth = resp.dateOfBirth;
-                                    model.customer.familyMembers[rowIndex].maritalStatus = resp.maritalStatus;
-                                    model.customer.familyMembers[rowIndex].age = moment().diff(moment(resp.dateOfBirth), 'years');
-                                    model.customer.familyMembers[rowIndex].mobilePhone = resp.mobilePhone;
-                                    model.customer.familyMembers[rowIndex].relationShip = "";
-
-                                    var selfIndex = _.findIndex(resp.familyMembers, function (o) {
-                                        return o.relationShip.toUpperCase() == 'SELF'
-                                    });
-
-                                    if (selfIndex != -1) {
-                                        model.customer.familyMembers[rowIndex].healthStatus = resp.familyMembers[selfIndex].healthStatus;
-                                        model.customer.familyMembers[rowIndex].educationStatus = resp.familyMembers[selfIndex].educationStatus;
-                                    }
-                                    PageHelper.hideLoader();
-                                    irfProgressMessage.pop("cust-load", "Load Complete", 2000);
-                                }, function (resp) {
-                                    PageHelper.hideLoader();
-                                    irfProgressMessage.pop("cust-load", "An Error Occurred. Failed to fetch Data", 5000);
-
-                                });
-
-                            },
-                            getListDisplayItem: function (data, index) {
-                                return [
-                                    [data.firstName, data.fatherFirstName].join(' '),
-                                    data.id
-                                ];
-                            }
                         },
                         "FamilyDetails.familyMembers.familyMemberFirstName":{
                             orderNo:10,

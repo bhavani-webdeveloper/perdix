@@ -74,7 +74,7 @@
                 "maxItems": 10,
                 "items": {
                     "type": "object",
-                    "required": ["familyMemberFirstName", "relationShip", "gender", "dateOfBirth", "educationStatus"],
+                    "required": ["familyMemberFirstName", "relationShip", "educationStatus"],
                     "properties": {
                         "familyMemberFirstName": {
                             "title": "First Name",
