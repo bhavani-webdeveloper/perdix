@@ -71,9 +71,9 @@ import java.time.*;
    
 		insuranceType = "Individual";
         
-        if(customerData != null){
+        if(customerData != null && loanAmount > 5000 ){
             gender = customerData.getGender();
-            birthdate = customerData.getDateOfBirth();
+            birthdate = customer.getDateOfBirth();
             ageOfCustomer = Period.between(birthdate, LocalDate.now()).getYears();
             portfolioInsuranceMaster = portfolioInsuranceMasterRepository.findByAgeAndGenderAndTenureInYearAndSumAssuredAndInsuranceTypeAndInsuranceRateCode(ageOfCustomer, gender, customerTenureInYear, loanAmount, insuranceType, insuranceRateCode);
             if(portfolioInsuranceMaster != null){
@@ -90,7 +90,7 @@ import java.time.*;
                 }
             }
         }        
-        if(loanProduct.getSpouseInsuranceRequired().equals("YES")){
+        if(loanProduct.getSpouseInsuranceRequired().equals("YES") && loanAmount > 5000){
             if(customerData != null){
                 spouseGender = null;
                 ageOfSpouseCustomer = null
@@ -123,4 +123,11 @@ import java.time.*;
                     }
                 }
             }
+        }
+if(spousePortFolioInsurancePremium != null && customerPortFolioInsurancePremium != null){
+        	portfolioInsurancePremium =   new BigDecimal(Math.round(spousePortFolioInsurancePremium + customerPortFolioInsurancePremium));
+        }else if (spousePortFolioInsurancePremium != null){
+        	portfolioInsurancePremium =   new BigDecimal(Math.round(spousePortFolioInsurancePremium));
+        }else if (customerPortFolioInsurancePremium != null){
+        	portfolioInsurancePremium =   new BigDecimal(Math.round(customerPortFolioInsurancePremium));
         }

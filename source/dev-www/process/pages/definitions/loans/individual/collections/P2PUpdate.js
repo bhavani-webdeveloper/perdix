@@ -125,6 +125,12 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                 }
                             },
                             {
+                                key:"previousPromise.contactable",
+                                title:"ACTION",
+                                "type":"select",
+                                "enumCode":"contactable"
+                            },
+                            {
                                 key: "previousPromise.udf1",
                                 title: "BUSINESS_RUNNING",
                             },

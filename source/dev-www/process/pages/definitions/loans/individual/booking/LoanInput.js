@@ -440,7 +440,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     $log.info(err);
                                 });
                         }
-
+                        debugger
+                        console.log(form);
                         init(model, form, formCtrl); // init call
                     }, function(errResp){
                         PageHelper.showErrors(errResp);
@@ -536,7 +537,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 "key": "loanAccount.frequency",
                                 "type":"select",
-                                "enumCode":"loan_product_frequency",
+                                "enumCode":"frequency",
                                 "required": true,
                                 onChange: function(value, form, model) {
                                     clearProduct(value, model);
@@ -547,16 +548,16 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "title": "PRODUCT",
                                 //"lovonly": true,
                                 "type": "lov",
-                                bindMap: {
-                                 "Partner": "loanAccount.partnerCode",
-                                 "ProductCategory": "loanAccount.productCategory",
-                                 "Frequency": "loanAccount.frequency",
-                                },
+                                // bindMap: {
+                                //  "Partner": "loanAccount.partnerCode",
+                                //  "ProductCategory": "loanAccount.productCategory",
+                                //  "Frequency": "loanAccount.frequency",
+                                // },
                                // autolov: true,
                                 required: true,
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model, context) {
-
+                                    debugger;
                                    return Queries.getLoanProductCode(model.loanAccount.productCategory,model.loanAccount.frequency,model.loanAccount.partnerCode,model.loanAccount.bankId);
                                 },
                                 onSelect: function(valueObj, model, context) {
@@ -1050,7 +1051,10 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 "key": "loanAccount.frequency",
                                 "type":"select",
-                                "enumCode":"loan_product_frequency"
+                                "enumCode":"loan_product_frequency",
+                                // onClick:function(model,form,valueObj){
+                                //     debugger;
+                                // }
                             },
                             {
                                 "key": "loanAccount.productCode",
