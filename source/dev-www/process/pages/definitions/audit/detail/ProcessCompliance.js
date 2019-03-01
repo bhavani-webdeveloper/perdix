@@ -126,7 +126,7 @@ irf.pageCollection.controller(irf.controller("audit.detail.ProcessCompliance"), 
                     "items": [{
                         "type": "button",
                         "condition": "!model._isOnline",
-                        "title": "Downloand Samples",
+                        "title": "DOWNLOAD_SAMPLES",
                         "icon": "fa fa-download",
                         "fieldHtmlClass": "pull-right",
                         "style": "btn-default",
