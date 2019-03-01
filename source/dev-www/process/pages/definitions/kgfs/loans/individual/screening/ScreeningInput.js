@@ -46,6 +46,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageName: 'kgfs.customer.EnterpriseEnrolment2',
                             title: 'BUSINESS',
                             pageClass: 'business',
+                            minimum: 1,
+                            maximum: 1,
                             order:40
                         },
                         {
@@ -198,16 +200,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             });
 
                     } else {
+                        if($stateParams.pageData){
+                            var productCategory = $stateParams.pageData.productCategory; 
+                        }
                         LoanProcess.createNewProcess()
                             .subscribe(function(loanProcess){
                                 loanProcess.loanAccount.currentStage = 'Screening';
                                 bundleModel.loanProcess = loanProcess;
-                                if($stateParams.pageData){
-                                    var productCategory = $stateParams.pageData.productCategory; 
-                                    loanProcess.loanAccount.loanType = $stateParams.pageData.loanType;
-                                    loanProcess.loanAccount.productCategory = productCategory;
-                                }
-                                
+                                loanProcess.loanAccount.productCategory = productCategory;
                                  if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
 
                                     var _leadId = $stateParams.pageData['lead_id'];
