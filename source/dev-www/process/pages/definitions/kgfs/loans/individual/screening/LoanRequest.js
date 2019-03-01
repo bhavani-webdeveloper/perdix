@@ -681,7 +681,6 @@ define([],function(){
                     "PreliminaryInformation",
                     "PreliminaryInformation.partner",
                     "PreliminaryInformation.productType",
-                    "PreliminaryInformation.productCategory",
                     "PreliminaryInformation.frequency",
                     "PreliminaryInformation.loanProduct",
                     "PreliminaryInformation.productName",
@@ -771,6 +770,7 @@ define([],function(){
                     model.review = model.review|| {};
                     model.loanAccount = model.loanProcess.loanAccount;
                     model.loanAccount.interestRateEstimatedEMI={};
+                    
                 
                     defaultConfiguration(model,true);
 
@@ -852,13 +852,6 @@ define([],function(){
                                                 "key":"loanAccount.loanType",
                                                 "title": "PRODUCT_TYPE",
                                                 "type": "select",
-                                                "orderNo": 9
-                                            },
-                                            "productCategory":{
-                                                "key":"loanAccount.productCategory",
-                                                "title": "PRODUCT_CATEGORY",
-                                                "type": "text",
-                                                "readonly":true,
                                                 "orderNo": 9
                                             },
                                             "frequency": {
