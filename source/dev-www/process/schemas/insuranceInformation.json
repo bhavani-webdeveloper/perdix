@@ -67,6 +67,48 @@
                ],
                "title":"URN_NO"
             },
+            "accountNumber":{  
+               "type":[  
+                  "string",
+                  "null"
+               ],
+               "title":"BENEFICERY_ACCOUNT_NUMBER"
+            },
+            "accountType":{  
+               "type":[  
+                  "string",
+                  "null"
+               ],
+               "title":"ACCOUNT_TYPE"
+            },
+            "ifscCode":{  
+               "type":[  
+                  "string",
+                  "null"
+               ],
+               "title":"IFSC_CODE"
+            },
+            "customerNameAsInBank":{  
+               "type":[  
+                  "string",
+                  "null"
+               ],
+               "title":"CUSTOMER_NAME_AS_IN_BANK"
+            },
+            "customerBankName":{  
+               "type":[  
+                  "string",
+                  "null"
+               ],
+               "title":"CUSTOMER_BANK_NAME"
+            },
+            "customerBankBranchName":{  
+               "type":[  
+                  "string",
+                  "null"
+               ],
+               "title":"CUSTOMER_BANK_BRANCH_NAME"
+            },
             "fullName":{  
                "type":[  
                   "string",

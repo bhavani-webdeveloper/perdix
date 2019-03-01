@@ -74,7 +74,7 @@
                 "maxItems": 10,
                 "items": {
                     "type": "object",
-                    "required": ["familyMemberFirstName", "relationShip", "gender", "dateOfBirth", "educationStatus"],
+                    "required": ["familyMemberFirstName", "relationShip", "educationStatus"],
                     "properties": {
                         "familyMemberFirstName": {
                             "title": "First Name",
@@ -706,6 +706,13 @@
                         "type": "string",
                         "format": "date",
                         "captureStages": ["Stage01","Stage02" ,"Completed"]
+                    },
+                    "udf32": {
+                        "title": "Spouse Aadhaar Number",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": ["Completed"]
                     },
                     "careOf": {
                         "title": "Care Of",

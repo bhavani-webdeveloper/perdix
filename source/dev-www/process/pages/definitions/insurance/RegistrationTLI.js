@@ -88,8 +88,12 @@ var getIncludes = function (model) {
                    "InsurancePolicyInformation.insuranceRecommendations",
                    "InsurancePolicyInformation.recommendationStatus",
                    "InsurancePolicyInformation.question",
-                   
-                   
+                   "InsurancePolicyInformation.accountNumber",
+                   "InsurancePolicyInformation.accountType",
+                   "InsurancePolicyInformation.customerNameAsInBank",
+                   "InsurancePolicyInformation.ifscCode",
+                   "InsurancePolicyInformation.customerBankName",
+                   "InsurancePolicyInformation.customerBankBranchName",                
 
 
                    "InsuranceNomineeDetails",
@@ -130,7 +134,7 @@ var getIncludes = function (model) {
 
            return {
                "type": "schema-form",
-               "title": "INSURANCE_REGISTRATION",
+               "title": "INSURANCE_REGISTRATION_TLI",
              
                initialize: function (model, form, formCtrl) {
                    model.customer = {};
@@ -458,6 +462,7 @@ var getIncludes = function (model) {
                                    model.insurancePolicyDetailsDTO.startDate = moment(new Date()).format(SessionStore.getSystemDateFormat());
                                    model.insurancePolicyDetailsDTO.moduleConfigId = result.moduleConfigId
                                },
+                               
                                getListDisplayItem : function(item,index){
                                    return[
                                        item.productCode +" "+ item.partnerCode
@@ -465,7 +470,36 @@ var getIncludes = function (model) {
                                }
                                
                            },
+                           "InsurancePolicyInformation.accountNumber" : {
+                            "key" : "insurancePolicyDetailsDTO.accountNumber",
+                            "type" : "lov",
+                            /*"autolov" : true,*/
+                            "required" :  true,
+                            "title" : "BENEFIECIARY_ACCOUNT_NUMBER",
+                            search : function(inputModel,form,model,context){
+                                return Queries.getCustomerBankAccounts(
+                                    model.insurancePolicyDetailsDTO.customerId
+                                );
+                            },
+                            onSelect : function(result,model,context){
+                                model.insurancePolicyDetailsDTO.accountNumber = result.account_number,
+                                model.insurancePolicyDetailsDTO.customerBankName = result.customer_bank_name,
+                                model.insurancePolicyDetailsDTO.customerBankBranchName = result.customer_bank_branch_name,
+                                model.insurancePolicyDetailsDTO.ifscCode = result.ifsc_code,
+                                model.insurancePolicyDetailsDTO.accountType = result.account_type,
+                                model.insurancePolicyDetailsDTO.customerNameAsInBank = result.customer_name_as_in_bank
+                                
+                            },
+                            getListDisplayItem : function(item,index){
+                                return[
+                                    item.account_number +" - "+ item.ifsc_code
+                                ];
+                            }
+                            
+                        },
+                       
                            "InsurancePolicyInformation.sumInsured" : {
+                               "enumCode" : "tli_premium_amounts",
                                "onChange" : function(modelValue, form, model){
                                 PageHelper.showLoader();
 

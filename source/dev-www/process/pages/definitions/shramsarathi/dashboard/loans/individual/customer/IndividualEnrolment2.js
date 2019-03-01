@@ -2062,8 +2062,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "enumCode":"fixed_asset_type"
                     },
                     "Liabilities.liabilities.interestRate":{
-                        "type":"select",
-                        "enumCode":"rate_of_interest",
+                        "type":"text",
+                        //"enumCode":"rate_of_interest",
                     },
                     "KYC.additionalKYCs.kyc1ProofType":{
                         "enumCode":"age_proof",
@@ -2110,8 +2110,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "KYC.additionalKYCs.kyc1ValidUptoDate",
 
                     "IndividualInformation",
-                    "IndividualInformation.groupID",
-                    "IndividualInformation.groupName",
+                    // "IndividualInformation.groupID",
+                    // "IndividualInformation.groupName",
                     "IndividualInformation.customerBranchId",
                     "IndividualInformation.centreId",
                     "IndividualInformation.centreId1",
@@ -3142,19 +3142,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             parentEnumCode: "branch_id",
                                             orderNo: 12,
                                             parentValueExpr: "model.customer.customerBranchId",
-                                        },
-                                        "groupName": {
-                                            "key": "loanAccount.groupName",
-                                            "title": "GROUP_NAME",
-                                            "type": "string",
-                                            "orderNo": 50
-                                        },
-                                        "groupID": {
-                                            "key": "loanAccount.jlgGroupId ",
-                                            "title": "GROUP_ID",
-                                            "type": "string",
-                                            "orderNo": 40,
                                         }
+                                        // "groupName": {
+                                        //     "key": "loanAccount.groupName",
+                                        //     "title": "GROUP_NAME",
+                                        //     "type": "string",
+                                        //     "orderNo": 50
+                                        // },
+                                        // "groupID": {
+                                        //     "key": "loanAccount.jlgGroupId ",
+                                        //     "title": "GROUP_ID",
+                                        //     "type": "string",
+                                        //     "orderNo": 40,
+                                        // }
                                     }
                                 },
                                 "PhysicalAssets":{

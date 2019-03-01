@@ -1177,6 +1177,9 @@ define([],function(){
             }
              var overridesFields = function (bundlePageObj) {
                 return {
+                    "PreliminaryInformation.frequencyRequested":{
+                        "required":true
+                    },
                     // "PostReview.reject.rejectReason":{
                     //     "enumCode":"loan_rejection_reason"
                     // },
@@ -1475,6 +1478,8 @@ define([],function(){
                     "PreliminaryInformation",
                     "PreliminaryInformation.transactionType",
                     "PreliminaryInformation.transactionType2",
+                    "PreliminaryInformation.groupID",
+                    "PreliminaryInformation.groupName",
                     "PreliminaryInformation.linkedAccountNumber",
                     "PreliminaryInformation.linkedAccountNumber1",
                     "PreliminaryInformation.baseLoanAccount",
@@ -1818,6 +1823,18 @@ define([],function(){
                                                 "htmlClass": "alert alert-warning",
                                                 "condition": "model.applicant.age1 >= 41 && model.applicant.age1 <= 60 && model.loanAccount.loanAmountRequested >= 2000001 && model.loanAccount.loanAmountRequested <= 3000000 || model.applicant.age1 >= 61 && model.applicant.age1 <= 65 && model.loanAccount.loanAmountRequested < 3000000",
                                                 "html":"<h4><i class='icon fa fa-warning'></i>Medical Test is Mandatory</h4>"
+                                            },
+                                            "groupName": {
+                                                "key": "loanAccount.groupName",
+                                                "title": "GROUP_NAME",
+                                                "type": "string",
+                                                "orderNo": 41
+                                            },
+                                            "groupID": {
+                                                "key": "loanAccount.jlgGroupId ",
+                                                "title": "GROUP_ID",
+                                                "type": "string",
+                                                "orderNo": 40,
                                             }
                                           
                                         }
