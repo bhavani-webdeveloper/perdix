@@ -1177,6 +1177,9 @@ define([],function(){
             }
              var overridesFields = function (bundlePageObj) {
                 return {
+                    "PreliminaryInformation.frequencyRequested":{
+                        "required":true
+                    },
                     // "PostReview.reject.rejectReason":{
                     //     "enumCode":"loan_rejection_reason"
                     // },
