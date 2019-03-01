@@ -117,7 +117,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                             }
                         },
-                        "LosDSCOverride":{
+                        "DSCOverride":{
                             "overrides":{
                                 "IndividualInformation":{
                                     "readonly":true

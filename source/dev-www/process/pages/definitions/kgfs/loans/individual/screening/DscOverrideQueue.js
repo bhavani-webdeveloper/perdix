@@ -58,7 +58,7 @@ define({
 
                 getResultsPromise: function (searchOptions, pageOpts) {
                     var promise = IndividualLoan.search({
-                        'stage': 'LosDSCOverride',
+                        'stage': 'DSCOverride',
                         'branchId': searchOptions.branch,
                         'centreCode': searchOptions.centre,
                         'urn': searchOptions.customerUrnNo,

@@ -384,7 +384,7 @@ define([],function(){
                             }
 
                         },
-                        "LosDSCOverride":{
+                        "DSCOverride":{
                             "overrides":{
                                 "PreliminaryInformation":{
                                     "readonly":true
@@ -1147,7 +1147,7 @@ define([],function(){
                                 "additions": [
                                     {
                                         "type": "actionbox",
-                                        "condition": "model.loanAccount.currentStage !='Rejected' && model.loanAccount.currentStage !='KYCCheck' && model.loanAccount.currentStage !='DSCApproval' && model.loanAccount.currentStage !='LosDSCOverride' ",
+                                        "condition": "model.loanAccount.currentStage !='Rejected' && model.loanAccount.currentStage !='KYCCheck' && model.loanAccount.currentStage !='DSCApproval' && model.loanAccount.currentStage !='DSCOverride' ",
                                         "orderNo": 1000,
                                         "items": [
                                             {

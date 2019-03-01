@@ -359,7 +359,7 @@ define([], function () {
                                     },
                                     {
                                         "type": "section",
-                                        "condition" : "model.loanAccount.currentStage == 'LosDSCOverride'",
+                                        "condition" : "model.loanAccount.currentStage == 'DSCOverride'",
                                         items: [
                                             {
                                                 title: "REMARKS",

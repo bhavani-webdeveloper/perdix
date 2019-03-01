@@ -131,7 +131,7 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanOriginationDashboar
              var doqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.DscOverrideQueue"];
             if (doqMenu) {
                 IndividualLoan.search({
-                    'stage': 'LosDscOverride',
+                    'stage': 'DSCOverride',
                     'enterprisePincode': '',
                     'applicantName': '',
                     'area': '',

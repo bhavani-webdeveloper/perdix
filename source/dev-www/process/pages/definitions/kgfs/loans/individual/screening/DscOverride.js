@@ -101,7 +101,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 },
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
-                    bundleModel.currentStage = "LosDSCOverride";
+                    bundleModel.currentStage = "DSCOverride";
                     var deferred = $q.defer();
 
                     var $this = this;
@@ -202,7 +202,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 },
                 "post_pages_initialize": function(bundleModel){
                     $log.info("Inside post_page_initialize");
-                    BundleManager.broadcastEvent('origination-stage', 'LosDSCOverride');
+                    BundleManager.broadcastEvent('origination-stage', 'DSCOverride');
                     if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
                         PageHelper.showLoader();
                         PageHelper.showProgress("KYC-input", 'Loading lead details');
