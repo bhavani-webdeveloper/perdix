@@ -2556,8 +2556,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "from":{
                                                     "key":"customer.expenditures[].expenseFrom",
                                                     "title":"EXPENSE_FROM",
-                                                    "type":"select",
-                                                    "enumCode":"expense_type"
+                                                    "type":"date"
+                                                    // ,"enumCode":"expense_type"
                                                 },
                                             }
                                         },
