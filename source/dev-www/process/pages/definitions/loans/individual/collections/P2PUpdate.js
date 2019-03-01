@@ -108,7 +108,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                         "items": [
                             {
                                 key: "previousPromise.customerCategoryLoanOfficer",
-                                title: "CUSTOMER_CATEGORY_LOAN_OFFICER",
+                                title: "CUSTOMER_CATEGORY",
                                 "condition": "model.previousPromise.customerCategoryLoanOfficer",
                             },
                             {
@@ -123,6 +123,12 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                 schema: {
                                     default: false
                                 }
+                            },
+                            {
+                                key:"previousPromise.contactable",
+                                title:"ACTION",
+                                "type":"select",
+                                "enumCode":"contactable"
                             },
                             {
                                 key: "previousPromise.udf1",
