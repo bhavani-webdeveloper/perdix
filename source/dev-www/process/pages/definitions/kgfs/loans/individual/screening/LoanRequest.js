@@ -942,12 +942,12 @@ define([],function(){
                                             "marketValueOfAsset":{
                                                 "key": "loanAccount.collateral[].udf2",
                                                 "title":"MARKET_VALUE_OF_ASSET",
-                                                "type":"numeric"
+                                                "type":"number",
                                             },
                                             "timeSinceTheAssetIsOwned":{
                                                 "key": "loanAccount.collateral[].udf3",
                                                 "title":"TIME_SINCE_THE_ASSET_IS_OWNED",
-                                                "type":"amount"
+                                                "type":"number"
                                             },
                                             "collateralDocuments":{
                                                 "title":"COLLATERAL_DOCUMENTS",
@@ -1244,8 +1244,6 @@ define([],function(){
                         if (!model.loanAccount.id){
                             model.loanAccount.isRestructure = false;
                             model.loanAccount.documentTracking = "PENDING";
-                            model.loanAccount.psychometricCompleted = "NO";
-
                         }
 
                         if(!(validateCoGuarantor(model.additions.co_borrower_required,model.additions.number_of_guarantors,'validate',model.loanAccount.loanCustomerRelations,model)))
@@ -1279,7 +1277,6 @@ define([],function(){
                          if (!model.loanAccount.id){
                             model.loanAccount.isRestructure = false;
                             model.loanAccount.documentTracking = "PENDING";
-                            model.loanAccount.psychometricCompleted = "NO";
 
                         }
                         model.loanAccount.status = "HOLD";

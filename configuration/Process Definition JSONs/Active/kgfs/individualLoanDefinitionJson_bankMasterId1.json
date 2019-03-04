@@ -3589,7 +3589,7 @@
  
                    "udf2":{
                       "title":"udf2",
-                      "type":"string",
+                      "type":"number",
                       "captureStages":[
                          "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
                       ]
@@ -3597,7 +3597,7 @@
  
                    "udf3":{
                       "title":"udf3",
-                      "type":"string",
+                      "type":"number",
                       "captureStages":[
                          "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
                       ]
