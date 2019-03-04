@@ -16,25 +16,26 @@ irf.pages.controller("JewelDashboardCtrl",['$log', '$scope', 'PagesDefinition', 
 
          PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
 		 	$scope.dashboardDefinition = resp;
-		 	var branch = SessionStore.getCurrentBranch();
+		 	var branch = SessionStore.getBranchId();
 		        
 
 			 var jlqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/jewelloan.BranchJewelQueue"];
 			 if (jlqMenu) {
 				jlqMenu.data = 0;	 
-			 	JewelLoan.search({
-			 		        'accountNumber': '',
-			 		        'currentStage':"JewelLoanSummary",
-			 		        'monitoringType':"JewelLoan",
-			 		        'branchName': branch.branchName,
-			 		        'page': 1,
-			 		        'per_page': 1,
-			 		        'urnNo': '',
-                            'transitStatus': '',
-                            'fromDate': '' , 
-                            'toDate'  :  ''
-			 	}).$promise.then(function(response, headerGetter) {
-			 		jlqMenu.data = Number(response.headers['x-total-count']);
+				JewelLoan.search({
+					"originBranchid"	    : branch,
+					'currentStage'		    : "BranchJewelQueue",
+					//"fromDate"		    : '',
+					//"toDate"			    : '',	
+					//"urnNo"			    : '',
+					//"accountNo"		    : '',
+					//"transitStatus"       : '',
+					//"sourceBranchId"	    : originBranchId,	
+					//"destinationBranchId" : originBranch
+					// 'page'               : 1,
+                    // 'per_page'           : 1,
+					}).$promise.then(function(response, headerGetter) {
+			 		jlqMenu.data = response.headers['x-total-count'];
 			 	}, function() {
 			 		jlqMenu.data = '-';
 			 	});
@@ -44,16 +45,17 @@ irf.pages.controller("JewelDashboardCtrl",['$log', '$scope', 'PagesDefinition', 
 			var ptqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/jewelloan.PendingTransitQueue"];
 			if (ptqMenu) {
 				JewelLoan.search({
-							'accountNumber': '',
-							'currentStage':"PendingTransit",
-							'monitoringType':"JewelLoan",
-							'branchName': branch.branchName,
-							'page': 1,
-							'per_page': 1,
-							'urnNo': '',
-							'transitStatus': '',
-							'fromDate': '' , 
-							'toDate'  :  ''
+							"originBranchid"	  	: branch,
+							'currentStage'			:"PendingTransit",
+							//"fromDate"			: '',
+							//"toDate"			  	: '',	
+							//"urnNo"				: '',
+							//"accountNo"			: '',
+							"transitStatus"		    : 'PENDING_TRANSIT',
+							//"sourceBranchId"	    : originBranchId,	
+							//"destinationBranchId" : originBranch
+							// 'page': 1,
+							// 'per_page': 1,
 						}).$promise.then(function(response, headerGetter) {
 							ptqMenu.data = response.headers['x-total-count'];
 						}, function() {
@@ -64,35 +66,37 @@ irf.pages.controller("JewelDashboardCtrl",['$log', '$scope', 'PagesDefinition', 
 			var itqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/jewelloan.IncomingTransitQueue"];		
 			if (itqMenu) {
 				JewelLoan.search({
-							'accountNumber': '',
-							'currentStage':"PendingTransit",
-							'monitoringType':"JewelLoan",
-							'branchName': branch.branchName,
-							'page': 1,
-							'per_page': 1,
-							'urnNo': '',
-							'transitStatus': '',
-							'fromDate': '' , 
-							'toDate'  :  ''
+							"originBranchid"	  	: branch,
+							'currentStage'			:"IncomingTransit",
+							//"fromDate"			: '',
+							//"toDate"			  	: '',	
+							//"urnNo"				: '',
+							//"accountNo"			: '',
+							 "transitStatus"		: 'IN_TRANSIT',
+							//"sourceBranchId"	    : originBranchId,	
+							//"destinationBranchId" : originBranch
+							// 'page'				: 1,
+							// 'per_page'			: 1,
 						}).$promise.then(function(response, headerGetter) {
 							itqMenu.data = response.headers['x-total-count'];
 						}, function() {
 							itqMenu.data = '-';
 						});
 					}
-			var rrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/jewelloan.ReturnRequestQueues"];		
+			var rrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/jewelloan.ReturnRequestQueue"];		
 			if (rrqMenu) {
 				JewelLoan.search({
-							'accountNumber': '',
-							'currentStage':"PendingTransit",
-							'monitoringType':"JewelLoan",
-							'branchName': branch.branchName,
-							'page': 1,
-							'per_page': 1,
-							'urnNo': '',
-							'transitStatus': '',
-							'fromDate': '' , 
-							'toDate'  :  ''
+							"originBranchid"	  	: branch,
+							'currentStage'			:"ReturnRequest",
+							//"fromDate"			: '',
+							//"toDate"			  	: '',	
+							//"urnNo"				: '',
+							//"accountNo"			: '',
+							"transitStatus"			: 'RETURN_REQUEST',
+							//"sourceBranchId"	    : originBranchId,	
+							//"destinationBranchId" : originBranch
+							// 'page'				: 1,
+							// 'per_page'			: 1,
 						}).$promise.then(function(response, headerGetter) {
 							rrqMenu.data = response.headers['x-total-count'];
 						}, function() {

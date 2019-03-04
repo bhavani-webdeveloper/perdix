@@ -4,22 +4,16 @@ irf.models.factory('JewelLoan',
 
 		var endpoint = BASE_URL + '/api/jewelPouch';
 		var resource = $resource(endpoint, null, {
-
 			search: searchResource({
 				method: 'GET',
-				url: 'process/models/v1/jewelloan/jewelList.json'//  endpoint + '/jewelList'
+				url: endpoint + '/find'
 			}),
 			bulkJewelStatusUpdate:{
-				method: 'POST',
+				method: 'PUT',
+				isArray:true,
 				url: endpoint + '/bulkUpdate'
-			}, 
-			findJewelPouch : {
-				method:'GET',
-				url:'process/models/v1/jewelloan/jewelList.json',
-				isArray:true
 			}
 		});
-		 
 		return resource;
 	}
 ]);
