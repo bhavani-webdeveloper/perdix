@@ -60,7 +60,7 @@ function(LeadProcess, AngularResourceService) {
                     "leadProfile.leadDetails": {
                         "orderNo" : 15,
                     },
-                    "leadProfile.leadDetails.individualDetails.gender": {
+                    "leadProfile.individualDetails.gender": {
                         "required": true
                     },
                     "leadProfile.individualDetails.existingApplicant":{
@@ -578,9 +578,15 @@ function(LeadProcess, AngularResourceService) {
                         return deferred.promise;
                     },
 
-                    submit: function(model, form, formName) {
+                    submit: function(model, formCtrl, form, formName) {
                         $log.info("Inside submit()");
                         PageHelper.showLoader();
+                        
+                        formCtrl.scope.$broadcast('schemaFormValidate');
+					    if(!formCtrl.$valid){
+                            PageHelper.showProgress('form-error', 'Your form have errors. Please fix them.',5000);
+                            return
+                        }
 
                         var reqData = _.cloneDeep(model);
                         var centres = formHelper.enum('centre').data;

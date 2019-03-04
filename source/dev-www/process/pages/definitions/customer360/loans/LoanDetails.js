@@ -28,6 +28,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                 var allExistingDocs = []; 
                 var newLoanDocuments=[];
                 //
+
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
                 model.transactions=model.transactions||{};
                 var loanAccountId = $stateParams.pageId;
@@ -42,6 +43,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                 model.reqData.loanAccount.loanDocuments = model.reqData.loanAccount.loanDocuments || [];
                 PageHelper.showLoader();
                 model.pageConfig = {};
+                model.additional = {"isLoanDocBox":true};
 
                 PagesDefinition.getRolePageConfig("Page/Engine/customer360.loans.LoanDetails")
                     .then(function(data){
@@ -64,7 +66,17 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     .$promise
                     .then(function(res) {
                         model.loanAccount = res;
-                       
+                        if (model.loanAccount.loanType == "JLG"){
+                            if (model.loanAccount.loanDocuments.length>0){
+                                model.additional.isLoanDocBox = true;
+                            }
+                            else{
+                                model.additional.isLoanDocBox = false;
+                            }
+                        }
+                        else{
+                            model.additional.isLoanDocBox = true;
+                        }
                         uploadedExistingDocs=res.loanDocuments;
                       
                         model.loanAccount.processingFee = model.loanAccount.processingFeeInPaisa ? model.loanAccount.processingFeeInPaisa/100 : 0;
@@ -546,11 +558,13 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             }
                         }
                         $q.all(promiseArray).finally(function() {
-
+                            console.log("Form");
+                            console.log(form);
                         PageHelper.hideLoader();
                         })
                     }, function(err){
                         PageHelper.showErrors(err);
+                        model.additional.isLoanDocBox = true;
                         PageHelper.hideLoader();
                     });
                 // model.showmessageHistory = false;
@@ -2025,7 +2039,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                 {
                     "type": "box",
                     "title": "LOAN_DOCUMENTS",
-                    "condition": 'model.loanAccount.loanType != "JLG"',
+                    "condition": 'model.additional.isLoanDocBox',
                     "items": [{
                                 "type": "fieldset",
                                 "title": "EXISTING_LOAN_DOCUMENTS",
