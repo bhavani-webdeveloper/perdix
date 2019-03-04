@@ -29,17 +29,21 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 "Page/Engine/audit.ReviewedAuditsViewQueue",
                 "Page/Engine/audit.ApprovedAuditsQueue",
                 "Page/Engine/audit.ApprovedAuditsViewQueue",
+                "Page/Engine/audit.ApprovedBranchAuditsViewQueue",
                 "Page/Engine/audit.RejectedAuditsQueue",
                 "Page/Engine/audit.ExpiredAuditsQueue",
                 "Page/Engine/audit.AuditDumpsQueue",
                 "Page/Engine/audit.AuditScoresQueue",
                 "Page/Engine/audit.AuditsViewQueue",
                 "Page/Engine/audit.AssignedIssuesQueue",
+                "Page/Engine/audit.AssignedBranchIssuesQueue",
                 "Page/Engine/audit.AssignedIssuesViewQueue",
                 "Page/Engine/audit.OutstandingIssuesQueue",
                 "Page/Engine/audit.OutstandingIssuesViewQueue",
                 "Page/Engine/audit.ConfirmedIssuesQueue",
-                "Page/Engine/audit.UnconfirmedIssuesQueue"
+                "Page/Engine/audit.ConfirmedBranchIssuesQueue",
+                "Page/Engine/audit.UnconfirmedIssuesQueue",
+                "Page/Engine/audit.UnconfirmedBranchIssuesQueue"
             ]
         }).then(function(resp) {
             $scope.dashboardDefinition = resp;
@@ -59,17 +63,21 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 var ravq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ReviewedAuditsViewQueue"];
                 var aaq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ApprovedAuditsQueue"];
                 var aavq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ApprovedAuditsViewQueue"];
+                var abavq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ApprovedBranchAuditsViewQueue"];
                 var reaq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.RejectedAuditsQueue"];
                 var eaq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ExpiredAuditsQueue"];
                 var adq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.AuditDumpsQueue"];
                 var asq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.AuditScoresQueue"];
                 var avq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.AuditsViewQueue"];
                 var aiq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.AssignedIssuesQueue"];
+                var abiq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.AssignedBranchIssuesQueue"];
                 var aivq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.AssignedIssuesViewQueue"];
                 var oiq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.OutstandingIssuesQueue"];
                 var oivq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.OutstandingIssuesViewQueue"];
                 var ciq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ConfirmedIssuesQueue"];
+                var cbiq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ConfirmedBranchIssuesQueue"];
                 var uciq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.UnconfirmedIssuesQueue"];
+                var ucbiq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.UnconfirmedBranchIssuesQueue"];
 
                 if (saqMenu) saqMenu.data = '-';
                 if (savqMenu) savqMenu.data = '-';
@@ -84,6 +92,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (ravq) ravq.data = '-';
                 if (aaq) aaq.data = '-';
                 if (aavq) aavq.data = '-';
+                if (abavq) abavq.data = '-';
                 if (reaq) reaq.data = '-';
                 if (eaq) eaq.data = '-';
                 if (raq) raq.data = '-';
@@ -91,11 +100,14 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (asq) asq.data = '-';
                 if (avq) avq.data = '-';
                 if (aiq) aiq.data = '-';
+                if (abiq) abiq.data = '-';
                 if (aivq) aivq.data = '-';
                 if (oiq) oiq.data = '-';
                 if (oivq) oivq.data = '-';
                 if (ciq) ciq.data = '-';
+                if (cbiq) cbiq.data = '-';
                 if (uciq) uciq.data = '-';
+                if (ucbiq) uciq.data = '-';
 
                 if (saqMenu) {
                     Audit.online.findAuditInfo({
@@ -225,6 +237,19 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     });
                 }
 
+                if (aaq || abavq) {
+                    Audit.online.getAuditList({
+                        'current_stage': 'approve'
+                    }).$promise.then(function(data) {
+                        if (abaq) {
+                            aaq.data = data.body.length;
+                        }
+                        if (abavq) {
+                            aavq.data = data.body.length;
+                        }
+                    });
+                }
+
                 if (reaq) {
                     Audit.online.findAuditInfo({
                         'current_stage': 'reject',
@@ -280,6 +305,15 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     });
                 }
 
+                if (abiq) {
+                    Audit.online.getIssuesList({
+                        'current_stage': "assign",
+                        "assignee_designation_id": role_id
+                    }).$promise.then(function(data) {
+                        abiq.data = Number(data.headers['x-total-count']) || data.body.length;
+                    });
+                }
+
                 if (aivq) {
                     Audit.online.findIssues({
                         'current_stage': "assign",
@@ -315,6 +349,14 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     });
                 }
 
+                if (cbiq) {
+                    Audit.online.getIssuesList({
+                        'current_stage': "confirm",
+                    }).$promise.then(function(data) {
+                        cbiq.data = Number(data.headers['x-total-count']) || data.body.length;
+                    });
+                }
+
                 if (uciq) {
                     Audit.online.findIssues({
                         'current_stage': "unconfirm",
@@ -322,6 +364,14 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         'per_page': 1
                     }).$promise.then(function(data) {
                         uciq.data = Number(data.headers['x-total-count']) || data.body.length;
+                    });
+                }
+
+                if (ucbiq) {
+                    Audit.online.getIssuesList({
+                        'issue_status': "P",
+                    }).$promise.then(function(data) {
+                        ucbiq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
                 }
             }
