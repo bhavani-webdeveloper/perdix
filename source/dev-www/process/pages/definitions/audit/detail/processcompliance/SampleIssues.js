@@ -618,7 +618,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                 "properties": {
                     "branch_id": {
                         "title": "BRANCH",
-                        "type": ["null", "string"],
+                        "type": ["string","null"],
                         "enumCode": "branch",
                         "x-schema-form": {
                             "type": "select"
@@ -634,7 +634,7 @@ irf.pageCollection.factory(irf.page("audit.detail.processcompliance.SampleIssues
                     },
                     "role_id": {
                         "title": "ROlE_ID",
-                        "type": ["null", "number"],
+                        "type": ["number","null"],
                         "enumCode": "roles",
                         "x-schema-form": {
                             "type": "select"
