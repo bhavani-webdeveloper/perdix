@@ -306,7 +306,7 @@
    },
 
    "Centre Master":{  
-      "table":"Centre_master",
+      "table":"centre_master",
       "enableTruncate":false,
       "columns":[  
          {  
