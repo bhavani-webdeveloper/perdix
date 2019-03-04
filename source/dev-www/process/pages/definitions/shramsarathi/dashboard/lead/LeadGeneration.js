@@ -578,7 +578,7 @@ function(LeadProcess, AngularResourceService) {
                         return deferred.promise;
                     },
 
-                    submit: function(model, form, formName) {
+                    submit: function(model, formCtrl, form, formName) {
                         $log.info("Inside submit()");
                         PageHelper.showLoader();
                         
