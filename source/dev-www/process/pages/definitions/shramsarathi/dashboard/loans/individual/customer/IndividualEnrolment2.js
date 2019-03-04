@@ -44,8 +44,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         {
                             "excludes": [
                                 "KYC.firstName",
-                                "References.verifications.ReferenceCheck",
-                                //"IndividualReferences",
+                                //"References.verifications.ReferenceCheck",
+                                "IndividualReferences",
                             ],
                             "overrides": {
 
@@ -123,7 +123,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification.latitude",
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
-                                //"IndividualReferences",
+                                "IndividualReferences",
                                 "References",
                                 "KYC.firstName",
                             ],
@@ -1186,7 +1186,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "ApplicationReview": {
                             "excludes": [
                                 "ContactInformation.whatsAppMobileNoOption",
-                                "IndividualReferences.verifications.ReferenceCheck",
+                                //"IndividualReferences.verifications.ReferenceCheck",
                                 "KYC.customerId"
 
                             ],
@@ -1600,9 +1600,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "Liabilities": {
                                     "readonly": false
                                 },
-                                "IndividualReferences": {
-                                    "readonly": false
-                                },
+                                // "IndividualReferences": {
+                                //     "readonly": false
+                                // },
                                 "References": {
                                     "readonly": true
                                 },
