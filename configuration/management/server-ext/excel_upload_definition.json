@@ -552,7 +552,7 @@
             "columnName":"allow_collection"
          },
          {  
-            "fieldName":"allow_disbursement",
+            "fieldName":"Allow Disbursement",
             "columnName":"allow_disbursement"
          },
          {  
