@@ -187,36 +187,42 @@
             "key":"insurancePolicyDetailsDTO.accountNumber",
             "title":"BENEFICERY_ACCOUNT_NUMBER",
             "type":"lov",
+            "required":true,
             "orderNo":130
          },
          "accountType":{  
             "key":"insurancePolicyDetailsDTO.accountType",
             "title":"ACCOUNT_TYPE",
             "type":"string",
+            "readonly": true,
             "orderNo":130
          },
          "customerNameAsInBank":{  
             "key":"insurancePolicyDetailsDTO.customerNameAsInBank",
             "title":"CUSTOMER_NAME_AS_IN_BANK",
             "type":"string",
+            "readonly": true,
             "orderNo":130
          },
          "ifscCode":{  
             "key":"insurancePolicyDetailsDTO.ifscCode",
             "title":"IFSC_CODE",
             "type":"string",
+            "readonly":true,
             "orderNo":130
          },
          "customerBankName":{  
             "key":"insurancePolicyDetailsDTO.customerBankName",
             "title":"CUSTOMER_BANK_NAME",
             "type":"string",
+            "readonly": true,
             "orderNo":130
          },
          "customerBankBranchName":{  
             "key":"insurancePolicyDetailsDTO.customerBankBranchName",
             "title":"CUSTOMER_BANK_BRANCH_NAME",
             "type":"string",
+            "readonly":true,
             "orderNo":130
          },
          "purchaseDate":{  
