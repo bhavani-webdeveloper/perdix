@@ -1537,7 +1537,7 @@
                                 "enumCode": "occupation"
                             },
                             "incomeType": {
-                                "key": "",
+                                "key": "customer.familyMembers[].incomes[].incomeType",
                                 "title": "INCOME_TYPE",
                                 "type": "select",
                                 "enumCode": "income_types"
