@@ -167,7 +167,7 @@ function(LeadProcess, AngularResourceService) {
                     "leadProfile.centerName":{
                         "title":"ZONE",
                         "orderNo" : 5,
-                        //"readonly":true
+                        "lovonly": true,
                     },
                     "leadProfile.individualDetails.leadName":{
                         "title":"APPLICANT_FIRST_NAME"

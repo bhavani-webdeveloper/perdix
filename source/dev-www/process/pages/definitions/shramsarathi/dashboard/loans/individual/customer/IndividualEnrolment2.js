@@ -45,7 +45,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "excludes": [
                                 "KYC.firstName",
                                 "References.verifications.ReferenceCheck",
-                                "IndividualReferences",
+                                //"IndividualReferences",
                             ],
                             "overrides": {
 
@@ -123,7 +123,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification.latitude",
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
-                                "IndividualReferences",
+                                //"IndividualReferences",
                                 "References",
                                 "KYC.firstName",
                             ],
@@ -2679,7 +2679,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     },
                                                     "outputMap": {
                                                         "id": "customer.familyMembers[arrayIndex].customerId",
-                                                        "firstName": "customer.familyMembers[arrayIndex].familyMemberFirstName"
+                                                        "firstName": "customer.familyMembers[arrayIndex].familyMemberFirstName",
+                                                          "gender":"customer.familyMembers[arrayIndex].gender",
+                                                          "dob":"customer.familyMembers[arrayIndex].dateOfBirth",
+                                                          "age":"customer.familyMembers[arrayIndex].age",
+                                                          "educationStatus":"customer.familyMembers[arrayIndex].educationStatus",
+                                                          "maritalStatus":"customer.familyMembers[arrayIndex].maritalStatus",
+                                                          "mobileNo":"customer.familyMembers[arrayIndex].mobilePhone"
 
                                                     },
                                                     "searchHelper": formHelper,
@@ -2805,7 +2811,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                         "frequency": {
                                                             key: "customer.familyMembers[].incomes[].frequency",
                                                             type: "select",
-                                                            "enumCode":"frequency"
+                                                            "enumCode":"income_frequency"
                                                         },
                                                         "workSector":{
                                                             "key":"customer.familyMembers[].incomes[].workSector",
