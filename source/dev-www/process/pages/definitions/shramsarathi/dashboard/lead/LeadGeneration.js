@@ -74,7 +74,7 @@ function(LeadProcess, AngularResourceService) {
                         "required": true
                     },
                     "leadProfile.centerName": {
-                        "lovonly": true
+                        //"lovonly": true
                     },
                     "productDetails.screeningDate": {
                         "condition": "(model.lead.interestedInProduct==='YES' && model.lead.leadStatus ==='Screening')",
@@ -166,7 +166,8 @@ function(LeadProcess, AngularResourceService) {
                     },
                     "leadProfile.centerName":{
                         "title":"ZONE",
-                        "orderNo" : 5
+                        "orderNo" : 5,
+                        //"readonly":true
                     },
                     "leadProfile.individualDetails.leadName":{
                         "title":"APPLICANT_FIRST_NAME"
