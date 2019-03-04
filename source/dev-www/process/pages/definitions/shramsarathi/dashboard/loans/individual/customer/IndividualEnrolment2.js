@@ -45,7 +45,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "excludes": [
                                 "KYC.firstName",
                                 "References.verifications.ReferenceCheck",
-                                "IndividualReferences",
+                                //"IndividualReferences",
                             ],
                             "overrides": {
 
@@ -123,7 +123,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification.latitude",
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
-                                "IndividualReferences",
+                                //"IndividualReferences",
                                 "References",
                                 "KYC.firstName",
                             ],
@@ -2805,7 +2805,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                         "frequency": {
                                                             key: "customer.familyMembers[].incomes[].frequency",
                                                             type: "select",
-                                                            "enumCode":"frequency"
+                                                            "enumCode":"income_frequency"
                                                         },
                                                         "workSector":{
                                                             "key":"customer.familyMembers[].incomes[].workSector",
