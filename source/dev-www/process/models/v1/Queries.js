@@ -1482,6 +1482,15 @@ irf.models.factory('Queries', [
         },deferred.reject);
         return deferred.promise;
     };
+    resource.getInsuranceDcocuments = function(productCode){
+        var deferred = $q.defer();
+        resource.getResult("getInsuranceDocuments",{"productCode":productCode}).then(function(value){
+            if(value && value.results.length > 0){
+                deferred.resolve(value.results);
+            }
+        },deferred.reject);
+        return deferred.promise;
+    };
     return resource;
     
     }
