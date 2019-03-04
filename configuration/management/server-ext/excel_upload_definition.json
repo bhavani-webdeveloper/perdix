@@ -307,6 +307,7 @@
 
    "Centre Master":{  
       "table":"Centre_master",
+      "enableTruncate":false,
       "columns":[  
          {  
             "columnName":"version",
@@ -423,6 +424,7 @@
 
    "Partner Master":{  
       "table":"partner_master",
+      "enableTruncate":false,
       "columns":[  
          {  
             "columnName":"version",
@@ -482,6 +484,7 @@
    },
    "Bank Account Master":{  
       "table":"bank_account_master",
+      "enableTruncate":false,
       "columns":[  
          {  
             "columnName":"version",
