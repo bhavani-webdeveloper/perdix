@@ -942,7 +942,7 @@ define([],function(){
                                             "marketValueOfAsset":{
                                                 "key": "loanAccount.collateral[].udf2",
                                                 "title":"MARKET_VALUE_OF_ASSET",
-                                                "type":"number",
+                                                "type":"string",
                                             },
                                             "timeSinceTheAssetIsOwned":{
                                                 "key": "loanAccount.collateral[].udf3",
