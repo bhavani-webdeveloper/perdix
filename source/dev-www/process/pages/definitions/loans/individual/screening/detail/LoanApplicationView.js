@@ -94,7 +94,7 @@ define({
             if(model.expectedTurnoverObj['annualTurnover'] && model.expectedTurnoverObj['annualTurnover'] != 0){
                 var kinaraExposureToAnnualTurovr = ((oustandingAmount + model.expectedTurnoverObj['loanAmountRecommended'])/model.expectedTurnoverObj['annualTurnover']).toFixed(2);
                 var kinaraExposureToAnnualTurnover = (kinaraExposureToAnnualTurovr*100)+"%";
-                model.expectedTurnoverObj['kinaraExposureToAnnualTurover'] = kinaraExposureToAnnualTurnover;
+                model.expectedTurnoverObj['kinaraExposureToAnnualTurover'] = kinaraExposureToAnnualTurnover.toFixed(2);
             }
             else{
                 model.expectedTurnoverObj['kinaraExposureToAnnualTurover']  = 0+'%'; 
