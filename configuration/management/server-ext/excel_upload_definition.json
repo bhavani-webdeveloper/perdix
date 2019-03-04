@@ -303,5 +303,275 @@
             "default":"NOW()"
          }
       ]
+   },
+
+   "Centre Master":{  
+      "table":"Centre_master",
+      "columns":[  
+         {  
+            "columnName":"version",
+            "default":"0"
+         },
+         {  
+            "fieldName":"Centre Name",
+            "columnName":"centre_name"
+         },
+         {  
+            "fieldName":"Centre Code",
+            "columnName":"centre_code"
+         },
+         
+         {  
+            "fieldName":"Centre Address",
+            "columnName":"centre_address"
+         },
+         {  
+            "fieldName":"Branch Id",
+            "columnName":"branch_id"
+         },
+         {  
+            "fieldName":"Status",
+            "columnName":"status"
+         },
+         {  
+            "fieldName":"Employee",
+            "columnName":"employee"
+         },
+         {  
+            "fieldName":"Centre Leader URN",
+            "columnName":"centre_leader_urn"
+         },
+         {  
+            "fieldName":"Weeking Meeting Day",
+            "columnName":"weekly_meeting_day"
+         },
+         {  
+            "fieldName":"Weekly Meeting Time",
+            "columnName":"centre_leader_urn"
+         },
+         
+         {  
+            "fieldName":"Monthly Meeting Date",
+            "columnName":"monthly_meeting_date"
+         },
+         {  
+            "fieldName":"Monthly Meeting Day",
+            "columnName":"monthly_meeting_day"
+         },
+         {  
+            "fieldName":"Monthly Meeting Time",
+            "columnName":"monthly_meeting_time"
+         },
+         {  
+            "fieldName":"Fortnightly Meeting Day",
+            "columnName":"fortnightly_meeting_day"
+         },
+         {  
+            "fieldName":"Fortnightly Meeting Time",
+            "columnName":"fortnightly_meeting_time"
+         },
+         {  
+            "fieldName":"Centre Latitude",
+            "columnName":"centre_latitude"
+         },
+         {  
+            "fieldName":"Centre Longitude",
+            "columnName":"centre_longitude"
+         },
+         {  
+            "fieldName":"Centre Altitude",
+            "columnName":"centre_altitude"
+         },
+         {  
+            "fieldName":"Centre GPS Capture Date",
+            "columnName":"centre_gps_capture_date"
+         },
+         {  
+            "fieldName":"Survey Id",
+            "columnName":"survey_id"
+         },
+         {  
+            "columnName":"created_by",
+            "default":"system"
+         },
+         {  
+            "columnName":"created_at",
+            "default":"NOW()"
+         },
+         {  
+            "columnName":"last_edited_by",
+            "default":"SYSTEM"
+         },
+         {  
+            "columnName":"last_edited_at",
+            "default":"NOW()"
+         },
+         {  
+            "fieldName":"Monthly Meeting Status",
+            "columnName":"monthly_meeting_status"
+         },
+         {  
+            "fieldName":"Monthly Meeting Date Number",
+            "columnName":"monthly_meeting_date_number"
+         },
+         {  
+            "fieldName":"Meeting Preference",
+            "columnName":"meeting_preference"
+         }
+      ]
+   },
+
+   "Partner Master":{  
+      "table":"partner_master",
+      "columns":[  
+         {  
+            "columnName":"version",
+            "default":"0"
+         },
+         {  
+            "fieldName":"Partner Code",
+            "columnName":"partner_code"
+         },
+         {  
+            "fieldName":"Partner Name",
+            "columnName":"partner_name"
+         },
+         
+         {  
+            "fieldName":"External Partner",
+            "columnName":"external_partner"
+         },
+         {  
+            "fieldName":"Partner Address",
+            "columnName":"partner_address"
+         },
+         {  
+            "fieldName":"Partner Cin",
+            "columnName":"partner_cin"
+         },
+         {  
+            "fieldName":"Partner RBI",
+            "columnName":"partner_RBI"
+         },
+         {  
+            "fieldName":"Partner Fullname",
+            "columnName":"partner_fullname"
+         },
+         {  
+            "columnName":"created_by",
+            "default":"system"
+         },
+         {  
+            "columnName":"created_at",
+            "default":"NOW()"
+         },
+         {  
+            "columnName":"last_edited_by",
+            "default":"SYSTEM"
+         },
+         {  
+            "columnName":"last_edited_at",
+            "default":"NOW()"
+         },
+         {  
+            "fieldName":"Upload Branch Name",
+            "columnName":"upload_branch_name"
+           
+         }
+      ]
+   },
+   "Bank Account Master":{  
+      "table":"bank_account_master",
+      "columns":[  
+         {  
+            "columnName":"version",
+            "default":"0"
+         },
+         {  
+            "fieldName":"Account Number",
+            "columnName":"account_number"
+         },
+         {  
+            "fieldName":"Bank Name",
+            "columnName":"bank_name"
+         },
+         
+         {  
+            "fieldName":"Branch Name",
+            "columnName":"branch_name"
+         },
+         {  
+            "fieldName":"IFSC Code",
+            "columnName":"ifsc_code"
+         },
+         {  
+            "fieldName":"MICR Code",
+            "columnName":"micr_code"
+         },
+         {  
+            "fieldName":"Branch Address",
+            "columnName":"branch_address"
+         },
+         {  
+            "fieldName":"Default Collection Account",
+            "columnName":"default_collection_account"
+         },
+         {  
+            "fieldName":"Default Disbursement Account",
+            "columnName":"default_disbursement_account"
+         },
+         {  
+            "fieldName":"Account Code",
+            "columnName":"account_code"
+         },
+         {  
+            "fieldName":"Generic Bank Account Flag",
+            "columnName":"generic_bank_account_flag"
+         },
+         {  
+            "fieldName":"Partner Code",
+            "columnName":"partner_code"
+         },
+         {  
+            "fieldName":"Sponsor Bank Code",
+            "columnName":"sponsor_bank_code"
+         },
+         {  
+            "fieldName":"Utility Code",
+            "columnName":"utility_code"
+         },
+         {  
+            "fieldName":"Is Ach Account",
+            "columnName":"is_ach_account"
+         },
+         {  
+            "fieldName":"Allow Collection",
+            "columnName":"allow_collection"
+         },
+         {  
+            "fieldName":"allow_disbursement",
+            "columnName":"allow_disbursement"
+         },
+         {  
+            "columnName":"created_by",
+            "default":"system"
+         },
+         {  
+            "columnName":"created_at",
+            "default":"NOW()"
+         },
+         {  
+            "columnName":"last_edited_by",
+            "default":"SYSTEM"
+         },
+         {  
+            "columnName":"last_edited_at",
+            "default":"NOW()"
+         },
+         {  
+            "fieldName":"Payment Mode",
+            "columnName":"payment_mode"
+         }
+      ]
    }
 }
