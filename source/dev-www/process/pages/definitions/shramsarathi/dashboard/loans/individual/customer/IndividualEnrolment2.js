@@ -2712,7 +2712,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                         Enrollment.getCustomerById({id: valueObj.id})
                                                             .$promise
                                                             .then(function(res){
-                                                               debugger
+                                                               
                                                                 // PageHelper.showProgress("customer-load", "Done..", 5000);
                                                         model.customer.familyMembers[model.arrayIndex].gender=res.gender;
                                                          model.customer.familyMembers[model.arrayIndex].dateOfBirth=res.dateOfBirth;
