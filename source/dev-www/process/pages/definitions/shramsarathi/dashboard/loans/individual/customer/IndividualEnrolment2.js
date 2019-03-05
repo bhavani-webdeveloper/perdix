@@ -2225,6 +2225,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Liabilities.liabilities.loanAmountInPaisa",
                     "Liabilities.liabilities.installmentAmountInPaisa",
                     "Liabilities.liabilities.outstandingAmountInPaisa",
+                    "Liabilities.liabilities.amountPaidPrincipal",
+                    "Liabilities.liabilities.amountPaidInterest",
                     "Liabilities.liabilities.startDate",
                     "Liabilities.liabilities.maturityDate",
                     "Liabilities.liabilities.noOfInstalmentPaid",
@@ -2232,7 +2234,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Liabilities.liabilities.liabilityLoanPurpose",
                     "Liabilities.liabilities.interestOnly",
                     "Liabilities.liabilities.interestRate",
-                    // "Liabilities.liabilities.masonValuation",
+                    "Liabilities.liabilities.masonValuation",
                     
 
                     "HouseVerification",
@@ -2930,27 +2932,53 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "mortage": {
                                                     "key": "customer.liabilities[].udf1",
                                                     "title": "MORTAGE",
-                                                    //"condition": "model.Liabilities.liabilities.loanType=='SECURED'",
+                                                    //"condition": "model.Liabilities.liabilities.loanType =='SECURED'",
                                                     "orderNo": 10
                                                 },
                                                 "mortageAmount": {
                                                     "key": "customer.liabilities[].mortageAmount",
                                                     "title": "MORTAGE_AMOUNT",
+                                                    "orderNo": 10
                                                     //"condition": "model.Liabilities.liabilities.loanType=='SECURED'",
+                                                },
+                                                "liabilityLoanPurpose":{
+                                                    "orderNo": 11
                                                 },
                                                 "amountPaid":{
                                                     "key":"customer.liabilities[].principalExpense",
                                                     "title":"AMOUNT_PAID"
                                                 },
-                                                "amountPaidInterest":{
-                                                    "key":"customer.liabilities[].interestExpense",
-                                                    "title":"AMOUNT_PAID_INTEREST"
-                                                },
+                                                // "amountPaidInterest":{
+                                                //     "key":"customer.liabilities[].interestExpense",
+                                                //     "title":"AMOUNT_PAID_INTEREST"
+                                                // },
                                                 "masonValuation":{
                                                     "key":"customer.liabilities[].udf2",
                                                     "title":"MASON_VALUATION_DOCUMENT",
                                                     "type":"file",
-                                                    "fileType": "image/*",
+                                                    "fileType": "image/*"
+                                                },
+                                                "startDate":{
+                                                    "orderNo": 20
+                                                },
+                                                "maturityDate":{
+                                                    "orderNo": 20
+                                                },
+                                                "amountPaidPrincipal":{
+                                                    "key":"customer.liabilities[].interestExpense",
+                                                    "title":"AMOUNT_PAID_PRINCIPAL",
+                                                    "orderNo": 28
+                                                },
+                                                "noOfInstalmentPaid":{
+                                                    "orderNo": 25
+                                                },
+                                                "interestRate":{
+                                                    "orderNo": 22
+                                                },
+                                                "amountPaidInterest": {
+                                                    "key":"customer.liabilities[].interestExpense",
+                                                    "title":"AMOUNT_PAID_INTEREST",
+                                                    "orderNo": 28
                                                 }
                                                
                                             }
