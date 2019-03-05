@@ -141,7 +141,7 @@
             "relationShip": {
               "title": "Relationship",
               "type": "string",
-              "refCodeCategory": "relation",
+              "refCodeCategory": "relationship",
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"

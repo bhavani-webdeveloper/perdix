@@ -582,117 +582,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             type: "lov",
                             fieldType: "string",
                             autolov: true,
-                            inputMap: {
-                                "mailingPincode": "customer.mailingPincode",
-                                "mailingDivision": "customer.mailingLocality",
-                                "mailingtaluk": "customer.mailingtaluk",
-                                "region": "customer.villageName",
-                                "mailingDistrict": {
-                                    key: "customer.mailingDistrict"
-                                },
-                                "mailingState": {
-                                    key: "customer.mailingState"
-                                }
-                            },
-                            outputMap: {
-                                "mailingDivision": "customer.mailingLocality",
-                                "mailingPincode": "customer.mailingPincode",
-                                "mailingDistrict": "customer.mailingDistrict",
-                                "mailingState": "customer.mailingDivision"
-                            },
-                            searchHelper: formHelper,
-                            initialize: function (inputModel) {
-                                $log.warn('in pincode initialize');
-                                $log.info(inputModel);
-                                inputModel.region = undefined;
-                            },
-                            search: function (inputModel, form, model) {
-                                if (!inputModel.mailingPincode) {
-                                    return $q.reject();
-                                }
-                                return Queries.searchPincodes(
-                                    inputModel.mailingPincode,
-                                    inputModel.mailingDistrict,
-                                    inputModel.mailingState,
-                                    inputModel.mailingDivision,
-                                    inputModel.region,
-                                    inputModel.mailingtaluk
-                                );
-                            },
-                            getListDisplayItem: function (item, index) {
-                                return [
-                                    item.division + ', ' + item.region,
-                                    item.pincode,
-                                    item.district + ', ' + item.state
-                                ];
-                            },
-                            onSelect: function (result, model, context) {
-                                model.customer.mailingPincode = (new Number(result.pincode)).toString();
-                                model.customer.mailingLocality = result.division;
-                                model.customer.mailingState = result.state;
-                                model.customer.mailingDistrict = result.district;
-                            }
+                            "resolver": "MailingPincodeLOVConfiguration",
+                            "searchHelper": formHelper,
+
                         },
                         "ContactInformation.pincode": {
                             "type": "lov",
                             "title": "PIN_CODE",
                             fieldType: "number",
                             autolov: true,
-                            inputMap: {
-                                "pincode": {
-                                    key:  "customer.pincode"
-                                },
-                                "division": {
-                                    key: "customer.locality"
-                                },
-                                "region": {
-                                    key: "customer.villageName"
-                                },
-                                "taluk": {
-                                    key: "customer.taluk"
-                                },
-                                "district": {
-                                    key: "customer.district"
-                                },
-                                "state": {
-                                    key: "customer.state"
-                                }
-                            },
-                            outputMap: {
-                                "division": "customer.locality",
-                                "region": "customer.villageName",
-                                "pincode": "customer.pincode",
-                                "district": "customer.district",
-                                "state": "customer.state",
-                            },
-                            searchHelper: formHelper,
-                            initialize: function (inputModel) {
-                                $log.warn('in pincode initialize');
-                                $log.info(inputModel);
-                            },
-                            search: function (inputModel, form, model) {
-                                if (!inputModel.pincode) {
-                                    return $q.reject();
-                                }
-                                return Queries.searchPincodes(
-                                    inputModel.pincode,
-                                    inputModel.district,
-                                    inputModel.state,
-                                    inputModel.division,
-                                    inputModel.region,
-                                    inputModel.taluk
-                                );
-                            },
-                            getListDisplayItem: function (item, index) {
-                                return [
-                                    item.division + ', ' + item.region,
-                                    item.pincode,
-                                    item.district + ', ' + item.state,
-                                ];
-                            },
-                            onSelect: function (result, model, context) {
-                                $log.info(result);
-                            }
+                            "resolver": "PincodeLOVConfiguration",
+                            "searchHelper": formHelper,
                         },
                         "ContactInformation.locality":{
                             title:"LOCALITY1"
@@ -1246,10 +1146,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             }
                                         },
                                         "spouseAadharNumber":{
-                                            "key":"customer.udf32",
+                                            key:"customer.udf.userDefinedFieldValues.udf32",
                                             "title": "SPOUSE_AADHAR_NUMBER",
                                             condition: "model.customer.maritalStatus==='MARRIED'",
-                                            "type": "string",
+                                            "type": "number",
                                         }
                                     }
                                 },

@@ -44,7 +44,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         {
                             "excludes": [
                                 "KYC.firstName",
-                                "References.verifications.ReferenceCheck",
+                                //"References.verifications.ReferenceCheck",
                                 "IndividualReferences",
                             ],
                             "overrides": {
@@ -1140,6 +1140,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC": {
                                     "readonly": true
                                 },
+                                "EnterpriseFinancials.currentAsset.assetType":{
+                                    "readonly": true
+                                },
+                                "EnterpriseFinancials.currentAsset.value":{
+                                    "readonly": true
+                                },  
+                                "Machinery.fixedAssetsMachinaries.machineType":{
+                                    "readonly": true
+                                },
+                                "Machinery.fixedAssetsMachinaries.presentValue":{
+                                    "readonly": true
+                                },
                                 "FamilyDetails.familyMembers.noOfDependents": {
                                     "readonly": true
                                 },
@@ -1186,7 +1198,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "ApplicationReview": {
                             "excludes": [
                                 "ContactInformation.whatsAppMobileNoOption",
-                                "IndividualReferences.verifications.ReferenceCheck",
+                                //"IndividualReferences.verifications.ReferenceCheck",
                                 "KYC.customerId"
 
                             ],
@@ -1600,9 +1612,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "Liabilities": {
                                     "readonly": false
                                 },
-                                "IndividualReferences": {
-                                    "readonly": false
-                                },
+                                // "IndividualReferences": {
+                                //     "readonly": false
+                                // },
                                 "References": {
                                     "readonly": true
                                 },
@@ -2679,7 +2691,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     },
                                                     "outputMap": {
                                                         "id": "customer.familyMembers[arrayIndex].customerId",
-                                                        "firstName": "customer.familyMembers[arrayIndex].familyMemberFirstName"
+                                                        "firstName": "customer.familyMembers[arrayIndex].familyMemberFirstName",
+                                                          "gender":"customer.familyMembers[arrayIndex].gender",
+                                                          "dob":"customer.familyMembers[arrayIndex].dateOfBirth",
+                                                          "age":"customer.familyMembers[arrayIndex].age",
+                                                          "educationStatus":"customer.familyMembers[arrayIndex].educationStatus",
+                                                          "maritalStatus":"customer.familyMembers[arrayIndex].maritalStatus",
+                                                          "mobileNo":"customer.familyMembers[arrayIndex].mobilePhone"
 
                                                     },
                                                     "searchHelper": formHelper,
@@ -2805,7 +2823,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                         "frequency": {
                                                             key: "customer.familyMembers[].incomes[].frequency",
                                                             type: "select",
-                                                            "enumCode":"frequency"
+                                                            "enumCode":"income_frequency"
                                                         },
                                                         "workSector":{
                                                             "key":"customer.familyMembers[].incomes[].workSector",

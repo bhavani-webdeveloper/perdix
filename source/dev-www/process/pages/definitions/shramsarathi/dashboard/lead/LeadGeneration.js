@@ -24,6 +24,12 @@ function(LeadProcess, AngularResourceService) {
                     "leadProfile.individualDetails.maritalStatus":{
                         "required":true
                     },
+                    "leadProfile.migrantDetails.migrantDependantLabourFamily":{
+                        "schema": {
+                            "title":"MIGRANT",
+                            "type": ["string", "null"],
+                        },
+                    },                    
                     "leadProfile.individualDetails.lastName":{
                         "required": false
                     },
@@ -167,7 +173,7 @@ function(LeadProcess, AngularResourceService) {
                     "leadProfile.centerName":{
                         "title":"ZONE",
                         "orderNo" : 5,
-                        //"readonly":true
+                        "lovonly": true,
                     },
                     "leadProfile.individualDetails.leadName":{
                         "title":"APPLICANT_FIRST_NAME"
@@ -426,7 +432,7 @@ function(LeadProcess, AngularResourceService) {
                                         "orderNo": 30,
                                         "items": {
                                             "migrantDependantLabourFamily": {
-                                                key: "lead.udf.userDefinedFieldValues.udf2",
+                                                key: "lead.udf.userDefinedFieldValues.udf1",
                                                 title: "MIGRANT_DEPENDENT_LABOUR_FAMILY",
                                                 required:true,
                                                 type:"radios",
