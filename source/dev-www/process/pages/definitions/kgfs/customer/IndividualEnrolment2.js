@@ -292,7 +292,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "required": false
                         },
                         "IndividualInformation.language":{
-                            "type": "string",
+                            "type": "select",
                             "required": false
                         },
                         "IndividualInformation.area":{
