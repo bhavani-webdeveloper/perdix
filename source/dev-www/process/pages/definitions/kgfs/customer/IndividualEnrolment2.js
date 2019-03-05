@@ -1207,7 +1207,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "educationLevel":{
                                                     "key": "customer.familyMembers[].educationStatus",
                                                     "title":"EDUCATION_LEVEL",
-                                                    "type":"string"
+                                                    "type":"select"
                                                 },
                                                 "incomeDetails":{
                                                     "key": "customer.familyMembers[].udfId2",
