@@ -736,6 +736,7 @@ define([],function(){
 
                     "PostReview",
                     "PostReview.action",
+                    "PostReview.actionExcludesSendBack",
                     "PostReview.proceed",
                     "PostReview.proceed.remarks",
                     "PostReview.proceed.proceedButton",
@@ -1006,13 +1007,23 @@ define([],function(){
                                         "items": {
                                             "action": {
                                                 "key": "review.action",
+                                                "condition": "model.loanAccount.currentStage != 'Screening'",
                                                 "type": "radios",
                                                 "titleMap": {
                                                     "REJECT": "REJECT",
                                                     "SEND_BACK": "SEND_BACK",
                                                     "PROCEED": "PROCEED"
                                                 }
-                                            }, 
+                                            },
+                                            "actionExcludesSendBack": {
+                                                "key": "review.action",
+                                                "type": "radios",
+                                                "condition": "model.loanAccount.currentStage == 'Screening'",
+                                                "titleMap": {
+                                                    "REJECT": "REJECT",
+                                                    "PROCEED": "PROCEED"
+                                                }
+                                            },                                             
                                             "proceed": {
                                                 "type": "section",
                                                 "condition": "model.review.action=='PROCEED'",
