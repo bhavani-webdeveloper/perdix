@@ -33,7 +33,6 @@ define({
 					"branch": {
 						'title': "BRANCH",
 						"type": ["string", "null"],
-						"required":true,
 						"x-schema-form": {
 							"type": "userbranch",
 							"screenFilter": true
