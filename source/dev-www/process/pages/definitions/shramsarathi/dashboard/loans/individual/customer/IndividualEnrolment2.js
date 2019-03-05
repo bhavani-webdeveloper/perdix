@@ -2716,7 +2716,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                                 // PageHelper.showProgress("customer-load", "Done..", 5000);
                                                         model.customer.familyMembers[model.arrayIndex].gender=res.gender;
                                                          model.customer.familyMembers[model.arrayIndex].dateOfBirth=res.dateOfBirth;
-                                                          model.customer.familyMembers[model.arrayIndex].age=res.id;
+                                                         if (model.customer.familyMembers[model.arrayIndex].dateOfBirth) {
+                                                          model.customer.familyMembers[model.arrayIndex].age=moment().diff(moment(model.customer.familyMembers[model.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                                         }
                                                         //  model.customer.familyMembers[form.arrayIndex].educationStatus=res.customer.id;
                                                          model.customer.familyMembers[model.arrayIndex].maritalStatus=res.maritalStatus;
                                                          model.customer.familyMembers[model.arrayIndex].mobilePhone=res.mobilePhone;
