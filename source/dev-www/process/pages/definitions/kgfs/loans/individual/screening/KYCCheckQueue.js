@@ -106,6 +106,7 @@ define({
 				getListItem: function (item) {
 					return [
 						item.applicantName,
+						item.centreName,
 						item.urn,
 						item.loanAmount,
 						item.loanType,
@@ -129,6 +130,9 @@ define({
 						},{
 							title: 'CUSTOMER_NAME',
 							data: 'applicantName'
+						},{
+							title: 'CENTRE_NAME',
+							data: 'centreName'
 						},{
 							title:'LOAN_AMOUNT',
 							data:'loanAmount'
