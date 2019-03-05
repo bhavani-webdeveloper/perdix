@@ -128,6 +128,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.firstName",
                             ],
                             "overrides": {
+                                "EnterpriseFinancials.currentAsset.value":{
+                                    "type":"amount"
+                                },
                                 "IndividualInformation.centreId": {
                                     "required": true,
                                     "readonly": false,
@@ -1144,7 +1147,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "EnterpriseFinancials.currentAsset.value":{
-                                    "readonly": true
+                                    "readonly": true,
+                                    "type":"amount"
                                 },  
                                 "Machinery.fixedAssetsMachinaries.machineType":{
                                     "readonly": true
@@ -2566,10 +2570,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "expenditures":{
                                             "items":{
                                                 "from":{
-                                                    "key":"customer.expenditures[].expenseFrom",
+                                                    "key":"customer.expenditures[].expenseType",
                                                     "title":"EXPENSE_FROM",
-                                                    "type":"date"
-                                                    // ,"enumCode":"expense_type"
+                                                    "type":"select",
+                                                    "enumCode":"expense_type"
                                                 },
                                             }
                                         },
