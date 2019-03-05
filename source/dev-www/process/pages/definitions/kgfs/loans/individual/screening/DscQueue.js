@@ -110,8 +110,8 @@ define({
                             data: 'urn'
                         },
                         {
-                            title: 'ENTITY_NAME',
-                            data: 'customerName'
+                            title: 'CUSTOMER_NAME',
+                            data: 'applicantName'
                         }, {
                             title: 'LOAN_AMOUNT',
                             data: 'loanAmount'

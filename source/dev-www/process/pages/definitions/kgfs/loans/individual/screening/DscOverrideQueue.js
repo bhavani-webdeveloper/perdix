@@ -115,8 +115,8 @@ define({
 							data: 'urn'
                         }, 
                         {
-                            title: 'ENTITY_NAME',
-                            data: 'customerName'
+                            title: 'CUSTOMER_NAME',
+                            data: 'applicantName'
                         }, {
 							title: 'LOAN_AMOUNT',
 							data: 'loanAmount'
@@ -127,9 +127,6 @@ define({
                         {
 							title: 'PARTNER_CODE',
 							data: 'partnerCode'
-                        },{
-							title: 'PROCESS_TYPE',
-							data: 'processType'
                         },
                     ]
 					},
