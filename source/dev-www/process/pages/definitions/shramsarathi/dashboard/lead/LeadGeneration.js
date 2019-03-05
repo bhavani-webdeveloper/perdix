@@ -113,7 +113,7 @@ function(LeadProcess, AngularResourceService) {
                     },
                     "productDetails.interestedInProduct": {
                         "orderNo" : 10,
-                        "required":false,
+                        "required":true,
                         // enumCode: "decisionmaker",
                         // "onChange": function(modelValue, form, model) {
                         //         if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
