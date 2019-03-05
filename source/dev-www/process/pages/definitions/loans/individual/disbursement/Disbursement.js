@@ -111,7 +111,14 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                 }
                             }
                         });
-
+                        // to validate customer profile updated or not
+                        if(model.siteCode == 'KGFS') {
+                            Queries.getCustomerById(model.additional.customerId).then(function (res) {
+                                if(moment().diff(moment(res, 'YYYY-MM-DD'), 'days') <= 7) {
+                                    PageHelper.setWarning({message:"Profile Edited in last 7 days. Please refer customer history for same."});
+                                }
+                        });
+                        }
                         /*if(model.siteCode == 'KGFS' && resp[0].fees) {
                             model.additional.feeamount = [];
                             for (var i = 0; i < resp[0].fees.length; i++){

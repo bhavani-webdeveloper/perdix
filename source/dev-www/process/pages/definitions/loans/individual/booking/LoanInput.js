@@ -537,7 +537,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 "key": "loanAccount.frequency",
                                 "type":"select",
-                                "enumCode":"frequency",
+                                "enumCode":"loan_product_frequency",
                                 "required": true,
                                 onChange: function(value, form, model) {
                                     clearProduct(value, model);
