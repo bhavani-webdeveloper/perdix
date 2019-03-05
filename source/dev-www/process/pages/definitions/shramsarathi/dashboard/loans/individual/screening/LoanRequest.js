@@ -1178,7 +1178,7 @@ define([],function(){
             }
              var overridesFields = function (bundlePageObj) {
                 return {
-                    "PreliminaryInformation.frequencyRequested":{
+                    "PreliminaryInformation.frequencyRequested": {
                         "required":true
                     },
                     // "PostReview.reject.rejectReason":{
