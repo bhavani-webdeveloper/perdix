@@ -808,8 +808,8 @@ define([],function(){
                             "excludes": [
                                 "ProposedUtilizationPlan",
                                 "DeductionsFromLoan",
-                                // "LoanMitigants",
-                                // "LoanMitigants.deviationParameter",
+                                "LoanMitigants",
+                                "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
                                 "NomineeDetails.nominees.nomineeButton" ,
@@ -867,6 +867,7 @@ define([],function(){
                         },
                         "Application":{
                             "excludes": [
+                                "LoanMitigants",
                                 "LoanMitigants.deviationParameter",
                                 "LoanSanction",
                                 "LoanSanction.sanctionDate",
