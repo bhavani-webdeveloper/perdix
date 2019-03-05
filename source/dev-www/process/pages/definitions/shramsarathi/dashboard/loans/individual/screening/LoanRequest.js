@@ -680,7 +680,7 @@ define([],function(){
                                 "LoanMitigants.loanMitigantsByParameter",
                                 "CollateralDetails",
                                 "CBCheck",
-                                "LoanCustomerRelations",
+                                //"LoanCustomerRelations",
 
 
                             ],
@@ -749,7 +749,7 @@ define([],function(){
                                 "LoanSanction.disbursementSchedules.tranchCondition",
                                 //"NomineeDetails",
                                 //"NomineeDetails.nominees",
-                                //"AdditionalLoanInformation",
+                                "AdditionalLoanInformation",
                                 //"NomineeDetails.nominees.nomineeButton"   ,
                                 "LoanRecommendation.securityEmiRequired",
                                 "LoanMitigants.loanMitigantsByParameter",
@@ -808,8 +808,8 @@ define([],function(){
                             "excludes": [
                                 "ProposedUtilizationPlan",
                                 "DeductionsFromLoan",
-                                // "LoanMitigants",
-                                // "LoanMitigants.deviationParameter",
+                                "LoanMitigants",
+                                "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
                                 "NomineeDetails.nominees.nomineeButton" ,
@@ -867,6 +867,7 @@ define([],function(){
                         },
                         "Application":{
                             "excludes": [
+                                "LoanMitigants",
                                 "LoanMitigants.deviationParameter",
                                 "LoanSanction",
                                 "LoanSanction.sanctionDate",
@@ -1177,7 +1178,7 @@ define([],function(){
             }
              var overridesFields = function (bundlePageObj) {
                 return {
-                    "PreliminaryInformation.frequencyRequested":{
+                    "PreliminaryInformation.frequencyRequested": {
                         "required":true
                     },
                     // "PostReview.reject.rejectReason":{

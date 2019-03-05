@@ -743,7 +743,7 @@ define({
                             }
                         }, {
                             "key": "loanAccount.tenure",
-                            "title": "Duration(months)"/*,
+                            "title": "DURATION_IN_MONTHS"/*,
                             "type": "number"*/
                             ,
                             onChange:function(value,form,model){

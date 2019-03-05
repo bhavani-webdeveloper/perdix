@@ -167,6 +167,7 @@ irf.pageCollection.factory(irf.page("customer360.Insurance"), ["$log", "Insuranc
                 "insuranceDocuments.listOfDocuments.section.documentTitle",
                 "insuranceDocuments.listOfDocuments.section.documentTitle.field",
                 "insuranceDocuments.listOfDocuments.section.documentField.field",
+                "actionboxAfterSave.partnerSpecifiFix"
                 
             ]
         };

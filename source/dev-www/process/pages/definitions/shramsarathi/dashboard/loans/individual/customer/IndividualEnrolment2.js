@@ -1140,6 +1140,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC": {
                                     "readonly": true
                                 },
+                                "EnterpriseFinancials.currentAsset.assetType":{
+                                    "readonly": true
+                                },
+                                "EnterpriseFinancials.currentAsset.value":{
+                                    "readonly": true
+                                },  
+                                "Machinery.fixedAssetsMachinaries.machineType":{
+                                    "readonly": true
+                                },
+                                "Machinery.fixedAssetsMachinaries.presentValue":{
+                                    "readonly": true
+                                },
                                 "FamilyDetails.familyMembers.noOfDependents": {
                                     "readonly": true
                                 },
