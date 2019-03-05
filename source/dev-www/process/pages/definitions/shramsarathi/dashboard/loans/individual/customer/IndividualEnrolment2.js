@@ -46,6 +46,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.firstName",
                                 //"References.verifications.ReferenceCheck",
                                 "IndividualReferences",
+                                
+                                
                             ],
                             "overrides": {
 
@@ -1037,7 +1039,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "FamilyDetails.familyMembers.noOfDependents",
                                 "PhysicalAssets",
                                 "IndividualFinancials",
-                                "References"
+                                //"References",
+                                
                             ],
                             "overrides": {
                                 "KYC": {
@@ -1102,13 +1105,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "IndividualReferences": {
-                                    "readonly": true
+                                    "readonly": false
                                 },
                                 "TrackDetails": {
                                     "readonly": true
                                 },
                                 "reference": {
-                                    "readonly": true
+                                    "readonly": false
                                 },
                                 "HouseVerification": {
                                     "readonly": true
@@ -1256,7 +1259,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "excludes": [
                                 "ContactInformation.whatsAppMobileNoOption",
                                 //"IndividualReferences.verifications.ReferenceCheck",
-                                //"IndividualReferences",
+                                "IndividualReferences",
                                 "IndividualFinancials"
                             ],
                             "overrides": {
@@ -1620,7 +1623,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 //     "readonly": false
                                 // },
                                 "References": {
-                                    "readonly": true
+                                    "readonly": false
                                 },
                                 "TrackDetails": {
                                     "readonly": false
@@ -2294,7 +2297,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     
                     //"PhysicalAssets.physicalAssets.unit",
 
-                    "IndividualReferences",
+                    //"IndividualReferences",
                     "IndividualReferences.verifications",
                     "IndividualReferences.verifications.referenceFirstName",
                     "IndividualReferences.verifications.mobileNo",
@@ -3248,6 +3251,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                     UIRepository.getEnrolmentProcessUIRepository().$promise
                         .then(function (repo) {
+                            console.log(model.pageClass);
+                            console.log(repo);
+                            console.log(formRequest);
+                            console.log(configFile);
+                            console.log(model);
                             return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
                         })
                         .then(function (form) {
