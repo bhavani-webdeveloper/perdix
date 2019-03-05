@@ -1542,12 +1542,13 @@ define([],function(){
                     "LoanRecommendation.tenure",
                     // "LoanRecommendation.interestRate",
                     "LoanRecommendation.estimatedEmi",
-                    "LoanRecommendation.modeOfDisbursement",
+                    "LoanRecommendation.loanDisbursmentSchedule",
+                    "LoanRecommendation.loanDisbursmentSchedule.collectionDate",
+                    "LoanRecommendation.loanDisbursmentSchedule.disbursementDate",
+                    "LoanRecommendation.loanDisbursmentSchedule.gracePeriod",
+                    "LoanRecommendation.loanDisbursmentSchedule.modeOfDisbursement",
                     "LoanRecommendation.remarksOfInFavourLoan",
-                    "LoanRecommendation.potentialRisks",
-                    "LoanRecommendation.collectionDate",
-                    "LoanRecommendation.disbursementDate",
-                    "LoanRecommendation.gracePeriod",
+                    "LoanRecommendation.potentialRisks", 
                     "LoanRecommendation.date",
                     // "LoanRecommendation.processingFeePercentage",
                     // "LoanRecommendation.estimatedEmi1",
@@ -1857,12 +1858,7 @@ define([],function(){
                                             //     "title": "EXPECTED_SECURITY_EMI",
                                             //     "readonly": true
                                             // },
-                                            "modeOfDisbursement":{
-                                                "key":"loanAccount.disbursementSchedules.modeOfDisbursement",
-                                                "title":"MODE_OF_DISBURSEMENT",
-                                                "type":"select",
-                                                "enumCode":"mode_of_disbursement"
-                                            },
+                                           
                                         "remarksOfInFavourLoan":{
                                             "key":"loanAccount.udf.userDefinedFieldValues.udf10",
                                             "title":"REMARK_OF_IN_FAVOUR_LOAN",
@@ -1876,24 +1872,40 @@ define([],function(){
                                             "required":true,
                                             "titleMap":{"yes":"yes","no":"no"}
                                         },
-                                        "collectionDate":{
-                                            "key":"loanAccount.disbursementSchedules.firstRepaymentDate",
-                                            "title":"COLLECTION_DATE",
-                                            "type":"date",
-                                            "required":true
-                                        },
-                                        "disbursementDate":{
-                                            "key":"loanAccount.disbursementSchedules.actualDisbursementDate",
-                                            "title":"DISBURSEMENT_DATE",
-                                            "type":"date",
-                                            "required":true
-                                        },
-                                        "gracePeriod":{
-                                            "key":"loanAccount.disbursementSchedules.moratoriumPeriodInDays",
-                                            "title":"GRACE_PERIOD",
-                                            "type":"text",
-                                            "required":true
-                                        },
+                                        "loanDisbursmentSchedule":{
+                                            "type":"array",
+                                            notitle:true,
+                                            add:null,
+                                            remove:null,
+                                            startEmpty:false,
+                                            items:{
+                                                "modeOfDisbursement":{
+                                                    "key":"loanAccount.disbursementSchedules[].modeOfDisbursement",
+                                                    "title":"MODE_OF_DISBURSEMENT",
+                                                    "type":"select",
+                                                    "enumCode":"mode_of_disbursement"
+                                                },
+                                                "collectionDate":{
+                                                    "key":"loanAccount.disbursementSchedules[].firstRepaymentDate",
+                                                    "title":"COLLECTION_DATE",
+                                                    "type":"date",
+                                                    "required":true
+                                                },
+                                                "disbursementDate":{
+                                                    "key":"loanAccount.disbursementSchedules[].actualDisbursementDate",
+                                                    "title":"DISBURSEMENT_DATE",
+                                                    "type":"date",
+                                                    "required":true
+                                                },
+                                                "gracePeriod":{
+                                                    "key":"loanAccount.disbursementSchedules[].moratoriumPeriodInDays",
+                                                    "title":"GRACE_PERIOD",
+                                                    "type":"text",
+                                                    "required":true
+                                                }
+                                            }
+                                        }
+                                        ,
                                         "date":{
                                             "key":"loanAccount.udf.userDefinedFieldValues.udf12",
                                             "title":"DATE",
