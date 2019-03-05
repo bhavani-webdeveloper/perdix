@@ -680,7 +680,7 @@ define([],function(){
                                 "LoanMitigants.loanMitigantsByParameter",
                                 "CollateralDetails",
                                 "CBCheck",
-                                "LoanCustomerRelations",
+                                //"LoanCustomerRelations",
 
 
                             ],
@@ -749,7 +749,7 @@ define([],function(){
                                 "LoanSanction.disbursementSchedules.tranchCondition",
                                 //"NomineeDetails",
                                 //"NomineeDetails.nominees",
-                                //"AdditionalLoanInformation",
+                                "AdditionalLoanInformation",
                                 //"NomineeDetails.nominees.nomineeButton"   ,
                                 "LoanRecommendation.securityEmiRequired",
                                 "LoanMitigants.loanMitigantsByParameter",
