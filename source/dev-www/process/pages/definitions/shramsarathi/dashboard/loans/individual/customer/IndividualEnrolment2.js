@@ -2695,14 +2695,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     },
                                                     "outputMap": {
                                                         "id": "customer.familyMembers[arrayIndex].customerId",
-                                                        "firstName": "customer.familyMembers[arrayIndex].familyMemberFirstName",
-                                                          "gender":"customer.familyMembers[arrayIndex].gender",
-                                                          "dob":"customer.familyMembers[arrayIndex].dateOfBirth",
-                                                          "age":"customer.familyMembers[arrayIndex].age",
-                                                          "educationStatus":"customer.familyMembers[arrayIndex].educationStatus",
-                                                          "maritalStatus":"customer.familyMembers[arrayIndex].maritalStatus",
-                                                          "mobileNo":"customer.familyMembers[arrayIndex].mobilePhone"
-
+                                                        "firstName": "customer.familyMembers[arrayIndex].familyMemberFirstName"
                                                     },
                                                     "searchHelper": formHelper,
                                                     "search": function (inputModel, form) {
@@ -2713,6 +2706,26 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             'centreId': inputModel.centreId,
                                                         }).$promise;
                                                         return promise;
+                                                    },
+                                                    onSelect: function(valueObj, model, context){
+                                                        // PageHelper.showProgress('customer-load', 'Loading customer...');
+                                                        Enrollment.getCustomerById({id: valueObj.id})
+                                                            .$promise
+                                                            .then(function(res){
+                                                               
+                                                                // PageHelper.showProgress("customer-load", "Done..", 5000);
+                                                        model.customer.familyMembers[context.arrayIndex].gender=res.gender;
+                                                         model.customer.familyMembers[context.arrayIndex].dateOfBirth=res.dateOfBirth;
+                                                         if (model.customer.familyMembers[context.arrayIndex].dateOfBirth) {
+                                                          model.customer.familyMembers[context.arrayIndex].age=moment().diff(moment(model.customer.familyMembers[model.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                                         }
+                                                        //  model.customer.familyMembers[form.arrayIndex].educationStatus=res.customer.id;
+                                                         model.customer.familyMembers[context.arrayIndex].maritalStatus=res.maritalStatus;
+                                                         model.customer.familyMembers[context.arrayIndex].mobilePhone=res.mobilePhone;
+                                                               
+                                                            }, function(httpRes){
+                                                                // PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
+                                                        })
                                                     },
                                                     getListDisplayItem: function (data, index) {
                                                         return [
