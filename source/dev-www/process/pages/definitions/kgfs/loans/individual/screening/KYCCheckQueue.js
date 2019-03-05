@@ -33,7 +33,6 @@ define({
 					"branch": {
 						'title': "BRANCH",
 						"type": ["string", "null"],
-						"required":true,
 						"x-schema-form": {
 							"type": "userbranch",
 							"screenFilter": true
@@ -42,7 +41,6 @@ define({
 					"centre": {
 						"title": "CENTRE",
 						"type": ["integer", "null"],
-						"required":true,
 						"x-schema-form": {
 							"type": "select",
 							"enumCode": "centre",
