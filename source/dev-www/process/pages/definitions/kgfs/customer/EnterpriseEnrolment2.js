@@ -480,14 +480,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "BuyerDetails": {
                         "orderNo": 530,
-                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'LosDSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                     },
                     "BuyerDetails.buyerDetails.paymentFrequency": {
                         "type": "text"
                     },
                     "SuppliersDeatils": {
                         "orderNo": 535,
-                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'LosDSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                     },
                     "MonthlySalesCalculate":{
                         "orderNo": 740
@@ -576,7 +576,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "PreliminaryInformation": {
                         "type": "box",
-                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'LosDSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         "title": "PRELIMINARY_INFORMATION",
                         "items": {
                             "loanAmountRequested": {
@@ -618,7 +618,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EstimatedSales": {
                         "type": "box",
-                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'LosDSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         "title": "INITIALISE_ESTIMATE_OF_SALES",
                         "items": {
                             'ssiNumber': {
@@ -730,7 +730,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "ReviewDailySales": {
                         "type": "box",
-                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'LosDSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         "orderNo": 620,
                         colClass: "col-sm-12",
                         "title": "DAILY_SALES",
@@ -919,7 +919,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "ReviewEnterpriseProductSale": {
                         "type": "box",
                         "readonly":true,
-                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'LosDSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         "title": "Sales per product & Gross margin",
                         "orderNo": 640,
                         colClass: "col-sm-12",
@@ -1128,7 +1128,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "ReviewAnnualSales": {
                         "type": "box",
-                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'LosDSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         colClass: "col-sm-12",
                         "title": "ANNUAL_BUSINESS_CYCLE",
                         "orderNo": 650,
@@ -1277,7 +1277,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "MonthlySalesCalculate": {
                         "type": "box",
-                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'LosDSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         "title": "MONTHLY_SALES_CALCULATE",
                         "orderNo": 660,
                         "items": {
@@ -1454,7 +1454,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "OtherExpenseDetails": {
                         "type": "box",
-                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'LosDSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         "title": "OTHER_EXPENSE_CALCULATION",
                         "orderNo": 660,
                         "items": {
@@ -1596,7 +1596,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "ReviewMonthlyBusinessExpense": {
                         "type": "box",
                         colClass: "col-sm-6",
-                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'LosDSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         "title": "BUSINESS_EXPENSE_MONTHLY",
                         "orderNo": 670,
                         "items": {
@@ -1643,7 +1643,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "NetBusinessIncome": {
                         "type": "box",
                         "title": "NET_BUSINESS_INCOME",
-                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'LosDSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         "orderNo": 690,
                         "items": {
                             'netBusinessIncomeGrossMargin': {
@@ -1705,7 +1705,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "type": "box",
                         colClass: "col-sm-6",
                         "title": "ADDITIONAL_INCOME",
-                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'LosDSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         "orderNo": 680,
                         "items": {
                             "otherBusinessIncomes": {
@@ -1811,7 +1811,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         colClass: "col-sm-6",
                         "title": "PERSONAL_EXPENSES",
                         "orderNo": 710,
-                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'LosDSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         "items": {
                             "personalExpenses": {
                                 key: "customer.personalExpenses",
@@ -1923,7 +1923,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "type": "box",
                         colClass: "col-sm-6",
                         "title": "LIABILITY_REPAYMENT",
-                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'LosDSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         "orderNo": 730,
                         "items": {
                             "liabilityRepayment": {
@@ -1983,7 +1983,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         // colClass: "col-sm-12",
                         "title": 'TOTAL_MONTHLY_SURPLUS',
                        // readOnly : "model.TableReadonlyFlag"
-                       "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'LosDSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                       "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         "orderNo": 750,
                         "items": {
                             'avgDailySaleAmount': {
@@ -2381,7 +2381,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 }
                             }
                         },
-                        "LosDSCOverride": {
+                        "DSCOverride": {
                             "excludes": [
                             ],
                             "overrides": {
