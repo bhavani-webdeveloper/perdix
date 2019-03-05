@@ -41,7 +41,6 @@ define({
 					"centre": {
 						"title": "CENTRE",
 						"type": ["integer", "null"],
-						"required":true,
 						"x-schema-form": {
 							"type": "select",
 							"enumCode": "centre",
