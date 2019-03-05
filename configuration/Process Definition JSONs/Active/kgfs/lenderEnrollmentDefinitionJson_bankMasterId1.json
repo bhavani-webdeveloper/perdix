@@ -1594,6 +1594,67 @@
                     }
                 }
             },
+            "enterpriseRegistrations": {
+              "title": "Enterprise Registrations",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "registrationNumber",
+                  "documentId"
+                ],
+                "properties": {
+                  "registrationType": {
+                    "title": "Registration Type",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1000,
+                    "captureStages": [
+                      "BasicEnrolment",
+                      "Completed"
+                    ]
+                  },
+                  "registrationNumber": {
+                    "title": "Registration Number",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1000,
+                    "captureStages": [
+                      "BasicEnrolment",
+                      "Completed"
+                    ]
+                  },
+                  "registeredDate": {
+                    "title": "Registered Date",
+                    "type": "string",
+                    "format": "date",
+                    "captureStages": [
+                      "BasicEnrolment",
+                      "Completed"
+                    ]
+                  },
+                  "expiryDate": {
+                    "title": "Expiry Date",
+                    "type": "string",
+                    "format": "date",
+                    "captureStages": [
+                      "BasicEnrolment",
+                      "Completed"
+                    ]
+                  },
+                  "documentId": {
+                    "title": "document Capture",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500,
+                    "captureStages": [
+                      "BasicEnrolment",
+                      "Completed"
+                    ]
+                  }
+                }
+              }
+            },
             "lenderContatctDetails":
             {
                 "title": "Lender Contact Details",
