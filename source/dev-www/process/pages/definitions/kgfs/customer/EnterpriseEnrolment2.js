@@ -381,6 +381,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EnterpriseFinancials.incomeThroughSales.amount": {
                         "orderNo": 512,
+                        "required":true,
                         onChange: function (value, form, model) {
                             computeTotalMonthlySurpluse("value","form", model);
                         }
@@ -408,6 +409,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EnterpriseFinancials.rawMaterialExpenses.amount": {
                         "orderNo": 523,
+                        "required":true,
                         onChange: function (value, form, model) {
                             computeTotalMonthlySurpluse(value, form, model);
                         }
