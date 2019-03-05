@@ -2714,14 +2714,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             .then(function(res){
                                                                
                                                                 // PageHelper.showProgress("customer-load", "Done..", 5000);
-                                                        model.customer.familyMembers[model.arrayIndex].gender=res.gender;
-                                                         model.customer.familyMembers[model.arrayIndex].dateOfBirth=res.dateOfBirth;
-                                                         if (model.customer.familyMembers[model.arrayIndex].dateOfBirth) {
-                                                          model.customer.familyMembers[model.arrayIndex].age=moment().diff(moment(model.customer.familyMembers[model.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                                        model.customer.familyMembers[context.arrayIndex].gender=res.gender;
+                                                         model.customer.familyMembers[context.arrayIndex].dateOfBirth=res.dateOfBirth;
+                                                         if (model.customer.familyMembers[context.arrayIndex].dateOfBirth) {
+                                                          model.customer.familyMembers[context.arrayIndex].age=moment().diff(moment(model.customer.familyMembers[model.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                                                          }
                                                         //  model.customer.familyMembers[form.arrayIndex].educationStatus=res.customer.id;
-                                                         model.customer.familyMembers[model.arrayIndex].maritalStatus=res.maritalStatus;
-                                                         model.customer.familyMembers[model.arrayIndex].mobilePhone=res.mobilePhone;
+                                                         model.customer.familyMembers[context.arrayIndex].maritalStatus=res.maritalStatus;
+                                                         model.customer.familyMembers[context.arrayIndex].mobilePhone=res.mobilePhone;
                                                                
                                                             }, function(httpRes){
                                                                 // PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
