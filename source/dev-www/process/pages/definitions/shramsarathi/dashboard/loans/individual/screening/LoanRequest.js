@@ -1909,7 +1909,7 @@ define([],function(){
                                                 "gracePeriod":{
                                                     "key":"loanAccount.disbursementSchedules[].moratoriumPeriodInDays",
                                                     "title":"GRACE_PERIOD",
-                                                    "type":"text",
+                                                    "type":"number",
                                                     "required":true
                                                 }
                                             }
@@ -2188,8 +2188,6 @@ define([],function(){
                         return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model);
                     })
                     .then(function(form){
-                        console.log("Loan Request:");
-                        console.log(form);
                         self.form = form;
                     });
                 },
