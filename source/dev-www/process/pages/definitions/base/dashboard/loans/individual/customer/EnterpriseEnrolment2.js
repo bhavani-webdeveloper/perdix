@@ -2746,7 +2746,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
 
                                 if (response.customer_id == model.customer.id){
-                                    return false;
+                                   // return false;
                                 }
 
                                 return EnrolmentProcess.fromCustomerID(response.customer_id).toPromise();
@@ -2846,7 +2846,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         if(PageHelper.isFormInvalid(form)) {
                             return false;
                         }
-                        
+                        //model.enrolmentProcess.customer = model.customer;
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
                         model.enrolmentProcess.proceed()
