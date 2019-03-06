@@ -1299,8 +1299,12 @@ define([],function(){
                             onChange:function(value,form,model){
                                 computeEMI(model);
                             },
-                            "type":"select",
-                            "enumCode":"duration"
+                            // "type":"select",
+                            // "enumCode":"duration",
+                            "type":"number",
+                            "schema": {
+                                "pattern": "^([6-9]|[1-6][0-9]|60)$"
+                            }
                         },
                         "LoanRecommendation.interestRate":{
                             title:"INTEREST_RATE",
