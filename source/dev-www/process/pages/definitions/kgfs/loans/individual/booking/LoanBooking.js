@@ -245,6 +245,9 @@ define([], function () {
                     })
                     }
                 }
+                if(model.loanAccount.loanAmount && model.loanAccount.disbursementSchedules.length != 0){
+                    model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmount;
+                }
                 // TODO Hard Coded value have to fix this
                 model.loanAccount.securityEmiRequired = "No";
                 if(!(model.loanAccount.partnerCode)){
