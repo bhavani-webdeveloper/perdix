@@ -938,7 +938,7 @@ define([], function() {
                                     "udf7": {
                                         "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7",
                                         "title": "GROSS_IRR",
-                                        "type": "number",
+                                        "type": "string",
                                         "orderNo": 110,
                                         "readonly": true
                                     },
