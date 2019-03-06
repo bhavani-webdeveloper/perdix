@@ -1,51 +1,33 @@
-irf.pageCollection.factory(irf.page("audit.AssignedBranchIssuesQueue"), ["$log","PageHelper", "User", "formHelper", "irfNavigator", "$stateParams", "Audit", "$state", "$q", "SessionStore",
-    function($log,PageHelper, User, formHelper, irfNavigator, $stateParams, Audit, $state, $q, SessionStore) {
+irf.pageCollection.factory(irf.page("audit.ExpiredBranchAuditsQueue"), ["$log", "formHelper", "Lead", "$stateParams", "irfNavigator", "Audit", "$state", "$q", "SessionStore", "Utils",
+    function($log, formHelper, Lead, $stateParams, irfNavigator, Audit, $state, $q, SessionStore, Utils) {
+
         var returnObj = {
             "type": "search-list",
-            "title": "ASSIGNED_ISSUES",
+            "title": "EXPIRED_AUDITS",
             initialize: function(model, form, formCtrl) {
-                var bankName = SessionStore.getBankName();
-                var banks = formHelper.enum('bank').data;
-                for (var i = 0; i < banks.length; i++) {
-                    if (banks[i].name == bankName) {
-                        model.bankId = banks[i].value;
-                    }
-                }
-                var userRole = SessionStore.getUserRole();
-                if (userRole && userRole.accessLevel && userRole.accessLevel === 5) {
-                    model.fullAccess = true;
-                }
+                model.Audits = model.Audits || {};
+                model.branch = SessionStore.getCurrentBranch().branchId;
+                localFormController = formCtrl;
+                syncCheck = false;
                 if ($stateParams.pageData && $stateParams.pageData.page) {
                     returnObj.definition.listOptions.tableConfig.page = $stateParams.pageData.page;
                 } else {
                     returnObj.definition.listOptions.tableConfig.page = 0;
                 }
-                model.role_id = SessionStore.getUserRole().id;
             },
             definition: {
-                title: "SEARCH_ISSUES",
-                searchForm: [{
-                        key: "bankId",
-                        readonly: true,
-                        condition: "!model.fullAccess"
-                    }, {
-                        key: "bankId",
-                        condition: "model.fullAccess"
-                    },
-                    "branch_id"
+                title: "SEARCH_AUDITS",
+                searchForm: [
+                    "*"
                 ],
                 autoSearch: true,
                 searchSchema: {
                     "type": 'object',
                     "title": 'SEARCH_OPTIONS',
                     "properties": {
-                        "bankId": {
-                            "title": "BANK_NAME",
-                            "type": ["integer", "null"],
-                            "enumCode": "bank",
-                            "x-schema-form": {
-                                "type": "select"
-                            }
+                        "auditor_id": {
+                            "title": "AUDITOR_ID",
+                            "type": "number"
                         },
                         "branch_id": {
                             "title": "BRANCH_ID",
@@ -54,26 +36,48 @@ irf.pageCollection.factory(irf.page("audit.AssignedBranchIssuesQueue"), ["$log",
                             "x-schema-form": {
                                 "type": "userbranch"
                             }
+                        },
+                        "start_date": {
+                            "title": "START_DATE",
+                            "type": "string",
+                            "x-schema-form": {
+                                "type": "date"
+                            }
+                        },
+                        "end_date": {
+                            "title": "END_DATE",
+                            "type": "string",
+                            "x-schema-form": {
+                                "type": "date"
+                            }
+                        },
+                        "report_date": {
+                            "title": "REPORT_DATE",
+                            "type": "string",
+                            "x-schema-form": {
+                                "type": "date"
+                            }
                         }
                     },
-                    "required": []
                 },
                 getSearchFormHelper: function() {
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    return Audit.online.getIssuesList({
-                        'bank_id': searchOptions.bankId,
+                    return Audit.online.getAuditList({
+                        'audit_id': searchOptions.auditor_id,
                         'branch_id': searchOptions.branch_id,
-                        'current_stage': "assign",
-                        'assignee_designation_id': searchOptions.role_id,
+                        'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",
+                        'end_date': searchOptions.end_date ? searchOptions.end_date + " 23:59:59" : "",
+                        'report_date': searchOptions.report_date ? searchOptions.report_date + " 00:00:00" : "",
+                        'current_stage': 'expired',
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage
                     }).$promise;
                 },
                 paginationOptions: {
                     "getItemsPerPage": function(response, headers) {
-                        return 15;
+                        return 100;
                     },
                     "getTotalItemsCount": function(response, headers) {
                         return headers['x-total-count']
@@ -102,63 +106,60 @@ irf.pageCollection.factory(irf.page("audit.AssignedBranchIssuesQueue"), ["$log",
                     },
                     tableConfig: {
                         "serverPaginate": true,
-                        "paginate": false,
-                        "pageLength": 15
+                        "paginate": true,
+                        "pageLength": 10
                     },
                     getTableConfig: function() {
                         return this.tableConfig;
                     },
+
                     getColumns: function() {
-                        var master = Audit.offline.getAuditMaster();
+                        var masterJson = Audit.offline.getAuditMaster();
                         return [{
-                            title: 'ISSUE',
-                            data: 'id',
-                            render: function(data, type, full, meta) {
-                                return master.typeofissues[full.type_of_issue_id].description;
-                            }
+                            title: 'AUDIT_ID',
+                            data: 'audit_id'
                         }, {
-                            title: 'STATUS',
-                            data: 'status',
+                            title: 'AUDIT_TYPE',
+                            data: 'audit_type',
                             render: function(data, type, full, meta) {
-                                return data == 'A'? 'Assigned': 'Unconfirmed';
+                                return masterJson.audit_type[data].audit_type;
                             }
-                        }, {
-                            title: 'AUDITOR_ID',
-                            data: 'auditor_id'
                         }, {
                             title: 'BRANCH_NAME',
-                            data: 'branch_id',
-                            render: function(data, type, full, meta) {
-                                return master.branch_name[full.branch_id]? master.branch_name[full.branch_id].node_code: data;
-                            }
+                            data: 'branch_name'
                         }, {
-                            title: 'CLOSED_ON',
-                            data: 'closed_on'
+                            title: 'REPORT_DATE',
+                            data: 'report_date'
                         }, {
-                            title: 'CLOSED_BY',
-                            data: 'closed_by'
+                            title: 'START_DATE',
+                            data: 'start_date'
                         }, {
-                            title: 'AUDIT_REPORT_DATE',
-                            data: 'audit_report_date'
+                            title: 'END_DATE',
+                            data: 'end_date'
                         }]
                     },
                     getActions: function() {
                         return [{
-                            name: "UPDATE_ISSUE",
+                            name: "VIEW_AUDIT",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
-                                irfNavigator.go({
-                                    'state': 'Page.Engine',
-                                    'pageName': 'audit.IssueDetails',
-                                    'pageId': item.id,
+                                var goparam = {
+                                    'state': 'Page.Adhoc',
+                                    'pageName': 'audit.AuditDetails',
+                                    'pageId': item.audit_id,
                                     'pageData': {
-                                        "readonly": false,
-                                        "type": "operation"
+                                        "page": returnObj.definition.listOptions.tableConfig.page,
+                                        "readonly": true
                                     }
-                                }, {
+                                };
+                                var backparam = {
                                     'state': 'Page.Engine',
-                                    'pageName': 'audit.AssignedIssuesQueue'
-                                });
+                                    'pageName': 'audit.ExpiredAuditsQueue',
+                                    'pageData': {
+                                        "page": returnObj.definition.listOptions.tableConfig.page
+                                    }
+                                };
+                                irfNavigator.go(goparam, backparam);
                             },
                             isApplicable: function(item, index) {
                                 return true;

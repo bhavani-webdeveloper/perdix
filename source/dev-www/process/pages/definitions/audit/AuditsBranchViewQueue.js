@@ -1,8 +1,8 @@
-irf.pageCollection.factory(irf.page("audit.ApprovedBranchAuditsViewQueue"), ["$log", "Queries", "User", "formHelper", "$stateParams", "irfNavigator", "Audit", "$state", "$q", "SessionStore", "PageHelper",
-    function($log, Queries, User, formHelper, $stateParams, irfNavigator, Audit, $state, $q, SessionStore, PageHelper) {
+irf.pageCollection.factory(irf.page("audit.AuditsBranchViewQueue"), ["$log", "$q", "Queries", "User", "Audit", "formHelper", "$stateParams", "irfNavigator", "$state", "$stateParams", "irfNavigator", "SessionStore", "PageHelper",
+    function($log, $q, Queries, User, Audit, formHelper, $stateParams, irfNavigator, $state, $stateParams, irfNavigator, SessionStore, PageHelper) {
         var returnObj = {
             "type": "search-list",
-            "title": "APPROVED_AUDITS",
+            "title": "AUDIT_VIEW",
             initialize: function(model, form, formCtrl) {
                 model.Audits = model.Audits || {};
                 model.branch = SessionStore.getCurrentBranch().branchId;
@@ -16,7 +16,6 @@ irf.pageCollection.factory(irf.page("audit.ApprovedBranchAuditsViewQueue"), ["$l
                 }
                 localFormController = formCtrl;
                 syncCheck = false;
-                $log.info("Regular audit queue got initialized");
                 if ($stateParams.pageData && $stateParams.pageData.page) {
                     returnObj.definition.listOptions.tableConfig.page = $stateParams.pageData.page;
                 } else {
@@ -31,7 +30,7 @@ irf.pageCollection.factory(irf.page("audit.ApprovedBranchAuditsViewQueue"), ["$l
                 }, PageHelper.showErrors);
             },
             definition: {
-                title: "SEARCH_AUDITS",
+                title: "SEARCH_AUDIT",
                 searchForm: [{
                         key: "bankId",
                         readonly: true,
@@ -52,7 +51,8 @@ irf.pageCollection.factory(irf.page("audit.ApprovedBranchAuditsViewQueue"), ["$l
                             },
                             "branch_id": {
                                 "key": "branch_id"
-                            }
+                            },
+
                         },
                         outputMap: {
                             "login": "auditor_id",
@@ -81,12 +81,30 @@ irf.pageCollection.factory(irf.page("audit.ApprovedBranchAuditsViewQueue"), ["$l
                     "audit_type",
                     "report_date",
                     "start_date",
-                    "end_date"
+                    "end_date", {
+                        "key": "current_stage",
+                        "title": "STAGE",
+                        "type": "string",
+                        "type": "select",
+                        "titleMap": {
+                            "scheduled": "Scheduled",
+                            "postpone": "Postpone",
+                            "cancel": "Cancel",
+                            "reassign": "Reasign",
+                            "create": "Create",
+                            "start": "Start",
+                            "publish": "Publish",
+                            "reject": "Reject",
+                            "L1-approve": "Level 1 Approved",
+                            "approve": "Approve",
+                            "close": "Close"
+                        }
+                    }
                 ],
                 autoSearch: true,
                 searchSchema: {
                     "type": 'object',
-                    "title": 'SEARCH_OPTIONS',
+                    "title": 'SEARCH_OPTION',
                     "properties": {
                         "bankId": {
                             "title": "BANK_NAME",
@@ -102,8 +120,8 @@ irf.pageCollection.factory(irf.page("audit.ApprovedBranchAuditsViewQueue"), ["$l
                             "title": "AUDITOR_USERID"
                         },
                         "branch_id": {
-                            "title": "BRANCH_ID",
-                            "type": "number",
+                            "title": "BRANCH_NAME",
+                            "type": ["integer", "null"],
                             "enumCode": "branch_id",
                             "x-schema-form": {
                                 "type": "userbranch"
@@ -114,7 +132,7 @@ irf.pageCollection.factory(irf.page("audit.ApprovedBranchAuditsViewQueue"), ["$l
                             "type": "number",
                             "enumCode": "audit_type",
                             "x-schema-form": {
-                                "type": "select",
+                                "type": "select"
                             }
                         },
                         "start_date": {
@@ -138,6 +156,9 @@ irf.pageCollection.factory(irf.page("audit.ApprovedBranchAuditsViewQueue"), ["$l
                                 "type": "date"
                             }
                         },
+                        "current_stage": {
+                            "title": "STAGE"
+                        },
                         "user_name": {
                             "title": "USER_NAME",
                             "type": "string"
@@ -153,19 +174,19 @@ irf.pageCollection.factory(irf.page("audit.ApprovedBranchAuditsViewQueue"), ["$l
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    var promise = Audit.online.getAuditList({
-                        'auditor_id': searchOptions.auditor_id,
+                    return Audit.online.getAuditList({
+                        'audit_id': searchOptions.auditor_id,
+                        'userId': searchOptions.userId,
                         'branch_id': searchOptions.branch_id,
                         'bank_id': searchOptions.bankId,
                         'audit_type': searchOptions.audit_type,
                         'start_date': searchOptions.start_date ? searchOptions.start_date + " 00:00:00" : "",
                         'end_date': searchOptions.end_date ? searchOptions.end_date + " 23:59:59" : "",
                         'report_date': searchOptions.report_date ? searchOptions.report_date + " 00:00:00" : "",
-                        'current_stage': "approve",
+                        'current_stage': searchOptions.current_stage,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage
                     }).$promise;
-                    return promise;
                 },
                 paginationOptions: {
                     "getItemsPerPage": function(response, headers) {
@@ -187,8 +208,18 @@ irf.pageCollection.factory(irf.page("audit.ApprovedBranchAuditsViewQueue"), ["$l
                         return [];
                     },
                     getListItem: function(item) {
-                        return []
+                        return [
+
+                        ]
                     },
+                    getTableConfig: function() {
+                        return {
+                            "serverPaginate": true,
+                            "paginate": true,
+                            "pageLength": 10
+                        };
+                    },
+
                     tableConfig: {
                         "serverPaginate": true,
                         "paginate": true,
@@ -201,7 +232,7 @@ irf.pageCollection.factory(irf.page("audit.ApprovedBranchAuditsViewQueue"), ["$l
                     getColumns: function() {
                         var masterJson = Audit.offline.getAuditMaster();
                         return [{
-                            title: 'AUDIT_IT',
+                            title: 'AUDIT_ID',
                             data: 'audit_id'
                         }, {
                             title: 'AUDITOR_ID',
@@ -229,7 +260,7 @@ irf.pageCollection.factory(irf.page("audit.ApprovedBranchAuditsViewQueue"), ["$l
                     getActions: function() {
                         return [{
                             name: "VIEW_AUDIT",
-                            icon: "fa fa-eye",
+                            icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
                                 if (item.audit_type = 1) {
                                     var goparam = {
@@ -243,8 +274,8 @@ irf.pageCollection.factory(irf.page("audit.ApprovedBranchAuditsViewQueue"), ["$l
                                     };
                                     var backparam = {
                                         'state': 'Page.Engine',
-                                        'pageName': 'audit.ApprovedAuditsViewQueue',
-                                        'pageId': item.audit_id,
+                                        'pageName': 'audit.AuditsViewQueue',
+                                        'pageId': null,
                                         'pageData': {
                                             "page": returnObj.definition.listOptions.tableConfig.page
                                         }
@@ -262,8 +293,8 @@ irf.pageCollection.factory(irf.page("audit.ApprovedBranchAuditsViewQueue"), ["$l
                                     };
                                     var backparam = {
                                         'state': 'Page.Engine',
-                                        'pageName': 'audit.ApprovedAuditsViewQueue',
-                                        'pageId': item.audit_id,
+                                        'pageName': 'audit.AuditsViewQueue',
+                                        'pageId': null,
                                         'pageData': {
                                             "page": returnObj.definition.listOptions.tableConfig.page
                                         }

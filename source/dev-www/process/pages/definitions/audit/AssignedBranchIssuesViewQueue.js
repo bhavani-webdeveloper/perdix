@@ -1,8 +1,8 @@
-irf.pageCollection.factory(irf.page("audit.ConfirmedBranchIssuesQueue"), ["$log", "irfNavigator", "$stateParams", "formHelper", "Audit", "$state", "$q", "SessionStore",
-    function($log, irfNavigator, $stateParams, formHelper, Audit, $state, $q, SessionStore) {
+irf.pageCollection.factory(irf.page("audit.AssignedBranchIssuesViewQueue"), ["$log","PageHelper", "User", "formHelper", "irfNavigator", "$stateParams", "Audit", "$state", "$q", "SessionStore",
+    function($log,PageHelper, User, formHelper, irfNavigator, $stateParams, Audit, $state, $q, SessionStore) {
         var returnObj = {
             "type": "search-list",
-            "title": "CONFIRMED_ISSUES",
+            "title": "ASSIGNED_ISSUES_VIEW_QUEUE",
             initialize: function(model, form, formCtrl) {
                 var bankName = SessionStore.getBankName();
                 var banks = formHelper.enum('bank').data;
@@ -13,7 +13,7 @@ irf.pageCollection.factory(irf.page("audit.ConfirmedBranchIssuesQueue"), ["$log"
                 }
                 var userRole = SessionStore.getUserRole();
                 if (userRole && userRole.accessLevel && userRole.accessLevel === 5) {
-                    //model.fullAccess = true;
+                    model.fullAccess = true;
                 }
                 if ($stateParams.pageData && $stateParams.pageData.page) {
                     returnObj.definition.listOptions.tableConfig.page = $stateParams.pageData.page;
@@ -23,8 +23,7 @@ irf.pageCollection.factory(irf.page("audit.ConfirmedBranchIssuesQueue"), ["$log"
             },
             definition: {
                 title: "SEARCH_ISSUES",
-                searchForm: [
-                     {
+                searchForm: [{
                         key: "bankId",
                         readonly: true,
                         condition: "!model.fullAccess"
@@ -65,7 +64,8 @@ irf.pageCollection.factory(irf.page("audit.ConfirmedBranchIssuesQueue"), ["$log"
                     return Audit.online.getIssuesList({
                         'bank_id': searchOptions.bankId,
                         'branch_id': searchOptions.branch_id,
-                        'current_stage': "confirm",
+                        'current_stage': "assign",
+                        'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage
                     }).$promise;
                 },
@@ -106,7 +106,6 @@ irf.pageCollection.factory(irf.page("audit.ConfirmedBranchIssuesQueue"), ["$log"
                     getTableConfig: function() {
                         return this.tableConfig;
                     },
-
                     getColumns: function() {
                         var master = Audit.offline.getAuditMaster();
                         return [{
@@ -115,6 +114,15 @@ irf.pageCollection.factory(irf.page("audit.ConfirmedBranchIssuesQueue"), ["$log"
                             render: function(data, type, full, meta) {
                                 return master.typeofissues[full.type_of_issue_id].description;
                             }
+                        }, {
+                            title: 'STATUS',
+                            data: 'status',
+                            render: function(data, type, full, meta) {
+                                return data == 'A'? 'Assigned': 'Unconfirmed';
+                            }
+                        }, {
+                            title: 'AUDITOR_ID',
+                            data: 'auditor_id'
                         }, {
                             title: 'BRANCH_NAME',
                             data: 'branch_id',
@@ -134,7 +142,7 @@ irf.pageCollection.factory(irf.page("audit.ConfirmedBranchIssuesQueue"), ["$log"
                     },
                     getActions: function() {
                         return [{
-                            name: "VIEW_ISSUE",
+                            name: "UPDATE_ISSUE",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
                                 irfNavigator.go({
@@ -142,11 +150,13 @@ irf.pageCollection.factory(irf.page("audit.ConfirmedBranchIssuesQueue"), ["$log"
                                     'pageName': 'audit.IssueDetails',
                                     'pageId': item.id,
                                     'pageData': {
+                                        "readonly": false,
+                                        "type": "operation",
                                         "readonly": true
                                     }
                                 }, {
                                     'state': 'Page.Engine',
-                                    'pageName': 'audit.ConfirmedIssuesQueue'
+                                    'pageName': 'audit.AssignedIssuesQueue'
                                 });
                             },
                             isApplicable: function(item, index) {

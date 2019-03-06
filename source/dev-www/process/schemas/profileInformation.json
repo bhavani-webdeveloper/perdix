@@ -1024,6 +1024,12 @@
                                 "title":"UPLOAD_RECEIPTS",
                                 "category": "CustomerEnrollment",
                                 "subCategory": "LIABILITIES"
+                            },
+                            "udf2":{
+                                "type": ["string","null"],
+                                "title":"MASON_VALUATION_DOCUMENT",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "LIABILITIES"
                             }
                         },
                         "required": [

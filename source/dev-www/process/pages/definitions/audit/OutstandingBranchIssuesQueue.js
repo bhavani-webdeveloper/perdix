@@ -1,9 +1,8 @@
-irf.pageCollection.factory(irf.page("audit.UnconfirmedBranchIssuesQueue"), ["$log", "formHelper", "irfNavigator", "$stateParams", "Audit", "$state", "$q", "SessionStore",
+irf.pageCollection.factory(irf.page("audit.OutstandingBranchIssuesQueue"), ["$log", "formHelper", "irfNavigator", "$stateParams", "Audit", "$state", "$q", "SessionStore",
     function($log, formHelper, irfNavigator, $stateParams, Audit, $state, $q, SessionStore) {
-
         var returnObj = {
             "type": "search-list",
-            "title": "UNCONFIRMED_ISSUES",
+            "title": "OUTSTANDING_ISSUES",
             initialize: function(model, form, formCtrl) {
                 var bankName = SessionStore.getBankName();
                 var banks = formHelper.enum('bank').data;
@@ -24,8 +23,7 @@ irf.pageCollection.factory(irf.page("audit.UnconfirmedBranchIssuesQueue"), ["$lo
             },
             definition: {
                 title: "SEARCH_ISSUES",
-                searchForm: [
-                    {
+                searchForm: [{
                         key: "bankId",
                         readonly: true,
                         condition: "!model.fullAccess"
@@ -65,9 +63,9 @@ irf.pageCollection.factory(irf.page("audit.UnconfirmedBranchIssuesQueue"), ["$lo
                     return Audit.online.getIssuesList({
                         'bank_id': searchOptions.bankId,
                         'branch_id': searchOptions.branch_id,
-                        'issue_status': "P",
+                        'current_stage': "close",
                         'page': pageOpts.pageNo,
-                        'per_page': pageOpts.itemsPerPage
+                        'per_page': pageOpts.itemsPerPage,
                     }).$promise;
                 },
                 paginationOptions: {
@@ -135,22 +133,21 @@ irf.pageCollection.factory(irf.page("audit.UnconfirmedBranchIssuesQueue"), ["$lo
                     },
                     getActions: function() {
                         return [{
-                            name: "VIEW_ISSUE",
+                            name: "UPDATE_ISSUE",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
-                                var goparam = {
+                                irfNavigator.go({
                                     'state': 'Page.Engine',
                                     'pageName': 'audit.IssueDetails',
                                     'pageId': item.id,
                                     'pageData': {
-                                        "readonly": true
+                                        "readonly": false,
+                                        "type": "audit"
                                     }
-                                };
-                                var backparam = {
+                                }, {
                                     'state': 'Page.Engine',
-                                    'pageName': 'audit.UnconfirmedIssuesQueue'
-                                };
-                                irfNavigator.go(goparam, backparam);
+                                    'pageName': 'audit.OutstandingIssuesQueue'
+                                });
                             },
                             isApplicable: function(item, index) {
                                 return true;

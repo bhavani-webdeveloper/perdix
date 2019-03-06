@@ -176,7 +176,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             var overridesFields = function (bundlePageObj) {
                return {
                         "IndividualReferences":{
-                            title:"REFERENCE"
+                            title:"REFERENCE",
+                            condition:"model.pageClass !='guarantor' && model.pageClass !='co-applicant'"
                         },
                         "IndividualReferences.verifications":{
                             title:"REFERENCE"
@@ -292,7 +293,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "required": false
                         },
                         "IndividualInformation.language":{
-                            "type": "string",
+                            "type": "select",
                             "required": false
                         },
                         "IndividualInformation.area":{
@@ -892,6 +893,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             required: true,
                             enumCode: "house_ownership",
                         },
+                        "FamilyDetails": {
+                            condition:"model.pageClass !='guarantor' && model.pageClass !='co-applicant'"
+                        },
                         "FamilyDetails.familyMembers": {
                             "title":"FAMILY_DETAILS"
                         },
@@ -952,10 +956,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             title:"FAMILY_MEMBER_NAME"
                         },                       
                         "IndividualFinancials":{
-                            "title":"HOUSEHOLD_EXPENSES"
+                            "title":"HOUSEHOLD_EXPENSES",
+                            condition:"model.pageClass !='guarantor' && model.pageClass !='co-applicant'"
                         },
                         "IndividualFinancials.expenditures":{
-                            "title":"ADD_HOUSEHOLD_EXPENSES"
+                            "title":"ADD_HOUSEHOLD_EXPENSES",
+                            "titleExpr":"('HOUSEHOLD_EXPENSES'|translate)"
                         },                        
                         "IndividualFinancials.expenditures.expenditureSource":{
                             "required":true,
@@ -1207,7 +1213,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "educationLevel":{
                                                     "key": "customer.familyMembers[].educationStatus",
                                                     "title":"EDUCATION_LEVEL",
-                                                    "type":"string"
+                                                    "type":"select"
                                                 },
                                                 "incomeDetails":{
                                                     "key": "customer.familyMembers[].udfId2",

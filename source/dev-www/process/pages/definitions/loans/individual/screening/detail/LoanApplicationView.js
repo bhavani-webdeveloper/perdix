@@ -92,9 +92,9 @@ define({
             model.expectedTurnoverObj['totalOutstandingAmount'] = oustandingAmount;
             
             if(model.expectedTurnoverObj['annualTurnover'] && model.expectedTurnoverObj['annualTurnover'] != 0){
-                var kinaraExposureToAnnualTurovr = ((oustandingAmount + model.expectedTurnoverObj['loanAmountRecommended'])/model.expectedTurnoverObj['annualTurnover']).toFixed(2);
+                var kinaraExposureToAnnualTurovr = ((oustandingAmount + model.expectedTurnoverObj['loanAmountRecommended'])/model.expectedTurnoverObj['annualTurnover']);
                 var kinaraExposureToAnnualTurnover = (kinaraExposureToAnnualTurovr*100)+"%";
-                model.expectedTurnoverObj['kinaraExposureToAnnualTurover'] = kinaraExposureToAnnualTurnover;
+                model.expectedTurnoverObj['kinaraExposureToAnnualTurover'] = kinaraExposureToAnnualTurnover.toFixed(2);
             }
             else{
                 model.expectedTurnoverObj['kinaraExposureToAnnualTurover']  = 0+'%'; 
@@ -743,7 +743,7 @@ define({
                             }
                         }, {
                             "key": "loanAccount.tenure",
-                            "title": "Duration(months)"/*,
+                            "title": "DURATION_IN_MONTHS"/*,
                             "type": "number"*/
                             ,
                             onChange:function(value,form,model){

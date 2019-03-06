@@ -65,7 +65,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualInformation.urnNo",
                     "DownloadMELApplicationForm",
                     "DownloadMELApplicationForm.downloadMELApplicationFormFieldSet",
-                    "DownloadMELApplicationForm.downloadMELApplicationFormName",
                     "DownloadMELApplicationForm.downloadMELApplicationForm",                    
                     "UploadMELApplicationForm",
                     "UploadMELApplicationForm.uploadMELApplicationFormFieldSet",
@@ -234,7 +233,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "type": "button",
                                             "title": "DOWNLOAD",
                                             "icon": "fa fa-download",
-                                            "condition":"model.master.uploadNameValue",
                                             "notitle": true,
                                             "readonly": false,
 
@@ -261,7 +259,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "type": "file",
                                         "category": "ACH",
                                         "subCategory": "cat2",
-                                        "condition":"model.master.uploadNameValue",
                                         "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                                         customHandle: function(file, progress, modelValue, form, model) {
                                             Maintenance.masterDataUpload(file, progress, {

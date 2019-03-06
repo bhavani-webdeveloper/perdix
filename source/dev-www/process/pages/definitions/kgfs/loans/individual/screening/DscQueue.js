@@ -87,6 +87,7 @@ define({
                         return [
 
                             "{{'ENTITY_NAME'|translate}} : " + item.customerName,
+                            "{{'CENTRE_NAME'|translate}} : " + item.centreName,
                             "{{'LOAN_AMOUNT'|translate}} : " + item.loanAmount,
                             "{{'LOAN_TYPE'|translate}} : " + item.loanType,
                             "{{'PARTNER_CODE'|translate}} : " + item.partnerCode,
@@ -110,8 +111,12 @@ define({
                             data: 'urn'
                         },
                         {
-                            title: 'ENTITY_NAME',
-                            data: 'customerName'
+                            title: 'CUSTOMER_NAME',
+                            data: 'applicantName'
+                        },
+                        {
+                            title: 'CENTRE_NAME',
+                            data: 'centreName'
                         }, {
                             title: 'LOAN_AMOUNT',
                             data: 'loanAmount'

@@ -132,8 +132,10 @@ define([], function () {
                 model.additions.noOfGuarantorCoApplicantHtml = "<p stye=\"font-size:10px !important\"><font color=#FF6347>Number of Co-Applicants : {{model.additions.co_borrower_required}} Number of Guarantors :{{model.additions.number_of_guarantors}}</font><p>";
                 model.loanAccount.bcAccount = {};
                 model.loanAccount.processType = "1";
-                
-                if (typeof model.loanAccount.nominees == "undefined" || model.loanAccount.nominees == null){
+                if(model.loanAccount.loanAmount){
+                    model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmount;
+                }
+               if (typeof model.loanAccount.nominees == "undefined" || model.loanAccount.nominees == null){
                     model.loanAccount.nominees = [];
                     model.loanAccount.nominees.push({});
                 }
