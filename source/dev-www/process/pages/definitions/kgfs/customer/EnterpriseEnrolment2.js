@@ -19,7 +19,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             delete dailysales[day]
                         }
                         dailysales.total = (dailysales.mon ? dailysales.mon : 0) + (dailysales.tue ? dailysales.tue : 0) + (dailysales.wed ? dailysales.wed : 0) + (dailysales.thu ? dailysales.thu : 0) +
-                            (dailysales.fri ? dailysales.fri : 0) + (dailysales.sat ? dailysales.sat : 0) + (dailysales.sun ? dailysales.sun : 0)
+                            (dailysales.fri ?dailysales.fri : 0) + (dailysales.sat ? dailysales.sat : 0) + (dailysales.sun ? dailysales.sun : 0)
                         model.customer.enterprise.weeklySale = model.customer.enterprise.weeklySale + dailysales.total;
                         model.customer.enterprise.monthlySale = model.customer.enterprise.weeklySale * 4;
                     }

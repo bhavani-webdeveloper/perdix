@@ -978,7 +978,7 @@ define([],function(){
                                     "deviationDetails": {
                                         "type": "section",
                                         "colClass": "col-sm-12",
-                                        "html": '<table class="table"><colgroup><col width="20%"><col width="20%"></colgroup><thead><tr><th>Deviation</th><th>Mitigation</th></tr></thead><tbody>' +
+                                        "html": '<table class="table"><colgroup><col width="20%"><col width="20%"></colgroup><thead><tr><th>Parameter Name</th><th>Mitigant</th></tr></thead><tbody>' +
                                             '<tr ng-repeat="(parameter,item) in model.loanMitigantsGrouped">' +
                                             '<td>{{ parameter }}</td>' +
                                             '<td><ul class="list-unstyled">' +
@@ -995,7 +995,7 @@ define([],function(){
                                         "items":{
                                             "parameter":{
                                                "key":"loanAccount.loanMitigants[].parameter",
-                                               "title":"Deviation",
+                                               "title":"DEVIATION",
                                                "type":"string"
                                             },
                                             "mitigant":{
@@ -1385,7 +1385,7 @@ define([],function(){
                         }
                         if(typeof model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 =="undefined" || model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 == null){
                             PageHelper.showErrors({data:{error:"DSC STATUS IS REQUIRED...."}});
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showProgress('enrolment','Oops. Some error.', 5000);
                                 PageHelper.hideLoader();
                                 return false;
                         }
