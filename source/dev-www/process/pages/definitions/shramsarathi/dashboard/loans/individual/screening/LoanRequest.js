@@ -1542,11 +1542,11 @@ define([],function(){
                     "LoanRecommendation.tenure",
                     // "LoanRecommendation.interestRate",
                     "LoanRecommendation.estimatedEmi",
-                    "LoanRecommendation.loanDisbursmentSchedule",
-                    "LoanRecommendation.loanDisbursmentSchedule.collectionDate",
-                    "LoanRecommendation.loanDisbursmentSchedule.disbursementDate",
-                    "LoanRecommendation.loanDisbursmentSchedule.gracePeriod",
-                    "LoanRecommendation.loanDisbursmentSchedule.modeOfDisbursement",
+                    "LoanRecommendation.loanDisbursementSchedule",
+                    "LoanRecommendation.loanDisbursementSchedule.collectionDate",
+                    "LoanRecommendation.loanDisbursementSchedule.disbursementDate",
+                    "LoanRecommendation.loanDisbursementSchedule.gracePeriod",
+                    "LoanRecommendation.loanDisbursementSchedule.modeOfDisbursement",
                     "LoanRecommendation.remarksOfInFavourLoan",
                     "LoanRecommendation.potentialRisks", 
                     "LoanRecommendation.date",
@@ -1649,8 +1649,8 @@ define([],function(){
                     /* Setting data recieved from Bundle */
                     model.loanAccount = model.loanProcess.loanAccount;
                     model.currentStage = model.loanAccount.currentStage;
-
-                    console.log("jduehuohohoiewhwofhuoceheuhujfyoejcoueuoeijveieip",model.currentStage);
+                    model.loanAccount.disbursementSchedules=[];
+                    model.loanAccount.disbursementSchedules.push({});
 
                     if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
                         model.loanAccount.loanCustomerRelations!=null &&
@@ -1872,11 +1872,14 @@ define([],function(){
                                             "required":true,
                                             "titleMap":{"yes":"yes","no":"no"}
                                         },
-                                        "loanDisbursmentSchedule":{
+                                        "loanDisbursementSchedule":{
                                             "type":"array",
-                                            notitle:true,
-                                            add:null,
+                                            // notitle:true,
+                                            "title":"LOAN_DISBURSE",
+                                             add:null,
                                             remove:null,
+                                            view: "fixed",
+                                            key:"loanAccount.disbursementSchedules",
                                             startEmpty:false,
                                             items:{
                                                 "modeOfDisbursement":{
@@ -2178,6 +2181,8 @@ define([],function(){
                         return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model);
                     })
                     .then(function(form){
+                        console.log("Loan Request:");
+                        console.log(form);
                         self.form = form;
                     });
                 },
