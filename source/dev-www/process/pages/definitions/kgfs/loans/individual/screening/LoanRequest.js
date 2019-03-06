@@ -766,7 +766,6 @@ define([],function(){
                 "subTitle": "BUSINESS",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                     // AngularResourceService.getInstance().setInjector($injector);
-
                     model.customer = {};
                     model.review = model.review|| {};
                     model.loanAccount = model.loanProcess.loanAccount;
@@ -814,6 +813,7 @@ define([],function(){
 
                     BundleManager.broadcastEvent('loan-account-loaded', {loanAccount: model.loanAccount});                     
 
+
                      /* Deviations and Mitigations grouping */
                     if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
                         var loanMitigantsGrouped = {};
@@ -828,6 +828,13 @@ define([],function(){
 
                     }
                     /* End of Deviations and Mitigations grouping */
+                     /* Collateral */
+                    if (_.hasIn(model.loanAccount, 'collateral') && _.isArray(model.loanAccount.collateral)){
+                        for (var i=0; i<model.loanAccount.collateral.length; i++){
+                          model.loanAccount.collateral[i].udf3 = Number(model.loanAccount.collateral[i].udf3);     
+                        }
+                    }
+                    /* Collateral */
 
                     self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
@@ -1272,6 +1279,13 @@ define([],function(){
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
+                                /* Collateral */
+                                    if (_.hasIn(model.loanAccount, 'collateral') && _.isArray(model.loanAccount.collateral)){
+                                        for (var i=0; i<model.loanAccount.collateral.length; i++){
+                                          model.loanAccount.collateral[i].udf3 = Number(model.loanAccount.collateral[i].udf3);     
+                                        }
+                                    }
+                                /* Collateral */
                                 BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount});                                    
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
