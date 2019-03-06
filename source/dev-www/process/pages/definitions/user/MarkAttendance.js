@@ -1,15 +1,35 @@
 irf.pageCollection.factory(irf.page("user.MarkAttendance"),
     ["$log","$q", 'Pages_ManagementHelper','PageHelper','formHelper','Utils',
-        'SessionStore',"$state","$stateParams","Masters","authService", "User", "SchemaResource","Queries","Enrollment",
+        'SessionStore',"$state","$stateParams","Masters","authService", "User", "SchemaResource","Queries","Enrollment","BranchCreationResource",
         function($log, $q, ManagementHelper, PageHelper, formHelper,Utils,
-            SessionStore,$state,$stateParams,Masters,authService, User, SchemaResource,Queries,Enrollment){
+            SessionStore,$state,$stateParams,Masters,authService, User, SchemaResource,Queries,Enrollment,BranchCreationResource){
        
             return {
                 "name":"MARK_ATTENDANCE",
                 "type": "schema-form",
                 "title": "MARK_ATTENDANCE",
                 initialize: function (model, form, formCtrl) {
+                    var branchId = SessionStore.getBranchId();
+                    console.log(branchId)
                     $log.info("mark attendance loaded");
+                    if (!Utils.isCordova) {
+                        BranchCreationResource.getBranchByID({
+                                id: branchId
+                            },
+                            function (res) {
+                                if (res.fingerPrintDeviceType) {
+                                    if (res.fingerPrintDeviceType == "MANTRA") {
+                                        model.fingerPrintDeviceType = res.fingerPrintDeviceType;
+                                    }
+                                }
+
+                                PageHelper.hideLoader();
+                            },
+                            function (err) {
+                                $log.info(err);
+                            }
+                        );
+                    }
                     var bankName = SessionStore.getBankName();
                     var banks = formHelper.enum('bank').data;
                     var userRole = SessionStore.getUserRole();
@@ -160,7 +180,7 @@ irf.pageCollection.factory(irf.page("user.MarkAttendance"),
                                  required: true
                                 },
                                 {
-                                    condition: "!model.customer.fpOverrideRequested",
+                                    condition: "model.customer.iscordova && !model.customer.fpOverrideRequested",
                                     key: "customer.isBiometricValidated",
                                     "title": "CHOOSE_A_FINGER_TO_VALIDATE",
                                     type: "validatebiometric",
@@ -188,7 +208,53 @@ irf.pageCollection.factory(irf.page("user.MarkAttendance"),
                                     onValidate: function(valueObj,status,form,model){
                                         model.customer.biometricAuthentication = valueObj.name + " "+ valueObj.type;
                                     }
-                                }
+                                },
+                                {
+                                    type: "button",
+                                    condition: "!model.customer.iscordova && !model.customer.fpOverrideRequested",
+                                    title: "VALIDATE_BIOMETRIC",
+                                    notitle: true,
+                                    fieldHtmlClass: "btn-block",
+                                    onClick: function(model, form, formName) {
+                                        var fingerprintObj = {
+                                            'LeftThumb': model.customer.leftHandThumpImageId,
+                                            'LeftIndex': model.customer.leftHandIndexImageId,
+                                            'LeftMiddle': model.customer.leftHandMiddleImageId,
+                                            'LeftRing':  model.customer.leftHandRingImageId,
+                                            'LeftLittle': model.customer.leftHandSmallImageId,
+                                            'RightThumb': model.customer.rightHandThumpImageId,
+                                            'RightIndex': model.customer.rightHandIndexImageId,
+                                            'RightMiddle': model.customer.rightHandMiddleImageId,
+                                            'RightRing': model.customer.rightHandRingImageId,
+                                            'RightLittle': model.customer.rightHandSmallImageId
+                                        };
+                                        if (model.fingerPrintDeviceType == "MANTRA") {
+                                            BiometricService.validateFingerPrintByMantra(fingerprintObj).then(function (data) {
+                                                model.customer.isBiometricMatched = data;
+                                                if (data == "Match found") {
+                                                    model.customer.isBiometricValidated = true;
+                                                } else {
+                                                    model.customer.isBiometricValidated = false;
+                                                }
+                                            }, function (reason) {
+                                                console.log(reason);
+                                            });
+    
+                                        }
+                                        else{
+                                            BiometricService.validate(fingerprintObj).then(function(data) {
+                                                model.customer.isBiometricMatched = data;
+                                                if (data == "Match found") {
+                                                    model.customer.isBiometricValidated = true;
+                                                } else {
+                                                    model.customer.isBiometricValidated = false;
+                                                }
+                                            }, function(reason) {
+                                                console.log(reason);
+                                            });
+                                        }
+                                    }
+                                },
                          ]
                     },
                     {
