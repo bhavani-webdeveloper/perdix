@@ -132,9 +132,14 @@ define([], function () {
                 model.additions.noOfGuarantorCoApplicantHtml = "<p stye=\"font-size:10px !important\"><font color=#FF6347>Number of Co-Applicants : {{model.additions.co_borrower_required}} Number of Guarantors :{{model.additions.number_of_guarantors}}</font><p>";
                 model.loanAccount.bcAccount = {};
                 model.loanAccount.processType = "1";
+                
                 if(model.loanAccount.loanAmount){
-                    model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmount;
+                    if(model.loanAccount.disbursementSchedules.length > 0){
+                        model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmount;
+                    }
+                    
                 }
+
                if (typeof model.loanAccount.nominees == "undefined" || model.loanAccount.nominees == null){
                     model.loanAccount.nominees = [];
                     model.loanAccount.nominees.push({});
@@ -227,6 +232,9 @@ define([], function () {
                     model.loanAccount.disbursementSchedules.push({
                         trancheNumber  : 1
                     })
+                    if(model.loanAccount.loanAmount){
+                        model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmount;
+                    }
                 }
                 else{
                     if(!initFlag){
@@ -1535,24 +1543,24 @@ define([], function () {
                             model.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
                             model.loanAccount.portfolioInsuranceUrn = model.loanAccount.urnNo;
 
-                            if(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length > 0){
-                                for(i = 0; i< model.loanAccount.loanCustomerRelations.length;i++){
-                                    if(model.loanAccount.loanCustomerRelations[i].relation != "Applicant")
-                                        continue;
-                                    if(typeof model.loanAccount.loanCustomerRelations[i].dscStatus == "undefined" || model.loanAccount.loanCustomerRelations[i].dscStatus == ""){
-                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = null
-                                        break;
-                                    }
-                                    if(model.loanAccount.loanCustomerRelations[i].dscStatus == "FAILURE" || model.loanAccount.loanCustomerRelations[i].dscStatus == "DSC_OVERRIDE_REQUIRED"){
-                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = "true"
-                                        break;
-                                    }
-                                    else{
-                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = "false"
-                                    }
+                            // if(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length > 0){
+                            //     for(i = 0; i< model.loanAccount.loanCustomerRelations.length;i++){
+                            //         if(model.loanAccount.loanCustomerRelations[i].relation != "Applicant")
+                            //             continue;
+                            //         if(typeof model.loanAccount.loanCustomerRelations[i].dscStatus == "undefined" || model.loanAccount.loanCustomerRelations[i].dscStatus == ""){
+                            //             model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = null
+                            //             break;
+                            //         }
+                            //         if(model.loanAccount.loanCustomerRelations[i].dscStatus == "FAILURE" || model.loanAccount.loanCustomerRelations[i].dscStatus == "DSC_OVERRIDE_REQUIRED"){
+                            //             model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = "true"
+                            //             break;
+                            //         }
+                            //         else{
+                            //             model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = "false"
+                            //         }
                                     
-                                }
-                            }
+                            //     }
+                            // }
                         }
                         if(typeof model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 =="undefined" || model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 == null){
                             PageHelper.showErrors({data:{error:"DSC STATUS IS REQUIRED...."}});
