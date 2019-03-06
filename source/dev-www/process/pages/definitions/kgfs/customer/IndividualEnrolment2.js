@@ -1109,7 +1109,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                     /* Setting data for the form */
                     model.customer = model.enrolmentProcess.customer;
-                    model.customer.udf.userDefinedFieldValues.udf32=Number(model.customer.udf.userDefinedFieldValues.udf32);
+                     if (typeof model.customer.udf == "undefined") {                    
+                    model.customer.udf = {};
+                    model.customer.udf.userDefinedFieldValues = {};
+                    }
+                    else {
+                        model.customer.udf.userDefinedFieldValues.udf32=Number(model.customer.udf.userDefinedFieldValues.udf32);
+                    }
                     var branchId = SessionStore.getBranchId();
                     if(branchId && !model.customer.customerBranchId)
                         {
@@ -1431,7 +1437,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 formHelper.resetFormValidityState(form);
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
+                                if (typeof model.customer.udf.userDefinedFieldValues != "undefined")
                                 model.customer.udf.userDefinedFieldValues.udf32=Number(model.customer.udf.userDefinedFieldValues.udf32);
+                    
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                                 BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer});
 
