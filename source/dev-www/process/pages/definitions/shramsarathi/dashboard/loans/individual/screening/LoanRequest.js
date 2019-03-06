@@ -655,6 +655,7 @@ define([],function(){
                                 "LoanRecommendation":{
                                     "readonly": true
                                 }, 
+                                
                             }
                         },
                         "Screening":{
