@@ -960,7 +960,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             condition:"model.pageClass !='guarantor' && model.pageClass !='co-applicant'"
                         },
                         "IndividualFinancials.expenditures":{
-                            "title":"ADD_HOUSEHOLD_EXPENSES"
+                            "title":"ADD_HOUSEHOLD_EXPENSES",
+                            "titleExpr":"('HOUSEHOLD_EXPENSES'|translate)"
                         },                        
                         "IndividualFinancials.expenditures.expenditureSource":{
                             "required":true,

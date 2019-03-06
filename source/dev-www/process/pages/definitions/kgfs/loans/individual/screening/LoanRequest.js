@@ -982,6 +982,7 @@ define([],function(){
                                     "loanMitigants":{
                                         "key":"loanAccount.loanMitigants",
                                         "title":"ADD",
+                                        "titleExpr":"('DEVIATION_AND_MITIGATION'|translate)",
                                         "type":"array",
                                         "startEmpty": true,
                                         "items":{
