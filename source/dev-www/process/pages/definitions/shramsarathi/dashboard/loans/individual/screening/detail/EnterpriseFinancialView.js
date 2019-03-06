@@ -21,8 +21,10 @@ define({
 				// 	"type": "section",
 				// 	"html": '<br><div style="text-align:center">Waiting for summary..<br><br><ripple-loader></ripple-loader></div>'
 				// }];
-				Misc.getSummary({"customer_id":77}).$promise.then(function(resp){
-
+				Misc.getSummary({"customer_id":model.customerId}).$promise.then(function(resp){
+				//Misc.getSummary({"customer_id":77}).$promise.then(function(resp){
+				   console.log(model);
+				   console.log("------model");
 					console.log(resp);
 				model.incomeExpense={};
 				model.incomeExpense.destinationTotalIncome= resp.destination;
@@ -33,7 +35,7 @@ define({
 				model.incomeExpense.expensesGrandTotal= resp.expense_grand_total;
 				model.incomeExpense.destinationExtra = resp.destination - resp.distination_total_expense;
 				model.incomeExpense.sourceExtra = resp.source - resp.source_total_expense;
-				model.incomeExpense.totalExtra = incomeExpense.destinationExtra + incomeExpense.sourceExtra;
+				model.incomeExpense.totalExtra = destinationExtra + sourceExtra ;
 				model.assetsLiabilites={};
 				model.assetsLiabilites.totalCurrentAssets= resp.total_current_assets;
 				model.assetsLiabilites.totalFixedAsstes = resp.total_fixed_assets;
@@ -45,7 +47,7 @@ define({
 				model.familyInfo.noOfChildren = resp.no_of_childrens;
 				model.familyInfo.noOfSchoolGoing = resp.no_of_school_going;
 				model.familyInfo.noOfCollegeGoing = resp.no_of_college_going;
-				model.proposedAmount = incomeExpense.totalExtra;
+				model.proposedAmount = 0;
 				})
 				
 			},

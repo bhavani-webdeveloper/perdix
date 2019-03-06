@@ -130,9 +130,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.firstName",
                             ],
                             "overrides": {
+                                "FamilyDetails.familyMembers": {
+                                    "title": "MIGRANT_DETAILS"
+                                },
                                 "EnterpriseFinancials.currentAsset.value":{
                                     "type":"amount"
                                 },
+
                                 "IndividualInformation.centreId": {
                                     "required": true,
                                     "readonly": false,
@@ -313,9 +317,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto": {
                                     "required": true
                                 },
-                                "FamilyDetails.familyMembers": {
-                                    "title": "MIGRANT_DETAILS"
-                                },
+                                
                                 "BankAccounts.customerBankAccounts.accountNumber": {
                                     required: true
                                 },
@@ -2635,7 +2637,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "type": "box",
-                                    "title": "T_FAMILY_DETAILS",
+                                    "title": "MIGRANT_DETAILS",
                                     "items": {
                                         "familyMembers": {
                                             key: "customer.familyMembers",
