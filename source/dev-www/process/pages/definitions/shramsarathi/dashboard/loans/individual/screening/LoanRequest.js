@@ -1303,7 +1303,7 @@ define([],function(){
                             // "enumCode":"duration",
                             "type":"number",
                             "schema": {
-                                "pattern": "^([6-9]|[1-6][0-9]|60)$"
+                                "pattern": "^([6-9]|[1-5][0-9]|60)$"
                             }
                         },
                         "LoanRecommendation.interestRate":{
@@ -1655,7 +1655,7 @@ define([],function(){
                     model.loanAccount = model.loanProcess.loanAccount;
                     model.currentStage = model.loanAccount.currentStage;
                     model.loanAccount.disbursementSchedules=[];
-                    model.loanAccount.disbursementSchedules.push({});
+                   
 
                     if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
                         model.loanAccount.loanCustomerRelations!=null &&
@@ -1839,7 +1839,7 @@ define([],function(){
                                                 "orderNo": 41
                                             },
                                             "groupID": {
-                                                "key": "loanAccount.jlgGroupId ",
+                                                "key": "loanAccount.jlgGroupId",
                                                 "title": "GROUP_ID",
                                                 "type": "string",
                                                 "orderNo": 40,
