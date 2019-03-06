@@ -5732,7 +5732,19 @@
                     "CreditApproval2",
                     "CreditApproval3"
                  ]
-              }
+              },
+              "udf7":{
+               "type":"number",
+               "captureStages":[
+                  "Screening",
+                  "VehicleValuation",
+                  "FieldInvestigation1",
+                  "FieldInvestigation2",
+                  "FieldInvestigation3",
+                  "TeleVerification",
+                  "LoanInitiation"
+               ]
+            }
            }
         },
         "userDefinedDateFields":{
