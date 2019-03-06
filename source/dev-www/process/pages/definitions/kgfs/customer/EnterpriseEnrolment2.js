@@ -54,7 +54,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
             }
 
             var getAnnualSales = function (value, model, row, month) {
-                model.customer.enterprise.avgMonthlySales = 0;
+                model.customer.enterprise.avgAnnualSales = 0;
                 for (i in model.customer.monthlySale) {
                     monthlySales = model.customer.monthlySale[i];
                     if (monthlySales.seasonType != row.seasonType && monthlySales[month]) {
@@ -62,7 +62,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     }
                     monthlySales.total = (monthlySales.Jan ? monthlySales.Jan : 0) + (monthlySales.Feb ? monthlySales.Feb : 0) + (monthlySales.Mar ? monthlySales.Mar : 0) + (monthlySales.Apr ? monthlySales.Apr : 0) +
                         (monthlySales.May ? monthlySales.May : 0) + (monthlySales.June ? monthlySales.June : 0) + (monthlySales.July ? monthlySales.July : 0) + (monthlySales.Aug ? monthlySales.Aug : 0) + (monthlySales.Sep ? monthlySales.Sep : 0) + (monthlySales.Oct ? monthlySales.Oct : 0) + (monthlySales.Nov ? monthlySales.Nov : 0) + (monthlySales.Dec ? monthlySales.Dec : 0);
-                    model.customer.enterprise.avgAnnualSales = model.customer.enterprise.avgMonthlySales + monthlySales.total;
+                    model.customer.enterprise.avgAnnualSales = model.customer.enterprise.avgAnnualSales + monthlySales.total;
                     model.customer.enterprise.avgMonthlySales = (model.customer.enterprise.avgAnnualSales/12);
                 }
                 averageMonthlySale(model);
