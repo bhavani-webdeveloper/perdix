@@ -159,9 +159,9 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
 
 
         model.enterpriseDetails.columns = model.enterpriseDetails.columns.concat(model.ratioDetails.columns);
-       // _.merge(model.enterpriseDetails.data[0], _.omit(model.ratioDetails.data[0]['Average Bank Deposit']));
-       model.ratioDetails.data[0] = _.omit(model.ratioDetails.data[0],['Average Bank Deposit']);
-       _.merge(model.enterpriseDetails.data[0],model.ratioDetails.data[0]);
+        model.ratioDetails.data[0] = _.omit(model.ratioDetails.data[0],['Average Bank Deposit']);
+        model.enterpriseDetails.data[0] = _.omit(model.enterpriseDetails.data[0],['Average Bank Balances']);
+        _.merge(model.enterpriseDetails.data[0],model.ratioDetails.data[0]);
 
         /* Populate values for Balance Sheet */
         model.assetsAndLiabilities = {};
