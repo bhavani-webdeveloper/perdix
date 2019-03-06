@@ -15,15 +15,19 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
             "title": "AUDIT_DASHBOARD",
             "items": [
                 "Page/Engine/audit.CreateAudit",
+                "Page/Engine/audit.CreateBranchAudit",
                 "Page/Engine/audit.ScheduleAudit",
                 "Page/Engine/audit.ScheduledAuditsQueue",
                 "Page/Engine/audit.ScheduledAuditsViewQueue",
                 "Page/Engine/audit.DeferredAuditsQueue",
                 "Page/Engine/audit.OpenRegularAuditsQueue",
+                "Page/Engine/audit.OpenBranchRegularAuditsQueue",
                 "Page/Engine/audit.DraftOperationQueue",
                 "Page/Engine/audit.DraftAuditQueue",
                 "Page/Engine/audit.OpenSnapAuditsQueue",
+                "Page/Engine/audit.OpenBranchSnapAuditsQueue",
                 "Page/Engine/audit.PublishedAuditsViewQueue",
+                "Page/Engine/audit.PublishedBranchAuditsViewQueue",
                 "Page/Engine/audit.PublishedAuditsQueue",
                 "Page/Engine/audit.ReviewedAuditsQueue",
                 "Page/Engine/audit.ReviewedAuditsViewQueue",
@@ -32,13 +36,18 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 "Page/Engine/audit.ApprovedBranchAuditsViewQueue",
                 "Page/Engine/audit.RejectedAuditsQueue",
                 "Page/Engine/audit.ExpiredAuditsQueue",
+                "Page/Engine/audit.ExpiredBranchAuditsQueue",
                 "Page/Engine/audit.AuditDumpsQueue",
                 "Page/Engine/audit.AuditScoresQueue",
+                "Page/Engine/audit.AuditBranchScoresQueue",
                 "Page/Engine/audit.AuditsViewQueue",
+                "Page/Engine/audit.AuditsBranchViewQueue",
                 "Page/Engine/audit.AssignedIssuesQueue",
                 "Page/Engine/audit.AssignedBranchIssuesQueue",
                 "Page/Engine/audit.AssignedIssuesViewQueue",
+                "Page/Engine/audit.AssignedBranchIssuesViewQueue",
                 "Page/Engine/audit.OutstandingIssuesQueue",
+                "Page/Engine/audit.OutstandingBranchIssuesQueue",
                 "Page/Engine/audit.OutstandingIssuesViewQueue",
                 "Page/Engine/audit.ConfirmedIssuesQueue",
                 "Page/Engine/audit.ConfirmedBranchIssuesQueue",
@@ -54,10 +63,13 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 var savqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ScheduledAuditsViewQueue"];
                 var daq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.DeferredAuditsQueue"];
                 var oraq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.OpenRegularAuditsQueue"];
+                var obraq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.OpenBranchRegularAuditsQueue"];
                 var doaq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.DraftOperationQueue"];
                 var daaq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.DraftAuditQueue"];
                 var osaq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.OpenSnapAuditsQueue"];
+                var obsaq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.OpenBranchSnapAuditsQueue"];
                 var pavq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.PublishedAuditsViewQueue"];
+                var pbavq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.PublishedBranchAuditsViewQueue"];
                 var paq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.PublishedAuditsQueue"];
                 var raq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ReviewedAuditsQueue"];
                 var ravq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ReviewedAuditsViewQueue"];
@@ -66,13 +78,18 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 var abavq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ApprovedBranchAuditsViewQueue"];
                 var reaq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.RejectedAuditsQueue"];
                 var eaq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ExpiredAuditsQueue"];
+                var eaq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ExpiredBranchAuditsQueue"];
                 var adq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.AuditDumpsQueue"];
                 var asq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.AuditScoresQueue"];
+                var absq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.AuditBranchScoresQueue"];
                 var avq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.AuditsViewQueue"];
+                var abvq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.AuditsBranchViewQueue"];
                 var aiq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.AssignedIssuesQueue"];
                 var abiq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.AssignedBranchIssuesQueue"];
                 var aivq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.AssignedIssuesViewQueue"];
+                var abivq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.AssignedBranchIssuesViewQueue"];
                 var oiq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.OutstandingIssuesQueue"];
+                var obiq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.OutstandingBranchIssuesQueue"];
                 var oivq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.OutstandingIssuesViewQueue"];
                 var ciq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ConfirmedIssuesQueue"];
                 var cbiq = $scope.dashboardDefinition.$menuMap["Page/Engine/audit.ConfirmedBranchIssuesQueue"];
@@ -83,10 +100,11 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (savqMenu) savqMenu.data = '-';
                 if (daq) daq.data = '-';
                 if (oraq) oraq.data = '-';
-                if (oraq) oraq.data = '-';
+                if (obraq) obraq.data = '-';
                 if (doaq) doaq.data = '-';
                 if (daaq) daaq.data = '-';
                 if (pavq) pavq.data = '-';
+                if (pbavq) pbavq.data = '-';
                 if (paq) paq.data = '-';
                 if (raq) raq.data = '-';
                 if (ravq) ravq.data = '-';
@@ -98,11 +116,15 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                 if (raq) raq.data = '-';
                 if (adq) adq.data = '-';
                 if (asq) asq.data = '-';
+                if (absq) absq.data = '-';
                 if (avq) avq.data = '-';
+                if (abvq) abvq.data = '-';
                 if (aiq) aiq.data = '-';
                 if (abiq) abiq.data = '-';
                 if (aivq) aivq.data = '-';
+                if (abivq) abivq.data = '-';
                 if (oiq) oiq.data = '-';
+                if (obiq) obiq.data = '-';
                 if (oivq) oivq.data = '-';
                 if (ciq) ciq.data = '-';
                 if (cbiq) cbiq.data = '-';
@@ -146,6 +168,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         daq.data = (Number(data[0].headers['x-total-count']) || data[0].body.length) + (Number(data[1].headers['x-total-count']) || data[1].body.length);
                     });
                 }
+
                 if (oraq) {
                     Audit.online.findAuditInfo({
                         'auditor_id': auditor_id,
@@ -157,6 +180,17 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         oraq.data = Number(data.headers['x-total-count']) || data.body.length;
                     });
                 }
+
+                if (obraq) {
+                    Audit.online.getAuditList({
+                        'auditor_id': auditor_id,
+                        'status': 'O',
+                        'audit_type': 1
+                    }).$promise.then(function(data) {
+                        obraq.data = data.body.length;
+                    });
+                }
+
                 if (osaq) {
                     Audit.online.findAuditInfo({
                         'auditor_id': auditor_id,
@@ -166,6 +200,16 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                         'per_page': 1
                     }).$promise.then(function(data) {
                         osaq.data = Number(data.headers['x-total-count']) || data.body.length;
+                    });
+                }
+
+                if (obsaq) {
+                    Audit.online.getAuditList({
+                        'auditor_id': auditor_id,
+                        'audit_type': 0,
+                        'status': 'O'
+                    }).$promise.then(function(data) {
+                        obsaq.data = data.body.length;
                     });
                 }
 
@@ -207,6 +251,19 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     });
                 }
 
+                if (pbavq || paq) {
+                    Audit.online.getAuditList({
+                        'current_stage': 'publish'
+                    }).$promise.then(function(data) {
+                        if (pbavq) {
+                            pbavq.data = data.body.length;
+                        }
+                        if (paq) {
+                            paq.data = data.body.length;
+                        }
+                    });
+                }
+
                 if (raq || ravq) {
                     Audit.online.findAuditInfo({
                         'current_stage': 'L1-approve',
@@ -241,11 +298,11 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     Audit.online.getAuditList({
                         'current_stage': 'approve'
                     }).$promise.then(function(data) {
-                        if (abaq) {
+                        if (aaq) {
                             aaq.data = data.body.length;
                         }
                         if (abavq) {
-                            aavq.data = data.body.length;
+                            abavq.data = data.body.length;
                         }
                     });
                 }
@@ -285,12 +342,27 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     });
                 }
 
+                if (absq) {
+                    Audit.online.getAuditScores({
+                        'page': 1,
+                        'per_page': 100
+                    }).$promise.then(function(data) {
+                        absq.data = data.body.length;
+                    });
+                }
+
                 if (avq) {
                     Audit.online.findAuditInfo({
                         'page': 1,
                         'per_page': 1
                     }).$promise.then(function(data) {
                         avq.data = Number(data.headers['x-total-count']) || data.body.length;
+                    });
+                }
+
+                if (abvq) {
+                    Audit.online.getAuditList({}).$promise.then(function(data) {
+                        abvq.data = data.body.length;
                     });
                 }
 
@@ -324,6 +396,14 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     });
                 }
 
+                if (abivq) {
+                    Audit.online.getIssuesList({
+                        'current_stage': "assign"
+                    }).$promise.then(function(data) {
+                        abivq.data = Number(data.headers['x-total-count']) || data.body.length;
+                    });
+                }
+
                 if (oiq || oivq) {
                     Audit.online.findIssues({
                         'current_stage': 'close',
@@ -332,6 +412,19 @@ irf.pageCollection.controller(irf.controller("audit.AuditDashboard"), ["$log", "
                     }).$promise.then(function(data) {
                         if (oiq) {
                             oiq.data = Number(data.headers['x-total-count']) || data.body.length;
+                        }
+                        if (oivq) {
+                            oivq.data = Number(data.headers['x-total-count']) || data.body.length;
+                        }
+                    });
+                }
+
+                if (obiq || oivq) {
+                    Audit.online.getIssuesList({
+                        'current_stage': 'close'
+                    }).$promise.then(function(data) {
+                        if (obiq) {
+                            obiq.data = Number(data.headers['x-total-count']) || data.body.length;
                         }
                         if (oivq) {
                             oivq.data = Number(data.headers['x-total-count']) || data.body.length;

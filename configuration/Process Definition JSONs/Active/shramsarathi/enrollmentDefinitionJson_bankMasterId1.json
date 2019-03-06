@@ -468,6 +468,16 @@
                 "Completed"
               ]
             },
+            "incomeType": {
+              "title": "Income Type",
+              "type": "string",
+              "minimum": 0,
+              "maximum": 10000000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
             "frequency": {
               "title": "Frequency",
               "type": "string",

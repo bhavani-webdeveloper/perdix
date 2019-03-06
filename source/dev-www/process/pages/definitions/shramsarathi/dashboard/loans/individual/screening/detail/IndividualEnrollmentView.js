@@ -301,8 +301,8 @@ define({
     <div class="col-sm-6">
     <i class="fa fa-check-circle text-green" style="font-size:x-large">&nbsp;</i><em class="text-darkgray">{{model.existingCustomerStr}}</em><br>&nbsp;
     </div>
-    <div class="col-sm-3">{{'BRANCH'|translate}}: <strong>{{model.business.kgfsName}}</strong></div>
-    <div class="col-sm-3">{{'CENTRE'|translate}}: <strong>{{model.business.centreName}}</strong></div>
+    <div class="col-sm-3">{{'BRANCH'|translate}}: <strong>{{model.customer.customerBranchName}}</strong></div>
+    <div class="col-sm-3">{{'ZONE'|translate}}: <strong>{{model.customer.centreId}}</strong></div>
     `
                     }, {
                         "type": "box",

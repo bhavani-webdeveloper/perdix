@@ -213,7 +213,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     $this.bundlePages.push({
                                         pageClass: 'co-applicant',
                                         model: {
-                                            customerId: customerIds.coApplicants[i]
+                                            enrolmentProcess: customerIds.coApplicants[i]
                                         }
                                     });
                                 }
@@ -222,7 +222,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     $this.bundlePages.push({
                                         pageClass: 'guarantor',
                                         model: {
-                                            customerId: customerIds.guarantors[i]
+                                            enrolmentProcess: customerIds.guarantors[i]
                                         }
                                     });
                                 }
