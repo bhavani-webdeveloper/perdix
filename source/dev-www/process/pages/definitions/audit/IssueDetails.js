@@ -147,11 +147,11 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "for
                                     "value": 2
                                 }],
                                 "readonly": true
-                            }, {
-                                type: "textarea",
-                                key: "auditIssue.comments",
-                                "condition": "model.actions.showComments(model, true)",
-                                "readonly": true
+                            // }, {
+                            //     type: "textarea",
+                            //     key: "auditIssue.comments",
+                            //     "condition": "model.actions.showComments(model, true)",
+                            //     "readonly": true
                             }, {
                                 type: "textarea",
                                 key: "auditIssue.comments",

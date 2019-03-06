@@ -361,7 +361,8 @@ define({
                         title: "IS_NPA"
                     }]
                 }]
-            }, {
+            }, 
+            {
                 "type": "box",
                 "readonly": true,
                 "colClass": "col-sm-12",
@@ -430,7 +431,8 @@ define({
                         }]
                     }]
                 }]
-            }, {
+            },
+             {
                 "type": "box",
                 "readonly": true,
                 "colClass": "col-sm-12",
@@ -470,7 +472,8 @@ define({
                         }]
                     }]
                 }]
-            }, {
+            }, 
+            {
                 "type": "box",
                 "readonly": true,
                 "colClass": "col-sm-12",
@@ -501,7 +504,8 @@ define({
                         }]
                     }]
                 }]
-            }, {
+            },
+             {
                 "type": "box",
                 "readonly": true,
                 "colClass": "col-sm-12",
@@ -562,7 +566,8 @@ define({
                         }
                     }
                 ]
-            }, {
+            },
+             {
                 "type": "box",
                 "readonly": true,
                 "colClass": "col-sm-12",
@@ -596,7 +601,8 @@ define({
                         }]
                     }]
                 }]
-            }, {
+            }, 
+            {
                 "type": "box",
                 "colClass": "col-sm-12",
                 "title": "DEVIATION_AND_MITIGATIONS",
@@ -616,7 +622,8 @@ define({
                         '</li></ul></td></tr></tbody></table>'
 
                 }]
-            }, {
+            }, 
+            {
             "type": "box",
             "colClass": "col-sm-12",
             "title": "LOAN_DOCUMENTS",
@@ -655,7 +662,8 @@ define({
                 },
             ]
 
-        }, {
+            }, 
+            {
                 "type": "box",
                 "colClass": "col-sm-12",
                 "title": "Loan Recommendation",

@@ -2954,13 +2954,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "mortage": {
                                                     "key": "customer.liabilities[].udf1",
                                                     "title": "MORTAGE",
-                                                    "condition": "model.Liabilities.liabilities.loanType=='SECURED'",
+                                                    "condition": "model.customer.liabilities[arrayIndex].loanType.toLowerCase() !== 'unsecured'",
                                                     "orderNo": 10
                                                 },
                                                 "mortageAmount": {
                                                     "key": "customer.liabilities[].mortageAmount",
                                                     "title": "MORTAGE_AMOUNT",
-                                                    "condition": "model.Liabilities.liabilities.loanType=='SECURED'",
+                                                    "orderNo": 10,
+                                                    "condition": "model.customer.liabilities[arrayIndex].loanType.toLowerCase() !== 'unsecured'",
                                                 },
                                                 "liabilityLoanPurpose":{
                                                     "orderNo": 11
