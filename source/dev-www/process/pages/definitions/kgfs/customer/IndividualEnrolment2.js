@@ -360,7 +360,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 var centreCode = formHelper.enum('centre').data;
     
                                 var centreName = $filter('filter')(centreCode, {value: parentModel.customer.centreId}, true);
-                                if(centreName && centreName.length > 0) {
+                                if(centreName && centreName.length > 0 && model.centreId !=undefined) {
                                     model.centreName = centreName[0].name;
                                 }
     
