@@ -142,18 +142,6 @@
          ]
       },
       {
-        "order":16,
-        "code":"LinkedAccountVerification",
-        "name":"Linked Account Verification",
-        "stageType":"CAPTURE",
-        "sendSms":"No",
-        "smsCategory":"LoanBooking",
-        "isAccountOpening":true,
-        "allowedRoles":[
-           "WM"
-        ]
-     },
-      {
          "order":17,
          "code":"DocumentUpload",
          "name":"Document Download and Upload",

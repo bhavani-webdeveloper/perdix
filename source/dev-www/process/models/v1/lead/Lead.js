@@ -57,6 +57,25 @@ irf.models.factory('Lead', ["$resource", "$httpParamSerializer", "BASE_URL", "se
 			}, progress);
 			return deferred.promise;
 		};
+		resource.leadBulkUploadbyType = function(file,type, progress) {
+			var deferred = $q.defer();
+			Upload.upload({
+				url: BASE_URL + "/api/leads/upload",
+				data: {
+					file: file,
+					leadType:type
+				}
+			}).then(function(resp) {
+				// TODO handle success
+				PageHelper.showProgress("page-init", "successfully uploaded.", 2000);
+				deferred.resolve(resp);
+			}, function(errResp) {
+				// TODO handle error
+				PageHelper.showErrors(errResp);
+				deferred.reject(errResp);
+			}, progress);
+			return deferred.promise;
+		};
 
 		resource.getConfigFile = function() {
 			return {

@@ -978,7 +978,7 @@ define([],function(){
                                     "deviationDetails": {
                                         "type": "section",
                                         "colClass": "col-sm-12",
-                                        "html": '<table class="table"><colgroup><col width="20%"><col width="20%"></colgroup><thead><tr><th>Parameter Name</th><th>Mitigant</th></tr></thead><tbody>' +
+                                        "html": '<table class="table"><colgroup><col width="20%"><col width="20%"></colgroup><thead><tr><th>Deviation</th><th>Mitigation</th></tr></thead><tbody>' +
                                             '<tr ng-repeat="(parameter,item) in model.loanMitigantsGrouped">' +
                                             '<td>{{ parameter }}</td>' +
                                             '<td><ul class="list-unstyled">' +
@@ -995,7 +995,7 @@ define([],function(){
                                         "items":{
                                             "parameter":{
                                                "key":"loanAccount.loanMitigants[].parameter",
-                                               "title":"DEVIATION",
+                                               "title":"Deviation",
                                                "type":"string"
                                             },
                                             "mitigant":{
@@ -1362,6 +1362,32 @@ define([],function(){
                                 return false;
                             }
                         
+                        }
+                        if (model.loanAccount.id){
+                            if(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length > 0){
+                                for(i = 0; i< model.loanAccount.loanCustomerRelations.length;i++){
+                                    if(model.loanAccount.loanCustomerRelations[i].relation != "Applicant")
+                                        continue;
+                                    if(typeof model.loanAccount.loanCustomerRelations[i].dscStatus == "undefined" || model.loanAccount.loanCustomerRelations[i].dscStatus == ""){
+                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = null
+                                        break;
+                                    }
+                                    if(model.loanAccount.loanCustomerRelations[i].dscStatus == "FAILURE" || model.loanAccount.loanCustomerRelations[i].dscStatus == "DSC_OVERRIDE_REQUIRED"){
+                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = "true"
+                                        break;
+                                    }
+                                    else{
+                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = "false"
+                                    }
+                                    
+                                }
+                            }
+                        }
+                        if(typeof model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 =="undefined" || model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 == null){
+                            PageHelper.showErrors({data:{error:"DSC STATUS IS REQUIRED...."}});
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.hideLoader();
+                                return false;
                         }
                         PageHelper.showLoader();
                         PageHelper.showProgress('enrolment', 'Updating Loan');

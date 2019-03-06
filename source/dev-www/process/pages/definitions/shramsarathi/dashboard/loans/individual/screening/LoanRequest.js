@@ -655,6 +655,7 @@ define([],function(){
                                 "LoanRecommendation":{
                                     "readonly": true
                                 }, 
+                                
                             }
                         },
                         "Screening":{
@@ -1298,8 +1299,12 @@ define([],function(){
                             onChange:function(value,form,model){
                                 computeEMI(model);
                             },
-                            "type":"select",
-                            "enumCode":"duration"
+                            // "type":"select",
+                            // "enumCode":"duration",
+                            "type":"number",
+                            "schema": {
+                                "pattern": "^([6-9]|[1-6][0-9]|60)$"
+                            }
                         },
                         "LoanRecommendation.interestRate":{
                             title:"INTEREST_RATE",
@@ -1721,6 +1726,7 @@ define([],function(){
                                             model.review={};
                                             model.review.preStage = model.loanSummary[i].preStage;
                                             model.review.targetStage = model.loanSummary[i].preStage;
+                                            model.loanProcess.stage = model.review.targetStage;
                                         }
                                     }
                                 }
@@ -2144,6 +2150,7 @@ define([],function(){
                                                 },
                                                 onSelect: function(valueObj, model, context) {
                                                     model.review.targetStage = valueObj.name;
+                                                    model.loanProcess.stage = valueObj.name;
                                                 },
                                                 getListDisplayItem: function(item, index) {
                                                     return [

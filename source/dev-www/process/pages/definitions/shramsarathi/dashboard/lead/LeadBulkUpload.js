@@ -30,7 +30,7 @@ define({
                     "type": "file",
                     "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     customHandle: function(file, progress, modelValue, form, model) {
-                        Lead.leadBulkUpload(file, progress).then(function(resp){
+                        Lead.leadBulkUploadbyType(file,"Individual",progress).then(function(resp){
                             irfNavigator.go({
                                 state: "Page.Adhoc",
                                 pageName: "shramsarathi.dashboard.lead.LeadDashboard"
