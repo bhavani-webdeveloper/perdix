@@ -1153,10 +1153,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true,
                                     "type":"amount"
                                 },  
-                                "PhysicalAssets.physicalAssets.assetType":{
+                                "Machinery.fixedAssetsMachinaries.machineType":{
                                     "readonly": true
                                 },
-                                "PhysicalAssets.physicalAssets.ownedAssetValue":{
+                                "Machinery.fixedAssetsMachinaries.presentValue":{
                                     "readonly": true
                                 },
                                 "FamilyDetails.familyMembers.noOfDependents": {
@@ -1696,7 +1696,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "KYC.addressProofValidUptoDate":{
                         "condition":"model.customer.addressPfSameAsIdProof=='NO'"
                     },
-                    "PhysicalAssets.physicalAssets":{
+                    "Machinery.fixedAssetsMachinaries":{
                         "title":"FIXED_ASSET"
                     },
                     "IndividualInformation.age":{
@@ -1727,8 +1727,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "orderNo":400
                     },
                     "PhysicalAssets":{
-                        "title":"FIXED_ASSET",
-                        "orderNo":400
+                        "title":"FINANCIAL_ASSET"
                     },
                     "IndividualInformation.customerBranchId": {
                         "required": true,
@@ -2078,10 +2077,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Liabilities.liabilities.liabilityType":{
                         "enumCode":"financial_liabilities"
                     },
-                    "PhysicalAssets.physicalAssets.assetType":{
+                    "Machinery.fixedAssetsMachinaries.machineType":{
                         "enumCode":"fixed_asset_type"
                     },
-                    
                     "Liabilities.liabilities.interestRate":{
                         "type":"number",
                         //"enumCode":"rate_of_interest",
@@ -2234,8 +2232,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Liabilities.liabilities.loanAmountInPaisa",
                     "Liabilities.liabilities.installmentAmountInPaisa",
                     "Liabilities.liabilities.outstandingAmountInPaisa",
-                    "Liabilities.liabilities.amountPaidPrincipal",
-                    "Liabilities.liabilities.amountPaidInterest",
                     "Liabilities.liabilities.startDate",
                     "Liabilities.liabilities.maturityDate",
                     "Liabilities.liabilities.noOfInstalmentPaid",
@@ -2243,7 +2239,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Liabilities.liabilities.liabilityLoanPurpose",
                     "Liabilities.liabilities.interestOnly",
                     "Liabilities.liabilities.interestRate",
-                    "Liabilities.liabilities.masonValuation",
+                    // "Liabilities.liabilities.masonValuation",
                     
 
                     "HouseVerification",
@@ -2285,19 +2281,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto",
                     "BankAccounts.customerBankAccounts.isDisbersementAccount",
                     //
-                    "PhysicalAssets",
-                    "PhysicalAssets.physicalAssets",
-                    "PhysicalAssets.physicalAssets.assetType",
-                    "PhysicalAssets.physicalAssets.ownedAssetValue",
+                    // "PhysicalAssets",
+                    // "PhysicalAssets.financialAssets",
+                    // "PhysicalAssets.financialAssets.installmentAmount",
+                    // "PhysicalAssets.financialAssets.balance",
                     "EnterpriseFinancials",
                     "EnterpriseFinancials.currentAsset",
                     "EnterpriseFinancials.currentAsset.assetType",
                     "EnterpriseFinancials.currentAsset.value",
-                    // "Machinery",
-                    // "Machinery.fixedAssetsMachinaries",
-                    // "Machinery.fixedAssetsMachinaries.machineType",
-                    // "Machinery.fixedAssetsMachinaries.presentValue",
-                    // "Machinery.fixedAssetsMachinaries.balance",
+                    "Machinery",
+                    "Machinery.fixedAssetsMachinaries",
+                    "Machinery.fixedAssetsMachinaries.machineType",
+                    "Machinery.fixedAssetsMachinaries.presentValue",
+                    "Machinery.fixedAssetsMachinaries.balance",
                     
                     //"PhysicalAssets.physicalAssets.unit",
 
@@ -2970,37 +2966,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     "key":"customer.liabilities[].principalExpense",
                                                     "title":"AMOUNT_PAID"
                                                 },
-                                                // "amountPaidInterest":{
-                                                //     "key":"customer.liabilities[].interestExpense",
-                                                //     "title":"AMOUNT_PAID_INTEREST"
-                                                // },
+                                                "amountPaidInterest":{
+                                                    "key":"customer.liabilities[].interestExpense",
+                                                    "title":"AMOUNT_PAID_INTEREST"
+                                                },
                                                 "masonValuation":{
                                                     "key":"customer.liabilities[].udf2",
                                                     "title":"MASON_VALUATION_DOCUMENT",
                                                     "type":"file",
-                                                    "fileType": "image/*"
-                                                },
-                                                "startDate":{
-                                                    "orderNo": 20
-                                                },
-                                                "maturityDate":{
-                                                    "orderNo": 20
-                                                },
-                                                "amountPaidPrincipal":{
-                                                    "key":"customer.liabilities[].interestExpense",
-                                                    "title":"AMOUNT_PAID_PRINCIPAL",
-                                                    "orderNo": 28
-                                                },
-                                                "noOfInstalmentPaid":{
-                                                    "orderNo": 25
-                                                },
-                                                "interestRate":{
-                                                    "orderNo": 22
-                                                },
-                                                "amountPaidInterest": {
-                                                    "key":"customer.liabilities[].interestExpense",
-                                                    "title":"AMOUNT_PAID_INTEREST",
-                                                    "orderNo": 28
+                                                    "fileType": "image/*",
                                                 }
                                                
                                             }
