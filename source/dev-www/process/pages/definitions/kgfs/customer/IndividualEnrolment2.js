@@ -452,6 +452,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     'firstName': inputModel.firstName,
                                     'centreId':inputModel.centreId,
                                     'customerType':"individual",
+                                    'stage':'Completed',
                                     'urnNo': inputModel.urnNo
                                 }).$promise;
                                 return promise;
