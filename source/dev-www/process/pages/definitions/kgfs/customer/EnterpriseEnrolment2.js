@@ -11,18 +11,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
             irfProgressMessage, SessionStore, $state, $stateParams, Queries, Utils, CustomerBankBranch, BundleManager, $filter, $injector, UIRepository, LoanAccount) {
 
             var getDialySalesDetails = function (value, model, row, day) {
-                model.customer.enterprise.weeklySale = 0;
-                for (i in model.customer.enterpriseDailySale) {
-                    dailysales = model.customer.enterpriseDailySale[i];
-                    if (dailysales.salesType != row.salesType && dailysales[day]) {
-                        delete dailysales[day]
+                if(value){
+                    model.customer.enterprise.weeklySale = 0;
+                    for (i in model.customer.enterpriseDailySale) {
+                        dailysales = model.customer.enterpriseDailySale[i];
+                        if (dailysales.salesType != row.salesType && dailysales[day]) {
+                            delete dailysales[day]
+                        }
+                        dailysales.total = (dailysales.mon ? dailysales.mon : 0) + (dailysales.tue ? dailysales.tue : 0) + (dailysales.wed ? dailysales.wed : 0) + (dailysales.thu ? dailysales.thu : 0) +
+                            (dailysales.fri ? dailysales.fri : 0) + (dailysales.sat ? dailysales.sat : 0) + (dailysales.sun ? dailysales.sun : 0)
+                        model.customer.enterprise.weeklySale = model.customer.enterprise.weeklySale + dailysales.total;
+                        model.customer.enterprise.monthlySale = model.customer.enterprise.weeklySale * 4;
                     }
-                    dailysales.total = (dailysales.mon ? dailysales.mon : 0) + (dailysales.tue ? dailysales.tue : 0) + (dailysales.wed ? dailysales.wed : 0) + (dailysales.thu ? dailysales.thu : 0) +
-                        (dailysales.fri ? dailysales.fri : 0) + (dailysales.sat ? dailysales.sat : 0) + (dailysales.sun ? dailysales.sun : 0)
-                    model.customer.enterprise.weeklySale = model.customer.enterprise.weeklySale + dailysales.total;
-                    model.customer.enterprise.monthlySale = model.customer.enterprise.weeklySale * 4;
+                    averageMonthlySale(model);
                 }
-                averageMonthlySale(model);
+               
             }
             var getEnterpriseProductDetails = function (model) {
                 model.customer.enterprise.totalDailySales = 0
@@ -2009,6 +2012,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             'estimatedEmi': {
                                 key: "loanAccount.estimatedEmi",
                                 title: "Affordable EMI as stated by the customer",
+                                "readonly":true,
                                 "type": "number",
                                 "onChange": function (value, form, model) {
                                     monthlySurpluse(model);
