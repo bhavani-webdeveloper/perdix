@@ -1722,6 +1722,7 @@ define([],function(){
                                             model.review={};
                                             model.review.preStage = model.loanSummary[i].preStage;
                                             model.review.targetStage = model.loanSummary[i].preStage;
+                                            model.loanProcess.stage = model.review.targetStage;
                                         }
                                     }
                                 }
@@ -2145,6 +2146,7 @@ define([],function(){
                                                 },
                                                 onSelect: function(valueObj, model, context) {
                                                     model.review.targetStage = valueObj.name;
+                                                    model.loanProcess.stage = valueObj.name;
                                                 },
                                                 getListDisplayItem: function(item, index) {
                                                     return [
