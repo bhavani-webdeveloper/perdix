@@ -1137,6 +1137,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.customer.udf.userDefinedFieldValues = {};
                     }
                     else {
+                        if(!isNaN(model.customer.udf.userDefinedFieldValues.udf32) && model.customer.udf.userDefinedFieldValues.udf32 !=null)
                         model.customer.udf.userDefinedFieldValues.udf32=Number(model.customer.udf.userDefinedFieldValues.udf32);
                     }
                     var branchId = SessionStore.getBranchId();
