@@ -551,14 +551,36 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "key": "customer.addressProofIssueDate",
                             orderNo: 120,
                             condition: "!model.customer.addressProofSameAsIdProof",
-                            "type": "date"
+                            "type": "date",
+                            onChange: function (value, form, model, event) {
+                                if(model.customer.addressProofIssueDate){
+                                    var addressProof1IssueDate = moment(model.customer.addressProofIssueDate, SessionStore.getSystemDateFormat());
+                                    var addressProof1ValidUptoDate = moment(model.customer.addressProofValidUptoDate, SessionStore.getSystemDateFormat());
+                                    if (addressProof1ValidUptoDate < addressProof1IssueDate) {
+                                        model.customer.addressProofIssueDate = null;
+                                        PageHelper.showProgress("pre-save-validation", "Address Proof Issue Date always more than Address Proof Issue Date", 5000);
+                                        return false;
+                                    }
+                                }
+                            }
                         },
                         "KYC.addressProofValidUptoDate": {
                             "title":"VALID_UPTO",
                             "key": "customer.addressProofValidUptoDate",
                             orderNo: 130,
                             condition: "!model.customer.addressProofSameAsIdProof",
-                            "type": "date"
+                            "type": "date",
+                            onChange: function (value, form, model, event) {
+                                if(model.customer.addressProofValidUptoDate){
+                                    var addressProof1IssueDate = moment(model.customer.addressProofIssueDate, SessionStore.getSystemDateFormat());
+                                    var addressProof1ValidUptoDate = moment(model.customer.addressProofValidUptoDate, SessionStore.getSystemDateFormat());
+                                    if (addressProof1ValidUptoDate < addressProof1IssueDate) {
+                                        model.customer.addressProofValidUptoDate = null;
+                                        PageHelper.showProgress("pre-save-validation", "ID Proof ValidUptoDate always more than ID Proof Valid ToDate", 5000);
+                                        return false;
+                                    }
+                                }
+                            }
                         },
                         "ContactInformation.mobilePhone":{
                             "required": true,
