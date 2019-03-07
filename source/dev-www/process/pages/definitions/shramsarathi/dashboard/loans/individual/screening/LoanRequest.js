@@ -774,7 +774,7 @@ define([],function(){
                                 //     "orderNo": 9
                                 // },                          
                                 "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
-                                  // "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                   "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
                                 }     
                                     
                             }
@@ -1107,32 +1107,7 @@ define([],function(){
                                 },
                                 "CollateralDetails":{
                                     "readonly":true
-                                },
-                                "PreliminaryInformation":{
-                                    "readonly":true
-                                },
-                                "LoanCustomerRelations":{
-                                    "readonly":true
-                                },
-                                "DeductionsFromLoan":{
-                                    "readonly":true
-                                },
-                                "LoanDocuments":{
-                                    "readonly":true
-                                },
-                                "AdditionalLoanInformation":{
-                                    "readonly":true
-                                },
-                                "NomineeDetails":{
-                                    "readonly":true
-                                },
-                                "LoanSanction":{
-                                    "readonly":true
-                                },
-                                "LoanMitigants":{
-                                    "readonly":true
-                                },
-                      
+                                }
                             }
                         },
                         "Dedupe":{
@@ -1373,7 +1348,7 @@ define([],function(){
                             },
                             // "type":"select",
                             // "enumCode":"duration",
-                            "type":"number",
+                            "type":"text",
                             "schema": {
                                 "pattern": "^([6-9]|[1-5][0-9]|60)$"
                             }
@@ -1725,6 +1700,7 @@ define([],function(){
  
                     /* Setting data recieved from Bundle */
                     model.loanAccount = model.loanProcess.loanAccount;
+                 
                     model.currentStage = model.loanAccount.currentStage;
                     model.loanAccount.disbursementSchedules=[];
                    
