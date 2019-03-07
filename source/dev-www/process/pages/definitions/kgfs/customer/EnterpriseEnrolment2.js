@@ -656,7 +656,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
                                             "isStaticTable":true,
-                                            "canAddRow":true,
+                                            "canAddRow":false,
                                             "columns": [
                                                 {
                                                     prop: "salesType",
@@ -750,7 +750,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
                                             "isStaticTable":true,
-                                            "canAddRow":true,
+                                            "canAddRow":false,
                                             "columns": [
                                                 {
                                                     prop: "salesType",
@@ -866,7 +866,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     columnsFn: function () {
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
-                                            "canAddRow":true,
+                                            "canAddRow":false,
                                             "columns": [
                                                 {
                                                     prop: "productName",
@@ -938,7 +938,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
                                             "isStaticTable":true,
-                                            "canAddRow":true,
+                                            "canAddRow":false,
                                             "columns": [
                                                 {
                                                     prop: "productName",
@@ -1011,7 +1011,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
                                             "isStaticTable":true,
-                                            "canAddRow":true,
+                                            "canAddRow":false,
                                             "columns": [
                                                 {
                                                     prop: "seasonType",
@@ -1148,7 +1148,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
                                             "isStaticTable":true,
-                                            "canAddRow":true,
+                                            "canAddRow":false,
                                             "columns": [
                                                 {
                                                     prop: "seasonType",
@@ -1554,7 +1554,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
                                             "isStaticTable":true,
-                                            "canAddRow":true,
+                                            // "canAddRow":false,
                                             "columns": [
                                                 {
                                                     prop: "expenditureSource",
@@ -1614,7 +1614,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
                                             "isStaticTable":true,
-                                            "canAddRow":true,
+                                            "canAddRow":false,
                                             "columns": [
                                                 {
                                                     prop: "expenditureSource",
@@ -1675,7 +1675,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
                                             "isStaticTable":true,
-                                            "canAddRow":true,
+                                            "canAddRow":false,
                                             "columns": [
                                                 {
                                                     prop: "incomeSource",
@@ -1722,7 +1722,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
                                             "isStaticTable":true,
-                                            "canAddRow":true,
+                                            "canAddRow":false,
                                             "columns": [
                                                 {
                                                     prop: "incomeSource",
@@ -1770,7 +1770,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
                                             "isStaticTable":true,
-                                            "canAddRow":true,
+                                            "canAddRow":false,
                                             "columns": [
                                                 {
                                                     prop: "expenditureSource",
@@ -1827,7 +1827,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
                                             "isStaticTable":true,
-                                            "canAddRow":true,
+                                            "canAddRow":false,
                                             "columns": [
                                                 {
                                                     prop: "expenditureSource",
@@ -1883,7 +1883,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     columnsFn: function () {
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
-                                            "canAddRow":true,
+                                            "canAddRow":false,
                                             "columns": [
                                                 {
                                                     prop: "udf2",
@@ -1939,7 +1939,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     columnsFn: function () {
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
-                                            "canAddRow":true,
+                                            "canAddRow":false,
                                             "columns": [
                                                 {
                                                     prop: "udf2",
@@ -2565,7 +2565,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     }
                     model.customer.enterprise.businessType  = "Services";
                     computeTotalMonthlySurpluse("value","form",model);
-                    if(model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval'){
+                    if(model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck' ||  model.currentStage == 'RiskReviewAndLoanSanction' ){
                         model.customer.enterprise.initialEstimateMonthlySale = (model.customer.enterprise.ssiNumber) ? Number(model.customer.enterprise.ssiNumber * 4):0;
                         if(model.customer.enterprise){
                             model.customer.enterprise.vatNumber = model.customer.enterprise.vatNumber? Number(model.customer.enterprise.vatNumber):0;
