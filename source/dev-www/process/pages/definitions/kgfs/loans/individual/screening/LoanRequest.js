@@ -785,8 +785,10 @@ define([],function(){
                         } else {
                                 computeEMI(model);
                         }
-
-
+                        if (_.hasIn(model, 'loanAccount.loanType') && model.loanAccount.loanType !=null && model.loanAccount.loanType.length > 0) {
+                            if(model.loanAccount.loanType == 'JEWEL')
+                                getGoldRate(model);
+                        }
 
                     /* Setting data recieved from Bundle */
                     model.loanAccount.partnerCode='KGFS';
