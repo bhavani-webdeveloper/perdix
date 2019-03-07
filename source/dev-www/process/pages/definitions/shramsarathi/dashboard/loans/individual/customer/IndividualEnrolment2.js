@@ -50,7 +50,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 
                             ],
                             "overrides": {
-
+                                "KYC.addressProofFieldSet":{
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProof": {
+                                    "readonly": false,
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofImageId": {
+                                    "required": true,
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofNo": {
+                                    "required": true,
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofIssueDate":{
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofValidUptoDate":{
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
                                
                                 "ContactInformation.villageName": {
                                     "readonly": true,
@@ -247,27 +267,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualInformation.existingLoan": {
                                     "required": true
                                 },
-                                "IndividualInformation.dateOfBirth": {
-                                    "required": true,
-                                    "onChange": function (modelValue, form, model) {
-                                        if (model.customer.dateOfBirth) {
-                                            model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                                        }
-                                    }
-                                },
-                                "IndividualInformation.age": {
-                                    "required":true,
-                                    "onChange": function (modelValue, form, model) {
-                                        if (model.customer.age > 0) {
-                                            if (model.customer.dateOfBirth) {
-                                                model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-') + moment(model.customer.dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
-                                            } else {
-                                                model.customer.dateOfBirth = moment(new Date()).subtract(model.customer.age, 'years').format('YYYY-MM-DD');
-                                            }
-                                        }
-                                    }
-                                },
-
+                        
                                 "IndividualInformation.maritalStatus": {
                                     "required": true
                                 },
@@ -1135,7 +1135,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ContactInformation.whatsAppMobileNoOption",
                                 "IndividualReferences.verifications.ReferenceCheck",
                                 "IndividualReferences",
-                                "PhysicalAssets",
+                               
                                 "IndividualFinancials",
                                 "References",
                                 "HouseVerification.latitude",
@@ -1148,6 +1148,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC": {
                                     "readonly": true
                                 },
+                                "EnterpriseFinancials":{
+                                    "readonly":true
+                                },
                                 "EnterpriseFinancials.currentAsset.assetType":{
                                     "readonly": true
                                 },
@@ -1155,7 +1158,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true,
                                     "type":"amount"
                                 },  
-                                "Machinery.fixedAssetsMachinaries.machineType":{
+                                "PhysicalAssets.physicalAssets":{
+                                "add":null
+                                },
+                                "PhysicalAssets.physicalAssets.assetType":{
                                     "readonly": true
                                 },
                                 "Machinery.fixedAssetsMachinaries.presentValue":{
@@ -1587,6 +1593,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "loanView": {
                             "overrides": {
+                                // "kyc"
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials.expenditures":{
+                                   "readonly":true
+                                },
                                 "References": {
                                     "readonly": true
                                 },
@@ -1596,6 +1612,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "FamilyDetails": {
                                     "readonly": true
                                 },
+                                "ContactInformation": {
+                                    "readonly": true
+                                },
+                                "HouseVerification": {
+                                    "readonly": true
+                                },
+                               
+                                "Liabilities": {
+                                    "readonly": true
+                                },
+                                "BankAccounts.customerBankAccounts": {
+                                    "readonly": true
+                                },
+                                "EnterpriseFinancials.currentAsset":{
+                                    "readonly":true
+                                }
                             }
                         }
                     },
@@ -1652,6 +1684,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var overridesFields = function (bundlePageObj) {
                 return {
+                    
+                    "FamilyDetails.familyMembers.dateOfBirth":{
+                        "onChange": function (modelValue, form, model, formCtrl, event) {
+                            if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                                model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                            }
+                        }
+                    },
                     "IndividualFinancials.expenditures.annualExpenses":{
                         "required":true,
                         "title":"EXPENSE_AMOUNT"
@@ -3353,6 +3393,30 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "origination-stage": function (bundleModel, model, obj) {
                         model.currentStage = obj
+                    },
+                    "new-applicant": function(bundleModel,model,obj){
+                        if(model.customer.familyMembers){
+                            for (i=0;i<model.customer.familyMembers.length;i++){
+                                if (model.customer.familyMembers[i].dateOfBirth)
+                                    model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                            }
+                        }
+                    },
+                    "new-co-applicant": function(bundleModel,model,obj){
+                        if(model.customer.familyMembers){
+                            for (i=0;i<model.customer.familyMembers.length;i++){
+                                if (model.customer.familyMembers[i].dateOfBirth)
+                                    model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                            }
+                        }
+                    },
+                    "new-guarantor": function(bundleModel,model,obj){
+                        if(model.customer.familyMembers){
+                            for (i=0;i<model.customer.familyMembers.length;i++){
+                                if (model.customer.familyMembers[i].dateOfBirth)
+                                    model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                            }
+                        }
                     }
                 },
                 offline: false,
