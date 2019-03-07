@@ -1060,7 +1060,32 @@ define([],function(){
                                 },
                                 "CollateralDetails":{
                                     "readonly":true
-                                }
+                                },
+                                "PreliminaryInformation":{
+                                    "readonly":true
+                                },
+                                "LoanCustomerRelations":{
+                                    "readonly":true
+                                },
+                                "DeductionsFromLoan":{
+                                    "readonly":true
+                                },
+                                "LoanDocuments":{
+                                    "readonly":true
+                                },
+                                "AdditionalLoanInformation":{
+                                    "readonly":true
+                                },
+                                "NomineeDetails":{
+                                    "readonly":true
+                                },
+                                "LoanSanction":{
+                                    "readonly":true
+                                },
+                                "LoanMitigants":{
+                                    "readonly":true
+                                },
+                      
                             }
                         },
                         "Dedupe":{
