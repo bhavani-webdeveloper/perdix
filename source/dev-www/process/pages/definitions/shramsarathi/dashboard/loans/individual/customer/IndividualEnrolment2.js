@@ -1753,7 +1753,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "title":"FIXED_ASSET"
                     },
                     "IndividualInformation.age":{
-                        "required":true
+                        "required":false
                     },
                     //over 
                     "KYC.idProofIssueDate":{
