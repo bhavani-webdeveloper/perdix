@@ -43,7 +43,13 @@ define({
                         model.UIUDF.bankAccount=res.customerBankAccounts;
                         model.UIUDF.liabilities=res.liabilities;
                         model.household=res.expenditures;
-
+                        var centres = formHelper.enum("centre").data;
+                        for (var i=0;i<centres.length;i++){
+                            if(model.cusotmer.centreId == centres.value){
+                                model.cusotmer.centreName = centres.name;
+                                break;
+                            }
+                        }
                         debugger;
                         // model.customer.presetAddress = [
                         //     res.doorNo,
@@ -100,7 +106,7 @@ define({
                             }
                         })
                         model.decHouseExpanse = decExpanse;
-    
+                        model.household=res.expenditures;
                         /*Family Section*/
                         self.form = self.formSource;
                         var family = {
@@ -295,8 +301,7 @@ define({
                     }, function(e) {
                         model.cibil_equifax = null;
                     });
-                },
-    
+                },  
                 form: [],
                 formSource: [{
                         "type": "section",
@@ -305,7 +310,7 @@ define({
     <i class="fa fa-check-circle text-green" style="font-size:x-large">&nbsp;</i><em class="text-darkgray">{{model.existingCustomerStr}}</em><br>&nbsp;
     </div>
     <div class="col-sm-3">{{'BRANCH'|translate}}: <strong>{{model.customer.kgfsName}}</strong></div>
-    <div class="col-sm-3">{{'ZONE'|translate}}: <strong>{{model.customer.centreId}}</strong></div>
+    <div class="col-sm-3">{{'ZONE'|translate}}: <strong>{{model.customer.centreName}}</strong></div>
     `
                     }, {
                         "type": "box",
