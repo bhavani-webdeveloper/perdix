@@ -118,6 +118,16 @@
                 "Completed"
               ]
             },
+             "dateOfBirth": {
+              "title": "family member date of birth",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
             "familyMemberMiddleName": {
               "title": "Middle Name",
               "type": "string",
@@ -141,7 +151,7 @@
             "relationShip": {
               "title": "Relationship",
               "type": "string",
-              "refCodeCategory": "relation",
+              "refCodeCategory": "relationship",
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
@@ -450,6 +460,16 @@
             },
             "averageReturn": {
               "title": "average return",
+              "type": "string",
+              "minimum": 0,
+              "maximum": 10000000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "incomeType": {
+              "title": "Income Type",
               "type": "string",
               "minimum": 0,
               "maximum": 10000000,

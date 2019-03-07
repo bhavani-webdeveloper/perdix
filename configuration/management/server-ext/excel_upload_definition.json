@@ -306,7 +306,7 @@
    },
 
    "Centre Master":{  
-      "table":"Centre_master",
+      "table":"centre_master",
       "enableTruncate":false,
       "columns":[  
          {  
@@ -552,7 +552,7 @@
             "columnName":"allow_collection"
          },
          {  
-            "fieldName":"allow_disbursement",
+            "fieldName":"Allow Disbursement",
             "columnName":"allow_disbursement"
          },
          {  

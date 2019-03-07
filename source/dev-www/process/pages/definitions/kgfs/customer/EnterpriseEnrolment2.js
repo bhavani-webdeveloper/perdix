@@ -11,18 +11,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
             irfProgressMessage, SessionStore, $state, $stateParams, Queries, Utils, CustomerBankBranch, BundleManager, $filter, $injector, UIRepository, LoanAccount) {
 
             var getDialySalesDetails = function (value, model, row, day) {
-                model.customer.enterprise.weeklySale = 0;
-                for (i in model.customer.enterpriseDailySale) {
-                    dailysales = model.customer.enterpriseDailySale[i];
-                    if (dailysales.salesType != row.salesType && dailysales[day]) {
-                        delete dailysales[day]
+                if(value){
+                    model.customer.enterprise.weeklySale = 0;
+                    for (i in model.customer.enterpriseDailySale) {
+                        dailysales = model.customer.enterpriseDailySale[i];
+                        if (dailysales.salesType != row.salesType && dailysales[day]) {
+                            delete dailysales[day]
+                        }
+                        dailysales.total = (dailysales.mon ? dailysales.mon : 0) + (dailysales.tue ? dailysales.tue : 0) + (dailysales.wed ? dailysales.wed : 0) + (dailysales.thu ? dailysales.thu : 0) +
+                            (dailysales.fri ?dailysales.fri : 0) + (dailysales.sat ? dailysales.sat : 0) + (dailysales.sun ? dailysales.sun : 0)
+                        model.customer.enterprise.weeklySale = model.customer.enterprise.weeklySale + dailysales.total;
+                        model.customer.enterprise.monthlySale = model.customer.enterprise.weeklySale * 4;
                     }
-                    dailysales.total = (dailysales.mon ? dailysales.mon : 0) + (dailysales.tue ? dailysales.tue : 0) + (dailysales.wed ? dailysales.wed : 0) + (dailysales.thu ? dailysales.thu : 0) +
-                        (dailysales.fri ? dailysales.fri : 0) + (dailysales.sat ? dailysales.sat : 0) + (dailysales.sun ? dailysales.sun : 0)
-                    model.customer.enterprise.weeklySale = model.customer.enterprise.weeklySale + dailysales.total;
-                    model.customer.enterprise.monthlySale = model.customer.enterprise.weeklySale * 4;
+                    averageMonthlySale(model);
                 }
-                averageMonthlySale(model);
+               
             }
             var getEnterpriseProductDetails = function (model) {
                 model.customer.enterprise.totalDailySales = 0
@@ -54,7 +57,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
             }
 
             var getAnnualSales = function (value, model, row, month) {
-                model.customer.enterprise.avgMonthlySales = 0;
+                model.customer.enterprise.avgAnnualSales = 0;
                 for (i in model.customer.monthlySale) {
                     monthlySales = model.customer.monthlySale[i];
                     if (monthlySales.seasonType != row.seasonType && monthlySales[month]) {
@@ -62,7 +65,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     }
                     monthlySales.total = (monthlySales.Jan ? monthlySales.Jan : 0) + (monthlySales.Feb ? monthlySales.Feb : 0) + (monthlySales.Mar ? monthlySales.Mar : 0) + (monthlySales.Apr ? monthlySales.Apr : 0) +
                         (monthlySales.May ? monthlySales.May : 0) + (monthlySales.June ? monthlySales.June : 0) + (monthlySales.July ? monthlySales.July : 0) + (monthlySales.Aug ? monthlySales.Aug : 0) + (monthlySales.Sep ? monthlySales.Sep : 0) + (monthlySales.Oct ? monthlySales.Oct : 0) + (monthlySales.Nov ? monthlySales.Nov : 0) + (monthlySales.Dec ? monthlySales.Dec : 0);
-                    model.customer.enterprise.avgAnnualSales = model.customer.enterprise.avgMonthlySales + monthlySales.total;
+                    model.customer.enterprise.avgAnnualSales = model.customer.enterprise.avgAnnualSales + monthlySales.total;
                     model.customer.enterprise.avgMonthlySales = (model.customer.enterprise.avgAnnualSales/12);
                 }
                 averageMonthlySale(model);
@@ -381,6 +384,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EnterpriseFinancials.incomeThroughSales.amount": {
                         "orderNo": 512,
+                        "required":true,
                         onChange: function (value, form, model) {
                             computeTotalMonthlySurpluse("value","form", model);
                         }
@@ -408,6 +412,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EnterpriseFinancials.rawMaterialExpenses.amount": {
                         "orderNo": 523,
+                        "required":true,
                         onChange: function (value, form, model) {
                             computeTotalMonthlySurpluse(value, form, model);
                         }
@@ -601,21 +606,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         }
                     },
                     "EnterpriseFinancials": {
-                                "type": "fieldset",
-                                "title": "DOCUMENT_VERIFICATION",
-                                "items": {
-                                    "totalMonthlySurplus": {
-                                        "key": "customer.totalMonthlySurplus",
-                                        "type": "text",
-                                        "title": "TOTAL_MONTHLY_SURPLUS",
-                                    },
-                                    "debtServiceRatio": {
-                                        "key": "customer.debtServiceRatio",
-                                        "type": "text",
-                                        "title": "DEBT_SERVICE_RATIO",
-                                    }
-                                
-                            
+                        "items": {
+                            "totalMonthlySurplus": {
+                                "key": "customer.totalMonthlySurplus",
+                                "type": "text",
+                                "title": "TOTAL_MONTHLY_SURPLUS",
+                            },
+                            "debtServiceRatio": {
+                                "key": "customer.debtServiceRatio",
+                                "type": "text",
+                                "title": "DEBT_SERVICE_RATIO",
+                            }
                         }
                     },
                     "EstimatedSales": {
@@ -2011,6 +2012,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             'estimatedEmi': {
                                 key: "loanAccount.estimatedEmi",
                                 title: "Affordable EMI as stated by the customer",
+                                "readonly":true,
                                 "type": "number",
                                 "onChange": function (value, form, model) {
                                     monthlySurpluse(model);

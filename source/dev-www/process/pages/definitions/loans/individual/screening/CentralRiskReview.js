@@ -109,17 +109,17 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                 return out;
             },
 
-            bundleActions: [{
-                name: "Conversation",
-                desc: "",
-                icon: "fa fa-comment",
-                fn: function(bundleModel) {
-                    Message.openOrCreateConversation("Loan", $stateParams.pageId);
-                },
-                isApplicable: function(bundleModel) {
-                    return true;
-                }
-            }],
+            // bundleActions: [{
+            //     name: "Conversation",
+            //     desc: "",
+            //     icon: "fa fa-comment",
+            //     fn: function(bundleModel) {
+            //         Message.openOrCreateConversation("Loan", $stateParams.pageId);
+            //     },
+            //     isApplicable: function(bundleModel) {
+            //         return true;
+            //     }
+            // }],
 
             "pre_pages_initialize": function(bundleModel) {
                 $log.info("Inside pre_page_initialize");

@@ -91,6 +91,7 @@ define({
                         return [
 
                             "{{'ENTITY_NAME'|translate}} : " + item.customerName,
+                             "{{'CENTRE_NAME'|translate}} : " + item.centreName,
                             "{{'URN_NO'|translate}} : " + item.urn,
                             "{{'LOAN_AMOUNT'|translate}} : " + item.loanAmount,
                             "{{'LOAN_TYPE'|translate}} : " + item.loanType,
@@ -115,8 +116,12 @@ define({
 							data: 'urn'
                         }, 
                         {
-                            title: 'ENTITY_NAME',
-                            data: 'customerName'
+                            title: 'CUSTOMER_NAME',
+                            data: 'applicantName'
+                        }, 
+                        {
+                            title: 'CENTRE_NAME',
+                            data: 'centreName'
                         }, {
 							title: 'LOAN_AMOUNT',
 							data: 'loanAmount'
@@ -127,9 +132,6 @@ define({
                         {
 							title: 'PARTNER_CODE',
 							data: 'partnerCode'
-                        },{
-							title: 'PROCESS_TYPE',
-							data: 'processType'
                         },
                     ]
 					},

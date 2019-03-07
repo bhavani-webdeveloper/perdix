@@ -1,8 +1,8 @@
 define({
 	pageUID: "shramsarathi.dashboard.loans.individual.screening.detail.EnterpriseFinancialView",
 	pageType: "Engine",
-	dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "irfElementsConfig", "Model_ELEM_FC"],
-	$pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, irfElementsConfig, Model_ELEM_FC) {
+	dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "irfElementsConfig", "Model_ELEM_FC","Misc"],
+	$pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, irfElementsConfig, Model_ELEM_FC,Misc) {
 		var randomColor = function() {
 			return (function(m,s,c){return (c ? arguments.callee(m,s,c-1) : '#') + s[m.floor(m.random() * s.length)]})(Math,'0123456789ABCDEF',5);
 		}
@@ -15,33 +15,41 @@ define({
 				model.bundlePageObj = bundlePageObj;
 				model.bundleModel = bundleModel;
 				self = this;
-            $log.log("bundleModel",model.bundleModel);
+			$log.log("bundleModel",model.bundleModel);
+			
 				// self.form = [{
 				// 	"type": "section",
 				// 	"html": '<br><div style="text-align:center">Waiting for summary..<br><br><ripple-loader></ripple-loader></div>'
 				// }];
+				Misc.getSummary({"customer_id":model.customerId}).$promise.then(function(resp){
+				//Misc.getSummary({"customer_id":77}).$promise.then(function(resp){
+				   console.log(model);
+				   console.log("------model");
+					console.log(resp);
 				model.incomeExpense={};
-				model.incomeExpense.destinationTotalIncome=0;
-				model.incomeExpense.sourceTotalIncome=0;
-				model.incomeExpense.incomeGrandTotal=0;
-				model.incomeExpense.destinationTotalExpenses=0;
-				model.incomeExpense.sourceTotalExpenses=0;
-				model.incomeExpense.expensesGrandTotal=0;
-				model.incomeExpense.destinationExtra=0;
-				model.incomeExpense.sourceExtra=0;
-				model.incomeExpense.totalExtra=0;
+				model.incomeExpense.destinationTotalIncome= resp.destination;
+				model.incomeExpense.sourceTotalIncome= resp.source;
+				model.incomeExpense.incomeGrandTotal=resp.grand_total;
+				model.incomeExpense.destinationTotalExpenses= resp.distination_total_expense;
+				model.incomeExpense.sourceTotalExpenses=resp.source_total_expense;
+				model.incomeExpense.expensesGrandTotal= resp.expense_grand_total;
+				model.incomeExpense.destinationExtra = resp.destination - resp.distination_total_expense;
+				model.incomeExpense.sourceExtra = resp.source - resp.source_total_expense;
+				model.incomeExpense.totalExtra = destinationExtra + sourceExtra ;
 				model.assetsLiabilites={};
-				model.assetsLiabilites.totalCurrentAssets=0;
-				model.assetsLiabilites.totalFixedAsstes=0;
-				model.assetsLiabilites.totalLiabilites =0;
+				model.assetsLiabilites.totalCurrentAssets= resp.total_current_assets;
+				model.assetsLiabilites.totalFixedAsstes = resp.total_fixed_assets;
+				model.assetsLiabilites.totalLiabilites = resp.total_current_assets + resp.total_fixed_assets;
 				model.familyInfo={};
-				model.familyInfo.totalMembers=0;
-				model.familyInfo.earningMembers=0;
-				model.familyInfo.noOfMigrants=0;
-				model.familyInfo.noOfChildren=0;
-				model.familyInfo.noOfSchoolGoing=0;
-				model.familyInfo.noOfCollegeGoing=0;
-				model.proposedAmount=0;
+				model.familyInfo.totalMembers = resp.total_members;
+				model.familyInfo.earningMembers = resp.earning_members;
+				model.familyInfo.noOfMigrants = resp.no_of_migrants;
+				model.familyInfo.noOfChildren = resp.no_of_childrens;
+				model.familyInfo.noOfSchoolGoing = resp.no_of_school_going;
+				model.familyInfo.noOfCollegeGoing = resp.no_of_college_going;
+				model.proposedAmount = 0;
+				})
+				
 			},
 			form: [	
 				{

@@ -1,4 +1,4 @@
-customers.list=select last_edited_at from customer where id=:id
+customers.list=select customer_type as `customerType`,last_edited_at from customer where id=:id
 loanCollectionDepositSum.list=SELECT SUM(`demand_amount`) FROM loan_collections where bank_deposit_summary_id=:bank_deposit_summary_id
 loanaccounts.list=select l.* from loan_accounts l,jlg_account_details jlg where jlg.account_number = l.account_number and l.bank_id =:bank_id and jlg.group_code =:group_code and l.partner_code = :partner_code and l.is_closed = 0
 loanAccount.list=select * from loan_accounts where account_number=:account_number and branch_id=:branch_id
@@ -97,5 +97,5 @@ insuranceProducts.list = select distinct im.product_code as `productCode`, im.pa
 customerLoanAccount.list=SELECT account_number from loan_accounts where customer_id = :customer_id
 getBankName = SELECT bank_name from bank_master where id =:bankId
 getInsuranceFormName = SELECT product_code, document_code as `FormName`,is_mandatory from insurance_documents_master where product_code = :productCode
-getInsuranceDocuments = SELECT product_code as `productCode`,document_code as `document_code`,is_mandatory as `isMandatory` where product_code = :productCode
+getInsuranceDocuments.list = SELECT product_code as `productCode`,document_code as `documentCode`,is_mandatory as `isMandatory` from insurance_documents_master where product_code = :productCode
 getTelecallingSnapshotId = SELECT max(telecalling_details_id) as `telecalling_id` from telecalling_details_snapshot where process_type = 'CUSTOMER' and customer_id = :customer_id

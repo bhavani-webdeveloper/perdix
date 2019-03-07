@@ -155,15 +155,6 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.dis
                                     }
                                 }
                             });
-                            
-                        // to validate customer profile updated or not
-                        if(model.siteCode == 'KGFS') {
-                             Queries.getCustomerById(model.additional.customerId).then(function (res) {
-                                  if(moment().diff(moment(res, 'YYYY-MM-DD'), 'days') <= 7) {
-                                     PageHelper.setWarning({message:"Profile Edited in last 7 days. Please refer customer history for same."});
-                                   }
-                           });
-                        }
 
                             model.additional.netDisbursementAmount = Number(resp[0].netDisbursementAmount);
                             var j = 1;

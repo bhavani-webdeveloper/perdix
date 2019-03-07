@@ -176,7 +176,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             var overridesFields = function (bundlePageObj) {
                return {
                         "IndividualReferences":{
-                            title:"REFERENCE"
+                            title:"REFERENCE",
+                            condition:"model.pageClass !='guarantor' && model.pageClass !='co-applicant'"
                         },
                         "IndividualReferences.verifications":{
                             title:"REFERENCE"
@@ -292,7 +293,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "required": false
                         },
                         "IndividualInformation.language":{
-                            "type": "string",
+                            "type": "select",
                             "required": false
                         },
                         "IndividualInformation.area":{
@@ -359,7 +360,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 var centreCode = formHelper.enum('centre').data;
     
                                 var centreName = $filter('filter')(centreCode, {value: parentModel.customer.centreId}, true);
-                                if(centreName && centreName.length > 0) {
+                                if(centreName && centreName.length > 0 && model.centreId !=undefined) {
                                     model.centreName = centreName[0].name;
                                 }
     
@@ -451,6 +452,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     'firstName': inputModel.firstName,
                                     'centreId':inputModel.centreId,
                                     'customerType':"individual",
+                                    'stage':'Completed',
                                     'urnNo': inputModel.urnNo
                                 }).$promise;
                                 return promise;
@@ -582,117 +584,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             type: "lov",
                             fieldType: "string",
                             autolov: true,
-                            inputMap: {
-                                "mailingPincode": "customer.mailingPincode",
-                                "mailingDivision": "customer.mailingLocality",
-                                "mailingtaluk": "customer.mailingtaluk",
-                                "region": "customer.villageName",
-                                "mailingDistrict": {
-                                    key: "customer.mailingDistrict"
-                                },
-                                "mailingState": {
-                                    key: "customer.mailingState"
-                                }
-                            },
-                            outputMap: {
-                                "mailingDivision": "customer.mailingLocality",
-                                "mailingPincode": "customer.mailingPincode",
-                                "mailingDistrict": "customer.mailingDistrict",
-                                "mailingState": "customer.mailingDivision"
-                            },
-                            searchHelper: formHelper,
-                            initialize: function (inputModel) {
-                                $log.warn('in pincode initialize');
-                                $log.info(inputModel);
-                                inputModel.region = undefined;
-                            },
-                            search: function (inputModel, form, model) {
-                                if (!inputModel.mailingPincode) {
-                                    return $q.reject();
-                                }
-                                return Queries.searchPincodes(
-                                    inputModel.mailingPincode,
-                                    inputModel.mailingDistrict,
-                                    inputModel.mailingState,
-                                    inputModel.mailingDivision,
-                                    inputModel.region,
-                                    inputModel.mailingtaluk
-                                );
-                            },
-                            getListDisplayItem: function (item, index) {
-                                return [
-                                    item.division + ', ' + item.region,
-                                    item.pincode,
-                                    item.district + ', ' + item.state
-                                ];
-                            },
-                            onSelect: function (result, model, context) {
-                                model.customer.mailingPincode = (new Number(result.pincode)).toString();
-                                model.customer.mailingLocality = result.division;
-                                model.customer.mailingState = result.state;
-                                model.customer.mailingDistrict = result.district;
-                            }
+                            "resolver": "MailingPincodeLOVConfiguration",
+                            "searchHelper": formHelper,
+
                         },
                         "ContactInformation.pincode": {
                             "type": "lov",
                             "title": "PIN_CODE",
                             fieldType: "number",
                             autolov: true,
-                            inputMap: {
-                                "pincode": {
-                                    key:  "customer.pincode"
-                                },
-                                "division": {
-                                    key: "customer.locality"
-                                },
-                                "region": {
-                                    key: "customer.villageName"
-                                },
-                                "taluk": {
-                                    key: "customer.taluk"
-                                },
-                                "district": {
-                                    key: "customer.district"
-                                },
-                                "state": {
-                                    key: "customer.state"
-                                }
-                            },
-                            outputMap: {
-                                "division": "customer.locality",
-                                "region": "customer.villageName",
-                                "pincode": "customer.pincode",
-                                "district": "customer.district",
-                                "state": "customer.state",
-                            },
-                            searchHelper: formHelper,
-                            initialize: function (inputModel) {
-                                $log.warn('in pincode initialize');
-                                $log.info(inputModel);
-                            },
-                            search: function (inputModel, form, model) {
-                                if (!inputModel.pincode) {
-                                    return $q.reject();
-                                }
-                                return Queries.searchPincodes(
-                                    inputModel.pincode,
-                                    inputModel.district,
-                                    inputModel.state,
-                                    inputModel.division,
-                                    inputModel.region,
-                                    inputModel.taluk
-                                );
-                            },
-                            getListDisplayItem: function (item, index) {
-                                return [
-                                    item.division + ', ' + item.region,
-                                    item.pincode,
-                                    item.district + ', ' + item.state,
-                                ];
-                            },
-                            onSelect: function (result, model, context) {
-                                $log.info(result);
-                            }
+                            "resolver": "PincodeLOVConfiguration",
+                            "searchHelper": formHelper,
                         },
                         "ContactInformation.locality":{
                             title:"LOCALITY1"
@@ -992,6 +894,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             required: true,
                             enumCode: "house_ownership",
                         },
+                        "FamilyDetails": {
+                            condition:"model.pageClass !='guarantor' && model.pageClass !='co-applicant'"
+                        },
                         "FamilyDetails.familyMembers": {
                             "title":"FAMILY_DETAILS"
                         },
@@ -1052,10 +957,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             title:"FAMILY_MEMBER_NAME"
                         },                       
                         "IndividualFinancials":{
-                            "title":"HOUSEHOLD_EXPENSES"
+                            "title":"HOUSEHOLD_EXPENSES",
+                            condition:"model.pageClass !='guarantor' && model.pageClass !='co-applicant'"
                         },
                         "IndividualFinancials.expenditures":{
-                            "title":"ADD_HOUSEHOLD_EXPENSES"
+                            "title":"ADD_HOUSEHOLD_EXPENSES",
+                            "titleExpr":"('HOUSEHOLD_EXPENSES'|translate)"
                         },                        
                         "IndividualFinancials.expenditures.expenditureSource":{
                             "required":true,
@@ -1203,6 +1110,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                     /* Setting data for the form */
                     model.customer = model.enrolmentProcess.customer;
+                     if (typeof model.customer.udf == "undefined") {                    
+                    model.customer.udf = {};
+                    model.customer.udf.userDefinedFieldValues = {};
+                    }
+                    else {
+                        model.customer.udf.userDefinedFieldValues.udf32=Number(model.customer.udf.userDefinedFieldValues.udf32);
+                    }
                     var branchId = SessionStore.getBranchId();
                     if(branchId && !model.customer.customerBranchId)
                         {
@@ -1246,10 +1160,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             }
                                         },
                                         "spouseAadharNumber":{
-                                            "key":"customer.udf32",
+                                            key:"customer.udf.userDefinedFieldValues.udf32",
                                             "title": "SPOUSE_AADHAR_NUMBER",
                                             condition: "model.customer.maritalStatus==='MARRIED'",
-                                            "type": "string",
+                                            "type": "number",
                                         }
                                     }
                                 },
@@ -1307,7 +1221,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "educationLevel":{
                                                     "key": "customer.familyMembers[].educationStatus",
                                                     "title":"EDUCATION_LEVEL",
-                                                    "type":"string"
+                                                    "type":"select"
                                                 },
                                                 "incomeDetails":{
                                                     "key": "customer.familyMembers[].udfId2",
@@ -1524,6 +1438,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 formHelper.resetFormValidityState(form);
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
+                                if (typeof model.customer.udf.userDefinedFieldValues != "undefined")
+                                model.customer.udf.userDefinedFieldValues.udf32=Number(model.customer.udf.userDefinedFieldValues.udf32);
+                    
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                                 BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer});
 
