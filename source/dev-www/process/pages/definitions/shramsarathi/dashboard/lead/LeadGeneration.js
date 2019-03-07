@@ -27,7 +27,7 @@ function(LeadProcess, AngularResourceService) {
                     "leadProfile.migrantDetails.migrantDependantLabourFamily":{
                         "schema": {
                             "title":"MIGRANT",
-                            "type": ["string", "null"],
+                            "type": ["boolean", "null"],
                         },
                     },                    
                     "leadProfile.individualDetails.lastName":{
