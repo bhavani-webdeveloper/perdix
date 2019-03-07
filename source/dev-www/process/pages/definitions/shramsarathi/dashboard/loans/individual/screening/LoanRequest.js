@@ -1528,7 +1528,7 @@ define([],function(){
                     "PreliminaryInformation.expectedInterestRate",
                     "PreliminaryInformation.expectedEmi",
                     "PreliminaryInformation.emiRequested",
-                    "PreliminaryInformation.emiPaymentDateRequested",
+                    //"PreliminaryInformation.emiPaymentDateRequested",
                     "PreliminaryInformation.collectionPaymentType",
                     "PreliminaryInformation.expectedPortfolioInsurancePremium",
                     "PreliminaryInformation.BusinessSaveWarning",
