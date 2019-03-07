@@ -662,12 +662,12 @@ define([],function(){
                             "excludes": [
                                 "ProposedUtilizationPlan",
                                 //"DeductionsFromLoan",
-                                 "LoanMitigants",
-                                //"LoanMitigants.deviationParameter",
+                                "LoanMitigants",
+                                "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
-                                "NomineeDetails",
-                                "NomineeDetails.nominees",
+                                //"NomineeDetails",
+                                //"NomineeDetails.nominees",
                                 "LoanSanction",
                                 "LoanSanction.sanctionDate",
                                 "LoanSanction.numberOfDisbursements",
@@ -686,6 +686,52 @@ define([],function(){
 
                             ],
                             "overrides": {
+                                "NomineeDetails.nominees.nomineeFirstName": {
+                                    "orderNo": 1,
+                                    "type": "lov",
+                                    "title": "NAME",
+                                    "autolov":false,
+                                    searchHelper: formHelper,
+                                    search: function (inputModel, form, model, context) {
+                                        var out = [];
+                                        if (!model.customer.familyMembers) {
+                                            return out;
+                                        }
+            
+                                        for (var i = 0; i < model.customer.familyMembers.length; i++) {
+                                            if(!( model.customer.familyMembers[i].relationShip=='self')){
+                                                out.push({
+                                                    name: model.customer.familyMembers[i].familyMemberFirstName,
+                                                    dob: model.customer.familyMembers[i].dateOfBirth,
+                                                    relationship: model.customer.familyMembers[i].relationShip,
+                                                    gender: model.customer.familyMembers[i].gender
+                                                })
+                                            }
+                                        }
+                                        return $q.resolve({
+                                            headers: {
+                                                "x-total-count": out.length
+                                            },
+                                            body: out
+                                        });
+                                    },
+                                    onSelect: function (valueObj, model, context) {
+                                        //add to the witnees array.
+                                        if (_.isUndefined(model.loanAccount.nominees[context.arrayIndex])) {
+                                            model.loanAccount.nominees[context.arrayIndex] = [];
+                                        }
+                                        model.loanAccount.nominees[context.arrayIndex].nomineeFirstName = valueObj.name;
+                                        model.loanAccount.nominees[context.arrayIndex].nomineeRelationship = valueObj.relationship;
+                                        model.loanAccount.nominees[context.arrayIndex].nomineeGender = valueObj.gender;
+                                        model.loanAccount.nominees[context.arrayIndex].nomineeDOB = valueObj.dob
+                                    },
+                                    getListDisplayItem: function (item, index) {
+                                        return [
+                                            item.name
+                                        ];
+                                    }
+            
+                                },
                                 "PreliminaryInformation": {
                                     "orderNo": 1,
                                     "readonly": false
@@ -737,8 +783,8 @@ define([],function(){
                             "excludes": [
                                 "ProposedUtilizationPlan",
                                 //"DeductionsFromLoan",
-                                //"LoanMitigants",
-                                //"LoanMitigants.deviationParameter",
+                                "LoanMitigants",
+                                "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
                                 "LoanSanction",
@@ -759,6 +805,7 @@ define([],function(){
 
                             ],
                             "overrides": {
+                                
                                 "PreliminaryInformation": {
                                     "orderNo": 1,
                                     "readonly": true
@@ -1759,6 +1806,11 @@ define([],function(){
                         },function (errResp){
         
                         });
+                        Enrollment.getCustomerById({id:model.loanAccount.customerId}).$promise.then(function(customer){
+                            model.customer = customer
+                        },function(err){
+
+                        })
                     }
  
                     self = this;
