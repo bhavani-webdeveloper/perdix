@@ -1685,7 +1685,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var overridesFields = function (bundlePageObj) {
                 return {
-                    
+                   "Liabilities.liabilities.noOfInstalmentPaid":{
+                        "orderNo":23
+                    },
                     // "FamilyDetails.familyMembers.dateOfBirth":{
                     //     "onChange": function (modelValue, form, model, formCtrl, event) {
                     //         if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
@@ -2012,7 +2014,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "enumCode": "caste"
                     },
                     "Liabilities.liabilities.startDate": {
-                        "orderNo":18,
+                        "orderNo":20,
                         "onChange": function (modelValue, form, model, formCtrl, $event) {
                             var index = form.key[2];
                             if (moment(modelValue).isAfter(new Date().toDateString())) {
@@ -2031,7 +2033,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         }
                     },
                     "Liabilities.liabilities.maturityDate": {
-                        "orderNo":19,
+                        "orderNo":21,
                         "onChange":function (modelValue, form, model, formCtrl, event) {
                             var index = form.key[2];
                             if (model.customer.liabilities[index].startDate && moment(modelValue).isBefore(model.customer.liabilities[index].startDate)) {
@@ -2127,6 +2129,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Liabilities.liabilities.interestRate":{
                         "type":"number",
                         //"enumCode":"rate_of_interest",
+                        "orderNo":22,
                     },
                     "KYC.additionalKYCs.kyc1ProofType":{
                         "enumCode":"age_proof",
