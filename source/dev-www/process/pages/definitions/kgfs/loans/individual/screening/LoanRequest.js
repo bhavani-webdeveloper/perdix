@@ -506,7 +506,7 @@ define([],function(){
                             "title":"FREQUENCY_REQUESTED",
                             "enumCode": "loan_product_frequency",
                             "onChange": function(valueObj,context,model){
-                                computeEstimatedEMI(model);
+                                computeEstimatedEMI(model);                                                             
                                 clearAll('loanAccount',['productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
                                 model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                                 //clearAll('additions',['tenurePlaceHolder','interestPlaceHolder','amountPlaceHolder'],model)
@@ -540,6 +540,8 @@ define([],function(){
                             onSelect: function (valueObj, model, context) {
                                 clearAll("loanAccount",["loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
                                 model.loanAccount.productCode = valueObj.productCode;
+                                if(model.loanAccount.loanType == 'JEWEL')
+                                    getGoldRate(model); 
                                 model.additions.tenurePlaceHolder = valueObj.tenure_from == valueObj.tenure_to ? valueObj.tenure_from : valueObj.tenure_from + '-' + valueObj.tenure_to;
                                 model.additions.amountPlaceHolder = valueObj.amount_from == valueObj.amount_to ? valueObj.amount_from : valueObj.amount_from + '-' + valueObj.amount_to;
                                 model.additions.interestPlaceHolder = valueObj.min_interest_rate == valueObj.max_interest_rate ? valueObj.min_interest_rate : valueObj.min_interest_rate + '-' + valueObj.max_interest_rate;
