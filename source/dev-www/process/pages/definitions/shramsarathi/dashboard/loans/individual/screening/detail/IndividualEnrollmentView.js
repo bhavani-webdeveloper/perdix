@@ -39,8 +39,12 @@ define({
                                 break;
                         };
                         model.customer.presetAddress = 'Present Address';
-    
-    
+                        //debugger;
+                        model.UIUDF.bankAccount=res.customerBankAccounts;
+                        model.UIUDF.liabilities=res.liabilities;
+                        model.household=res.expenditures;
+
+                        debugger;
                         // model.customer.presetAddress = [
                         //     res.doorNo,
                         //     res.street,
@@ -64,8 +68,7 @@ define({
                         });
     
                         /*Cibil/highmark fields*/
-    
-    
+                        
                         /*Reference Check fields*/
                         model.UIUDF.REFERENCE_CHECK_RESPONSE = 'NA';
                         var ref_flag = "true";
@@ -534,70 +537,70 @@ define({
                                         "title": "Bank Name",
                                         "data": "customerBankName",
                                         render: function(data, type, full, meta) {
-                                            return full['Bank Name']
+                                            return full['customerBankName']
                                         }
                                     }, {
                                         "title": "Branch Name",
                                         "data": "customerBankBranchName",
                                         render: function(data, type, full, meta) {
                                             if (data) return data;
-                                            return "NA"
+                                            return ['customerBankBranchName']
     
                                         }
                                     }, {
                                         "title": "IFSC Code",
                                         "data": "ifscCode",
                                         render: function(data, type, full, meta) {
-                                            return full['IFS Code']
+                                            return full['ifscCode']
                                         }
                                     }, {
                                         "title": "Account Number",
                                         "data": "accountNumber",
                                         render: function(data, type, full, meta) {
-                                            return full['Account Number']
+                                            return full['accountNumber']
                                         }
                                     }, {
                                         "title": "Average Bank Balance",
                                         "data": "BankAvgBal",
                                         render: function(data, type, full, meta) {
-                                            return irfCurrencyFilter(full['Average Bank Balance'])
+                                            return irfCurrencyFilter(full['BankAvgBal'])
                                         }
                                     }, {
                                         "title": "Average Bank Deposit",
                                         "data": "BankAvgDep",
                                         render: function(data, type, full, meta) {
-                                            return irfCurrencyFilter(full['Average Bank Deposit'])
+                                            return irfCurrencyFilter(full['BankAvgDep'])
                                         }
                                     }, {
                                         "title": "Account Name",
                                         "data": "customerNameAsInBank",
                                         render: function(data, type, full, meta) {
-                                            return full['Account Holder Name']
+                                            return full['customerNameAsInBank']
                                         }
                                     }, {
                                         "title": "Account Type",
                                         "data": "accountType",
                                         render: function(data, type, full, meta) {
-                                            return full['Account Type']
+                                            return full['accountType']
                                         }
                                     }, {
                                         "title": "BANKING_SINCE",
                                         "data": "bankingSince",
                                         render: function(data, type, full, meta) {
-                                            return full['Banking Since']
+                                            return full['bankingSince']
                                         }
     
                                     }, {
                                         "title": "NET_BANKING_AVAILABLE",
                                         "data": "netBankingAvailable",
                                         render: function(data, type, full, meta) {
-                                            return full['Net Banking Available']
+                                            return full['netBankingAvailable']
                                         }
                                     }, {
                                         "title": "Limit",
                                         "data": "limit",
                                         render: function(data, type, full, meta) {
-                                            return full.Limit;
+                                            return full['limit']
                                         }
                                     }, {
                                         "title": "Bank Statement's",
@@ -675,25 +678,25 @@ define({
                                         "title": "loan_source",
                                         "data": "loanSource",
                                         render: function(data, type, full, meta) {
-                                            return full['Loan Source']
+                                            return full['loanSource']
                                         }
                                     }, {
                                         "title": "loan Amount",
                                         "data": "loanAmount",
                                         render: function(data, type, full, meta) {
-                                            return irfCurrencyFilter(full['Loan Amount'])
+                                            return irfCurrencyFilter(full['loanAmount'])
                                         }
                                     }, {
                                         "title": "Installment Amount",
                                         "data": "installmentAmountInPaisa",
                                         render: function(data, type, full, meta) {
-                                            return irfCurrencyFilter(full['Installment Amount'])
+                                            return irfCurrencyFilter(full['installmentAmountInPaisa'])
                                         }
                                     }, {
                                         "data": "outstandingAmountInPaisa",
                                         "title": "OUTSTANDING_AMOUNT",
                                         render: function(data, type, full, meta) {
-                                            return irfCurrencyFilter(full['Outstanding Amount'])
+                                            return irfCurrencyFilter(full['outstandingAmountInPaisa'])
                                         }
                                     }, {
                                         "title": "Loan Purpose",
@@ -706,19 +709,19 @@ define({
                                         "title": "START_DATE",
                                         "data": "startDate",
                                         render: function(data, type, full, meta) {
-                                            return full['Start Date']
+                                            return full['startDate']
                                         }
                                     }, {
                                         "title": "MATURITY_DATE",
                                         "data": "maturityDate",
                                         render: function(data, type, full, meta) {
-                                            return full['Maturity Date']
+                                            return full['maturityDate']
                                         }
                                     }, {
                                         "title": "NO_OF_INSTALLMENT_PAID",
                                         "data": "noOfInstalmentPaid",
                                         render: function(data, type, full, meta) {
-                                            return full['No of Installment Paid']
+                                            return full['noOfInstalmentPaid']
                                         }
     
                                     }, {
@@ -737,7 +740,7 @@ define({
                                         "data": "interestRate",
                                         "title": "RATE_OF_INTEREST",
                                         render: function(data, type, full, meta) {
-                                            return full['Rate of Interest']
+                                            return full['interestRate']
                                         }
                                     }];
                                 },
@@ -896,7 +899,7 @@ define({
                                     "title": "Income",
                                     "type": "amount"
                                 }, {
-                                    "key": "household_new.Expenses",
+                                    "key": "decHouseExpanse",
                                     "title": "Expenses",
                                     "type": "amount"
                                 }, {
@@ -1071,7 +1074,7 @@ define({
                         _.each(model.bankDetails, function(bankDetail) {
                             if (model.customer.id == bankDetail['Customer ID']) {
                                 count++;
-                                model.UIUDF.bankAccount.push(bankDetail)
+                               // model.UIUDF.bankAccount.push(bankDetail)
                                 BankAvgBal += parseInt(bankDetail['Average Bank Balance']);
                                 BankAvgDep += parseInt(bankDetail['Average Bank Deposit']);
                                 checkBounced += bankDetail['Total Cheque Bounced (Non EMI)'];
@@ -1093,7 +1096,7 @@ define({
     
                         _.each(liability, function(liability) {
                             if (liability.summary['Customer ID'] == model.customer.id) {
-                                model.UIUDF.liabilities = _.cloneDeep(liability.data)
+                               // model.UIUDF.liabilities = _.cloneDeep(liability.data)
                                 monthly_installment += liability.summary['Total Monthly Installment'];
                                 outstanding_bal += liability.summary['Total Outstanding Loan Amount'];
     

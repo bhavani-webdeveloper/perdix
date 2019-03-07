@@ -2540,8 +2540,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     model.customer.customerBranchId = SessionStore.getCurrentBranch().branchId;
                     model.customer.branchName = SessionStore.getCurrentBranch().branchName;
                     var centre = SessionStore.getCentres();
-                    model.customer.centreId = centre[0].centreCode;
-                    model.customer.centreName = centre[0].centreName;
+                    if(centre.length > 0)
+                    {
+                        model.customer.centreId = centre[0].centreCode;
+                        model.customer.centreName = centre[0].centreName;                        
+                    }
                     model.centreName = model.customer.centreName ;
                     var branchId = SessionStore.getBranchId();
                     if (branchId && !model.customer.customerBranchId) {

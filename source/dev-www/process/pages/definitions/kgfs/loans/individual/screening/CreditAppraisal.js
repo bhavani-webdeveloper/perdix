@@ -171,7 +171,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             pageClass: 'co-applicant',
                                             model: {
                                                 enrolmentProcess: loanProcess.coApplicantsEnrolmentProcesses[i],
-                                                loanRelation: loanAccount.coApplicantsEnrolmentProcesses[i]
+                                                loanProcess: loanProcess
                                             }
                                         });
                                     }
@@ -181,8 +181,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         $this.bundlePages.push({
                                             pageClass: 'guarantor',
                                             model: {
-                                                enrolmentProcess: loanProcess.coApplicantsEnrolmentProcesses[i],
-                                                loanRelation: loanAccount.coApplicantsEnrolmentProcesses[i]
+                                                enrolmentProcess: loanProcess.guarantorsEnrolmentProcesses[i],
+                                                loanProcess: loanProcess
                                             }
                                         });
                                     }
