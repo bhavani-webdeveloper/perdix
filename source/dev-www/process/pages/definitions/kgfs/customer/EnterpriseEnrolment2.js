@@ -2831,7 +2831,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         if (PageHelper.isFormInvalid(form)) {
                             return false;
                         }
-                        PageHelper.showProgress('enrolment', 'Updating Customer');
+                        PageHelper.showProgress('enrolment', 'Updating Customer',5000);
                         PageHelper.showLoader();
                         model.customer.expenditures = [];
 
@@ -2892,8 +2892,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 }
                                 BundleManager.pushEvent(model._bundlePageObj.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
                             }, function (err) {
-                                PageHelper.showErrors(err.message);
-                                PageHelper.showProgress('enrolment', err.message, 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.showProgress('enrolment', err, 5000);
                                 PageHelper.hideLoader();
                             });
                     }
