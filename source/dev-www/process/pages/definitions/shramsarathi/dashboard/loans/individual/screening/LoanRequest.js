@@ -728,7 +728,7 @@ define([],function(){
                                 //     "orderNo": 9
                                 // },                          
                                 "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
-                                   "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                  // "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
                                 }     
                                     
                             }

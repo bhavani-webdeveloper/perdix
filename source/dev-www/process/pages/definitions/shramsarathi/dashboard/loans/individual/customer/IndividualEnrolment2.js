@@ -50,7 +50,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 
                             ],
                             "overrides": {
-
+                                "KYC.addressProofFieldSet":{
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProof": {
+                                    "readonly": false,
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofImageId": {
+                                    "required": true,
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofNo": {
+                                    "required": true,
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofIssueDate":{
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofValidUptoDate":{
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
                                
                                 "ContactInformation.villageName": {
                                     "readonly": true,
@@ -1135,7 +1155,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ContactInformation.whatsAppMobileNoOption",
                                 "IndividualReferences.verifications.ReferenceCheck",
                                 "IndividualReferences",
-                                "PhysicalAssets",
+                               
                                 "IndividualFinancials",
                                 "References",
                                 "HouseVerification.latitude",
@@ -1148,6 +1168,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC": {
                                     "readonly": true
                                 },
+                                "EnterpriseFinancials":{
+                                    "readonly":true
+                                },
                                 "EnterpriseFinancials.currentAsset.assetType":{
                                     "readonly": true
                                 },
@@ -1155,7 +1178,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true,
                                     "type":"amount"
                                 },  
-                                "Machinery.fixedAssetsMachinaries.machineType":{
+                                "PhysicalAssets.physicalAssets":{
+                                "add":null
+                                },
+                                "PhysicalAssets.physicalAssets.assetType":{
                                     "readonly": true
                                 },
                                 "Machinery.fixedAssetsMachinaries.presentValue":{
@@ -1587,6 +1613,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "loanView": {
                             "overrides": {
+                                // "kyc"
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials.expenditures":{
+                                   "readonly":true
+                                },
                                 "References": {
                                     "readonly": true
                                 },
@@ -1596,6 +1632,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "FamilyDetails": {
                                     "readonly": true
                                 },
+                                "ContactInformation": {
+                                    "readonly": true
+                                },
+                                "HouseVerification": {
+                                    "readonly": true
+                                },
+                               
+                                "Liabilities": {
+                                    "readonly": true
+                                },
+                                "BankAccounts.customerBankAccounts": {
+                                    "readonly": true
+                                },
+                                "EnterpriseFinancials.currentAsset":{
+                                    "readonly":true
+                                }
                             }
                         }
                     },
