@@ -46,31 +46,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.firstName",
                                 //"References.verifications.ReferenceCheck",
                                 "IndividualReferences",
-                                
-                                
+                                "References",   
                             ],
                             "overrides": {
-                                "KYC.addressProofFieldSet":{
-                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
-                                },
-                                "KYC.addressProof": {
-                                    "readonly": false,
-                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
-                                },
-                                "KYC.addressProofImageId": {
-                                    "required": true,
-                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
-                                },
-                                "KYC.addressProofNo": {
-                                    "required": true,
-                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
-                                },
-                                "KYC.addressProofIssueDate":{
-                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
-                                },
-                                "KYC.addressProofValidUptoDate":{
-                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
-                                },
+                                
                                
                                 "ContactInformation.villageName": {
                                     "readonly": true,
@@ -137,6 +116,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ContactInformation.permanentAddressFieldSet":{
                                     "title":"DESTINATION_ADDRESS"
                                 }
+                                
                             }
                         },
                         "Screening": {
@@ -1218,6 +1198,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                             ],
                             "overrides": {
+                                "KYC.addressProofFieldSet":{
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProof": {
+                                    "readonly": false,
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofImageId": {
+                                    "required": true,
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofNo": {
+                                    "required": true,
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofIssueDate":{
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofValidUptoDate":{
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
                                 "KYC": {
                                     "readonly": true
                                 },
@@ -1685,13 +1686,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             var overridesFields = function (bundlePageObj) {
                 return {
                     
-                    "FamilyDetails.familyMembers.dateOfBirth":{
-                        "onChange": function (modelValue, form, model, formCtrl, event) {
-                            if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
-                                model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                            }
-                        }
-                    },
+                    // "FamilyDetails.familyMembers.dateOfBirth":{
+                    //     "onChange": function (modelValue, form, model, formCtrl, event) {
+                    //         if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                    //             model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                    //         }
+                    //     }
+                    // },
                     "IndividualFinancials.expenditures.annualExpenses":{
                         "required":true,
                         "title":"EXPENSE_AMOUNT"
@@ -1717,26 +1718,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "readonly":true
                     },
                     "KYC.addressProofFieldSet":{
-                        "condition":"model.customer.addressPfSameAsIdProof=='NO'"
-                    },
-                    "KYC.addressProof":{
-                        "condition":"model.customer.addressPfSameAsIdProof=='NO'"
+                        "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
                     },
                     "KYC.addressProof": {
+                        "readonly": false,
+                        "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                    },
+                    "KYC.addressProofImageId": {
                         "required": true,
-                        "condition":"model.customer.addressPfSameAsIdProof=='NO'"
+                        "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
                     },
-                    "KYC.addressProofImageId":{
-                        "condition":"model.customer.addressPfSameAsIdProof=='NO'"
-                    },
-                    "KYC.addressProofNo":{
-                        "condition":"model.customer.addressPfSameAsIdProof=='NO'"
+                    "KYC.addressProofNo": {
+                        "required": true,
+                        "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
                     },
                     "KYC.addressProofIssueDate":{
-                        "condition":"model.customer.addressPfSameAsIdProof=='NO'"
+                        "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
                     },
                     "KYC.addressProofValidUptoDate":{
-                        "condition":"model.customer.addressPfSameAsIdProof=='NO'"
+                        "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
                     },
                     "Machinery.fixedAssetsMachinaries":{
                         "title":"FIXED_ASSET"
@@ -2012,6 +2012,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "enumCode": "caste"
                     },
                     "Liabilities.liabilities.startDate": {
+                        "orderNo":18,
                         "onChange": function (modelValue, form, model, formCtrl, $event) {
                             var index = form.key[2];
                             if (moment(modelValue).isAfter(new Date().toDateString())) {
@@ -2030,7 +2031,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         }
                     },
                     "Liabilities.liabilities.maturityDate": {
-                        "onChange": function (modelValue, form, model, formCtrl, event) {
+                        "orderNo":19,
+                        "onChange":function (modelValue, form, model, formCtrl, event) {
                             var index = form.key[2];
                             if (model.customer.liabilities[index].startDate && moment(modelValue).isBefore(model.customer.liabilities[index].startDate)) {
                                 modelValue = null;
@@ -2281,7 +2283,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Liabilities.liabilities.liabilityLoanPurpose",
                     "Liabilities.liabilities.interestOnly",
                     "Liabilities.liabilities.interestRate",
-                    // "Liabilities.liabilities.masonValuation",
+                    "Liabilities.liabilities.masonValuation",
+                    "Liabilities.liabilities.amountPaidInterest",
+                    "Liabilities.liabilities.amountPaid",
+
                     
 
                     "HouseVerification",
@@ -3006,17 +3011,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 },
                                                 "amountPaid":{
                                                     "key":"customer.liabilities[].principalExpense",
-                                                    "title":"AMOUNT_PAID"
+                                                    "title":"AMOUNT_PAID_PRINCIPAL",
+                                                   // "orderNo":1
                                                 },
                                                 "amountPaidInterest":{
                                                     "key":"customer.liabilities[].interestExpense",
-                                                    "title":"AMOUNT_PAID_INTEREST"
+                                                    "title":"AMOUNT_PAID_INTEREST",
+                                                    //"orderNo":2
                                                 },
                                                 "masonValuation":{
                                                     "key":"customer.liabilities[].udf2",
                                                     "title":"MASON_VALUATION_DOCUMENT",
                                                     "type":"file",
                                                     "fileType": "image/*",
+                                                   // "orderNo":4
                                                 }
                                                
                                             }
@@ -3196,6 +3204,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                         //     key:"customer.verifications[].outstandingReceivable",
                                                         //     "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
                                                         // },
+                                                        
                                                         "customerResponse": {
                                                             key: "customer.verifications[].customerResponse",
                                                             title: "CUSTOMER_RESPONSE",
