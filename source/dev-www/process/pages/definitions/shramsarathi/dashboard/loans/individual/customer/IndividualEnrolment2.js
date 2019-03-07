@@ -74,7 +74,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                
                                 "ContactInformation.villageName": {
                                     "readonly": true,
-                                    "title":"VILLAGE"
+                                    "title":"VILLAGE",
+                                    "required": true
                                 },
                                 "ContactInformation.district": {
                                     "readonly": true
@@ -146,12 +147,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
                                 "IndividualReferences",
+                                "IndividualInformation.centreId",
                                 "References",
                                 "KYC.firstName",
                             ],
                             "overrides": {
                                 "FamilyDetails.familyMembers": {
                                     "title": "MIGRANT_DETAILS"
+                                },
+                                "FamilyDetails.familyMembers.maritalStatus":{
+                                    "required": true
                                 },
                                 "EnterpriseFinancials.currentAsset.value":{
                                     "type":"amount"
@@ -236,7 +241,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 
                                 "ContactInformation.villageName": {
                                     "readonly": true,
-                                    "title":"VILLAGE"
+                                    "title":"VILLAGE",
+                                    
                                 },
                                 "ContactInformation.district": {
                                     "readonly": true
@@ -1450,13 +1456,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ContactInformation.villageName": {
                                     "readonly": true,
-                                    "title":"VILLAGE"
+                                    "title":"VILLAGE",
+                                    "required": true
                                 },
                                 "ContactInformation.district": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "required": true
                                 },
                                 "ContactInformation.state": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    "required": true
                                 },
                                 "ContactInformation.mailingDoorNo": {
                                     "condition": "!model.customer.mailSameAsResidence",
@@ -1784,7 +1793,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "ContactInformation.mobilePhone":{
                         "title": "SOURCE_PHONE_NO",
-                        "required":true
+                        "required":false
                         
                     },
                     
@@ -2186,10 +2195,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualInformation.gender",
                     "IndividualInformation.dateOfBirth",
                     "IndividualInformation.age",
-                    "IndividualInformation.religion",
+                    // "IndividualInformation.religion",
                     "IndividualInformation.language",
                     "IndividualInformation.fatherFirstName",
-                    "IndividualInformation.motherName",
+                    // "IndividualInformation.motherName",
                     "IndividualInformation.maritalStatus",
                     "IndividualInformation.spouseFirstName",
                     "IndividualInformation.spouseDateOfBirth",
@@ -2263,6 +2272,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "FamilyDetails.familyMembers.incomes.avarageTimeSpend",
                     "FamilyDetails.familyMembers.incomes.avarageReturn",
                     "FamilyDetails.familyMembers.incomes.incomeFrom",
+                    "FamilyDetails.familyMembers.incomes.noOfDaysWorkedInMonth",
 
                     "Liabilities",
                     "Liabilities.liabilities",
@@ -2718,67 +2728,68 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     },
                                                     title: "T_RELATIONSHIP"
                                                 },
-                                                "customerId": {
-                                                    "orderNo": 2,
-                                                    key: "customer.familyMembers[].customerId",
-                                                    title:"MIGRANT_ID",
-                                                    condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
-                                                    type: "lov",
-                                                    "inputMap": {
-                                                        "firstName": {
-                                                            "key": "customer.firstName",
-                                                            "title": "CUSTOMER_NAME"
-                                                        },
-                                                        "branchName": {
-                                                            "key": "customer.kgfsName",
-                                                            "type": "select"
-                                                        },
-                                                        "centreId": {
-                                                            "key": "customer.centreId",
-                                                            "type": "select"
-                                                        }
-                                                    },
-                                                    "outputMap": {
-                                                        "id": "customer.familyMembers[arrayIndex].customerId",
-                                                        "firstName": "customer.familyMembers[arrayIndex].familyMemberFirstName"
-                                                    },
-                                                    "searchHelper": formHelper,
-                                                    "search": function (inputModel, form) {
-                                                        $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                                        var promise = Enrollment.search({
-                                                            'branchName': SessionStore.getBranch() || inputModel.branchName,
-                                                            'firstName': inputModel.first_name,
-                                                            'centreId': inputModel.centreId,
-                                                        }).$promise;
-                                                        return promise;
-                                                    },
-                                                    onSelect: function(valueObj, model, context){
-                                                        // PageHelper.showProgress('customer-load', 'Loading customer...');
-                                                        Enrollment.getCustomerById({id: valueObj.id})
-                                                            .$promise
-                                                            .then(function(res){
+                                                // "customerId": {
+                                                //     "orderNo": 2,
+                                                //     key: "customer.familyMembers[].customerId",
+                                                //     title:"MIGRANT_ID",
+                                                //     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                                                //     type: "lov",
+                                                //     "inputMap": {
+                                                //         "firstName": {
+                                                //             "key": "customer.firstName",
+                                                //             "title": "CUSTOMER_NAME"
+                                                //         },
+                                                //         "branchName": {
+                                                //             "key": "customer.kgfsName",
+                                                //             "type": "select"
+                                                //         },
+                                                //         "centreId": {
+                                                //             "key": "customer.centreId",
+                                                //             "type": "select"
+                                                //         }
+                                                //     },
+                                                //     "outputMap": {
+                                                //         "id": "customer.familyMembers[arrayIndex].customerId",
+                                                //         "firstName": "customer.familyMembers[arrayIndex].familyMemberFirstName"
+                                                //     },
+                                                //     "searchHelper": formHelper,
+                                                //     "search": function (inputModel, form) {
+                                                //         $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                                //         var promise = Enrollment.search({
+                                                //             'branchName': SessionStore.getBranch() || inputModel.branchName,
+                                                //             'firstName': inputModel.first_name,
+                                                //             'centreId': inputModel.centreId,
+                                                //         }).$promise;
+                                                //         return promise;
+                                                //     },
+                                                //     onSelect: function(valueObj, model, context){
+                                                //         // PageHelper.showProgress('customer-load', 'Loading customer...');
+            
+                                                //         Enrollment.getCustomerById({id: valueObj.id})
+                                                //             .$promise
+                                                //             .then(function(res){
                                                                
-                                                                // PageHelper.showProgress("customer-load", "Done..", 5000);
-                                                        model.customer.familyMembers[context.arrayIndex].gender=res.gender;
-                                                         model.customer.familyMembers[context.arrayIndex].dateOfBirth=res.dateOfBirth;
-                                                         if (model.customer.familyMembers[context.arrayIndex].dateOfBirth) {
-                                                          model.customer.familyMembers[context.arrayIndex].age=moment().diff(moment(model.customer.familyMembers[model.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                                                         }
-                                                        //  model.customer.familyMembers[form.arrayIndex].educationStatus=res.customer.id;
-                                                         model.customer.familyMembers[context.arrayIndex].maritalStatus=res.maritalStatus;
-                                                         model.customer.familyMembers[context.arrayIndex].mobilePhone=res.mobilePhone;
+                                                //                 // PageHelper.showProgress("customer-load", "Done..", 5000);
+                                                //         model.customer.familyMembers[context.arrayIndex].gender=res.gender;
+                                                //          model.customer.familyMembers[context.arrayIndex].dateOfBirth=res.dateOfBirth;
+                                                //          if (model.customer.familyMembers[context.arrayIndex].dateOfBirth) {
+                                                //           model.customer.familyMembers[context.arrayIndex].age=moment().diff(moment(model.customer.familyMembers[model.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                                //          }
+                                                //         //  model.customer.familyMembers[form.arrayIndex].educationStatus=res.customer.id;
+                                                //          model.customer.familyMembers[context.arrayIndex].maritalStatus=res.maritalStatus;
+                                                //          model.customer.familyMembers[context.arrayIndex].mobilePhone=res.mobilePhone;
                                                                
-                                                            }, function(httpRes){
-                                                                // PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
-                                                        })
-                                                    },
-                                                    getListDisplayItem: function (data, index) {
-                                                        return [
-                                                            [data.firstName, data.fatherFirstName].join(' '),
-                                                            data.id
-                                                        ];
-                                                    }
-                                                },
+                                                //             }, function(httpRes){
+                                                //                 // PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
+                                                //         })
+                                                //     },
+                                                //     getListDisplayItem: function (data, index) {
+                                                //         return [
+                                                //             [data.firstName, data.fatherFirstName].join(' '),
+                                                //             data.id
+                                                //         ];
+                                                //     }
+                                                // },
                                                 "familyMemberFirstName": {
                                                     "orderNo": 3,
                                                     key: "customer.familyMembers[].familyMemberFirstName",
@@ -2872,7 +2883,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                         "incomeSource": {
                                                             key: "customer.familyMembers[].incomes[].incomeSource",
                                                             type: "select",
-                                                            title:"OCCUPATION"
+                                                            title:"OCCUPATION",
+                                                            required: false
                                                         },
                                                         "incomeEarned": {
                                                             key: "customer.familyMembers[].incomes[].incomeEarned",
@@ -2935,10 +2947,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "title":"INCOME_TYPE",
                                                             "type":"select",
                                                             "required":true,
-                                                            "enumCode":"income_type"
-                                                          
-                                                        }
-
+                                                            "enumCode":"income_type" 
+                                                        },
+                                                        "noOfDaysWorkedInMonth":{
+                                                            "key":"customer.familyMembers[].incomes[].noOfDaysWorkedInMonth",
+                                                            "title":"NO_OF_DAYS_WORKED_IN_MONTH",
+                                                            "type":"number",
+                                                        },
                                                     }
 
                                                 },

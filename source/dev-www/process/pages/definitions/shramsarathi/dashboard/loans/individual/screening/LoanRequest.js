@@ -666,6 +666,7 @@ define([],function(){
                                 //"LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
+                                "PreliminaryInformation.emiPaymentDateRequested",
                                 "NomineeDetails",
                                 "NomineeDetails.nominees",
                                 "LoanSanction",
@@ -1373,7 +1374,7 @@ define([],function(){
                             required:true,
                             type:"select",
                             enumCode:"loan_product_category",
-                            condition:"model.currentStage=='Application' || model.currentStage=='FieldAppraisal'"
+                            condition:"model.currentStage=='Application' || model.currentStage=='FieldAppraisal' || model.currentStage == 'Televerification' "
                         },
                         "PreliminaryInformation.tenureRequested": {
                             "required": true,
