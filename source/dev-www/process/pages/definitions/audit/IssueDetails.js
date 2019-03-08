@@ -56,6 +56,16 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "for
                                 key: "auditIssue.id",
                                 "title": "ISSUE_ID",
                                 "readonly": true
+                            },{
+                                "key": "auditIssue.auditProcessID",
+                                "title": "PROCESS_NAME",
+                                "readonly": true,
+                                "condition":"model.siteCode == 'KGFS'"
+                            }, {
+                                "key": "auditIssue.auditSubProcessID",
+                                "title": "SUB_PROCESS_NAME",
+                                "readonly": true,
+                                "condition":"model.siteCode == 'KGFS'"
                             }, {
                                 "key": "auditIssue.title",
                                 "title": "ISSUE",
