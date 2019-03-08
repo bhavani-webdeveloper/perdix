@@ -137,6 +137,7 @@
         "sendSms":"No",
         "smsCategory":"LoanBooking",
         "isAccountOpening":true,
+        "multipleLoanNotAllowedForLoanType":true,
         "allowedRoles":[
            "WM"
         ]
@@ -3707,7 +3708,7 @@
                       "Screening", "LoanInitiation", "PendingForPartner"
                    ]
                 }
-             }
+               }
           },
           "userDefinedDateFields":{
              "title":"User Defined Date Details",
