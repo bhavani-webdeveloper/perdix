@@ -3325,6 +3325,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                     UIRepository.getEnrolmentProcessUIRepository().$promise
                         .then(function (repo) {
+                            debugger;
                             console.log(model.pageClass);
                             console.log(repo);
                             console.log(formRequest);
@@ -3333,6 +3334,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
                         })
                         .then(function (form) {
+                            debugger;
                             console.log("form:");
                             console.log(form);
                             self.form = form;
