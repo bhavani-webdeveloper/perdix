@@ -695,13 +695,13 @@ define({
                             "readonly":true
                         }, 
                         {
-                            "key": "loanAccount.remarksOfInFavourLoan",
+                            "key": "loanAccount.udf.userDefinedFieldValues.udf10",
                             "title": "REMARK_OF_IN_FAVOUR_LOAN",
                            // "type": "string",
                             "readonly":true
                         }, 
                         {
-                            "key": "loanAccount.potentialRisks",
+                            "key": "loanAccount.udf.userDefinedFieldValues.udf11",
                             "title": "POTENTIAL_RISK",
                           // "type": "number",
                              "readonly":true,
