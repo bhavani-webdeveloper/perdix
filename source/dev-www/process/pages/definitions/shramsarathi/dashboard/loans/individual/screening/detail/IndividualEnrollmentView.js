@@ -42,15 +42,16 @@ define({
                         //debugger;
                         model.UIUDF.bankAccount=res.customerBankAccounts;
                         model.UIUDF.liabilities=res.liabilities;
-                        model.household=res.expenditures;
+                        model.household=model.expenditures;
+                        debugger;
                         var centres = formHelper.enum("centre").data;
                         for (var i=0;i<centres.length;i++){
-                            if(model.cusotmer.centreId == centres.value){
-                                model.cusotmer.centreName = centres.name;
+                            if(model.customer.centreId == centres[i].value){
+                                model.customer.centreName = centres.name;
                                 break;
                             }
                         }
-                        debugger;
+                        //debugger;
                         // model.customer.presetAddress = [
                         //     res.doorNo,
                         //     res.street,
@@ -106,7 +107,7 @@ define({
                             }
                         })
                         model.decHouseExpanse = decExpanse;
-                        model.household=res.expenditures;
+                        // model.household=res.expenditures;
                         /*Family Section*/
                         self.form = self.formSource;
                         var family = {
@@ -900,7 +901,7 @@ define({
                                 "type": "grid",
                                 "orientation": "vertical",
                                 "items": [{
-                                    "key": "household_new.income",
+                                    "key": "household.annualExpenses",
                                     "title": "Income",
                                     "type": "amount"
                                 }, {
@@ -1127,25 +1128,25 @@ define({
                             if (model.customer.id == household["customer_id"]) {
                                 totalIncome = parseInt(household.data[0]['Salary from business']) + parseInt(household.data[0]['Other Income/salaries']) + parseInt(household.data[0]['Family Member Incomes']);
                                 totalExpenses = parseInt(household.data[0]['Expenses Declared or based on the educational expense whichever is higher']) + parseInt(household.data[0]['EMI\'s of household liabilities']);
-                                model.household = [];
-                                model.household.push({
-                                    income: totalIncome,
-                                    salaryFromBusiness: household.data[0]['Salary from business'],
-                                    otherIncomeSalaries: household.data[0]['Other Income/salaries'],
-                                    familyMemberIncomes: household.data[0]['Family Member Incomes'],
-                                    Expenses: totalExpenses,
-                                    declaredEducationExpense: household.data[0]['Expenses Declared or based on the educational expense whichever is higher'],
-                                    emiHouseholdLiabilities: household.data[0]['EMI\'s of household liabilities'],
-                                    netHouseholdIncome: household.data[0]['Net Household Income']
-                                });
-                                model.household_new = model.household[0];
+                                // model.household = [];
+                                // model.household.push({
+                                //     income: totalIncome,
+                                //     salaryFromBusiness: household.data[0]['Salary from business'],
+                                //     otherIncomeSalaries: household.data[0]['Other Income/salaries'],
+                                //     familyMemberIncomes: household.data[0]['Family Member Incomes'],
+                                //     Expenses: totalExpenses,
+                                //     declaredEducationExpense: household.data[0]['Expenses Declared or based on the educational expense whichever is higher'],
+                                //     emiHouseholdLiabilities: household.data[0]['EMI\'s of household liabilities'],
+                                //     netHouseholdIncome: household.data[0]['Net Household Income']
+                                // });
+                                // model.household_new = model.household[0];
     
                             }
                         })
-                            if (model.household) {
+                            /*if (model.household) {
 
                                 model.UIUDF.family_fields.total_household_income = model.household[0].income;
-                            }
+                            }*/
     
     
                         /*Psychometric details*/
