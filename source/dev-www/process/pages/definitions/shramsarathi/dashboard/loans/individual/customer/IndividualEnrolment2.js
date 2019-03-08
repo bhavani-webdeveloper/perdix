@@ -2961,6 +2961,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "key":"customer.familyMembers[].incomes[].noOfDaysWorkedInMonth",
                                                             "title":"NO_OF_DAYS_WORKED_IN_MONTH",
                                                             "type":"number",
+                                                            "required":true
                                                         },
                                                     }
 
