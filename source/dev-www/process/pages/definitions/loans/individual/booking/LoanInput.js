@@ -1132,7 +1132,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 key: "loanAccount.loanPurpose3",
                                 condition:"model.additional.config.loanAccount_loanPurpose3",
                                 "type": "lov",
-                                "lovonly":true,
+                                "required":true,
                                 outputMap: {
                                     "loan_purpose": "loanAccount.loanPurpose3"
                                 },
