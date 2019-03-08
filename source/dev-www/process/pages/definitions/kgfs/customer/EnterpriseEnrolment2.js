@@ -2662,9 +2662,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             getPersonalExpenses('value', model, 'row');
                             getOtherBusinessIncomeDet('', model, '') ;
                         }
-                        if(model.customer.liabilities.length > 0 && model.customer.liabilities[0].customerLiabilityRepayments){
+                        if(model.customer.liabilities.length >  0 && model.customer.liabilities[0].customerLiabilityRepayments){
+                            model.customer.enterprise.totalLoanAmount = 0;
+                            model.customer.enterprise.totalEmiAmount = 0;
                             _.forEach(model.customer.liabilities[0].customerLiabilityRepayments,function(liability){
+                                liability.udf1 = Number(liability.udf1);
                                 model.customer.liabilityRepayment.push(liability)
+                                model.customer.enterprise.totalLoanAmount = model.customer.enterprise.totalLoanAmount + Number(liability.udf1);
+                                model.customer.enterprise.totalEmiAmount = model.customer.enterprise.totalEmiAmount + liability.emiAmount;
                             })
                         }
                     }
