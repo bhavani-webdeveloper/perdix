@@ -2889,6 +2889,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         else if(customerLiabilityRepayment.length > 0 && model.customer.liabilities.length == 0){
                             model.customer.liabilities.push({'customerLiabilityRepayments':customerLiabilityRepayment})
                         }
+                        
                         model.enrolmentProcess.customer = model.customer;
                         model.enrolmentProcess.proceed()
                             .finally(function () {
