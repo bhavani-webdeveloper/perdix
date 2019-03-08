@@ -152,7 +152,24 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, Pag
             .addLine("", {});
             return PrinterData;
     };
-
+//
+    res.insuranceReverseFeedUpload = function (file, progress) {
+        var deferred = $q.defer();
+        Upload.upload({
+            url: BASE_URL + "/api/insurancePolicyReverseFeedUpload",
+            data: {
+                file: file
+            }
+        }).then(function (resp) {
+            PageHelper.showProgress("page-init", "successfully uploaded.", 2000);
+            deferred.resolve(resp);
+        }, function (errResp) {
+            PageHelper.showErrors(errResp);
+            deferred.reject(errResp);
+        }, progress);
+        return deferred.promise;
+    },
+//
     res.getThermalFooter = function(opts,PData) {
         PData
             .addStrRepeatingLine("-", {
@@ -203,5 +220,3 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource, Upload, $q, Pag
 
 
 }]);
-
-
