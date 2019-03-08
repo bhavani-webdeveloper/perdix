@@ -1402,6 +1402,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             PageHelper.showProgress("enrolment", "Your form have errors. Please fix them.", 5000);
                             return false;
                         }
+                        
+                        if (model.customer.addressProof == 'Aadhar card' && !_.isNull(model.customer.addressProofNo)){
+                            model.customer.aadhaarNo = model.customer.addressProofNo;
+                        }
 
                         // $q.all start
                         model.enrolmentProcess.save()
@@ -1425,6 +1429,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         PageHelper.clearErrors();
                         if(PageHelper.isFormInvalid(form)) {
                             return false;
+                        }
+                        if (model.customer.addressProof == 'Aadhar card' && !_.isNull(model.customer.addressProofNo)){
+                            model.customer.aadhaarNo = model.customer.addressProofNo;
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
@@ -1452,7 +1459,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             return false;
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
+                        if (model.customer.addressProof == 'Aadhar card' && !_.isNull(model.customer.addressProofNo)){
+                            model.customer.aadhaarNo = model.customer.addressProofNo;
+                        }
                         PageHelper.showLoader();
+
                         model.enrolmentProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
