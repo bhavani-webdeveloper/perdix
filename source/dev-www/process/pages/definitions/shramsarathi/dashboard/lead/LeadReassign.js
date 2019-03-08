@@ -26,7 +26,7 @@ define(['perdix/domain/model/lead/LeadRepository'], function(LeadRepository) {
                         var branches = formHelper.enum('branch_id').data;
                         $log.info(branches);
                         for (var i = 0; i < branches.length; i++) {
-                            if ((branches[i].name.toLowerCase()) == model.customer.branchName.toLowerCase()) {
+                            if ((branches[i].name) == model.customer.branchName) {
                                 model.customer.branchId = branches[i].value;
                             }else{
                                 PageHelper.showErrors({data:{error:"hubname was not previously uploaded / hubname has invalid name"}});
