@@ -44,7 +44,9 @@ define({
             obj.fatherFirstName=customer.fatherFirstName;
             obj.spouseFirstName=customer.spouseFirstName;
             obj.mobilePhone=customer.mobilePhone;
-            obj.accountNumber=jlgMembers.loanAccount.accountNumber;
+            if (jlgMembers.loanAccount){
+                obj.accountNumber=jlgMembers.loanAccount.accountNumber;
+            }
             customer.member=obj;
             if (customer.street) addr.push(customer.street);
             if (customer.locality) addr.push(customer.locality);

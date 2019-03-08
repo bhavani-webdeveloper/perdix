@@ -506,7 +506,7 @@ define([],function(){
                             "title":"FREQUENCY_REQUESTED",
                             "enumCode": "loan_product_frequency",
                             "onChange": function(valueObj,context,model){
-                                computeEstimatedEMI(model);
+                                computeEstimatedEMI(model);                                                             
                                 clearAll('loanAccount',['productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
                                 model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                                 //clearAll('additions',['tenurePlaceHolder','interestPlaceHolder','amountPlaceHolder'],model)
@@ -540,6 +540,8 @@ define([],function(){
                             onSelect: function (valueObj, model, context) {
                                 clearAll("loanAccount",["loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
                                 model.loanAccount.productCode = valueObj.productCode;
+                                if(model.loanAccount.loanType == 'JEWEL')
+                                    getGoldRate(model); 
                                 model.additions.tenurePlaceHolder = valueObj.tenure_from == valueObj.tenure_to ? valueObj.tenure_from : valueObj.tenure_from + '-' + valueObj.tenure_to;
                                 model.additions.amountPlaceHolder = valueObj.amount_from == valueObj.amount_to ? valueObj.amount_from : valueObj.amount_from + '-' + valueObj.amount_to;
                                 model.additions.interestPlaceHolder = valueObj.min_interest_rate == valueObj.max_interest_rate ? valueObj.min_interest_rate : valueObj.min_interest_rate + '-' + valueObj.max_interest_rate;
@@ -785,8 +787,10 @@ define([],function(){
                         } else {
                                 computeEMI(model);
                         }
-
-
+                        if (_.hasIn(model, 'loanAccount.loanType') && model.loanAccount.loanType !=null && model.loanAccount.loanType.length > 0) {
+                            if(model.loanAccount.loanType == 'JEWEL')
+                                getGoldRate(model);
+                        }
 
                     /* Setting data recieved from Bundle */
                     model.loanAccount.partnerCode='KGFS';
@@ -978,7 +982,7 @@ define([],function(){
                                     "deviationDetails": {
                                         "type": "section",
                                         "colClass": "col-sm-12",
-                                        "html": '<table class="table"><colgroup><col width="20%"><col width="20%"></colgroup><thead><tr><th>Deviation</th><th>Mitigation</th></tr></thead><tbody>' +
+                                        "html": '<table class="table"><colgroup><col width="20%"><col width="20%"></colgroup><thead><tr><th>Parameter Name</th><th>Mitigant</th></tr></thead><tbody>' +
                                             '<tr ng-repeat="(parameter,item) in model.loanMitigantsGrouped">' +
                                             '<td>{{ parameter }}</td>' +
                                             '<td><ul class="list-unstyled">' +
@@ -995,7 +999,7 @@ define([],function(){
                                         "items":{
                                             "parameter":{
                                                "key":"loanAccount.loanMitigants[].parameter",
-                                               "title":"Deviation",
+                                               "title":"DEVIATION",
                                                "type":"string"
                                             },
                                             "mitigant":{
@@ -1363,7 +1367,7 @@ define([],function(){
                             }
                         
                         }
-                        if (model.loanAccount.id){
+                        if (model.loanAccount.id && model.loanAccount.currentStage == 'DSCOverride'){
                             if(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length > 0){
                                 for(i = 0; i< model.loanAccount.loanCustomerRelations.length;i++){
                                     if(model.loanAccount.loanCustomerRelations[i].relation != "Applicant")
@@ -1383,9 +1387,9 @@ define([],function(){
                                 }
                             }
                         }
-                        if(typeof model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 =="undefined" || model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 == null){
+                        if((model.loanAccount.currentStage == 'DSCOverride') && (typeof model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 =="undefined" || model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 == null)){
                             PageHelper.showErrors({data:{error:"DSC STATUS IS REQUIRED...."}});
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                PageHelper.showProgress('enrolment','Oops. Some error.', 5000);
                                 PageHelper.hideLoader();
                                 return false;
                         }

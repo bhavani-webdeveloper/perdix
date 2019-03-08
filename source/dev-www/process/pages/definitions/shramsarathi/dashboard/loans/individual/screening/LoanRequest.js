@@ -40,7 +40,7 @@ define([],function(){
                 }
                 return true;
             };
- 
+
             var getRelationFromClass = function(relation){
                 if (relation == 'guarantor'){
                     return 'Guarantor';
@@ -662,12 +662,13 @@ define([],function(){
                             "excludes": [
                                 "ProposedUtilizationPlan",
                                 //"DeductionsFromLoan",
-                                 "LoanMitigants",
-                                //"LoanMitigants.deviationParameter",
+                                "LoanMitigants",
+                                "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
-                                //"NomineeDetails",
-                                //"NomineeDetails.nominees",
+                                "PreliminaryInformation.emiPaymentDateRequested",
+                                "NomineeDetails",
+                                "NomineeDetails.nominees",
                                 "LoanSanction",
                                 "LoanSanction.sanctionDate",
                                 "LoanSanction.numberOfDisbursements",
@@ -686,6 +687,52 @@ define([],function(){
 
                             ],
                             "overrides": {
+                                "NomineeDetails.nominees.nomineeFirstName": {
+                                    "orderNo": 1,
+                                    "type": "lov",
+                                    "title": "NAME",
+                                    "autolov":false,
+                                    searchHelper: formHelper,
+                                    search: function (inputModel, form, model, context) {
+                                        var out = [];
+                                        if (!model.customer.familyMembers) {
+                                            return out;
+                                        }
+            
+                                        for (var i = 0; i < model.customer.familyMembers.length; i++) {
+                                            if(!( model.customer.familyMembers[i].relationShip=='self')){
+                                                out.push({
+                                                    name: model.customer.familyMembers[i].familyMemberFirstName,
+                                                    dob: model.customer.familyMembers[i].dateOfBirth,
+                                                    relationship: model.customer.familyMembers[i].relationShip,
+                                                    gender: model.customer.familyMembers[i].gender
+                                                })
+                                            }
+                                        }
+                                        return $q.resolve({
+                                            headers: {
+                                                "x-total-count": out.length
+                                            },
+                                            body: out
+                                        });
+                                    },
+                                    onSelect: function (valueObj, model, context) {
+                                        //add to the witnees array.
+                                        if (_.isUndefined(model.loanAccount.nominees[context.arrayIndex])) {
+                                            model.loanAccount.nominees[context.arrayIndex] = [];
+                                        }
+                                        model.loanAccount.nominees[context.arrayIndex].nomineeFirstName = valueObj.name;
+                                        model.loanAccount.nominees[context.arrayIndex].nomineeRelationship = valueObj.relationship;
+                                        model.loanAccount.nominees[context.arrayIndex].nomineeGender = valueObj.gender;
+                                        model.loanAccount.nominees[context.arrayIndex].nomineeDOB = valueObj.dob
+                                    },
+                                    getListDisplayItem: function (item, index) {
+                                        return [
+                                            item.name
+                                        ];
+                                    }
+            
+                                },
                                 "PreliminaryInformation": {
                                     "orderNo": 1,
                                     "readonly": false
@@ -737,8 +784,8 @@ define([],function(){
                             "excludes": [
                                 "ProposedUtilizationPlan",
                                 //"DeductionsFromLoan",
-                                //"LoanMitigants",
-                                //"LoanMitigants.deviationParameter",
+                                "LoanMitigants",
+                                "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
                                 "LoanSanction",
@@ -759,6 +806,7 @@ define([],function(){
 
                             ],
                             "overrides": {
+                                
                                 "PreliminaryInformation": {
                                     "orderNo": 1,
                                     "readonly": true
@@ -1301,9 +1349,9 @@ define([],function(){
                             },
                             // "type":"select",
                             // "enumCode":"duration",
-                            "type":"number",
+                            "type":"text",
                             "schema": {
-                                "pattern": "^([6-9]|[1-6][0-9]|60)$"
+                                "pattern": "^([6-9]|[1-5][0-9]|60)$"
                             }
                         },
                         "LoanRecommendation.interestRate":{
@@ -1348,7 +1396,7 @@ define([],function(){
                             required:true,
                             type:"select",
                             enumCode:"loan_product_category",
-                            condition:"model.currentStage=='Application' || model.currentStage=='FieldAppraisal'"
+                            condition:"model.currentStage=='Application' || model.currentStage=='FieldAppraisal' || model.currentStage == 'Televerification' "
                         },
                         "PreliminaryInformation.tenureRequested": {
                             "required": true,
@@ -1503,7 +1551,7 @@ define([],function(){
                     "PreliminaryInformation.expectedInterestRate",
                     "PreliminaryInformation.expectedEmi",
                     "PreliminaryInformation.emiRequested",
-                    "PreliminaryInformation.emiPaymentDateRequested",
+                    //"PreliminaryInformation.emiPaymentDateRequested",
                     "PreliminaryInformation.collectionPaymentType",
                     "PreliminaryInformation.expectedPortfolioInsurancePremium",
                     "PreliminaryInformation.BusinessSaveWarning",
@@ -1653,9 +1701,10 @@ define([],function(){
  
                     /* Setting data recieved from Bundle */
                     model.loanAccount = model.loanProcess.loanAccount;
+                 
                     model.currentStage = model.loanAccount.currentStage;
                     model.loanAccount.disbursementSchedules=[];
-                    model.loanAccount.disbursementSchedules.push({});
+                   
 
                     if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
                         model.loanAccount.loanCustomerRelations!=null &&
@@ -1734,6 +1783,11 @@ define([],function(){
                         },function (errResp){
         
                         });
+                        Enrollment.getCustomerById({id:model.loanAccount.customerId}).$promise.then(function(customer){
+                            model.customer = customer
+                        },function(err){
+
+                        })
                     }
  
                     self = this;
@@ -1839,7 +1893,7 @@ define([],function(){
                                                 "orderNo": 41
                                             },
                                             "groupID": {
-                                                "key": "loanAccount.jlgGroupId ",
+                                                "key": "loanAccount.jlgGroupId",
                                                 "title": "GROUP_ID",
                                                 "type": "string",
                                                 "orderNo": 40,
@@ -1909,7 +1963,7 @@ define([],function(){
                                                 "gracePeriod":{
                                                     "key":"loanAccount.disbursementSchedules[].moratoriumPeriodInDays",
                                                     "title":"GRACE_PERIOD",
-                                                    "type":"text",
+                                                    "type":"number",
                                                     "required":true
                                                 }
                                             }
@@ -2188,8 +2242,6 @@ define([],function(){
                         return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model);
                     })
                     .then(function(form){
-                        console.log("Loan Request:");
-                        console.log(form);
                         self.form = form;
                     });
                 },

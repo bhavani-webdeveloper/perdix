@@ -28,6 +28,8 @@ define(['perdix/domain/model/lead/LeadRepository'], function(LeadRepository) {
                         for (var i = 0; i < branches.length; i++) {
                             if ((branches[i].name) == model.customer.branchName) {
                                 model.customer.branchId = branches[i].value;
+                            }else{
+                                PageHelper.showErrors({data:{error:"hubname was not previously uploaded / hubname has invalid name"}});
                             }
                         }
                     }

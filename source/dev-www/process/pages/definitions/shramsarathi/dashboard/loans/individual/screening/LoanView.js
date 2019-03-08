@@ -190,6 +190,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             bundleModel.loanProcess = loanProcess;
                             bundleModel.loanProcess.loanAccount.isReadOnly = "Yes";
                             bundleModel.loanProcess.loanAccount.isValuator = "Yes";
+                            loanProcess.loanAccount.currentStage = 'loanView';
                                var loanAccount = loanProcess;
                                 // loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.loanAccount.customerId;
                                     if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
@@ -197,7 +198,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess.loanAccount.leadId = _leadId;
 
                                     }
-                               
+                                    loanProcess.loanAccount.currentStage = 'loanView';
                                     
     
                                 $this.bundlePages.push({

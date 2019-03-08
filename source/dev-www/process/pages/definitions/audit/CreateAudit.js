@@ -51,7 +51,16 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
                             "key": "audit_info.report_date",
                             "condition": "model.audit_info.audit_type == 1", // Regular
                             "type": "date",
-                            "required": true
+                            "required": true,
+                            "onChange": function (modelValue, form, model) {
+                                var selecteddate = model.audit_info.report_date;
+                                var currentdate = moment(new Date()).format("YYYY-MM-DD");
+                                if(selecteddate > currentdate){
+                                    model.audit_info.report_date = null;
+                                    PageHelper.showProgress("Date Error", "Report Date should not contain future." , 5000);
+                                    return false;
+                                }
+                            },
                         }, {
                             "key": "audit_info.start_date",
                             "type": "date",

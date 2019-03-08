@@ -77,7 +77,7 @@ define({
                         //     "type": "string",
                         //     "x-schema-form": {
                         //         "type": "date"
-                        //     }
+                        //     } 
                         // },
                         "pincode": {
 	                        "title": "PIN_CODE",

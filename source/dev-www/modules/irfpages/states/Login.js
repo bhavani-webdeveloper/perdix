@@ -23,15 +23,20 @@ function($scope, authService, $log, $state, $stateParams, irfStorageService, Ses
 			window.MacAddress.getMacAddress(
 				function(macAddress) {
 					macaddress=macAddress;
-					//console.log("mac address :"+macAddress);
-					window.plugins.imeiplugin.getImei(function (imei) {
-					//	console.log("IMEI :" + imei);
-						imeinumber=imei;
-						authService.login(username,password,macaddress,imeinumber).then(function() { successLogin(refresh) }, failedLogin);
-					},function(error){
-						console.log("imie error");
-					});
-					},function(fail) {alert(fail);
+					window.plugins.imei.get(
+						function(imei) {
+						  imeinumber=imei;
+						  authService.login(username,password,macaddress,imeinumber).then(function() { successLogin(refresh) }, failedLogin);
+						
+						},
+						function() {
+						  console.log("error in loading imei");
+						  authService.login(username,password,macaddress).then(function() { successLogin(refresh) }, failedLogin);
+						 
+						}
+					  );
+					},function(fail) {
+						authService.login(username,password).then(function() { successLogin(refresh) }, failedLogin);
 					}
 				);
 			}
@@ -53,17 +58,19 @@ function($scope, authService, $log, $state, $stateParams, irfStorageService, Ses
 		if (Utils.isCordova) {
 			window.MacAddress.getMacAddress(
 				function(macAddress) {
-					//console.log("mac address : "+macAddress);
 					macaddress=macAddress;
-					window.plugins.imeiplugin.getImei(function (imei) {
-						//console.log("IMEI :" + imei);
-						imeinumber=imei;
-						authService.login(username,password,macaddress,imeinumber).then(function() { successLogin(refresh) }, failedLogin);
-					},function(error){
-						console.log("imie error");
-					});
-					
-				},function(fail) {alert(fail);
+					window.plugins.imei.get(
+						function(imei) {
+						  imeinumber=imei;
+						  authService.login(username,password,macaddress,imeinumber).then(function() { successLogin(refresh) }, failedLogin);
+						},
+						function() {
+						  console.log("error in loading imei");
+						  authService.login(username,password,macaddress).then(function() { successLogin(refresh) }, failedLogin);
+						}
+					  );
+				},function(fail) {
+					authService.login(username,password).then(function() { successLogin(refresh) }, failedLogin);
 					}
 				);
 		}

@@ -64,7 +64,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             title: 'DSC',
                             pageClass: 'dsc-check',
                             minimum: 1,
-                            maximum: 1,
+                            maximum: 0,
                             order:70
                         },
                         {
@@ -189,7 +189,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         });
                                     }
                                 }
-                                
+
                                 if(loanProcess.loanAccount.productCategory == 'MEL'){
                                     if (loanProcess.loanCustomerEnrolmentProcess) {
                                         $this.bundlePages.push({

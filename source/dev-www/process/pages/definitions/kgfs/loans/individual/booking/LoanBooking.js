@@ -245,9 +245,6 @@ define([], function () {
                     })
                     }
                 }
-                if(model.loanAccount.loanAmount && model.loanAccount.disbursementSchedules.length != 0){
-                    model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmount;
-                }
                 // TODO Hard Coded value have to fix this
                 model.loanAccount.securityEmiRequired = "No";
                 if(!(model.loanAccount.partnerCode)){
@@ -1544,7 +1541,7 @@ define([], function () {
                         PageHelper.showProgress('enrolment', 'Updating Loan');
                         if (model.loanAccount.id){
                             model.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
-                            model.loanAccount.portfolioInsuranceUrn = model.loanAccount.urnNo;
+                            model.loanAccount.portfolioInsuranceUrn = model.loanAccount.loanCustomerRelations[0].urn;
 
                             // if(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length > 0){
                             //     for(i = 0; i< model.loanAccount.loanCustomerRelations.length;i++){
