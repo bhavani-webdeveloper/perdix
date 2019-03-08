@@ -47,7 +47,7 @@ define({
                         var centres = formHelper.enum("centre").data;
                         for (var i=0;i<centres.length;i++){
                             if(model.customer.centreId == centres[i].value){
-                                model.customer.centreName = centres.name;
+                                model.customer.centreName = centres[i].name;
                                 break;
                             }
                         }
