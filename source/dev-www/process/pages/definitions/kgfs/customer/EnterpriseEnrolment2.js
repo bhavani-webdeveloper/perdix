@@ -24,6 +24,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         model.customer.enterprise.monthlySale = model.customer.enterprise.weeklySale * 4;
                     }
                     averageMonthlySale(model);
+                    getBusinessExpenseData('value', model, 'row');
+                    monthlySurpluse(model);
                 }
                
             }
@@ -54,6 +56,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     }
                 }
                 averageMonthlySale(model);
+                getBusinessExpenseData('value', model, 'row');
+                monthlySurpluse(model);
             }
 
             var getAnnualSales = function (value, model, row, month) {
@@ -70,6 +74,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     model.customer.enterprise.avgMonthlySales = (model.customer.enterprise.avgAnnualSales/12);
                 }
                     averageMonthlySale(model);
+                    getBusinessExpenseData('value', model, 'row');
+                    monthlySurpluse(model);
                 }
             }
 
@@ -1469,7 +1475,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 "items": {
                                     'totalBusinessExpenses': {
                                         key: "customer.enterprise.totalBusinessExpenses",
-                                        title: "TotalBusinessExpenses",
+                                        title: "TOTAL_BUSINESS_EXPENSES",
                                         "type": "number",
                                         required: true,
                                         readonly: true
@@ -1489,14 +1495,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 "items": {
                                     'totalMonthlyAdditionIncome': {
                                         key: "customer.enterprise.totalMonthlyAdditionIncome",
-                                        title: "TotalMonthlyAdditionlIncome",
+                                        title: "TOTAL_MONTHLY_ADDITIONAL_INCOME",
                                         "type": "number",
                                         required: true,
                                         readonly: true
                                     },
                                     'additionalIncomeConsidered': {
                                         key: "customer.enterprise.additionalIncomeConsidered",
-                                        title: "AdditionalIncomeConsidered",
+                                        title: "ADDITIONAL_INCOME_CONSIDERED",
                                         "type": "number",
                                         required: true,
                                         readonly: true
@@ -1509,7 +1515,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 "items":{
                                     'totalPersonalExpense': {
                                         key: "customer.enterprise.totalPersonalExpense",
-                                        title: "TotalPersonalExpense",
+                                        title: "TOTAL_PERSONAL_EXPENSE",
                                         "type": "number",
                                         required: true,
                                         readonly: true
@@ -1584,14 +1590,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             },
                             'totalBusinessExpenses': {
                                 key: "customer.enterprise.totalBusinessExpenses",
-                                title: "TotalBusinessExpenses",
+                                title: "TOTAL_BUSINESS_EXPENSES",
                                 "type": "number",
                                 required: true,
                                 readonly: true
                             },
                             'netBusinessIncome': {
                                 key: "customer.enterprise.netBusinessIncome",
-                                title: "NetBusinessIncome",
+                                title: "NET_BUSINEE_INCOME",
                                 "type": "number",
                                 required: true,
                                 readonly: true
@@ -2877,8 +2883,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         _.forEach(model.customer.liabilityRepayment, function (liability) {
                             customerLiabilityRepayment.push(liability)
                         })
-                        if(customerLiabilityRepayment > 0){
+                        if(customerLiabilityRepayment.length > 0 && model.customer.liabilities.length > 0){
                             model.customer.liabilities[0]['customerLiabilityRepayments']=customerLiabilityRepayment;
+                        }
+                        else if(customerLiabilityRepayment.length > 0 && model.customer.liabilities.length == 0){
+                            model.customer.liabilities.push({'customerLiabilityRepayments':customerLiabilityRepayment})
                         }
                         model.enrolmentProcess.customer = model.customer;
                         model.enrolmentProcess.proceed()
