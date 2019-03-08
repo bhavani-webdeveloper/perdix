@@ -40,7 +40,7 @@ define([],function(){
                 }
                 return true;
             };
- 
+
             var getRelationFromClass = function(relation){
                 if (relation == 'guarantor'){
                     return 'Guarantor';
