@@ -46,7 +46,15 @@ Class Ckyc {
         'Aadhar Card' => 'AadharCard',
         'Voter Card' => 'VoterID',
         'Ration Card' => 'OthersPOACKYCInd',
-        'Driving Licence' => 'DrivingLicence'
+        'Driving Licence' => 'DrivingLicence',
+        'GST Certificate' => 'GSTCertificate',
+        'Electricity Bill' => 'Utilitybill2m',
+        'Telephone Bill' => 'Utilitybill2m',
+        'Insurance Policy' => 'OthersPOACKYCInd',
+        'Lease/Rent Agreement' => 'OthersPOACKYCInd',
+        'Letter From Any Recognized Public Authority' => 'EmployerHouseLetter',
+        'Bank Account Statement And Passbook' => 'BankStatement',
+        'Proof From Post Office' => 'BankStatement'
     ];
     private static function preProcessOfAddress($index1,$givenLenght,$data,$symbol,$preStrings,$prevJ,$preData,$total){
         $index = $index1;  

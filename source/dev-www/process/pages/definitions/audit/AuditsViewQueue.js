@@ -86,6 +86,7 @@ irf.pageCollection.factory(irf.page("audit.AuditsViewQueue"), ["$log", "$q", "Qu
                         "title": "STAGE",
                         "type": "string",
                         "type": "select",
+                        "condition":"model.siteCode !='KGFS'",
                         "titleMap": {
                             "scheduled": "Scheduled",
                             "postpone": "Postpone",
@@ -99,6 +100,13 @@ irf.pageCollection.factory(irf.page("audit.AuditsViewQueue"), ["$log", "$q", "Qu
                             "approve": "Approve",
                             "close": "Close"
                         }
+                    },
+                    {
+                        "key": "current_stage",
+                        "title": "STAGE",
+                        "type": "select",
+                        "condition":"model.siteCode =='KGFS'",
+                        "enumCode": "audit_dump_stages"
                     }
                 ],
                 autoSearch: true,

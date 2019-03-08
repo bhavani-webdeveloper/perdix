@@ -506,7 +506,7 @@ define([],function(){
                             "title":"FREQUENCY_REQUESTED",
                             "enumCode": "loan_product_frequency",
                             "onChange": function(valueObj,context,model){
-                                computeEstimatedEMI(model);
+                                computeEstimatedEMI(model);                                                             
                                 clearAll('loanAccount',['productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
                                 model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                                 //clearAll('additions',['tenurePlaceHolder','interestPlaceHolder','amountPlaceHolder'],model)
@@ -540,6 +540,8 @@ define([],function(){
                             onSelect: function (valueObj, model, context) {
                                 clearAll("loanAccount",["loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
                                 model.loanAccount.productCode = valueObj.productCode;
+                                if(model.loanAccount.loanType == 'JEWEL')
+                                    getGoldRate(model); 
                                 model.additions.tenurePlaceHolder = valueObj.tenure_from == valueObj.tenure_to ? valueObj.tenure_from : valueObj.tenure_from + '-' + valueObj.tenure_to;
                                 model.additions.amountPlaceHolder = valueObj.amount_from == valueObj.amount_to ? valueObj.amount_from : valueObj.amount_from + '-' + valueObj.amount_to;
                                 model.additions.interestPlaceHolder = valueObj.min_interest_rate == valueObj.max_interest_rate ? valueObj.min_interest_rate : valueObj.min_interest_rate + '-' + valueObj.max_interest_rate;
@@ -766,7 +768,6 @@ define([],function(){
                 "subTitle": "BUSINESS",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                     // AngularResourceService.getInstance().setInjector($injector);
-
                     model.customer = {};
                     model.review = model.review|| {};
                     model.loanAccount = model.loanProcess.loanAccount;
@@ -786,8 +787,10 @@ define([],function(){
                         } else {
                                 computeEMI(model);
                         }
-
-
+                        if (_.hasIn(model, 'loanAccount.loanType') && model.loanAccount.loanType !=null && model.loanAccount.loanType.length > 0) {
+                            if(model.loanAccount.loanType == 'JEWEL')
+                                getGoldRate(model);
+                        }
 
                     /* Setting data recieved from Bundle */
                     model.loanAccount.partnerCode='KGFS';
@@ -814,6 +817,7 @@ define([],function(){
 
                     BundleManager.broadcastEvent('loan-account-loaded', {loanAccount: model.loanAccount});                     
 
+
                      /* Deviations and Mitigations grouping */
                     if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
                         var loanMitigantsGrouped = {};
@@ -828,6 +832,13 @@ define([],function(){
 
                     }
                     /* End of Deviations and Mitigations grouping */
+                     /* Collateral */
+                    if (_.hasIn(model.loanAccount, 'collateral') && _.isArray(model.loanAccount.collateral)){
+                        for (var i=0; i<model.loanAccount.collateral.length; i++){
+                          model.loanAccount.collateral[i].udf3 = Number(model.loanAccount.collateral[i].udf3);     
+                        }
+                    }
+                    /* Collateral */
 
                     self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
@@ -1272,6 +1283,13 @@ define([],function(){
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
+                                /* Collateral */
+                                    if (_.hasIn(model.loanAccount, 'collateral') && _.isArray(model.loanAccount.collateral)){
+                                        for (var i=0; i<model.loanAccount.collateral.length; i++){
+                                          model.loanAccount.collateral[i].udf3 = Number(model.loanAccount.collateral[i].udf3);     
+                                        }
+                                    }
+                                /* Collateral */
                                 BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount});                                    
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
@@ -1348,6 +1366,32 @@ define([],function(){
                                 return false;
                             }
                         
+                        }
+                        if (model.loanAccount.id && model.loanAccount.currentStage == 'DSCOverride'){
+                            if(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length > 0){
+                                for(i = 0; i< model.loanAccount.loanCustomerRelations.length;i++){
+                                    if(model.loanAccount.loanCustomerRelations[i].relation != "Applicant")
+                                        continue;
+                                    if(typeof model.loanAccount.loanCustomerRelations[i].dscStatus == "undefined" || model.loanAccount.loanCustomerRelations[i].dscStatus == ""){
+                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = null
+                                        break;
+                                    }
+                                    if(model.loanAccount.loanCustomerRelations[i].dscStatus == "FAILURE" || model.loanAccount.loanCustomerRelations[i].dscStatus == "DSC_OVERRIDE_REQUIRED"){
+                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = "true"
+                                        break;
+                                    }
+                                    else{
+                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = "false"
+                                    }
+                                    
+                                }
+                            }
+                        }
+                        if((model.loanAccount.currentStage == 'DSCOverride') && (typeof model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 =="undefined" || model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 == null)){
+                            PageHelper.showErrors({data:{error:"DSC STATUS IS REQUIRED...."}});
+                                PageHelper.showProgress('enrolment','Oops. Some error.', 5000);
+                                PageHelper.hideLoader();
+                                return false;
                         }
                         PageHelper.showLoader();
                         PageHelper.showProgress('enrolment', 'Updating Loan');

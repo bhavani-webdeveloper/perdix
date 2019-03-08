@@ -2,9 +2,9 @@
 define({
     pageUID: "shramsarathi.dashboard.lead.LeadBulkUpload",
     pageType: "Engine",
-    dependencies: ["$log", "SessionStore", "$state", "$stateParams", "Lead", "irfNavigator", "Utils"],
+    dependencies: ["$log", "SessionStore", "$state", "$stateParams", "Lead", "irfNavigator", "Utils","PageHelper"],
 
-    $pageFn: function($log, SessionStore, $state, $stateParams, Lead, irfNavigator, Utils) {
+    $pageFn: function($log, SessionStore, $state, $stateParams, Lead, irfNavigator, Utils,PageHelper) {
 
         var branch = SessionStore.getBranch();
         return {
@@ -30,10 +30,22 @@ define({
                     "type": "file",
                     "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     customHandle: function(file, progress, modelValue, form, model) {
-                        Lead.leadBulkUpload(file, progress).then(function(resp){
+                        Lead.leadBulkUploadbyType(file,"Individual",progress).then(function(resp){
+                            
+                            //  PageHelper.showErrors({data:{error:resp.data[0].errorMessage}});
+                        if (resp.data.length>0){
+                              var errorArray=[];
+                            angular.forEach(resp.data, function(message, key) {
+                                errorArray.push(message.errorMessage); 
+                            });
+                           var send={data:{errors:{bulkupload:errorArray}}};
+                            PageHelper.showErrors(send);
+                            }
                             irfNavigator.go({
                                 state: "Page.Adhoc",
                                 pageName: "shramsarathi.dashboard.lead.LeadDashboard"
+                            },function(err){
+                               
                             });
                         });
                     }

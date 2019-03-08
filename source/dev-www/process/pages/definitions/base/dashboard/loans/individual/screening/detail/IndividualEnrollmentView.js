@@ -1077,7 +1077,7 @@ define({
                         var checkBounced = 0;
                         var emiBounce = 0;
                         _.each(model.bankDetails, function(bankDetail) {
-                            if (model.customer.id == bankDetail['Customer ID']) {
+                            if (model.customerId == bankDetail['Customer ID']) {
                                 count++;
                                 model.UIUDF.bankAccount.push(bankDetail)
                                 BankAvgBal += parseInt(bankDetail['Average Bank Balance']);
@@ -1100,7 +1100,7 @@ define({
                         var outstanding_bal = 0;
     
                         _.each(liability, function(liability) {
-                            if (liability.summary['Customer ID'] == model.customer.id) {
+                            if (liability.summary['Customer ID'] == model.customerId) {
                                 model.UIUDF.liabilities = _.cloneDeep(liability.data)
                                 monthly_installment += liability.summary['Total Monthly Installment'];
                                 outstanding_bal += liability.summary['Total Outstanding Loan Amount'];
@@ -1124,7 +1124,7 @@ define({
                         var totalExpenses = 0;
                         if(model.bundlePageObj.pageClass!='guarantor'){
                         _.each(houseHoldPL, function(household) {
-                            if (model.customer.id == household["customer_id"]) {
+                            if (model.customerId == household["customer_id"]) {
                                 totalIncome = parseInt(household.data[0]['Salary from business']) + parseInt(household.data[0]['Other Income/salaries']) + parseInt(household.data[0]['Family Member Incomes']);
                                 totalExpenses = parseInt(household.data[0]['Expenses Declared or based on the educational expense whichever is higher']) + parseInt(household.data[0]['EMI\'s of household liabilities']);
                                 model.household = [];
@@ -1150,7 +1150,7 @@ define({
     
                         /*Psychometric details*/
                         _.each(psychometricScores, function(psyScore){
-                            if(model.customer.id == psyScore.customer_id){
+                            if(model.customerId == psyScore.customer_id){
                                 model.psy_data = psyScore;
                             
                             model.psy_data.passOutOf = 0;

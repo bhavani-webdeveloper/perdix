@@ -41,6 +41,9 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     if(model.loanAccountDisbursementSchedule.moratoriumPeriodInDays){
                         model.loanAccountDisbursementSchedule.firstRepaymentDate  = model.loanAccountDisbursementSchedule.scheduleStartDate
                     }
+                    else{
+                        model.loanAccountDisbursementSchedule.firstRepaymentDate  = null
+                    }
 
                 }
                 model.validateDisbursementStartDate = function(model){
@@ -49,6 +52,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         PageHelper.setError({
                             message: "scheduled start date should be greater than or equal to disbursement date" + " " + moment(model.loanAccountDisbursementSchedule.scheduledDisbursementDate).format(SessionStore.getDateFormat())
                         });
+                        model.loanAccountDisbursementSchedule.scheduleStartDate = null;
                         return;
                     }
 
@@ -160,7 +164,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             modelValue = new Date(model.loanAccountDisbursementSchedule.scheduledDisbursementDate);
                             model.loanAccountDisbursementSchedule.scheduleStartDate = moment(new Date(modelValue.setDate(modelValue.getDate()+ model.loanAccountDisbursementSchedule.moratoriumPeriodInDays ))).format("YYYY-MM-DD");
                           }
-                        if(model.loanAccountDisbursementSchedule.moratoriumPeriodInDays){
+                        if(model.loanAccountDisbursementSchedule.moratoriumPeriodInDays > 0){
                         model.loanAccountDisbursementSchedule.firstRepaymentDate = model.loanAccountDisbursementSchedule.scheduleStartDate;
                         }
                         else{
@@ -328,7 +332,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.firstRepaymentDate",
-                        "condition":"model.siteCode=='IREPDhan' && model.loanAccountDisbursementSchedule.moratoriumPeriodInDays && model.CanChangeRepaymentDateIndisbursement",
+                        "condition":"model.siteCode=='IREPDhan' && model.loanAccountDisbursementSchedule.moratoriumPeriodInDays != '0' && model.CanChangeRepaymentDateIndisbursement",
                         "title":"FIRST_REPAYMENT_DATE",
                         "type":"date",
                         "readonly":true,
@@ -339,7 +343,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.firstRepaymentDate",
-                        "condition":"model.siteCode=='IREPDhan' && !model.loanAccountDisbursementSchedule.moratoriumPeriodInDays && model.CanChangeRepaymentDateIndisbursement",
+                        "condition":"model.siteCode=='IREPDhan' && model.loanAccountDisbursementSchedule.moratoriumPeriodInDays == '0' && model.CanChangeRepaymentDateIndisbursement",
                         "title":"FIRST_REPAYMENT_DATE",
                         "type":"date",
                         "onChange": function(value ,form ,model, event){

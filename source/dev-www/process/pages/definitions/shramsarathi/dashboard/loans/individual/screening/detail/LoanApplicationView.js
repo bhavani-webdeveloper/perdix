@@ -276,6 +276,7 @@ define({
                 model.loanMitigants= model.loanAccount.loanMitigants;
                 model.expectedTurnoverObj = {};
                 documentArrayFormation(model);
+                debugger;
             /*Asset details*/
                 if (model.loanAccount.collateral.length != 0) {
                     model.asset_details = [];
@@ -361,7 +362,8 @@ define({
                         title: "IS_NPA"
                     }]
                 }]
-            }, {
+            }, 
+            {
                 "type": "box",
                 "readonly": true,
                 "colClass": "col-sm-12",
@@ -430,7 +432,8 @@ define({
                         }]
                     }]
                 }]
-            }, {
+            },
+             {
                 "type": "box",
                 "readonly": true,
                 "colClass": "col-sm-12",
@@ -470,7 +473,8 @@ define({
                         }]
                     }]
                 }]
-            }, {
+            }, 
+            {
                 "type": "box",
                 "readonly": true,
                 "colClass": "col-sm-12",
@@ -501,7 +505,8 @@ define({
                         }]
                     }]
                 }]
-            }, {
+            },
+             {
                 "type": "box",
                 "readonly": true,
                 "colClass": "col-sm-12",
@@ -562,7 +567,8 @@ define({
                         }
                     }
                 ]
-            }, {
+            },
+             {
                 "type": "box",
                 "readonly": true,
                 "colClass": "col-sm-12",
@@ -596,7 +602,8 @@ define({
                         }]
                     }]
                 }]
-            }, {
+            }, 
+            {
                 "type": "box",
                 "colClass": "col-sm-12",
                 "title": "DEVIATION_AND_MITIGATIONS",
@@ -616,7 +623,8 @@ define({
                         '</li></ul></td></tr></tbody></table>'
 
                 }]
-            }, {
+            }, 
+            {
             "type": "box",
             "colClass": "col-sm-12",
             "title": "LOAN_DOCUMENTS",
@@ -655,9 +663,11 @@ define({
                 },
             ]
 
-        }, {
+            }, 
+            {
                 "type": "box",
                 "colClass": "col-sm-12",
+                "readOnly":true,
                 "title": "Loan Recommendation",
                 "items": [{
                     "type": "grid",
@@ -667,49 +677,73 @@ define({
                         "orientation": "vertical",
                         "items": [{
                             "key": "",
-                            "title": "Current Exposure",
-                            "type": "amount"
-                        }, {
-                            "key": "loanAccount.loanAmount",
-                            "title": "Loan Amount Recommended",
-                            "type": "amount",
-                            onChange:function(value,form,model){
-                                computeEMI(model);
-                            }
-                        }, {
+                            "title": "LOAN_AMOUNT",
+                           // "type": "amount",
+                            "readonly":true
+                        }, 
+                        {
                             "key": "loanAccount.tenure",
-                            "title": "Duration(months)"/*,
-                            "type": "number"*/
-                            ,
+                            "title": "TENURE",
+                            "readonly":true,
                             onChange:function(value,form,model){
                                 computeEMI(model);
                             }
-                        }, {
-                            "key": "loanAccount.interestRate",
-                            "title": "Interest Rate",
-                            "type": "number",
+                        }, 
+                        {
+                            "key": "loanAccount.estimatedEmi",
+                            "title": "ESTIMATED_KINARA_EMI",
+                           //"type": "amount",
+                            "readonly":true
+                        }, 
+                        {
+                            "key": "loanAccount.udf.userDefinedFieldValues.udf10",
+                            "title": "REMARK_OF_IN_FAVOUR_LOAN",
+                           // "type": "string",
+                            "readonly":true
+                        }, 
+                        {
+                            "key": "loanAccount.udf.userDefinedFieldValues.udf11",
+                            "title": "POTENTIAL_RISK",
+                          // "type": "number",
+                             "readonly":true,
                             onChange:function(value,form,model){
                                 computeEMI(model);
                             }
                         }]
-                    }, {
+                    },
+                     {
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
-                            "key": "loanAccount.estimatedEmi",
-                            "title": "ESTIMATED_KINARA_EMI",
-                            "type": "amount"
-                        }, {
-                            "key": "loanAccount.processingFeePercentage",
-                            "title": "Processing Fee(in%)"
-                        }, {
-                            "key": "loanAccount.estimatedEmi",
-                            "title": "Expected Security EMI"
-                        }, {
-                            "key": "loanAccount.commercialCibilCharge",
-                            "title": "CIBIL Charges",
-                            "type": "amount"
-                        }]
+                            "key":"loanAccount.disbursementSchedules[].modeOfDisbursement",
+                            "title":"MODE_OF_DISBURSEMENT",
+                            "readonly":true
+                        }, 
+                        {
+                            "key":"loanAccount.disbursementSchedules[].firstRepaymentDate",
+                            "title":"COLLECTION_DATE",
+                            "type":"date",
+                            "readonly":true
+                        },
+                         {
+                            "key":"loanAccount.disbursementSchedules[].actualDisbursementDate",
+                            "title":"DISBURSEMENT_DATE",
+                            "type":"date",
+                            "readonly":true
+                        },
+                        {
+                            "key":"loanAccount.disbursementSchedules[].moratoriumPeriodInDays",
+                            "title":"GRACE_PERIOD",
+                            "readonly":true
+                            
+                        },
+                        {
+                            "key":"loanAccount.udf.userDefinedFieldValues.udf12",
+                            "title":"DATE",
+                            "type":"date",
+                            "readonly":true
+                        },
+                    ]
                     }]
                 }]
             }, 

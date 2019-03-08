@@ -68,6 +68,10 @@ MainApp.controller("irfMainMenuController", [
 		if (angular.isFunction(menu.onClick)) {
 			menu.onClick(event, menu);
 		}
+		setTimeout(function() {
+			$(event.target).closest('.sidebar-menu').find('li.active').removeClass('active');
+			$(event.target).closest('li').addClass('active');
+		});
 	};
 
 	$scope.loadOfflinePage = function(event, menu) {

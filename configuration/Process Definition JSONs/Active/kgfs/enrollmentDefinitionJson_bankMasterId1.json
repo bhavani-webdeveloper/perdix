@@ -2057,7 +2057,7 @@
             "enterprise": {
                 "title": "Enterprise",
                 "type": "object",
-                "required": ["corporateName", "businessName", "businessConstitution"],
+                "required": ["corporateName", "businessName"],
                 "properties": {
                     "customerNumber": {
                         "title": "customerNumber",

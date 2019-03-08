@@ -360,7 +360,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 var centreCode = formHelper.enum('centre').data;
     
                                 var centreName = $filter('filter')(centreCode, {value: parentModel.customer.centreId}, true);
-                                if(centreName && centreName.length > 0) {
+                                if(centreName && centreName.length > 0 && model.centreId !=undefined) {
                                     model.centreName = centreName[0].name;
                                 }
     
@@ -452,6 +452,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     'firstName': inputModel.firstName,
                                     'centreId':inputModel.centreId,
                                     'customerType':"individual",
+                                    'stage':'Completed',
                                     'urnNo': inputModel.urnNo
                                 }).$promise;
                                 return promise;
@@ -550,14 +551,36 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "key": "customer.addressProofIssueDate",
                             orderNo: 120,
                             condition: "!model.customer.addressProofSameAsIdProof",
-                            "type": "date"
+                            "type": "date",
+                            onChange: function (value, form, model, event) {
+                                if(model.customer.addressProofIssueDate){
+                                    var addressProof1IssueDate = moment(model.customer.addressProofIssueDate, SessionStore.getSystemDateFormat());
+                                    var addressProof1ValidUptoDate = moment(model.customer.addressProofValidUptoDate, SessionStore.getSystemDateFormat());
+                                    if (addressProof1ValidUptoDate < addressProof1IssueDate) {
+                                        model.customer.addressProofIssueDate = null;
+                                        PageHelper.showProgress("pre-save-validation", "Address Proof Issue Date always more than Address Proof Issue Date", 5000);
+                                        return false;
+                                    }
+                                }
+                            }
                         },
                         "KYC.addressProofValidUptoDate": {
                             "title":"VALID_UPTO",
                             "key": "customer.addressProofValidUptoDate",
                             orderNo: 130,
                             condition: "!model.customer.addressProofSameAsIdProof",
-                            "type": "date"
+                            "type": "date",
+                            onChange: function (value, form, model, event) {
+                                if(model.customer.addressProofValidUptoDate){
+                                    var addressProof1IssueDate = moment(model.customer.addressProofIssueDate, SessionStore.getSystemDateFormat());
+                                    var addressProof1ValidUptoDate = moment(model.customer.addressProofValidUptoDate, SessionStore.getSystemDateFormat());
+                                    if (addressProof1ValidUptoDate < addressProof1IssueDate) {
+                                        model.customer.addressProofValidUptoDate = null;
+                                        PageHelper.showProgress("pre-save-validation", "ID Proof ValidUptoDate always more than ID Proof Valid ToDate", 5000);
+                                        return false;
+                                    }
+                                }
+                            }
                         },
                         "ContactInformation.mobilePhone":{
                             "required": true,
@@ -1109,6 +1132,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                     /* Setting data for the form */
                     model.customer = model.enrolmentProcess.customer;
+                     if (typeof model.customer.udf == "undefined") {                    
+                    model.customer.udf = {};
+                    model.customer.udf.userDefinedFieldValues = {};
+                    }
+                    else {
+                        if(!isNaN(model.customer.udf.userDefinedFieldValues.udf32) && model.customer.udf.userDefinedFieldValues.udf32 !=null)
+                        model.customer.udf.userDefinedFieldValues.udf32=Number(model.customer.udf.userDefinedFieldValues.udf32);
+                    }
                     var branchId = SessionStore.getBranchId();
                     if(branchId && !model.customer.customerBranchId)
                         {
@@ -1371,6 +1402,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             PageHelper.showProgress("enrolment", "Your form have errors. Please fix them.", 5000);
                             return false;
                         }
+                        
+                        if (model.customer.addressProof == 'Aadhar card' && !_.isNull(model.customer.addressProofNo)){
+                            model.customer.aadhaarNo = model.customer.addressProofNo;
+                        }
 
                         // $q.all start
                         model.enrolmentProcess.save()
@@ -1394,6 +1429,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         PageHelper.clearErrors();
                         if(PageHelper.isFormInvalid(form)) {
                             return false;
+                        }
+                        if (model.customer.addressProof == 'Aadhar card' && !_.isNull(model.customer.addressProofNo)){
+                            model.customer.aadhaarNo = model.customer.addressProofNo;
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
@@ -1421,7 +1459,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             return false;
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
+                        if (model.customer.addressProof == 'Aadhar card' && !_.isNull(model.customer.addressProofNo)){
+                            model.customer.aadhaarNo = model.customer.addressProofNo;
+                        }
                         PageHelper.showLoader();
+
                         model.enrolmentProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
@@ -1430,6 +1472,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 formHelper.resetFormValidityState(form);
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
+                                if (typeof model.customer.udf.userDefinedFieldValues != "undefined")
+                                model.customer.udf.userDefinedFieldValues.udf32=Number(model.customer.udf.userDefinedFieldValues.udf32);
+                    
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                                 BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer});
 

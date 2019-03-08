@@ -11,6 +11,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
             }
             return null;
         }
+        
+        var formConfig = function(individual,entity,model){
+            model.additional.isIndividual = individual ? true : false;
+            model.additional.isEntity = entity ? true : false;
+        };
+
 
         return {
             "type": "schema-form",
@@ -183,6 +189,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                                         PageHelper.hideLoader();
                                     }
                                 )
+                            model.additional ={};
+                            Queries.getCustomerById(model.loanAccount.customerId,true).then(function(customer){
+                                if (customer.customerType == "Individual")
+                                    formConfig(true,false,model);
+                                else
+                                    formConfig(false,true,model);
+                            },function(err){
+                                formConfig(false,true,model);
+                            })
                         },
                         function(httpRes) {
                             PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
@@ -692,8 +707,16 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                     }, {
                         "key": "_queue.customerName",
                         "title": "ENTITY_NAME",
+                        "condition": "model.additional.isEntity",
                         "readonly": true
-                    }, {
+                    },
+                    {
+                        "key": "_queue.customerName",
+                        "title": "APPLICANT_NAME",
+                        "condition":"model.additional.isIndividual",
+                        "readonly": true
+                    }, 
+                    {
                         "type": "button",
                         "title": "DOWNLOAD_ALL_FORMS",
                         "onClick": function(model, form, schemaForm, event) {
