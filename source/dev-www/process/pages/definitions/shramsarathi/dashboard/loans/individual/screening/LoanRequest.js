@@ -2285,7 +2285,6 @@ define([],function(){
                         model.loanAccount.loanCentre.centreId = obj.customer.centreId;
                         model.loanAccount.loanCentre.loanId = model.loanAccount.id?model.loanAccount.id:null;
                         model.customer = obj.customer;
- 
                     },
                     "load-deviation":function(bundleModel, model, params){
                         $log.info("Inside Deviation List");
@@ -2307,6 +2306,12 @@ define([],function(){
                                 }
                             })
                         }
+                    },
+                    "telecall": function(bundleModel, model, obj){
+                        $log.info("Telecall",obj);
+                        console.log(obj);
+                        debugger;
+                        model.loanAccount.telecallingDetails = obj.telecallingDetails;   
                     }
                 },
                 form: [],
@@ -2417,6 +2422,10 @@ define([],function(){
                     proceed: function(model, formCtrl, form, $event){
                         if (model.loanProcess.remarks==null || model.loanProcess.remarks ==""){
                             PageHelper.showProgress("update-loan", "Remarks is mandatory", 3000);
+                            return false;
+                        }
+                        if((model.loanAccount.currentStage =='Televerification') && (model.loanAccount.telecallingDetails.length == 0)){
+                            PageHelper.showErrors({"data": {"error":"Tele Verification should be done"}});
                             return false;
                         }
                         if (!validateForm(formCtrl)){
