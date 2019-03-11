@@ -21,8 +21,8 @@ define({
 				// 	"type": "section",
 				// 	"html": '<br><div style="text-align:center">Waiting for summary..<br><br><ripple-loader></ripple-loader></div>'
 				// }];
-				//Misc.getSummary({"customer_id":model.customerId}).$promise.then(function(resp){
-				 Misc.getSummary({"customer_id":77}).$promise.then(function(resp){
+				Misc.getSummary({"customer_id":model.customerId}).$promise.then(function(resp){
+				//Misc.getSummary({"customer_id":77}).$promise.then(function(resp){
 				   console.log(model);
 				   console.log("------model");
 					console.log(resp);
