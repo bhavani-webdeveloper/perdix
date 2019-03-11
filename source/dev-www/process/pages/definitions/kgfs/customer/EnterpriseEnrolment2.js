@@ -1560,7 +1560,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         return $q.resolve({
                                             "dtlKeyvalue": "ADD_PARAMETER",
                                             "isStaticTable":true,
-                                            // "canAddRow":false,
+                                            "canAddRow":false,
                                             "columns": [
                                                 {
                                                     prop: "expenditureSource",
@@ -2629,7 +2629,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 var sales = dailysales;
                                 if (dailysales.salesType == 'High' ? (i = 1) : (dailysales.salesType == 'Medium' ? (i = 2) : (i = 3))) {
                                     for (var key of Object.keys(dailysales)) {
-                                        if (dailysales[key] != 'undefined' && key != 'salesType' && key != 'totalSales') {
+                                        if(key == 'day' && dailysales[key] != 'undefined'){
+                                       // if (dailysales[key] != 'undefined' && key != 'salesType' && key != 'totalSales') {
                                             day = dailysales[key]
                                             model.customer.enterpriseDailySale[i - 1][day] = sales.totalSales;
                                             model.customer.enterpriseDailySale[i - 1]["total"] += sales.totalSales;
