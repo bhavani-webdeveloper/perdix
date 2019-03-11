@@ -1350,7 +1350,8 @@ define([],function(){
                             // "type":"select",
                             // "enumCode":"duration",
                             "type":"text",
-                            "schema": {
+                            "schema": {  
+                                "type": ["integer", "string"],
                                 "pattern": "^([6-9]|[1-5][0-9]|60)$"
                             }
                         },
