@@ -733,6 +733,10 @@ define([],function(){
                                     }
             
                                 },
+                                "NomineeDetails.nominees.nomineeLocality": {
+                                    "orderNo":50,
+                                    "title":"PANCHAYAT"
+                                },
                                 "PreliminaryInformation": {
                                     "orderNo": 1,
                                     "readonly": false
@@ -806,7 +810,10 @@ define([],function(){
 
                             ],
                             "overrides": {
-                                
+                                "NomineeDetails.nominees.nomineeLocality": {
+                                    "orderNo":50,
+                                    "title":"PANCHAYAT"
+                                },
                                 "PreliminaryInformation": {
                                     "orderNo": 1,
                                     "readonly": true
@@ -1439,17 +1446,19 @@ define([],function(){
                         },
                         "NomineeDetails.nominees.nomineePincode": {
                             "resolver": "NomineePincodeLOVConfiguration",
-                            "orderNo":70
+                            "orderNo":70,
+                            "required":true
                         },
                         "NomineeDetails.nominees.nomineeDoorNo": {
                             "orderNo": 40,
-                            "title":""
+                            "title":"HAMLET_FALA"
                         },
                         "NomineeDetails.nominees.nomineeStreet":{
                             "orderNo": 60
                         },
                         "NomineeDetails.nominees.nomineeLocality": {
-                            "orderNo":50
+                            "orderNo":50,
+                            "title":"PANCHAYAT"
                         },
                         "NomineeDetails.nominees.nomineeDistrict":{
                             "orderNo":80
