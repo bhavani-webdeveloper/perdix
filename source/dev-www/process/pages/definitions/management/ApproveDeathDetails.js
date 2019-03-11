@@ -22,6 +22,7 @@ define({
                 model.approveDeathDetails.dateOfIncident = $stateParams.pageData.dateOfIncident;
                 model.approveDeathDetails.details = $stateParams.pageData.furtherDetails;
                 model.approveDeathDetails.comments = $stateParams.pageData.comments;
+                model.approveDeathDetails.fileId = $stateParams.pageData.fileId;                
             },
             form: [
                 {
@@ -71,6 +72,15 @@ define({
                             "title": "APPROVE_DEATH_COMMENTS",
                             readonly: true
                         },
+                        {
+                            key: "approveDeathDetails.fileId",                                            
+                            title: "DEATHCERTIFICATE_UPLOAD_FILE",
+                            category: "DeathMarking",
+                            subCategory: "DEATHCERTIFICATE",
+                            type: "file",
+                            fileType: "jpeg,jpg,png",  
+                            readonly : true
+                        },
                     ]
                 },
                 {
@@ -88,12 +98,12 @@ define({
                                     ],
                                     "message": "Death marking approved"     
                                 };
-                                PageHelper.clearErrors();
+                               // PageHelper.clearErrors();
                                 PageHelper.showLoader();
                                 DeathMarking.updateDeadMarkingStatus(req).$promise.then(function(resp) {
                                     PageHelper.showProgress("ApproveDeathDetails-pages", "Death Marking Approved Successfully", 3000);
                                     irfNavigator.goBack();
-                                }, function(err) {
+                                }, function(err){           
                                     PageHelper.showErrors(err);
                                 }).finally(function() {
                                     PageHelper.hideLoader();
@@ -118,6 +128,7 @@ define({
                                     Utils.alert("Death Marking Rejected Successfully");
                                     irfNavigator.goBack();
                                 }, function(err) {
+                                    
                                     PageHelper.showErrors(err);
                                 }).finally(function() {
                                     PageHelper.hideLoader();

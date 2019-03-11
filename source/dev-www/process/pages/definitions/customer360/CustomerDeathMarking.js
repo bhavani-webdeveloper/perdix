@@ -11,15 +11,17 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                 PageHelper.showLoader();              
                     var defered = $q.defer();                     
                 model.deathMarking = {}; 
-                 var customerId = $stateParams.pageId.split(':');
+                 var customerId = $stateParams.pageId.split(':')[0];
                 Enrollment.getCustomerById({
                     id: customerId
                 }).$promise.then(function(resp) {
                                   
                     model.deathMarking.familyMemberName = resp.firstName;
-                    model.deathMarking.familyMembers = resp.familyMembers;                    
+                    model.deathMarking.familyMembers = resp.familyMembers;
+                    model.deathMarking.urnNo = resp.urnNo;
+                    if(resp.familyMembers && resp.familyMembers.length) {
                         for(var i=0; i<resp.familyMembers.length; i++){
-                            if(resp.familyMembers[i].relationShip == "self"){                               
+                            if((resp.familyMembers[i].relationShip).toUpperCase() == "SELF"){                               
                                 model.deathMarking.dateOfBirth = resp.familyMembers[i].dateOfBirth;
                                 model.deathMarking.familyMemberRelation = resp.familyMembers[i].relationShip;
                                 model.deathMarking.familyMemberId = resp.familyMembers[i].familySequenceId;
@@ -37,6 +39,8 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                                     model.deathMarking.reasonForDeath =  model.deceaseDetails[i].reason_for_death || {};
                                     model.deathMarking.dateOfDeath =  model.deceaseDetails[i].date_of_incident || {};
                                     model.deathMarking.deathMarkingStatus =  model.deceaseDetails[i].admin_confirmation_status || {};
+                                    model.deathMarking.fileId =  model.deceaseDetails[i].fileId;
+                                    model.deathMarking.id =  model.deceaseDetails[i].id || {};
                                    }
                                     }
                                     PageHelper.hideLoader();
@@ -45,7 +49,9 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                                     PageHelper.hideLoader();
                                 });                
                             }                           
-                        }      
+                        } 
+                    }                   
+                    PageHelper.hideLoader();         
                 }, function(errResp) {
                     PageHelper.showErrors(errResp);
                     PageHelper.hideLoader();
@@ -122,6 +128,12 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                             readonly:true
                         },
                         {
+                            key: "deathMarking.urnNo",
+                            type: "string",
+                            title:"DEATH_MARKING_COLUMN_URN",        
+                            readonly:true
+                        },
+                        {
                             key: "deathMarking.dateOfBirth",
                             title: "DATE_OF_BIRTH",
                             type: "date",
@@ -130,15 +142,16 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                         {
                             key: "deathMarking.dateOfDeath",
                             title: "DATE_OF_DEATH",
-                            condition:"model.deathMarking.deathMarkingStatus",                                      
+                            condition:"model.deathMarking.deathMarkingStatus && model.deathMarking.deathMarkingStatus != 'REJECT'",                                      
                             type: "date",
                             readonly:true
                         },
                         {
                             key: "deathMarking.dateOfDeath",
                             title: "DATE_OF_DEATH",
-                            condition:"!model.deathMarking.deathMarkingStatus",                                      
-                            type: "date"
+                            condition:"!model.deathMarking.deathMarkingStatus || model.deathMarking.deathMarkingStatus == 'REJECT'",                                      
+                            type: "date",
+                            required: true
                         },
                         {
                             key: "deathMarking.deathMarkingStatus",
@@ -160,7 +173,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                             required: true,
                             enumCode: "reason_for_death",
                             readonly:true,
-                            condition:"model.deathMarking.deathMarkingStatus",                                      
+                            condition:"model.deathMarking.deathMarkingStatus  && model.deathMarking.deathMarkingStatus != 'REJECT'",                                      
                                 
                         },
                         {
@@ -168,7 +181,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                             title: "FURTHER_DETAILS",
                             type: "select",
                             readonly:true,
-                            condition: "model.deathMarking.deathMarkingStatus && model.deathMarking.reasonForDeath != 'SUCIDE'",
+                            condition: "model.deathMarking.deathMarkingStatus && model.deathMarking.reasonForDeath != 'SUCIDE' && model.deathMarking.deathMarkingStatus != 'REJECT'",
                             required: true,
                             parentEnumCode:"reason_for_death",
                             parentValueExpr:"model.deathMarking.reasonForDeath",
@@ -179,13 +192,13 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                             type: "textarea",
                             title:"COMMENTS",
                             readonly:true,
-                            condition:"model.deathMarking.deathMarkingStatus",                                      
+                            condition:"model.deathMarking.deathMarkingStatus  && model.deathMarking.deathMarkingStatus != 'REJECT'",                                      
                             
                         },
                         {
                             key: "deathMarking.reasonForDeath",
                             title: "REASON_FOR_DEATH",
-                            condition:"!model.deathMarking.deathMarkingStatus",                                      
+                            condition:"!model.deathMarking.deathMarkingStatus || model.deathMarking.deathMarkingStatus == 'REJECT'",                                      
                             type: "select",
                             required: true,
                             enumCode: "reason_for_death"                          
@@ -195,7 +208,7 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                             key: "deathMarking.furtherDetails",
                             title: "FURTHER_DETAILS",
                             type: "select",
-                            condition: "!model.deathMarking.deathMarkingStatus && model.deathMarking.reasonForDeath != 'SUCIDE'",
+                            condition: "!model.deathMarking.deathMarkingStatus|| model.deathMarking.deathMarkingStatus == 'REJECT' && model.deathMarking.reasonForDeath != 'SUCIDE'",
                             required: true,
                             parentEnumCode:"reason_for_death",
                             parentValueExpr:"model.deathMarking.reasonForDeath",
@@ -204,14 +217,25 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                         {
                             key: "deathMarking.comments",
                             type: "textarea",
-                            condition:"!model.deathMarking.deathMarkingStatus",
-                            title:"COMMENTS"
+                            condition:"!model.deathMarking.deathMarkingStatus || model.deathMarking.deathMarkingStatus == 'REJECT'",
+                            title:"COMMENTS",
+                            required: true
+                        },
+
+                        {
+                            key: "deathMarking.fileId",                                            
+                            title: "DEATHCERTIFICATE_UPLOAD_FILE",
+                            category: "DeathMarking",
+                            subCategory: "DEATHCERTIFICATE",
+                            type: "file",
+                            fileType: "jpeg,jpg,png",  
+                            condition:"!model.deathMarking.deathMarkingStatus || model.deathMarking.deathMarkingStatus == 'REJECT'",            
                         },
                     ]
                 },
                 {
                     type: "actionbox",
-                    condition:"!model.deathMarking.deathMarkingStatus",
+                    condition:"!model.deathMarking.deathMarkingStatus || model.deathMarking.deathMarkingStatus == 'REJECT'",
                     items: [
                         {
                             type: "submit",
@@ -226,6 +250,15 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
             actions: {
                 submit: function(model, form, formName) { 
                 
+                    var selecteddate = model.deathMarking.dateOfDeath;
+                    var currentdate = moment(new Date()).format("YYYY-MM-DD");
+                    var currentstatus = model.deathMarking.deathMarkingStatus;
+
+                    if(selecteddate > currentdate){
+                        PageHelper.showProgress("Date Error", "Future Death Date is not allowed" , 5000);
+                        return false;
+                    }
+
                     var req = {
                         //adminConfirmationStatus: "1",
                         "comments": model.deathMarking.comments,
@@ -235,21 +268,36 @@ irf.pageCollection.factory(irf.page("customer360.CustomerDeathMarking"), ["$log"
                         "famillyEnrollmentId": model.deathMarking.enrollmentId,
                         "familyMemberId": model.deathMarking.familyMemberId,
                         "familyMemberRelation": model.deathMarking.familyMemberRelation,
-                        "familyMemberName": model.deathMarking.familyMemberFirstName,
+                        "familyMemberName": model.deathMarking.familyMemberName,
                         "furtherDetails": model.deathMarking.furtherDetails,
                         "reasonForDeath": model.deathMarking.reasonForDeath,
+                        "fileId": model.deathMarking.fileId,
+                        "id": model.deathMarking.id,
                     };
                    // req.parameter.push(parameter_list);
                     Utils.confirm("Are you sure?").then(function() {
                         PageHelper.showLoader();
-                        DeathMarking.postCustomerDeathMarking(req).$promise.then(function(resp) {
-                            PageHelper.showProgress("customerdeathmarking-pages", "Page customer death marking saved", 3000);
-                            irfNavigator.goBack();
-                        }, function(err) {
-                            PageHelper.showErrors(err);
-                        }).finally(function() {
-                            PageHelper.hideLoader();
-                        });
+                        if(currentstatus == "REJECT"){
+                            DeathMarking.modifyCustomerDeathMarking(req).$promise.then(function(resp) {
+                                PageHelper.showProgress("customerdeathmarking-pages", "Page customer death marking saved", 3000);
+                                irfNavigator.goBack();
+                            }, function(err) {
+                                PageHelper.showErrors(err);
+                            }).finally(function() {
+                                PageHelper.hideLoader();
+                            });
+                        }
+                        else{
+                            DeathMarking.postCustomerDeathMarking(req).$promise.then(function(resp) {
+                                PageHelper.showProgress("customerdeathmarking-pages", "Page customer death marking saved", 3000);
+                                irfNavigator.goBack();
+                            }, function(err) {
+                                PageHelper.showErrors(err);
+                            }).finally(function() {
+                                PageHelper.hideLoader();
+                            });
+
+                        }
                     });
                 },
             }
