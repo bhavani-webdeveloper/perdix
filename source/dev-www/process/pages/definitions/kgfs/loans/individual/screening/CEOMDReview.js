@@ -189,7 +189,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 }
 
 
-                                    if (loanProcess.loanCustomerEnrolmentProcess) {
+                                    if (loanProcess.loanAccount.productCategory == 'MEL') {
                                         $this.bundlePages.push({
                                             pageClass: "business",
                                             model: {

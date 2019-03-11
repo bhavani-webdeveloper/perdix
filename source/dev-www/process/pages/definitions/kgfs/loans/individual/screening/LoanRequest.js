@@ -887,7 +887,20 @@ define([],function(){
                     model.review = model.review|| {};
                     model.loanAccount = model.loanProcess.loanAccount;
                     model.loanAccount.interestRateEstimatedEMI={};
-                
+                    var postReviewActionArray = {};
+                    if(model.loanAccount.currentStage == 'BusinessTeamReview' || model.loanAccount.currentStage == 'CreditOfficerReview' || model.loanAccount.currentStage == 'CreditManagerReview' || model.loanAccount.currentStage == 'CBOCreditHeadReview' || model.loanAccount.currentStage == 'CEOMDReview') {
+                        postReviewActionArray = {
+                            "SEND_BACK": "SEND_BACK",
+                            "PROCEED": "PROCEED"
+                        }
+                    } else {
+                        postReviewActionArray = {
+                            "REJECT": "REJECT",
+                            "SEND_BACK": "SEND_BACK",
+                            "PROCEED": "PROCEED"
+                        }
+                    }
+                    
                     defaultConfiguration(model,true);
 
 
@@ -1136,11 +1149,7 @@ define([],function(){
                                                 "key": "review.action",
                                                 "condition": "model.loanAccount.currentStage != 'Screening'",
                                                 "type": "radios",
-                                                "titleMap": {
-                                                    "REJECT": "REJECT",
-                                                    "SEND_BACK": "SEND_BACK",
-                                                    "PROCEED": "PROCEED"
-                                                }
+                                                "titleMap": postReviewActionArray
                                             },
                                             "actionExcludesSendBack": {
                                                 "key": "review.action",
