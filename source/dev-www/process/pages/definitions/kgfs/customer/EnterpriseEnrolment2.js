@@ -117,15 +117,38 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                 var businessExpense = 0;
                 if (model.customer.incomeThroughSales) {
                     for (i in model.customer.incomeThroughSales) {
-                        businessIncome = businessIncome + (model.customer.incomeThroughSales[i].amount ? model.customer.incomeThroughSales[i].amount : 0);
+                        if(model.customer.incomeThroughSales[i].amount && model.customer.incomeThroughSales[i].frequency == 'Monthly'){
+                            businessIncome = businessIncome +  (model.customer.incomeThroughSales[i].amount * 12);
+                        }
+                        else if(model.customer.incomeThroughSales[i].amount && model.customer.incomeThroughSales[i].frequency == 'Quarterly'){
+                            businessIncome = businessIncome +  (model.customer.incomeThroughSales[i].amount * 4);
+                        }
+                        else if(model.customer.incomeThroughSales[i].amount && model.customer.incomeThroughSales[i].frequency == "Half yearly"){
+                            businessIncome = businessIncome +  (model.customer.incomeThroughSales[i].amount * 2);
+                        }
+                        else if(model.customer.incomeThroughSales[i].amount && model.customer.incomeThroughSales[i].frequency == 'Annually'){
+                            businessIncome = businessIncome +  (model.customer.incomeThroughSales[i].amount * 1);
+                        }
                     }
                 }
                 if (model.customer.rawMaterialExpenses) {
                     for (i in model.customer.rawMaterialExpenses) {
-                        businessExpense = businessExpense + (model.customer.rawMaterialExpenses[i].amount ? model.customer.rawMaterialExpenses[i].amount : 0);
+                        if(model.customer.rawMaterialExpenses[i].amount  && model.customer.rawMaterialExpenses[i].frequency == 'Monthly'){
+                            businessExpense = businessExpense +  (model.customer.rawMaterialExpenses[i].amount * 12);
+                        }
+                        else if(model.customer.rawMaterialExpenses[i].amount  && model.customer.rawMaterialExpenses[i].frequency == 'Quarterly'){
+                            businessExpense = businessExpense +  (model.customer.rawMaterialExpenses[i].amount * 4);
+                        }
+                        else if(model.customer.rawMaterialExpenses[i].amount  && model.customer.rawMaterialExpenses[i].frequency == 'Half yearly'){
+                            businessExpense = businessExpense +  (model.customer.rawMaterialExpenses[i].amount * 2);
+                        }
+                        else if(model.customer.rawMaterialExpenses[i].amount  && model.customer.rawMaterialExpenses[i].frequency == 'Annually'){
+                            businessExpense = businessExpense +  (model.customer.rawMaterialExpenses[i].amount * 1);
+                        }
+                        
                     }
                 }
-                model.customer.totalMonthlySurplus = businessIncome - businessExpense;
+                model.customer.totalMonthlySurplus = (businessIncome - businessExpense)/12;
                 model.customer.debtServiceRatio = (businessExpense / businessIncome) * 100;
                 monthlySurpluse(model);
             }
@@ -389,6 +412,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "type": "select",
                         "enumCode": "businessIncomeType",
                         "orderNo": 511,
+                        "required":true
                     },
                     "EnterpriseFinancials.incomeThroughSales.amount": {
                         "orderNo": 512,
@@ -399,9 +423,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EnterpriseFinancials.incomeThroughSales.frequency": {
                         "orderNo": 511,
+                        "required":true
                     },
                     "EnterpriseFinancials.incomeThroughSales.invoiceDocId": {
-
+                        "orderNo": 514,
+                    },
+                    "EnterpriseFinancials.incomeThroughSales.buyerName":{
+                        "orderNo": 513,
+                        "title": "OTHER_INCOME_FEILD",
+                        "type":"text"
                     },
                     "EnterpriseFinancials.rawMaterialExpenses": {
                         "orderNo": 520,
@@ -417,6 +447,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "title":"INCOME_TYPE",
                         "enumCode": "businessExpenseType",
                         "orderNo": 521,
+                        "required":true
                     },
                     "EnterpriseFinancials.rawMaterialExpenses.amount": {
                         "orderNo": 523,
@@ -427,54 +458,59 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EnterpriseFinancials.rawMaterialExpenses.frequency":{
                         "orderNo": 522,
+                        "required":true
                     },
-                    "EnterpriseFinancials.totalMonthlySurplus": {
+                    "EnterpriseFinancials.monthlySurplus.totalMonthlySurplus": {
                         "orderNo": 524,
-                        "required": true
+                        readonly: true
                     },
-                    "EnterpriseFinancials.debtServiceRatio": {
+                    "EnterpriseFinancials.monthlySurplus.debtServiceRatio": {
                         "orderNo": 528,
-                        "required": true
+                        readonly: true
                     },
                     "PreliminaryInformation": {
                         "orderNo": 540
                     },
                     "PreliminaryInformation.loanAmountRequested": {
                         "orderNo": 540,
-                        onChange: function (value, form, model) {
-                            if (model.loanAccount.loanAmountRequested == '' || model.loanAccount.interestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenure == '')
+                        "readonly":true,
+                        // onChange: function (value, form, model) {
+                        //     if (model.loanAccount.loanAmountRequested == '' || model.loanAccount.interestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenure == '')
 
-                                return;
-                            var principal = model.loanAccount.loanAmount;
-                            var interest = model.loanAccount.interestRate / 100 / 12;
-                            //var payments;
-                            var payments = model.loanAccount.tenure;
+                        //         return;
+                        //     var principal = model.loanAccount.loanAmount;
+                        //     var interest = model.loanAccount.interestRate / 100 / 12;
+                        //     //var payments;
+                        //     var payments = model.loanAccount.tenure;
 
-                            // Now compute the monthly payment figure, using esoteric math.
-                            var x = Math.pow(1 + interest, payments);
-                            var monthly = (principal * x * interest) / (x - 1);
+                        //     // Now compute the monthly payment figure, using esoteric math.
+                        //     var x = Math.pow(1 + interest, payments);
+                        //     var monthly = (principal * x * interest) / (x - 1);
 
-                            // Check that the result is a finite number. If so, display the results.
-                            if (!isNaN(monthly) &&
-                                (monthly != Number.POSITIVE_INFINITY) &&
-                                (monthly != Number.NEGATIVE_INFINITY)) {
-                                model.loanAccount.emiEstimated = round(monthly);
-                            }
-                            // Otherwise, the user's input was probably invalid, so don't
-                            // display anything.
-                            else {
-                                model.loanAccount.emiEstimated = "";
-                            }
-                        }
+                        //     // Check that the result is a finite number. If so, display the results.
+                        //     if (!isNaN(monthly) &&
+                        //         (monthly != Number.POSITIVE_INFINITY) &&
+                        //         (monthly != Number.NEGATIVE_INFINITY)) {
+                        //         model.loanAccount.emiEstimated = round(monthly);
+                        //     }
+                        //     // Otherwise, the user's input was probably invalid, so don't
+                        //     // display anything.
+                        //     else {
+                        //         model.loanAccount.emiEstimated = "";
+                        //     }
+                        // }
                     },
                     "PreliminaryInformation.tenure": {
-                        "orderNo": 550
+                        "orderNo": 550,
+                        "readonly":true
                     },
                     "PreliminaryInformation.interestRate": {
-                        "orderNo": 560
+                        "orderNo": 560,
+                        "readonly":true
                     },
                     "PreliminaryInformation.emiEstimated": {
-                        "orderNo": 570
+                        "orderNo": 570,
+                        "readonly":true
                     },
                     "EstimatedSales": {
                         "orderNo": 590
@@ -487,7 +523,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         }
                     },
                     "EstimatedSales.initialEstimateMonthlySale": {
-                        "orderNo": 605
+                        "orderNo": 605,
+                        "readonly":true
                     },
                     "BuyerDetails": {
                         "orderNo": 530,
@@ -623,18 +660,36 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         }
                     },
                     "EnterpriseFinancials": {
-                        "items": {
-                            "totalMonthlySurplus": {
-                                "key": "customer.totalMonthlySurplus",
-                                "type": "text",
+                        "items":{
+                           "monthlySurplus":{
+                                "type": "fieldset",
                                 "title": "TOTAL_MONTHLY_SURPLUS",
-                            },
-                            "debtServiceRatio": {
-                                "key": "customer.debtServiceRatio",
-                                "type": "text",
-                                "title": "DEBT_SERVICE_RATIO",
-                            }
+                                "items": {
+                                    "totalMonthlySurplus": {
+                                        "key": "customer.totalMonthlySurplus",
+                                        "type": "text",
+                                        "title": "TOTAL_MONTHLY_SURPLUS",
+                                    },
+                                    "debtServiceRatio": {
+                                        "key": "customer.debtServiceRatio",
+                                        "type": "text",
+                                        "title": "DEBT_SERVICE_RATIO",
+                                    }
+                                }
+                           }
                         }
+                        // "items": {
+                        //     "totalMonthlySurplus": {
+                        //         "key": "customer.totalMonthlySurplus",
+                        //         "type": "text",
+                        //         "title": "TOTAL_MONTHLY_SURPLUS",
+                        //     },
+                        //     "debtServiceRatio": {
+                        //         "key": "customer.debtServiceRatio",
+                        //         "type": "text",
+                        //         "title": "DEBT_SERVICE_RATIO",
+                        //     }
+                        // }
                     },
                     "EstimatedSales": {
                         "type": "box",
@@ -2153,6 +2208,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "EnterpriseFinancials.incomeThroughSales.amount",
                     "EnterpriseFinancials.incomeThroughSales.frequency",
                     "EnterpriseFinancials.incomeThroughSales.invoiceDocId",
+                    "EnterpriseFinancials.incomeThroughSales.buyerName",
 
                     "EnterpriseFinancials",
                     "EnterpriseFinancials.rawMaterialExpenses",
@@ -2162,8 +2218,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId",
 
                     "EnterpriseFinancials",
-                    "EnterpriseFinancials.totalMonthlySurplus",
-                    "EnterpriseFinancials.debtServiceRatio",
+                    "EnterpriseFinancials.monthlySurplus",
+                    "EnterpriseFinancials.monthlySurplus.totalMonthlySurplus",
+                    "EnterpriseFinancials.monthlySurplus.debtServiceRatio",
 
                     "BuyerDetails",
                     "BuyerDetails.buyerDetails",
