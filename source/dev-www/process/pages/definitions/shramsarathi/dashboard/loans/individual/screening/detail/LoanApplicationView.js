@@ -400,10 +400,13 @@ define({
                             "key": "loanAccount.loanAmountRequested",
                             "title": "Loan Amount Requested",
                             "type": "amount"
-                        }, {
-                            "key": "loanAccount.emiPaymentDateRequested",
-                            "title": "Requested EMI Payment Date"
-                        }, {
+
+                        }, 
+                        //{
+                        //     "key": "loanAccount.emiPaymentDateRequested",
+                        //     "title": "Requested EMI Payment Date"
+                        // },
+                         {
                             "key": "loanAccount.expectedPortfolioInsurancePremium",
                             "title": "Expected Portfolio Insurance Premium",
                             "type": "amount"
