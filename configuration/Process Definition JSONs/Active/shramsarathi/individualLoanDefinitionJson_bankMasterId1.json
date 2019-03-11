@@ -226,6 +226,16 @@
                    "Screening", "LoanInitiation"
                 ]
              },
+             "jlgGroupId":{
+               "title":"Jlg Group Id",
+               "type":"string",
+               "minimum":1,
+               "maximum":12,
+               "captureStages":[
+                  "Screening", "LoanInitiation"
+               
+               ]
+             },
                "processType":{
                   "title":"Process Type",
                   "type":"string",
@@ -3912,6 +3922,41 @@
                   "captureStages": [
                      "Screening", "LoanInitiation", "PendingForPartner"
                   ]
+               },
+               "udf8": {
+                  "title": "udf8",
+                  "type": "number",
+                  "captureStages": [
+                     "Screening", "LoanInitiation", "PendingForPartner"
+                  ]
+               },
+               "udf9": {
+                  "title": "udf9",
+                  "type": "number",
+                  "captureStages": [
+                     "Screening", "LoanInitiation", "PendingForPartner"
+                  ]
+               },
+               "udf10": {
+                  "title": "udf10",
+                  "type": "number",
+                  "captureStages": [
+                     "Screening", "LoanInitiation", "PendingForPartner"
+                  ]
+               },
+               "udf11": {
+                  "title": "udf11",
+                  "type": "number",
+                  "captureStages": [
+                     "Screening", "LoanInitiation", "PendingForPartner"
+                  ]
+               },
+               "udf12": {
+                  "title": "udf11",
+                  "type": "number",
+                  "captureStages": [
+                     "Screening", "LoanInitiation", "PendingForPartner"
+                  ]
                }
             }
          },
@@ -4272,6 +4317,20 @@
                      "maxLength": 100,
                      "captureStages": [
                         "LoanBooking"
+                     ]
+                  },
+                  "modeOfDisbursement":{
+                     "title":"modeOfDisbursement",
+                     "type":"date",
+                     "captureStages":[
+                        "Screening", "Sanction", "LoanBooking", "LoanInitiation"
+                     ]
+                  },
+                  "actualDisbursementDate":{
+                     "title":"actualDisbursementDate",
+                     "type":"date",
+                     "captureStages":[
+                        "Screening", "Sanction", "LoanBooking", "LoanInitiation"
                      ]
                   }
                }
