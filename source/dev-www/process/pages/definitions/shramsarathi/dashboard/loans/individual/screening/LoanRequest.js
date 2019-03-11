@@ -1574,7 +1574,7 @@ define([],function(){
                      "DeductionsFromLoan.estimatedEmi",
 
                     "LoanMitigants",
-                    "LoanMitigants.deviationParameter",
+                    //"LoanMitigants.deviationParameter",
                     "LoanMitigants.deviationParameter.mitigants",
                     "LoanMitigants.deviationParameter.mitigants.mitigantsName",
                     "LoanMitigants.deviationParameter.mitigants.mitigantsName.sectionSelected",
