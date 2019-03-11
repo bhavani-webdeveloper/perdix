@@ -400,10 +400,13 @@ define({
                             "key": "loanAccount.loanAmountRequested",
                             "title": "Loan Amount Requested",
                             "type": "amount"
-                        }, {
-                            "key": "loanAccount.emiPaymentDateRequested",
-                            "title": "Requested EMI Payment Date"
-                        }, {
+
+                        }, 
+                        //{
+                        //     "key": "loanAccount.emiPaymentDateRequested",
+                        //     "title": "Requested EMI Payment Date"
+                        // },
+                         {
                             "key": "loanAccount.expectedPortfolioInsurancePremium",
                             "title": "Expected Portfolio Insurance Premium",
                             "type": "amount"
@@ -603,27 +606,27 @@ define({
                     }]
                 }]
             }, 
-            {
-                "type": "box",
-                "colClass": "col-sm-12",
-                "title": "DEVIATION_AND_MITIGATIONS",
-                "condition": "model.currentStage != 'ScreeningReview'",
-                "items": [{
-                    "type": "section",
-                    "colClass": "col-sm-12",
-                    "html": '<table class="table"><colgroup><col width="20%"><col width="5%"><col width="20%"></colgroup><thead><tr><th>Parameter Name</th><th></th><th>Actual Value</th><th>Mitigant</th></tr></thead><tbody>' +
-                        '<tr ng-repeat="item in model.deviationDetails">' +
-                        '<td>{{ item["parameter"] }}</td>' +
-                        '<td> <span class="square-color-box" style="background: {{ item.color_hexadecimal }}"> </span></td>' +
-                        '<td>{{ item["deviation"] }}</td>' +
-                        '<td><ul class="list-unstyled">' +
-                        '<li ng-repeat="m in item.mitigants " id="{{m.mitigant}}">' +
-                        '<input type="checkbox"  ng-model="m.selected" ng-checked="m.selected"> {{ m.mitigant }}' +
-                        // '<input type="checkbox"  ng-model="m.selected" ng-change="model.updateChosenMitigant(m.selected,m)"> {{ m.mitigant }}' +
-                        '</li></ul></td></tr></tbody></table>'
+            // {
+            //     "type": "box",
+            //     "colClass": "col-sm-12",
+            //     "title": "DEVIATION_AND_MITIGATIONS",
+            //     "condition": "model.currentStage != 'ScreeningReview'",
+            //     "items": [{
+            //         "type": "section",
+            //         "colClass": "col-sm-12",
+            //         "html": '<table class="table"><colgroup><col width="20%"><col width="5%"><col width="20%"></colgroup><thead><tr><th>Parameter Name</th><th></th><th>Actual Value</th><th>Mitigant</th></tr></thead><tbody>' +
+            //             '<tr ng-repeat="item in model.deviationDetails">' +
+            //             '<td>{{ item["parameter"] }}</td>' +
+            //             '<td> <span class="square-color-box" style="background: {{ item.color_hexadecimal }}"> </span></td>' +
+            //             '<td>{{ item["deviation"] }}</td>' +
+            //             '<td><ul class="list-unstyled">' +
+            //             '<li ng-repeat="m in item.mitigants " id="{{m.mitigant}}">' +
+            //             '<input type="checkbox"  ng-model="m.selected" ng-checked="m.selected"> {{ m.mitigant }}' +
+            //             // '<input type="checkbox"  ng-model="m.selected" ng-change="model.updateChosenMitigant(m.selected,m)"> {{ m.mitigant }}' +
+            //             '</li></ul></td></tr></tbody></table>'
 
-                }]
-            }, 
+            //     }]
+            // }, 
             {
             "type": "box",
             "colClass": "col-sm-12",

@@ -39,8 +39,16 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                     "key": "centre",
                     "type":"select",
                     "enumCode":"usercentre",
+                    "condition": "!model.pageConfig.IncludeUserFilter",
                     title:"CENTRE",
                     required:true,
+                },
+                {
+                    "key": "centre",
+                    "type":"select",
+                    "enumCode":"usercentre",
+                    "condition": "model.pageConfig.IncludeUserFilter",
+                    title:"CENTRE"
                 },
                 {
                     "key": "promisreToPayDate"

@@ -67,7 +67,10 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                     "lovonly": true,
                                     search: function (inputModel, form, model, context) {
                                         var loanProduct = formHelper.enum('loan_product').data;
-                                        var products = $filter('filter')(loanProduct, {parentCode: model.partner_code ? model.partner_code : undefined}, true);
+                                        var products = $filter('filter')(loanProduct, 
+                                            {   
+                                                parentCode: model.partner_code ? model.partner_code : undefined,
+                                                field2 : model.loanType ? model.loanType : undefined}, true);
         
                                         return $q.resolve({
                                             headers: {
@@ -148,7 +151,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                             return [
                                 item.customerName + " ( Loan Account #: "+item.accountNumber+")",
                                 "<em>Disbursed Amount:  &#8377;"+((!item.disbursedAmount)?0:item.disbursedAmount)+", Disbursement Amount :  &#8377;"+item.disbursementAmount
-                                +", Scheduled Disbursement Date :" + ((!item.scheduledDisbursementDate) ? " NA " : item.scheduledDisbursementDate) + (item.groupCode?  ", Group Code :" +item.groupCode : "" ) + "</em>"
+                                +", Scheduled Disbursement Date :" + ((!item.scheduledDisbursementDate) ? " NA " : item.scheduledDisbursementDate) + (item.productCode?  ", Product Code :" +item.productCode : "" )+(item.groupCode?  ", Group Code :" +item.groupCode : "" ) + "</em>"
                             ]
                         },
                         getActions: function(){

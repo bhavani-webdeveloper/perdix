@@ -188,7 +188,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.identityProofNo": {
-                                    "required": true
+                                   "required":true,
+                                    "schema": {
+                                        "type": ["string","null"],
+                                        "pattern": "(^\\d{4}\\d{4}\\d{4}$)|(^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$)"
+                                    }
                                 },
                                 "KYC.addressProofFieldSet":{
                                     "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
@@ -3325,18 +3329,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                     UIRepository.getEnrolmentProcessUIRepository().$promise
                         .then(function (repo) {
-                            debugger;
                             console.log(model.pageClass);
-                            console.log(repo);
-                            console.log(formRequest);
-                            console.log(configFile);
-                            console.log(model);
                             return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
                         })
                         .then(function (form) {
-                            debugger;
-                            console.log("form:");
-                            console.log(form);
+                        
+                            console.log("form screening input",form);
                             self.form = form;
                         });
 
@@ -3520,6 +3518,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             });
                     },
                     submit: function (model, form, formName) {
+                        model.customer.identityProofNo
                         PageHelper.clearErrors();
                         if (PageHelper.isFormInvalid(form)) {
                             return false;

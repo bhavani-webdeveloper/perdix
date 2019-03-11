@@ -677,7 +677,7 @@ define([],function(){
                                 "LoanSanction.disbursementSchedules.trancheNumber",
                                 "LoanSanction.disbursementSchedules.tranchCondition",
                                 "AdditionalLoanInformation",
-                               "NomineeDetails.nominees.nomineeButton",
+                                "NomineeDetails.nominees.nomineeButton",
                                 "LoanRecommendation.securityEmiRequired",
                                 "LoanMitigants.loanMitigantsByParameter",
                                 "CollateralDetails",
@@ -732,6 +732,10 @@ define([],function(){
                                         ];
                                     }
             
+                                },
+                                "NomineeDetails.nominees.nomineeLocality": {
+                                    "orderNo":50,
+                                    "title":"PANCHAYAT"
                                 },
                                 "PreliminaryInformation": {
                                     "orderNo": 1,
@@ -802,11 +806,14 @@ define([],function(){
                                 "LoanRecommendation.securityEmiRequired",
                                 "LoanMitigants.loanMitigantsByParameter",
                                 "CollateralDetails",
-                                "LoanRecommendation",
+                               // "LoanRecommendation",
 
                             ],
                             "overrides": {
-                                
+                                "NomineeDetails.nominees.nomineeLocality": {
+                                    "orderNo":50,
+                                    "title":"PANCHAYAT"
+                                },
                                 "PreliminaryInformation": {
                                     "orderNo": 1,
                                     "readonly": true
@@ -1350,7 +1357,8 @@ define([],function(){
                             // "type":"select",
                             // "enumCode":"duration",
                             "type":"text",
-                            "schema": {
+                            "schema": {  
+                                "type": ["integer", "string"],
                                 "pattern": "^([6-9]|[1-5][0-9]|60)$"
                             }
                         },
@@ -1438,16 +1446,19 @@ define([],function(){
                         },
                         "NomineeDetails.nominees.nomineePincode": {
                             "resolver": "NomineePincodeLOVConfiguration",
-                            "orderNo":70
+                            "orderNo":70,
+                            "required":true
                         },
                         "NomineeDetails.nominees.nomineeDoorNo": {
-                            "orderNo": 40
+                            "orderNo": 40,
+                            "title":"HAMLET_FALA"
                         },
                         "NomineeDetails.nominees.nomineeStreet":{
                             "orderNo": 60
                         },
                         "NomineeDetails.nominees.nomineeLocality": {
-                            "orderNo":50
+                            "orderNo":50,
+                            "title":"PANCHAYAT"
                         },
                         "NomineeDetails.nominees.nomineeDistrict":{
                             "orderNo":80
@@ -1573,8 +1584,8 @@ define([],function(){
                      "DeductionsFromLoan.expectedCommercialCibilCharge",
                      "DeductionsFromLoan.estimatedEmi",
 
-                    "LoanMitigants",
-                    "LoanMitigants.deviationParameter",
+                    //"LoanMitigants",
+                    //"LoanMitigants.deviationParameter",
                     "LoanMitigants.deviationParameter.mitigants",
                     "LoanMitigants.deviationParameter.mitigants.mitigantsName",
                     "LoanMitigants.deviationParameter.mitigants.mitigantsName.sectionSelected",
