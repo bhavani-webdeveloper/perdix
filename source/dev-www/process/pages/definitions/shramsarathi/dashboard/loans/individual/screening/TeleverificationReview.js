@@ -237,6 +237,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 name: "SHAHAL AGAIN"
                             });
                         },
+                        "televerification": function(pageObj, bundleModel, params){
+                        },
                         "new-enrolment": function(pageObj, bundleModel, params) {
                             switch (pageObj.pageClass) {
                                 case 'applicant':
