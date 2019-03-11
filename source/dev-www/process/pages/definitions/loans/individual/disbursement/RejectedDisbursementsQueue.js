@@ -145,7 +145,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.RejectedDisbu
                             return [
                                 item.customerName + " ( Account #: "+item.accountNumber+")",
                                 "<em>Disbursed Amount:  &#8377;"+((!item.disbursedAmount)?0:item.disbursedAmount)+", Disbursement Amount :  &#8377;"+item.disbursementAmount
-                                + ", Scheduled Disbursement Date :" + ((!item.scheduledDisbursementDate) ? " NA " : item.scheduledDisbursementDate) + (item.groupCode?  ", Group Code :" +item.groupCode : "" ) + "</em>"
+                                + ", Scheduled Disbursement Date :" + ((!item.scheduledDisbursementDate) ? " NA " : item.scheduledDisbursementDate) + (item.productCode?  ", Product Code :" +item.productCode : "" ) + (item.groupCode?  ", Group Code :" +item.groupCode : "" ) + "</em>"
                             ]
                         },
                         getActions: function(){
