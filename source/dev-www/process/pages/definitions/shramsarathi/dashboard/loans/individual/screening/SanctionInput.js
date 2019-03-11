@@ -10,9 +10,9 @@ define(["perdix/domain/model/loan/LoanProcess",
             pageUID: "shramsarathi.dashboard.loans.individual.screening.SanctionInput",
             pageType: "Bundle",
             dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
-            ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
+            ,"LoanAccount", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
             "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan", "BundleManager", "Message"],
-            $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager, Message) {
+            $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager, Message) {
                 return {
                     "type": "page-bundle",
                     "title": "SANCTION",
@@ -161,15 +161,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                         var deferred = $q.defer();
 
                         var $this = this;
-                        if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)){
+                        if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)) {
                             PageHelper.showLoader();
                             bundleModel.loanId = $stateParams.pageId;
-
-                            LoanProcessts.get(bundleModel.loanId)
-                            .subscribe(function(loanProcess){
-                                var loanAccount = loanProcess.loanAccount;
-                                loanProcess.applicantEnrolmentProcess.customer.customerId = loanAccount.customerId;
-                                 bundleModel.loanAccount = loanAccount;
+                            IndividualLoan.get({
+                                id: bundleModel.loanId
+                            })
+                            .$promise
+                            .then(
+                                function(res) {
+                                    bundleModel.loanAccount = res;
 
                                 bundleModel.applicant = {};
                                 bundleModel.coApplicants = [];
@@ -195,8 +196,8 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                 
 
-                                for (var i = 0; i < loanAccount.loanCustomerRelations.length; i++) {
-                                    var cust = loanAccount.loanCustomerRelations[i];
+                                for (var i = 0; i < res.loanCustomerRelations.length; i++) {
+                                    var cust = res.loanCustomerRelations[i];
                                     if (cust.relation == 'APPLICANT' || cust.relation == 'Applicant' || cust.relation == 'Sole Proprieter') {
                                         bundleModel.urnNos.push(cust.urn);
                                         customerIds.applicant = cust.customerId;
@@ -230,34 +231,26 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 $this.bundlePages.push({
                                     pageClass: 'applicant',
                                     model: {
-                                        customerId: loanAccount.customerId,
-                                        enrolmentProcess: loanProcess.applicantEnrolmentProcess,
-                                        loanProcess: loanProcess
+                                        customerId: customerIds.applicant
                                     }
                                 });
 
-                                if(_.hasIn(loanAccount, 'coApplicantsEnrolmentProcesses')) {
-                                    for (var i=0;i<loanAccount.coApplicantsEnrolmentProcesses.length; i++){
-                                        $this.bundlePages.push({
-                                            pageClass: 'co-applicant',
-                                            model: {
-                                                enrolmentProcess: loanAccount.coApplicantsEnrolmentProcesses[i],
-                                                loanProcess: loanProcess
-                                            }
-                                        });
-                                    }
+                                for (i in customerIds.coApplicants) {
+                                    $this.bundlePages.push({
+                                        pageClass: 'co-applicant',
+                                        model: {
+                                            customerId: customerIds.coApplicants[i]
+                                        }
+                                    });
                                 }
 
-                                if(_.hasIn(loanAccount, 'guarantorsEnrolmentProcesses')) {
-                                    for (var i=0;i<loanAccount.guarantorsEnrolmentProcesses.length; i++){
-                                        $this.bundlePages.push({
-                                            pageClass: 'guarantor',
-                                            model: {
-                                                enrolmentProcess: loanAccount.guarantorsEnrolmentProcesses[i],
-                                                loanProcess: loanProcess
-                                            }
-                                        });
-                                    }
+                                for (i in customerIds.guarantors) {
+                                    $this.bundlePages.push({
+                                        pageClass: 'guarantor',
+                                        model: {
+                                            customerId: customerIds.guarantors[i]
+                                        }
+                                    });
                                 }
 
 
@@ -272,22 +265,22 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 $this.bundlePages.push({
                                     pageClass: 'loan-recommendation',
                                     model: {
-                                        customerId: loanAccount.customerId,
-                                        loanAccount: loanAccount
+                                        customerId: res.customerId,
+                                        loanAccount: res
                                     }
                                 });
 
                                 $this.bundlePages.push({
                                     pageClass: 'cbview',
                                     model: {
-                                        loanAccount: loanProcess.loanAccount
+                                        loanAccount: res
                                     }
                                 });
 
                                $this.bundlePages.push({
                                     pageClass: 'loan-review',
                                     model: {
-                                        loanAccount: loanProcess.loanAccount,
+                                        loanAccount: res
                                     }
                                 });
 
