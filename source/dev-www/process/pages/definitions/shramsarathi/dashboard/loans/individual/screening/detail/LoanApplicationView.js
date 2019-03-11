@@ -276,7 +276,7 @@ define({
                 model.loanMitigants= model.loanAccount.loanMitigants;
                 model.expectedTurnoverObj = {};
                 documentArrayFormation(model);
-                debugger;
+                //debugger;
             /*Asset details*/
                 if (model.loanAccount.collateral.length != 0) {
                     model.asset_details = [];
