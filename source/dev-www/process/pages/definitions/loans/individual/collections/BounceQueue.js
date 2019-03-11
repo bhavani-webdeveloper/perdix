@@ -70,29 +70,6 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                     "condition": "!model.pageConfig.IncludeUserFilter",
                     title:"CENTRE",
                     required:true,
-                    title:"CENTRE",
-                    condition: "model.pageConfig.isAllBranchAllowed===false",
-                    bindMap: {
-                    },
-                    searchHelper: formHelper,
-                    search: function(inputModel, form, model, context) {
-                        var centres = SessionStore.getCentres();
-                        return $q.resolve({
-                            headers: {
-                                "x-total-count": centres.length
-                            },
-                            body: centres
-                        });
-                    },
-                    onSelect: function(valueObj, model, context){
-                        model.centre = valueObj.centreCode;
-                        model.centreName = valueObj.centreName;
-                    },
-                    getListDisplayItem: function(item, index) {
-                        return [
-                            item.centreName
-                        ];
-                    }
                 },
                 {
                     "key": "centre",
