@@ -2518,7 +2518,322 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     "readonly": true
                                 }
                             }
-                        }
+                        },
+                        "BusinessTeamReview": {
+                            "excludes": [
+                            ],
+                            "overrides": {
+                                "EnterpriseInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation":{
+                                    "readonly": true
+                                },
+                                "BankAccounts":{
+                                    "readonly": true
+                                },
+                                "Liabilities":{
+                                    "readonly": true
+                                },
+                                "EnterpriseFinancials":{
+                                    "readonly": true
+                                },
+                                "BuyerDetails":{
+                                    "readonly": true
+                                },
+                                "SuppliersDeatils":{
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation":{
+                                    "readonly": true
+                                },
+                                "EstimatedSales":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                },
+                                "NetBusinessIncome":{
+                                    "readonly": true
+                                },
+                                "TotalMonthlySurplus":{
+                                    "readonly": true
+                                },
+                                "MonthlyBusinessExpense":{
+                                    "readonly": true
+                                },
+                                "OtherBusinessIncomes":{
+                                    "readonly": true
+                                },
+                                "PersonalExpenses":{
+                                    "readonly": true
+                                },
+                                "LiabilityRepayment":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "CreditOfficerReview": {
+                            "excludes": [
+                            ],
+                            "overrides": {
+                                "EnterpriseInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation":{
+                                    "readonly": true
+                                },
+                                "BankAccounts":{
+                                    "readonly": true
+                                },
+                                "Liabilities":{
+                                    "readonly": true
+                                },
+                                "EnterpriseFinancials":{
+                                    "readonly": true
+                                },
+                                "BuyerDetails":{
+                                    "readonly": true
+                                },
+                                "SuppliersDeatils":{
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation":{
+                                    "readonly": true
+                                },
+                                "EstimatedSales":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                },
+                                "NetBusinessIncome":{
+                                    "readonly": true
+                                },
+                                "TotalMonthlySurplus":{
+                                    "readonly": true
+                                },
+                                "MonthlyBusinessExpense":{
+                                    "readonly": true
+                                },
+                                "OtherBusinessIncomes":{
+                                    "readonly": true
+                                },
+                                "PersonalExpenses":{
+                                    "readonly": true
+                                },
+                                "LiabilityRepayment":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "CreditManagerReview": {
+                            "excludes": [
+                            ],
+                            "overrides": {
+                                "EnterpriseInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation":{
+                                    "readonly": true
+                                },
+                                "BankAccounts":{
+                                    "readonly": true
+                                },
+                                "Liabilities":{
+                                    "readonly": true
+                                },
+                                "EnterpriseFinancials":{
+                                    "readonly": true
+                                },
+                                "BuyerDetails":{
+                                    "readonly": true
+                                },
+                                "SuppliersDeatils":{
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation":{
+                                    "readonly": true
+                                },
+                                "EstimatedSales":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                },
+                                "NetBusinessIncome":{
+                                    "readonly": true
+                                },
+                                "TotalMonthlySurplus":{
+                                    "readonly": true
+                                },
+                                "MonthlyBusinessExpense":{
+                                    "readonly": true
+                                },
+                                "OtherBusinessIncomes":{
+                                    "readonly": true
+                                },
+                                "PersonalExpenses":{
+                                    "readonly": true
+                                },
+                                "LiabilityRepayment":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "CBOCreditHeadReview": {
+                            "excludes": [
+                            ],
+                            "overrides": {
+                                "EnterpriseInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation":{
+                                    "readonly": true
+                                },
+                                "BankAccounts":{
+                                    "readonly": true
+                                },
+                                "Liabilities":{
+                                    "readonly": true
+                                },
+                                "EnterpriseFinancials":{
+                                    "readonly": true
+                                },
+                                "BuyerDetails":{
+                                    "readonly": true
+                                },
+                                "SuppliersDeatils":{
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation":{
+                                    "readonly": true
+                                },
+                                "EstimatedSales":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                },
+                                "NetBusinessIncome":{
+                                    "readonly": true
+                                },
+                                "TotalMonthlySurplus":{
+                                    "readonly": true
+                                },
+                                "MonthlyBusinessExpense":{
+                                    "readonly": true
+                                },
+                                "OtherBusinessIncomes":{
+                                    "readonly": true
+                                },
+                                "PersonalExpenses":{
+                                    "readonly": true
+                                },
+                                "LiabilityRepayment":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "CEOMDReview": {
+                            "excludes": [
+                            ],
+                            "overrides": {
+                                "EnterpriseInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation":{
+                                    "readonly": true
+                                },
+                                "BankAccounts":{
+                                    "readonly": true
+                                },
+                                "Liabilities":{
+                                    "readonly": true
+                                },
+                                "EnterpriseFinancials":{
+                                    "readonly": true
+                                },
+                                "BuyerDetails":{
+                                    "readonly": true
+                                },
+                                "SuppliersDeatils":{
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation":{
+                                    "readonly": true
+                                },
+                                "EstimatedSales":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                },
+                                "NetBusinessIncome":{
+                                    "readonly": true
+                                },
+                                "TotalMonthlySurplus":{
+                                    "readonly": true
+                                },
+                                "MonthlyBusinessExpense":{
+                                    "readonly": true
+                                },
+                                "OtherBusinessIncomes":{
+                                    "readonly": true
+                                },
+                                "PersonalExpenses":{
+                                    "readonly": true
+                                },
+                                "LiabilityRepayment":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                }
+                            }
+                        },
                     }
                 }
             }
