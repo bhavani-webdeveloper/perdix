@@ -2855,7 +2855,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         _.forEach(model.customer.monthlySale, function (monthlysale) {
                             for (const key of Object.keys(monthlysale)) {
                                 monthlysales = {}
-                                if (!_.isEmpty(monthlysale[key]) && key != 'seasonType' && key != 'total') {
+                                if (dailySale[key] != 'undefined' && dailySale[key] != null  && key != 'seasonType' && key != 'total') {
                                     monthlysales['seasonType'] = monthlysale['seasonType'];
                                     monthlysales['month'] = key;
                                     monthlysales['totalSales'] = monthlysale[key]
@@ -2870,7 +2870,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         _.forEach(model.customer.enterpriseDailySale, function (dailySale) {
                             for (const key of Object.keys(dailySale)) {
                                 dailySales = {}
-                                if (!_.isEmpty(dailySale[key]) && key != 'salesType' && key != 'total') {
+                                if (dailySale[key] != 'undefined' && dailySale[key] != null && key != 'salesType' && key != 'total') {
                                     dailySales['salesType'] = dailySale['salesType'];
                                     dailySales['day'] = key;
                                     dailySales['totalSales'] = dailySale[key]
