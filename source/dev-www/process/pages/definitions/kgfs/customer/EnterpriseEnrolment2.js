@@ -593,18 +593,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             "loanAmountRequested": {
                                 "key": "loanAccount.loanAmountRequested",
                                 "type": "amount",
-                                "title": "REQUESTED_LOAN_AMOUNT"
+                                "title": "REQUESTED_LOAN_AMOUNT",
+                                "onChange": function (value, form, model) {
+                                    computeEstimatedEmi(model);
+                                }
                             },
                             "tenure": {
                                 "key": "loanAccount.tenure",
                                 "title": "DURATION_IN_MONTHS",
-                                "required": true
+                                "required": true,
+                                "onChange": function (value, form, model) {
+                                    computeEstimatedEmi(model);
+                                }
                             },
                             "interestRate": {
                                 "key": "loanAccount.interestRate",
                                 "type": "number",
                                 "required": true,
-                                "title": "INTEREST_RATE"
+                                "title": "INTEREST_RATE",
+                                "onChange": function (value, form, model) {
+                                    computeEstimatedEmi(model);
+                                }
                             },
                             "emiEstimated": {
                                 "key": "loanAccount.emiEstimated",
@@ -2855,7 +2864,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         _.forEach(model.customer.monthlySale, function (monthlysale) {
                             for (const key of Object.keys(monthlysale)) {
                                 monthlysales = {}
-                                if (dailySale[key] != 'undefined' && dailySale[key] != null  && key != 'seasonType' && key != 'total') {
+                                if (monthlysale[key] != 'undefined' && monthlysale[key] != null  && key != 'seasonType' && key != 'total') {
                                     monthlysales['seasonType'] = monthlysale['seasonType'];
                                     monthlysales['month'] = key;
                                     monthlysales['totalSales'] = monthlysale[key]
