@@ -1134,19 +1134,10 @@ define([],function(){
                                         "items": {
                                             "action": {
                                                 "key": "review.action",
-                                                "condition": "model.loanAccount.currentStage != 'Screening' model.loanAccount.currentStage != 'BusinessTeamReview' && model.loanAccount.currentStage != 'CreditOfficerReview' && model.loanAccount.currentStage != 'CreditManagerReview' && model.loanAccount.currentStage != 'CBOCreditHeadReview' && model.loanAccount.currentStage != 'CEOMDReview'",
+                                                "condition": "model.loanAccount.currentStage != 'Screening'",
                                                 "type": "radios",
                                                 "titleMap": {
                                                     "REJECT": "REJECT",
-                                                    "SEND_BACK": "SEND_BACK",
-                                                    "PROCEED": "PROCEED"
-                                                }
-                                            },
-                                            "action": {
-                                                "key": "review.action",
-                                                "condition": "model.loanAccount.currentStage == 'BusinessTeamReview' || model.loanAccount.currentStage == 'CreditOfficerReview' || model.loanAccount.currentStage == 'CreditManagerReview' || model.loanAccount.currentStage == 'CBOCreditHeadReview' || model.loanAccount.currentStage == 'CEOMDReview'",
-                                                "type": "radios",
-                                                "titleMap": {
                                                     "SEND_BACK": "SEND_BACK",
                                                     "PROCEED": "PROCEED"
                                                 }
