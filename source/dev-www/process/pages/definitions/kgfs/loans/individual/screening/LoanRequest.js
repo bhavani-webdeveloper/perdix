@@ -406,7 +406,122 @@ define([],function(){
                                 }
                             }
 
-                        }
+                        },
+                        "BusinessTeamReview":{
+                            "overrides":{
+                                "PreliminaryInformation":{
+                                    "readonly":true
+                                },
+                                "CollateralInformation":{
+                                    "readonly":true
+                                },
+                                "LoanDocuments":{
+                                    "readonly":true
+                                },
+                                "LoanRecommendation":{
+                                    "readonly":true
+                                },
+                                "LoanMitigants":{
+                                    "readonly":true
+                                },
+                                "JewelDetails":{
+                                    "readonly":true
+                                }
+                            }
+
+                        },
+                        "CreditOfficerReview":{
+                            "overrides":{
+                                "PreliminaryInformation":{
+                                    "readonly":true
+                                },
+                                "CollateralInformation":{
+                                    "readonly":true
+                                },
+                                "LoanDocuments":{
+                                    "readonly":true
+                                },
+                                "LoanRecommendation":{
+                                    "readonly":true
+                                },
+                                "LoanMitigants":{
+                                    "readonly":true
+                                },
+                                "JewelDetails":{
+                                    "readonly":true
+                                }
+                            }
+
+                        },
+                        "CreditManagerReview":{
+                            "overrides":{
+                                "PreliminaryInformation":{
+                                    "readonly":true
+                                },
+                                "CollateralInformation":{
+                                    "readonly":true
+                                },
+                                "LoanDocuments":{
+                                    "readonly":true
+                                },
+                                "LoanRecommendation":{
+                                    "readonly":true
+                                },
+                                "LoanMitigants":{
+                                    "readonly":true
+                                },
+                                "JewelDetails":{
+                                    "readonly":true
+                                }
+                            }
+
+                        },
+                        "CBOCreditHeadReview":{
+                            "overrides":{
+                                "PreliminaryInformation":{
+                                    "readonly":true
+                                },
+                                "CollateralInformation":{
+                                    "readonly":true
+                                },
+                                "LoanDocuments":{
+                                    "readonly":true
+                                },
+                                "LoanRecommendation":{
+                                    "readonly":true
+                                },
+                                "LoanMitigants":{
+                                    "readonly":true
+                                },
+                                "JewelDetails":{
+                                    "readonly":true
+                                }
+                            }
+
+                        },
+                        "CEOMDReview":{
+                            "overrides":{
+                                "PreliminaryInformation":{
+                                    "readonly":true
+                                },
+                                "CollateralInformation":{
+                                    "readonly":true
+                                },
+                                "LoanDocuments":{
+                                    "readonly":true
+                                },
+                                "LoanRecommendation":{
+                                    "readonly":true
+                                },
+                                "LoanMitigants":{
+                                    "readonly":true
+                                },
+                                "JewelDetails":{
+                                    "readonly":true
+                                }
+                            }
+
+                        },
                     },
                     "loanProcess.loanAccount.loanType":{
                         "SECURED":{

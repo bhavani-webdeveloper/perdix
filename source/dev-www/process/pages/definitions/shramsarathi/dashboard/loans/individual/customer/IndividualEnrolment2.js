@@ -188,8 +188,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.identityProofNo": {
-                                    "required": true,
+                                   "required":true,
                                     "schema": {
+                                        "type": ["string","null"],
                                         "pattern": "(^\\d{4}\\d{4}\\d{4}$)|(^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$)"
                                     }
                                 },
@@ -3332,6 +3333,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
                         })
                         .then(function (form) {
+                        
+                            console.log("form screening input",form);
                             self.form = form;
                         });
 
@@ -3515,6 +3518,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             });
                     },
                     submit: function (model, form, formName) {
+                        model.customer.identityProofNo
                         PageHelper.clearErrors();
                         if (PageHelper.isFormInvalid(form)) {
                             return false;

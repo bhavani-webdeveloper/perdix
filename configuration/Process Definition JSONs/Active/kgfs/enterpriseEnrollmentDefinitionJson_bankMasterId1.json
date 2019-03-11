@@ -3205,7 +3205,7 @@
                 }
             },
             "customerLiabilityRepayment": {
-                "title": "customerLiabilityRepayment",
+                "title": "CustomerLiabilityRepayment",
                 "type": "array",
                 "items": {
                   "type": "object",

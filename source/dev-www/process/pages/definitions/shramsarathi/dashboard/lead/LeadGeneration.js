@@ -31,13 +31,13 @@ function(LeadProcess, AngularResourceService) {
                         },
                     },                    
                     "leadProfile.individualDetails.lastName":{
-                        "required": true
+                        "required": false
                     },
                     "leadProfile.individualDetails.dob":{
                         "required": true
                     },
                     "leadProfile.individualDetails.nickName":{
-                        "required": true
+                        "required": false
                     },
                     "leadProfile.individualDetails.educationStatus":{
                         "required":true,
