@@ -677,7 +677,7 @@ define([],function(){
                                 "LoanSanction.disbursementSchedules.trancheNumber",
                                 "LoanSanction.disbursementSchedules.tranchCondition",
                                 "AdditionalLoanInformation",
-                               "NomineeDetails.nominees.nomineeButton",
+                                "NomineeDetails.nominees.nomineeButton",
                                 "LoanRecommendation.securityEmiRequired",
                                 "LoanMitigants.loanMitigantsByParameter",
                                 "CollateralDetails",
@@ -802,7 +802,7 @@ define([],function(){
                                 "LoanRecommendation.securityEmiRequired",
                                 "LoanMitigants.loanMitigantsByParameter",
                                 "CollateralDetails",
-                                "LoanRecommendation",
+                               // "LoanRecommendation",
 
                             ],
                             "overrides": {
