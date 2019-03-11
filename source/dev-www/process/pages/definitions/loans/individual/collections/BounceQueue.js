@@ -65,12 +65,10 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                 },
                 {
                     "key": "centre",
-                    "condition": "model.pageConfig.isAllBranchAllowed"
-                },
-                {
-                    key: "centreName",
-                    type: "lov",
-                    autolov: false,
+                    "type":"select",
+                    "enumCode":"usercentre",
+                    "condition": "!model.pageConfig.IncludeUserFilter",
+                    title:"CENTRE",
                     required:true,
                     title:"CENTRE",
                     condition: "model.pageConfig.isAllBranchAllowed===false",
@@ -95,6 +93,13 @@ function($log, formHelper, LoanProcess, $state, SessionStore,$q, entityManager, 
                             item.centreName
                         ];
                     }
+                },
+                {
+                    "key": "centre",
+                    "type":"select",
+                    "enumCode":"usercentre",
+                    "condition": "model.pageConfig.IncludeUserFilter",
+                    title:"CENTRE"
                 },
                 {
                     "key": "promisreToPayDate"
