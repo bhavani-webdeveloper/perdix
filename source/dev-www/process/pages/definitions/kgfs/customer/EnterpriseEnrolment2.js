@@ -88,8 +88,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
             }
             var monthlySurpluse = function (model) {
                 model.customer.enterprise.avgDailySaleAmount = ((model.customer.enterprise.netBusinessIncome ? model.customer.enterprise.netBusinessIncome : 0) + (model.customer.enterprise.additionalIncomeConsidered ? model.customer.enterprise.additionalIncomeConsidered : 0) - (model.customer.enterprise.totalPersonalExpense ? model.customer.enterprise.totalPersonalExpense : 0) - (model.customer.enterprise.totalEmiAmount ? model.customer.enterprise.totalEmiAmount : 0))
-                model.customer.enterprise.rent = (model.customer.enterprise.avgDailySaleAmount * (model.customer.enterprise.generalAdmin ? model.customer.enterprise.generalAdmin : 0));
-                model.customer.enterprise.workingDaysInMonth = Math.min((model.customer.enterprise.rent ? model.customer.enterprise.rent : 0), (model.loanAccount.estimatedEmi? model.loanAccount.estimatedEmi: 0));
+                model.customer.enterprise.avgMonthlyNetIncome = (model.customer.enterprise.avgDailySaleAmount * (model.customer.enterprise.ownerSalary ? model.customer.enterprise.ownerSalary : 0));
+                model.customer.enterprise.workingDaysInMonth = Math.min((model.customer.enterprise.avgMonthlyNetIncome ? model.customer.enterprise.avgMonthlyNetIncome : 0), (model.loanAccount.estimatedEmi? model.loanAccount.estimatedEmi: 0));
                 var x = (((Math.pow(((model.loanAccount.interestRate / 12)+1), model.loanAccount.tenure)) - 1) * (model.customer.enterprise.workingDaysInMonth))
                 var y = ((Math.pow(((model.loanAccount.interestRate/ 12)+1), model.loanAccount.tenure)) * ((model.loanAccount.interestRate/ 12)))
                 model.customer.enterprise.employeeSalary = (x/y);
@@ -245,7 +245,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "orderNo": 100,
                         "required": false
                     },
-                    "EnterpriseInformation.vatNumber": {
+                    "EnterpriseInformation.monthlyTurnover": {
                         "orderNo": 110
                     },
                     "EnterpriseInformation.noOfPartners": {
@@ -515,10 +515,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "EstimatedSales": {
                         "orderNo": 590
                     },
-                    "EstimatedSales.ssiNumber": {
+                    "EstimatedSales.monthlyBusinessExpenses": {
                         "orderNo": 600,
                         onChange: function (value, form, model) {
-                            model.customer.enterprise.initialEstimateMonthlySale = model.customer.enterprise.ssiNumber * 4;
+                            model.customer.enterprise.initialEstimateMonthlySale = model.customer.enterprise.monthlyBusinessExpenses * 4;
                             averageMonthlySale(model);
                         }
                     },
@@ -575,8 +575,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 "title": "BRANCH_NAME",
                                 "required":true
                             },
-                            "vatNumber": {
-                                "key": "customer.enterprise.vatNumber",
+                            "monthlyTurnover": {
+                                "key": "customer.enterprise.monthlyTurnover",
                                 "type": "text",
                                 "title": "GST_NUMBER",
                                 "required":true
@@ -696,8 +696,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         "title": "INITIALISE_ESTIMATE_OF_SALES",
                         "items": {
-                            'ssiNumber': {
-                                key: "customer.enterprise.ssiNumber",
+                            'monthlyBusinessExpenses': {
+                                key: "customer.enterprise.monthlyBusinessExpenses",
                                 title: "WEEKLY_SALES",
                                 "type": "number"
                             },
@@ -2068,16 +2068,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 "type": "number",
                                 "readonly": true
                             },
-                            'generalAdmin': {
-                                key: "customer.enterprise.generalAdmin",
+                            'ownerSalary': {
+                                key: "customer.enterprise.ownerSalary",
                                 title: "DEBT_SERVICE_RATIO",
                                 "type": "number",
                                 "onChange": function (value, form, model) {
                                     monthlySurpluse(model);
                                 }
                             },
-                            'rent': {
-                                key: "customer.enterprise.rent",
+                            'avgMonthlyNetIncome': {
+                                key: "customer.enterprise.avgMonthlyNetIncome",
                                 title: "EMI Eligibility as per Net Business Surplus",
                                 "type": "number",
                                 "readonly": true
@@ -2097,8 +2097,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 "type": "number",
                                 "readonly": true
                             },
-                            'dic': {
-                                key: "customer.enterprise.dic",
+                            'coOwnerSalary': {
+                                key: "customer.enterprise.coOwnerSalary",
                                 title: "Actual EMI offered to the borrower",
                                 "type": "number",
                                 "onChange": function (value, form, model) {
@@ -2143,7 +2143,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "EnterpriseInformation.distanceFromBranch",
                     "EnterpriseInformation.ownership",
                     "EnterpriseInformation.businessConstitution",
-                    "EnterpriseInformation.vatNumber",
+                    "EnterpriseInformation.monthlyTurnover",
                     "EnterpriseInformation.noOfPartners",
                     "EnterpriseInformation.companyRegistered",
                     "EnterpriseInformation.enterpriseRegistrations",
@@ -2240,7 +2240,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "SuppliersDeatils.supplierDetails.receivablesOutstanding",
                     "SuppliersDeatils.supplierDetails.contactNumber",
                     "EstimatedSales",
-                    "EstimatedSales.ssiNumber",
+                    "EstimatedSales.monthlyBusinessExpenses",
                     "EstimatedSales.initialEstimateMonthlySale",
 
                     "DailySales",
@@ -2321,11 +2321,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     
                     "TotalMonthlySurplus",
                     "TotalMonthlySurplus.avgDailySaleAmount",
-                    "TotalMonthlySurplus.generalAdmin",
-                    "TotalMonthlySurplus.rent",
+                    "TotalMonthlySurplus.ownerSalary",
+                    "TotalMonthlySurplus.avgMonthlyNetIncome",
                     "TotalMonthlySurplus.estimatedEmi",
                     "TotalMonthlySurplus.workingDaysInMonth",
-                    "TotalMonthlySurplus.dic",
+                    "TotalMonthlySurplus.coOwnerSalary",
                     "TotalMonthlySurplus.employeeSalary",
                     "TotalMonthlySurplus.tin"
                 ]
@@ -2957,13 +2957,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     model.customer.enterprise.businessType  = "Services";
                     computeTotalMonthlySurpluse("value","form",model);
                     if(model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck' ||  model.currentStage == 'RiskReviewAndLoanSanction' ){
-                        model.customer.enterprise.initialEstimateMonthlySale = (model.customer.enterprise.ssiNumber) ? Number(model.customer.enterprise.ssiNumber * 4):0;
+                        model.customer.enterprise.initialEstimateMonthlySale = (model.customer.enterprise.monthlyBusinessExpenses) ? Number(model.customer.enterprise.monthlyBusinessExpenses * 4):0;
                         if(model.customer.enterprise){
-                            model.customer.enterprise.vatNumber = model.customer.enterprise.vatNumber? Number(model.customer.enterprise.vatNumber):0;
-                            model.customer.enterprise.ssiNumber = model.customer.enterprise.ssiNumber? Number(model.customer.enterprise.ssiNumber):0;
+                            model.customer.enterprise.monthlyTurnover = model.customer.enterprise.monthlyTurnover? Number(model.customer.enterprise.monthlyTurnover):0;
+                            model.customer.enterprise.monthlyBusinessExpenses = model.customer.enterprise.monthlyBusinessExpenses? Number(model.customer.enterprise.monthlyBusinessExpenses):0;
                             model.customer.enterprise.tin = model.customer.enterprise.tin? Number(model.customer.enterprise.tin):0;
-                            model.customer.enterprise.dic = model.customer.enterprise.dic? Number(model.customer.enterprise.dic):0;
-                            model.customer.enterprise.vatNumber = model.customer.enterprise.vatNumber? Number(model.customer.enterprise.vatNumber):0;
+                            model.customer.enterprise.coOwnerSalary = model.customer.enterprise.coOwnerSalary? Number(model.customer.enterprise.coOwnerSalary):0;
+                            model.customer.enterprise.monthlyTurnover = model.customer.enterprise.monthlyTurnover? Number(model.customer.enterprise.monthlyTurnover):0;
                         }
                         if (model.customer.expenditures.length != 0) {
                             _.forEach(model.customer.expenditures, function (expenditure, index) {

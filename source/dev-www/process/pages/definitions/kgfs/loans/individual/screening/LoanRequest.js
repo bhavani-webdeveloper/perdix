@@ -886,6 +886,9 @@ define([],function(){
                     model.customer = {};
                     model.review = model.review|| {};
                     model.loanAccount = model.loanProcess.loanAccount;
+                    if(model.loanAccount.loanType == 'JEWEL'){
+                        getGoldRate(model);
+                    }
                     model.loanAccount.interestRateEstimatedEMI={};
                     var postReviewActionArray = {};
                     if(model.loanAccount.currentStage == 'BusinessTeamReview' || model.loanAccount.currentStage == 'CreditOfficerReview' || model.loanAccount.currentStage == 'CreditManagerReview' || model.loanAccount.currentStage == 'CBOCreditHeadReview' || model.loanAccount.currentStage == 'CEOMDReview') {
@@ -990,6 +993,7 @@ define([],function(){
                                             "productType": {
                                                 "key":"loanAccount.loanType",
                                                 "title": "PRODUCT_TYPE",
+                                                "readonly":true,
                                                 "type": "select",
                                                 "orderNo": 9
                                             },
