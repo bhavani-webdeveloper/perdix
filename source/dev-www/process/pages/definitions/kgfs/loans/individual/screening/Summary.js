@@ -127,26 +127,6 @@ define({
             household: [],
             business: {}
         };
-        // model.pl.household.income = model.houseHoldPL.data[0]['Total Incomes'];
-        // model.pl.household.salaryFromBusiness = model.houseHoldPL.data[0]['Salary from business'];
-        // model.pl.household.otherIncomeSalaries = model.houseHoldPL.data[0]['Other Income/salaries'];
-        // model.pl.household.familyMemberIncomes = model.houseHoldPL.data[0]['Family Member Incomes'];
-        // model.pl.household.Expenses = model.houseHoldPL.data[0]['Total Expenses'];
-        // model.pl.household.declaredEducationExpense = model.houseHoldPL.data[0]['Expenses Declared or based on the educational expense whichever is higher'];
-        // model.pl.household.emiHouseholdLiabilities = model.houseHoldPL.data[0]['EMI\'s of household liabilities'];
-        // model.pl.household.netHouseholdIncome = model.houseHoldPL.data[0]['Net Household Income'];
-
-        // if (model.houseHoldPL_CoApplicant && model.houseHoldPL_CoApplicant.active) {
-        //     model.pl.householdCoApplicant = {};
-        //     model.pl.householdCoApplicant.income = model.houseHoldPL_CoApplicant.data[0]['Total Incomes'];
-        //     model.pl.householdCoApplicant.salaryFromBusiness = model.houseHoldPL_CoApplicant.data[0]['Salary from business'];
-        //     model.pl.householdCoApplicant.otherIncomeSalaries = model.houseHoldPL_CoApplicant.data[0]['Other Income/salaries'];
-        //     model.pl.householdCoApplicant.familyMemberIncomes = model.houseHoldPL_CoApplicant.data[0]['Family Member Incomes'];
-        //     model.pl.householdCoApplicant.Expenses = model.houseHoldPL_CoApplicant.data[0]['Total Expenses'];
-        //     model.pl.householdCoApplicant.declaredEducationExpense = model.houseHoldPL_CoApplicant.data[0]['Expenses Declared or based on the educational expense whichever is higher'];
-        //     model.pl.householdCoApplicant.emiHouseholdLiabilities = model.houseHoldPL_CoApplicant.data[0]['EMI\'s of household liabilities'];
-        //     model.pl.householdCoApplicant.netHouseholdIncome = model.houseHoldPL_CoApplicant.data[0]['Net Household Income'];
-        // }
 
         if(model.houseHoldPL && model.houseHoldPL.length){
             for (var i=0; i<model.houseHoldPL.length; i++){
@@ -811,52 +791,6 @@ define({
                 }
             ]
         });
-
-        // form.push({
-        //     type: "box",
-        //     colClass: "col-sm-12 table-box",
-        //     title: "DEVIATION_AND_MITIGATIONS",
-        //     condition: "model.currentStage != 'ScreeningReview'",
-        //     items: [
-        //         {
-        //             type: "section",
-        //             colClass: "col-sm-12",
-        //             html: '<table class="table"><colgroup><col width="20%"><col width="5%"><col width="20%"><col width="30%"><col width="30"></colgroup><thead><tr><th>Parameter Name</th><th></th><th>Actual Value</th><th>Mitigant</th><th>Chosen Mitigant</th></tr></thead><tbody><tr ng-repeat="rowData in model.deviationDetails.data"><td>{{ rowData["Parameter"] }}</td><td> <span class="square-color-box" style="background: {{ rowData.color_hexadecimal }}"> </span></td><td>{{ rowData["Deviation"] }}</td><td><ol><li ng-repeat="m in rowData.ListOfMitigants"> {{ m }}</li></ol></td><td><ol><li ng-repeat="m in rowData.ChosenMitigants"> {{ m }}</li></ol></td></tr></tbody></table>'
-        //         }
-        //     ]
-        // });
-
-        // form.push({
-        //     type: "box",
-        //     colClass: "col-sm-12 table-box",
-        //     title: "BUSINESS_SUMMARY",
-        //     condition: "model.currentStage != 'ScreeningReview'",
-        //     items: [
-        //         {
-        //             type: "section",
-        //             colClass: "col-sm-12",
-        //             html: '<table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><tbody><tr><td><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><tbody><tr><th></th><th></th></tr><tr ng-repeat="(key, value) in model.enterpriseDetails.data[0] track by $index" ng-if="$index%2==0"><td> {{ key }}</td><td> {{ value }}</td></tr></tbody></table></td><td><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><tbody><tr><th></th><th></th></tr><tr ng-repeat="(key, value) in model.enterpriseDetails.data[0] track by $index" ng-if="$index%2==1"><td> {{ key }}</td><td> {{ value }}</td></tr></tbody></table></td></tr></tbody></table>'
-        //         }
-        //     ]
-        // })
-
-        // form.push({
-        //     type: "box",
-        //     colClass: "col-sm-12",
-        //     items: [
-        //         {
-        //             type: "tableview",
-        //             key: "bankStatement.data",
-        //             title: model.bankStatement.title,
-        //             selectable: false,
-        //             paginate: false,
-        //             searching: false,
-        //             getColumns: function(){
-        //                 return model.bankStatement.columns;
-        //             }
-        //         }
-        //     ]
-        // });
 
         return form;
     }; // END OF prepareForms()
