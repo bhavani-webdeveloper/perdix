@@ -14,6 +14,13 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanOriginationDashboar
                 "Page/Engine/kgfs.loans.individual.screening.MELApplicationFormQueue",
                 "Page/Engine/kgfs.loans.individual.screening.ApplicationQueue",
                 "Page/Engine/kgfs.loans.individual.screening.CreditAppraisalQueue",
+                
+                "Page/Engine/kgfs.loans.individual.screening.BusinessTeamReviewQueue",
+                "Page/Engine/kgfs.loans.individual.screening.CreditOfficerReviewQueue",
+                "Page/Engine/kgfs.loans.individual.screening.CreditManagerReviewQueue",
+                "Page/Engine/kgfs.loans.individual.screening.CBOCreditHeadReviewQueue",
+                "Page/Engine/kgfs.loans.individual.screening.CEOMDReviewQueue",
+
                 "Page/Engine/kgfs.loans.individual.screening.DscQueue",
                 "Page/Engine/kgfs.loans.individual.screening.DscOverrideQueue",
                 "Page/Engine/kgfs.loans.individual.screening.KYCCheckQueue",
@@ -109,6 +116,95 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanOriginationDashboar
                     caqMenu.data = '-';
                 });
             }
+
+
+            //Optional stages
+            var btrMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.BusinessTeamReviewQueue"];
+            if (btrMenu) {
+                IndividualLoan.search({
+                    'stage': 'BusinessTeamReview',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    btrMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    btrMenu.data = '-';
+                });
+            }
+            var corMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.CreditOfficerReviewQueue"];
+            if (corMenu) {
+                IndividualLoan.search({
+                    'stage': 'CreditOfficerReview',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    corMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    corMenu.data = '-';
+                });
+            }
+            var cmrMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.CreditManagerReviewQueue"];
+            if (cmrMenu) {
+                IndividualLoan.search({
+                    'stage': 'CreditManagerReview',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    cmrMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    cmrMenu.data = '-';
+                });
+            }
+            var cchrMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.CBOCreditHeadReviewQueue"];
+            if (cchrMenu) {
+                IndividualLoan.search({
+                    'stage': 'CBOCreditHeadReview',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    cchrMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    cchrMenu.data = '-';
+                });
+            }
+            var cmdrMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.CEOMDReviewQueue"];
+            if (cmdrMenu) {
+                IndividualLoan.search({
+                    'stage': 'CEOMDReview',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    cmdrMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    cmdrMenu.data = '-';
+                });
+            }
+            
 
              var daqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.loans.individual.screening.DscQueue"];
             if (daqMenu) {

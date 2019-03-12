@@ -920,7 +920,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         model.loanCustomer.partyType = "loanCustomer";
                         model.loanCustomer.customerCalledAt = new Date();
                         model.loanAccount.telecallingDetails.push(model.loanCustomer);
-                            
+
+                        BundleManager.broadcastEvent("telecall",{telecallingDetails: model.loanAccount.telecallingDetails}); 
+
+
                         //  _.forEach(model.coApplicants, function(val) {
                         //     val.customerId = val.customer.id;
                         //     val.partyType = "coApplicant";

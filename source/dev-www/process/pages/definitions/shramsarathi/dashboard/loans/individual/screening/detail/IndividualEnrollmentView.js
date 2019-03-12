@@ -43,7 +43,7 @@ define({
                         model.UIUDF.bankAccount=res.customerBankAccounts;
                         model.UIUDF.liabilities=res.liabilities;
                         model.household=model.expenditures;
-                      
+                        //debugger;
                         var centres = formHelper.enum("centre").data;
                         for (var i=0;i<centres.length;i++){
                             if(model.customer.centreId == centres[i].value){

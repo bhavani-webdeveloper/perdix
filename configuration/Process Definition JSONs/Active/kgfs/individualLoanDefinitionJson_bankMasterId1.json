@@ -55,7 +55,73 @@
           ]
        },
        {
-          "order":5,
+         "order":5,
+         "code":"BusinessTeamReview",
+         "name":"Business Team Review",
+         "stageType":"CAPTURE",
+         "sendSms":"No",
+         "smsCategory":"LoanBooking",
+         "isAccountOpening":false,
+         "riskScoreName":"RiskScore2",
+         "allowedRoles":[
+            "WM"
+         ]
+       },
+       {
+         "order":6,
+         "code":"CreditOfficerReview",
+         "name":"Credit Officer Review",
+         "stageType":"CAPTURE",
+         "sendSms":"No",
+         "smsCategory":"LoanBooking",
+         "isAccountOpening":false,
+         "riskScoreName":"RiskScore2",
+         "allowedRoles":[
+            "WM"
+         ]
+       },
+       {
+         "order":7,
+         "code":"CreditManagerReview",
+         "name":"Credit Manager Review",
+         "stageType":"CAPTURE",
+         "sendSms":"No",
+         "smsCategory":"LoanBooking",
+         "isAccountOpening":false,
+         "riskScoreName":"RiskScore2",
+         "allowedRoles":[
+            "WM"
+         ]
+       },
+       {
+         "order":8,
+         "code":"CBOCreditHeadReview",
+         "name":"CBO & Credit Head Review",
+         "stageType":"CAPTURE",
+         "sendSms":"No",
+         "smsCategory":"LoanBooking",
+         "isAccountOpening":false,
+         "riskScoreName":"RiskScore2",
+         "allowedRoles":[
+            "WM"
+         ]
+       },
+       {
+         "order":9,
+         "code":"CEOMDReview",
+         "name":"CEO & MD Review",
+         "stageType":"CAPTURE",
+         "sendSms":"No",
+         "smsCategory":"LoanBooking",
+         "isAccountOpening":false,
+         "riskScoreName":"RiskScore2",
+         "allowedRoles":[
+            "WM"
+         ]
+       },
+
+       {
+          "order":10,
           "code":"DSCApproval",
           "name":"DSC Approval",
           "stageType":"CAPTURE",
@@ -68,7 +134,7 @@
           ]
        },
        {
-          "order":6,
+          "order":11,
           "code":"DSCOverride",
           "name":"DSC Override",
           "stageType":"CAPTURE",
@@ -81,7 +147,7 @@
           ]
        },
        {
-          "order":7,
+          "order":12,
           "code":"KYCCheck",
           "name":"KYC Check",
           "stageType":"CAPTURE",
@@ -93,7 +159,7 @@
           ]
        },
        {
-          "order":8,
+          "order":13,
           "code":"RiskReviewAndLoanSanction",
           "name":"Risk Review And Loan Sanction",
           "stageType":"CAPTURE",
@@ -105,7 +171,7 @@
           ]
        },
        {
-         "order":9,
+         "order":14,
          "code": "Rejected",
          "name": "Rejected",
          "stageType": "CAPTURE",
@@ -117,7 +183,7 @@
          ]
       },
        {
-          "order":10,
+          "order":15,
           "code":"LoanInitiation",
           "name":"Loan Input",
           "stageType":"CAPTURE",
@@ -130,19 +196,20 @@
           ]
        },
        {
-        "order":11,
+        "order":16,
         "code":"DocumentUpload",
         "name":"Document Download and Upload",
         "stageType":"CAPTURE",
         "sendSms":"No",
         "smsCategory":"LoanBooking",
         "isAccountOpening":true,
+        "multipleLoanNotAllowedForLoanType":true,
         "allowedRoles":[
            "WM"
         ]
      },
      {
-        "order":12,
+        "order":17,
         "code":"Checker1",
         "name":"Checker1",
         "stageType":"CAPTURE",
@@ -154,7 +221,7 @@
         ]
      },
      {
-       "order":13,
+       "order":18,
        "code":"Checker2",
        "name":"Checker2",
        "stageType":"CAPTURE",
@@ -166,7 +233,7 @@
        ]
     },
        {
-         "order":14,
+         "order":19,
          "code":"Completed",
          "name":"Completed",
          "stageType":"CAPTURE",
@@ -3707,7 +3774,7 @@
                       "Screening", "LoanInitiation", "PendingForPartner"
                    ]
                 }
-             }
+               }
           },
           "userDefinedDateFields":{
              "title":"User Defined Date Details",

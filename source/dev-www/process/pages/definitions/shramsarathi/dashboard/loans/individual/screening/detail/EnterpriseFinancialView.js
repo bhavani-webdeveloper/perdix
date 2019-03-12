@@ -22,7 +22,7 @@ define({
 				// 	"html": '<br><div style="text-align:center">Waiting for summary..<br><br><ripple-loader></ripple-loader></div>'
 				// }];
 				Misc.getSummary({"customer_id":model.customerId}).$promise.then(function(resp){
-				// Misc.getSummary({"customer_id":77}).$promise.then(function(resp){
+				//Misc.getSummary({"customer_id":77}).$promise.then(function(resp){
 				   console.log(model);
 				   console.log("------model");
 					console.log(resp);
@@ -35,7 +35,7 @@ define({
 				model.incomeExpense.expensesGrandTotal= resp.expense_grand_total;
 				model.incomeExpense.destinationExtra = resp.destination - resp.distination_total_expense;
 				model.incomeExpense.sourceExtra = resp.source - resp.source_total_expense;
-				model.incomeExpense.totalExtra = destinationExtra + sourceExtra ;
+				model.incomeExpense.totalExtra = model.incomeExpense.destinationExtra + model.incomeExpense.sourceExtra;
 				model.assetsLiabilites={};
 				model.assetsLiabilites.totalCurrentAssets= resp.total_current_assets;
 				model.assetsLiabilites.totalFixedAsstes = resp.total_fixed_assets;
@@ -64,15 +64,15 @@ define({
 					"colClass": "col-sm-12",
 					"html": '<table class="table table-responsive">' +
 						'<tbody>' +
-						'<tr><td>{{"Destination Total Income" | translate}}</td><td>{{model.incomeExpense.destinationTotalIncome | irfCurrency}}</td></tr>'+
-						'<tr><td>{{"Source Total Income" | translate}}</td><td>{{model.incomeExpense.sourceTotalIncome | irfCurrency}}</td></tr>'+
-						'<tr><td>{{"Income Grand Total" | translate}}</td><td>{{model.incomeExpense.incomeGrandTotal | irfCurrency}}</td></tr>'+
-						'<tr><td>{{"Destination Total Expenses" | translate}}</td><td>{{model.incomeExpense.destinationTotalExpenses | irfCurrency}}</td></tr>'+
-						'<tr><td>{{"Source Total Expenses" | translate}}</td><td>{{model.incomeExpense.sourceTotalExpenses | irfCurrency}}</td></tr>'+
-						'<tr><td>{{"Expenses Grand Total" | translate}}</td><td>{{model.incomeExpense.expensesGrandTotal | irfCurrency}}</td></tr>'+
-						'<tr><td>{{"Destination Extra" | translate}}</td><td>{{model.incomeExpense.destinationExtra | irfCurrency}}</td></tr>'+
-						'<tr><td>{{"Source Extra" | translate}}</td><td>{{model.incomeExpense.sourceExtra | irfCurrency}}</td></tr>'+
-						'<tr><td>{{"Total Extra" | translate}}</td><td>{{model.incomeExpense.totalExtra | irfCurrency}}</td></tr>'+
+						'<tr><td>{{"Destination Total Income" | translate}}</td><td>{{model.incomeExpense.destinationTotalIncome }}</td></tr>'+
+						'<tr><td>{{"Source Total Income" | translate}}</td><td>{{model.incomeExpense.sourceTotalIncome }}</td></tr>'+
+						'<tr><td>{{"Income Grand Total" | translate}}</td><td>{{model.incomeExpense.incomeGrandTotal }}</td></tr>'+
+						'<tr><td>{{"Destination Total Expenses" | translate}}</td><td>{{model.incomeExpense.destinationTotalExpenses }}</td></tr>'+
+						'<tr><td>{{"Source Total Expenses" | translate}}</td><td>{{model.incomeExpense.sourceTotalExpenses }}</td></tr>'+
+						'<tr><td>{{"Expenses Grand Total" | translate}}</td><td>{{model.incomeExpense.expensesGrandTotal }}</td></tr>'+
+						'<tr><td>{{"Destination Extra" | translate}}</td><td>{{model.incomeExpense.destinationExtra }}</td></tr>'+
+						'<tr><td>{{"Source Extra" | translate}}</td><td>{{model.incomeExpense.sourceExtra }}</td></tr>'+
+						'<tr><td>{{"Total Extra" | translate}}</td><td>{{model.incomeExpense.totalExtra }}</td></tr>'+
 						'</tbody>' +
 						'</table>'
 				}
@@ -90,9 +90,9 @@ define({
 					"colClass": "col-sm-12",
 					"html": '<table class="table table-responsive">' +
 						'<tbody>' +
-						'<tr><td>{{"Total Current assets" | translate}}</td><td>{{model.assetsLiabilites.totalCurrentAssets | irfCurrency}}</td></tr>'+
-						'<tr><td>{{"Total Fixed assets" | translate}}</td><td>{{model.assetsLiabilites.totalFixedAsstes | irfCurrency}}</td></tr>'+
-						'<tr><td>{{"Total Liabilites" | translate}}</td><td>{{model.assetsLiabilites.totalLiabilites | irfCurrency}}</td></tr>'+
+						'<tr><td>{{"Total Current assets" | translate}}</td><td>{{model.assetsLiabilites.totalCurrentAssets }}</td></tr>'+
+						'<tr><td>{{"Total Fixed assets" | translate}}</td><td>{{model.assetsLiabilites.totalFixedAsstes }}</td></tr>'+
+						'<tr><td>{{"Total Liabilites" | translate}}</td><td>{{model.assetsLiabilites.totalLiabilites }}</td></tr>'+
 						
 						'</tbody>' +
 						'</table>'
@@ -111,12 +111,12 @@ define({
 					"colClass": "col-sm-12",
 					"html": '<table class="table table-responsive">' +
 						'<tbody>' +
-						'<tr><td>{{"Total Members" | translate}}</td><td>{{model.familyInfo.totalMembers | irfCurrency}}</td></tr>'+
-						'<tr><td>{{"Earning members" | translate}}</td><td>{{model.familyInfo.earningMembers | irfCurrency}}</td></tr>'+
-						'<tr><td>{{"No.of Migrants" | translate}}</td><td>{{model.familyInfo.noOfMigrants | irfCurrency}}</td></tr>'+
-						'<tr><td>{{"No. of Children" | translate}}</td><td>{{model.familyInfo.noOfChildren | irfCurrency}}</td></tr>'+
-						'<tr><td>{{"No of school going" | translate}}</td><td>{{model.familyInfo.noOfSchoolGoing | irfCurrency}}</td></tr>'+
-						'<tr><td>{{"No. of college going" | translate}}</td><td>{{model.familyInfo.noOfCollegeGoing | irfCurrency}}</td></tr>'+
+						'<tr><td>{{"Total Members" | translate}}</td><td>{{model.familyInfo.totalMembers }}</td></tr>'+
+						'<tr><td>{{"Earning members" | translate}}</td><td>{{model.familyInfo.earningMembers }}</td></tr>'+
+						'<tr><td>{{"No.of Migrants" | translate}}</td><td>{{model.familyInfo.noOfMigrants }}</td></tr>'+
+						'<tr><td>{{"No. of Children" | translate}}</td><td>{{model.familyInfo.noOfChildren }}</td></tr>'+
+						'<tr><td>{{"No of school going" | translate}}</td><td>{{model.familyInfo.noOfSchoolGoing }}</td></tr>'+
+						'<tr><td>{{"No. of college going" | translate}}</td><td>{{model.familyInfo.noOfCollegeGoing }}</td></tr>'+
 						'</tbody>' +
 						'</table>'
 				},{

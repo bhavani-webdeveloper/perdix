@@ -3,8 +3,8 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
     return {
         pageUID: "customer360.Insurance",
         pageType: "Engine",
-        dependencies: ["$log", "Insurance", "$q", "PageHelper", "$stateParams", "UIRepository", "IrfFormRequestProcessor", "Misc", "Utils", "Queries", "SessionStore"],
-        $pageFn: function ($log, Insurance, $q, PageHelper, $stateParams, UIRepository, IrfFormRequestProcessor, Misc, Utils, Queries, SessionStore) {
+        dependencies: ["$log", "Insurance", "$q", "PageHelper", "$stateParams", "UIRepository", "IrfFormRequestProcessor", "Misc", "Utils", "Queries", "SessionStore","irfNavigator"],
+        $pageFn: function ($log, Insurance, $q, PageHelper, $stateParams, UIRepository, IrfFormRequestProcessor, Misc, Utils, Queries, SessionStore,irfNavigator) {
 
             var globalListkeys = [];
             var getIncludesFromJson = function (params) {};
@@ -43,7 +43,7 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                         condition: "model.insurancePolicyDetailsDTO.id"
                     },
                     "actionboxBeforeSave.OnlinePrint": {
-                        "condition": false
+                        condition: 2==1
                     }
                 };
                 var overridesObject = {};
@@ -88,9 +88,9 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                                                     "htmlClass": "col-sm-3",
                                                     "items": {
                                                         "field": {
-                                                            "key": "insurancePolicyDetailsDTO.insuranceDocumentsDTO[].document_code",
+                                                            "key": "insurancePolicyDetailsDTO.insuranceDocumentsDTO[].documentCode",
                                                             "notitle": true,
-                                                            "titleExpr": "model.insurancePolicyDetailsDTO.insuranceDocumentsDTO[arrayIndex].document_code",
+                                                            "titleExpr": "model.insurancePolicyDetailsDTO.insuranceDocumentsDTO[arrayIndex].documentCode",
                                                             "type": "anchor",
                                                             "fieldHtmlClass": "text-bold",
                                                             // "onClick": function (model, form, schemaForm, event) {
@@ -107,7 +107,7 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                                                     "items": {
                                                         "field": {
                                                             title: "Upload",
-                                                            key: "insurancePolicyDetailsDTO.insuranceDocumentsDTO[].documentId",
+                                                            key: "insurancePolicyDetailsDTO.insuranceDocumentsDTO[].fileId",
                                                             type: "file",
                                                             fileType: "application/pdf",
                                                             category: "Loan",
@@ -144,7 +144,7 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                         "actionboxBeforeSave": {
                             "items": {
                                 "partnerSpecifiFix": {
-                                    "condition": "model.insurancePolicyDetailsDTO.productCode == 'IFTLI'",
+                                    condition: "model.insurancePolicyDetailsDTO.productCode == 'whatever'",
                                     "type": "button",
                                     "title": "Prints",
                                     onClick: function (model, form) {
@@ -261,6 +261,7 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
 
                     "actionboxBeforeSave",
                     "actionboxBeforeSave.save",
+                    "actionboxBeforeSave.OnlinePrint"
                     //    "actionboxAfterSave",
                     //    "actionboxAfterSave.OnlinePrint",
                     //    "actionboxAfterSave.Back"
@@ -291,8 +292,11 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                                     var insuranceDocuments = model.insurancePolicyDetailsDTO.insuranceDocumentsDTO;
 
                                     for (var i = 0; i < documents.length; i++) {
-                                        if (_.indexOf(insuranceDocuments, documents[i].document_code) == -1) {
-                                            insuranceDocuments.push(documents[i])
+                                        if (_.indexOf(insuranceDocuments, documents[i].documentCode) == -1) {
+                                            insuranceDocuments.push({
+                                                "documentCode":documents[i].documentCode,
+                                                "insuranceId":model.insurancePolicyDetailsDTO.id
+                                            })
                                         }
                                     }
                                 })
@@ -398,7 +402,7 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                         // }
 
 
-                        model.insuranceProcess.save()
+                        model.insuranceProcess.update()
                             .finally(function () {
                                 PageHelper.hideLoader();
                             })

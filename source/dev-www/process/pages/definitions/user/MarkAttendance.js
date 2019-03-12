@@ -52,6 +52,7 @@ irf.pageCollection.factory(irf.page("user.MarkAttendance"),
                             .then(function(user){
                                 PageHelper.showProgress('loading-user', 'Done.', 5000);
                                 model.user = user;
+                                model.fingerPrintDeviceType = "MANTRA";
                                 model.customer = {};
                                 Enrollment.getCustomerById({id:user.customerId}).$promise.then(function(resp){
                                     model.customer = resp;
@@ -113,6 +114,7 @@ irf.pageCollection.factory(irf.page("user.MarkAttendance"),
                                     IN  : "IN",
                                     OUT : "OUT",
                                 },
+                                required: true,
                                 "onChange": function(modelValue, form, model) {
                                     if (model.customer.type) {
                                         model.customer.datetime = new Date().toLocaleDateString()+ ' ' + new Date().toLocaleTimeString();
@@ -186,7 +188,7 @@ irf.pageCollection.factory(irf.page("user.MarkAttendance"),
                                         };
                                     },
                                     onValidate: function(valueObj,status,form,model){
-                                        model.customer.biometricAuthentication = valueObj.name + " "+ valueObj.type;
+                                        model.customer.biometricAuthentication = valueObj.type + " "+valueObj.name;
                                     }
                                 }
                          ]

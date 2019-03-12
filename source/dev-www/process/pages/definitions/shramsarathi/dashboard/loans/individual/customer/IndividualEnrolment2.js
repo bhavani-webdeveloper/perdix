@@ -49,7 +49,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "References",   
                             ],
                             "overrides": {
-                                
+                                "KYC.addressProofFieldSet":{
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProof": {
+                                    "readonly": false,
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofImageId": {
+                                    "required": true,
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofNo": {
+                                    "required": true,
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofIssueDate":{
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofValidUptoDate":{
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
                                
                                 "ContactInformation.villageName": {
                                     "readonly": true,
@@ -150,9 +170,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualInformation.centreId1":{
                                     "title": "ZONE_NAME"
                                 },
-                                // "IndividualInformation.age":{
-                                //     "required":true
-                                // },
+                                "IndividualInformation.age":{
+                                    "required":false
+                                },
+                                "IndividualInformation.dateOfBirth":{ 
+                                    "onChange": function (modelValue, form, model) {
+                                    if (model.customer.dateOfBirth) {
+                                        model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                    }
+                                }
+                            }
+                        ,
                                 "KYC": {
                                     "orderNo": 1
                                 },
@@ -188,7 +216,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.identityProofNo": {
-                                    "required": true
+                                    "required": true,
+                                    "schema": {
+                                        "pattern": "(^\\d{4}\\d{4}\\d{4}$)|(^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$)"
+                                    }
                                 },
                                 "KYC.addressProofFieldSet":{
                                     "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
@@ -3016,14 +3047,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "mortage": {
                                                     "key": "customer.liabilities[].udf1",
                                                     "title": "MORTAGE",
-                                                    "condition": "model.customer.liabilities[arrayIndex].loanType.toLowerCase() !== 'unsecured'",
+                                                    "condition": "model.customer.liabilities[arrayIndex].loanType.toLowerCase() === 'secured'",
                                                     "orderNo": 10
                                                 },
                                                 "mortageAmount": {
                                                     "key": "customer.liabilities[].mortageAmount",
                                                     "title": "MORTAGE_AMOUNT",
                                                     "orderNo": 10,
-                                                    "condition": "model.customer.liabilities[arrayIndex].loanType.toLowerCase() !== 'unsecured'",
+                                                    "condition": "model.customer.liabilities[arrayIndex].loanType.toLowerCase() === 'secured'",
                                                 },
                                                 "liabilityLoanPurpose":{
                                                     "orderNo": 11
@@ -3326,15 +3357,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     UIRepository.getEnrolmentProcessUIRepository().$promise
                         .then(function (repo) {
                             console.log(model.pageClass);
-                            console.log(repo);
-                            console.log(formRequest);
-                            console.log(configFile);
-                            console.log(model);
                             return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
                         })
                         .then(function (form) {
-                            console.log("form:");
-                            console.log(form);
                             self.form = form;
                         });
 

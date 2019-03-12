@@ -2643,6 +2643,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
+                        if(model.currentStage =='Screening') {
+                            if (model.customer.addressProof == 'Aadhar Card' &&
+                                !_.isNull(model.customer.addressProofNo)){
+                                    model.customer.aadhaarNo = model.customer.addressProofNo;
+                            }
+                            if (model.customer.identityProof == 'Pan Card' &&
+                                !_.isNull(model.customer.identityProofNo)){
+                                model.customer.panNo = model.customer.identityProofNo;
+                            }
+                            if (model.customer.identityProof != 'Pan Card' &&
+                                !_.isNull(model.customer.identityProofNo)){       
+                                model.customer.panNo = null;
+                            }
+                        }
                         model.enrolmentProcess.proceed()
                             .finally(function () {
                                 console.log("Inside hideLoader call");

@@ -6,6 +6,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
             docRejectReasons = resp;
         });
 
+        var formConfig = function(individual,entity,model){
+            model.additional.isIndividual = individual ? true : false;
+            model.additional.isEntity = entity ? true : false;
+        };
+
         return {
             "type": "schema-form",
             "title": "DOCUMENT_VERIFICATION",
@@ -142,9 +147,19 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                         }
                         PageHelper.hideLoader();
                     },
+                    
                     function(httpRes) {
                         PageHelper.hideLoader();
                     });
+                    model.additional = {};
+                    Queries.getCustomerById(model.loanAccount.customerId,true).then(function(customer){
+                        if (customer.customerType == "Individual")
+                            formConfig(true,false,model);
+                        else
+                            formConfig(false,true,model);
+                    },function(err){
+                        formConfig(false,true,model);
+                    })
                 },
                 function(httpRes) {
                     PageHelper.showProgress('loan-load', 'Failed to load the loan details. Try again.', 4000);
@@ -283,8 +298,16 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                     }, {
                         "key": "_queue.customerName",
                         "title": "ENTITY_NAME",
+                        "condition":"model.additional.isEntity",
                         "readonly": true
-                    }, {
+                    },
+                    {
+                        "key": "_queue.customerName",
+                        "title": "APPLICANT_NAME",
+                        "condition":"model.additional.isIndividual",
+                        "readonly": true
+                    },
+                    {
                         "type": "button",
                         "title": "DOWNLOAD_ALL_FORMS",
                         "onClick": function(model, form, schemaForm, event) {

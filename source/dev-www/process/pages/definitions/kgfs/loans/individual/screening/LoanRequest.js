@@ -406,7 +406,122 @@ define([],function(){
                                 }
                             }
 
-                        }
+                        },
+                        "BusinessTeamReview":{
+                            "overrides":{
+                                "PreliminaryInformation":{
+                                    "readonly":true
+                                },
+                                "CollateralInformation":{
+                                    "readonly":true
+                                },
+                                "LoanDocuments":{
+                                    "readonly":true
+                                },
+                                "LoanRecommendation":{
+                                    "readonly":true
+                                },
+                                "LoanMitigants":{
+                                    "readonly":true
+                                },
+                                "JewelDetails":{
+                                    "readonly":true
+                                }
+                            }
+
+                        },
+                        "CreditOfficerReview":{
+                            "overrides":{
+                                "PreliminaryInformation":{
+                                    "readonly":true
+                                },
+                                "CollateralInformation":{
+                                    "readonly":true
+                                },
+                                "LoanDocuments":{
+                                    "readonly":true
+                                },
+                                "LoanRecommendation":{
+                                    "readonly":true
+                                },
+                                "LoanMitigants":{
+                                    "readonly":true
+                                },
+                                "JewelDetails":{
+                                    "readonly":true
+                                }
+                            }
+
+                        },
+                        "CreditManagerReview":{
+                            "overrides":{
+                                "PreliminaryInformation":{
+                                    "readonly":true
+                                },
+                                "CollateralInformation":{
+                                    "readonly":true
+                                },
+                                "LoanDocuments":{
+                                    "readonly":true
+                                },
+                                "LoanRecommendation":{
+                                    "readonly":true
+                                },
+                                "LoanMitigants":{
+                                    "readonly":true
+                                },
+                                "JewelDetails":{
+                                    "readonly":true
+                                }
+                            }
+
+                        },
+                        "CBOCreditHeadReview":{
+                            "overrides":{
+                                "PreliminaryInformation":{
+                                    "readonly":true
+                                },
+                                "CollateralInformation":{
+                                    "readonly":true
+                                },
+                                "LoanDocuments":{
+                                    "readonly":true
+                                },
+                                "LoanRecommendation":{
+                                    "readonly":true
+                                },
+                                "LoanMitigants":{
+                                    "readonly":true
+                                },
+                                "JewelDetails":{
+                                    "readonly":true
+                                }
+                            }
+
+                        },
+                        "CEOMDReview":{
+                            "overrides":{
+                                "PreliminaryInformation":{
+                                    "readonly":true
+                                },
+                                "CollateralInformation":{
+                                    "readonly":true
+                                },
+                                "LoanDocuments":{
+                                    "readonly":true
+                                },
+                                "LoanRecommendation":{
+                                    "readonly":true
+                                },
+                                "LoanMitigants":{
+                                    "readonly":true
+                                },
+                                "JewelDetails":{
+                                    "readonly":true
+                                }
+                            }
+
+                        },
                     },
                     "loanProcess.loanAccount.loanType":{
                         "SECURED":{
@@ -771,8 +886,24 @@ define([],function(){
                     model.customer = {};
                     model.review = model.review|| {};
                     model.loanAccount = model.loanProcess.loanAccount;
+                    if(model.loanAccount.loanType == 'JEWEL'){
+                        getGoldRate(model);
+                    }
                     model.loanAccount.interestRateEstimatedEMI={};
-                
+                    var postReviewActionArray = {};
+                    if(model.loanAccount.currentStage == 'BusinessTeamReview' || model.loanAccount.currentStage == 'CreditOfficerReview' || model.loanAccount.currentStage == 'CreditManagerReview' || model.loanAccount.currentStage == 'CBOCreditHeadReview' || model.loanAccount.currentStage == 'CEOMDReview') {
+                        postReviewActionArray = {
+                            "SEND_BACK": "SEND_BACK",
+                            "PROCEED": "PROCEED"
+                        }
+                    } else {
+                        postReviewActionArray = {
+                            "REJECT": "REJECT",
+                            "SEND_BACK": "SEND_BACK",
+                            "PROCEED": "PROCEED"
+                        }
+                    }
+                    
                     defaultConfiguration(model,true);
 
 
@@ -862,6 +993,7 @@ define([],function(){
                                             "productType": {
                                                 "key":"loanAccount.loanType",
                                                 "title": "PRODUCT_TYPE",
+                                                "readonly":true,
                                                 "type": "select",
                                                 "orderNo": 9
                                             },
@@ -1021,11 +1153,7 @@ define([],function(){
                                                 "key": "review.action",
                                                 "condition": "model.loanAccount.currentStage != 'Screening'",
                                                 "type": "radios",
-                                                "titleMap": {
-                                                    "REJECT": "REJECT",
-                                                    "SEND_BACK": "SEND_BACK",
-                                                    "PROCEED": "PROCEED"
-                                                }
+                                                "titleMap": postReviewActionArray
                                             },
                                             "actionExcludesSendBack": {
                                                 "key": "review.action",
