@@ -49,7 +49,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "References",   
                             ],
                             "overrides": {
-                                
+                                "KYC.addressProofFieldSet":{
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProof": {
+                                    "readonly": false,
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofImageId": {
+                                    "required": true,
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofNo": {
+                                    "required": true,
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofIssueDate":{
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofValidUptoDate":{
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
                                
                                 "ContactInformation.villageName": {
                                     "readonly": true,
@@ -1639,7 +1659,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification": {
                                     "readonly": true
                                 },
-                               
                                 "Liabilities": {
                                     "readonly": true
                                 },
@@ -1669,7 +1688,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": false,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "MIGRANT_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": false
@@ -3027,14 +3046,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "mortage": {
                                                     "key": "customer.liabilities[].udf1",
                                                     "title": "MORTAGE",
-                                                    "condition": "model.customer.liabilities[arrayIndex].loanType.toLowerCase() !== 'unsecured'",
+                                                    "condition": "model.customer.liabilities[arrayIndex].loanType.toLowerCase() === 'secured'",
                                                     "orderNo": 10
                                                 },
                                                 "mortageAmount": {
                                                     "key": "customer.liabilities[].mortageAmount",
                                                     "title": "MORTAGE_AMOUNT",
                                                     "orderNo": 10,
-                                                    "condition": "model.customer.liabilities[arrayIndex].loanType.toLowerCase() !== 'unsecured'",
+                                                    "condition": "model.customer.liabilities[arrayIndex].loanType.toLowerCase() === 'secured'",
                                                 },
                                                 "liabilityLoanPurpose":{
                                                     "orderNo": 11

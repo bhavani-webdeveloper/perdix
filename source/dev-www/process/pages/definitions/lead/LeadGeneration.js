@@ -1305,7 +1305,12 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                                 type: "select",
                                 required: true,
                                 condition: "(model.lead.eligibleForProduct ==='NO' || model.lead.eligibleForProduct ==='No')",
-                                enumCode: "leadRejectReasonByFieldOfficer",
+                                titleMap: {
+                                    "High Interest rate": "High Interest rate",
+                                    "Negative": "Negative",
+                                    "Not Kgf's target segment": "Not Kgf's target segment",
+                                    "Not having proper documents": "Not having proper documents",
+                                }
                             }, {
                                 key: "lead.additionalRemarks",
                             },]
