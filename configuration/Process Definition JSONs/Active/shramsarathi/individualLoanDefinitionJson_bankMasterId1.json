@@ -3927,35 +3927,35 @@
                   "title": "udf8",
                   "type": "string",
                   "captureStages": [
-                     "Screening", "LoanInitiation", "PendingForPartner"
+                     "Screening"
                   ]
                },
                "udf9": {
                   "title": "udf9",
                   "type": "string",
                   "captureStages": [
-                     "Screening", "LoanInitiation", "PendingForPartner"
+                     "Screening"
                   ]
                },
                "udf10": {
                   "title": "udf10",
                   "type": "string",
                   "captureStages": [
-                     "Screening", "LoanInitiation", "PendingForPartner"
+                     "ScreeningReview", "Application"
                   ]
                },
                "udf11": {
                   "title": "udf11",
                   "type": "string",
                   "captureStages": [
-                     "Screening", "LoanInitiation", "PendingForPartner"
+                     "ScreeningReview", "Application"
                   ]
                },
                "udf12": {
                   "title": "udf12",
                   "type": "string",
                   "captureStages": [
-                     "Screening", "LoanInitiation", "PendingForPartner"
+                     "ScreeningReview", "Application"
                   ]
                }
             }
@@ -4323,14 +4323,14 @@
                      "title":"modeOfDisbursement",
                      "type":"date",
                      "captureStages":[
-                        "Screening", "Sanction", "LoanBooking", "LoanInitiation"
+                        "ScreeningReview", "LoanBooking", "Application"
                      ]
                   },
                   "actualDisbursementDate":{
                      "title":"actualDisbursementDate",
                      "type":"date",
                      "captureStages":[
-                        "Screening", "Sanction", "LoanBooking", "LoanInitiation"
+                        "ScreeningReview", "LoanBooking", "Application"
                      ]
                   },
                   "firstRepaymentDate":{
