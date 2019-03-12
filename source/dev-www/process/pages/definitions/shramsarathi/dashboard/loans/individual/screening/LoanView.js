@@ -217,7 +217,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             model: {
                                                 loanRelation: coApplicant[i],
                                                 enrolmentProcess: coApplicant[i],
-                                                loanProcess: loanAccount
+                                                loanProcess: loanProcess
                                             }
                                         });
                                     }
@@ -230,7 +230,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             model: {
                                                 loanRelation: guarantor[i],
                                                 enrolmentProcess:guarantor[i],
-                                                loanProcess: loanAccount
+                                                loanProcess: loanProcess
                                             }
                                         });
                                     }

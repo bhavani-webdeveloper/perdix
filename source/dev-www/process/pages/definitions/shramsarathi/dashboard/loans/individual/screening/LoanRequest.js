@@ -1109,12 +1109,31 @@ define([],function(){
                             }
                         },
                         "loanView":{
+                            "excludes": [
+                                "LoanSanction",
+                                "PostReview"       
+                            ],
                             "overrides":{
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan":{
+                                    "readonly": true,
+                                },
                                 "AdditionalLoanInformation": {
                                     "readonly": true
                                 },
                                 "CollateralDetails":{
                                     "readonly":true
+                                },
+                                "LoanCustomerRelations": {
+                                    "readonly": true
+                                },
+                                "NomineeDetails": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
                                 }
                             }
                         },
@@ -1237,6 +1256,10 @@ define([],function(){
                     "PreliminaryInformation.frequencyRequested": {
                         "required":true
                     },
+                    "NomineeDetails.nominees.nomineeFirstName":{
+                        "required":true
+                    },
+                  
                     // "PostReview.reject.rejectReason":{
                     //     "enumCode":"loan_rejection_reason"
                     // },
@@ -1298,6 +1321,7 @@ define([],function(){
                                 populateDisbursementSchedule(value,form,model);
                             }
                         },
+                       
                         "LoanSanction.disbursementSchedules.tranchCondition": {
                             type: "lov",
                             autolov: true,
@@ -1433,13 +1457,16 @@ define([],function(){
                         },
                         "NomineeDetails.nominees.nomineeFirstName":{
                             "orderNo":10,
-                            "resolver": "NomineeFirstNameLOVConfiguration"
+                            "resolver": "NomineeFirstNameLOVConfiguration",
+                            "required": true
                         },
                         "NomineeDetails.nominees.nomineeGender": {
-                            "orderNo": 20
+                            "orderNo": 20,
+                            "required": true
                         },
                         "NomineeDetails.nominees.nomineeDOB":{
-                            "orderNo": 30
+                            "orderNo": 30,
+                            "required": true
                         },
                         "NomineeDetails.nominees.nomineeRelationship": {
                             "orderNo": 100
@@ -1451,7 +1478,8 @@ define([],function(){
                         },
                         "NomineeDetails.nominees.nomineeDoorNo": {
                             "orderNo": 40,
-                            "title":"HAMLET_FALA"
+                            "title":"HAMLET_FALA",
+                            "required": true
                         },
                         "NomineeDetails.nominees.nomineeStreet":{
                             "orderNo": 60
@@ -1708,6 +1736,10 @@ define([],function(){
                 "title": "LOAN_REQUEST",
                 "subTitle": "BUSINESS",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+                //     console.log(model);
+                // console.log("-------- Model");
+                // console.log(form);
+                // console.log("-------- form");
                     // AngularResourceService.getInstance().setInjector($injector);
  
                     /* Setting data recieved from Bundle */

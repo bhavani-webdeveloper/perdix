@@ -690,7 +690,8 @@ define({
                                         "title": "loan Amount",
                                         "data": "loanAmount",
                                         render: function(data, type, full, meta) {
-                                            return irfCurrencyFilter(full['loanAmount'])
+                                            return irfCurrencyFilter(full['loanAmountInPaisa'])
+                                            debugger;
                                         }
                                     }, {
                                         "title": "Installment Amount",
@@ -708,7 +709,7 @@ define({
                                         "title": "Loan Purpose",
                                         "data": "Purpose",
                                         render: function(data, type, full, meta) {
-                                            return full['Purpose']
+                                            return full['liabilityLoanPurpose']
                                         }
     
                                     }, {
@@ -734,13 +735,13 @@ define({
                                         "title": "Frequency of Installments",
                                         "data": "Frequency",
                                         render: function(data, type, full, meta) {
-                                            return full['Frequency']
+                                            return full['frequencyOfInstallment']
                                         }
                                     }, {
                                         "data": "",
                                         "title": "INTEREST_ONLY",
                                         render: function(data, type, full, meta) {
-                                            return full['Interest Only']
+                                            return full['interestOnly']
                                         }
                                     }, {
                                         "data": "interestRate",
