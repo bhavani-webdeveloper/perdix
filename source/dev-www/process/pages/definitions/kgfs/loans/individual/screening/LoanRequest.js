@@ -886,8 +886,11 @@ define([],function(){
                     model.customer = {};
                     model.review = model.review|| {};
                     model.loanAccount = model.loanProcess.loanAccount;
-                    if(model.loanAccount.loanType == 'JEWEL'){
+                    if(model.loanAccount.loanType == 'JEWEL' && model.loanAccount.currentStage == 'Screening'){
                         getGoldRate(model);
+                        model.loanAccount.jewelLoanDetails = {};
+                        model.loanAccount.jewelLoanDetails.encoreClosed = false;
+                        model.loanAccount.jewelLoanDetails.jewelPouchLocationType = "BRANCH";
                     }
                     model.loanAccount.interestRateEstimatedEMI={};
                     var postReviewActionArray = {};

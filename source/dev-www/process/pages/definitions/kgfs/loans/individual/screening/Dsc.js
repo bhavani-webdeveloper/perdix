@@ -411,8 +411,8 @@ define([], function () {
                 actions: {
                     doDscOverride: function (model,loanid) {
                         if (model.customer.dscOverrideRemarks) {
-                            irfProgressMessage.pop("dsc-override", "Performing DSC Override");
-                            IndividualLoan.overrideDsc({
+                            irfProgressMessage.pop("dsc-override", "Performing DSC Override111");
+                            IndividualLoan.overrideAllLCRMemberDsc({
                                 customerId: model.loanAccount.customerId,
                                 loanId: model.loanAccount.id,
                                 remarks: model.customer.dscOverrideRemarks,
@@ -421,7 +421,14 @@ define([], function () {
                                 $log.info(resp);
                                 PageHelper.hideLoader();
                                 irfProgressMessage.pop("dsc-override", "Override Succeeded", 2000);
-                                model.customer.dscStatus = resp.dscStatus;
+                                if(resp && resp.length)
+                                {
+                                    for(i=0;i<resp.length;i++)
+                                    {
+                                        model.customer.dscStatus = resp[i].dscStatus;
+                                    }
+                                }
+                                
                                 //irfNavigator.goBack();
                             }, function (resp) {
                                 $log.error(resp);
