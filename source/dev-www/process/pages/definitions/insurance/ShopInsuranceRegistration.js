@@ -76,7 +76,12 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                    "InsurancePolicyInformation.insuranceRecommendations",
                    "InsurancePolicyInformation.recommendationStatus",
                    "InsurancePolicyInformation.question",
-                   
+                   "InsurancePolicyInformation.accountNumber",
+                   "InsurancePolicyInformation.accountType",
+                   "InsurancePolicyInformation.customerNameAsInBank",
+                   "InsurancePolicyInformation.ifscCode",
+                   "InsurancePolicyInformation.customerBankName",
+                   "InsurancePolicyInformation.customerBankBranchName",  
                    
 
 
@@ -103,7 +108,8 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                    "shopInsurance",
                    "shopInsurance.shopType",
                    "shopInsurance.constructionType",
-                   "shopInsurance.shopPhoto",
+                   "shopInsurance.shopPhotos",
+                   "shopInsurance.shopPhotos.shopPhoto",
                    "shopInsurance.shopAddress",
                    "shopInsurance.shopAddress.address1",
                    "shopInsurance.shopAddress.address2",
@@ -388,13 +394,39 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                                                 "WOOD" :"Wood Frame"
                                             }
                                         },
-                                        "shopPhoto":{
+                                        "shopPhotos":{
+                                            key: "shopInsurance.shopPhotos",
+                                            type: "array",
+                                            startEmpty: false,
                                             title:"SHOP_PHOTO",
-                                            key: "insurancePolicyDetailsDTO.urnNo",
-                                            offline: true,
-                                            type: "file",
-                                            fileType: "image/*"
-                                        },        
+                                            add: null,
+                                            remove :null,
+                                            "view":"fixed",
+                                            "notitle": true,
+                                            "items": {
+                                                // "udf1": {
+                                                //     "type": "select",
+                                                //     "enumCode": "businessType",
+                                                //     "title": "BUSINESS_TYPE",
+                                                //     "key": "customer.enterpriseDocuments[].udf1",
+                                                //     "required":true
+                                                // },
+                                                "shopPhoto":{
+                                                    title:"SHOP_PHOTO",
+                                                    key: "insurancePolicyDetailsDTO.urnNo",
+                                                    offline: true,
+                                                    type: "file",
+                                                    fileType: "image/*"
+                                                }, 
+                                            }
+                                        },
+                                        // "shopPhoto":{
+                                        //     title:"SHOP_PHOTO",
+                                        //     key: "insurancePolicyDetailsDTO.urnNo",
+                                        //     offline: true,
+                                        //     type: "file",
+                                        //     fileType: "image/*"
+                                        // },        
                                         "shopAddress": {
                                             "order": 53,
                                             "title": "SHOP_ADDRESS",
@@ -488,7 +520,7 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                                    return Queries.getProductCode(
                                       SessionStore.getBankId(),
                                       SessionStore.getCurrentBranch().branchId,
-                                      'PAI'
+                                      'SHOPINSURANCE'
                                    );
                                },
                                onSelect : function(result,model,context){
@@ -507,6 +539,33 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                                }
                                
                            },
+                           "InsurancePolicyInformation.accountNumber" : {
+                            "key" : "insurancePolicyDetailsDTO.accountNumber",
+                            "type" : "lov",
+                            /*"autolov" : true,*/
+                            "required" :  true,
+                            "title" : "BENEFIECIARY_ACCOUNT_NUMBER",
+                            search : function(inputModel,form,model,context){
+                                return Queries.getCustomerBankAccounts(
+                                    model.insurancePolicyDetailsDTO.customerId
+                                );
+                            },
+                            onSelect : function(result,model,context){
+                                model.insurancePolicyDetailsDTO.accountNumber = result.account_number,
+                                model.insurancePolicyDetailsDTO.customerBankName = result.customer_bank_name,
+                                model.insurancePolicyDetailsDTO.customerBankBranchName = result.customer_bank_branch_name,
+                                model.insurancePolicyDetailsDTO.ifscCode = result.ifsc_code,
+                                model.insurancePolicyDetailsDTO.accountType = result.account_type,
+                                model.insurancePolicyDetailsDTO.customerNameAsInBank = result.customer_name_as_in_bank
+                                
+                            },
+                            getListDisplayItem : function(item,index){
+                                return[
+                                    item.account_number +" - "+ item.ifsc_code
+                                ];
+                            }
+                            
+                        },
                            "InsurancePolicyInformation.sumInsured" : {
                                "onChange" : function(modelValue, form, model){
                                 PageHelper.showLoader();
@@ -735,21 +794,37 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                        }
 
                       
-                           model.insuranceProcess.save()
-                               .finally(function() {
-                                   PageHelper.hideLoader();
-                               })
-                               .subscribe(function(value) {
-                                   model.insurancePolicyDetailsDTO = value.insurancePolicyDetailsDTO[0];
-                                   model.submissionDone = true;
-                                   idPresent = true;
-                                   PageHelper.showProgress('Insurance', 'Insurance Registration Saved', 5000);
-                               }, function(err) {
-                                   PageHelper.showProgress('Insurance', 'Insurance Registration Failed', 5000);
-                                   PageHelper.showErrors(err);
-                                   PageHelper.hideLoader();
-                               });
-                      
+                       if(model.insurancePolicyDetailsDTO.id){
+                        model.insuranceProcess.update()
+                            .finally(function() {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function(value) {
+                                model.insurancePolicyDetailsDTO = value.insurancePolicyDetailsDTO;
+                                model.submissionDone = true;
+                                
+                            }, function(err) {
+                                PageHelper.showProgress('Insurance', 'Insurance Registration Failed', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
+                        }
+                        else{
+                            model.insuranceProcess.insurancePolicyDetailsDTO.telecallingDetails = model.telecalling;
+                            model.insuranceProcess.save()
+                            .finally(function() {
+                                PageHelper.hideLoader();
+                            })
+                            .subscribe(function(value) {
+                                model.insurancePolicyDetailsDTO = value.insurancePolicyDetailsDTO;
+                                model.submissionDone = true;
+                                PageHelper.showProgress('Insurance', 'Insurance Registration Saved', 5000);
+                            }, function(err) {
+                                PageHelper.showProgress('Insurance', 'Insurance Registration Failed', 5000);
+                                PageHelper.showErrors(err);
+                                PageHelper.hideLoader();
+                            });
+                        }
                    }
                }
            };

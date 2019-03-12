@@ -385,7 +385,7 @@ define([], function () {
                                         "title": "VIEW_DSC_RESPONSE",
                                         "icon": "fa fa-eye",
                                         "style": "btn-primary",
-                                        "condition":"model.customer.dscStatus && model.loanAccount.currentStage == 'DSCApproval'",
+                                        "condition":"model.customer.dscStatus && (model.loanAccount.currentStage == 'DSCApproval' || model.loanAccount.currentStage =='RiskReviewAndLoanSanction')",
                                         "onClick": function(model, formCtrl, form, event) {
                                             console.log(form);
                                             console.warn(event);
@@ -412,7 +412,7 @@ define([], function () {
                     doDscOverride: function (model,loanid) {
                         if (model.customer.dscOverrideRemarks) {
                             irfProgressMessage.pop("dsc-override", "Performing DSC Override");
-                            IndividualLoan.overrideDsc({
+                            IndividualLoan.overrideAllLCRMemberDsc({
                                 customerId: model.loanAccount.customerId,
                                 loanId: model.loanAccount.id,
                                 remarks: model.customer.dscOverrideRemarks,
@@ -421,7 +421,14 @@ define([], function () {
                                 $log.info(resp);
                                 PageHelper.hideLoader();
                                 irfProgressMessage.pop("dsc-override", "Override Succeeded", 2000);
-                                model.customer.dscStatus = resp.dscStatus;
+                                if(resp && resp.length)
+                                {
+                                    for(i=0;i<resp.length;i++)
+                                    {
+                                        model.customer.dscStatus = resp[i].dscStatus;
+                                    }
+                                }
+                                
                                 //irfNavigator.goBack();
                             }, function (resp) {
                                 $log.error(resp);

@@ -295,7 +295,9 @@ foreach ($partners as $partner) {
                               'customer_partner.customer_partner_number'
                           ]);
 
-                        //echo $customer;
+                          if($customer=== NULL){
+                            throw new PDOException('Customer not Found');
+                          }
                         $apiCustomer = getCustomer($customer['id']);
                         //print_r($customer);
 
@@ -344,20 +346,26 @@ foreach ($partners as $partner) {
     
                     }catch(Exception $e1)
                     {
-                        echo "<br/><br/> error ".$e1->getMessage();
-                        $kycUploadDetail = new KycUploadDetail();
-                        $kycUploadDetail->master_id = $IdGenerated;
-                        $kycUploadDetail->customer_id = $customer["customer_partner_number"];
-                        $kycUploadDetail->customer_name = $customer["first_name"];
-                        $kycUploadDetail->is_processed = true;
-                        $kycUploadDetail->status = 'FAILED';
-                        $kycUploadDetail->request_json = json_encode($customer);
-                        $kycUploadDetail->error_response = $e1->getMessage();
-                        $kycUploadDetail->save();
-                        //var_dump($customerUploadDetail->toArray());
+                        try{
+                            echo "<br/><br/> error ".$e1->getMessage();
+                            $kycUploadDetail = new KycUploadDetail();
+                            $kycUploadDetail->master_id = $IdGenerated;
+                            $kycUploadDetail->customer_id = $customer["customer_partner_number"];
+                            $kycUploadDetail->customer_name = $customer["first_name"];
+                            $kycUploadDetail->is_processed = true;
+                            $kycUploadDetail->status = 'FAILED';
+                            $kycUploadDetail->request_json = json_encode($customer);
+                            $kycUploadDetail->error_response = $e1->getMessage();
+                            $kycUploadDetail->save();
+                            //var_dump($customerUploadDetail->toArray());;
+                        }catch(Exception $e2)
+                        {
+                            
+                        }finally{
                         $failedCount++;
                         $content=$content. PHP_EOL . "Status : Fails";
                         $content=$content. PHP_EOL . "Error  : ".$e1->getMessage();
+                        }
 
                         //json_encode($customer);
                     }

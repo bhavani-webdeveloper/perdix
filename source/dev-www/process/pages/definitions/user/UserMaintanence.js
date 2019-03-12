@@ -57,6 +57,17 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                         model.user.branchId = branch.value;
                                     }
                                 }
+                                var arrayIndex = 0;
+                                for (var i = 0; i < branches.length; i++) {
+                                    var branch = branches[i];
+                                    
+                                    if ( branch.value == model.user.userBranches[arrayIndex].branchId) {
+                                        model.user.userBranches[arrayIndex].branchId = branch.value;
+                                        model.user.userBranches[arrayIndex].bankId = Number(branch.parentCode);
+                                        arrayIndex++;
+                                        i=-1;
+                                    }
+                                }
                             }, function(httpResponse){
                                 PageHelper.showProgress('loading-user', 'Failed.', 5000);
                             }).finally(function(){
@@ -150,7 +161,7 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                         type: "select",
                                         enumCode: "branch_id",
                                         "parentEnumCode": "bank",
-                                        "parentValueExpr": "model.bankId",
+                                        "parentValueExpr": "model.user.userBranches[arrayIndex].bankId",
                                         required: true
                                     }
                                 ]
@@ -298,6 +309,18 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                                             model.user.branchId = branch.value;
                                                         }
                                                     }
+                                                    var arrayIndex = 0;
+                                                    for (var i = 0; i < branches.length; i++) {
+                                                        var branch = branches[i];
+                                                        
+                                                        if ( branch.value == model.user.userBranches[arrayIndex].branchId) {
+                                                            model.user.userBranches[arrayIndex].branchId = branch.value;
+                                                            model.user.userBranches[arrayIndex].bankId = Number(branch.parentCode);
+                                                            arrayIndex++;
+                                                            i=-1;
+                                                        }
+                                                    }
+
                                                 }, function(httpResponse){
                                                     PageHelper.showProgress("user-update", 'Failed.', 5000);
                                                     PageHelper.showErrors(httpResponse);

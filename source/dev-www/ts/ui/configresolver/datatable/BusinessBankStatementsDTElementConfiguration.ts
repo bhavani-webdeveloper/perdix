@@ -59,6 +59,19 @@ export class BusinessBankStatementsDTElementConfiguration extends DataTableEleme
                         name: "TOTAL_DEPOSITS"
                     },
                     {
+                        prop: "closingBalance",
+                        type: "number",
+                        name: "Closing Bank Balance",
+                        "onClick": function(modelValue, form, model, formCtrl, event) {
+                            modelValue = modelValue == null ? 0 : modelValue;
+                            if (modelValue != null) {
+                                model.closingBalance = modelValue;
+                                model.totalWithdrawals = model.totalDeposits - model.closingBalance;
+                            }
+                        }
+
+                    },
+                    {
                         prop: "totalWithdrawals",
                         type: "number",
                         name: "TOTAL_WITHDRAWALS"
