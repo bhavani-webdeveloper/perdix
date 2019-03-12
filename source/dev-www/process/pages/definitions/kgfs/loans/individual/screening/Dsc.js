@@ -385,7 +385,7 @@ define([], function () {
                                         "title": "VIEW_DSC_RESPONSE",
                                         "icon": "fa fa-eye",
                                         "style": "btn-primary",
-                                        "condition":"model.customer.dscStatus && model.loanAccount.currentStage == 'DSCApproval'",
+                                        "condition":"model.customer.dscStatus && (model.loanAccount.currentStage == 'DSCApproval' || model.loanAccount.currentStage =='RiskReviewAndLoanSanction')",
                                         "onClick": function(model, formCtrl, form, event) {
                                             console.log(form);
                                             console.warn(event);
@@ -411,7 +411,7 @@ define([], function () {
                 actions: {
                     doDscOverride: function (model,loanid) {
                         if (model.customer.dscOverrideRemarks) {
-                            irfProgressMessage.pop("dsc-override", "Performing DSC Override111");
+                            irfProgressMessage.pop("dsc-override", "Performing DSC Override");
                             IndividualLoan.overrideAllLCRMemberDsc({
                                 customerId: model.loanAccount.customerId,
                                 loanId: model.loanAccount.id,
