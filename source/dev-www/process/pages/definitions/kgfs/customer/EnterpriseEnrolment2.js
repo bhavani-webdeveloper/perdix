@@ -444,7 +444,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EnterpriseFinancials.rawMaterialExpenses.vendorName": {
                         "type": "select",
-                        "title":"INCOME_TYPE",
+                        "title":"EXPENSE_TYPE",
                         "enumCode": "businessExpenseType",
                         "orderNo": 521,
                         "required":true
@@ -710,7 +710,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "DailySales": {
                         "type": "box",
-                        "condition":"model.currentStage == 'CreditAppraisal'",
+                        // "condition":"model.currentStage == 'CreditAppraisal'",
                         "orderNo": 620,
                         colClass: "col-sm-12",
                         readonly:true,
@@ -805,7 +805,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "ReviewDailySales": {
                         "type": "box",
-                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         "orderNo": 620,
                         colClass: "col-sm-12",
                         "title": "DAILY_SALES",
@@ -923,7 +922,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "EnterpriseProductSale": {
                         "type": "box",
                         "readonly":true,
-                        "condition":"model.currentStage == 'CreditAppraisal'",
+                        //"condition":"model.currentStage == 'CreditAppraisal'",
                         "title": "Sales per product & Gross margin",
                         "orderNo": 640,
                         colClass: "col-sm-12",
@@ -994,7 +993,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "ReviewEnterpriseProductSale": {
                         "type": "box",
                         "readonly":true,
-                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         "title": "Sales per product & Gross margin",
                         "orderNo": 640,
                         colClass: "col-sm-12",
@@ -1066,7 +1064,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "AnnualSales": {
                         "type": "box",
-                        "condition":"model.currentStage == 'CreditAppraisal'",
                         colClass: "col-sm-12",
                         "title": "ANNUAL_BUSINESS_CYCLE",
                         "orderNo": 650,
@@ -1203,7 +1200,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "ReviewAnnualSales": {
                         "type": "box",
-                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         colClass: "col-sm-12",
                         "title": "ANNUAL_BUSINESS_CYCLE",
                         "orderNo": 650,
@@ -1352,7 +1348,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "MonthlySalesCalculate": {
                         "type": "box",
-                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        //"condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         "title": "MONTHLY_SALES_CALCULATE",
                         "orderNo": 660,
                         "items": {
@@ -1529,7 +1525,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "OtherExpenseDetails": {
                         "type": "box",
-                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                       // "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         "title": "OTHER_EXPENSE_CALCULATION",
                         "orderNo": 660,
                         "items": {
@@ -1611,7 +1607,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "MonthlyBusinessExpense": {
                         "type": "box",
                         colClass: "col-sm-6",
-                        "condition":"model.currentStage == 'CreditAppraisal'",
+                       // "condition":"model.currentStage == 'CreditAppraisal'",
                         "title": "BUSINESS_EXPENSE_MONTHLY",
                         "orderNo": 670,
                         "items": {
@@ -1671,7 +1667,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "ReviewMonthlyBusinessExpense": {
                         "type": "box",
                         colClass: "col-sm-6",
-                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                       // "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         "title": "BUSINESS_EXPENSE_MONTHLY",
                         "orderNo": 670,
                         "items": {
@@ -1718,7 +1714,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "NetBusinessIncome": {
                         "type": "box",
                         "title": "NET_BUSINESS_INCOME",
-                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                       // "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         "orderNo": 690,
                         "items": {
                             'netBusinessIncomeGrossMargin': {
@@ -1733,7 +1729,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "type": "box",
                         colClass: "col-sm-6",
                         "title": "ADDITIONAL_INCOME",
-                        "condition":"model.currentStage == 'CreditAppraisal'",
+                        //"condition":"model.currentStage == 'CreditAppraisal'",
                         "orderNo": 680,
                         "items": {
                             "otherBusinessIncomes": {
@@ -1780,7 +1776,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "type": "box",
                         colClass: "col-sm-6",
                         "title": "ADDITIONAL_INCOME",
-                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                       // "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         "orderNo": 680,
                         "items": {
                             "otherBusinessIncomes": {
@@ -1829,7 +1825,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         colClass: "col-sm-6",
                         "title": "PERSONAL_EXPENSES",
                         "orderNo": 710,
-                        "condition":"model.currentStage == 'CreditAppraisal'",
+                       // "condition":"model.currentStage == 'CreditAppraisal'",
                         "items": {
                             "personalExpenses": {
                                 key: "customer.personalExpenses",
@@ -1886,7 +1882,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         colClass: "col-sm-6",
                         "title": "PERSONAL_EXPENSES",
                         "orderNo": 710,
-                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        //"condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         "items": {
                             "personalExpenses": {
                                 key: "customer.personalExpenses",
@@ -1942,7 +1938,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "type": "box",
                         colClass: "col-sm-6",
                         "title": "LIABILITY_REPAYMENT",
-                        "condition":"model.currentStage == 'CreditAppraisal'",
+                        //"condition":"model.currentStage == 'CreditAppraisal'",
                         "orderNo": 730,
                         "items": {
                             "liabilityRepayment": {
@@ -1998,7 +1994,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "type": "box",
                         colClass: "col-sm-6",
                         "title": "LIABILITY_REPAYMENT",
-                        "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                       // "condition":"model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         "orderNo": 730,
                         "items": {
                             "liabilityRepayment": {
@@ -2059,7 +2055,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         // colClass: "col-sm-12",
                         "title": 'TOTAL_MONTHLY_SURPLUS',
                        // readOnly : "model.TableReadonlyFlag"
-                       "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                      // "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
                         "orderNo": 750,
                         "items": {
                             'avgDailySaleAmount': {
@@ -2334,71 +2330,79 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
             var configFile = function () {
                 return {
                     "currentStage": {
-                        "KYCCheck": {
+                        "Screening":{
                             "excludes": [
+                                "DailySales",
+                                "AnnualSales",
+                                "EnterpriseProductSale",
+                                "MonthlyBusinessExpense",
+                                "OtherBusinessIncomes",
+                                "PersonalExpenses",
+                                "LiabilityRepayment",
+                                "ReviewAnnualSales",
+                                "ReviewDailySales",
+                                "ReviewEnterpriseProductSale",
+                                "ReviewMonthlyBusinessExpense",
+                                "ReviewOtherBusinessIncomes",
+                                "ReviewPersonalExpenses",
+                                "ReviewLiabilityRepayment",
+                                "TotalMonthlySurplus",
+                                "OtherExpenseDetails",
+                                "MonthlySalesCalculate",
+                                "NetBusinessIncome"
                             ],
-                            "overrides": {
-                                "EnterpriseInformation": {
-                                    "readonly": true
-                                },
-                                "ContactInformation":{
-                                    "readonly": true
-                                },
-                                "BankAccounts":{
-                                    "readonly": true
-                                },
-                                "Liabilities":{
-                                    "readonly": true
-                                },
-                                "EnterpriseFinancials":{
-                                    "readonly": true
-                                },
-                                "BuyerDetails":{
-                                    "readonly": true
-                                },
-                                "SuppliersDeatils":{
-                                    "readonly": true
-                                },
-                                "PreliminaryInformation":{
-                                    "readonly": true
-                                },
-                                "EstimatedSales":{
-                                    "readonly": true
-                                },
-                                "MonthlySalesCalculate":{
-                                    "readonly": true
-                                },
-                                "OtherExpenseDetails":{
-                                    "readonly": true
-                                },
-                                "NetBusinessIncome":{
-                                    "readonly": true
-                                },
-                                "TotalMonthlySurplus":{
-                                    "readonly": true
-                                },
-                                "MonthlyBusinessExpense":{
-                                    "readonly": true
-                                },
-                                "OtherBusinessIncomes":{
-                                    "readonly": true
-                                },
-                                "PersonalExpenses":{
-                                    "readonly": true
-                                },
-                                "LiabilityRepayment":{
-                                    "readonly": true
-                                },
-                                "MonthlySalesCalculate":{
-                                    "readonly": true
-                                },
-                                "OtherExpenseDetails":{
-                                    "readonly": true
-                                }
+                            "overrides":{
+
+                            } 
+                        },
+                        "Application":{
+                            "excludes": [
+                                "DailySales",
+                                "AnnualSales",
+                                "EnterpriseProductSale",
+                                "MonthlyBusinessExpense",
+                                "OtherBusinessIncomes",
+                                "PersonalExpenses",
+                                "LiabilityRepayment",
+                                "ReviewAnnualSales",
+                                "ReviewDailySales",
+                                "ReviewEnterpriseProductSale",
+                                "ReviewMonthlyBusinessExpense",
+                                "ReviewOtherBusinessIncomes",
+                                "ReviewPersonalExpenses",
+                                "ReviewLiabilityRepayment",
+                                "TotalMonthlySurplus",
+                                "OtherExpenseDetails",
+                                "MonthlySalesCalculate",
+                                "NetBusinessIncome"
+                            ],
+                            "overrides":{
+
+                            } 
+                        },
+                        "CreditAppraisal": {
+                            "excludes": [
+                                "ReviewAnnualSales",
+                                "ReviewDailySales",
+                                "ReviewEnterpriseProductSale",
+                                "ReviewMonthlyBusinessExpense",
+                                "ReviewOtherBusinessIncomes",
+                                "ReviewPersonalExpenses",
+                                "ReviewLiabilityRepayment"
+                            ],
+                            "overrides":{
+
                             }
                         },
                         "DSCApproval": {
                             "excludes": [
+                                "DailySales",
+                                "AnnualSales",
+                                "EnterpriseProductSale",
+                                "MonthlyBusinessExpense",
+                                "OtherBusinessIncomes",
+                                "PersonalExpenses",
+                                "LiabilityRepayment"
                             ],
                             "overrides": {
                                 "EnterpriseInformation": {
@@ -2462,6 +2466,83 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         },
                         "DSCOverride": {
                             "excludes": [
+                                "DailySales",
+                                "AnnualSales",
+                                "EnterpriseProductSale",
+                                "MonthlyBusinessExpense",
+                                "OtherBusinessIncomes",
+                                "PersonalExpenses",
+                                "LiabilityRepayment"
+                            ],
+                            "overrides": {
+                                "EnterpriseInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation":{
+                                    "readonly": true
+                                },
+                                "BankAccounts":{
+                                    "readonly": true
+                                },
+                                "Liabilities":{
+                                    "readonly": true
+                                },
+                                "EnterpriseFinancials":{
+                                    "readonly": true
+                                },
+                                "BuyerDetails":{
+                                    "readonly": true
+                                },
+                                "SuppliersDeatils":{
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation":{
+                                    "readonly": true
+                                },
+                                "EstimatedSales":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                },
+                                "NetBusinessIncome":{
+                                    "readonly": true
+                                },
+                                "TotalMonthlySurplus":{
+                                    "readonly": true
+                                },
+                                "MonthlyBusinessExpense":{
+                                    "readonly": true
+                                },
+                                "OtherBusinessIncomes":{
+                                    "readonly": true
+                                },
+                                "PersonalExpenses":{
+                                    "readonly": true
+                                },
+                                "LiabilityRepayment":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "KYCCheck": {
+                            "excludes": [
+                                "DailySales",
+                                "AnnualSales",
+                                "EnterpriseProductSale",
+                                "MonthlyBusinessExpense",
+                                "OtherBusinessIncomes",
+                                "PersonalExpenses",
+                                "LiabilityRepayment"
                             ],
                             "overrides": {
                                 "EnterpriseInformation": {
@@ -2525,6 +2606,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         },
                         "RiskReviewAndLoanSanction": {
                             "excludes": [
+                                "DailySales",
+                                "AnnualSales",
+                                "EnterpriseProductSale",
+                                "MonthlyBusinessExpense",
+                                "OtherBusinessIncomes",
+                                "PersonalExpenses",
+                                "LiabilityRepayment"
                             ],
                             "overrides": {
                                 "EnterpriseInformation": {
@@ -2588,6 +2676,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         },
                         "BusinessTeamReview": {
                             "excludes": [
+                                "DailySales",
+                                "AnnualSales",
+                                "EnterpriseProductSale",
+                                "MonthlyBusinessExpense",
+                                "OtherBusinessIncomes",
+                                "PersonalExpenses",
+                                "LiabilityRepayment"
                             ],
                             "overrides": {
                                 "EnterpriseInformation": {
@@ -2651,6 +2746,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         },
                         "CreditOfficerReview": {
                             "excludes": [
+                                "DailySales",
+                                "AnnualSales",
+                                "EnterpriseProductSale",
+                                "MonthlyBusinessExpense",
+                                "OtherBusinessIncomes",
+                                "PersonalExpenses",
+                                "LiabilityRepayment"
                             ],
                             "overrides": {
                                 "EnterpriseInformation": {
@@ -2714,6 +2816,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         },
                         "CreditManagerReview": {
                             "excludes": [
+                                "DailySales",
+                                "AnnualSales",
+                                "EnterpriseProductSale",
+                                "MonthlyBusinessExpense",
+                                "OtherBusinessIncomes",
+                                "PersonalExpenses",
+                                "LiabilityRepayment"
                             ],
                             "overrides": {
                                 "EnterpriseInformation": {
@@ -2777,6 +2886,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         },
                         "CBOCreditHeadReview": {
                             "excludes": [
+                                "DailySales",
+                                "AnnualSales",
+                                "EnterpriseProductSale",
+                                "MonthlyBusinessExpense",
+                                "OtherBusinessIncomes",
+                                "PersonalExpenses",
+                                "LiabilityRepayment"
                             ],
                             "overrides": {
                                 "EnterpriseInformation": {
@@ -2840,6 +2956,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         },
                         "CEOMDReview": {
                             "excludes": [
+                                "DailySales",
+                                "AnnualSales",
+                                "EnterpriseProductSale",
+                                "MonthlyBusinessExpense",
+                                "OtherBusinessIncomes",
+                                "PersonalExpenses",
+                                "LiabilityRepayment"
                             ],
                             "overrides": {
                                 "EnterpriseInformation": {
@@ -2901,6 +3024,85 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 }
                             }
                         },
+                        "LoanInitiation": {
+                            "excludes": [
+                                "BankAccounts",
+                                "Liabilities",
+                                "BuyerDetails",
+                                "SuppliersDeatils",
+                                "PreliminaryInformation",
+                                "EstimatedSales",
+                                "DailySales",
+                                "ReviewDailySales",
+                                "AnnualSales",
+                                "ReviewAnnualSales",
+                                "EnterpriseProductSale",
+                                "ReviewEnterpriseProductSale",
+                                "MonthlyBusinessExpense",
+                                "ReviewMonthlyBusinessExpense",
+                                "OtherBusinessIncomes",
+                                "ReviewOtherBusinessIncomes",
+                                "PersonalExpenses",
+                                "ReviewPersonalExpenses",
+                                "LiabilityRepayment",
+                                "ReviewLiabilityRepayment",
+                                "NetBusinessIncome"
+                            ],
+                            "overrides": {
+                                "EnterpriseInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation":{
+                                    "readonly": true
+                                },
+                                "EnterpriseFinancials":{
+                                    "readonly": true
+                                },
+                                "BuyerDetails":{
+                                    "readonly": true
+                                },
+                                "SuppliersDeatils":{
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation":{
+                                    "readonly": true
+                                },
+                                "EstimatedSales":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                },
+                                "NetBusinessIncome":{
+                                    "readonly": true
+                                },
+                                "TotalMonthlySurplus":{
+                                    "readonly": true
+                                },
+                                "MonthlyBusinessExpense":{
+                                    "readonly": true
+                                },
+                                "OtherBusinessIncomes":{
+                                    "readonly": true
+                                },
+                                "PersonalExpenses":{
+                                    "readonly": true
+                                },
+                                "LiabilityRepayment":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        
                     }
                 }
             }
@@ -2956,7 +3158,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     }
                     model.customer.enterprise.businessType  = "Services";
                     computeTotalMonthlySurpluse("value","form",model);
-                    if(model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck' ||  model.currentStage == 'RiskReviewAndLoanSanction' ){
+                    if(model.currentStage != 'Screening' || model.currentStage != 'Application'){
                         model.customer.enterprise.initialEstimateMonthlySale = (model.customer.enterprise.monthlyBusinessExpenses) ? Number(model.customer.enterprise.monthlyBusinessExpenses * 4):0;
                         if(model.customer.enterprise){
                             model.customer.enterprise.monthlyTurnover = model.customer.enterprise.monthlyTurnover? Number(model.customer.enterprise.monthlyTurnover):0;
