@@ -1688,7 +1688,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": false,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "MIGRANT_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": false
