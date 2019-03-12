@@ -1659,7 +1659,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification": {
                                     "readonly": true
                                 },
-                               
                                 "Liabilities": {
                                     "readonly": true
                                 },

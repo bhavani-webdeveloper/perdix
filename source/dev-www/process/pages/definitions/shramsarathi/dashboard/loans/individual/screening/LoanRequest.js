@@ -1109,12 +1109,31 @@ define([],function(){
                             }
                         },
                         "loanView":{
+                            "excludes": [
+                                "LoanSanction",
+                                "PostReview"       
+                            ],
                             "overrides":{
+                                "PreliminaryInformation": {
+                                    "readonly": true
+                                },
+                                "DeductionsFromLoan":{
+                                    "readonly": true,
+                                },
                                 "AdditionalLoanInformation": {
                                     "readonly": true
                                 },
                                 "CollateralDetails":{
                                     "readonly":true
+                                },
+                                "LoanCustomerRelations": {
+                                    "readonly": true
+                                },
+                                "NomineeDetails": {
+                                    "readonly": true
+                                },
+                                "LoanDocuments": {
+                                    "readonly": true
                                 }
                             }
                         },
