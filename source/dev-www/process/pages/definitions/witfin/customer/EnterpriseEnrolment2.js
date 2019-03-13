@@ -243,9 +243,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     }
                                 },
                                 "excludes": [
-                                    "IndividualReferences",
+                                    //"IndividualReferences",
                                     "Liabilities",
-                                    "BusinessVerification"
+                                    //"BusinessVerification"
                                 ]
                             },
                             "GoNoGoApproval1": {
@@ -746,10 +746,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             },
                             "TeleVerification": {
                                 "overrides": {
-                                    "IndividualReferences":{
-                                        "readonly": true
-                                    }
-                                }
+                                    // "IndividualReferences":{
+                                    //     "readonly": true
+                                    // }
+                                },
+                                "excludes": [
+                                    "BusinessVerification",
+                                    "IndividualReferences"
+
+                                ]
                             },
                             // "ApplicationReview": {
                             //     "overrides": {

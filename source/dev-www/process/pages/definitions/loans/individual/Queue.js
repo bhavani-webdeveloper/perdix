@@ -29,6 +29,8 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 
 		initialize: function (model, form, formCtrl) {
 			model.branch = SessionStore.getCurrentBranch().branchId;
+			model.stage = 'Completed';
+			model.siteCode = SessionStore.getGlobalSetting('siteCode');
 			//model.branch = branch;
 		},
 
@@ -181,6 +183,25 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 							},
 							isApplicable: function(item, index){
 								if(item.stage == "DocumentUpload") {
+									return true;
+								} else {
+									return false;
+								}
+							}
+						},
+						{
+							name: "CUSTOMER_360",
+							desc: "",
+							icon: "fa fa-user",
+							fn: function(item, model){
+								$state.go("Page.Customer360",{
+									pageName:"Page.Customer360",
+									pageId:item.customerId,
+									pageData:model.siteCode
+								});
+							},
+							isApplicable: function(item, model){
+								if(item.stage == "Completed" && model.searchOptions.siteCode=="witfin") {
 									return true;
 								} else {
 									return false;
