@@ -698,9 +698,9 @@ define([],function(){
                                         if (!model.customer.familyMembers) {
                                             return out;
                                         }
-            
+                                    
                                         for (var i = 0; i < model.customer.familyMembers.length; i++) {
-                                            if(!( model.customer.familyMembers[i].relationShip=='self')){
+                                            if(!( model.customer.familyMembers[i].relationShip =='Self')){
                                                 out.push({
                                                     name: model.customer.familyMembers[i].familyMemberFirstName,
                                                     dob: model.customer.familyMembers[i].dateOfBirth,
