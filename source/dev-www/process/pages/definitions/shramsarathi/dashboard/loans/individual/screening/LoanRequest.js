@@ -698,9 +698,9 @@ define([],function(){
                                         if (!model.customer.familyMembers) {
                                             return out;
                                         }
-            
+                                    
                                         for (var i = 0; i < model.customer.familyMembers.length; i++) {
-                                            if(!( model.customer.familyMembers[i].relationShip=='self')){
+                                            if(!( model.customer.familyMembers[i].relationShip =='Self')){
                                                 out.push({
                                                     name: model.customer.familyMembers[i].familyMemberFirstName,
                                                     dob: model.customer.familyMembers[i].dateOfBirth,
@@ -1479,11 +1479,11 @@ define([],function(){
                         "NomineeDetails.nominees.nomineeDoorNo": {
                             "orderNo": 40,
                             "title":"HAMLET_FALA",
-                            "required": true
+                            "required": false
                         },
-                        "NomineeDetails.nominees.nomineeStreet":{
-                            "orderNo": 60
-                        },
+                        // "NomineeDetails.nominees.nomineeStreet":{
+                        //     "orderNo": 60
+                        // },
                         "NomineeDetails.nominees.nomineeLocality": {
                             "orderNo":50,
                             "title":"PANCHAYAT"
@@ -1690,7 +1690,7 @@ define([],function(){
                     "NomineeDetails.nominees.nomineeButton",
                     "NomineeDetails.nominees.nomineeDoorNo",
                     "NomineeDetails.nominees.nomineeLocality",
-                    "NomineeDetails.nominees.nomineeStreet",
+                    //"NomineeDetails.nominees.nomineeStreet",
                     "NomineeDetails.nominees.nomineePincode",
                     "NomineeDetails.nominees.nomineeDistrict",
                     "NomineeDetails.nominees.nomineeState",

@@ -1683,42 +1683,11 @@ define([], function () {
                         if (model.loanAccount.id){
                             model.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
                             model.loanAccount.portfolioInsuranceUrn = model.loanAccount.loanCustomerRelations[0].urn;
-
-                            // if(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length > 0){
-                            //     for(i = 0; i< model.loanAccount.loanCustomerRelations.length;i++){
-                            //         if(model.loanAccount.loanCustomerRelations[i].relation != "Applicant")
-                            //             continue;
-                            //         if(typeof model.loanAccount.loanCustomerRelations[i].dscStatus == "undefined" || model.loanAccount.loanCustomerRelations[i].dscStatus == ""){
-                            //             model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = null
-                            //             break;
-                            //         }
-                            //         if(model.loanAccount.loanCustomerRelations[i].dscStatus == "FAILURE" || model.loanAccount.loanCustomerRelations[i].dscStatus == "DSC_OVERRIDE_REQUIRED"){
-                            //             model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = "true"
-                            //             break;
-                            //         }
-                            //         else{
-                            //             model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = "false"
-                            //         }
-                                    
-                            //     }
-                            // }
-                        }
-                        if(typeof model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 =="undefined" || model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 == null){
-                            PageHelper.showErrors({data:{error:"DSC STATUS IS REQUIRED...."}});
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                                PageHelper.hideLoader();
-                                return false;
                         }
                         
                         if(!(policyBasedOnLoanType(model.loanAccount.loanType,model)))
                             return false;
 
-                        if(model.loanAccount.currentStage=='Checker2'){
-                            model.loanProcess.stage='Completed';
-                        }
-                        if(model.loanAccount.currentStage=='DSCOverride'){
-                            model.loanProcess.stage='LoanInitiation';
-                        }
                         var toStage=model.loanProcess.stage||null;
                         model.loanProcess.proceed(toStage)
                             .finally(function () {

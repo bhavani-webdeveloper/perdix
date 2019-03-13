@@ -162,15 +162,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 
                                 if(model.siteCode == 'KGFS'){
                                     model.customer.enterpriseRegistrations = model.customer.enterpriseRegistrations || [];
-                                    
-                                    model.customer.enterpriseRegistrations.push({
-                                        'registrationType': 'GST',
-                                    });
-                                    model.customer.enterpriseRegistrations.push({
-                                        'registrationType': 'PAN',
-                                    });
+                                    if( model.customer.enterpriseRegistrations.length == 0){
+                                        model.customer.enterpriseRegistrations.push({
+                                            'registrationType': 'GST',
+                                        });
+                                        model.customer.enterpriseRegistrations.push({
+                                            'registrationType': 'PAN',
+                                        });
+                                    }
                                 }
-
                                 PageHelper.hideLoader();
                             });
                     } else {

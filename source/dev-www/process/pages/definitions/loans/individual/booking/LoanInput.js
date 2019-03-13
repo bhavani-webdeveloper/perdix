@@ -844,7 +844,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         "items": [   
                          {
                                 "key": "loanAccount.applicant",
-                                "condition":"model.additional.isIndividual",
                                 "title": "APPLICANT_URN_NO",
                                 "type":"lov",
                                 "lovonly": true,
@@ -896,13 +895,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             },
                             {
                                 "key":"loanAccount.applicantName",
-                                "condition":"model.additional.isIndividual",
                                 "title":"APPLICANT_NAME",
                                 "readonly": true
                             },
                             {
                                 "key":"loanAccount.applicantId",
-                                "condition":"model.additional.isIndividual",
                                 "title":"APPLICANT_ID",
                                 "readonly": true
                             },

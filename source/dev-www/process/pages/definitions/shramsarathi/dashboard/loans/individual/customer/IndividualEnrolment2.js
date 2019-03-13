@@ -717,9 +717,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"HAMLET_FALA",
                                     "required":false
                                 },
-                                "ContactInformation.mailingStreet": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
+                                // "ContactInformation.mailingStreet": {
+                                //     "condition": "!model.customer.mailSameAsResidence"
+                                // },
                                 "ContactInformation.mailingMobilePhone": {
                                     "condition": "!model.customer.mailSameAsResidence"
                                 },
@@ -1504,9 +1504,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"HAMLET_FALA",
                                     "required":false
                                 },
-                                "ContactInformation.mailingStreet": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
+                                // "ContactInformation.mailingStreet": {
+                                //     "condition": "!model.customer.mailSameAsResidence"
+                                // },
                                 "ContactInformation.mailingPostoffice": {
                                     "condition": "!model.customer.mailSameAsResidence"
                                 },
@@ -1632,11 +1632,59 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                             }
                         },
+                        "pageClass": {
+                            "guarantor": {
+                                "overrides": {
+                                    "KYC": {
+                                        "readonly": false
+                                    },
+                                    "IndividualFinancials": {
+                                        "readonly": false
+                                    },
+                                    "IndividualInformation": {
+                                        "readonly": false
+                                    },
+                                    "ContactInformation": {
+                                        "readonly": false
+                                    },
+                                    "FamilyDetails": {
+                                        "readonly": false,
+                                        "title": "MIGRANT_DETAILS"
+                                    },
+                                    "Liabilities": {
+                                        "readonly": false
+                                    },
+                                    // "IndividualReferences": {
+                                    //     "readonly": false
+                                    // },
+                                    "References": {
+                                        "readonly": false
+                                    },
+                                    "TrackDetails": {
+                                        "readonly": false
+                                    },
+                                    "reference": {
+                                        "readonly": false
+                                    },
+                                    "HouseVerification": {
+                                        "readonly": false
+                                    },
+                                    "ResidenceVerification": {
+                                        "readonly": false
+                                    },
+                                    "PhysicalAssets": {
+                                        "readonly": false
+                                    },
+                                    "BankAccounts.customerBankAccounts": {
+                                        "readonly": false
+                                    }
+                                }
+                            }
+                        },
                         "loanView": {
                             "overrides": {
-                                // "kyc"
                                 "KYC":{
-                                    "readonly":true
+                                    "readonly": true
                                 },
                                 "IndividualInformation":{
                                     "readonly":true
@@ -1669,61 +1717,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly":true
                                 }
                             }
-                        }
-                    },
-                    "pageClass": {
-                        "guarantor": {
-                            "overrides": {
-                                "KYC": {
-                                    "readonly": false
-                                },
-                                "IndividualFinancials": {
-                                    "readonly": false
-                                },
-                                "IndividualInformation": {
-                                    "readonly": false
-                                },
-                                "ContactInformation": {
-                                    "readonly": false
-                                },
-                                "FamilyDetails": {
-                                    "readonly": false,
-                                    "title": "MIGRANT_DETAILS"
-                                },
-                                "Liabilities": {
-                                    "readonly": false
-                                },
-                                // "IndividualReferences": {
-                                //     "readonly": false
-                                // },
-                                "References": {
-                                    "readonly": false
-                                },
-                                "TrackDetails": {
-                                    "readonly": false
-                                },
-                                "reference": {
-                                    "readonly": false
-                                },
-                                "HouseVerification": {
-                                    "readonly": false
-                                },
-                                "ResidenceVerification": {
-                                    "readonly": false
-                                },
-                                "PhysicalAssets": {
-                                    "readonly": false
-                                },
-                                "BankAccounts.customerBankAccounts": {
-                                    "readonly": false
-                                }
-                            }
-                        }
+                        },
                     }
                 }
             }
             var overridesFields = function (bundlePageObj) {
                 return {
+                    "ContactInformation.mailingDoorNo": {
+                        "condition": "!model.customer.mailSameAsResidence",
+                        "title":"HAMLET_FALA",
+                        "required":false
+                    },
                    "Liabilities.liabilities.noOfInstalmentPaid":{
                         "orderNo":23
                     },
@@ -2101,11 +2105,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "ContactInformation.mailingDoorNo": {
                         "condition": "!model.customer.mailSameAsResidence",
-                        "title":"HAMLET_FALA"
+                        "title":"HAMLET_FALA",
+                        "required":false
                     },
-                    "ContactInformation.mailingStreet": {
-                        "condition": "!model.customer.mailSameAsResidence"
-                    },
+                    // "ContactInformation.mailingStreet": {
+                    //     "condition": "!model.customer.mailSameAsResidence"
+                    // },
                     "ContactInformation.mailingPostoffice": {
                         "condition": "!model.customer.mailSameAsResidence"
                     },
@@ -2250,7 +2255,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.residentialAddressFieldSet",
                     "ContactInformation.careOf",
                     "ContactInformation.doorNo",
-                    "ContactInformation.street",
+                    //"ContactInformation.street",
                     "ContactInformation.postOffice",
                     "ContactInformation.landmark",
                     //"ContactInformation.collectionArea",
@@ -2265,7 +2270,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.mailingLandmark",
                     "ContactInformation.mailingMobilePhone",
                     "ContactInformation.mailingDoorNo",
-                    "ContactInformation.mailingStreet",
+                    //"ContactInformation.mailingStreet",
                     "ContactInformation.mailingPostoffice",
                     "ContactInformation.mailingMandal",
                     "ContactInformation.mailingPincode",
@@ -2456,7 +2461,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     };
 
                     /* Setting data recieved from Bundle */
-                    model.loanCustomerRelationType = getLoanCustomerRelation(bundlePageObj.pageClass);
+                    model.loanCustomerRelationType = 
+                    (bundlePageObj.pageClass);
                     model.pageClass = bundlePageObj.pageClass;
                     model.currentStage = bundleModel.currentStage;
                     // if( model.currentStage=="FieldAppraisal"){
@@ -3410,7 +3416,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 model.customer.customerBranchId = obj.branchId;
                                 model.customer.centreId = obj.centreId;
                                 model.customer.centreName = obj.centreName;
-                                model.customer.street = obj.addressLine2;
+                                //model.customer.street = obj.addressLine2;
                                 model.customer.doorNo = obj.addressLine1;
                                 model.customer.pincode = obj.pincode;
                                 model.customer.district = obj.district;

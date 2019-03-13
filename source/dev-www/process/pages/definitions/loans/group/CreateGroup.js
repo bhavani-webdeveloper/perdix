@@ -307,30 +307,12 @@ define({
                                 "type": "select",
                                 "parentEnumCode": "branch_id",
                                 "parentValueExpr": "model.branchId",
-                            },
-                            "status": {
-                                "key": "group.status",
-                                "title": "STATUS",
-                                "type": "select",
-                                "titleMap": [{
-                                    "name": "All",
-                                    "value": ""
-                                }, {
-                                    "name": "Processed",
-                                    "value": "PROCESSED"
-                                }, {
-                                    "name": "Pending",
-                                    "value": "PENDING"
-                                }, {
-                                    "name": "Error",
-                                    "value": "ERROR"
-                                }]
-                            },
+                            }
                         },
                         "outputMap": {
                             "urnNo": "group.jlgGroupMembers[arrayIndex].urnNo",
                             "firstName": "group.jlgGroupMembers[arrayIndex].firstName",
-                            "fatherFirstName": "group.jlgGroupMembers[arrayIndex].husbandOrFatherFirstName",
+                            "fatherFirstName": "group.jlgGroupMembers[arrayIndex].fatherFirstName",
                             "customerId": "group.jlgGroupMembers[arrayIndex].customerId",
                             "spouseFirstName": "group.jlgGroupMembers[arrayIndex].spouseFirstName"
                         },
@@ -345,15 +327,11 @@ define({
                                     break;
                                 }
                             }
-                            var today = moment(new Date());
-                            var nDaysBack = moment(new Date()).subtract(nDays, 'days');
+                            
                             console.log(inputModel);
-                            var promise = CreditBureau.listCreditBureauStatus({
+                            var promise = Enrollment.search({
                                 'branchName': branchName,
-                                'status': inputModel.status,
-                                'centreId': inputModel.centreId,
-                                'fromDate': nDaysBack.format('YYYY-MM-DD'),
-                                'toDate': today.format('YYYY-MM-DD')
+                                'centreId': inputModel.centreId
                             }).$promise.then(function(response){
                                 $log.info(response.body);
                                 var ret = [];
