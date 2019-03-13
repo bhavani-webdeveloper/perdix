@@ -1632,11 +1632,59 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                             }
                         },
+                        "pageClass": {
+                            "guarantor": {
+                                "overrides": {
+                                    "KYC": {
+                                        "readonly": false
+                                    },
+                                    "IndividualFinancials": {
+                                        "readonly": false
+                                    },
+                                    "IndividualInformation": {
+                                        "readonly": false
+                                    },
+                                    "ContactInformation": {
+                                        "readonly": false
+                                    },
+                                    "FamilyDetails": {
+                                        "readonly": false,
+                                        "title": "MIGRANT_DETAILS"
+                                    },
+                                    "Liabilities": {
+                                        "readonly": false
+                                    },
+                                    // "IndividualReferences": {
+                                    //     "readonly": false
+                                    // },
+                                    "References": {
+                                        "readonly": false
+                                    },
+                                    "TrackDetails": {
+                                        "readonly": false
+                                    },
+                                    "reference": {
+                                        "readonly": false
+                                    },
+                                    "HouseVerification": {
+                                        "readonly": false
+                                    },
+                                    "ResidenceVerification": {
+                                        "readonly": false
+                                    },
+                                    "PhysicalAssets": {
+                                        "readonly": false
+                                    },
+                                    "BankAccounts.customerBankAccounts": {
+                                        "readonly": false
+                                    }
+                                }
+                            }
+                        },
                         "loanView": {
                             "overrides": {
-                                // "kyc"
                                 "KYC":{
-                                    "readonly":true
+                                    "readonly": true
                                 },
                                 "IndividualInformation":{
                                     "readonly":true
@@ -1669,56 +1717,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly":true
                                 }
                             }
-                        }
-                    },
-                    "pageClass": {
-                        "guarantor": {
-                            "overrides": {
-                                "KYC": {
-                                    "readonly": false
-                                },
-                                "IndividualFinancials": {
-                                    "readonly": false
-                                },
-                                "IndividualInformation": {
-                                    "readonly": false
-                                },
-                                "ContactInformation": {
-                                    "readonly": false
-                                },
-                                "FamilyDetails": {
-                                    "readonly": false,
-                                    "title": "MIGRANT_DETAILS"
-                                },
-                                "Liabilities": {
-                                    "readonly": false
-                                },
-                                // "IndividualReferences": {
-                                //     "readonly": false
-                                // },
-                                "References": {
-                                    "readonly": false
-                                },
-                                "TrackDetails": {
-                                    "readonly": false
-                                },
-                                "reference": {
-                                    "readonly": false
-                                },
-                                "HouseVerification": {
-                                    "readonly": false
-                                },
-                                "ResidenceVerification": {
-                                    "readonly": false
-                                },
-                                "PhysicalAssets": {
-                                    "readonly": false
-                                },
-                                "BankAccounts.customerBankAccounts": {
-                                    "readonly": false
-                                }
-                            }
-                        }
+                        },
                     }
                 }
             }
@@ -2456,7 +2455,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     };
 
                     /* Setting data recieved from Bundle */
-                    model.loanCustomerRelationType = getLoanCustomerRelation(bundlePageObj.pageClass);
+                    model.loanCustomerRelationType = 
+                    (bundlePageObj.pageClass);
                     model.pageClass = bundlePageObj.pageClass;
                     model.currentStage = bundleModel.currentStage;
                     // if( model.currentStage=="FieldAppraisal"){
