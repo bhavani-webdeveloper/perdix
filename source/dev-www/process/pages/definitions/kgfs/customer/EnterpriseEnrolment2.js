@@ -199,14 +199,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EnterpriseInformation.centreId": {
                         "type": "text",
-                        "title": "CENTRE_ID",
+                        "title": "CENTREID",
                         "readonly": true,
                         "required": true,
                         "orderNo": 30
                     },
                     "EnterpriseInformation.centreName": {
                         "type": "text",
-                        "title": "CENTRE_Name",
+                        "title": "CENTRE_NAME",
                         "readonly": true,
                         "required": true,
                         "orderNo": 20
@@ -3158,7 +3158,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     }
                     model.customer.enterprise.businessType  = "Services";
                     computeTotalMonthlySurpluse("value","form",model);
-                    if(model.currentStage != 'Screening' || model.currentStage != 'Application'){
+                    if(model.currentStage != 'Screening' && model.currentStage != 'Application'){
                         model.customer.enterprise.initialEstimateMonthlySale = (model.customer.enterprise.monthlyBusinessExpenses) ? Number(model.customer.enterprise.monthlyBusinessExpenses * 4):0;
                         if(model.customer.enterprise){
                             model.customer.enterprise.monthlyTurnover = model.customer.enterprise.monthlyTurnover? Number(model.customer.enterprise.monthlyTurnover):0;
