@@ -203,7 +203,8 @@ function(LeadProcess, AngularResourceService) {
                     },
                     "leadProfile.contactDetails.addressLine1":{
                         "title":"HAMLET_FALA",
-                        "orderNo":12
+                        "orderNo":12,
+                        "required":false
                     },
                     "leadProfile.contactDetails.alternateMobileNo":{
                         orderNo: 10
@@ -420,7 +421,7 @@ function(LeadProcess, AngularResourceService) {
                                         "items":{
                                              "subDistrict": {
                                                      "key":"lead.cityTownVillage",
-                                                     "title":"SUBDISTRICT",
+                                                     "title":"SUB_DISTRICT",
                                                      "readonly":true,
                                                      "required":true
                                                  }
