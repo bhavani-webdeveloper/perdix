@@ -2777,6 +2777,12 @@
                             "type": "string",
                             "format": "date",
                             "captureStages": ["BasicEnrolment","Completed"]
+                        },
+                        "frequency": {
+                            "title": "Frequency",
+                            "type": "string",
+                            "refCodeCategory": "frequency",
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         }
                     }
                 }

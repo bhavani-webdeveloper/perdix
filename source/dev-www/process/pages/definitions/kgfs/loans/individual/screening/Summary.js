@@ -53,9 +53,9 @@ define({
     "pageUID": "kgfs.loans.individual.screening.Summary",
     "pageType": "Engine",
     "dependencies": ["$log", "$q","Enrollment", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
-'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch","Scoring","AuthTokenHelper", "BundleManager"],
+'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch","Scoring","AuthTokenHelper", "BundleManager","Misc"],
     $pageFn: function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUtils,
-    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch,Scoring,AuthTokenHelper,BundleManager){
+    irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch,Scoring,AuthTokenHelper,BundleManager,Misc){
 
     var branch = SessionStore.getBranch();
     var scoreName;
@@ -87,7 +87,7 @@ define({
         model.deviationDetails = res[12];
         model.deviationParameter = res[12];
         model.ratioDetails = res[13];
-        model.psychometricScores = res[14].sections;
+       // model.psychometricScores = res[14].sections;
         model.cashFlowDetails = res[15];
         model.businessBankStmtSummary = res[16];
         model.personalBankStmtSummary = res[17];
@@ -127,26 +127,6 @@ define({
             household: [],
             business: {}
         };
-        // model.pl.household.income = model.houseHoldPL.data[0]['Total Incomes'];
-        // model.pl.household.salaryFromBusiness = model.houseHoldPL.data[0]['Salary from business'];
-        // model.pl.household.otherIncomeSalaries = model.houseHoldPL.data[0]['Other Income/salaries'];
-        // model.pl.household.familyMemberIncomes = model.houseHoldPL.data[0]['Family Member Incomes'];
-        // model.pl.household.Expenses = model.houseHoldPL.data[0]['Total Expenses'];
-        // model.pl.household.declaredEducationExpense = model.houseHoldPL.data[0]['Expenses Declared or based on the educational expense whichever is higher'];
-        // model.pl.household.emiHouseholdLiabilities = model.houseHoldPL.data[0]['EMI\'s of household liabilities'];
-        // model.pl.household.netHouseholdIncome = model.houseHoldPL.data[0]['Net Household Income'];
-
-        // if (model.houseHoldPL_CoApplicant && model.houseHoldPL_CoApplicant.active) {
-        //     model.pl.householdCoApplicant = {};
-        //     model.pl.householdCoApplicant.income = model.houseHoldPL_CoApplicant.data[0]['Total Incomes'];
-        //     model.pl.householdCoApplicant.salaryFromBusiness = model.houseHoldPL_CoApplicant.data[0]['Salary from business'];
-        //     model.pl.householdCoApplicant.otherIncomeSalaries = model.houseHoldPL_CoApplicant.data[0]['Other Income/salaries'];
-        //     model.pl.householdCoApplicant.familyMemberIncomes = model.houseHoldPL_CoApplicant.data[0]['Family Member Incomes'];
-        //     model.pl.householdCoApplicant.Expenses = model.houseHoldPL_CoApplicant.data[0]['Total Expenses'];
-        //     model.pl.householdCoApplicant.declaredEducationExpense = model.houseHoldPL_CoApplicant.data[0]['Expenses Declared or based on the educational expense whichever is higher'];
-        //     model.pl.householdCoApplicant.emiHouseholdLiabilities = model.houseHoldPL_CoApplicant.data[0]['EMI\'s of household liabilities'];
-        //     model.pl.householdCoApplicant.netHouseholdIncome = model.houseHoldPL_CoApplicant.data[0]['Net Household Income'];
-        // }
 
         if(model.houseHoldPL && model.houseHoldPL.length){
             for (var i=0; i<model.houseHoldPL.length; i++){
@@ -225,38 +205,38 @@ define({
         // debugger;
 
 
-        for (var i=0;i< model.deviationDetails.data.length; i++){
-            var d = model.deviationDetails.data[i];
-            if (d.Mitigant && d.Mitigant.length!=0){
-                if (d.Mitigant && d.Mitigant!=null){
-                    d.ListOfMitigants = d.Mitigant.split("|");
-                }
+        // for (var i=0;i< model.deviationDetails.data.length; i++){
+        //     var d = model.deviationDetails.data[i];
+        //     if (d.Mitigant && d.Mitigant.length!=0){
+        //         if (d.Mitigant && d.Mitigant!=null){
+        //             d.ListOfMitigants = d.Mitigant.split("|");
+        //         }
 
-                if (d.ChosenMitigant && d.ChosenMitigant!=null){
-                    d.ChosenMitigants = d.ChosenMitigant.split("|")
-                }
+        //         if (d.ChosenMitigant && d.ChosenMitigant!=null){
+        //             d.ChosenMitigants = d.ChosenMitigant.split("|")
+        //         }
 
-            }
-        }
+        //     }
+        // }
 
-        model.deviationParameter = [];
-        for (var i=0;i< model.deviationDetails.data.length; i++){
-            var d = model.deviationDetails.data[i];
-            model.deviationParameter.push(_.cloneDeep(model.deviationDetails.data[i]));
-            delete model.deviationParameter[model.deviationParameter.length-1].ListOfMitigants;
-            delete model.deviationParameter[model.deviationParameter.length-1].Mitigant;
-            model.deviationParameter[model.deviationParameter.length-1].mitigants = [];
-            if (d.Mitigant && d.Mitigant.length!=0){
-                d.ListOfMitigants = d.Mitigant.split("|");
-                for (var j =0; j < d.ListOfMitigants.length; j++) {
-                    model.deviationParameter[model.deviationParameter.length-1].mitigants.push({mitigantName:d.ListOfMitigants[j]});
-                }
+        // model.deviationParameter = [];
+        // for (var i=0;i< model.deviationDetails.data.length; i++){
+        //     var d = model.deviationDetails.data[i];
+        //     model.deviationParameter.push(_.cloneDeep(model.deviationDetails.data[i]));
+        //     delete model.deviationParameter[model.deviationParameter.length-1].ListOfMitigants;
+        //     delete model.deviationParameter[model.deviationParameter.length-1].Mitigant;
+        //     model.deviationParameter[model.deviationParameter.length-1].mitigants = [];
+        //     if (d.Mitigant && d.Mitigant.length!=0){
+        //         d.ListOfMitigants = d.Mitigant.split("|");
+        //         for (var j =0; j < d.ListOfMitigants.length; j++) {
+        //             model.deviationParameter[model.deviationParameter.length-1].mitigants.push({mitigantName:d.ListOfMitigants[j]});
+        //         }
 
-            }
-        }
+        //     }
+        // }
         model.additional = {};
-        model.additional = {deviations:{deviationParameter: model.deviationParameter,scoreName:scoreName}};
-        BundleManager.pushEvent('deviation-loaded', model._bundlePageObj, model.additional);
+        // model.additional = {deviations:{deviationParameter: model.deviationParameter,scoreName:scoreName}};
+        // BundleManager.pushEvent('deviation-loaded', model._bundlePageObj, model.additional);
 
         $log.info("Karthik here");
         $log.info(model.additional);
@@ -383,90 +363,90 @@ define({
         //     ]
         // });
 
-        form.push({
-            type: "box",
-            colClass: "col-sm-12 table-box",
-            condition: "model.siteCode != IREPDhan",
-            title: "SCORES",
-            items: [
-                {
-                    type: "section",
-                    htmlClass: "row",
-                    html: '<div class="col-sm-3"><div class="stat-container" ><dd class="stat-key"> Total Score</dd><dt class="stat-value"> {{ model.ScoreDetails[0].OverallWeightedScore }}</dt></div></div><div class="col-sm-3"><div class="stat-container" ><dd class="stat-key"> Status</dd><dt class="stat-value" ng-class="{\'text-a-green\': model.ScoreDetails[0].OverallPassStatus==\'PASS\', \'text-a-red\': model.ScoreDetails[0].OverallPassStatus==\'FAIL\'}"> {{ model.ScoreDetails[0].OverallPassStatus }}</dt></div></div><div class="clearfix"></div><hr>'
-                },
-                {
-                    type: "section",
-                    htmlClass: "row",
-                    items: [
-                        {
-                            type: "section",
-                            htmlClass: "col-sm-12",
-                            title: model.scoreDetails[0].title,
-                            html:
-'<div ng-init="_score=model.scoreDetails[0]">'+
-    '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{_score.title}} ({{model.totalScores.data[0][_score.title]}})</h3>'+
-    '<table class="table">'+
-        '<colgroup>'+
-            '<col width="25%">'+
-            '<col width="{{_score.colorPct}}%" ng-repeat-start="i in _score.values">'+
-            '<col width="{{_score.valuePct}}%" ng-repeat-end>'+
-        '</colgroup>'+
-        '<tbody>'+
-            '<tr>'+
-                '<th>Parameter Name</th>'+
-                '<th colspan="2" ng-repeat="j in _score.values">{{_score.sections[j].relation_detail}}</th>'+
-            '</tr>'+
-            '<tr ng-repeat="data in _score.sections[0].data" ng-init="parameterIndex=$index">'+
-                '<td>{{data.Parameter}}</td>'+
-                '<td ng-repeat-start="k in _score.values"> <span class="square-color-box" style="background:{{_score.sections[k].data[parameterIndex].color_hexadecimal}}"> </span></td>'+
-                '<td ng-repeat-end>{{_score.sections[k].data[parameterIndex].Applicant}}</td></tr>'+
-        '</tbody>'+
-    '</table>'+
-'</div>'
-                        },
-                        {
-                            type: "section",
-                            htmlClass: "col-sm-12",
-                            title: model.scoreDetails[1].title,
-                            html:
-'<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{ model.scoreDetails[1].title }} ({{ model.totalScores.data[0][model.scoreDetails[1].title] }})</h3>'+
-'<table class="table">'+
-    '<colgroup><col width="50%"><col width="5%"><col width="45%"></colgroup>'+
-    '<tbody>'+
-        '<tr><th>Parameter</th><th></th><th>Actual Value</th></tr>'+
-        '<tr ng-repeat="data in model.scoreDetails[1].data">'+
-            '<td>{{ data.Parameter }}</td>'+
-            '<td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td>'+
-            '<td>{{ data["Actual Value"] }}</td>'+
-        '</tr>'+
-    '</tbody>'+
-'</table>'
-                        }
-                    ]
-                },
-                {
-                    type: "section",
-                    htmlClass: "row",
-                    items: [
-                        {
-                            type: "section",
-                            htmlClass: "col-sm-6",
-                            condition: "model.currentStage!='ScreeningReview'",
-                            title: model.scoreDetails[2].title,
-                            html: '<h3>{{ model.scoreDetails[2].title }} ({{ model.totalScores.data[0][model.scoreDetails[2].title] }})</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.scoreDetails[2].data"><td>{{ data.Parameter }}</td><td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td><td>{{ data["Actual Value"] }}</td></tr></tbody></table>'
-                        },
-                        {
-                            type: "section",
-                            htmlClass: "col-sm-6",
-                            condition: "model.currentStage!='ScreeningReview'",
-                            title: model.scoreDetails[3].title,
-                            html: '<h3>{{ model.scoreDetails[3].title }} ({{ model.totalScores.data[0][model.scoreDetails[3].title] }})</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.scoreDetails[3].data"><td>{{ data.Parameter }}</td><td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td><td>{{ data["Actual Value"] }}</td></tr></tbody></table>'
-                        }
-                    ]
-                }
+//         form.push({
+//             type: "box",
+//             colClass: "col-sm-12 table-box",
+//             condition: "model.siteCode != IREPDhan",
+//             title: "SCORES",
+//             items: [
+//                 {
+//                     type: "section",
+//                     htmlClass: "row",
+//                     html: '<div class="col-sm-3"><div class="stat-container" ><dd class="stat-key"> Total Score</dd><dt class="stat-value"> {{ model.ScoreDetails[0].OverallWeightedScore }}</dt></div></div><div class="col-sm-3"><div class="stat-container" ><dd class="stat-key"> Status</dd><dt class="stat-value" ng-class="{\'text-a-green\': model.ScoreDetails[0].OverallPassStatus==\'PASS\', \'text-a-red\': model.ScoreDetails[0].OverallPassStatus==\'FAIL\'}"> {{ model.ScoreDetails[0].OverallPassStatus }}</dt></div></div><div class="clearfix"></div><hr>'
+//                 },
+//                 {
+//                     type: "section",
+//                     htmlClass: "row",
+//                     items: [
+//                         {
+//                             type: "section",
+//                             htmlClass: "col-sm-12",
+//                             title: model.scoreDetails[0].title,
+//                             html:
+// '<div ng-init="_score=model.scoreDetails[0]">'+
+//     '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{_score.title}} ({{model.totalScores.data[0][_score.title]}})</h3>'+
+//     '<table class="table">'+
+//         '<colgroup>'+
+//             '<col width="25%">'+
+//             '<col width="{{_score.colorPct}}%" ng-repeat-start="i in _score.values">'+
+//             '<col width="{{_score.valuePct}}%" ng-repeat-end>'+
+//         '</colgroup>'+
+//         '<tbody>'+
+//             '<tr>'+
+//                 '<th>Parameter Name</th>'+
+//                 '<th colspan="2" ng-repeat="j in _score.values">{{_score.sections[j].relation_detail}}</th>'+
+//             '</tr>'+
+//             '<tr ng-repeat="data in _score.sections[0].data" ng-init="parameterIndex=$index">'+
+//                 '<td>{{data.Parameter}}</td>'+
+//                 '<td ng-repeat-start="k in _score.values"> <span class="square-color-box" style="background:{{_score.sections[k].data[parameterIndex].color_hexadecimal}}"> </span></td>'+
+//                 '<td ng-repeat-end>{{_score.sections[k].data[parameterIndex].Applicant}}</td></tr>'+
+//         '</tbody>'+
+//     '</table>'+
+// '</div>'
+//                         },
+//                         {
+//                             type: "section",
+//                             htmlClass: "col-sm-12",
+//                             title: model.scoreDetails[1].title,
+//                             html:
+// '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{ model.scoreDetails[1].title }} ({{ model.totalScores.data[0][model.scoreDetails[1].title] }})</h3>'+
+// '<table class="table">'+
+//     '<colgroup><col width="50%"><col width="5%"><col width="45%"></colgroup>'+
+//     '<tbody>'+
+//         '<tr><th>Parameter</th><th></th><th>Actual Value</th></tr>'+
+//         '<tr ng-repeat="data in model.scoreDetails[1].data">'+
+//             '<td>{{ data.Parameter }}</td>'+
+//             '<td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td>'+
+//             '<td>{{ data["Actual Value"] }}</td>'+
+//         '</tr>'+
+//     '</tbody>'+
+// '</table>'
+//                         }
+//                     ]
+//                 },
+//                 {
+//                     type: "section",
+//                     htmlClass: "row",
+//                     items: [
+//                         {
+//                             type: "section",
+//                             htmlClass: "col-sm-6",
+//                             condition: "model.currentStage!='ScreeningReview'",
+//                             title: model.scoreDetails[2].title,
+//                             html: '<h3>{{ model.scoreDetails[2].title }} ({{ model.totalScores.data[0][model.scoreDetails[2].title] }})</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.scoreDetails[2].data"><td>{{ data.Parameter }}</td><td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td><td>{{ data["Actual Value"] }}</td></tr></tbody></table>'
+//                         },
+//                         {
+//                             type: "section",
+//                             htmlClass: "col-sm-6",
+//                             condition: "model.currentStage!='ScreeningReview'",
+//                             title: model.scoreDetails[3].title,
+//                             html: '<h3>{{ model.scoreDetails[3].title }} ({{ model.totalScores.data[0][model.scoreDetails[3].title] }})</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.scoreDetails[3].data"><td>{{ data.Parameter }}</td><td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td><td>{{ data["Actual Value"] }}</td></tr></tbody></table>'
+//                         }
+//                     ]
+//                 }
 
-            ]
-        })
+//             ]
+//         })
 
         // for (i in model.scoreDetails) {
         //     (function(i){
@@ -494,110 +474,110 @@ define({
         //     // form.push()
         // }
 
-        form.push({
-            type: "box",
-            colClass: "col-sm-12",
-            condition: "model.currentStage!='ScreeningReview'",
-            items: [
-                {
-                    type: "tableview",
-                    key: "sectorDetails.data",
-                    title: model.sectorDetails.title,
-                    selectable: false,
-                    paginate: false,
-                    searching: false,
-                    getColumns: function(){
-                        return model.sectorDetails.columns;
-                    }
-                }
-            ]
-        });
+        // form.push({
+        //     type: "box",
+        //     colClass: "col-sm-12",
+        //     condition: "model.currentStage!='ScreeningReview'",
+        //     items: [
+        //         {
+        //             type: "tableview",
+        //             key: "sectorDetails.data",
+        //             title: model.sectorDetails.title,
+        //             selectable: false,
+        //             paginate: false,
+        //             searching: false,
+        //             getColumns: function(){
+        //                 return model.sectorDetails.columns;
+        //             }
+        //         }
+        //     ]
+        // });
 
-        form.push({
-            type: "box",
-            colClass: "col-sm-12",
-            condition: "model.currentStage!='ScreeningReview'",
-            items: [
-                {
-                    type: "tableview",
-                    key: "subSectorDetails.data",
-                    title: model.subSectorDetails.title,
-                    selectable: false,
-                    paginate: false,
-                    searching: false,
-                    getColumns: function(){
-                        return model.subSectorDetails.columns;
-                    }
-                }
-            ]
-        });
+        // form.push({
+        //     type: "box",
+        //     colClass: "col-sm-12",
+        //     condition: "model.currentStage!='ScreeningReview'",
+        //     items: [
+        //         {
+        //             type: "tableview",
+        //             key: "subSectorDetails.data",
+        //             title: model.subSectorDetails.title,
+        //             selectable: false,
+        //             paginate: false,
+        //             searching: false,
+        //             getColumns: function(){
+        //                 return model.subSectorDetails.columns;
+        //             }
+        //         }
+        //     ]
+        // });
 
         // for (i in model.psychometricScores) {
-            form.push({
-                type: "box",
-                colClass: "col-sm-12 table-box",
-                title: "Psychometric Scores",
-                condition: "model.currentStage != 'ScreeningReview' && model.siteCode == 'kinara'",
-                items: [
-                    {
-                        type: "section",
-                        colClass: "col-sm-12",
-                        html:
-                        // '\
-                        // <table class="table">\
-                        //     <colgroup>\
-                        //         <col width="60%">\
-                        //         <col width="20%">\
-                        //         <col width="20%">\
-                        //     </colgroup>\
-                        //     <thead>\
-                        //         <tr>\
-                        //             <th>Category</th>\
-                        //             <th>Score</th>\
-                        //         </tr>\
-                        //     </thead>\
-                        //     <tbody>\
-                        //         <tr ng-repeat="rowData in model.psychometricScores['+i+'].data">\
-                        //             <td>{{ rowData["Category Name"] }}</td>\
-                        //             <td style="background: {{ rowData.color_hexadecimal }}"></td>\
-                        //             <td>{{ rowData["Score"] }}</td>\
-                        //         </tr>\
-                        //     </tbody>\
-                        // </table>\
-                        // <strong>Total Score </strong> &nbsp; &nbsp; {{ model.psychometricScores['+i+'].summary["Total Score"] }} <br />\
-                        // <strong>Test Attempt Time </strong> &nbsp; &nbsp; {{ model.psychometricScores['+i+'].summary["Test Attempt Time"] }} <br />\
-                        // <strong>Attempt Language </strong> &nbsp; &nbsp; {{ model.psychometricScores['+i+'].summary["Attempt Language"] }} <br />'
-                        '<div ng-init="_scores=model.psychometricScores">'+
-    //'<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{_score.title}} ({{model.totalScores.data[0][_score.title]}})</h3>'+
-    '<table class="table table-responsive">'+
-        // '<colgroup>'+
-        //     '<col width="25%">'+
-        //     '<col width="{{_score.colorPct}}%" ng-repeat-start="i in _score.values">'+
-        //     '<col width="{{_score.valuePct}}%" ng-repeat-end>'+
-        // '</colgroup>'+
-        '<tbody>'+
-            '<tr>'+
-                '<th>Parameter Name</th>'+
-                '<th>Cut Off Score</th>'+
-                '<th colspan="2" ng-repeat="_score in _scores">{{_score.relation_detail}}</th>'+
-            '</tr>'+
-            '<tr ng-repeat=" (key, value) in _scores[0].data" ng-init="parameterIndex=$index">'+
-                '<td >{{key}}</td>'+
-                '<td >{{value["Cut Off Score"]}}</td>' +
-                '<td ng-repeat-start="_score in _scores"> <span class="square-color-box" style="background:{{_score.data[key].color_hexadecimal}}"> </span></td>'+
-               '<td ng-repeat-end>{{_score.data[key].Score}}</td></tr>'+
+//             form.push({
+//                 type: "box",
+//                 colClass: "col-sm-12 table-box",
+//                 title: "Psychometric Scores",
+//                 condition: "model.currentStage != 'ScreeningReview' && model.siteCode == 'kinara'",
+//                 items: [
+//                     {
+//                         type: "section",
+//                         colClass: "col-sm-12",
+//                         html:
+//                         // '\
+//                         // <table class="table">\
+//                         //     <colgroup>\
+//                         //         <col width="60%">\
+//                         //         <col width="20%">\
+//                         //         <col width="20%">\
+//                         //     </colgroup>\
+//                         //     <thead>\
+//                         //         <tr>\
+//                         //             <th>Category</th>\
+//                         //             <th>Score</th>\
+//                         //         </tr>\
+//                         //     </thead>\
+//                         //     <tbody>\
+//                         //         <tr ng-repeat="rowData in model.psychometricScores['+i+'].data">\
+//                         //             <td>{{ rowData["Category Name"] }}</td>\
+//                         //             <td style="background: {{ rowData.color_hexadecimal }}"></td>\
+//                         //             <td>{{ rowData["Score"] }}</td>\
+//                         //         </tr>\
+//                         //     </tbody>\
+//                         // </table>\
+//                         // <strong>Total Score </strong> &nbsp; &nbsp; {{ model.psychometricScores['+i+'].summary["Total Score"] }} <br />\
+//                         // <strong>Test Attempt Time </strong> &nbsp; &nbsp; {{ model.psychometricScores['+i+'].summary["Test Attempt Time"] }} <br />\
+//                         // <strong>Attempt Language </strong> &nbsp; &nbsp; {{ model.psychometricScores['+i+'].summary["Attempt Language"] }} <br />'
+//                         '<div ng-init="_scores=model.psychometricScores">'+
+//     //'<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{_score.title}} ({{model.totalScores.data[0][_score.title]}})</h3>'+
+//     '<table class="table table-responsive">'+
+//         // '<colgroup>'+
+//         //     '<col width="25%">'+
+//         //     '<col width="{{_score.colorPct}}%" ng-repeat-start="i in _score.values">'+
+//         //     '<col width="{{_score.valuePct}}%" ng-repeat-end>'+
+//         // '</colgroup>'+
+//         '<tbody>'+
+//             '<tr>'+
+//                 '<th>Parameter Name</th>'+
+//                 '<th>Cut Off Score</th>'+
+//                 '<th colspan="2" ng-repeat="_score in _scores">{{_score.relation_detail}}</th>'+
+//             '</tr>'+
+//             '<tr ng-repeat=" (key, value) in _scores[0].data" ng-init="parameterIndex=$index">'+
+//                 '<td >{{key}}</td>'+
+//                 '<td >{{value["Cut Off Score"]}}</td>' +
+//                 '<td ng-repeat-start="_score in _scores"> <span class="square-color-box" style="background:{{_score.data[key].color_hexadecimal}}"> </span></td>'+
+//                '<td ng-repeat-end>{{_score.data[key].Score}}</td></tr>'+
 
-            '<tr ng-repeat=" (key, value) in _scores[0].summary" ng-init="parameterIndex=$index">'+
-                '<td >{{key}}</td>'+
-                '<td ></td>' +
-                '<td ng-repeat-start="_score in _scores"></td>' +
-                '<td ng-repeat-end ng-style = "key === \'Total Score\' ?{\'font-weight\': \'bold\'} : {}"> {{_score.summary[key]}}</td>'+
-        '</tbody>'+
-    '</table>'+
-'</div>'
-                    }
-                ]
-            })
+//             '<tr ng-repeat=" (key, value) in _scores[0].summary" ng-init="parameterIndex=$index">'+
+//                 '<td >{{key}}</td>'+
+//                 '<td ></td>' +
+//                 '<td ng-repeat-start="_score in _scores"></td>' +
+//                 '<td ng-repeat-end ng-style = "key === \'Total Score\' ?{\'font-weight\': \'bold\'} : {}"> {{_score.summary[key]}}</td>'+
+//         '</tbody>'+
+//     '</table>'+
+// '</div>'
+//                     }
+//                 ]
+//             })
        // }
 
         // form.push({
@@ -753,58 +733,29 @@ define({
         '<col width="25%"><col width="25%"><col width="25%">'+
     '</colgroup>'+
     '<thead>'+
-        '<tr><th colspan="2">Assets</th><th colspan="2">Liabilities</th></tr>'+
+        '<tr><th colspan="2">Assets</th></tr>'+
     '</thead>'+
     '<tbody>'+
-        '<tr class="table-sub-header"><th colspan="2">{{"CURRENT_ASSETS" | translate}}</th><th colspan="2">{{"CURRENT_LIABILITIES" | translate}}</th></tr>'+
-        '<tr><td>{{"CASH_IN_BANK" | translate}}</td><td>{{model.assetsAndLiabilities.cashInBank | irfCurrency}}</td><td>{{"PAYABLES" | translate}}</td><td>{{model.assetsAndLiabilities.payables | irfCurrency}}</td></tr>'+
-        '<tr><td>{{"ACCOUNTS_RECEIVABLES" | translate}}</td><td>{{model.assetsAndLiabilities.accountsReceivable | irfCurrency}}</td><td>{{"SHORT_TERM_DEBTS" | translate}}</td><td>{{model.assetsAndLiabilities.shortTermDebts | irfCurrency}}</td></tr>'+
-        '<tr><td>{{"RAW_MATERIAL" | translate}}</td><td>{{model.assetsAndLiabilities.rawMaterial | irfCurrency}}</td><td>{{"CURRENT_PORTION_OF_LONG_TERM_DEBT" | translate}}</td><td>{{model.assetsAndLiabilities.currentPortionOfLongTermDeb | irfCurrency}}</td></tr>'+
+        '<tr class="table-sub-header"><th colspan="4">{{"CURRENT_ASSETS" | translate}}</th></tr>'+
+        '<tr><td>{{"CASH_IN_BANK" | translate}}</td><td>{{model.assetsAndLiabilities.cashInBank | irfCurrency}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"ACCOUNTS_RECEIVABLES" | translate}}</td><td>{{model.assetsAndLiabilities.accountsReceivable | irfCurrency}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"RAW_MATERIAL" | translate}}</td><td>{{model.assetsAndLiabilities.rawMaterial | irfCurrency}}</td><td></td><td></td></tr>'+
         '<tr><td>{{"WORK_IN_PROGRESS" | translate}}</td><td>{{model.assetsAndLiabilities.workInProgress | irfCurrency}}</td><td></td><td></td></tr>'+
         '<tr><td>{{"FINISHED_GOODS" | translate}}</td><td>{{model.assetsAndLiabilities.finishedGoods | irfCurrency}}</td><td></td><td></td></tr>'+
-        '<tr><td>{{"TOTAL_CURRENT_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalCurrentAssets | irfCurrency}}</td><td>{{"TOTAL_CURRENT_LIABILITIES" | translate}}</td><td>{{model.assetsAndLiabilities.totalCurrentLiabilities | irfCurrency}}</td></tr>'+
-        '<tr class="table-sub-header"><th colspan="2">{{"FIXED_ASSETS" | translate}}</th><th colspan="2">{{"LONG_TERM_LIABILITIES" | translate}}</th></tr><tr><td>{{"MACHINERY" | translate}}</td><td>{{model.assetsAndLiabilities.machinery | irfCurrency}}</td><td>{{"LONGTERMDEBT" | translate}}</td><td>{{model.assetsAndLiabilities.longTermDebt | irfCurrency}}</td></tr>'+
-        '<tr><td>{{"LAND" | translate}}</td><td>{{model.assetsAndLiabilities.land | irfCurrency}}</td><td>{{"OWN_CAPITAL" | translate}}</td><td>{{model.assetsAndLiabilities.ownCapital | irfCurrency}}</td></tr><tr><td>{{"BUILDING" | translate}}</td><td>{{model.assetsAndLiabilities.building | irfCurrency}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"TOTAL_CURRENT_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalCurrentAssets | irfCurrency}}</td><td></td><td></td></tr>'+
+        '<tr class="table-sub-header"><th colspan="4">{{"FIXED_ASSETS" | translate}}</th></tr>'+
+        '<tr><td>{{"MACHINERY" | translate}}</td><td>{{model.assetsAndLiabilities.machinery | irfCurrency}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"LAND" | translate}}</td><td>{{model.assetsAndLiabilities.land | irfCurrency}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"BUILDING" | translate}}</td><td>{{model.assetsAndLiabilities.building | irfCurrency}}</td><td></td><td></td></tr>'+
         '<tr><td>{{"VEHICLE" | translate}}</td><td>{{model.assetsAndLiabilities.vehicle | irfCurrency}}</td><td></td><td></td></tr>'+
         '<tr><td>{{"FURNITURE_AND_FIXING" | translate}}</td><td>{{model.assetsAndLiabilities.furnitureAndFixtures | irfCurrency}}</td><td></td><td></td></tr>'+
-        '<tr><td>{{"TOTAL_FIXED_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalFixedAssets | irfCurrency}}</td><td>{{"TOTAL_LONG_TERM_LIABILITIES" | translate}}</td><td>{{model.assetsAndLiabilities.totalLengTermLiabilities | irfCurrency}}</td></tr><tr></tr>'+
-        '<tr class="table-bottom-summary"><th>{{"TOTAL_ASSETS" | translate}}</th><th>{{model.assetsAndLiabilities.totalAssets | irfCurrency}}</th><th>{{"TOTAL_LIABILITIES" | translate}}</th><th>{{model.assetsAndLiabilities.totalLiabilities | irfCurrency}}</th></tr>'+
+        '<tr><td>{{"TOTAL_FIXED_ASSETS" | translate}}</td><td>{{model.assetsAndLiabilities.totalFixedAssets | irfCurrency}}</td><td></td><td></td></tr><tr></tr>'+
+        '<tr class="table-bottom-summary"><th>{{"TOTAL_ASSETS" | translate}}</th><th>{{model.assetsAndLiabilities.totalAssets | irfCurrency}}</th><th></th><th></th></tr>'+
     '</tbody>'+
 '</table>'
                 }
             ]
         });
-
-        var cashFlowDetailsTable = "<irf-simple-summary-table irf-table-def='model.cashFlowDetails'></irf-simple-summary-table>";
-
-        form.push({
-             type: "box",
-            colClass: "col-sm-12 table-box",
-            title: model.cashFlowDetails.title,
-            items: [
-                {
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: cashFlowDetailsTable
-                }
-            ]
-        });
-
-        var purchaseDetailsTable = "<irf-simple-summary-table irf-table-def = 'model.purchaseDetails'></irf-simple-summary-table>";
-
-        form.push({
-             type: "box",
-            colClass: "col-sm-12 table-box",
-            title: model.purchaseDetails.title,
-            items: [
-                {
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: purchaseDetailsTable
-                }
-            ]
-        });
-
         var items = [];
         if (_.isArray(model.liabilitiesSummary.subgroups) && model.liabilitiesSummary.subgroups.length > 0){
             for (var i=0;i<model.liabilitiesSummary.subgroups.length; i++){
@@ -828,65 +779,6 @@ define({
             items: items
         });
 
-        var opexDetailsTable = "<irf-simple-summary-table irf-table-def = 'model.opexDetails'></irf-simple-summary-table>";
-
-        form.push({
-             type: "box",
-            colClass: "col-sm-12 table-box",
-            title: model.opexDetails.title,
-            items: [
-                {
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: opexDetailsTable
-                }
-            ]
-        });
-
-        var machineryDetailsTable = "<irf-simple-summary-table irf-table-def = 'model.machineryDetails'></irf-simple-summary-table>";
-
-        form.push({
-             type: "box",
-            colClass: "col-sm-12 table-box",
-            title: model.machineryDetails.title,
-            items: [
-                {
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: machineryDetailsTable
-                }
-            ]
-        });
-
-        var businessBankStmtSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.businessBankStmtSummary'></irf-simple-summary-table>";
-
-        form.push({
-             type: "box",
-            colClass: "col-sm-12 table-box",
-            title: model.businessBankStmtSummary.title,
-            items: [
-                {
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: businessBankStmtSummaryTable
-                }
-            ]
-        });
-
-        var personalBankStmtSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.personalBankStmtSummary'></irf-simple-summary-table>";
-        form.push({
-             type: "box",
-            colClass: "col-sm-12 table-box",
-            title: model.personalBankStmtSummary.title,
-            items: [
-                {
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: personalBankStmtSummaryTable
-                }
-            ]
-        });
-
         form.push({
              type: "box",
             colClass: "col-sm-12 table-box",
@@ -899,52 +791,6 @@ define({
                 }
             ]
         });
-
-        form.push({
-            type: "box",
-            colClass: "col-sm-12 table-box",
-            title: "DEVIATION_AND_MITIGATIONS",
-            condition: "model.currentStage != 'ScreeningReview'",
-            items: [
-                {
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: '<table class="table"><colgroup><col width="20%"><col width="5%"><col width="20%"><col width="30%"><col width="30"></colgroup><thead><tr><th>Parameter Name</th><th></th><th>Actual Value</th><th>Mitigant</th><th>Chosen Mitigant</th></tr></thead><tbody><tr ng-repeat="rowData in model.deviationDetails.data"><td>{{ rowData["Parameter"] }}</td><td> <span class="square-color-box" style="background: {{ rowData.color_hexadecimal }}"> </span></td><td>{{ rowData["Deviation"] }}</td><td><ol><li ng-repeat="m in rowData.ListOfMitigants"> {{ m }}</li></ol></td><td><ol><li ng-repeat="m in rowData.ChosenMitigants"> {{ m }}</li></ol></td></tr></tbody></table>'
-                }
-            ]
-        });
-
-        // form.push({
-        //     type: "box",
-        //     colClass: "col-sm-12 table-box",
-        //     title: "BUSINESS_SUMMARY",
-        //     condition: "model.currentStage != 'ScreeningReview'",
-        //     items: [
-        //         {
-        //             type: "section",
-        //             colClass: "col-sm-12",
-        //             html: '<table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><tbody><tr><td><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><tbody><tr><th></th><th></th></tr><tr ng-repeat="(key, value) in model.enterpriseDetails.data[0] track by $index" ng-if="$index%2==0"><td> {{ key }}</td><td> {{ value }}</td></tr></tbody></table></td><td><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><tbody><tr><th></th><th></th></tr><tr ng-repeat="(key, value) in model.enterpriseDetails.data[0] track by $index" ng-if="$index%2==1"><td> {{ key }}</td><td> {{ value }}</td></tr></tbody></table></td></tr></tbody></table>'
-        //         }
-        //     ]
-        // })
-
-        // form.push({
-        //     type: "box",
-        //     colClass: "col-sm-12",
-        //     items: [
-        //         {
-        //             type: "tableview",
-        //             key: "bankStatement.data",
-        //             title: model.bankStatement.title,
-        //             selectable: false,
-        //             paginate: false,
-        //             searching: false,
-        //             getColumns: function(){
-        //                 return model.bankStatement.columns;
-        //             }
-        //         }
-        //     ]
-        // });
 
         return form;
     }; // END OF prepareForms()
@@ -966,7 +812,7 @@ define({
             var $this = this;
             var deferred = $q.defer();
 
-            scoreName = 'RiskScore1';
+            scoreName = 'RiskScore2';
 
 
             if (bundlePageObj) {
@@ -981,7 +827,7 @@ define({
                 }).$promise.then(function(response){
                     model.ScoreDetails = response.ScoreDetails;
                 }).finally(function(){
-                    var onSuccessPromise = Scoring.financialSummary({loan_id: model.cbModel.loanId, score_name: scoreName}).$promise;
+                    var onSuccessPromise = Misc.getSummary({loan_id: model.cbModel.loanId, score_name: scoreName}).$promise;
                     onSuccessPromise.then(function(res){
                         prepareData(res, model);
                         model.$prepared = true;
