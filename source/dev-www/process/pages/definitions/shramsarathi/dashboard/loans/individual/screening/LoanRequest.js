@@ -1323,7 +1323,7 @@ define([],function(){
                         },
                        
                         "LoanSanction.disbursementSchedules.tranchCondition": {
-                            type: "lov",
+                            type: "",
                             autolov: true,
                             title: "TRANCHE_CONDITION",
                             bindMap: {
