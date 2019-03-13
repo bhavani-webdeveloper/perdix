@@ -717,9 +717,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"HAMLET_FALA",
                                     "required":false
                                 },
-                                "ContactInformation.mailingStreet": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
+                                // "ContactInformation.mailingStreet": {
+                                //     "condition": "!model.customer.mailSameAsResidence"
+                                // },
                                 "ContactInformation.mailingMobilePhone": {
                                     "condition": "!model.customer.mailSameAsResidence"
                                 },
@@ -1504,9 +1504,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"HAMLET_FALA",
                                     "required":false
                                 },
-                                "ContactInformation.mailingStreet": {
-                                    "condition": "!model.customer.mailSameAsResidence"
-                                },
+                                // "ContactInformation.mailingStreet": {
+                                //     "condition": "!model.customer.mailSameAsResidence"
+                                // },
                                 "ContactInformation.mailingPostoffice": {
                                     "condition": "!model.customer.mailSameAsResidence"
                                 },
@@ -2108,9 +2108,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "title":"HAMLET_FALA",
                         "required":false
                     },
-                    "ContactInformation.mailingStreet": {
-                        "condition": "!model.customer.mailSameAsResidence"
-                    },
+                    // "ContactInformation.mailingStreet": {
+                    //     "condition": "!model.customer.mailSameAsResidence"
+                    // },
                     "ContactInformation.mailingPostoffice": {
                         "condition": "!model.customer.mailSameAsResidence"
                     },
@@ -2255,7 +2255,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.residentialAddressFieldSet",
                     "ContactInformation.careOf",
                     "ContactInformation.doorNo",
-                    "ContactInformation.street",
+                    //"ContactInformation.street",
                     "ContactInformation.postOffice",
                     "ContactInformation.landmark",
                     //"ContactInformation.collectionArea",
@@ -2270,7 +2270,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.mailingLandmark",
                     "ContactInformation.mailingMobilePhone",
                     "ContactInformation.mailingDoorNo",
-                    "ContactInformation.mailingStreet",
+                    //"ContactInformation.mailingStreet",
                     "ContactInformation.mailingPostoffice",
                     "ContactInformation.mailingMandal",
                     "ContactInformation.mailingPincode",
@@ -3416,7 +3416,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 model.customer.customerBranchId = obj.branchId;
                                 model.customer.centreId = obj.centreId;
                                 model.customer.centreName = obj.centreName;
-                                model.customer.street = obj.addressLine2;
+                                //model.customer.street = obj.addressLine2;
                                 model.customer.doorNo = obj.addressLine1;
                                 model.customer.pincode = obj.pincode;
                                 model.customer.district = obj.district;

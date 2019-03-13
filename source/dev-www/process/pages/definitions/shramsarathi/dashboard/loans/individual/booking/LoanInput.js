@@ -2096,10 +2096,10 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.boo
                                         key:"loanAccount.nominees[].nomineeLocality",
                                         "title":"PANCHAYAT"
                                     },
-                                    {
-                                        key:"loanAccount.nominees[].nomineeStreet",
-                                        "title":"STREET"
-                                    },
+                                    // {
+                                    //     key:"loanAccount.nominees[].nomineeStreet",
+                                    //     "title":"STREET"
+                                    // },
                                     {
                                         key: "loanAccount.nominees[].nomineePincode",
                                         type: "lov",
@@ -2406,10 +2406,10 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.boo
                                         key:"loanAccount.nominees[].nomineeLocality",
                                         "title":"PANCHAYAT"
                                     },
-                                    {
-                                        key:"loanAccount.nominees[].nomineeStreet",
-                                        "title":"STREET"
-                                    },
+                                    // {
+                                    //     key:"loanAccount.nominees[].nomineeStreet",
+                                    //     "title":"STREET"
+                                    // },
                                     {
                                         key: "loanAccount.nominees[].nomineePincode",
                                         type: "lov",

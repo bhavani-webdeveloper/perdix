@@ -1481,9 +1481,9 @@ define([],function(){
                             "title":"HAMLET_FALA",
                             "required": false
                         },
-                        "NomineeDetails.nominees.nomineeStreet":{
-                            "orderNo": 60
-                        },
+                        // "NomineeDetails.nominees.nomineeStreet":{
+                        //     "orderNo": 60
+                        // },
                         "NomineeDetails.nominees.nomineeLocality": {
                             "orderNo":50,
                             "title":"PANCHAYAT"
@@ -1690,7 +1690,7 @@ define([],function(){
                     "NomineeDetails.nominees.nomineeButton",
                     "NomineeDetails.nominees.nomineeDoorNo",
                     "NomineeDetails.nominees.nomineeLocality",
-                    "NomineeDetails.nominees.nomineeStreet",
+                    //"NomineeDetails.nominees.nomineeStreet",
                     "NomineeDetails.nominees.nomineePincode",
                     "NomineeDetails.nominees.nomineeDistrict",
                     "NomineeDetails.nominees.nomineeState",
