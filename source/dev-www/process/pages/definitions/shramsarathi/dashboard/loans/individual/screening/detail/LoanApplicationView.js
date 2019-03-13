@@ -679,7 +679,7 @@ define({
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
-                            "key": "",
+                            "key": "loanAccount.loanAmount",
                             "title": "LOAN_AMOUNT",
                            // "type": "amount",
                             "readonly":true
@@ -718,24 +718,24 @@ define({
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
-                            "key":"loanAccount.disbursementSchedules[].modeOfDisbursement",
+                            "key":"loanAccount.disbursementSchedules[0].modeOfDisbursement",
                             "title":"MODE_OF_DISBURSEMENT",
                             "readonly":true
                         }, 
                         {
-                            "key":"loanAccount.disbursementSchedules[].firstRepaymentDate",
+                            "key":"loanAccount.disbursementSchedules[0].firstRepaymentDate",
                             "title":"COLLECTION_DATE",
                             "type":"date",
                             "readonly":true
                         },
                          {
-                            "key":"loanAccount.disbursementSchedules[].actualDisbursementDate",
+                            "key":"loanAccount.disbursementSchedules[0].actualDisbursementDate",
                             "title":"DISBURSEMENT_DATE",
                             "type":"date",
                             "readonly":true
                         },
                         {
-                            "key":"loanAccount.disbursementSchedules[].moratoriumPeriodInDays",
+                            "key":"loanAccount.disbursementSchedules[0].moratoriumPeriodInDays",
                             "title":"GRACE_PERIOD",
                             "readonly":true
                             
