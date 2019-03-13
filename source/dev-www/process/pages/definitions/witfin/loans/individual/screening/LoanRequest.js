@@ -170,7 +170,7 @@ define([], function() {
                         "ScreeningReview": {
                             "excludes": [
                                 "PreliminaryInformation.calculateEmi",
-                                "FieldInvestigationDetails"
+                               // "FieldInvestigationDetails"
                             ],
                             "overrides": {
                                 "PreliminaryInformation.linkedAccountNumber": {
@@ -290,6 +290,7 @@ define([], function() {
                         "TeleVerification": {
                             "excludes": [
                                 "LoanRecommendation",
+                                "FieldInvestigationDetails"
                             ],
                             "overrides": {
                                 "FieldInvestigationDetails": {
