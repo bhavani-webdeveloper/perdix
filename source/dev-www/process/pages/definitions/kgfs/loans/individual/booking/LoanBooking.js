@@ -262,6 +262,12 @@ define([], function () {
                 }
             }
 
+            var calculateTotalValue = function(value, form, model){
+                if (_.isNumber(model.loanAccount.collateral[form.arrayIndex].quantity) && _.isNumber(value)){
+                    model.loanAccount.collateral[form.arrayIndex].totalValue = model.loanAccount.collateral[form.arrayIndex].quantity * model.loanAccount.collateral[form.arrayIndex].loanToValue;
+                }
+            }
+
             // View Functions
             var getIncludes = function (model) {
                 return [
@@ -276,6 +282,7 @@ define([], function () {
                     "LoanDetails.loanAmountRequested",
                     "LoanDetails.requestedTenure",
                     "LoanDetails.interestRate",
+                    "LoanDetails.processingFeePercentage",
                     "LoanDetails.loanPurpose1",
                     "LoanDetails.loanPurpose2",
                     "LoanDetails.loanPurpose3",
@@ -288,6 +295,7 @@ define([], function () {
                     "LoanDetails.witnessDetails.witnessDOB",
                     "LoanDetails.witnessDetails.witnessRelationship",
                     "LoanDetails.numberOfGuarantorsCoApplicants",
+                    "LoanDetails.collectionPaymentType",
 
 
                     "NomineeDetails",
@@ -333,6 +341,21 @@ define([], function () {
                     "JewelDetails.ornamentDetails.carat",
                     "JewelDetails.ornamentDetails.rate",
                     "JewelDetails.ornamentDetails.marketValue",
+
+                    "CollateralInformation",
+                    "CollateralInformation.collateral",
+                    "CollateralInformation.collateral.collateralCategory",
+                    "CollateralInformation.collateral.collateralType",
+                    "CollateralInformation.collateral.electricityAvailable",
+                    "CollateralInformation.collateral.collateralDescription",
+                    "CollateralInformation.collateral.manufacturer",
+                    "CollateralInformation.collateral.modelNo",
+                    "CollateralInformation.collateral.quantity",
+                    "CollateralInformation.collateral.udf1",
+                    "CollateralInformation.collateral.machineOld",
+                    "CollateralInformation.collateral.loanToValue",
+                    "CollateralInformation.collateral.collateralValue",
+                    "CollateralInformation.collateral.totalValue",
 
                     "LoanSanction",
                     "LoanSanction.sanctionDate",
@@ -780,15 +803,15 @@ define([], function () {
                         "orderNo": 2,
                         
                     },
-                    "NomineeDetails.nominees.nomineeRelationship": {
-                        "readonly": true,
-                        "type": "text",
-                    },
-                    "NomineeDetails.nominees.nomineeGender": {
-                        "orderNo": 3,
-                        "readonly": true,
-                        "type": "text"
-                    },
+                    // "NomineeDetails.nominees.nomineeRelationship": {
+                    //     "readonly": true,
+                    //     "type": "text",
+                    // },
+                    // "NomineeDetails.nominees.nomineeGender": {
+                    //     "orderNo": 3,
+                    //     "readonly": true,
+                    //     "type": "text"
+                    // },
                     "NomineeDetails.nominees.nomineePincode": {
                         "orderNo": 6,
                         fieldType: "number",    
@@ -873,13 +896,15 @@ define([], function () {
                         }
                     },
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianGender": {
-                        "readonly": true,
-                        "type": "text",
+                        // "readonly": true,
+                        // "type": "text",
+                        "enumCode":"gender",
                         required:true
                     },
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianRelationship": {
-                        "readonly": true,
-                        "type": "text",
+                        // "readonly": true,
+                        // "type": "text",
+                        "enumCode":"relation",
                         required:true
                     },
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianPincode": {
@@ -931,7 +956,7 @@ define([], function () {
                     },
                     "NomineeDetails.nominees.nomineeMinor":{
                         onChange:function(valueObj,form,mode){
-                            // clearAll("loanAccount.nominees[0]",["guardianFirstName","guardianGender","guardianDOB","guardianDoorNo","guardianLocality","guardianDistrict","guardianStreet","guardianPincode","guardianState","guardianRelationWithMinor","guardianAddressSameAsCustomer"],model);
+                            clearAll("0",["guardianFirstName","guardianGender","guardianDOB","guardianDoorNo","guardianLocality","guardianDistrict","guardianStreet","guardianPincode","guardianState","guardianRelationWithMinor","guardianAddressSameAsCustomer"],model.loanAccount.nominees);
                         }
                     },
 
@@ -978,7 +1003,49 @@ define([], function () {
                                 PageHelper.showProgress("loan-create", "Disbursement date should be lesser than Repayment date", 5000);
                             }
                         }
-                    }
+                    },
+                    "CollateralInformation": {
+                        "title":"COLLATERAL",
+                        "orderNo":20,
+                        "condition": "model.loanAccount.loanType=='SECURED'",
+                    },
+                     "CollateralInformation.collateral": {
+                        "title":"COLLATERAL",
+                       // "titleExpr": "('COLLATERAL'| translate) + ': ' + model.loanAccount.collateral[arrayIndex].collateralCategory + ' - ' + model.loanAccount.collateral[arrayIndex].collateralType",
+                        onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
+                            model.loanAccount.collateral[model.loanAccount.collateral.length-1].quantity = 1;
+                        }
+                    },
+                    "CollateralInformation.collateral.collateralType" : {
+                        "type":"select",
+                        "title":"Collateral Sub Type",
+                        "enumCode":"hypothication_sub_type",
+                        "parentEnumCode":"hypothecation_type",
+                        "orderNo": 150,
+                        "parentValueExpr":"model.loanAccount.collateral[arrayIndex].collateralCategory"
+                    },
+                    "CollateralInformation.collateral.electricityAvailable" : {
+                        "condition": "model.pageConfig.CollateralUDFs.electricityAvailable",
+                        "title":"SEGMENT",
+                        "orderNo": 200,
+                    },
+                    "CollateralInformation.collateral.collateralDescription" : {
+                        "orderNo": 155,
+                        "title":"Collateral Description"
+                    },
+                    "CollateralInformation.collateral.collateralValue" : {
+                        "type":"amount",
+                        "orderNo": 185,
+                        "title":"PURCHASE_PRICE"
+                    },
+                    "CollateralInformation.collateral.manufacturer" : {
+                        "orderNo": 160,
+                        "title":"Manufacturer"
+                    },
+                    "CollateralInformation.collateral.modelNo" : {
+                        "orderNo": 170,
+                        "title":"Model Number"
+                    },
                 }
             };
             var self;
@@ -1078,7 +1145,24 @@ define([], function () {
                                                     "type":"html",
                                                     "condition":"model.loanAccount.productCode",
                                                     "key":"additions.noOfGuarantorCoApplicantHtml"
+                                                },
+                                                "processingFeePercentage" : {
+                                                    "key" : "loanAccount.processingFeePercentage",
+                                                    "orderNo":10,
+                                                    "readonly": true
+                                                },
+                                                "collectionPaymentType":{
+                                                    "key": "loanAccount.collectionPaymentType",
+                                                    "title": "Mode Of Repayment",
+                                                    "type": "select",
+                                                    titleMap:{
+                                                        "ACH":"ACH",
+                                                        "PDC":"PDC",
+                                                        "Others":"Others"
+                                                    },
+                                                    "orderNo": 120
                                                 }
+
                                             }
                                         },
                                         "LoanSanction": {
@@ -1122,7 +1206,64 @@ define([], function () {
                                                     }
                                                 }
                                             }
+                                        },
+                                        
+                                        "CollateralInformation" : {
+                                            "items":
+                                            {
+                                                "collateral" : {
+                                                "items":{
+                                                        "collateralCategory" : {
+                                                            "key":"loanAccount.collateral[].collateralCategory",
+                                                            "type":"select",
+                                                             "orderNo": 145,
+                                                            "enumCode":"hypothecation_type",
+                                                            "title":"Collateral Type",
+                                                            "required":true
+                                                        },
+                                                        "quantity" : {
+                                                            "key":"loanAccount.collateral[].quantity",
+                                                            "orderNo": 165,
+                                                            "onChange": function(value ,form ,model, event){
+                                                                calculateTotalValue(value, form, model);
+                                                            }
+                                                        },
+                                                        "udf1" : {
+                                                            "key":"loanAccount.collateral[].udf1",
+                                                            "orderNo": 195,
+                                                            "condition": "model.pageConfig.CollateralUDFs.udf1",
+                                                            "type": "string",
+                                                            "title": "YEAR_OF_MANUFACTURE"
+                                                        },
+                                                        "machineOld" : {
+                                                            "key":"loanAccount.collateral[].machineOld",
+                                                            "orderNo": 175,
+                                                            "type":"checkbox",
+                                                            "title":"IS_MACHINE_OLD"
+                                                        },
+                                                        "loanToValue" : {
+                                                            "key":"loanAccount.collateral[].loanToValue",
+                                                            "type":"amount",
+                                                            "orderNo": 180,
+                                                            "title":"PRESENT_VALUE",
+                                                            "onChange": function(value ,form ,model, event){
+                                                                calculateTotalValue(value, form, model);
+                                                            }
+                                                        },
+                                                       
+                                                        "totalValue" : {
+                                                            "key":"loanAccount.collateral[].totalValue",
+                                                            "type":"amount",
+                                                            "orderNo": 190,
+                                                            "title":"TOTAL_VALUE",
+                                                            "readonly":true
+                                                        },
+                                                    }
+                                                }
+                                            }
+                                            
                                         }
+                                        
                                     },
                                     "additions": [
                                         // Remarks History
@@ -1542,42 +1683,11 @@ define([], function () {
                         if (model.loanAccount.id){
                             model.loanAccount.portfolioInsurancePremiumCalculated = 'Yes';
                             model.loanAccount.portfolioInsuranceUrn = model.loanAccount.loanCustomerRelations[0].urn;
-
-                            // if(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length > 0){
-                            //     for(i = 0; i< model.loanAccount.loanCustomerRelations.length;i++){
-                            //         if(model.loanAccount.loanCustomerRelations[i].relation != "Applicant")
-                            //             continue;
-                            //         if(typeof model.loanAccount.loanCustomerRelations[i].dscStatus == "undefined" || model.loanAccount.loanCustomerRelations[i].dscStatus == ""){
-                            //             model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = null
-                            //             break;
-                            //         }
-                            //         if(model.loanAccount.loanCustomerRelations[i].dscStatus == "FAILURE" || model.loanAccount.loanCustomerRelations[i].dscStatus == "DSC_OVERRIDE_REQUIRED"){
-                            //             model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = "true"
-                            //             break;
-                            //         }
-                            //         else{
-                            //             model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = "false"
-                            //         }
-                                    
-                            //     }
-                            // }
-                        }
-                        if(typeof model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 =="undefined" || model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 == null){
-                            PageHelper.showErrors({data:{error:"DSC STATUS IS REQUIRED...."}});
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                                PageHelper.hideLoader();
-                                return false;
                         }
                         
                         if(!(policyBasedOnLoanType(model.loanAccount.loanType,model)))
                             return false;
 
-                        if(model.loanAccount.currentStage=='Checker2'){
-                            model.loanProcess.stage='Completed';
-                        }
-                        if(model.loanAccount.currentStage=='DSCOverride'){
-                            model.loanProcess.stage='LoanInitiation';
-                        }
                         var toStage=model.loanProcess.stage||null;
                         model.loanProcess.proceed(toStage)
                             .finally(function () {
