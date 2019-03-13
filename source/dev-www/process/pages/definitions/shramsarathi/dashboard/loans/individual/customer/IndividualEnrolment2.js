@@ -1622,7 +1622,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "CreditCommitteeReview": {
                             "overrides": {
                                 "References": {
-                                    "readonly": false
+                                    "readonly": true
                                 },
                                 "PhysicalAssets": {
                                     "readonly": true
