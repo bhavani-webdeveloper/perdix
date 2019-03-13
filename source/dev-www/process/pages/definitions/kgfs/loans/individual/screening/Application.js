@@ -157,21 +157,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     irfNavigator.goBack();
                                     return;
                                 }
-                            //    $this.bundlePages.push({
-                            //         pageClass: 'summary',
-                            //         model: {
-                            //             // cbModel: {
-                            //             //     customerId:loanProcess.loanAccount.customerId,
-                            //             //     loanId:bundleModel.loanId,
-                            //             //     scoreName:'RiskScore3'
-                            //             // }41254
-                            //               cbModel: {
-                            //                 customerId:loanProcess.loanAccount.customerId,
-                            //                 loanId:bundleModel.loanId,
-                            //                 scoreName:'ConsolidatedScore'
-                            //             }
-                            //         }
-                            //     });
+                               $this.bundlePages.push({
+                                    pageClass: 'summary',
+                                    model: {
+                                            cbModel: {
+                                            customerId:loanProcess.loanAccount.customerId,
+                                            loanId:bundleModel.loanId,
+                                            scoreName:'ConsolidatedScore'
+                                        }
+                                    }
+                                });
                                 $this.bundlePages.push({
                                     pageClass: 'applicant',
                                     model: {

@@ -461,12 +461,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                     $log.info(err);
                                 });
                         }
-                        Queries.getCustomerById(model.loanAccount.customerId,true).then(function(customer){
-                                if(customer.customerType == "Individual")
-                                    formConfig(true,false,model);
-                                else
-                                    formConfig(false,true,model);
-                        },function(err){})
                         console.log(form);
                         init(model, form, formCtrl); // init call
                     }, function(errResp){
@@ -611,7 +605,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     {
                         "type": "fieldset",
                         "title": "ENTITY_DETAILS",
-                        condition:"!model.additional.isIndividual",
+                        condition:"!model.additional.config.isIndividual",
                         "items": [
                             {
                                 "key": "loanAccount.urnNo",
@@ -846,8 +840,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     {
                         "type": "fieldset",
                         "title": "APPLICANT_DETAILS",
-                        condition:"!model.additional.isEntity",
-                        "titleExpr": "model.additional.isEntity? ENTITY_DETAILS : APPLICANT_DETAILS",
+                        condition:"model.additional.config.isIndividual",
                         "items": [   
                          {
                                 "key": "loanAccount.applicant",
