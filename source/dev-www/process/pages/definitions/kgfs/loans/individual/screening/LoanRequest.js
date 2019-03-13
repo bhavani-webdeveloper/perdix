@@ -1480,6 +1480,11 @@ define([],function(){
                             });
                     },
                     proceed: function(model, formCtrl, form, $event){
+                         if (model.loanProcess.remarks==null || model.loanProcess.remarks ==""){
+                               PageHelper.showProgress("update-loan", "Remarks is mandatory", 3000);
+                               PageHelper.hideLoader();
+                               return false;
+                        }
                         var trancheTotalAmount=0;
                         if(model.loanAccount.currentStage && model.loanAccount.currentStage == 'Sanction' && model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length){
                             
