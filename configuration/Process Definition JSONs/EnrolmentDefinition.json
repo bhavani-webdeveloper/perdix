@@ -431,7 +431,6 @@
           "dateOfBirth",
           "religion",
           "landLineNo",
-          "mobilePhone",
           "maritalStatus"
         ],
         "properties":{

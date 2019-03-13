@@ -170,10 +170,12 @@ define({
                                         }, {
                                             key: "lead.addressLine1",
                                             "title": "DOOR_NO"
-                                        }, {
-                                            key: "lead.addressLine2",
-                                            "title": "STREET"
-                                        }, {
+                                        }, 
+                                        // {
+                                        //     key: "lead.addressLine2",
+                                        //     "title": "STREET"
+                                        // }, 
+                                        {
                                             key: "lead.pincode",
                                             type: "lov",
                                             fieldType: "number",

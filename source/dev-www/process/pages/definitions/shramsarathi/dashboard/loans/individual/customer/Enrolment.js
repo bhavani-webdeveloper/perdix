@@ -682,7 +682,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     "ContactInformation.mobilePhone",
                     "ContactInformation.landLineNo",
                     "ContactInformation.doorNo",
-                    "ContactInformation.street",
+                    //"ContactInformation.street",
                     //"ContactInformation.postOffice",
                     "ContactInformation.landmark",
                     "ContactInformation.pincode",

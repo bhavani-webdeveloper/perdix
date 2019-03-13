@@ -1002,10 +1002,10 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.boo
                                         key:"loanAccount.nominees[].nomineeLocality",
                                         "title":"LOCALITY"
                                     },
-                                    {
-                                        key:"loanAccount.nominees[].nomineeStreet",
-                                        "title":"STREET"
-                                    },
+                                    // {
+                                    //     key:"loanAccount.nominees[].nomineeStreet",
+                                    //     "title":"STREET"
+                                    // },
                                     {
                                         key: "loanAccount.nominees[].nomineePincode",
                                         type: "lov",

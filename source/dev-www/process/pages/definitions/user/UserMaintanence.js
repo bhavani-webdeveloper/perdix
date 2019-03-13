@@ -3,7 +3,15 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
         'SessionStore',"$state","$stateParams","Masters","authService", "User", "SchemaResource","Queries",
         function($log, $q, ManagementHelper, PageHelper, formHelper,Utils,
             SessionStore,$state,$stateParams,Masters,authService, User, SchemaResource,Queries){
-
+            var getBranchByCode= function(code){
+                var temp = formHelper.enum('branch').data;
+                for (var i=0;i<temp.length;i++){
+                    if (temp[i].code == code)
+                        return temp[i].name;
+                }
+                return "MAPPED_BRANCH";
+            
+            }
             return {
                 "name":"USER_MAINTANENCE",
                 "type": "schema-form",
@@ -57,17 +65,21 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                         model.user.branchId = branch.value;
                                     }
                                 }
+                                var userBranchLength = model.user.userBranches.length;
                                 var arrayIndex = 0;
                                 for (var i = 0; i < branches.length; i++) {
                                     var branch = branches[i];
-                                    
-                                    if ( branch.value == model.user.userBranches[arrayIndex].branchId) {
-                                        model.user.userBranches[arrayIndex].branchId = branch.value;
-                                        model.user.userBranches[arrayIndex].bankId = Number(branch.parentCode);
-                                        arrayIndex++;
-                                        i=-1;
+                                    if (arrayIndex < userBranchLength){
+                                        if ( branch.value == model.user.userBranches[arrayIndex].branchId) {
+                                            model.user.userBranches[arrayIndex].branchId = branch.value;
+                                            model.user.userBranches[arrayIndex].bankId = Number(branch.parentCode);
+                                            model.user.userBranches[arrayIndex].titleExpr = branch.name;
+                                            arrayIndex++;
+                                            i=-1;
+                                        }
                                     }
                                 }
+
                             }, function(httpResponse){
                                 PageHelper.showProgress('loading-user', 'Failed.', 5000);
                             }).finally(function(){
@@ -143,6 +155,7 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                 type: "array",
                                 //view: "fixed",
                                 title: "MAPPED_BRANCHES",
+                                titleExpr: "model.user.userBranches[arrayIndex].titleExpr",
                                 startEmpty: true,
                                 onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
                                     //modelValue.bankId=model.bankId;
@@ -162,7 +175,11 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                         enumCode: "branch_id",
                                         "parentEnumCode": "bank",
                                         "parentValueExpr": "model.user.userBranches[arrayIndex].bankId",
-                                        required: true
+                                        required: true,
+                                        onChange: function(valueObj,context,model){
+                                                model.user.userBranches[context.arrayIndex].titleExpr = getBranchByCode(valueObj.toString());
+                                        }
+
                                     }
                                 ]
                             },
