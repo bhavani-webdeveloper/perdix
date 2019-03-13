@@ -1479,7 +1479,7 @@ define([],function(){
                         "NomineeDetails.nominees.nomineeDoorNo": {
                             "orderNo": 40,
                             "title":"HAMLET_FALA",
-                            "required": true
+                            "required": false
                         },
                         "NomineeDetails.nominees.nomineeStreet":{
                             "orderNo": 60
