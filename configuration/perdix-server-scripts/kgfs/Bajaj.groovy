@@ -73,7 +73,7 @@ import java.time.*;
         
         if(customerData != null && loanAmount > 5000 ){
             gender = customerData.getGender();
-            birthdate = customer.getDateOfBirth();
+            birthdate = customerData.getDateOfBirth();
             ageOfCustomer = Period.between(birthdate, LocalDate.now()).getYears();
             portfolioInsuranceMaster = portfolioInsuranceMasterRepository.findByAgeAndGenderAndTenureInYearAndSumAssuredAndInsuranceTypeAndInsuranceRateCode(ageOfCustomer, gender, customerTenureInYear, loanAmount, insuranceType, insuranceRateCode);
             if(portfolioInsuranceMaster != null){

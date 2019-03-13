@@ -1723,6 +1723,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var overridesFields = function (bundlePageObj) {
                 return {
+                    "ContactInformation.mailingDoorNo": {
+                        "condition": "!model.customer.mailSameAsResidence",
+                        "title":"HAMLET_FALA",
+                        "required":false
+                    },
                    "Liabilities.liabilities.noOfInstalmentPaid":{
                         "orderNo":23
                     },
@@ -2100,7 +2105,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "ContactInformation.mailingDoorNo": {
                         "condition": "!model.customer.mailSameAsResidence",
-                        "title":"HAMLET_FALA"
+                        "title":"HAMLET_FALA",
+                        "required":false
                     },
                     "ContactInformation.mailingStreet": {
                         "condition": "!model.customer.mailSameAsResidence"
