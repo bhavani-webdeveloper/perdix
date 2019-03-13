@@ -348,7 +348,7 @@
          },
          {  
             "fieldName":"Weekly Meeting Time",
-            "columnName":"centre_leader_urn"
+            "columnName":"weekly_meeting_time"
          },
          
          {  
