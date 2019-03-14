@@ -88,7 +88,7 @@ gulp.task('assets', ['ts:scripts', 'ts:perdixConfig'], function(){
             ];
     }
     return gulp.src(src , {base: 'dev-www/'})
-        .pipe(babel())
+        //.pipe(babel())
         .pipe(gulp.dest(buildDirectory));
 })
 
