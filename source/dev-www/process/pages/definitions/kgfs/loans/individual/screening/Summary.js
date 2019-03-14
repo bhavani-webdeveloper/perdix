@@ -167,7 +167,7 @@ define({
         // model.pl.business.EBITDA = model.businessPL.data[0]['EBITDA'];
         // model.pl.business.EBITDA_PCT = model.businessPL.data[0]['EBITDA pct'];
         // model.pl.business.businessLiabilities = model.businessPL.data[0]['Business Liabilities'];
-        // model.pl.business.netBusinessIncome = model.businessPL.data[0]['Net Business Income'];
+        // model.pl.business.netBusinessIncome = model.businessPL.data[0]['Net Business Income']p;
         // model.pl.business.netBusinessIncomePCT = model.businessPL.data[0]['Net Business Income pct'];
         // model.pl.business.kinaraEmi = model.businessPL.data[0]['Kinara EMI'];
         // model.pl.business.kinaraEmiPCT = model.businessPL.data[0]['Kinara EMI pct'];
@@ -192,6 +192,8 @@ define({
         model.enterpriseDetailsData['Wealth Manager Name'] = model.enterpriseDetails.data[0]['Wealth Manager Name'];
         model.enterpriseDetailsData['Loan Amount Requested'] = model.enterpriseDetails.data[0]['Loan Amount Requested'];
         model.enterpriseDetailsData['Interest'] = model.enterpriseDetails.data[0]['Interest'];
+        model.enterpriseDetailsData['Existing Loan Repayments'] = model.enterpriseDetails.data[0]['Existing Loan Repayments'];
+        model.enterpriseDetailsData['Tenure'] = model.enterpriseDetails.data[0]['Tenure'];
         model.enterpriseDetailsData['Avg Monthly Net Income'] = model.enterpriseDetails.data[0]['Avg Monthly Net Income'];
         model.enterpriseDetailsData['Average_Bank_Balance'] = model.enterpriseDetails.data[0]['Average_Bank_Balance'];
         model.enterpriseDetailsData['Average Bank Deposit'] = model.enterpriseDetails.data[0]['Average Bank Deposit'];

@@ -197,10 +197,10 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CreditCommitteeR
                                 $this.bundlePages.push({
                                     pageClass: 'summary',
                                     model: {
-                                        cbModel: {
-                                            customerId: res.customerId,
-                                            loanId: bundleModel.loanId,
-                                            scoreName: 'RiskScore3'
+                                            cbModel: {
+                                            customerId:loanProcess.loanAccount.customerId,
+                                            loanId:bundleModel.loanId,
+                                            scoreName:'RiskScore2'
                                         }
                                     }
                                 });
