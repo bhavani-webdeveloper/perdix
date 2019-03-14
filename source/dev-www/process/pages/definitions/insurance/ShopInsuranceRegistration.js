@@ -105,19 +105,21 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                    "validateBiometric.fpOverrideRequested",
                    "validateBiometric.fpOverrideRemarks",
                    "validateBiometric.fpOverrideStatus",
-                   "shopInsurance",
-                   "shopInsurance.shopType",
-                   "shopInsurance.constructionType",
-                   "shopInsurance.shopPhotos",
-                   "shopInsurance.shopPhotos.shopPhoto",
-                   "shopInsurance.shopAddress",
-                   "shopInsurance.shopAddress.address1",
-                   "shopInsurance.shopAddress.address2",
-                   "shopInsurance.shopAddress.address3",
-                   "shopInsurance.shopAddress.village",
-                   "shopInsurance.shopAddress.locality",
-                   "shopInsurance.shopAddress.district",
-                   "shopInsurance.shopAddress.pincode",
+                   "shopInsuranceBox",
+                   "shopInsuranceBox.shopInsurance",
+                   "shopInsuranceBox.shopInsurance.shopType",
+                   "shopInsuranceBox.shopInsurance.constructionType",
+                   "shopInsuranceBox.shopInsurance.coverNoteNo",
+                   "shopInsuranceBox.shopInsurance.shopPhotos",
+                   "shopInsuranceBox.shopInsurance.shopPhotos.shopPhoto",
+                   "shopInsuranceBox.shopInsurance.shopAddress",
+                   "shopInsuranceBox.shopInsurance.shopAddress.address1",
+                   "shopInsuranceBox.shopInsurance.shopAddress.address2",
+                   "shopInsuranceBox.shopInsurance.shopAddress.address3",
+                   "shopInsuranceBox.shopInsurance.shopAddress.village",
+                   "shopInsuranceBox.shopInsurance.shopAddress.locality",
+                   "shopInsuranceBox.shopInsurance.shopAddress.district",
+                   "shopInsuranceBox.shopInsurance.shopAddress.pincode",
                    //"InsuranceTransactionDetails.insuranceTransactionDetailsDTO.transactionDate",
 
                    "actionboxBeforeSave",
@@ -138,7 +140,7 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                initialize: function (model, form, formCtrl) {
                    model.customer = {};
                    model.idPresent = "false";
-                    
+                   
                    //start
             var branchId = SessionStore.getBranchId();
             if (!Utils.isCordova) {
@@ -241,13 +243,18 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                                                    id: valueObj.id
                                                }).$promise.then(function(resp) {
                                                    model.customer = resp;
-                                                   model.insurancePolicyDetailsDTO.fullName = resp.firstName
+                                                   
+                                                   model.insurancePolicyDetailsDTO.fullName = resp.firstName,
                                                    model.insurancePolicyDetailsDTO.branchId =resp.customerBranchId,
                                                    model.insurancePolicyDetailsDTO.bankId = resp.customerBankId,
                                                    model.insurancePolicyDetailsDTO.centreId = resp.centreId,
                                                    model.insurancePolicyDetailsDTO.customerId = resp.id,
                                                    model.insurancePolicyDetailsDTO.urnNo =resp.urnNo,
                                                    model.insurancePolicyDetailsDTO.contactNumber = resp.mobilePhone
+                                                   
+                                                   if (resp.dateOfBirth) {
+                                                    model.insurancePolicyDetailsDTO.age = moment().diff(moment(resp.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                                }
                                                })
                                            },
                                            getListDisplayItem: function(item, index) {
@@ -268,39 +275,39 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                                    }
                                 },
                                 "InsuranceNomineeDetails":{
-                                   "items" : {
-                                       "nomineeDetailsDTO":{
-                                           "items" : {
-                                               "nomineeName" : {                               
-                                                   "type": "lov",
-                                                   "title" : "NOMINEE_NAME",
-                                                   "key" : "insurancePolicyDetailsDTO.nomineeDetailsDTO[].nomineeName",
-                                                   "autolov": false,
-                                                   "lovonly": true,
-                                                   "bindMap": {},
-                                                   "searchHelper": formHelper,
-                                                   search: function(inputModel, form, model, context) {                                              
-                                                      return Queries.getCustomerNomineeRelations(
-                                                        model.insurancePolicyDetailsDTO.customerId,
-                                                        model.insurancePolicyDetailsDTO.benificieryRelationship
-                                                       );
-                                                   },
-                                                   onSelect: function(result, model, context){
-                                                       model.insurancePolicyDetailsDTO.nomineeDetailsDTO[context.arrayIndex].nomineeName = result.familyMemberFirstName;
-                                                       model.insurancePolicyDetailsDTO.nomineeDetailsDTO[context.arrayIndex].nomineeRelationship = result.realtionShip;
-                                                       model.insurancePolicyDetailsDTO.nomineeDetailsDTO[context.arrayIndex].nomineeGender = result.gender;
-                                                       model.insurancePolicyDetailsDTO.nomineeDetailsDTO[context.arrayIndex].nomineePercentage = 100;
-                                                   },                                                   
-                                                   getListDisplayItem: function(item, index) {
-                                                       return [
-                                                           item.familyMemberFirstName,item.realtionShip
-                                                       ];
-                                                   }
-                                               }
-                                           }
-                                       }
-                                    }
-                               },
+                                    "items" : {
+                                        "nomineeDetailsDTO":{
+                                            "items" : {
+                                                "nomineeName" : {                               
+                                                    "type": "lov",
+                                                    "title" : "NOMINEE_NAME",
+                                                    "key" : "insurancePolicyDetailsDTO.nomineeDetailsDTO[].nomineeName",
+                                                    "autolov": false,
+                                                    "lovonly": true,
+                                                    "bindMap": {},
+                                                    "searchHelper": formHelper,
+                                                    search: function(inputModel, form, model, context) {                                              
+                                                       return Queries.getCustomerNomineeRelations(
+                                                         model.insurancePolicyDetailsDTO.customerId,
+                                                         model.insurancePolicyDetailsDTO.benificieryRelationship
+                                                        );
+                                                    },
+                                                    onSelect: function(result, model, context){
+                                                        model.insurancePolicyDetailsDTO.nomineeDetailsDTO[context.arrayIndex].nomineeName = result.familyMemberFirstName;
+                                                        model.insurancePolicyDetailsDTO.nomineeDetailsDTO[context.arrayIndex].nomineeRelationship = result.realtionShip;
+                                                        model.insurancePolicyDetailsDTO.nomineeDetailsDTO[context.arrayIndex].nomineeGender = result.gender;
+                                                        model.insurancePolicyDetailsDTO.nomineeDetailsDTO[context.arrayIndex].nomineePercentage = 100;
+                                                    },                                                   
+                                                    getListDisplayItem: function(item, index) {
+                                                        return [
+                                                            item.familyMemberFirstName,item.realtionShip
+                                                        ];
+                                                    }
+                                                }
+                                            }
+                                        }
+                                     }
+                                },
                                "validateBiometric":{
                                    "type":"box",
                                    "orderNo":4,
@@ -365,136 +372,154 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                                        }
                                    }
                                },
-                               "shopInsurance":{
-                                    "type":"box",
-                                    "orderNo":50,
-                                    "title":"SHOP_INSURANCE",
-                                    "items":{
-                                        "shopType": {
-                                            order:51,
-                                            "title": "SHOP_TYPE",
-                                            //enumCode:"work_place_type",//'shop_type',
-                                            type: "select",
-                                            required: true,                                            
-                                            titleMap: {
-                                                "TEASHOP"           :  "TeaShop",
-                                                "KIRANASHOP"        :  "KiranaShop",
-                                                "FLOWERSHOP"        :  "FlowerShop"
-                                            }, 
-                                        },
-                                        "constructionType": {
-                                            order: 52,
-                                            key: "",
-                                            title: "CONSTRUCTION_TYPE",
-                                            "type": "select",
-                                            "titleMap": {
-                                                "CONCRETE": "Kachha",
-                                                "MUD": "Pucca",
-                                                "BRICK": "Ardha Pucca",
-                                                "WOOD" :"Wood Frame"
-                                            }
-                                        },
-                                        "shopPhotos":{
-                                            key: "shopInsurance.shopPhotos",
-                                            type: "array",
-                                            startEmpty: false,
-                                            title:"SHOP_PHOTO",
-                                            add: null,
-                                            remove :null,
-                                            "view":"fixed",
-                                            "notitle": true,
-                                            "items": {
-                                                // "udf1": {
-                                                //     "type": "select",
-                                                //     "enumCode": "businessType",
-                                                //     "title": "BUSINESS_TYPE",
-                                                //     "key": "customer.enterpriseDocuments[].udf1",
-                                                //     "required":true
-                                                // },
-                                                "shopPhoto":{
-                                                    title:"SHOP_PHOTO",
-                                                    key: "insurancePolicyDetailsDTO.urnNo",
-                                                    offline: true,
-                                                    type: "file",
-                                                    fileType: "image/*"
-                                                }, 
-                                            }
-                                        },
-                                        // "shopPhoto":{
-                                        //     title:"SHOP_PHOTO",
-                                        //     key: "insurancePolicyDetailsDTO.urnNo",
-                                        //     offline: true,
-                                        //     type: "file",
-                                        //     fileType: "image/*"
-                                        // },        
-                                        "shopAddress": {
-                                            "order": 53,
-                                            "title": "SHOP_ADDRESS",
-                                            "type": "fieldset",
-                                            "items": {
-                                                "address1": {
-                                                    "title": "ADDRESS1",
-                                                    "type": "string",
-                                                },
-                                                "address2": {
-                                                    "title": "ADDRESS2",
-                                                    "type": "string",
-                                                },
-                                                "address3": {
-                                                    "title": "ADDRESS3",
-                                                    "type": "string",
-                                                },
-                                                "village": {
-                                                    "title": "VILLAGE",
-                                                    required: false,
-                                                    "readonly": false,
-                                                    type: "select",
-                                                    "enumCode": "village",
-                                                    filter: {
-                                                        parentCode: 'model.customer.customerBranchId'
-                                                    },
-                                                    screenFilter: true
-                                                },
-                                                "locality":{
-                                                    "title": "LOCALITY",
-                                                    "type": "string",    
-                                                },
-                                                "district":{
-                                                    "title": "DISTRICT",
-                                                    type: "select",
-                                                    "enumCode": "district_master",
-                                                    screenFilter: true,
-                                                    parentEnumCode: "bankname",
-                                                    parentValueExpr: "model.customer.kgfsBankName",
-                                                    "readonly": false 
-                                                },
-                                                "pincode":{
-                                                    "title": "PINCODE",
-                                                    "type": "number"
+                               "shopInsuranceBox":{
+                                "type":"box",
+                                orderNo:5,
+                                items:{
+                                    "shopInsurance":{
+                                        "type":"array",
+                                        "key"  : "insurancePolicyDetailsDTO.shopInsuranceDTO",
+                                        startEmpty: false,
+                                        add: null,
+                                        remove :null,
+                                        "orderNo": 90,
+                                        "title":"SHOP_INSURANCE",
+                                        "items":{
+                                            "shopType": {
+                                                order:100,
+                                                "key"  : "insurancePolicyDetailsDTO.shopInsuranceDTO[].shopType",
+                                                "title": "SHOP_TYPE",
+                                                enumCode:"loan_purpose_3",
+                                                type: "select",
+                                                required: true,                                            
+                                            },
+                                            "constructionType": {
+                                                order: 110,
+                                                key: "insurancePolicyDetailsDTO.shopInsuranceDTO[].constructionType",
+                                                title: "CONSTRUCTION_TYPE",
+                                                "type": "select",
+                                                "titleMap": {
+                                                    "WOOD_TIN": "Wood Frame",
+                                                    "CONCRETE_PUCCA": "Pucca"
                                                 }
-                                                // "address1":{
-                                                //     "title":"ADDRESS1",
-                                                //     "type": ["string","null"]
+                                            },
+                                            "coverNoteNo": {
+                                                order: 120,
+                                                key: "insurancePolicyDetailsDTO.shopInsuranceDTO[].coverNoteNo",
+                                                title: "COVER_NOTE_NO",
+                                                "type": "string"
+                                            },   
+                                            "shopPhotos":{
+                                                key: "insurancePolicyDetailsDTO.insurancePhotosDTO",
+                                                type: "array",
+                                                startEmpty: false,
+                                                title:"SHOP_PHOTO",
+                                                add: null,
+                                                remove :null,
+                                                "view":"fixed",
+                                                "notitle": true,
+                                                "items": {
+                                                    "shopPhoto":{
+                                                        title:"SHOP_PHOTO",
+                                                        key: "insurancePolicyDetailsDTO.insurancePhotosDTO[].fileId",
+                                                        offline: true,
+                                                        type: "file",
+                                                        fileType: "image/*",
+                                                        "category": "Shop",
+                                                        "subCategory": "SHOPPHOTO",
+                                                  
+                                                        
+                                                    }, 
+                                                }
+                                            },
+                                            // "shopPhoto":{
+                                            //     title:"SHOP_PHOTO",
+                                            //     key: "insurancePolicyDetailsDTO.urnNo",
+                                            //     offline: true,
+                                            //     type: "file",
+                                            //     fileType: "image/*"
+                                            // },        
+                                            "shopAddress": {
+                                                //"order": 53,
+                                                "title": "SHOP_ADDRESS",
+                                                "notitle" : true,
+                                                "type": "fieldset",
+                                                "items": {
+                                                    "address1": {
+                                                        "key"  : "insurancePolicyDetailsDTO.shopInsuranceDTO[].shopAddress1",
+                                                        "title": "ADDRESS1",
+                                                        "type": "string",
+                                                    },
+                                                    "address2": {
+                                                        "key"  : "insurancePolicyDetailsDTO.shopInsuranceDTO[].shopAddress2",
+                                                        "title": "ADDRESS2",
+                                                        "type": "string",
+                                                    },
+                                                    "address3": {
+                                                        "key"  : "insurancePolicyDetailsDTO.shopInsuranceDTO[].shopAddress3",
+                                                        "title": "ADDRESS3",
+                                                        "type": "string",
+                                                    },
+                                                    "village": {
+                                                        "key"  : "insurancePolicyDetailsDTO.shopInsuranceDTO[].village",
+                                                        "title": "VILLAGE",
+                                                        required: false,
+                                                        "readonly": false,
+                                                        type: "select",
+                                                        "enumCode": "village",
+                                                        filter: {
+                                                            parentCode: 'model.customer.customerBranchId'
+                                                        },
+                                                        screenFilter: true
+                                                    },
+                                                    "locality":{
+                                                        "key"  : "insurancePolicyDetailsDTO.shopInsuranceDTO[].locality",
+                                                        "title": "LOCALITY",
+                                                        "type": "string",    
+                                                    },
+                                                    "district":{
+                                                        "key"  : "insurancePolicyDetailsDTO.shopInsuranceDTO[].district",
+                                                        "title": "DISTRICT",
+                                                        type: "select",
+                                                        "enumCode": "district_master",
+                                                        screenFilter: true,
+                                                        parentEnumCode: "bankname",
+                                                        parentValueExpr: "model.customer.kgfsBankName",
+                                                        "readonly": false 
+                                                    },
+                                                    "pincode":{
+                                                        "key"  : "insurancePolicyDetailsDTO.shopInsuranceDTO[].pinCode",
+                                                        "title": "PINCODE",
+                                                        "type": "number"
+                                                    }
+                                                    // "address1":{
+                                                    //     "title":"ADDRESS1",
+                                                    //     "type": ["string","null"]
+    
+                                                    //     // "items":{
+                                                    //     //     "centreId": {
+                                                    //     //         orderNo: 60,
+                                                    //     //         key: "customer.centreId",
+                                                    //     //         "required": true,
+                                                    //     //         type: "select",
+                                                    //     //         enumCode: "centre",
+                                                    //     //         parentEnumCode: "userbranches",
+                                                    //     //         parentValueExpr: "model.customer.customerBranchId",
+                                                    //     //     },
+                                                    //     // }
+                                                    //   }
+                                                }
+    
+    
+                                            },
+                                            
+                                        }
+                                   },
 
-                                                //     // "items":{
-                                                //     //     "centreId": {
-                                                //     //         orderNo: 60,
-                                                //     //         key: "customer.centreId",
-                                                //     //         "required": true,
-                                                //     //         type: "select",
-                                                //     //         enumCode: "centre",
-                                                //     //         parentEnumCode: "userbranches",
-                                                //     //         parentValueExpr: "model.customer.customerBranchId",
-                                                //     //     },
-                                                //     // }
-                                                //   }
-                                            }
-
-
-                                        },
-                                        
                                     }
                                },
+
+
                            }
                            
                           
@@ -520,7 +545,7 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                                    return Queries.getProductCode(
                                       SessionStore.getBankId(),
                                       SessionStore.getCurrentBranch().branchId,
-                                      'SHOPINSURANCE'
+                                      'SHOP_INSURANCE'
                                    );
                                },
                                onSelect : function(result,model,context){
@@ -616,7 +641,10 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                                console.log(insuranceProcess); 
                                model.insuranceProcess = insuranceProcess;
                                model.insurancePolicyDetailsDTO = model.insuranceProcess.insurancePolicyDetailsDTO;
-                               
+                              // model.insurancePolicyDetailsDTO.insurancePhotosDTO=[];
+                               //model.insurancePolicyDetailsDTO.insurancePhotosDTO.push({"fileId":""});
+                              // model.insurancePolicyDetailsDTO.insurancePhotosDTO = [{fileId:null}];
+            
                                UIRepository.getInsuranceProcessDetails().$promise
                                .then(function(repo){
                                    return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)

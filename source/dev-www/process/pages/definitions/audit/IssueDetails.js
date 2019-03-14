@@ -90,16 +90,18 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "for
                                 "title": "AUDITOR_DEVIATION",
                                 "type": "html",
                                 "readonly": true
-                            }, {
-                                key: "auditIssue.closed_on",
-                                type: "date",
-                                "readonly": true,
-                                "condition":"model.siteCode != 'KGFS'"
-                            }, {
-                                key: "auditIssue.closed_by",
-                                "readonly": true,
-                                "condition":"model.siteCode != 'KGFS'"
-                            }, {
+                            },
+                            //  {
+                            //     key: "auditIssue.closed_on",
+                            //     type: "date",
+                            //     "readonly": true,
+                            //     "condition":"model.siteCode != 'KGFS'"
+                            // }, {
+                            //     key: "auditIssue.closed_by",
+                            //     "readonly": true,
+                            //     "condition":"model.siteCode != 'KGFS'"
+                            // }, 
+                            {
                                 key: "auditIssue.closed_on",
                                 type: "date",
                                 "readonly": true,
@@ -156,25 +158,27 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "for
                                     "name": "Unconfirm",
                                     "value": 2
                                 }]
-                            }, {
-                                "key": "auditIssue.confirmity_status",
-                                "title": "STATUS",
-                                "condition": "(model.readonly || model.type!='audit') && model.siteCode != 'KGFS'",
-                                "type": "radios",
-                                "titleMap": [{
-                                    "name": "Confirmed",
-                                    "value": 1
-                                }, {
-                                    "name": "Unconfirmed",
-                                    "value": 2
-                                }],
-                                "readonly": true
-                            // }, {
-                            //     type: "textarea",
-                            //     key: "auditIssue.comments",
-                            //     "condition": "model.actions.showComments(model, true)",
+                            },
+                            //  {
+                            //     "key": "auditIssue.confirmity_status",
+                            //     "title": "STATUS",
+                            //     "condition": "(model.readonly || model.type!='audit') && model.siteCode != 'KGFS'",
+                            //     "type": "radios",
+                            //     "titleMap": [{
+                            //         "name": "Confirmed",
+                            //         "value": 1
+                            //     }, {
+                            //         "name": "Unconfirmed",
+                            //         "value": 2
+                            //     }],
                             //     "readonly": true
-                            }, {
+                            // // }, {
+                            // //     type: "textarea",
+                            // //     key: "auditIssue.comments",
+                            // //     "condition": "model.actions.showComments(model, true)",
+                            // //     "readonly": true
+                            // },
+                             {
                                 type: "textarea",
                                 key: "auditIssue.comments",
                                 "condition": "model.actions.showComments(model, false)",
