@@ -213,7 +213,7 @@ gulp.task("clean:tsScripts", function(){
 gulp.task('ts:scripts', ['clean:tsScripts'], function() {
     var tsconfig = require("./tsconfig.json");
     return gulp.src('./dev-www/ts/**/*.ts')
-        .pipe(ts(tsconfig))
+        .pipe(ts(tsconfig.compilerOptions))
         .pipe(gulp.dest('./dev-www/tsjs'));
 });
 
