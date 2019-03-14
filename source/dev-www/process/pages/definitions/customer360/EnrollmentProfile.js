@@ -186,7 +186,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                         {
                             key:"customer.enrolledAs",
                             type:"radios",
-                            //readonly: true
+                            readonly: true
                         },
                         {
                             key:"customer.gender",
@@ -1565,7 +1565,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                         {
                             key:"customer.enrolledAs",
                             type:"radios",
-                            //readonly: true
+                            readonly: true
                         },
                         {
                             key:"customer.gender",

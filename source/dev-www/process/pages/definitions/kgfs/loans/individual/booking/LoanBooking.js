@@ -273,6 +273,7 @@ define([], function () {
                 return [
                     "LoanDetails",
                     "LoanDetails.centreName",
+                    "LoanDetails.productCategory",
                     "LoanDetails.loanType",
                     "LoanDetails.partner",
                     "LoanDetails.frequency",
@@ -477,6 +478,7 @@ define([], function () {
                     "LoanDetails.loanType": {
                         "orderNo": 2,
                         "required": true,
+                        "readonly": true,
                         "enumCode": "booking_loan_type",
                         "onChange": function(valueObj,context,model){
                             clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
@@ -493,7 +495,7 @@ define([], function () {
                         }
                     },
                     "LoanDetails.partner": {
-                        "orderNo": 2,
+                        "orderNo": 3,
                         "enumCode": "loan_partner",
                         "onChange": function(valueObj,context,model){
                             clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
@@ -1093,6 +1095,13 @@ define([], function () {
                                         "LoanDetails": {
                                             "orderNo": 7,
                                             "items": {
+                                                "productCategory":{
+                                                    "key":"loanAccount.productCategory",
+                                                    "title": "PRODUCT_CATEGORY",
+                                                    "type": "text",
+                                                    "readonly":true,
+                                                    "orderNo": 2
+                                                },
                                                 "loanProductName":{
                                                     "title": "PRODUCT_NAME",
                                                     "readonly": true,

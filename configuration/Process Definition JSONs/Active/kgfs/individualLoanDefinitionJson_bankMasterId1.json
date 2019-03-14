@@ -133,6 +133,19 @@
              "WM"
           ]
        },
+        {
+          "order":11,
+          "code":"DSCOverride",
+          "name":"DSC Override",
+          "stageType":"CAPTURE",
+          "sendSms":"No",
+          "smsCategory":"LoanBooking",
+          "isAccountOpening":false,
+          "riskScoreName":"RiskScore3",
+          "allowedRoles":[
+            "WM"
+          ]
+      },
        {
           "order":12,
           "code":"KYCCheck",
@@ -3753,6 +3766,13 @@
                    "captureStages": [
                       "Screening", "LoanInitiation", "PendingForPartner"
                    ]
+                },
+                "udf5": {
+                  "title": "DSC Override status",
+                  "type": "boolean",
+                  "captureStages": [
+                     "Screening", "LoanInitiation", "PendingForPartner", "DSCApproval"
+                  ]
                 },
                 "udf7": {
                    "title": "Eligible Disposable Income",

@@ -267,11 +267,7 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 									});
 								} else if (siteCode == 'KGFS') {
 									$state.go("Page.Engine", {
-										pageName: "kgfs.customer.Enrollment",
-										pageId: item.id,
-										pageData: {
-											lead_id: item.id
-										}
+										pageName: "kgfs.customer.Enrollment"
 									});
 								}
 							},

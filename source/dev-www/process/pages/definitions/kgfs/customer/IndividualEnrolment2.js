@@ -688,7 +688,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     var addressProof1ValidUptoDate = moment(model.customer.addressProofValidUptoDate, SessionStore.getSystemDateFormat());
                                     if (addressProof1ValidUptoDate < addressProof1IssueDate) {
                                         model.customer.addressProofIssueDate = null;
-                                        PageHelper.showProgress("pre-save-validation", "Address Proof Issue Date always more than Address Proof Issue Date", 5000);
+                                        PageHelper.showErrors({data:{error:"Address Proof Issue Date always more than Address Proof valid Upto Date"}});
                                         return false;
                                     }
                                 }
@@ -706,7 +706,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     var addressProof1ValidUptoDate = moment(model.customer.addressProofValidUptoDate, SessionStore.getSystemDateFormat());
                                     if (addressProof1ValidUptoDate < addressProof1IssueDate) {
                                         model.customer.addressProofValidUptoDate = null;
-                                        PageHelper.showProgress("pre-save-validation", "ID Proof ValidUptoDate always more than ID Proof Valid ToDate", 5000);
+                                        PageHelper.showErrors({data:{error:"Address Proof valid Upto Date always more than Address Proof Issue Date"}});
                                         return false;
                                     }
                                 }

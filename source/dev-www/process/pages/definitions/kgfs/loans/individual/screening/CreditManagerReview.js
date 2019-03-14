@@ -66,22 +66,22 @@ define(["perdix/domain/model/loan/LoanProcess",
                             maximum: 1,
                             order:9
                         },
-                            // {
-                            //     pageName: 'kgfs.loans.individual.screening.Summary',
-                            //     title: 'SUMMARY',
-                            //     pageClass: 'summary',
-                            //     minimum: 1,
-                            //     maximum: 1,
-                            //     order: 5
-                            // },                            
-                            {
-                                pageName: 'kgfs.loans.individual.screening.Review',
-                                title: 'REVIEW',
-                                pageClass: 'loan-review',
-                                minimum: 1,
-                                maximum: 1,
-                                order:80
-                            }
+                        {
+                            pageName: 'kgfs.loans.individual.screening.Summary',
+                            title: 'SUMMARY',
+                            pageClass: 'summary',
+                            minimum: 1,
+                            maximum: 1,
+                            order: 5
+                        },                            
+                        {
+                            pageName: 'kgfs.loans.individual.screening.Review',
+                            title: 'REVIEW',
+                            pageClass: 'loan-review',
+                            minimum: 1,
+                            maximum: 1,
+                            order:80
+                        }
                     ]);
                 },
                 "bundlePages": [],
@@ -157,6 +157,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     return;
                                 }
 
+                                $this.bundlePages.push({
+                                    pageClass: 'summary',
+                                    model: {
+                                            cbModel: {
+                                            customerId:loanProcess.loanAccount.customerId,
+                                            loanId:bundleModel.loanId,
+                                            scoreName:'RiskScore2'
+                                        }
+                                    }
+                                });
                                 $this.bundlePages.push({
                                     pageClass: 'applicant',
                                     model: {

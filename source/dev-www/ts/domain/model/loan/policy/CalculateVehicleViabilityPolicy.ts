@@ -112,13 +112,13 @@ export class CalculateVehicleViabilityPolicy extends IPolicy<LoanProcess> {
                          if (d.calculation_method == "DISTANCE") {
                                 let incomeAmount =  loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].ratePerTrip *  loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips;
 
-                                loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0].expenseAmount = parseFloat(incomeAmount) * parseFloat( parseFloat(d.fuel_cost_pm);                                
+                                loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0].expenseAmount = parseFloat(incomeAmount) * parseFloat(d.fuel_cost_pm);                                
 
                         } else if (d.calculation_method == "TIME") {
 
                                 let incomeAmount =  loanProcess.loanAccount.vehicleLoanDetails.monthlyWorkingHours *  loanProcess.loanAccount.vehicleLoanDetails.hourlyRate;
                             
-                                loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0].expenseAmount = parseFloat(incomeAmount) * parseFloat( parseFloat(d.fuel_cost_pm);
+                                loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[0].expenseAmount = parseFloat(incomeAmount) * parseFloat(d.fuel_cost_pm);
                             
                         }
 
@@ -127,12 +127,12 @@ export class CalculateVehicleViabilityPolicy extends IPolicy<LoanProcess> {
 
                              let incomeAmount =  loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].ratePerTrip *  loanProcess.loanAccount.vehicleLoanDetails.vehicleRouteDetails[0].trips;
 
-                            loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[1].expenseAmount = parseFloat(incomeAmount) * parseFloat( parseFloat(d.tyre_cost_pm);       
+                            loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[1].expenseAmount = parseFloat(incomeAmount) * parseFloat(d.tyre_cost_pm);
                                 
                         } else {
                                 let incomeAmount =  loanProcess.loanAccount.vehicleLoanDetails.monthlyWorkingHours *  loanProcess.loanAccount.vehicleLoanDetails.hourlyRate;
 
-                                loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[1].expenseAmount = parseFloat(incomeAmount) * parseFloat( parseFloat(d.tyre_cost_pm);
+                                loanProcess.loanAccount.vehicleLoanDetails.vehicleLoanExpenses[1].expenseAmount = parseFloat(incomeAmount) * parseFloat(d.tyre_cost_pm);
                         }
                        
 

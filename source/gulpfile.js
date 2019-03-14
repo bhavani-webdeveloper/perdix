@@ -7,6 +7,7 @@ var gulpLoadPlugins = require('gulp-load-plugins');
 var argv = require('yargs').argv;
 var ts = require('gulp-typescript');
 var merge = require('merge2');
+var babel = require("gulp-babel");
 var $ = gulpLoadPlugins();
 
 /*
@@ -87,6 +88,7 @@ gulp.task('assets', ['ts:scripts', 'ts:perdixConfig'], function(){
             ];
     }
     return gulp.src(src , {base: 'dev-www/'})
+        //.pipe($.if('*.js', babel()))
         .pipe(gulp.dest(buildDirectory));
 })
 
@@ -209,14 +211,9 @@ gulp.task("clean:tsScripts", function(){
     return del(['./dev-www/tsjs/**/*']);
 })
 gulp.task('ts:scripts', ['clean:tsScripts'], function() {
+    var tsconfig = require("./tsconfig.json");
     return gulp.src('./dev-www/ts/**/*.ts')
-        .pipe(ts({
-            noImplicitAny: true,
-            module: 'AMD',
-            moduleResolution:'node',
-            target: "es5",
-            experimentalDecorators: true
-        }))
+        .pipe(ts(tsconfig.compilerOptions))
         .pipe(gulp.dest('./dev-www/tsjs'));
 });
 

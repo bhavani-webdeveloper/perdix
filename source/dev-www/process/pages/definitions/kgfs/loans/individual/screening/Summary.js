@@ -87,14 +87,7 @@ define({
         model.deviationDetails = res[12];
         model.deviationParameter = res[12];
         model.ratioDetails = res[13];
-       // model.psychometricScores = res[14].sections;
-        model.cashFlowDetails = res[15];
-        model.businessBankStmtSummary = res[16];
-        model.personalBankStmtSummary = res[17];
-        model.purchaseDetails = res[18];
         model.liabilitiesSummary = res[19];
-        model.machineryDetails = res[20];
-        model.opexDetails = res[21];
 
         model.enterpriseDetails.columns = model.enterpriseDetails.columns.concat(model.ratioDetails.columns);
         _.merge(model.enterpriseDetails.data[0], model.ratioDetails.data[0]);
@@ -123,6 +116,23 @@ define({
         model.assetsAndLiabilities.totalAssets = model.balanceSheet.data[0]['Total Assets'];
         model.assetsAndLiabilities.totalLiabilities = model.balanceSheet.data[0]['Total Liabilities'];
 
+        model.cams = {};
+        model.cams.requestedLoanAmount = model.enterpriseDetails.data[0]['Loan Amount Requested'];
+        // model.cams.freqency=model.enterpriseDetails.data[0]['frequency']
+        model.cams.freqency= 'Monthly';
+        model.cams.tenure = model.enterpriseDetails.data[0]['Tenure'];
+        model.cams.estimatedEmi = model.enterpriseDetails.data[0]['EstimateEmi'];
+        model.cams.sanctionedLoanAmount = model.enterpriseDetails.data[0]['Tin'];
+        model.cams.totalMonthlySurplus = model.enterpriseDetails.data[0]['Avgrage Daily Sale Amount'];
+        model.cams.debtServiceRatio = model.enterpriseDetails.data[0]['Owner Salary'];
+        model.cams.emiEligibleAsPerNetBusinessSurplus = model.enterpriseDetails.data[0]['Net Business Income'];
+        //model.cams.debtServiceRatio = model.enterpriseDetails.data[0]['EstimateEmi'];
+        model.cams.finalEmiEligible = model.enterpriseDetails.data[0]['Working Days In Month'];
+        model.cams.actualEMiOffered = model.enterpriseDetails.data[0]['Co-Owner Salary'];
+        model.cams.loanAmountEligible = model.enterpriseDetails.data[0]['Employee Salary'];
+       // model.cams.sanctionedLoanAmount = model.enterpriseDetails.data[0]['Tin'];
+
+
         model.pl  = {
             household: [],
             business: {}
@@ -143,105 +153,51 @@ define({
             }
         }
 
-        model.pl.business.invoice = model.businessPL.data[0]['Invoice'];
-        model.pl.business.invoicePCT = model.businessPL.data[0]['Invoice pct'];
-        model.pl.business.cashRevenue = model.businessPL.data[0]['Cash'];
-        model.pl.business.cashRevenuePCT = model.businessPL.data[0]['Cash pct'];
-        model.pl.business.scrapIncome = model.businessPL.data[0]['Scrap or any business related income'];
-        model.pl.business.scrapIncomePCT = model.businessPL.data[0]['Scrap or any business related income pct'];
-        model.pl.business.totalBusinessIncome = model.businessPL.data[0]['Total Business Revenue'];
-        model.pl.business.purchases = model.businessPL.data[0]['Purchases'];
-        model.pl.business.purchasesPCT = model.businessPL.data[0]['Purchases pct'];
-        model.pl.business.grossIncome = model.businessPL.data[0]['Gross Income'];
-        model.pl.business.Opex = model.businessPL.data[0]['Opex'];
-        model.pl.business.EBITDA = model.businessPL.data[0]['EBITDA'];
-        model.pl.business.EBITDA_PCT = model.businessPL.data[0]['EBITDA pct'];
-        model.pl.business.businessLiabilities = model.businessPL.data[0]['Business Liabilities'];
-        model.pl.business.netBusinessIncome = model.businessPL.data[0]['Net Business Income'];
-        model.pl.business.netBusinessIncomePCT = model.businessPL.data[0]['Net Business Income pct'];
-        model.pl.business.kinaraEmi = model.businessPL.data[0]['Kinara EMI'];
-        model.pl.business.kinaraEmiPCT = model.businessPL.data[0]['Kinara EMI pct'];
-        model.pl.business.netIncome = model.businessPL.data[0]['Net Income'];
-        model.pl.business.finalKinaraEmi = model.businessPL.data[0]['Final Kinara EMI'];
-        model.pl.business.finalKinaraEmiPCT = model.businessPL.data[0]['Final Kinara EMI pct'];
+        // model.pl.business.invoice = model.businessPL.data[0]['Invoice'];
+        // model.pl.business.invoicePCT = model.businessPL.data[0]['Invoice pct'];
+        // model.pl.business.cashRevenue = model.businessPL.data[0]['Cash'];
+        // model.pl.business.cashRevenuePCT = model.businessPL.data[0]['Cash pct'];
+        // model.pl.business.scrapIncome = model.businessPL.data[0]['Scrap or any business related income'];
+        // model.pl.business.scrapIncomePCT = model.businessPL.data[0]['Scrap or any business related income pct'];
+        // model.pl.business.totalBusinessIncome = model.businessPL.data[0]['Total Business Revenue'];
+        // model.pl.business.purchases = model.businessPL.data[0]['Purchases'];
+        // model.pl.business.purchasesPCT = model.businessPL.data[0]['Purchases pct'];
+        // model.pl.business.grossIncome = model.businessPL.data[0]['Gross Income'];
+        // model.pl.business.Opex = model.businessPL.data[0]['Opex'];
+        // model.pl.business.EBITDA = model.businessPL.data[0]['EBITDA'];
+        // model.pl.business.EBITDA_PCT = model.businessPL.data[0]['EBITDA pct'];
+        // model.pl.business.businessLiabilities = model.businessPL.data[0]['Business Liabilities'];
+        // model.pl.business.netBusinessIncome = model.businessPL.data[0]['Net Business Income'];
+        // model.pl.business.netBusinessIncomePCT = model.businessPL.data[0]['Net Business Income pct'];
+        // model.pl.business.kinaraEmi = model.businessPL.data[0]['Kinara EMI'];
+        // model.pl.business.kinaraEmiPCT = model.businessPL.data[0]['Kinara EMI pct'];
+        // model.pl.business.netIncome = model.businessPL.data[0]['Net Income'];
+        // model.pl.business.finalKinaraEmi = model.businessPL.data[0]['Final Kinara EMI'];
+        // model.pl.business.finalKinaraEmiPCT = model.businessPL.data[0]['Final Kinara EMI pct'];
 
-
-
-        /* Scoring Sections */
-
-        /* Populate seperate scoring section for ScreeningReview screen */
-        // model.screeningScoreDetails = {
-        //     columns: [
-        //         {
-        //             "title": "Parameter",
-        //             "data": "Parameter"
-        //         },
-        //         {
-        //             "title": "Actual Value",
-        //             "data": "Actual Value"
-        //         },
-        //         {
-        //             "title": "ParameterScore",
-        //             "data": "ParameterScore"
-        //         }
-        //     ],
-        //     data: []
-        // };
-        // // debugger;
-        // if (_.hasIn(model.scoreDetails[0], "data") && _.isArray(model.scoreDetails[0].data) && model.scoreDetails[0].data.length > 0) {
-        //     var score1Data = _.cloneDeep(model.scoreDetails[0].data, true);
-        //     _.forEach(score1Data, function(data){
-        //         data["Actual Value"] = data["Applicant"];
-        //         delete data.Applicant;
-        //         delete data["Co-Applicant"];
-        //     });
-
-        //     model.screeningScoreDetails.data = _.concat(model.screeningScoreDetails.data, score1Data);
-        // }
-        // if (_.hasIn(model.scoreDetails[1], "data") && _.isArray(model.scoreDetails[1].data) && model.scoreDetails[1].data.length > 0) {
-        //     model.screeningScoreDetails.data = _.concat(model.screeningScoreDetails.data, model.scoreDetails[1].data);
-        // }
-
-        // debugger;
-
-
-        // for (var i=0;i< model.deviationDetails.data.length; i++){
-        //     var d = model.deviationDetails.data[i];
-        //     if (d.Mitigant && d.Mitigant.length!=0){
-        //         if (d.Mitigant && d.Mitigant!=null){
-        //             d.ListOfMitigants = d.Mitigant.split("|");
-        //         }
-
-        //         if (d.ChosenMitigant && d.ChosenMitigant!=null){
-        //             d.ChosenMitigants = d.ChosenMitigant.split("|")
-        //         }
-
-        //     }
-        // }
-
-        // model.deviationParameter = [];
-        // for (var i=0;i< model.deviationDetails.data.length; i++){
-        //     var d = model.deviationDetails.data[i];
-        //     model.deviationParameter.push(_.cloneDeep(model.deviationDetails.data[i]));
-        //     delete model.deviationParameter[model.deviationParameter.length-1].ListOfMitigants;
-        //     delete model.deviationParameter[model.deviationParameter.length-1].Mitigant;
-        //     model.deviationParameter[model.deviationParameter.length-1].mitigants = [];
-        //     if (d.Mitigant && d.Mitigant.length!=0){
-        //         d.ListOfMitigants = d.Mitigant.split("|");
-        //         for (var j =0; j < d.ListOfMitigants.length; j++) {
-        //             model.deviationParameter[model.deviationParameter.length-1].mitigants.push({mitigantName:d.ListOfMitigants[j]});
-        //         }
-
-        //     }
-        // }
         model.additional = {};
         // model.additional = {deviations:{deviationParameter: model.deviationParameter,scoreName:scoreName}};
         // BundleManager.pushEvent('deviation-loaded', model._bundlePageObj, model.additional);
 
         $log.info("Karthik here");
         $log.info(model.additional);
+        model.enterpriseDetailsData = {};
+        model.enterpriseDetailsData['Company Name'] = model.enterpriseDetails.data[0]['Company Name'];
+        model.enterpriseDetailsData['Business Constitution'] = model.enterpriseDetails.data[0]['Business Constitution'];
+        model.enterpriseDetailsData['Business Activity'] = model.enterpriseDetails.data[0]['Business Activity'];
+        model.enterpriseDetailsData['Business Type'] = model.enterpriseDetails.data[0]['Business Type'];
+        model.enterpriseDetailsData['Sector'] = model.enterpriseDetails.data[0]['Sector'];
+        model.enterpriseDetailsData['Loan Product'] = model.enterpriseDetails.data[0]['Loan Product'];
+        model.enterpriseDetailsData['Monthly Turnover'] = model.enterpriseDetails.data[0]['Monthly Turnover'];
+        model.enterpriseDetailsData['Wealth Manager Name'] = model.enterpriseDetails.data[0]['Wealth Manager Name'];
+        model.enterpriseDetailsData['Loan Amount Requested'] = model.enterpriseDetails.data[0]['Loan Amount Requested'];
+        model.enterpriseDetailsData['Interest'] = model.enterpriseDetails.data[0]['Interest'];
+        model.enterpriseDetailsData['Avg Monthly Net Income'] = model.enterpriseDetails.data[0]['Avg Monthly Net Income'];
+        model.enterpriseDetailsData['Average_Bank_Balance'] = model.enterpriseDetails.data[0]['Average_Bank_Balance'];
+        model.enterpriseDetailsData['Average Bank Deposit'] = model.enterpriseDetails.data[0]['Average Bank Deposit'];
+        
 
-        model.enterpriseDetailsData = model.enterpriseDetails.data[0];
+
 
     }; // END OF prepareData()
 
@@ -278,11 +234,11 @@ define({
                 readonly: true,
             };
 
-            if (key == "FRO Remarks"){
-                item.type = "section";
-                item.htmlClass = "row";
-                item.html = "<div><label class = 'col-sm-4' style = 'text-align: right;'>FRO Remarks</label><div style = 'font-weight: bold;'  class = 'col-sm-8'>{{model.enterpriseDetailsData['FRO Remarks']}}</div></div>";
-            }
+            // if (key == "FRO Remarks"){
+            //     item.type = "section";
+            //     item.htmlClass = "row";
+            //     item.html = "<div><label class = 'col-sm-4' style = 'text-align: right;'>FRO Remarks</label><div style = 'font-weight: bold;'  class = 'col-sm-8'>{{model.enterpriseDetailsData['FRO Remarks']}}</div></div>";
+            // }
             if (bsCounter++ % 2 ==0){
                 bsLeft.push(item)
             } else {
@@ -314,6 +270,41 @@ define({
                     }
                 ]
         })
+
+
+
+        form.push({
+            type: "box",
+            colClass: "col-sm-12 table-box",
+            title: "CAMS",
+            items: [
+                {
+                    type: "section",
+                    colClass: "col-sm-12",
+                    html:
+'<table class="table">'+
+    '<colgroup>'+
+        '<col width="33%"> <col width="33%"><col width="33%">'+
+    '</colgroup>'+
+    '<tbody>'+
+        '<tr class="table-sub-header"> <th></th> <th>{{"REQUESTED_BY_APPLICANT" | translate}}</th><th>{{"RECOMMENDED_BY_LOAN_OFFICER" | translate}}</th> </tr>'+
+        '<tr> <td>{{"LOAN_AMOUNT" | translate}}</td><td>{{model.cams.requestedLoanAmount}}</td> <td>{{model.cams.sanctionedLoanAmount}}</td> </tr>'+
+        '<tr> <td>{{"FREQUENCY" | translate}}</td><td>{{ model.cams.freqency}}</td> <td>{{ model.cams.freqency}}</td> </tr>'+
+        '<tr> <td>{{"TERM" | translate}}</td><td>{{ model.cams.tenure}}</td> <td>{{ model.cams.tenure}}</td> </tr>'+
+        '<tr> <td>{{"INSTALLMENT" | translate}}</td><td>{{model.cams.estimatedEmi}}</td><td></td></tr>'+
+        '<tr class="table-sub-header"><th colspan="12">{{"ELIGIBILITY_CALCULATOR" | translate}}</th></tr>'+
+        '<tr><td>{{"TOTAL_MONTHLY_SURPLUS" | translate}}</td><td>{{model.cams.totalMonthlySurplus}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"DEBT_SERVICE_RATIO" | translate}}</td><td>{{model.cams.debtServiceRatio}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"EMI_ELIGIBLE_AS_PER_NET_BUSINESS_SURPLUS" | translate}}</td><td>{{model.cams.emiEligibleAsPerNetBusinessSurplus}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"AFFORDABLE_EMI_AS_STATED_BY_CUSTOMER" | translate}}</td><td>{{model.cams.estimatedEmi}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"FINAL_EMI_ELIGIBILITY" | translate}}</td><td>{{model.cams.finalEmiEligible}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"ACTUAL_EMI_OFFERED_TO_BORRWER" | translate}}</td><td>{{model.cams.actualEMiOffered}}</td><td></td><td></td></tr>'+
+        '<tr> <td>{{"FINAL_LOAN_AMOUNT_SANCTIONED" | translate}}</td><td>{{model.cams.sanctionedLoanAmount}}</td><td></td></tr>'+
+    '</tbody>'+
+'</table>'
+                }
+            ]
+        });
 
         // form.push({
         //     "type": "box",

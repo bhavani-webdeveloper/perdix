@@ -430,7 +430,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EnterpriseFinancials.incomeThroughSales.buyerName":{
                         "orderNo": 513,
-                        "title": "OTHER_INCOME_FEILD",
+                        "title": "OTHER_INCOME",
                         "type":"text"
                     },
                     "EnterpriseFinancials.rawMaterialExpenses": {

@@ -1480,6 +1480,11 @@ define([],function(){
                             });
                     },
                     proceed: function(model, formCtrl, form, $event){
+                         if (model.loanProcess.remarks==null || model.loanProcess.remarks ==""){
+                               PageHelper.showProgress("update-loan", "Remarks is mandatory", 3000);
+                               PageHelper.hideLoader();
+                               return false;
+                        }
                         var trancheTotalAmount=0;
                         if(model.loanAccount.currentStage && model.loanAccount.currentStage == 'Sanction' && model.loanAccount.disbursementSchedules && model.loanAccount.disbursementSchedules.length){
                             
@@ -1503,7 +1508,7 @@ define([],function(){
                                 for(i = 0; i< model.loanAccount.loanCustomerRelations.length;i++){
                                     if(model.loanAccount.loanCustomerRelations[i].relation != "Applicant")
                                         continue;
-                                    if(typeof model.loanAccount.loanCustomerRelations[i].dscStatus == "undefined" || model.loanAccount.loanCustomerRelations[i].dscStatus == ""){
+                                    if(typeof model.loanAccount.loanCustomerRelations[i].dscStatus == "undefined" || model.loanAccount.loanCustomerRelations[i].dscStatus == null){
                                         model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = null
                                         break;
                                     }
@@ -1529,7 +1534,7 @@ define([],function(){
                         }
                         PageHelper.showLoader();
                         PageHelper.showProgress('enrolment', 'Updating Loan');
-                        model.loanProcess.proceed()
+                        model.loanProcess.proceed(model.loanProcess.stage)
                             .finally(function () {
                                 PageHelper.hideLoader();
                             })

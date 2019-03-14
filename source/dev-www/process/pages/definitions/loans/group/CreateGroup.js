@@ -331,7 +331,9 @@ define({
                             console.log(inputModel);
                             var promise = Enrollment.search({
                                 'branchName': branchName,
-                                'centreId': inputModel.centreId
+                                'centreId': inputModel.centreId,
+                                'customerType':'INDIVIDUAL',
+                                'stage' : 'Completed'
                             }).$promise.then(function(response){
                                 $log.info(response.body);
                                 var ret = [];

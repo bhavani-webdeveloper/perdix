@@ -25,14 +25,14 @@ export class VendorNameLOVConfiguration extends LOVElementConfiguration {
             },
             body: out
         });
-    },
+    };
     onSelect: Function= function(valueObj, model, context){
         if (_.isUndefined(model.customer.rawMaterialExpenses[context.arrayIndex])) {
             model.customer.rawMaterialExpenses[context.arrayIndex] = {};
         }
 
         model.customer.rawMaterialExpenses[context.arrayIndex].vendorName = valueObj.value;
-    },
+    };
     getListDisplayItem: Function= function(item, index) {
         return [
             item.name
