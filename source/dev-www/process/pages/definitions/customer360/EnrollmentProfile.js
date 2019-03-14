@@ -87,6 +87,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
             }
             //end
             model.enabletrue= false;
+            model.isRiskProfileAccess = false;
             if($stateParams.pageData){
                 if($stateParams.pageData.enabletrue){
                     model.enabletrue= $stateParams.pageData.enabletrue;
@@ -105,9 +106,16 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                         $log.info(data.EditBasicCustomerInfo);
                         if(data){
                             model.EditBasicCustomerInfo= !data.EditBasicCustomerInfo;
+                            if (typeof data.isRiskProfileAccess !="undefined"){
+                                model.isRiskProfileAccess = data.isRiskProfileAccess;
+                            }
+                            else{
+                                model.isRiskProfileAccess = false;
+                            }
                             if(model.EditBasicCustomerInfo)
                                 {
                                     model.enabletrue = true;
+                                   
                                 }
 
                         }
@@ -115,6 +123,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                         PageHelper.hideLoader();
                         model.EditBasicCustomerInfo= true;
                         model.enabletrue = true;
+                        model.isRiskProfileAccess = false;
                     });
                     if (model.customer.currentStage==='Stage01') {
                         irfProgressMessage.pop("enrollment-save","Customer "+model.customer.id+" not enrolled yet", 5000);
@@ -292,13 +301,24 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                         },
                         {
                             "title": "RISK_PROFILE",
+                            "condition":"model.isRiskProfileAccess",
+                            "type": "select",
+                            "key": "customer.riskProfile",
+                            "enumCode":"customer_risk_profile",
+                            onChange: function (valueObj, form, model) {
+                            }
+                        },
+                        {
+                            "title": "RISK_PROFILE",
+                            "condition":"!model.isRiskProfileAccess",
+                            "readonly":true,
                             "type": "select",
                             "key": "customer.riskProfile",
                             "enumCode":"customer_risk_profile",
                             onChange: function (valueObj, form, model) {
                             }
                         }
-                        
+
                         
                     ]
                 },
