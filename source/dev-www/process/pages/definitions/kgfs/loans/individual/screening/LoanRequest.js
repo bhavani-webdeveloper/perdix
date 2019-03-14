@@ -749,6 +749,10 @@ define([],function(){
                         "CollateralInformation.collateral.collateralDocuments": {
                              "required":true
                         },
+                        "LoanMitigants.loanMitigants.parameter":{
+                            maxLength:10,
+                            "pattern": "^[a-zA-Z.]{1,5}$"
+                        },
                         "JewelDetails": {
                             "orderNo": 20,
                             "condition": "model.loanAccount.loanType == 'JEWEL'"
@@ -1117,7 +1121,7 @@ define([],function(){
                                     "deviationDetails": {
                                         "type": "section",
                                         "colClass": "col-sm-12",
-                                        "html": '<table class="table"><colgroup><col width="20%"><col width="20%"></colgroup><thead><tr><th>Parameter Name</th><th>Mitigant</th></tr></thead><tbody>' +
+                                        "html": '<table class="table"><colgroup><col width="20%"><col width="20%"></colgroup><thead><tr><th>Deviation</th><th>Mitigation</th></tr></thead><tbody>' +
                                             '<tr ng-repeat="(parameter,item) in model.loanMitigantsGrouped">' +
                                             '<td>{{ parameter }}</td>' +
                                             '<td><ul class="list-unstyled">' +
@@ -1134,12 +1138,13 @@ define([],function(){
                                         "items":{
                                             "parameter":{
                                                "key":"loanAccount.loanMitigants[].parameter",
-                                               "title":"DEVIATION",
-                                               "type":"string"
+                                               "title":"Deviation",
+                                               "type":"string",
+                                               
                                             },
                                             "mitigant":{
                                                "key":"loanAccount.loanMitigants[].mitigant",
-                                               "title":"MITIGATION",
+                                               "title":"Mitigation",
                                                "type":"string"
                                             }
                                         }
