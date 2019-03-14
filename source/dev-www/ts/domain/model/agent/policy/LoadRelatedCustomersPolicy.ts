@@ -29,7 +29,7 @@ export class LoadRelatedCustomersPolicy extends IPolicy<AgentProcess> {
         let activeSession:ISession = ObjectFactory.getInstance("Session");
         let observables = [];      
 
-        if (_.hasIn(agentProcess, "agent.customerId"){
+        if (_.hasIn(agentProcess, "agent.customerId")){
             let obs1 = EnrolmentProcess.fromCustomerID(agentProcess.agent.customerId)
                 .map(
                     (customer: EnrolmentProcess) => {
