@@ -108,7 +108,7 @@ define({
                             "{{'URN_NO'|translate}} : " + item.urn,
                             "{{'LOAN_ACCOUNT_NO'|translate}} : " + item.accountNumber,
                             "{{'LOAN_AMOUNT_SANCTIONED'|translate}} : " + item.loanAmount,
-                            "{{'DCOUEMT_UPLOADED_TIME'|translate}} : " + item.applicationDate
+                            "{{'DOCUMENT_UPLOADED_TIME'|translate}} : " + item.applicationDate
 
                         ]
                     },
