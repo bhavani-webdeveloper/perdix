@@ -1715,6 +1715,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "EnterpriseFinancials.currentAsset":{
                                     "readonly":true
+                                },
+                                "Machinery":{
+                                    "readonly":true
                                 }
                             }
                         },
