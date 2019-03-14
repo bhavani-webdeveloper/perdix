@@ -632,7 +632,6 @@ define({
                 type: "box",
                 colClass: "col-sm-12 table-box",
                 title: "Household P&L Statement - " + model.houseHoldPL[i].relation_detail,
-                condition: "model.currentStage != 'ScreeningReview'",
                 items: [
                     {
                         type: "section",
