@@ -1592,6 +1592,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "References": {
                                     "readonly": true
                                 },
+                                "EnterpriseFinancials.currentAsset":{
+                                    "readonly":true
+                                },
+                                "Machinery":{
+                                    "readonly":true
+                                }
                             }
                         },
                         "FieldAppraisalReview": {
