@@ -42,8 +42,10 @@
     "wiredep": "^3.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.3.4",
     "del": "^2.2.2",
     "frisby": "^0.8.5",
+    "gulp-babel": "^8.0.0",
     "gulp-if": "^2.0.1",
     "gulp-load-plugins": "^1.2.4",
     "gulp-main-bower-files": "^1.5.1",
@@ -84,5 +86,8 @@
       "com-badrit-macaddress": {},
       "cordova-plugin-imei": {}
     }
+  },
+  "resolutions": {
+    "**/event-stream": "^4.0.1"
   }
 }
