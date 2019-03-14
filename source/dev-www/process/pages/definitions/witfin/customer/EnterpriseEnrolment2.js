@@ -240,6 +240,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "TangibleNetWorth": {
                                       "readonly": true
+                                    },
+                                    "IndividualReferences": {
+                                        "readonly": true
+                                    },
+                                    "BusinessVerification": {
+                                      "readonly": true
                                     }
                                 },
                                 "excludes": [
