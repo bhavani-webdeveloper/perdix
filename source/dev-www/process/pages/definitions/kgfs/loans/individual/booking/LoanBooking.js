@@ -904,7 +904,16 @@ define([], function () {
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianRelationship": {
                         // "readonly": true,
                         // "type": "text",
-                        "enumCode":"relation",
+                        //"enumCode":"relation",
+                        "titleMap": [{
+                            value: "Relative",
+                            name: "Relative"
+                            },
+                            {
+                                value: "Neighbour",
+                                name: "Neighbour"
+                            },
+                        ],
                         required:true
                     },
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianPincode": {
