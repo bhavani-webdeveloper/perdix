@@ -1508,7 +1508,7 @@ define([],function(){
                                 for(i = 0; i< model.loanAccount.loanCustomerRelations.length;i++){
                                     if(model.loanAccount.loanCustomerRelations[i].relation != "Applicant")
                                         continue;
-                                    if(typeof model.loanAccount.loanCustomerRelations[i].dscStatus == "undefined" || model.loanAccount.loanCustomerRelations[i].dscStatus == ""){
+                                    if(typeof model.loanAccount.loanCustomerRelations[i].dscStatus == "undefined" || model.loanAccount.loanCustomerRelations[i].dscStatus == null){
                                         model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = null
                                         break;
                                     }

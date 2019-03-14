@@ -218,7 +218,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.identityProofNo": {
                                     "required": true,
                                     "schema": {
-                                        "pattern": "(^\\d{4}\\d{4}\\d{4}$)|(^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$)"
+                                        "pattern": "(^\\d{4}\\d{4}\\d{4}$)|(^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$)",
+                                        "type": ["integer", "string"]
                                     }
                                 },
                                 "KYC.addressProofFieldSet":{
@@ -2976,9 +2977,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                         "avarageTimeSpend":{
                                                             "key":"customer.familyMembers[].incomes[].averageTimeSpent",
                                                             "title":"AVERAGE_TIME_SPENT",
-                                                            "type":"number",
-                                                            "required":true
-                                                           
+                                                            "type":"text",
+                                                            "required":true,
+                                                            "schema": {
+                                                                "pattern": "^[0-9]*$",
+                                                                "type": ["integer", "string"]
+                                                            }
                                                         },
                                                         "avarageReturn":{
                                                             "key":"customer.familyMembers[].incomes[].averageReturn",
