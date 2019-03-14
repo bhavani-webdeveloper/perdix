@@ -162,7 +162,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             cbModel: {
                                             customerId:loanProcess.loanAccount.customerId,
                                             loanId:bundleModel.loanId,
-                                            scoreName:'ConsolidatedScore'
+                                            scoreName:'RiskScore2'
                                         }
                                     }
                                 });

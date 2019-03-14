@@ -73,6 +73,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             minimum: 1,
                             maximum: 1,
                             order:70
+                        }, 
+                        {
+                            pageName: 'kgfs.loans.individual.screening.Summary',
+                            title: 'SUMMARY',
+                            pageClass: 'summary',
+                            minimum: 1,
+                            maximum: 1,
+                            order: 5
                         },                           
                         {
                             pageName: 'kgfs.loans.individual.screening.Review',
@@ -156,6 +164,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     irfNavigator.goBack();
                                     return;
                                 }
+                                $this.bundlePages.push({
+                                    pageClass: 'summary',
+                                    model: {
+                                        cbModel: {
+                                            customerId: res.customerId,
+                                            loanId: bundleModel.loanId,
+                                            scoreName: 'RiskScore2'
+                                        }
+                                    }
+                                });
 
                                 $this.bundlePages.push({
                                     pageClass: 'applicant',

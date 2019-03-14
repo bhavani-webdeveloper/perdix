@@ -181,8 +181,23 @@ define({
 
         $log.info("Karthik here");
         $log.info(model.additional);
+        model.enterpriseDetailsData = {};
+        model.enterpriseDetailsData['Company Name'] = model.enterpriseDetails.data[0]['Company Name'];
+        model.enterpriseDetailsData['Business Constitution'] = model.enterpriseDetails.data[0]['Business Constitution'];
+        model.enterpriseDetailsData['Business Activity'] = model.enterpriseDetails.data[0]['Business Activity'];
+        model.enterpriseDetailsData['Business Type'] = model.enterpriseDetails.data[0]['Business Type'];
+        model.enterpriseDetailsData['Sector'] = model.enterpriseDetails.data[0]['Sector'];
+        model.enterpriseDetailsData['Loan Product'] = model.enterpriseDetails.data[0]['Loan Product'];
+        model.enterpriseDetailsData['Monthly Turnover'] = model.enterpriseDetails.data[0]['Monthly Turnover'];
+        model.enterpriseDetailsData['Wealth Manager Name'] = model.enterpriseDetails.data[0]['Wealth Manager Name'];
+        model.enterpriseDetailsData['Loan Amount Requested'] = model.enterpriseDetails.data[0]['Loan Amount Requested'];
+        model.enterpriseDetailsData['Interest'] = model.enterpriseDetails.data[0]['Interest'];
+        model.enterpriseDetailsData['Avg Monthly Net Income'] = model.enterpriseDetails.data[0]['Avg Monthly Net Income'];
+        model.enterpriseDetailsData['Average_Bank_Balance'] = model.enterpriseDetails.data[0]['Average_Bank_Balance'];
+        model.enterpriseDetailsData['Average Bank Deposit'] = model.enterpriseDetails.data[0]['Average Bank Deposit'];
+        
 
-        model.enterpriseDetailsData = model.enterpriseDetails.data[0];
+
 
     }; // END OF prepareData()
 
@@ -219,11 +234,11 @@ define({
                 readonly: true,
             };
 
-            if (key == "FRO Remarks"){
-                item.type = "section";
-                item.htmlClass = "row";
-                item.html = "<div><label class = 'col-sm-4' style = 'text-align: right;'>FRO Remarks</label><div style = 'font-weight: bold;'  class = 'col-sm-8'>{{model.enterpriseDetailsData['FRO Remarks']}}</div></div>";
-            }
+            // if (key == "FRO Remarks"){
+            //     item.type = "section";
+            //     item.htmlClass = "row";
+            //     item.html = "<div><label class = 'col-sm-4' style = 'text-align: right;'>FRO Remarks</label><div style = 'font-weight: bold;'  class = 'col-sm-8'>{{model.enterpriseDetailsData['FRO Remarks']}}</div></div>";
+            // }
             if (bsCounter++ % 2 ==0){
                 bsLeft.push(item)
             } else {
