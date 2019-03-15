@@ -871,6 +871,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "outputMap": {
                                     "id": "loanAccount.customerId",
                                     "urnNo": "loanAccount.urnNo",
+                                    "firstName":"loanAccount.applicantName",
                                     "customerBranchId":"loanAccount.loanCentre.branchId",
                                     "centreId":"loanAccount.loanCentre.centreId"
                                 },
