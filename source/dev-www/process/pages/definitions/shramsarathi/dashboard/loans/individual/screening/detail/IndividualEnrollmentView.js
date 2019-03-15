@@ -394,10 +394,12 @@ define({
                                 }, {
                                     "key": "customer.fatherFirstName",
                                     "title": "FATHER_FULL_NAME",
-                                }, {
-                                    "key": "customer.motherName",
-                                    "title": "Mother's Full Name"
-                                }, {
+                                }, 
+                                // {
+                                //     "key": "customer.motherName",
+                                //     "title": "Mother's Full Name"
+                                // }, 
+                                {
                                     "key": "customer.maritalStatus"
                                 }, {
                                     "key": "customer.spouseFirstName",
@@ -466,17 +468,27 @@ define({
                                     "type": "string"
                                 },{
                                     "key": "customer.place"
+                                },
+                                {
+                                    "key":"customer.udf.userDefinedFieldValues.udf4",
+                                    "title":"IN_CURRENT_ADDRESS_SINCE",
+                                    "type":"string"
                                 }]
                             }, {
                                 "type": "grid",
                                 "orientation": "vertical",
                                 "items": [{
-                                    "key": "customer.udf.userDefinedFieldValues.udf3",
-                                    "title":"RENT_LEASE_STATUS",
+                                    "key": "customer.houseStatus",
+                                    "title":"HOUSE_STATUS",
                                     "type": "string"
+                                },
+                                {
+                                    "key": "customer.noOfRooms",
+                                    "title":"NO_OF_ROOMS",
+                                    "type": "number"
                                 },{
-                                    "key": "customer.udf.userDefinedDateFieldValues.udfDate1",
-                                    "title":"RENT_LEASE_AGREEMENT_VALID_TILL",
+                                    "key": "customer.udf.userDefinedFieldValues.udf5",
+                                    "title":"IN_CURRENT_AREA_SINCE",
                                     "type": "string"
                                 }]
                             }]
@@ -567,7 +579,7 @@ define({
                                         }
                                     }, {
                                         "title": "Average Bank Balance",
-                                        "data": "BankAvgBal",
+                                        "data": "averageBankBalance",
                                         render: function(data, type, full, meta) {
                                             return irfCurrencyFilter(full['BankAvgBal'])
                                         }
@@ -902,7 +914,7 @@ define({
                                 "type": "grid",
                                 "orientation": "vertical",
                                 "items": [{
-                                    "key": "household.annualExpenses",
+                                    "key": "annualExpenses",
                                     "title": "Income",
                                     "type": "amount"
                                 }, {
