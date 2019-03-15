@@ -23,6 +23,7 @@ export class LoanPurpose2LOVConfiguration extends LOVElementConfiguration{
     };
     onSelect: Function = function(valueObj, model, context) {
         model.loanAccount.loanPurpose2 = valueObj.purpose2;
+        model.loanAccount.loanPurpose3 = valueObj.purpose2;
         NGHelper.refreshUI();
     };
 

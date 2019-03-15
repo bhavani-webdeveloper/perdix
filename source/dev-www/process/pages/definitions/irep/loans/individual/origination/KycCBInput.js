@@ -67,14 +67,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:60
                         },
                         {
-                            pageName: 'kgfs.loans.individual.screening.Summary',
-                            title: 'SUMMARY',
-                            pageClass: 'summary',
-                            minimum: 1,
-                            maximum: 1,
-                            order: 5
-                        }, 
-                        {
                             pageName: 'irep.loans.individual.origination.Review',
                             title: 'REVIEW',
                             pageClass: 'loan-review',

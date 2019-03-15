@@ -584,6 +584,13 @@ define([],function(){
                                 computeEstimatedEMI(model);
                             }
                         },
+                        "PreliminaryInformation.loanPurpose2":{
+                            
+                            onChange:function(value,form,model){
+                                model.loanAccount.loanPurpose3=model.loanAccount.loanPurpose2;
+                            }
+
+                        },
                         "PreliminaryInformation.expectedInterestRate": {
                             "required": true,
                             "orderNo":140,
@@ -749,6 +756,10 @@ define([],function(){
                         "CollateralInformation.collateral.collateralDocuments": {
                              "required":true
                         },
+                        "LoanMitigants.loanMitigants.parameter":{
+                            maxLength:10,
+                            "pattern": "^[a-zA-Z.]{1,5}$"
+                        },
                         "JewelDetails": {
                             "orderNo": 20,
                             "condition": "model.loanAccount.loanType == 'JEWEL'"
@@ -805,7 +816,6 @@ define([],function(){
                     "PreliminaryInformation.numberOfGuarantorsCoApplicants",                    
                     "PreliminaryInformation.loanPurpose1",
                     "PreliminaryInformation.loanPurpose2",
-                    "PreliminaryInformation.loanPurpose3",
                     "PreliminaryInformation.loanAmountRequested",
                     "PreliminaryInformation.tenureRequested",
                     "PreliminaryInformation.comfortableEMI",
@@ -892,6 +902,8 @@ define([],function(){
                         model.loanAccount.jewelLoanDetails.encoreClosed = false;
                         model.loanAccount.jewelLoanDetails.jewelPouchLocationType = "BRANCH";
                     }
+                    if (_.hasIn(model, 'loanAccount.loanPurpose2') && model.loanAccount.loanPurpose2 !=null && model.loanAccount.loanPurpose2.length > 0)
+                    model.loanAccount.loanPurpose3=model.loanAccount.loanPurpose2;
                     model.loanAccount.interestRateEstimatedEMI={};
                     var postReviewActionArray = {};
                     if(model.loanAccount.currentStage == 'BusinessTeamReview' || model.loanAccount.currentStage == 'CreditOfficerReview' || model.loanAccount.currentStage == 'CreditManagerReview' || model.loanAccount.currentStage == 'CBOCreditHeadReview' || model.loanAccount.currentStage == 'CEOMDReview') {
@@ -1117,7 +1129,7 @@ define([],function(){
                                     "deviationDetails": {
                                         "type": "section",
                                         "colClass": "col-sm-12",
-                                        "html": '<table class="table"><colgroup><col width="20%"><col width="20%"></colgroup><thead><tr><th>Parameter Name</th><th>Mitigant</th></tr></thead><tbody>' +
+                                        "html": '<table class="table"><colgroup><col width="20%"><col width="20%"></colgroup><thead><tr><th>Deviation</th><th>Mitigation</th></tr></thead><tbody>' +
                                             '<tr ng-repeat="(parameter,item) in model.loanMitigantsGrouped">' +
                                             '<td>{{ parameter }}</td>' +
                                             '<td><ul class="list-unstyled">' +
@@ -1134,8 +1146,9 @@ define([],function(){
                                         "items":{
                                             "parameter":{
                                                "key":"loanAccount.loanMitigants[].parameter",
-                                               "title":"DEVIATION",
-                                               "type":"string"
+                                               "title":"Deviation",
+                                               "type":"string",
+                                               
                                             },
                                             "mitigant":{
                                                "key":"loanAccount.loanMitigants[].mitigant",

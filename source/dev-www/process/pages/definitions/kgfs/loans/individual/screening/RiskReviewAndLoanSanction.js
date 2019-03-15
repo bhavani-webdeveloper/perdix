@@ -167,10 +167,10 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 $this.bundlePages.push({
                                     pageClass: 'summary',
                                     model: {
-                                        cbModel: {
-                                            customerId: res.customerId,
-                                            loanId: bundleModel.loanId,
-                                            scoreName: 'RiskScore2'
+                                            cbModel: {
+                                            customerId:loanProcess.loanAccount.customerId,
+                                            loanId:bundleModel.loanId,
+                                            scoreName:'RiskScore2'
                                         }
                                     }
                                 });
