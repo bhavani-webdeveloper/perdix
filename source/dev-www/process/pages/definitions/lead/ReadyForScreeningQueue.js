@@ -276,7 +276,7 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 							}
 						},
 						{
-							name: "reject Lead",
+							name: "Reject Lead",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {

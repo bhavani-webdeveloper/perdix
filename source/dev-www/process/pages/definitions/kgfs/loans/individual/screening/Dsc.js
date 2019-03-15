@@ -301,7 +301,7 @@ define([], function () {
                                 "items": [
                                     {
                                         key: "customer.applicantname",
-                                        title: "ApplicantName",
+                                        title: "Applicant Name",
                                         readonly: true,
                                         type: "string",
 

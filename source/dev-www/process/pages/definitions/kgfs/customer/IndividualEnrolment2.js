@@ -1318,7 +1318,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             key:"customer.udf.userDefinedFieldValues.udf32",
                                             "title": "SPOUSE_AADHAR_NUMBER",
                                             condition: "model.customer.maritalStatus==='MARRIED'",
-                                            "type": "number",
+                                            "type": "string",
+                                            schema: {
+                                                "pattern": "^[2-9]{1}[0-9]{11}$",
+                                                "type": ["string", "null"],
+                                            }
                                         }
                                     }
                                 },

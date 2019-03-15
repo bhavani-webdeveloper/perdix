@@ -147,7 +147,7 @@ define({
 				},
 				getActions: function () {
 					return [{
-						name: "VIEW/UPLOAD_DOCUMENTS",
+						name: "View/Upload Documents",
 						desc: "",
 						icon: "fa fa-pencil-square-o",
 						fn: function (item, index) {

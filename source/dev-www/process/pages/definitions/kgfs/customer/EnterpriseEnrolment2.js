@@ -186,7 +186,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
             var overridesFields = function (bundlePageObj) {
                 return {
                     "ContactInformation.pincode": {
-                        "title": "pincode",
+                        "title": "Pincode",
                         "required": true,
                         "resolver": "PincodeLOVConfiguration",
                         "searchHelper": formHelper,
@@ -923,14 +923,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "type": "box",
                         "readonly":true,
                         //"condition":"model.currentStage == 'CreditAppraisal'",
-                        "title": "Sales per product & Gross margin",
+                        "title": "Sales per Product & Gross Margin",
                         "orderNo": 640,
                         colClass: "col-sm-12",
                         "items": {
                             "enterpriseProductSales": {
                                 key: "customer.enterpriseProductSales",
                                 type: "datatable",
-                                title: "Sales per product & Gross margin",
+                                title: "Sales per Product & Gross Margin",
                                 dtlConfig: {
                                     columnsFn: function () {
                                         return $q.resolve({
@@ -993,14 +993,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "ReviewEnterpriseProductSale": {
                         "type": "box",
                         "readonly":true,
-                        "title": "Sales per product & Gross margin",
+                        "title": "Sales per Product & Gross Margin",
                         "orderNo": 640,
                         colClass: "col-sm-12",
                         "items": {
                             "enterpriseProductSales": {
                                 key: "customer.enterpriseProductSales",
                                 type: "datatable",
-                                title: "Sales per product & Gross margin",
+                                title: "Sales per Product & Gross Margin",
                                 dtlConfig: {
                                     columnsFn: function () {
                                         return $q.resolve({
@@ -2080,7 +2080,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             },
                             'estimatedEmi': {
                                 key: "loanAccount.estimatedEmi",
-                                title: "Affordable EMI as stated by the customer",
+                                title: "Affordable EMI as stated by the Customer",
                                 "readonly":true,
                                 "type": "number",
                                 "onChange": function (value, form, model) {
@@ -2095,7 +2095,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             },
                             'coOwnerSalary': {
                                 key: "customer.enterprise.coOwnerSalary",
-                                title: "Actual EMI offered to the borrower",
+                                title: "Actual EMI offered to the Borrower",
                                 "type": "number",
                                 "onChange": function (value, form, model) {
                                     monthlySurpluse(model);
@@ -2103,7 +2103,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             },
                             'employeeSalary': {  
                                 key: "customer.enterprise.employeeSalary",
-                                title: "Loan Amount Eligible for the customer",
+                                title: "Loan Amount Eligible for the Customer",
                                 "type": "number",
                                 "readonly": true
                             },

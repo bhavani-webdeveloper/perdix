@@ -1047,7 +1047,7 @@ define([],function(){
                                                     
                                             },
                                             "numberOfGuarantorsCoApplicants":{
-                                                "title":"REQUIRED",
+                                                "title":"Required",
                                                 orderNo:12,
                                                 "type":"html",
                                                 "condition":"model.loanAccount.productCode",
