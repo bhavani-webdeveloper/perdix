@@ -164,7 +164,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                                 "IndividualInformation.centreId": {
                                     "required": true,
-                                    "readonly": false,
+                                    "readonly": true,
                                     "title": "ZONE_ID"
                                 },
                                 "IndividualInformation.centreId1":{
@@ -247,7 +247,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "IndividualInformation.customerBranchId": {
-                                    "readonly": false,
+                                    "readonly": true,
                                     "required": true
                                 },
                                 
@@ -683,7 +683,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "IndividualInformation.centreId": {
-                                    "readonly": false,
+                                    "readonly": true,
                                     "title": "ZONE_ID"
                                 },
                                 "IndividualInformation.centreId1":{
@@ -1828,7 +1828,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "IndividualInformation.customerBranchId": {
                         "required": true,
-                        "readonly": false
+                        "readonly": true
                     },
                     "IndividualInformation.photoImageId": {
                         "required": true,
@@ -1871,7 +1871,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualInformation.centreId": {
                         "resolver": "CentreLOVConfiguration",
                         "title": "CENTRE_ID",
-                        "readonly": false
+                        //"readonly": false
                     },
                     "IndividualInformation.spouseFirstName": {
                         "condition": "model.customer.maritalStatus==='MARRIED'",
