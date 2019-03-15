@@ -140,16 +140,21 @@ define({
 
         if(model.houseHoldPL && model.houseHoldPL.length){
             for (var i=0; i<model.houseHoldPL.length; i++){
-                model.pl.household.push({
-                    income : model.houseHoldPL[0].data[0]['Total Incomes'],
-                    salaryFromBusiness : model.houseHoldPL[0].data[0]['Salary from business'],
-                    otherIncomeSalaries : model.houseHoldPL[0].data[0]['Other Income/salaries'],
-                    familyMemberIncomes : model.houseHoldPL[0].data[0]['Family Member Incomes'],
-                    Expenses : model.houseHoldPL[0].data[0]['Total Expenses'],
-                    declaredEducationExpense : model.houseHoldPL[0].data[0]['Expenses Declared or based on the educational expense whichever is higher'],
-                    emiHouseholdLiabilities : model.houseHoldPL[0].data[0]['EMI\'s of household liabilities'],
-                    netHouseholdIncome : model.houseHoldPL[0].data[0]['Net Household Income']
-                })
+                var relationDetails = (model.houseHoldPL[i].relation_detail).split(" - ");
+                if(relationDetails[0] === "Applicant"){
+                    model.pl.household.push({
+                        income : model.houseHoldPL[i].data[0]['Total Incomes'],
+                        salaryFromBusiness : model.houseHoldPL[i].data[0]['Salary from business'],
+                        otherIncomeSalaries : model.houseHoldPL[i].data[0]['Other Income/salaries'],
+                        familyMemberIncomes : model.houseHoldPL[i].data[0]['Family Member Incomes'],
+                        Expenses : model.houseHoldPL[i].data[0]['Total Expenses'],
+                        declaredEducationExpense : model.houseHoldPL[i].data[0]['Expenses Declared or based on the educational expense whichever is higher'],
+                        emiHouseholdLiabilities : model.houseHoldPL[i].data[0]['EMI\'s of household liabilities'],
+                        netHouseholdIncome : model.houseHoldPL[i].data[0]['Net Household Income'],
+                        relationDetails: model.houseHoldPL[i]['relation_detail']
+                    })
+                }
+               
             }
         }
 
@@ -278,7 +283,7 @@ define({
         form.push({
             type: "box",
             colClass: "col-sm-12 table-box",
-            "condition": "model.currentStage !='Screening' && model.currentStage !='MELApplication' && model.currentStage !='Application'",
+            "condition": "(model.currentStage !='Screening' && model.currentStage !='MELApplication' && model.currentStage !='Application') && ('model.loanProcess.loanAccount.productCategory' === 'MEL')",
             title: "CAMS_SUMMARY",
             items: [
                 {
@@ -632,7 +637,7 @@ define({
             form.push({
                 type: "box",
                 colClass: "col-sm-12 table-box",
-                title: "Household P&L Statement - " + model.houseHoldPL[i].relation_detail,
+                title: "Household P&L Statement - " + model.pl.household[i].relationDetails,
                 items: [
                     {
                         type: "section",
