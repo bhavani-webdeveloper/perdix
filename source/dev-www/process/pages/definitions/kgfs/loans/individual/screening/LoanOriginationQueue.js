@@ -145,6 +145,10 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 					getColumns: function() {
 						return [
 						{
+							title: 'LOAN_ID',
+							data: 'loanId'
+						},
+						{
 							title: 'HUB_NAME',
 							data: 'branchName'
 						},
