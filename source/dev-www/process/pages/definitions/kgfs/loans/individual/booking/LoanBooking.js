@@ -286,7 +286,6 @@ define([], function () {
                     "LoanDetails.processingFeePercentage",
                     "LoanDetails.loanPurpose1",
                     "LoanDetails.loanPurpose2",
-                    "LoanDetails.loanPurpose3",
                     "LoanDetails.borrowers",
                     "LoanDetails.borrowersFatherName",
                     "LoanDetails.borrowersHusbandName",
