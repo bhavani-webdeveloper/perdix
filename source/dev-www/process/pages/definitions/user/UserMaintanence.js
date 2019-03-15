@@ -180,6 +180,19 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                                 model.user.userBranches[context.arrayIndex].titleExpr = getBranchByCode(valueObj.toString());
                                         }
 
+                                    },
+                                    {
+                                        key: "user.userBranches[].branchId",
+                                        title: "BRANCH_NAME",
+                                        type: "select",
+                                        "condition": "!model.fullAccess",
+                                        enumCode: "branch_id",
+                                        "parentEnumCode": "bank",
+                                        "parentValueExpr": "model.bankId",
+                                        required: true,
+                                        onChange: function(valueObj,context,model){
+                                                model.user.userBranches[context.arrayIndex].titleExpr = getBranchByCode(valueObj.toString());
+                                        }
                                     }
                                 ]
                             },
