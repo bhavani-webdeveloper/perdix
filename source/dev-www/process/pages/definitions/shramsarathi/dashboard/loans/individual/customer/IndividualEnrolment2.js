@@ -2418,7 +2418,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualReferences.verifications.ReferenceCheck.financialStatus",
                     "IndividualReferences.verifications.ReferenceCheck.customerResponse",
 
-                    "References",
+                    //"References",
                     "References.verifications",
                     "References.verifications.relationship",
                     "References.verifications.businessName",
