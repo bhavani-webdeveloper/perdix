@@ -1486,6 +1486,171 @@
                 }
              }
           },
+          "teleCallingDetails": {
+            "title": "teleCallingDetails",
+            "type": "array",
+            "maxItems": 10,
+            "items": {
+              "type": "object",
+              "required": [
+              ],
+              "properties": {
+                "customerCalled": {
+                  "title": "customerCalled",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages":[
+                         "Checker2"
+                      ]
+                },
+                "customerNotCalledReason": {
+                  "title": "customerNotCalledReason",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages":[
+                         "Checker2"
+                      ]
+                },
+                "customerNotCalledRemarks": {
+                  "title": "customerNotCalledRemarks",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500,
+                  "captureStages":[
+                         "Checker2"
+                      ]
+                },
+                "customerCalledDate": {
+                  "title": "customerCalledDate",
+                  "type": "date",
+                  
+                  "captureStages":[
+                         "Checker2"
+                      ]
+                },
+                "customerCalledBy": {
+                  "title": "customerCalledBy",
+                  "type": "string",
+                  
+                  "captureStages":[
+                         "Checker2"
+                      ]
+                },
+                "customerCalledAt": {
+                  "title": "customerCalledAt",
+                  "type": "date",
+                 
+                  "captureStages":[
+                         "Checker2"
+                      ]
+                },
+                "customerKnownSinceYears": {
+                  "title": "customerKnownSinceYears",
+                  "type": "number",
+                  "captureStages":[
+                        "Checker2"
+                      ]
+                },
+                "relationshipWithCustomer": {
+                  "title": "relationshipWithCustomer",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 20,
+                  "captureStages":[
+                        "Checker2"
+                      ]
+                },
+                "referenceOpinionOnCustomer": {
+                  "title": "referenceOpinionOnCustomer",
+                  "type": "string",
+                  "captureStages":[
+                     "Checker2"
+                      ]
+                },
+                "customerFinancialStatus": {
+                  "title": "customerFinancialStatus",
+                  "type": "string",
+                  "captureStages":[
+                     "Checker2"
+                      ]
+                },
+                "telecallingResponse": {
+                  "title": "telecallingResponse",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages":[
+                     "Checker2"
+                      ]
+                },
+                "telecallingRemarks": {
+                  "title": "telecallingRemarks",
+                  "type": "string",
+                  "captureStages":[
+                     "Checker2"
+                      ]
+                },
+                "personContacted": {
+                  "title": "personContacted",
+                  "type": "string",
+                  "captureStages":[
+                     "Checker2"
+                      ]
+                },
+                "contactNumber": {
+                  "title": "contactNumber",
+                  "type": "string",
+                   "captureStages": [
+                     "Checker2"
+                        ]
+                      },
+                "occupation": {
+                  "title": "occupation",
+                  "type": "string",
+                   "captureStages":[
+                        "Checker2"
+                      ]
+                },
+                "address": {
+                  "title": "address",
+                  "type": "string",
+                   "captureStages":[
+                     "Checker2"
+                      ]
+                },
+                "personType": {
+                  "title": "personType",
+                  "type": "string",
+                   "captureStages":[
+                     "Checker2"
+                      ]
+                },
+                "partyType": {
+                  "title": "partyType",
+                  "type": "string",
+                   "captureStages":[
+                     "Checker2"
+                      ]
+                },
+             "noOfCallAttempts": {
+                  "title": "noOfCallAttempts",
+                  "type": "number",
+                   "captureStages":[
+                     "Checker2"
+                      ]
+                },
+             "followupCallRequired": {
+                  "title": "followupCallRequired",
+                  "type": "date",
+                   "captureStages":[
+                     "Checker2"
+                      ]
+                }
+              }
+            }
+          },
           "guarantor":{
              "title":"Guarantor Details",
              "type":"array",
