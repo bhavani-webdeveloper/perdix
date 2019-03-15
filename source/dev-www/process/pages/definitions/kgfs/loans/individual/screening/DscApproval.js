@@ -171,7 +171,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     pageClass: 'summary',
                                     model: {
                                         cbModel: {
-                                            customerId: res.customerId,
+                                            customerId: loanAccount.loanAccount.customerId,
                                             loanId: bundleModel.loanId,
                                             scoreName: 'RiskScore2'
                                         }

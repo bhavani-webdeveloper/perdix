@@ -810,6 +810,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         "EDF":{
                             orderNo: 140
                         },
+                        "EDF.condition" : {
+                            "title": "Agree with the Terms and Conditions Accept"
+                        },
                         "bankAccounts.customerBankAccounts.accountNumber":{
                             "required": true
                         },
