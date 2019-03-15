@@ -338,6 +338,15 @@
                       "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation", "PendingForPartner"
                    ]
                 },
+                "productCode":{
+                   "title":"Product Code",
+                   "type":"string",
+                   "minLength":1,
+                   "maxLength":100,
+                   "captureStages":[
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation", "PendingForPartner"
+                   ]
+                },
                 "loanAmount":{
                    "title":"Loan Amount",
                    "type":"number",
@@ -3937,6 +3946,13 @@
                   "type": "boolean",
                   "captureStages": [
                      "Screening", "LoanInitiation", "PendingForPartner", "DSCApproval"
+                  ]
+                },
+                "udf6": {
+                  "title": "Product Name",
+                  "type": "string",
+                  "captureStages": [
+                     "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","LoanBooking","LinkedAccountVerification"
                   ]
                 },
                 "udf7": {
