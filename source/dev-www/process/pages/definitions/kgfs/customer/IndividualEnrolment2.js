@@ -1191,7 +1191,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "ContactInformation.mailingDoorNo",
                 "ContactInformation.mailingStreet",
                 "ContactInformation.mailingLocality",
+                "ContactInformation.mailingVillageName",
                 "ContactInformation.mailingPostoffice",
+                "ContactInformation.mailinglandmark",
                 "ContactInformation.mailingDistrict",
                 "ContactInformation.mailingPincode",
                 "ContactInformation.mailingState",
@@ -1344,6 +1346,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "schema":{  
                                                "default":false
                                             }
+                                        },
+                                        "mailinglandmark":{
+                                            "key":"customer.previousRentDetails",
+                                            "orderNo":185,
+                                            "title":"LANDMARK"
+                                        },
+                                        "mailingVillageName":{
+                                            "key":"customer.nickName",
+                                            "orderNo":195,
+                                            "title":"VILLAGE_NAME"
                                         }
                                     }
                                 },

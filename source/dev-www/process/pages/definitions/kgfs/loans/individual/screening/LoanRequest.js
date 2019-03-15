@@ -584,6 +584,13 @@ define([],function(){
                                 computeEstimatedEMI(model);
                             }
                         },
+                        "PreliminaryInformation.loanPurpose2":{
+                            
+                            onChange:function(value,form,model){
+                                model.loanAccount.loanPurpose3=model.loanAccount.loanPurpose2;
+                            }
+
+                        }
                         "PreliminaryInformation.expectedInterestRate": {
                             "required": true,
                             "orderNo":140,
