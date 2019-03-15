@@ -76,7 +76,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:60
                         },
                         {
-                            pageName: 'loans.individual.screening.Summary',
+                            pageName: 'kgfs.loans.individual.screening.Summary',
                             title: 'SUMMARY',
                             pageClass: 'summary',
                             minimum: 1,
