@@ -3115,7 +3115,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     if (bundlePageObj) {
                         model._bundlePageObj = _.cloneDeep(bundlePageObj);
                     }
-
                     /* Setting data recieved from Bundle */
                     model.loanCustomerRelationType = "Customer";
                     model.currentStage = bundleModel.currentStage;  
@@ -3153,6 +3152,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     // model.customer.enterprise = {
                         
                     // }
+        
+                    if (_.hasIn(model, 'loanProcess.applicantEnrolmentProcess') && model.loanProcess.applicantEnrolmentProcess !=null){
+                        model.applicantEnrolmentProcessDetails = {}; 
+                        model.applicantEnrolmentProcessDetails=model.loanProcess.applicantEnrolmentProcess.customer;
+                        model.customer.customerBankAccounts=model.applicantEnrolmentProcessDetails.customerBankAccounts;
+                    }
+
                     if(model.customer.enterprise == null){
                         model.customer.enterprise = {}; 
                     }

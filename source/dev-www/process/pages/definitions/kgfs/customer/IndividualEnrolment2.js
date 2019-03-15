@@ -1358,7 +1358,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         },
                                         "mailingVillageName":{
                                             "key":"customer.nickName",
-                                            "orderNo":195,
+                                            "orderNo":205,
                                             "title":"VILLAGE_NAME"
                                         }
                                     }
