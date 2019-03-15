@@ -760,6 +760,7 @@ define([], function () {
                         "orderNo": 1,
                         "type": "lov",
                         "title": "NAME",
+                        required:true,
                         searchHelper: formHelper,
                         search: function (inputModel, form, model, context) {
                             var out = [];
@@ -803,21 +804,23 @@ define([], function () {
                     },
                     "NomineeDetails.nominees.nomineeDOB": {
                         "orderNo": 2,
-                        
+                        required:true,
                     },
                     // "NomineeDetails.nominees.nomineeRelationship": {
                     //     "readonly": true,
                     //     "type": "text",
                     // },
-                    // "NomineeDetails.nominees.nomineeGender": {
-                    //     "orderNo": 3,
-                    //     "readonly": true,
-                    //     "type": "text"
-                    // },
+                    "NomineeDetails.nominees.nomineeGender": {
+                        "orderNo": 3,
+                        //"readonly": true,
+                        required:true,
+                       // "type": "text"
+                    },
                     "NomineeDetails.nominees.nomineePincode": {
                         "orderNo": 6,
                         fieldType: "number",    
                         autolov: true,
+                        required:true,
                         inputMap: {
                             "district": {
                                 key: "loanAccount.nominees[].nomineeDistrict"
