@@ -1649,7 +1649,7 @@ define([],function(){
                     // "LoanRecommendation.udf8",
                     // "LoanRecommendation.udf3",
  
-                     "LoanSanction",
+                     //"LoanSanction",
                      "LoanSanction.sanctionDate",
                      "LoanSanction.numberOfDisbursements",
                      "LoanSanction.disbursementSchedules",
