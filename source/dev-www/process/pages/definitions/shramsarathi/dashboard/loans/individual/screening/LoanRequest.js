@@ -1576,7 +1576,7 @@ define([],function(){
                     "PreliminaryInformation.linkedAccountNumber",
                     "PreliminaryInformation.linkedAccountNumber1",
                     "PreliminaryInformation.baseLoanAccount",
-                    "PreliminaryInformation.npa",
+                    //"PreliminaryInformation.npa",
                     "PreliminaryInformation.loan",
                     "PreliminaryInformation.loanPurpose1",
                     "PreliminaryInformation.loanPurpose2",
@@ -1872,10 +1872,10 @@ define([],function(){
                                                 type: "select",
                                                 required: true,
                                                 "titleMap": {
-                                                    "New Loan": "New Loan",
-                                                    "Renewal": "Renewal",
-                                                    "Loan Restructure": "Loan Restructure",
-                                                    "Internal Foreclosure": "Internal Foreclosure"
+                                                   "New Loan": "New Loan",
+                                                   "Renewal": "Renewal",
+                                                   "Loan Restructure": "Loan Restructure",
+                                                   "Internal Foreclosure": "Internal Foreclosure"
                                                 },
                                                 "orderNo": 1,
                                                 condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal'",
