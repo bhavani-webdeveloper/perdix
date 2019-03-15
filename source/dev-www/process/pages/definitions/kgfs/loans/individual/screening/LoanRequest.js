@@ -590,7 +590,7 @@ define([],function(){
                                 model.loanAccount.loanPurpose3=model.loanAccount.loanPurpose2;
                             }
 
-                        }
+                        },
                         "PreliminaryInformation.expectedInterestRate": {
                             "required": true,
                             "orderNo":140,
