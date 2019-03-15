@@ -726,7 +726,7 @@ define([],function(){
                             "offline": true
                         },
                         "LoanDocuments.loanDocuments": {
-                            "title":"ADD_LOAN_DOCUMENT"
+                            "title":"LOAN_DOCUMENT"
                         },
                         "CollateralInformation": {
                             "title":"COLLATERAL",
@@ -734,7 +734,7 @@ define([],function(){
                             "condition": "model.loanAccount.loanType=='SECURED'"
                         },
                         "CollateralInformation.collateral": {
-                            "title":"ADD_COLLATERAL",
+                            "title":"COLLATERAL",
                             "required":true
                         },
                         "CollateralInformation.collateral.collateralType": {
@@ -1370,6 +1370,10 @@ define([],function(){
                         model.enterprise = obj.customer;
 
                     },
+                    "business-captures": function(bundleModel, model, params){
+                        model.loanAccount.isBusinessCaptured = typeof params.customer.isCaptured  != undefined ? (params.customer.isCaptured?true:false):false;
+                        model.loanAccount.isCreditAppraisal = typeof params.customer.isCreditAppraisal  != undefined ? (params.customer.isCreditAppraisal?true:false):false;             
+                    },
                     "dsc-response": function(bundleModel,model,obj){
                         model.loanAccount.loanCustomerRelations = obj;
                     },
@@ -1405,6 +1409,17 @@ define([],function(){
                             model.loanAccount.customerId=model.loanAccount.loanCustomerRelations[0].customerId;
                             model.loanAccount.urnNo=model.loanAccount.loanCustomerRelations[0].urn; 
                         }
+
+                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == "Screening" && model.loanAccount.productCategory == 'MEL' && !model.loanAccount.isBusinessCaptured){
+                            PageHelper.showProgress("loan-enrolment","Business Details are not captured",5000);
+                                return false;
+                        }
+
+                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == "CreditAppraisal" && model.loanAccount.productCategory == 'MEL' && !model.loanAccount.isCreditAppraisal){
+                            PageHelper.showProgress("loan-enrolment","CreditAppraisal Details are not captured",5000);
+                                return false;
+                        }
+
                         // model.loanAccount.customerId=model.loanAccount.loanCustomerRelations[0].customerId;
                         /* Loan SAVE */
                         if (!model.loanAccount.id){
