@@ -1,8 +1,3 @@
-.header-corporate-logo .header-corporate-logo-img,
-.login-corporate-logo .login-corporate-logo-img {
-  -webkit-filter: none;
-  filter: none;
-}
 .skin-green-light .main-header li.user-header {
   background-color: #727376;
 }
