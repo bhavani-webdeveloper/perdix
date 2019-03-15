@@ -213,18 +213,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 model.customer = model.enrolmentProcess.customer;
                                 model.customer.customerType = "Lender";
                                 model.customer.currentStage = 'BasicEnrolment'; 
+                                
                                 if(model.siteCode == 'KGFS'){
                                   model.customer.enterpriseRegistrations = model.customer.enterpriseRegistrations || [];
                                   model.customer.enterpriseRegistrations.push({
-                                      'registrationType': 'GST',
+                                      'registrationType': 'GST'
                                   });
                                   model.customer.enterpriseRegistrations.push({
-                                      'registrationType': 'PAN',
+                                      'registrationType': 'PAN'
                                   });
                                 }
                             });
                     }
-
+                    
                     var self = this;
                     var formRequest = {
                         "overrides": overridesFields(model),
@@ -243,7 +244,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "add": null,
                                             "remove": null,
                                             "title": "REGISTRATION_DETAILS",
-                                            titleExpr: "model.customer.enterpriseRegistrations[arrayIndex].registrationType +  ' Deatils' | translate",
+                                            titleExpr: "model.customer.enterpriseRegistrations[arrayIndex].registrationType +  ' Details' | translate",
                                             "items": {
                                                 "registrationType": {
                                                     "key": "customer.enterpriseRegistrations[].registrationType",
@@ -480,7 +481,30 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             PageHelper.showProgress("enrolment", "Your form have errors. Please fix them.", 5000);
                             return false;
                         }
-
+                        if(model.siteCode == 'KGFS'){
+                            try{
+                                var count = 0;
+                                for (var i = 0; i < model.customer.enterpriseRegistrations.length; i++) {
+                                    if ((model.customer.enterpriseRegistrations[i].registrationType === "GST" || model.customer.enterpriseRegistrations[i].registrationType === "PAN")
+                                    && model.customer.enterpriseRegistrations[i].registrationNumber != ""
+                                    && model.customer.enterpriseRegistrations[i].registrationNumber != null){
+                                        var regex = "";
+                                        if(model.customer.enterpriseRegistrations[i].registrationType === "GST"){
+                                            regex = /^[a-zA-Z0-9]{15}$/;
+                                        }else{
+                                            regex = /^[a-zA-Z0-9]{10}$/;
+                                        }
+                                        if(regex.test(model.customer.enterpriseRegistrations[i].registrationNumber) == false){
+                                            PageHelper.showProgress("Registration","Please enter valid " + model.customer.enterpriseRegistrations[i].registrationType + " no",9000);
+                                            return false;
+                                        }
+                                    }
+                                }
+                            }
+                            catch(err){
+                                console.error(err);
+                            }
+                        }
                         // $q.all start
                         PageHelper.showLoader();
 
