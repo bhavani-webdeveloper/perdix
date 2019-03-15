@@ -638,6 +638,7 @@ define({
                     "key": "loanAccount.loanDocuments",
                     "view": "fixed",
                     "startEmpty": true,
+                    "readonly":true,
                     "title": "LOAN_DOCUMENT",
                     "titleExpr": "model.loanAccount.loanDocuments[arrayIndex].document",
                     "items": [

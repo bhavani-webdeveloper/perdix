@@ -3356,8 +3356,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, model.loanCustomerRelationType);
 
                                 /* Setting for the current page */
-                                model.enrolmentProcess = enrolmentProcess;
-                                model.customer = enrolmentProcess.customer;
+                                // model.enrolmentProcess = enrolmentProcess;
+                                // model.customer = enrolmentProcess.customer;
 
                                 /* Setting enterprise customer relation on the enterprise customer */
                                 model.enrolmentProcess.refreshEnterpriseCustomerRelations(model.loanProcess);
