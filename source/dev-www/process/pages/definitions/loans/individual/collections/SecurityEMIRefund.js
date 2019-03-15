@@ -1,8 +1,8 @@
 define({
     pageUID: "loans.individual.collections.SecurityEMIRefund",
     pageType: "Engine",
-    dependencies: ["$log", "formHelper","LoanAccount","irfProgressMessage", "IndividualLoan", "Queries", "PageHelper", "SecurityEMIRefundResource", "$state", "SessionStore", "Utils", "irfNavigator", "$stateParams", "RolesPages", "$filter", "Enrollment", "Queries", "$q"],
-    $pageFn: function($log, formHelper,LoanAccount,irfProgressMessage, IndividualLoan, Queries, PageHelper, SecurityEMIRefundResource, $state, SessionStore, Utils, irfNavigator, $stateParams, RolesPages, $filter, Enrollment, Queries, $q) {
+    dependencies: ["$log", "formHelper","LoanAccount","irfProgressMessage", "IndividualLoan", "PageHelper", "SecurityEMIRefundResource", "$state", "SessionStore", "Utils", "irfNavigator", "$stateParams", "RolesPages", "$filter", "Enrollment", "Queries", "$q"],
+    $pageFn: function($log, formHelper,LoanAccount,irfProgressMessage, IndividualLoan, PageHelper, SecurityEMIRefundResource, $state, SessionStore, Utils, irfNavigator, $stateParams, RolesPages, $filter, Enrollment, Queries, $q) {
         return {
             "type": "schema-form",
             "title": "SECURITY_EMI_REFUND",

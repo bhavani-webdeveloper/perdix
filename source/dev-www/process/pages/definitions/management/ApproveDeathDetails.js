@@ -2,9 +2,9 @@ define({
     pageUID: "management.ApproveDeathDetails",
     pageType: "Engine",
     dependencies:  ["$log", "irfNavigator", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
-    "PageHelper", "Utils", "PagesDefinition", "Queries", "$stateParams", "Queries", "DeathMarking"],
+    "PageHelper", "Utils", "PagesDefinition", "$stateParams", "Queries", "DeathMarking"],
     $pageFn:function($log, irfNavigator, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils, PagesDefinition, Queries, $stateParams, Queries, DeathMarking) {
+        PageHelper, Utils, PagesDefinition, $stateParams, Queries, DeathMarking) {
             return {
             "type": "schema-form",
             "title": "APPROVE_DEATH_DETAILS",

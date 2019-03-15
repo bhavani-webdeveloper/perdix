@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.misc.BalanceSheetHistory"),
-["$log", "$q","Enrollment", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",'SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch","Scoring","AuthTokenHelper", "BundleManager", "Queries", "$filter",
-function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUtils,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch,Scoring,AuthTokenHelper,BundleManager, Queries, $filter){
+["$log", "$q","Enrollment", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",'SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch","Scoring","AuthTokenHelper", "BundleManager", "$filter",
+function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUtils,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch,Scoring,AuthTokenHelper,BundleManager, $filter){
 
     return {
         "type": "schema-form",

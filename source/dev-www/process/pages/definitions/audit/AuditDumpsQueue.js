@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.AuditDumpsQueue"), ["$log","Queries","User", "PageHelper", "irfNavigator", "$q", "Audit", "formHelper", "$state", "$stateParams", "irfNavigator", "SessionStore",
-    function($log, Queries, User, PageHelper, irfNavigator, $q, Audit, formHelper, $state, $stateParams, irfNavigator, SessionStore) {
+irf.pageCollection.factory(irf.page("audit.AuditDumpsQueue"), ["$log","Queries","User", "PageHelper", "$q", "Audit", "formHelper", "$state", "$stateParams", "irfNavigator", "SessionStore",
+    function($log, Queries, User, PageHelper, $q, Audit, formHelper, $state, $stateParams, irfNavigator, SessionStore) {
         var branch = SessionStore.getBranch();
         var returnObj = {
             "type": "search-list",

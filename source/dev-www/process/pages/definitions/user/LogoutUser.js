@@ -1,6 +1,6 @@
-irf.pageCollection.factory(irf.page('user.LogoutUser'), ["$log","User", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
+irf.pageCollection.factory(irf.page('user.LogoutUser'), ["$log","User", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
 "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "Queries", "Utils",
-function($log,User, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, Queries, Utils) {
+function($log,User, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, Queries, Utils) {
 
     var _pageGlobals = {};
     var pageData = {};

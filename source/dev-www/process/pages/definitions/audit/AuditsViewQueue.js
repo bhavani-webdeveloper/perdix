@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("audit.AuditsViewQueue"), ["$log", "$q", "Queries", "User", "Audit", "formHelper", "$stateParams", "irfNavigator", "$state", "$stateParams", "irfNavigator", "SessionStore", "PageHelper", "translateFilter",
-    function($log, $q, Queries, User, Audit, formHelper, $stateParams, irfNavigator, $state, $stateParams, irfNavigator, SessionStore, PageHelper, translateFilter) {
+irf.pageCollection.factory(irf.page("audit.AuditsViewQueue"), ["$log", "$q", "Queries", "User", "Audit", "formHelper", "$state", "$stateParams", "irfNavigator", "SessionStore", "PageHelper", "translateFilter",
+    function($log, $q, Queries, User, Audit, formHelper, $state, $stateParams, irfNavigator, SessionStore, PageHelper, translateFilter) {
         var returnObj = {
             "type": "search-list",
             "title": "AUDIT_VIEW",
