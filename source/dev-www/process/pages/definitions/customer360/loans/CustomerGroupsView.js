@@ -1,8 +1,8 @@
 define({
     pageUID: "customer360.loans.CustomerGroupsView",
     pageType: "Engine",
-    dependencies: ["$log","Queries","irfNavigator", "formHelper", "LoanAccount", "$state", "SessionStore", "LoanAccount", "$stateParams"],
-    $pageFn: function($log,Queries, irfNavigator,formHelper, LoanAccount, $state, SessionStore, LoanAccount, $stateParams) {
+    dependencies: ["$log","Queries","irfNavigator", "formHelper", "$state", "SessionStore", "LoanAccount", "$stateParams"],
+    $pageFn: function($log,Queries, irfNavigator,formHelper, $state, SessionStore, LoanAccount, $stateParams) {
             return {
                 "type": "search-list",
                 "title": "CUSTOMER_GROUPS",

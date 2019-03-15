@@ -63,6 +63,32 @@ irf.pageCollection.factory(irf.page("audit.CreateAudit"), ["$log", "PageHelper",
                             },
                         }, {
                             "key": "audit_info.start_date",
+                            "type":"date",
+                            "condition": "model.audit_info.report_date && model.siteCode == 'KGFS'",
+                            "required": true,
+                            "onChange": function (modelValue, form, model) {
+                                var selecteddate=model.audit_info.start_date;
+                                var currentdate = moment(new Date()).format("YYYY-MM-DD");
+                                var report_date=model.audit_info.report_date;
+                                var start_date_one_day=moment(moment(currentdate, SessionStore.getSystemDateFormat()).add(1, 'days')).format("YYYY-MM-DD");
+                                if(report_date == currentdate && selecteddate > start_date_one_day) {
+                                    model.audit_info.start_date = null;
+                                    PageHelper.showProgress("Date Error", "Enter Valid Start Date." , 5000);
+                                    return false;
+                                } else if (report_date < currentdate && selecteddate > currentdate) {
+                                    model.audit_info.start_date = null;
+                                    PageHelper.showProgress("Date Error", "Enter Valid Start Date." , 5000);
+                                    return false;
+                                }
+                            }
+                        }, {
+                            "key": "audit_info.end_date",
+                            "type":"date",
+                            "condition": "model.audit_info.report_date && model.siteCode == 'KGFS'",
+                            "required": true
+                        },{
+                            "key": "audit_info.report_date",
+                            "condition": "model.audit_info.audit_type == 1 && model.siteCode == 'kinara'", // Regular
                             "type": "date",
                             "required": true
                         }, {

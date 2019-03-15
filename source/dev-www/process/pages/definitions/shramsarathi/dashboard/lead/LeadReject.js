@@ -2,10 +2,10 @@ define({
     pageUID: "shramsarathi.dashboard.lead.LeadReject",
     pageType: "Engine",
     dependencies: ["$log", "$state", "$filter", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "entityManager", "$q", "irfProgressMessage",
-    "PageHelper", "Utils", "entityManager", "BiometricService", "PagesDefinition", "Queries", "irfNavigator"],
+    "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "irfNavigator"],
 
     $pageFn: function($log, $state, $filter, $stateParams, Lead, LeadHelper, SessionStore, formHelper, entityManager, $q, irfProgressMessage,
-        PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries, irfNavigator) {
+        PageHelper, Utils, BiometricService, PagesDefinition, Queries, irfNavigator) {
 
         var branch = SessionStore.getBranch();
         return {

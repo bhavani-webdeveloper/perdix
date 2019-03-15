@@ -269,7 +269,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                                 "key": "loanAccount.frequencyRequested",
                                                                 "type": "select",
                                                                 "title": "FREQUENCY_REQUESTED",
-                                                                "enumCode": "frequency",
+                                                                "enumCode": "loan_product_frequency",
                                                                 "readonly": true
                                                             },
                                                             {
@@ -380,6 +380,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.telecalling.applicant = _.filter(model.loanAccount.telecallingDetails, {"partyType": "applicant"});
                   
                     model.telecalling.loanCustomer = _.filter(model.loanAccount.telecallingDetails, {"partyType": "loanCustomer"});
+                    if (_.hasIn(model, 'loanProcess.applicantEnrolmentProcess') && model.loanProcess.applicantEnrolmentProcess !=null){
+                        model.applicantEnrolmentProcessDetails = {}; 
+                        model.applicantEnrolmentProcessDetails=model.loanProcess.applicantEnrolmentProcess.customer;
+                        model.applicant.customer.customerBankAccounts=model.applicantEnrolmentProcessDetails.customerBankAccounts;
+                    }
+
+                    if(model.loanAccount.frequency)
+                    model.loanAccount.frequencyRequested=model.loanAccount.frequency;
 
                     var self = this;
                    /* model.loanProcess = bundleModel.loanProcess;

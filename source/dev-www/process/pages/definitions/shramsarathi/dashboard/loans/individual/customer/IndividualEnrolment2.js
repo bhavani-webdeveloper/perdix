@@ -164,7 +164,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                                 "IndividualInformation.centreId": {
                                     "required": true,
-                                    "readonly": false,
+                                    "readonly": true,
                                     "title": "ZONE_ID"
                                 },
                                 "IndividualInformation.centreId1":{
@@ -186,7 +186,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "HouseVerification.place": {
                                     "condition": "model.customer.ownership == 'Rented but own house in different place'",
-                                    "required": true
+                                    "required": false
                                 },
                                 "IndividualInformation": {
                                     "orderNo": 2
@@ -247,7 +247,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "IndividualInformation.customerBranchId": {
-                                    "readonly": false,
+                                    "readonly": true,
                                     "required": true
                                 },
                                 
@@ -299,7 +299,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 //     "readonly": true
                                 // },
                                 "HouseVerification.ownership": {
-                                    "required": true
+                                    "required": false
                                 },
                                 "HouseVerification.udf30": {
                                     "required": true
@@ -367,7 +367,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "HouseVerification.place": {
                                     "condition": "model.customer.ownership == 'Rented but own house in different place'",
-                                    "required": true
+                                    "required": false
                                 },
                                 "IndividualInformation": {
                                     "orderNo": 2
@@ -479,7 +479,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title": "MIGRANT_DETAILS"
                                 },
                                 "HouseVerification.ownership": {
-                                    "required": true
+                                    "required": false
                                 },
                                 "HouseVerification.udf30": {
                                     "required": true
@@ -594,8 +594,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ContactInformation.whatsAppMobileNoOption",
                                 "HouseVerification.latitude",
                                 "HouseVerification.houseVerificationPhoto",
-                                "HouseVerification.date",
-                                "HouseVerification.place",
+                                // "HouseVerification.date",
+                                // "HouseVerification.place",
                                 "PhysicalAssets",
                                 "IndividualReferences",
                                 "References"
@@ -683,7 +683,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "IndividualInformation.centreId": {
-                                    "readonly": false,
+                                    "readonly": true,
                                     "title": "ZONE_ID"
                                 },
                                 "IndividualInformation.centreId1":{
@@ -763,7 +763,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 //     "readonly": true
                                 // },
                                 "HouseVerification.ownership": {
-                                    "required": true
+                                    "required": false
                                 },
                                 "HouseVerification.udf30": {
                                     "required": true
@@ -1158,8 +1158,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "References",
                                 "HouseVerification.latitude",
                                 "HouseVerification.houseVerificationPhoto",
-                                "HouseVerification.date",
-                                "HouseVerification.place",
+                                // "HouseVerification.date",
+                                // "HouseVerification.place",
                                 "KYC.customerId"
                             ],
                             "overrides": {
@@ -1533,7 +1533,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 //     "readonly": true
                                 // },
                                 "HouseVerification.ownership": {
-                                    "required": true
+                                    "required": false
                                 },
                                 "HouseVerification.udf30": {
                                     "required": true
@@ -1828,7 +1828,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "IndividualInformation.customerBranchId": {
                         "required": true,
-                        "readonly": false
+                        "readonly": true
                     },
                     "IndividualInformation.photoImageId": {
                         "required": true,
@@ -1871,7 +1871,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualInformation.centreId": {
                         "resolver": "CentreLOVConfiguration",
                         "title": "CENTRE_ID",
-                        "readonly": false
+                        //"readonly": false
                     },
                     "IndividualInformation.spouseFirstName": {
                         "condition": "model.customer.maritalStatus==='MARRIED'",
@@ -1961,7 +1961,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "HouseVerification.inCurrentAreaSince": {
                         "key": "customer.udf.userDefinedFieldValues.udf5",
                         "enumCode": "years_in_current_area",
-                        "required": true,
+                        "required": false,
                         "orderNo": 40
                     },
                     "HouseVerification.latitude": {
@@ -1970,12 +1970,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "HouseVerification.houseVerificationPhoto": {
                         "orderNo": 70
                     },
-                    "HouseVerification.date": {
-                        "orderNo": 80
-                    },
-                    "HouseVerification.place": {
-                        "orderNo": 90
-                    },
+                    // "HouseVerification.date": {
+                    //     "orderNo": 80
+                    // },
+                    // "HouseVerification.place": {
+                    //     "orderNo": 90
+                    // },
                     "BankAccounts.customerBankAccounts": {
                         onArrayAdd: function (modelValue, form, model, formCtrl, $event) {
                             modelValue.bankStatements = [];
@@ -2103,7 +2103,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "condition": "model.customer.ownership.toLowerCase() == 'rent' || model.customer.ownership.toLowerCase() == 'lease'",
                         "orderNo": 21,
-                        "required": true
+                        "required": false
                     },
                     "HouseVerification.rentLeaseAgreement": {
                         "condition": "model.customer.udf.userDefinedFieldValues.udf3 == 'Available'",
@@ -2354,8 +2354,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "HouseVerification.inCurrentAreaSince",
                     "HouseVerification.latitude",
                     "HouseVerification.houseVerificationPhoto",
-                    "HouseVerification.date",
-                    "HouseVerification.place",
+                    // "HouseVerification.date",
+                    // "HouseVerification.place",
                     "HouseVerification.houseStatus",
                     "HouseVerification.noOfRooms",
                     //"HouseVerification.rentLeaseStatus",

@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("CBCheckStatusQueue"),
-["$log", "formHelper", "CreditBureau", "CreditBureau", "SessionStore", "$state", "entityManager",
+["$log", "formHelper", "CreditBureau", "SessionStore", "$state", "entityManager",
 "irfProgressMessage", "irfSimpleModal", "PageHelper",
-function($log, formHelper, CreditBureau, CreditBureau, SessionStore, $state, entityManager,
+function($log, formHelper, CreditBureau, SessionStore, $state, entityManager,
 	PM, showModal, PageHelper){
 	var nDays = 15;
 	return {
