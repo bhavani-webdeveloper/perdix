@@ -278,7 +278,8 @@ define({
         form.push({
             type: "box",
             colClass: "col-sm-12 table-box",
-            title: "CAMS",
+            "condition": "model.currentStage !='Screening' && model.currentStage !='MELApplication' && model.currentStage !='Application'",
+            title: "CAMS_SUMMARY",
             items: [
                 {
                     type: "section",
