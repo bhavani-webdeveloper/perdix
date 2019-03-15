@@ -2491,10 +2491,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     "readonly": true
                                 },
                                 "BuyerDetails":{
-                                    "readonly": true
+                                    //"readonly": true
                                 },
                                 "SuppliersDeatils":{
-                                    "readonly": true
+                                   // "readonly": true
                                 },
                                 "PreliminaryInformation":{
                                     "readonly": true
