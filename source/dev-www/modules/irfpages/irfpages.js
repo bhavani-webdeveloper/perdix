@@ -223,7 +223,7 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
 	irfStorageService, entityManager, SessionStore, irfElementsConfig, irfOfflineFileRegistry,
 	PageHelper, $translate, $injector, Locking, $filter, formHelper){
 
-	$rootScope.$on("irf-login-success", function() {
+	$rootScope.$on("irf-master-loaded", function() {
 		var userRole = SessionStore.getUserRole(); var fullAccess = false;
 		if(userRole && userRole.accessLevel && userRole.accessLevel === 5){
 			fullAccess = true;

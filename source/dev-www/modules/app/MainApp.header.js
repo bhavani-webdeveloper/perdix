@@ -73,7 +73,7 @@ function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translat
 		$event.stopPropagation();
 	}
 
-	$scope.$on("irf-login-success", function () {
+	$scope.$on("irf-master-loaded", function () {
 		/* Loading branch details */
 		var branches = SessionStore.getItem("UserAllowedBranches");
 		//getting the home branch details from masters
