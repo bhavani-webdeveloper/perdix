@@ -12,6 +12,22 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                 return "MAPPED_BRANCH";
             
             }
+            var branchNameTitleMap = function(branches,model){
+                var userBranchLength = model.user.userBranches.length;
+                var arrayIndex = 0;
+                for (var i = 0; i < branches.length; i++) {
+                    var branch = branches[i];
+                    if (arrayIndex < userBranchLength){
+                        if ( branch.value == model.user.userBranches[arrayIndex].branchId) {
+                            model.user.userBranches[arrayIndex].branchId = branch.value;
+                            model.user.userBranches[arrayIndex].bankId = Number(branch.parentCode);
+                            model.user.userBranches[arrayIndex].titleExpr = branch.name;
+                            arrayIndex++;
+                            i=-1;
+                        }
+                    }
+                }
+            }
             return {
                 "name":"USER_MAINTANENCE",
                 "type": "schema-form",
@@ -340,17 +356,7 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                                             model.user.branchId = branch.value;
                                                         }
                                                     }
-                                                    var arrayIndex = 0;
-                                                    for (var i = 0; i < branches.length; i++) {
-                                                        var branch = branches[i];
-                                                        
-                                                        if ( branch.value == model.user.userBranches[arrayIndex].branchId) {
-                                                            model.user.userBranches[arrayIndex].branchId = branch.value;
-                                                            model.user.userBranches[arrayIndex].bankId = Number(branch.parentCode);
-                                                            arrayIndex++;
-                                                            i=-1;
-                                                        }
-                                                    }
+                                                    branchNameTitleMap(branches,model);
 
                                                 }, function(httpResponse){
                                                     PageHelper.showProgress("user-update", 'Failed.', 5000);
@@ -367,6 +373,14 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                                 .then(function(response){
                                                     PageHelper.showProgress("user-update", 'Done', 5000);
                                                     model.user = response;
+                                                    var branches = formHelper.enum('branch_id').data;
+                                                    for (var i = 0; i < branches.length; i++) {
+                                                        var branch = branches[i];
+                                                        if (branch.name == model.user.branchName) {
+                                                            model.user.branchId = branch.value;
+                                                        }
+                                                    }
+                                                    branchNameTitleMap(formHelper.enum('branch_id').data,model);
                                                     $state.go("Page.Engine", {pageName: 'user.UserMaintanence'}, {reload: true});
                                                 }, function(httpResponse){
                                                     PageHelper.showProgress("user-update", 'Failed.', 5000);
