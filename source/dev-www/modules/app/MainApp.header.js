@@ -72,8 +72,7 @@ function($scope, $log, $rootScope, $templateCache, irfConfig, SessionStore, $tra
 	$scope.preventClose = function($event){
 		$event.stopPropagation();
 	}
-
-	$rootScope.$on("irf-user-allowed-branches-loaded", function () {
+	var userbranchesfn = function () {
 		/* Loading branch details */
 		var branches = SessionStore.getItem("UserAllowedBranches");
 		//getting the home branch details from masters
@@ -90,7 +89,9 @@ function($scope, $log, $rootScope, $templateCache, irfConfig, SessionStore, $tra
 	
 		$scope.branchSwitch.allowedBranches = branches;
 		$scope.branchSwitch.selectedBranch = $scope.branchSwitch.currentBranch;	
-	});
+	}
+	$rootScope.$on("irf-user-allowed-branches-loaded", userbranchesfn);
+	if (SessionStore.getItem("UserAllowedBranches")) userbranchesfn();
 
 	$scope.showLogs = function() {
 		var allLogs = $log.getAllLogs();
