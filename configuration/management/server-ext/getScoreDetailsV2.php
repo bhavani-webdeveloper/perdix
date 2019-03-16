@@ -32,7 +32,7 @@ if (isset($_GET)) {
     }
 
     $error_log = "";
-    $CustomerLoanId = $_GET['LoanId'];
+    $CustomerLoanId = (!empty($_GET['LoanId']))? mysqli_real_escape_string(DB::connection("default"),$_GET['LoanId']): $_GET['LoanId'];
     $authInfo = 'Bearer '.$_GET['auth_token'];
     $SessionUserName = "admin";
     $userInfo = $perdixService->accountInfo($authInfo);
