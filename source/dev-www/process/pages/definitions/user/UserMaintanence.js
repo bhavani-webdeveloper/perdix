@@ -174,6 +174,7 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                                         type: "select",
                                         enumCode: "branch_id",
                                         "parentEnumCode": "bank",
+                                        "condition": "model.fullAccess",
                                         "parentValueExpr": "model.user.userBranches[arrayIndex].bankId",
                                         required: true,
                                         onChange: function(valueObj,context,model){
