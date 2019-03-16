@@ -88,18 +88,6 @@ gulp.task('assets', ['ts:scripts', 'ts:perdixConfig'], function(){
             ];
     }
     return gulp.src(src , {base: 'dev-www/'})
-        .pipe($.if('*.js', babel({
-            "sourceType": "script",
-            "presets": [
-                ["@babel/preset-env", {
-                    "loose": true,
-                    "modules": false
-                }]
-            ],
-            "plugins": [
-                "transform-es2015-template-literals"
-            ]
-        })))
         .pipe(gulp.dest(buildDirectory));
 })
 
@@ -117,6 +105,18 @@ gulp.task('html', function(){
         .pipe($.if('*.js', $.rev()))
         .pipe($.if('*.css', $.rev()))
         .pipe($.revReplace())
+        .pipe($.if('*.js', babel({
+            "sourceType": "script",
+            "presets": [
+                ["@babel/preset-env", {
+                    "loose": true,
+                    "modules": false
+                }]
+            ],
+            "plugins": [
+                "transform-es2015-template-literals"
+            ]
+        })))
         .pipe($.print())
         .pipe(gulp.dest(buildDirectory))
 })
