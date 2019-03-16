@@ -16,9 +16,9 @@ MainApp.directive('irfHeader', function(){
 });
 
 MainApp.controller("irfHeaderController",
-["$scope", "$log", "$http", "$templateCache", "irfConfig", "SessionStore", "$translate", "languages", "$state", "$q", "User",
+["$scope", "$log", "$rootScope", "$templateCache", "irfConfig", "SessionStore", "$translate", "languages", "$state", "$q", "User",
 	"authService", "irfSimpleModal", "irfProgressMessage", "irfStorageService", "Utils", "Auth", "PageHelper", "Account", "formHelper", "elementsUtils",
-function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translate, languages, $state, $q, User,
+function($scope, $log, $rootScope, $templateCache, irfConfig, SessionStore, $translate, languages, $state, $q, User,
 	authService, irfSimpleModal, irfProgressMessage, irfStorageService, Utils, Auth, PageHelper, Account, formHelper, elementsUtils) {
 
 	$scope.ss = SessionStore;
@@ -73,7 +73,7 @@ function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translat
 		$event.stopPropagation();
 	}
 
-	$scope.$on("irf-master-loaded", function () {
+	$rootScope.$on("irf-master-loaded", function () {
 		/* Loading branch details */
 		var branches = SessionStore.getItem("UserAllowedBranches");
 		//getting the home branch details from masters
