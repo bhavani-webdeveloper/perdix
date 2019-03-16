@@ -350,7 +350,8 @@ function($log,$q,rcResource,$rootScope, SessionStore, $filter, Utils){
 			} else {
 				factoryObj.retrieveMaster().then(function(value) {
 					masters = value;
-					deferred.resolve();
+					deferred.resolve("just loading master");
+					$rootScope.$broadcast('irf-master-loaded');
 				}, deferred.reject);
 			}
 			return deferred.promise;
