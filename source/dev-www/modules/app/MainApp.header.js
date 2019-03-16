@@ -73,7 +73,7 @@ function($scope, $log, $rootScope, $templateCache, irfConfig, SessionStore, $tra
 		$event.stopPropagation();
 	}
 
-	$rootScope.$on("irf-master-loaded", function () {
+	$rootScope.$on("irf-user-allowed-branches-loaded", function () {
 		/* Loading branch details */
 		var branches = SessionStore.getItem("UserAllowedBranches");
 		//getting the home branch details from masters

@@ -257,6 +257,7 @@ function($rootScope, $log, $timeout, $q, $state, authService, $location, ALLOWED
 				}
 			}
 		}
+		$rootScope.$broadcast('irf-user-allowed-branches-loaded');
 	});
 
 	var setProfilePreferences = function(userData) {
