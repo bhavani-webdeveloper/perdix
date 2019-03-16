@@ -95,6 +95,9 @@ gulp.task('assets', ['ts:scripts', 'ts:perdixConfig'], function(){
                     "loose": true,
                     "modules": false
                 }]
+            ],
+            "plugins": [
+                "transform-es2015-template-literals"
             ]
         })))
         .pipe(gulp.dest(buildDirectory));
