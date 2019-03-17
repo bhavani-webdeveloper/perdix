@@ -73,22 +73,26 @@ function($scope, $log, $rootScope, $templateCache, irfConfig, SessionStore, $tra
 		$event.stopPropagation();
 	}
 	var userbranchesfn = function () {
-		/* Loading branch details */
-		var branches = SessionStore.getItem("UserAllowedBranches");
-		//getting the home branch details from masters
-		var homeBranch = Account.getHomeBranchForUser();
-		var homebranchCode = homeBranch.branchCode;
-		/* Need to add homebranch to list, if its already not there */
-		var indexForHome = _.findIndex(branches, function(b){
-			return b.branchCode == homebranchCode;
-		})
-	
-		if (indexForHome == -1) {
-			branches.push(homeBranch);
+		try {
+			/* Loading branch details */
+			var branches = SessionStore.getItem("UserAllowedBranches");
+			//getting the home branch details from masters
+			var homeBranch = Account.getHomeBranchForUser();
+			var homebranchCode = homeBranch.branchCode;
+			/* Need to add homebranch to list, if its already not there */
+			var indexForHome = _.findIndex(branches, function(b){
+				return b.branchCode == homebranchCode;
+			})
+		
+			if (indexForHome == -1) {
+				branches.push(homeBranch);
+			}
+		
+			$scope.branchSwitch.allowedBranches = branches;
+			$scope.branchSwitch.selectedBranch = $scope.branchSwitch.currentBranch;
+		} catch (e) {
+			$log.error(e);
 		}
-	
-		$scope.branchSwitch.allowedBranches = branches;
-		$scope.branchSwitch.selectedBranch = $scope.branchSwitch.currentBranch;	
 	}
 	$rootScope.$on("irf-user-allowed-branches-loaded", userbranchesfn);
 	if (SessionStore.getItem("UserAllowedBranches")) userbranchesfn();
