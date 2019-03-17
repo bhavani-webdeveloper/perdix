@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
-    ["PagesDefinition", "translateFilter", "$log", "GroupProcess", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal", "irfNavigator", "RepaymentReminder", "Misc", "$httpParamSerializer", "Misc",
-        function (PagesDefinition, translateFilter, $log, GroupProcess, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal, irfNavigator, RepaymentReminder, Misc, $httpParamSerializer, Misc) {
+    ["PagesDefinition", "translateFilter", "$log", "GroupProcess", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal", "irfNavigator", "RepaymentReminder", "Misc", "$httpParamSerializer",
+        function (PagesDefinition, translateFilter, $log, GroupProcess, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal, irfNavigator, RepaymentReminder, Misc, $httpParamSerializer) {
 
             var transactionDetailHtml = "\
         <irf-simple-summary-table irf-table-def='model.orgTransactionDetails' />\

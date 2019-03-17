@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("score.CreateScoreParameters"),
-["$log", "BIReports", "$state", "SessionStore", "SessionStore", "PageHelper", "$httpParamSerializer", "AuthTokenHelper",
-    function($log, BIReports, $state, SessionStore, SessionStore, PageHelper, $httpParamSerializer, AuthTokenHelper) {
+["$log", "BIReports", "$state", "SessionStore", "PageHelper", "$httpParamSerializer", "AuthTokenHelper",
+    function($log, BIReports, $state, SessionStore, PageHelper, $httpParamSerializer, AuthTokenHelper) {
 
         return {
             "type": "schema-form",

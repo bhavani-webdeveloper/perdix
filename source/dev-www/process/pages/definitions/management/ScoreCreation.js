@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("management.ScoreCreation"),
-    ["$log", "$state", "ScoresMaintenance", "formHelper", "$q", "irfProgressMessage", "ScoresMaintenance", "PageHelper", "Utils", "irfNavigator","$stateParams",
-        function ($log, $state, ScoresMaintenance, formHelper, $q, irfProgressMessage, ScoresMaintenance, PageHelper, Utils, irfNavigator,$stateParams) {
+    ["$log", "$state", "formHelper", "$q", "irfProgressMessage", "ScoresMaintenance", "PageHelper", "Utils", "irfNavigator","$stateParams",
+        function ($log, $state, formHelper, $q, irfProgressMessage, ScoresMaintenance, PageHelper, Utils, irfNavigator,$stateParams) {
 
             var tempErrorFix = function(resp){
                 var newError = {};

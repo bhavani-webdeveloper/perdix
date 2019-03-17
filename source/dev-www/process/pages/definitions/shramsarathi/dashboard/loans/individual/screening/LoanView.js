@@ -217,7 +217,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             model: {
                                                 loanRelation: coApplicant[i],
                                                 enrolmentProcess: coApplicant[i],
-                                                loanProcess: loanAccount
+                                                loanProcess: loanProcess
                                             }
                                         });
                                     }
@@ -227,10 +227,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     for (var i=0;i< guarantor.length; i++){
                                         $this.bundlePages.push({
                                             pageClass: 'guarantor',
+                                            // model:{ 
+                                            //     additional.loanView
+                                            // },
                                             model: {
                                                 loanRelation: guarantor[i],
                                                 enrolmentProcess:guarantor[i],
-                                                loanProcess: loanAccount
+                                                loanProcess: loanProcess
                                             }
                                         });
                                     }
@@ -429,6 +432,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 if (!_.hasIn(bundleModel, 'guarantors')){
                                     bundleModel.guarantors = [];
                                 }
+                                BundleManager.broadcastEvent("new-guarantor", params);
                                 bundleModel.guarantors.push(params.guarantor);
                                 break;
                             case 'business':

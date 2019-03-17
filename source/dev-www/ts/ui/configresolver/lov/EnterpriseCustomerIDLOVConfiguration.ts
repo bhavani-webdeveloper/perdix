@@ -1,4 +1,4 @@
-\import {LOVElementConfiguration} from "./LOVElementConfiguration";
+import {LOVElementConfiguration} from "./LOVElementConfiguration";
 import {NGHelper} from "../../../infra/helpers/NGHelper";
 import AngularResourceService = require("../../../infra/api/AngularResourceService");
 import {EnrolmentProcess} from '../../../domain/model/customer/EnrolmentProcess';

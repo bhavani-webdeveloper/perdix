@@ -170,7 +170,7 @@ define([], function() {
                         "ScreeningReview": {
                             "excludes": [
                                 "PreliminaryInformation.calculateEmi",
-                                "FieldInvestigationDetails"
+                               // "FieldInvestigationDetails"
                             ],
                             "overrides": {
                                 "PreliminaryInformation.linkedAccountNumber": {
@@ -220,7 +220,11 @@ define([], function() {
                                 },
                                 "LoanRecommendation":{
                                     "orderNo":60
-                                }
+                                },
+                                "FieldInvestigationDetails": {
+                                    "readonly": true
+                                },
+                                
                             }
                         },
                         "GoNoGoApproval1": {
@@ -290,6 +294,7 @@ define([], function() {
                         "TeleVerification": {
                             "excludes": [
                                 "LoanRecommendation",
+                                "FieldInvestigationDetails"
                             ],
                             "overrides": {
                                 "FieldInvestigationDetails": {

@@ -66,22 +66,22 @@ define(["perdix/domain/model/loan/LoanProcess",
                             maximum: 1,
                             order:9
                         },
-                            // {
-                            //     pageName: 'kgfs.loans.individual.screening.Summary',
-                            //     title: 'SUMMARY',
-                            //     pageClass: 'summary',
-                            //     minimum: 1,
-                            //     maximum: 1,
-                            //     order: 5
-                            // },                            
-                            {
-                                pageName: 'kgfs.loans.individual.screening.Review',
-                                title: 'REVIEW',
-                                pageClass: 'loan-review',
-                                minimum: 1,
-                                maximum: 1,
-                                order:80
-                            }
+                        {
+                            pageName: 'kgfs.loans.individual.screening.Summary',
+                            title: 'SUMMARY',
+                            pageClass: 'summary',
+                            minimum: 1,
+                            maximum: 1,
+                            order: 5
+                        },                            
+                        {
+                            pageName: 'kgfs.loans.individual.screening.Review',
+                            title: 'REVIEW',
+                            pageClass: 'loan-review',
+                            minimum: 1,
+                            maximum: 1,
+                            order:80
+                        }
                     ]);
                 },
                 "bundlePages": [],
@@ -156,7 +156,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     irfNavigator.goBack();
                                     return;
                                 }
-
+                                $this.bundlePages.push({
+                                    pageClass: 'summary',
+                                    model: {
+                                            cbModel: {
+                                            customerId:loanProcess.loanAccount.customerId,
+                                            loanId:bundleModel.loanId,
+                                            scoreName:'RiskScore2'
+                                        }
+                                    }
+                                });
                                 $this.bundlePages.push({
                                     pageClass: 'applicant',
                                     model: {
@@ -188,8 +197,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 }
 
-
-                                    if (loanProcess.loanCustomerEnrolmentProcess) {
+                                
+                                    if (loanProcess.loanAccount.productCategory == 'MEL') {
                                         $this.bundlePages.push({
                                             pageClass: "business",
                                             model: {
@@ -363,6 +372,10 @@ define(["perdix/domain/model/loan/LoanProcess",
                     "new-loan": function(pageObj, bundleModel, params){
                         $log.info("Inside new-loan of CBCheck");
                         BundleManager.broadcastEvent("new-loan", params);
+                    },
+                    "business-capture": function(pageObj, bundleModel, params){
+                        $log.info("Inside business-capture of Screening");
+                        BundleManager.broadcastEvent("business-captures", params);
                     },
                     "applicant-updated": function(pageObj, bundlePageObj, obj){
                         /* Update other pages */

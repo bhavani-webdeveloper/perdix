@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"),
-    ["$log", "Enrollment","BiometricService","elementsUtils", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "Utils","LoanAccount","formHelper","Queries","LoanAccount",
-        function($log, Enrollment,BiometricService,elementsUtils, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource, Utils,LoanAccount,formHelper,Queries,LoanAccount){
+    ["$log", "Enrollment","BiometricService","elementsUtils", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "Utils","LoanAccount","formHelper","Queries",
+        function($log, Enrollment,BiometricService,elementsUtils, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource, Utils,LoanAccount,formHelper,Queries){
 
         var branch = SessionStore.getBranch();
         var siteCode = SessionStore.getGlobalSetting("siteCode");

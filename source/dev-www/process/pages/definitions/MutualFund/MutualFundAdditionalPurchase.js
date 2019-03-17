@@ -308,31 +308,6 @@ define({
     }
     else {
 
-        initialize: function(form, model, formCtrl){
-            $log.info("inside else")
-        }
-        form [
-                {type : "box",
-                 title: "your EKYC Registration is not complete",
-                 items: [ {
-                    type: "button",
-                    title: "GO TO EKYC PAGE",
-                    onClick:  irfNavigator.go({
-                                    state: "Page.Adhoc",
-
-                                    pageName: "MutualFund.MutualFundEKYC",
-                                    pageId: $stateParams.pageId,
-                                }
-                                )
-                 }
-
-
-                 ]
-
-
-                }
-        ]
-
     }
 
  

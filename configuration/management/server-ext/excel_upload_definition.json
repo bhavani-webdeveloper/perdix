@@ -255,6 +255,7 @@
       "columns":[  
          {  
             "columnName":"version",
+            "fieldName":"version",
             "default":"0"
          },
          {  
@@ -311,6 +312,7 @@
       "columns":[  
          {  
             "columnName":"version",
+            "fieldName":"version",
             "default":"0"
          },
          {  
@@ -348,7 +350,7 @@
          },
          {  
             "fieldName":"Weekly Meeting Time",
-            "columnName":"centre_leader_urn"
+            "columnName":"weekly_meeting_time"
          },
          
          {  
@@ -428,6 +430,7 @@
       "columns":[  
          {  
             "columnName":"version",
+            "fieldName":"version",
             "default":"0"
          },
          {  
@@ -488,6 +491,7 @@
       "columns":[  
          {  
             "columnName":"version",
+            "fieldName":"version",
             "default":"0"
          },
          {  

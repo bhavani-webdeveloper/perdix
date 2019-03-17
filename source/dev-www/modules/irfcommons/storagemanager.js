@@ -7,8 +7,8 @@ function localStorageAsJSON(key) {
 };
 
 irf.commons.factory("irfStorageService",
-["$log","$q","ReferenceCodeResource","RefCodeCache", "SessionStore", "$filter", "Utils",
-function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
+["$log","$q","ReferenceCodeResource","$rootScope", "SessionStore", "$filter", "Utils",
+function($log,$q,rcResource,$rootScope, SessionStore, $filter, Utils){
 	var masterUpdateRegistry = {};
 
 	var retrieveItem = function(key) {
@@ -303,7 +303,8 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 			var deferred = $q.defer();
 			if (masters && !_.isEmpty(masters) && !forceFetch) {
 				$log.info('masters already in memory');
-				deferred.resolve();
+				deferred.resolve("masters already in memory");
+				$rootScope.$broadcast('irf-master-loaded');
 			} else if (isServer) {
 				$log.info('masters isServer');
 				factoryObj.retrieveMaster().then(function(value) {
@@ -330,6 +331,7 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 									});
 									$q.all(masterUpdatePromises).then(function() {
 										deferred.resolve("masters download complete");
+										$rootScope.$broadcast('irf-master-loaded');
 									}, function(err) {
 										deferred.reject(err);
 									});
@@ -339,6 +341,7 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 							});
 						} else {
 							deferred.resolve("It's the same day for Masters/ not downloading");
+							$rootScope.$broadcast('irf-master-loaded');
 						}
 					} catch (e) {
 						deferred.reject(e);
@@ -347,7 +350,8 @@ function($log,$q,rcResource,RefCodeCache, SessionStore, $filter, Utils){
 			} else {
 				factoryObj.retrieveMaster().then(function(value) {
 					masters = value;
-					deferred.resolve();
+					deferred.resolve("just loading master");
+					$rootScope.$broadcast('irf-master-loaded');
 				}, deferred.reject);
 			}
 			return deferred.promise;

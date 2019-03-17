@@ -1,8 +1,8 @@
 define({
     pageUID: "loans.individual.collections.DepositStageDetail",
     pageType: "Engine",
-    dependencies: ["$log","Queries", "CustomerBankBranch","SessionStore", "formHelper", "$stateParams", "PageHelper", "Utils", "LoanCollection", "irfNavigator","Queries","Files"],
-    $pageFn: function ($log,Queries, CustomerBankBranch,SessionStore, formHelper, $stateParams, PageHelper, Utils, LoanCollection, irfNavigator, Queries, Files) {
+    dependencies: ["$log", "CustomerBankBranch","SessionStore", "formHelper", "$stateParams", "PageHelper", "Utils", "LoanCollection", "irfNavigator","Queries","Files"],
+    $pageFn: function ($log, CustomerBankBranch,SessionStore, formHelper, $stateParams, PageHelper, Utils, LoanCollection, irfNavigator, Queries, Files) {
         return {
             "type": "schema-form",
             "title": "DEPOSIT_STAGE_DETAIL",

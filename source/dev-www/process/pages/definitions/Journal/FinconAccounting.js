@@ -1,6 +1,6 @@
-irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log", "$scope", "Journal", "$state", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "irfNavigator", "UIRepository", "IrfFormRequestProcessor", "$injector", "entityManager", "SchemaResource", "irfSimpleModal", "Queries",
+irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log", "$scope", "Journal", "$state", "$stateParams", "SessionStore", "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "irfNavigator", "UIRepository", "IrfFormRequestProcessor", "$injector", "entityManager", "SchemaResource", "irfSimpleModal", "Queries",
     function($log, $scope, Journal, $state, $stateParams, SessionStore, formHelper, $q, irfProgressMessage,
-        PageHelper, Utils, PagesDefinition, Queries, irfNavigator, UIRepository, IrfFormRequestProcessor, $injector, entityManager, SchemaResource, irfSimpleModal, Queries) {
+        PageHelper, Utils, PagesDefinition, irfNavigator, UIRepository, IrfFormRequestProcessor, $injector, entityManager, SchemaResource, irfSimpleModal, Queries) {
         $log.info("Page.FinconAccounting.html loaded");
         $scope.$templateUrl = "process/pages/templates/Page.FinconAccounting.html";
         $scope.pageName = $stateParams.pageName;

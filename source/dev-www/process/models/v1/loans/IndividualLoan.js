@@ -17,7 +17,12 @@ function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHe
         },
         overrideDsc:{
             method : 'POST',
-            url : endpoint + '/overridedsc'
+            url : endpoint + '/overrideDsc'
+        },
+        overrideAllLCRMemberDsc:{
+            method : 'POST',
+            url : endpoint + '/overrideAllLCRMemberDsc',
+            isArray:true
         },
         update:{
             method:'PUT',

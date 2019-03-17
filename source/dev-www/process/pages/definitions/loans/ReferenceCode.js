@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page('loans.ReferenceCode'),
-    ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
+    ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams"
     ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
     "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils",
-    function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils) {
+    function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils) {
 
 
         return {

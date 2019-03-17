@@ -168,7 +168,137 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
 
                             }
-                        }    
+                        },  
+                        "BusinessTeamReview":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
+                        }, 
+                        "CreditOfficerReview":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
+                        }, 
+                        "CreditManagerReview":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
+                        }, 
+                        "CBOCreditHeadReview":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
+                        }, 
+                        "CEOMDReview":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
+                        }, 
                     }
                 }
                     
@@ -558,7 +688,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     var addressProof1ValidUptoDate = moment(model.customer.addressProofValidUptoDate, SessionStore.getSystemDateFormat());
                                     if (addressProof1ValidUptoDate < addressProof1IssueDate) {
                                         model.customer.addressProofIssueDate = null;
-                                        PageHelper.showProgress("pre-save-validation", "Address Proof Issue Date always more than Address Proof Issue Date", 5000);
+                                        PageHelper.showErrors({data:{error:"Address Proof Issue Date always more than Address Proof valid Upto Date"}});
                                         return false;
                                     }
                                 }
@@ -576,7 +706,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     var addressProof1ValidUptoDate = moment(model.customer.addressProofValidUptoDate, SessionStore.getSystemDateFormat());
                                     if (addressProof1ValidUptoDate < addressProof1IssueDate) {
                                         model.customer.addressProofValidUptoDate = null;
-                                        PageHelper.showProgress("pre-save-validation", "ID Proof ValidUptoDate always more than ID Proof Valid ToDate", 5000);
+                                        PageHelper.showErrors({data:{error:"Address Proof valid Upto Date always more than Address Proof Issue Date"}});
                                         return false;
                                     }
                                 }
@@ -1061,7 +1191,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "ContactInformation.mailingDoorNo",
                 "ContactInformation.mailingStreet",
                 "ContactInformation.mailingLocality",
+                "ContactInformation.mailingVillageName",
                 "ContactInformation.mailingPostoffice",
+                "ContactInformation.mailinglandmark",
                 "ContactInformation.mailingDistrict",
                 "ContactInformation.mailingPincode",
                 "ContactInformation.mailingState",
@@ -1132,7 +1264,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                     /* Setting data for the form */
                     model.customer = model.enrolmentProcess.customer;
-                     if (typeof model.customer.udf == "undefined") {                    
+                     if (typeof model.customer.udf == "undefined" || model.customer.udf == null) {                    
                     model.customer.udf = {};
                     model.customer.udf.userDefinedFieldValues = {};
                     }
@@ -1186,7 +1318,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             key:"customer.udf.userDefinedFieldValues.udf32",
                                             "title": "SPOUSE_AADHAR_NUMBER",
                                             condition: "model.customer.maritalStatus==='MARRIED'",
-                                            "type": "number",
+                                            "type": "string",
+                                            schema: {
+                                                "pattern": "^[2-9]{1}[0-9]{11}$",
+                                                "type": ["string", "null"],
+                                            }
                                         }
                                     }
                                 },
@@ -1214,6 +1350,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "schema":{  
                                                "default":false
                                             }
+                                        },
+                                        "mailinglandmark":{
+                                            "key":"customer.previousRentDetails",
+                                            "orderNo":185,
+                                            "title":"LANDMARK"
+                                        },
+                                        "mailingVillageName":{
+                                            "key":"customer.nickName",
+                                            "orderNo":205,
+                                            "title":"VILLAGE_NAME"
                                         }
                                     }
                                 },

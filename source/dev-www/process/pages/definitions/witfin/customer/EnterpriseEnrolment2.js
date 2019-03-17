@@ -240,12 +240,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     },
                                     "TangibleNetWorth": {
                                       "readonly": true
+                                    },
+                                    "IndividualReferences": {
+                                        "readonly": true
+                                    },
+                                    "BusinessVerification": {
+                                      "readonly": true
                                     }
                                 },
                                 "excludes": [
-                                    "IndividualReferences",
+                                    //"IndividualReferences",
                                     "Liabilities",
-                                    "BusinessVerification"
+                                    //"BusinessVerification"
                                 ]
                             },
                             "GoNoGoApproval1": {
@@ -746,10 +752,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             },
                             "TeleVerification": {
                                 "overrides": {
-                                    "IndividualReferences":{
-                                        "readonly": true
-                                    }
-                                }
+                                    // "IndividualReferences":{
+                                    //     "readonly": true
+                                    // }
+                                },
+                                "excludes": [
+                                    "BusinessVerification",
+                                    "IndividualReferences"
+
+                                ]
                             },
                             // "ApplicationReview": {
                             //     "overrides": {

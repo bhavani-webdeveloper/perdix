@@ -103,13 +103,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "BankAccounts": {
                                     "readonly": true
+                                },
+                                "EnterpriseReferences": {
+                                    "readonly": true
+                                },
+                                "PhysicalAssets":{
+                                    "readonly": true
+                                },
+                                "ResidenceVerification": {
+                                    "readonly": true
                                 }
                             },
                             "excludes": [
-                                "EnterpriseReferences",
+                               // "EnterpriseReferences",
                                 "IndividualReferences",
-                                "PhysicalAssets",
-                                "ResidenceVerification",
+                                //"PhysicalAssets",
+                                //"ResidenceVerification",
                                 "Liabilities",
                             ]
                         },
@@ -233,18 +242,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "TeleVerification": {
                             "overrides": {
-                                "PhysicalAssets": {
-                                    "readonly": true
-                                },
-                                "ResidenceVerification": {
-                                    "readonly": true
-                                },
-                                "EnterpriseReferences":{
-                                    "readonly": true
-                                }
+                                // "PhysicalAssets": {
+                                //     "readonly": true
+                                // },
+                                // "ResidenceVerification": {
+                                //     "readonly": true
+                                // },
+                                // "EnterpriseReferences":{
+                                //     "readonly": true
+                                // }
                             },
                             "excludes": [
                                 "ContactInformation.location",
+                                "PhysicalAssets",
+                                "EnterpriseReferences",
+                                "ResidenceVerification"
+
                             ]
                         },
                         "CreditAppraisal": {

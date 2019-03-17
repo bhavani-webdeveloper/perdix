@@ -147,7 +147,7 @@ define({
 				},
 				getActions: function () {
 					return [{
-						name: "REVERT REJECT",
+						name: "Revert Reject",
 						desc: "",
 						icon: "fa fa-pencil-square-o",
 						fn: function (item, index) {

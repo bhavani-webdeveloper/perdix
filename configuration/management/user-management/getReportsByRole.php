@@ -13,8 +13,7 @@ FROM ".DB_SCHEMA.".role_report_access rra where rra.role_id = :roleId";
 // JOIN ".DB_SCHEMA.".role_page_access rpa ON p.id = rpa.page_id AND rpa.role_id = 
 // ";
 
-$role_id = $_GET['roleId'];
-
+$role_id = (!empty($_GET['roleId'])) ? mysqli_real_escape_string($connection,$_GET['roleId']) : $_GET['roleId'];
 if (empty($role_id)) {
 	die('{"error":"Role Id is mandatory"}');
 } else {
@@ -31,9 +30,10 @@ if (!$result) {
 } else {
 	$data = array();
 	while($output = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+		var_dump($output);
 		$data[] = $output;
 	}
-	$result->close();
+	$query->close();
 	http_response_code(200);
 	header('X-Total-Count: 100');
 	echo json_encode($data);

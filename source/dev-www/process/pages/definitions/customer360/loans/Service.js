@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page('customer360.loans.Service'),
-    ["$log", "formHelper", "LoanAccount", "$state", "SessionStore", "LoanAccount", "$stateParams","entityManager",
-        function($log, formHelper, LoanAccount, $state, SessionStore, LoanAccount, $stateParams,EntityManager){
+    ["$log", "formHelper", "LoanAccount", "$state", "SessionStore", "$stateParams","entityManager",
+        function($log, formHelper, LoanAccount, $state, SessionStore, $stateParams,EntityManager){
             return {
                 "id": "ViewLoans",
                 "type": "search-list",

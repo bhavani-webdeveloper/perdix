@@ -4,6 +4,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
 
     // var branch = SessionStore.getBranch();
     var branch = SessionStore.getCurrentBranch().branchName;
+    var siteCode = SessionStore.getGlobalSetting('siteCode');
 
     var computeTotal = function(model){
         var totalAmount=0;
@@ -21,6 +22,7 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
         initialize: function (model, form, formCtrl) {
             $log.info("Individual Loan Booking Page got initialized");
             model.loggedInUser = SessionStore.getLoginname();
+            model.siteCode = SessionStore.getGlobalSetting('siteCode');
             PageHelper.showLoader();
             model.bankDepositSummary = {};
 
@@ -177,9 +179,16 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 "readonly": true
             },
             {
+                "key":"bankDepositSummary.depositId",
+                "type":"text",
+                "title":"REFERENCE",
+                "condition":"model.siteCode == 'witfin'"
+            },
+            {
                 "key":"bankDepositSummary.reference",
                 "type":"text",
-                "title":"REFERENCE"
+                "title":"REFERENCE",
+                "condition":"model.siteCode != 'witfin'"
             },
             {
                 key: "bankDepositSummary.bankAccountNumber",

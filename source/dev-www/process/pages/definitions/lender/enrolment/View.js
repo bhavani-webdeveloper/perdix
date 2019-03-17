@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page('lender.enrolment.View'),
-    ["$log", "formHelper", "LoanAccount", "$state", "SessionStore", "LoanAccount", "$stateParams","LiabilityAccountProcess",
-        function($log, formHelper, LoanAccount, $state, SessionStore, LoanAccount, $stateParams,LiabilityAccountProcess){
+    ["$log", "formHelper", "$state", "SessionStore", "LoanAccount", "$stateParams","LiabilityAccountProcess",
+        function($log, formHelper, $state, SessionStore, LoanAccount, $stateParams,LiabilityAccountProcess){
             return {
                 "type": "search-list",
                 "title": "VIEW_LOANS",

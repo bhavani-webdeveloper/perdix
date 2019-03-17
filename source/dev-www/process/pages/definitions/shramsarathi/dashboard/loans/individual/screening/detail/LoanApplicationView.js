@@ -276,7 +276,7 @@ define({
                 model.loanMitigants= model.loanAccount.loanMitigants;
                 model.expectedTurnoverObj = {};
                 documentArrayFormation(model);
-                debugger;
+                //debugger;
             /*Asset details*/
                 if (model.loanAccount.collateral.length != 0) {
                     model.asset_details = [];
@@ -324,45 +324,46 @@ define({
              }
 
         },
-        form: [{
-                "type": "section",
-                "html": '<div class="col-xs-12">' +
-                    '<div class="box no-border">' +
-                    '<div class="box-body" style="padding-right: 0">' +
-                    '<sf-decorator ng-repeat="item in form.items" form="item" class="ng-scope"></sf-decorator></div></div></div>',
-                "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        key: "loanAccount.linkedAccountNumber",
-                        title: "LINKED_ACCOUNT_NUMBER",
-                        type: "lov",
-                        autolov: true,
-                        readonly:true,
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model, context) {
-                            return LoanProcess.viewLoanaccount({
-                                urn: model.customer.urnNo
-                            }).$promise;
-                        },
-                        getListDisplayItem: function(item, index) {
-                            return [
-                                item.accountId,
-                                item.glSubHead,
-                                item.amount,
-                                item.npa
-                            ];
-                        },
-                        onSelect: function(valueObj, model, context) {
-                            model.loanAccount.npa = valueObj.npa;
-                            model.loanAccount.linkedAccountNumber = valueObj.accountId;
-                        }
-                    }, {
-                        key: "loanAccount.npa",
-                        title: "IS_NPA"
-                    }]
-                }]
-            }, 
+        form: [
+            // {
+            //     "type": "section",
+            //     "html": '<div class="col-xs-12">' +
+            //         '<div class="box no-border">' +
+            //         '<div class="box-body" style="padding-right: 0">' +
+            //         '<sf-decorator ng-repeat="item in form.items" form="item" class="ng-scope"></sf-decorator></div></div></div>',
+            //     "items": [{
+            //         "type": "grid",
+            //         "orientation": "horizontal",
+            //         "items": [{
+            //             key: "loanAccount.linkedAccountNumber",
+            //             title: "LINKED_ACCOUNT_NUMBER",
+            //             type: "lov",
+            //             autolov: true,
+            //             readonly:true,
+            //             searchHelper: formHelper,
+            //             search: function(inputModel, form, model, context) {
+            //                 return LoanProcess.viewLoanaccount({
+            //                     urn: model.customer.urnNo
+            //                 }).$promise;
+            //             },
+            //             getListDisplayItem: function(item, index) {
+            //                 return [
+            //                     item.accountId,
+            //                     item.glSubHead,
+            //                     item.amount,
+            //                     item.npa
+            //                 ];
+            //             },
+            //             onSelect: function(valueObj, model, context) {
+            //                 model.loanAccount.npa = valueObj.npa;
+            //                 model.loanAccount.linkedAccountNumber = valueObj.accountId;
+            //             }
+            //         }, {
+            //             key: "loanAccount.npa",
+            //             title: "IS_NPA"
+            //         }]
+            //     }]
+            // }, 
             {
                 "type": "box",
                 "readonly": true,
@@ -638,6 +639,7 @@ define({
                     "key": "loanAccount.loanDocuments",
                     "view": "fixed",
                     "startEmpty": true,
+                    "readonly":true,
                     "title": "LOAN_DOCUMENT",
                     "titleExpr": "model.loanAccount.loanDocuments[arrayIndex].document",
                     "items": [
@@ -679,7 +681,7 @@ define({
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
-                            "key": "",
+                            "key": "loanAccount.loanAmount",
                             "title": "LOAN_AMOUNT",
                            // "type": "amount",
                             "readonly":true
@@ -699,13 +701,13 @@ define({
                             "readonly":true
                         }, 
                         {
-                            "key": "loanAccount.udf.userDefinedFieldValues.udf10",
+                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf10",
                             "title": "REMARK_OF_IN_FAVOUR_LOAN",
                            // "type": "string",
                             "readonly":true
                         }, 
                         {
-                            "key": "loanAccount.udf.userDefinedFieldValues.udf11",
+                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf11",
                             "title": "POTENTIAL_RISK",
                           // "type": "number",
                              "readonly":true,
@@ -718,30 +720,30 @@ define({
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
-                            "key":"loanAccount.disbursementSchedules[].modeOfDisbursement",
+                            "key":"loanAccount.disbursementSchedules[0].modeOfDisbursement",
                             "title":"MODE_OF_DISBURSEMENT",
                             "readonly":true
                         }, 
                         {
-                            "key":"loanAccount.disbursementSchedules[].firstRepaymentDate",
+                            "key":"loanAccount.disbursementSchedules[0].firstRepaymentDate",
                             "title":"COLLECTION_DATE",
                             "type":"date",
                             "readonly":true
                         },
                          {
-                            "key":"loanAccount.disbursementSchedules[].actualDisbursementDate",
+                            "key":"loanAccount.disbursementSchedules[0].actualDisbursementDate",
                             "title":"DISBURSEMENT_DATE",
                             "type":"date",
                             "readonly":true
                         },
                         {
-                            "key":"loanAccount.disbursementSchedules[].moratoriumPeriodInDays",
+                            "key":"loanAccount.disbursementSchedules[0].moratoriumPeriodInDays",
                             "title":"GRACE_PERIOD",
                             "readonly":true
                             
                         },
                         {
-                            "key":"loanAccount.udf.userDefinedFieldValues.udf12",
+                            "key":"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf12",
                             "title":"DATE",
                             "type":"date",
                             "readonly":true

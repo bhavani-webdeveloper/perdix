@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("workflow.CustomerApprovalInit"),
-    ["$window", "$log", "formHelper", "filterFilter", "Enrollment","Workflow","RolesPages","Queries", "$q", "$state", "SessionStore", "Utils", "PagesDefinition", "irfNavigator", "User", "SchemaResource", "$stateParams", "PageHelper", "irfProgressMessage","Workflow",
-        function ($window, $log, formHelper, filterFilter, Enrollment,Workflow, RolesPages ,Queries, $q, $state, SessionStore, Utils, PagesDefinition, irfNavigator, User, SchemaResource, $stateParams, PageHelper, irfProgressMessage,Workflow) {
+    ["$window", "$log", "formHelper", "filterFilter", "Enrollment","RolesPages","Queries", "$q", "$state", "SessionStore", "Utils", "PagesDefinition", "irfNavigator", "User", "SchemaResource", "$stateParams", "PageHelper", "irfProgressMessage","Workflow",
+        function ($window, $log, formHelper, filterFilter, Enrollment, RolesPages ,Queries, $q, $state, SessionStore, Utils, PagesDefinition, irfNavigator, User, SchemaResource, $stateParams, PageHelper, irfProgressMessage,Workflow) {
             var branch = SessionStore.getBranch();
 
             var getCustomer = function (result, model){

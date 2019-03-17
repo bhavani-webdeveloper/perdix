@@ -7,10 +7,10 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
        pageType: "Engine",
         //pageType: "Adhoc",
         dependencies: ["$log", "$state", "$filter", "$stateParams", "Lead", "LeadHelper","Enrollment", "SessionStore", "formHelper", "entityManager", "$q", "irfProgressMessage",
-        "PageHelper", "Utils", "entityManager", "BiometricService", "PagesDefinition", "Queries", "IrfFormRequestProcessor", "$injector", "irfNavigator", "User"],
+        "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "IrfFormRequestProcessor", "$injector", "irfNavigator", "User"],
 
         $pageFn: function($log, $state, $filter, $stateParams, Lead, LeadHelper,Enrollment, SessionStore, formHelper, entityManager, $q, irfProgressMessage,
-            PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries, IrfFormRequestProcessor, $injector, irfNavigator, User) {
+            PageHelper, Utils, BiometricService, PagesDefinition, Queries, IrfFormRequestProcessor, $injector, irfNavigator, User) {
                 console.log("lead zeneration test");
             var branch = SessionStore.getBranch();
             AngularResourceService.getInstance().setInjector($injector);

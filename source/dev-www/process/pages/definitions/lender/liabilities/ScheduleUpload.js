@@ -4,10 +4,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
         pageUID: "lender.liabilities.ScheduleUpload",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
-            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator", "Utils", "Files", "LiabilityAccountProcess", "Schedule"
+            "PageHelper", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator", "Utils", "Files", "LiabilityAccountProcess", "Schedule"
         ],
         $pageFn: function($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
-            PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator, Utils, Files, LiabilityAccountProcess, Schedule) {
+            PageHelper, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator, Utils, Files, LiabilityAccountProcess, Schedule) {
 
             var configFile = function() {
                 return {}

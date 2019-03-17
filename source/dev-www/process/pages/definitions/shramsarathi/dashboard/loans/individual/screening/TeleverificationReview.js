@@ -30,7 +30,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         order: 20
                     },
                      {
-                        pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
+                        pageName: 'shramsarathi.dashboard.loans.individual.customer.IndividualEnrolment2',
                         title: 'GUARANTOR',
                         pageClass: 'guarantor',
                         minimum: 1,
@@ -236,6 +236,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                             BundleManager.broadcastEvent("test-listener", {
                                 name: "SHAHAL AGAIN"
                             });
+                        },
+                        "televerification": function(pageObj, bundleModel, params){
                         },
                         "new-enrolment": function(pageObj, bundleModel, params) {
                             switch (pageObj.pageClass) {

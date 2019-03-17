@@ -246,6 +246,590 @@
                     }
                 }
             },
+"enterpriseOtherAssets": {
+        "title": "Enterprise Other Asset",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            
+          ],
+          "properties": {
+            "assetType": {
+              "title": "Asset Type",
+              "type": "string",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "description": {
+              "title": "description",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "assetValue": {
+              "title": "assetValue",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000000000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "hypothecatedToUs": {
+              "title": "hypothecatedToUs",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            }
+           
+          }
+        }
+      },
+"enterpriseCustomerRelation": {
+        "title": "Enterprise Customer Relation",
+        "type": "object",
+        "required": [
+          "Completed",
+          "linkedToCompleted"
+        ],
+        "properties": {
+          "Completed": {
+            "title": "Completed",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "relationshipType": {
+            "title": "relationshipType",
+            "type": "string",
+            "refCodeCategory": "relationship_type",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "linkedToCustomerId": {
+            "title": "linkedToCustomerId",
+            "type": "number",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "linkedToCompleted": {
+            "title": "linkedToCompleted",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "businessInvolvement": {
+            "title": "businessInvolvement",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 45,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "partnerOfAnyOtherCompany": {
+            "title": "partnerOfAnyOtherCompany",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 45,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "otherBusinessClosed": {
+            "title": "otherBusinessClosed",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 45,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "otherBusinessClosureDate": {
+            "title": "otherBusinessClosureDate",
+            "type": "string",
+            "format": "date",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "experienceInBusiness": {
+            "title": "experienceInBusiness",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 45,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          }
+        }
+      },
+    "enterpriseMonthlySales": {
+        "title": "Enterprise Monthly Sales",
+        "type": "object",
+        "required": [
+        ],
+        "properties": {
+          "month": {
+            "title": "month",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 250,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "totalSales": {
+            "title": "totalSales",
+            "type": "number",
+      "minimum": 0,
+            "maximum": 1000000,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "seasonType": {
+            "title": "seasonType",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 250,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "udf1": {
+            "title": "udf1",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 250,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "udf2": {
+            "title": "udf2",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 250,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "udf3": {
+            "title": "udf3",
+            "type": "string",
+            "minimum": 0,
+            "maximum": 250,
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
+          "udfDate1": {
+            "title": "udfDate1",
+            "type": "date",            
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          }
+        }
+      },
+ "enterpriseRegistrations": {
+        "title": "Enterprise Registrations",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "registrationType",
+            "registrationNumber",
+            "registeredDate",
+            "documentId"
+          ],
+          "properties": {
+            "registrationType": {
+              "title": "Registration Type",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "registrationNumber": {
+              "title": "Registration Number",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "registeredDate": {
+              "title": "Registered Date",
+              "type": "string",
+              "format": "date",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "expiryDate": {
+              "title": "Expiry Date",
+              "type": "string",
+              "format": "date",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "documentId": {
+              "title": "document Capture",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            }
+          }
+        }
+      },
+ "enterpriseRegistrations": {
+        "title": "Enterprise Registrations",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "registrationType",
+            "registrationNumber",
+            "registeredDate",
+            "documentId"
+          ],
+          "properties": {
+            "registrationType": {
+              "title": "Registration Type",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "registrationNumber": {
+              "title": "Registration Number",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "registeredDate": {
+              "title": "Registered Date",
+              "type": "string",
+              "format": "date",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "expiryDate": {
+              "title": "Expiry Date",
+              "type": "string",
+              "format": "date",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "documentId": {
+              "title": "document Capture",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            }
+          }
+        }
+      },"enterpriseDocuments" : {
+        "title": "Enterprise Document",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "assetType",
+            "valueOfAsset"
+          ],
+          "properties": {
+            "docType": {
+              "title": "Document Type",
+              "type": "string",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "docId": {
+              "title": "Document Id",
+              "type": "string",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "fileId": {
+              "title": "File Id",
+              "type": "string",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+           "udf1": {
+              "title": "udf1",
+              "type": "String",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udf2": {
+              "title": "udf2",
+              "type": "string",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udf3": {
+              "title": "udf3",
+              "type": "String",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udf4": {
+              "title": "udf4",
+              "type": "String",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udf5": {
+              "title": "udf5",
+              "type": "String",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udfDate1": {
+              "title": "udfDate1",
+              "type": "string",
+              "format": "date",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udfDate2": {
+              "title": "udfDate2",
+             "type": "string",
+              "format": "date",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udfDate3": {
+              "title": "udfDate3",
+             "type": "string",
+              "format": "date",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            }
+
+
+          }
+
+          
+        }
+
+      },
+      "enterpriseNetworth" : {
+        "title": "Enterprise Networth",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+           
+          ],
+          "properties": {
+            "FinancialYear": {
+              "title": "financial Year",
+              "type": "string",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "tangibleNetworth": {
+              "title": "tangibleNetworth ",
+              "type": "number",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+           "udf1": {
+              "title": "udf1",
+              "type": "String",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udf2": {
+              "title": "udf2",
+              "type": "string",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udf3": {
+              "title": "udf3",
+              "type": "String",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udf4": {
+              "title": "udf4",
+              "type": "String",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udf5": {
+              "title": "udf5",
+              "type": "String",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udfDate1": {
+              "title": "udfDate1",
+              "type": "string",
+              "format": "date",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udfDate2": {
+              "title": "udfDate2",
+             "type": "string",
+              "format": "date",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udfDate3": {
+              "title": "udfDate3",
+             "type": "string",
+              "format": "date",
+              "minimum": 0,
+              "maximum": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            }
+          }
+        }
+      },
             "customerBankAccounts":
             {
                 "title": "Customer Bank Account",

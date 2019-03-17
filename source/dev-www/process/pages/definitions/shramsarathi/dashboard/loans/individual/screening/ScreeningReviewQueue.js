@@ -40,19 +40,20 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.scr
 	                    'branch': {
 	                    	'title': "BRANCH",
 	                    	"type": ["string", "null"],
-	                    	"enumCode": "branch",
 							"x-schema-form": {
-								"type": "userbranch",
+								"type":"userbranch",
 								"screenFilter": true
 							}
 	                    },
-                        "centre": {
-							"title": "ZONE_NAME",
+						"centre": {
+                            "title": "ZONE_NAME",
+                            "required":false,
 							"type": ["integer", "null"],
 							"x-schema-form": {
 								"type": "select",
 								"enumCode": "centre",
-								"parentEnumCode": "branch",
+								"parentEnumCode": "branch_id",
+								"parentValueExpr": "model.branch",
 								"screenFilter": true
 							}
 						},

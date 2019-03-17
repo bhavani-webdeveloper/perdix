@@ -394,10 +394,12 @@ define({
                                 }, {
                                     "key": "customer.fatherFirstName",
                                     "title": "FATHER_FULL_NAME",
-                                }, {
-                                    "key": "customer.motherName",
-                                    "title": "Mother's Full Name"
-                                }, {
+                                }, 
+                                // {
+                                //     "key": "customer.motherName",
+                                //     "title": "Mother's Full Name"
+                                // }, 
+                                {
                                     "key": "customer.maritalStatus"
                                 }, {
                                     "key": "customer.spouseFirstName",
@@ -466,17 +468,27 @@ define({
                                     "type": "string"
                                 },{
                                     "key": "customer.place"
+                                },
+                                {
+                                    "key":"customer.udf.userDefinedFieldValues.udf4",
+                                    "title":"IN_CURRENT_ADDRESS_SINCE",
+                                    "type":"string"
                                 }]
                             }, {
                                 "type": "grid",
                                 "orientation": "vertical",
                                 "items": [{
-                                    "key": "customer.udf.userDefinedFieldValues.udf3",
-                                    "title":"RENT_LEASE_STATUS",
+                                    "key": "customer.houseStatus",
+                                    "title":"HOUSE_STATUS",
                                     "type": "string"
+                                },
+                                {
+                                    "key": "customer.noOfRooms",
+                                    "title":"NO_OF_ROOMS",
+                                    "type": "number"
                                 },{
-                                    "key": "customer.udf.userDefinedDateFieldValues.udfDate1",
-                                    "title":"RENT_LEASE_AGREEMENT_VALID_TILL",
+                                    "key": "customer.udf.userDefinedFieldValues.udf5",
+                                    "title":"IN_CURRENT_AREA_SINCE",
                                     "type": "string"
                                 }]
                             }]
@@ -567,7 +579,7 @@ define({
                                         }
                                     }, {
                                         "title": "Average Bank Balance",
-                                        "data": "BankAvgBal",
+                                        "data": "averageBankBalance",
                                         render: function(data, type, full, meta) {
                                             return irfCurrencyFilter(full['BankAvgBal'])
                                         }
@@ -690,7 +702,8 @@ define({
                                         "title": "loan Amount",
                                         "data": "loanAmount",
                                         render: function(data, type, full, meta) {
-                                            return irfCurrencyFilter(full['loanAmount'])
+                                            return irfCurrencyFilter(full['loanAmountInPaisa'])
+                                            debugger;
                                         }
                                     }, {
                                         "title": "Installment Amount",
@@ -708,7 +721,7 @@ define({
                                         "title": "Loan Purpose",
                                         "data": "Purpose",
                                         render: function(data, type, full, meta) {
-                                            return full['Purpose']
+                                            return full['liabilityLoanPurpose']
                                         }
     
                                     }, {
@@ -734,13 +747,13 @@ define({
                                         "title": "Frequency of Installments",
                                         "data": "Frequency",
                                         render: function(data, type, full, meta) {
-                                            return full['Frequency']
+                                            return full['frequencyOfInstallment']
                                         }
                                     }, {
                                         "data": "",
                                         "title": "INTEREST_ONLY",
                                         render: function(data, type, full, meta) {
-                                            return full['Interest Only']
+                                            return full['interestOnly']
                                         }
                                     }, {
                                         "data": "interestRate",
@@ -901,7 +914,7 @@ define({
                                 "type": "grid",
                                 "orientation": "vertical",
                                 "items": [{
-                                    "key": "household.annualExpenses",
+                                    "key": "annualExpenses",
                                     "title": "Income",
                                     "type": "amount"
                                 }, {

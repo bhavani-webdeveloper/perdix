@@ -8,10 +8,10 @@ function(LeadProcess, AngularResourceService) {
        pageType: "Engine",
         //pageType: "Adhoc",
         dependencies: ["$log", "$state", "$filter", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "entityManager", "$q", "irfProgressMessage",
-        "PageHelper", "Utils", "entityManager", "BiometricService", "PagesDefinition", "Queries", "IrfFormRequestProcessor", "$injector", "irfNavigator", "User"],
+        "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "IrfFormRequestProcessor", "$injector", "irfNavigator", "User"],
 
         $pageFn: function($log, $state, $filter, $stateParams, Lead, LeadHelper, SessionStore, formHelper, entityManager, $q, irfProgressMessage,
-            PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries, IrfFormRequestProcessor, $injector, irfNavigator, User) {
+            PageHelper, Utils, BiometricService, PagesDefinition, Queries, IrfFormRequestProcessor, $injector, irfNavigator, User) {
                 console.log("lead generation test");
 
             var branch = SessionStore.getBranch();
@@ -203,7 +203,8 @@ function(LeadProcess, AngularResourceService) {
                     },
                     "leadProfile.contactDetails.addressLine1":{
                         "title":"HAMLET_FALA",
-                        "orderNo":12
+                        "orderNo":12,
+                        "required":false
                     },
                     "leadProfile.contactDetails.alternateMobileNo":{
                         orderNo: 10
@@ -420,7 +421,7 @@ function(LeadProcess, AngularResourceService) {
                                         "items":{
                                              "subDistrict": {
                                                      "key":"lead.cityTownVillage",
-                                                     "title":"SUBDISTRICT",
+                                                     "title":"SUB_DISTRICT",
                                                      "readonly":true,
                                                      "required":true
                                                  }

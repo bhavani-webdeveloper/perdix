@@ -226,6 +226,16 @@
                    "Screening", "LoanInitiation"
                 ]
              },
+             "jlgGroupId":{
+               "title":"Jlg Group Id",
+               "type":"string",
+               "minimum":1,
+               "maximum":12,
+               "captureStages":[
+                  "Screening", "LoanInitiation"
+               
+               ]
+             },
                "processType":{
                   "title":"Process Type",
                   "type":"string",
@@ -948,7 +958,7 @@
                   "title":"REPAYMENT_DATE",
                   "type":"date",
                   "captureStages":[
-                     "LoanBooking"
+                     "LoanBooking","Application","ScreeningReview"
                   ]
                },
                "frequency":{
@@ -3912,6 +3922,41 @@
                   "captureStages": [
                      "Screening", "LoanInitiation", "PendingForPartner"
                   ]
+               },
+               "udf8": {
+                  "title": "udf8",
+                  "type": "string",
+                  "captureStages": [
+                     "Screening"
+                  ]
+               },
+               "udf9": {
+                  "title": "udf9",
+                  "type": "string",
+                  "captureStages": [
+                     "Screening"
+                  ]
+               },
+               "udf10": {
+                  "title": "udf10",
+                  "type": "string",
+                  "captureStages": [
+                     "ScreeningReview", "Application"
+                  ]
+               },
+               "udf11": {
+                  "title": "udf11",
+                  "type": "string",
+                  "captureStages": [
+                     "ScreeningReview", "Application"
+                  ]
+               },
+               "udf12": {
+                  "title": "udf12",
+                  "type": "string",
+                  "captureStages": [
+                     "ScreeningReview", "Application"
+                  ]
                }
             }
          },
@@ -4115,7 +4160,7 @@
                      "minimum": 1,
                      "maximum": 10000000,
                      "captureStages": [
-                        "Screening", "Sanction", "LoanBooking", "LoanInitiation"
+                        "Screening","ScreeningReview", "Sanction", "LoanBooking", "LoanInitiation","Application"
                      ]
                   },
                   "disbursementAmount":{
@@ -4272,6 +4317,27 @@
                      "maxLength": 100,
                      "captureStages": [
                         "LoanBooking"
+                     ]
+                  },
+                  "modeOfDisbursement":{
+                     "title":"modeOfDisbursement",
+                     "type":"date",
+                     "captureStages":[
+                        "ScreeningReview", "LoanBooking", "Application"
+                     ]
+                  },
+                  "actualDisbursementDate":{
+                     "title":"actualDisbursementDate",
+                     "type":"date",
+                     "captureStages":[
+                        "ScreeningReview", "LoanBooking", "Application"
+                     ]
+                  },
+                  "firstRepaymentDate":{
+                     "title":"REPAYMENT_DATE",
+                     "type":"date",
+                     "captureStages":[
+                        "Screening","ScreeningReview","Application","LoanBooking"
                      ]
                   }
                }

@@ -2253,21 +2253,21 @@
                         "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "monthlyTurnover": {
-                        "title": "monthlyTurnover",
+                        "title": "GST_NUMBER",
                         "type": "number",
                         "minimum": 0,
                         "maximum": 10000000,
                         "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "monthlyBusinessExpenses": {
-                        "title": "monthlyBusinessExpenses",
+                        "title": "WEEKLY_SALES",
                         "type": "number",
                         "minimum": 0,
                         "maximum": 10000000,
                         "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "avgMonthlyNetIncome": {
-                        "title": "avgMonthlyNetIncome",
+                        "title": "EMI_ELIGIBILITY",
                         "type": "number",
                         "minimum": 0,
                         "maximum": 10000000,
@@ -2386,12 +2386,12 @@
                         "type": "string",
                         "captureStages": ["Completed"]
                     },
-                    "dic": {
+                    "coOwnerSalary": {
                         "title": "ACTUAL_EMI_OFFERED",
                         "type": "string",
                         "captureStages": ["Completed"]
                     },
-                    "generalAdmin": {
+                    "ownerSalary": {
                         "title": "DEBT_SERVICE_RATIO",
                         "type": "number",
                         "captureStages": ["Completed"]
@@ -2777,6 +2777,12 @@
                             "type": "string",
                             "format": "date",
                             "captureStages": ["BasicEnrolment","Completed"]
+                        },
+                        "frequency": {
+                            "title": "Frequency",
+                            "type": "string",
+                            "refCodeCategory": "frequency",
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         }
                     }
                 }
