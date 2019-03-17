@@ -21,7 +21,7 @@ try {
 			return;
 		}
 		$stmt = $connection->prepare($QUERY);
-		$stmt->bind_parameters('s',strtolower($_GET['userId']));
+		$stmt->bind_param('s',strtolower($_GET['userId']));
 		$stmt->execute();
 		$stmt->bind_result($id, $name, $access_level);
 		$data = '';
