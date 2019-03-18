@@ -369,12 +369,14 @@ if (isset($_GET)) {
 
     //reserving the record for score details on calculation table
     $UpdateCalculation = "INSERT INTO sc_calculation ( ScoreName, ApplicationId, created_by, created_at) 
-	VALUES ('" . $NameOfTheScore . "', :CustomerLoanId , '" . $SessionUserName . "', '" . date('Y-m-d H:i:s') . "')";
+	VALUES (:NameOfTheScore, :CustomerLoanId , :SessionUserName,". date('Y-m-d H:i:s') . "')";
 
     try {
         $db = ConnectDb();
         $calculationTable = $db->prepare($UpdateCalculation);
         $calculationTable = $db->bindParam(':CustomerLoanId', $CustomerLoanId);
+        $calculationTable = $db->bindParam(':NameOfTheScore', $NameOfTheScore);
+        $calculationTable = $db->bindParam(':SessionUserName',$SessionUserName);
         $calculationTable->execute();
         $db = null;
 
