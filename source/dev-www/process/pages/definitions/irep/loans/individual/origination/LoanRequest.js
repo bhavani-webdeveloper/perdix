@@ -49,6 +49,27 @@ define([],function(){
                     return 'Co-Applicant';
                 }
             };
+            var tempGlobalerrMsg = "";
+            var policyByStage = function(model){
+                if (model.loanAccount.currentStage == 'KYC'){
+                    for (var i=0;i<model.loanAccount.loanCustomerRelations.length;i++){
+                        if (model.loanAccount.loanCustomerRelations[i].relation == "Co-Applicant")
+                            return true
+                    }
+                    tempGlobalerrMsg = "Atleast one Co-Applicant is  necessary";
+                    return false;
+                }
+                else if (model.loanAccount.currentStage == 'GuarantorAddition'){
+                    for (var i=0;i<model.loanAccount.loanCustomerRelations.length;i++){
+                        if (model.loanAccount.loanCustomerRelations[i].relation == "Guarantor")
+                            return true
+                    }
+                    tempGlobalerrMsg = "Atleast one Guarantor is  necessary";
+                    return false;
+                }
+                else
+                    return true;
+            }
 
 
 
@@ -149,10 +170,6 @@ define([],function(){
                                     "orderNo": 1,
                                     "readonly": true
                                 },
-                                "LoanCustomerRelations": {
-                                    "orderNo": 2,
-                                    "readonly": true
-                                },
                                 "LoanMitigants": {
                                     "orderNo": 4
                                 },
@@ -170,9 +187,22 @@ define([],function(){
                                 "NomineeDetails": {
                                     "orderNo": 8,
                                     "readonly": true
-                                },                                
+                                }, 
+                                "LoanCustomerRelations.loanCustomerRelations.customerId":{
+                                    "readonly": true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.urn":{
+                                    "readonly":true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.name":{
+                                    "readonly":true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.relation":{
+                                    "readonly":true
+                                },                               
                                 "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
-                                   "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
+                                   "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'&& model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Guarantor'",
+                                   "readonly":true
                                 }          
                             }
                         },
@@ -714,6 +744,7 @@ define([],function(){
                     "LoanCustomerRelations.loanCustomerRelations.name",
                     "LoanCustomerRelations.loanCustomerRelations.relation",
                     "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant",
+                    "LoanCustomerRelations.loanCustomerRelations.relationShipWithApplicantv2",
 
                     "DeductionsFromLoan",
                     "DeductionsFromLoan.expectedProcessingFeePercentage",
@@ -899,6 +930,22 @@ define([],function(){
                                                         "title": "NOMINEE_ADDRESS_APPLICANT",
                                                         "onClick": "actions.nomineeAddress(model, formCtrl, form, $event)"
                                                     }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "LoanCustomerRelations": {
+                                        "items": {
+                                            "loanCustomerRelations": {
+                                                "items": {
+                                                    "relationShipWithApplicantv2": {
+                                                        condition:"model.loanAccount.currentStage == 'GuarantorAddition' && model.loanAccount.loanCustomerRelations[arrayIndex].relation == 'Guarantor'",
+                                                        "key": "loanAccount.loanCustomerRelations[].relationshipWithApplicant",
+                                                        "title": "RELATIONSHIP_WITH_APPLICATION",
+                                                        "type": "select",
+                                                        "enumCode": "relation",
+                                                        "required":true
+                                                    },
                                                 }
                                             }
                                         }
@@ -1106,7 +1153,11 @@ define([],function(){
                             model.loanAccount.psychometricCompleted = "NO";
 
                         }
-                        
+                        if (!policyByStage(model)){
+                            PageHelper.showErrors({data:{error:tempGlobalerrMsg}})
+                            PageHelper.hideLoader();
+                            return false;
+                        }
                         PageHelper.showProgress('loan-process', 'Updating Loan');
                         model.loanProcess.save()
                             .finally(function () {
@@ -1197,6 +1248,11 @@ define([],function(){
                             }
                         }
                         PageHelper.showProgress('enrolment', 'Updating Loan');
+                        if (!policyByStage(model)){
+                            PageHelper.showErrors({data:{error:tempGlobalerrMsg}});
+                            PageHelper.hideLoader();
+                            return false;
+                        }
                         model.loanProcess.proceed()
                             .finally(function () {
                                 PageHelper.hideLoader();
