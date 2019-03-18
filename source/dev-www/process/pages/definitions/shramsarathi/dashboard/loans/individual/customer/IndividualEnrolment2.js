@@ -338,7 +338,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 
                                 "BankAccounts.customerBankAccounts.accountNumber": {
-                                    required: true
+                                    required: true,
+                                    "schema": {
+                                        "pattern": "^[0-9]{16}$",
+                                        //"type": ["integer"]
+                                    }
+                                   
                                 },
                                 "BankAccounts.customerBankAccounts.isDisbersementAccount": {
                                     "type": "radios"

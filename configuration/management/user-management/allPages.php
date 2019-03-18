@@ -8,7 +8,7 @@ $PM_QUERY = "
 SELECT p.id, p.uri, rpa.id rpa_id, rpa.page_config, p.title, p.icon_class, p.state, p.page_name
 FROM ".DB_SCHEMA.".pages p
 LEFT OUTER
-JOIN ".DB_SCHEMA.".role_page_access rpa ON p.id = rpa.page_id AND rpa.role_id = :roleId
+JOIN ".DB_SCHEMA.".role_page_access rpa ON p.id = rpa.page_id AND rpa.role_id = ?
 ";
 
 $role_id = $_GET['roleId'];
@@ -19,7 +19,7 @@ if (empty($role_id)) {
 } 
 
 $stmt = $connection->prepare($PM_QUERY);
-$stmt->bindParam(":roleId", $role_id);
+$stmt->bind_param("i", $role_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
