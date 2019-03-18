@@ -137,7 +137,7 @@ define({
 							data: 'branchName'
 						},
 						{
-							title: 'SPOKE_NAME',
+							title: 'ZONE_NAME',
 							data: 'centreName'
 						},
 						{
