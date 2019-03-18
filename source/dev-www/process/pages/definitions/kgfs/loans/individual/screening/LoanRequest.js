@@ -13,7 +13,18 @@ define([],function(){
             var branch = SessionStore.getBranch();
             var podiValue = SessionStore.getGlobalSetting("percentOfDisposableIncome");
             //PMT calculation
-
+            
+            var setDeviation = function(model){
+                      /* Deviations and Mitigations grouping */
+                      if (model.deviationMitigants && model.loanAccount.loanMitigants && _.isArray(model.loanAccount.loanMitigants)){
+                        
+                        for (var i=0; i<model.deviationMitigants.length; i++){
+                            model.loanAccount.loanMitigants.push(model.deviationMitigants[i]);
+                        }      
+                    }
+                    /* End of Deviations and Mitigations grouping */
+            }
+            
             var getGoldRate = function(model){
                 var value = Queries.getGoldRate();
                 value.then(function(resp){
@@ -974,7 +985,9 @@ define([],function(){
                             }
                             loanMitigantsGrouped[item.parameter].push(item);
                         }
-                        model.loanMitigantsGrouped=loanMitigantsGrouped;                       
+                        model.loanMitigantsGrouped=loanMitigantsGrouped;
+                        model.deviationMitigants  = model.loanAccount.loanMitigants;
+                        model.loanAccount.loanMitigants = null;                        
 
                     }
                     /* End of Deviations and Mitigations grouping */
@@ -1134,7 +1147,7 @@ define([],function(){
                                             '<td>{{ parameter }}</td>' +
                                             '<td><ul class="list-unstyled">' +
                                             '<li ng-repeat="m in item" id="{{m.mitigant}}">' +
-                                            '<input type="checkbox" ng-checked="m.mitigatedStatus"  ng-model="m.mitigatedStatus"> {{ m.mitigant }}' +
+                                            '<input required type="checkbox" ng-checked="m.mitigatedStatus"  ng-model="m.mitigatedStatus"> {{ m.mitigant }}' +
                                             '</li></ul></td></tr></tbody></table>'
                                     },                                    
                                     "loanMitigants":{
@@ -1372,7 +1385,8 @@ define([],function(){
                     },
                     "business-captures": function(bundleModel, model, params){
                         model.loanAccount.isBusinessCaptured = typeof params.customer.isCaptured  != undefined ? (params.customer.isCaptured?true:false):false;
-                        model.loanAccount.isCreditAppraisal = typeof params.customer.isCreditAppraisal  != undefined ? (params.customer.isCreditAppraisal?true:false):false;             
+                        model.loanAccount.isCreditAppraisal = typeof params.customer.isCreditAppraisal  != undefined ? (params.customer.isCreditAppraisal?true:false):false; 
+                        model.loanAccount.urnNo = model.customer.urnNo;            
                     },
                     "dsc-response": function(bundleModel,model,obj){
                         model.loanAccount.loanCustomerRelations = obj;
@@ -1404,19 +1418,23 @@ define([],function(){
                     return SchemaResource.getLoanAccountSchema().$promise;
                 },
                 actions: {
+                    
                     submit: function(model, formCtrl, form){
+
+                        setDeviation(model);
+
                         if(model.loanAccount.productCategory  != 'MEL'){
                             model.loanAccount.customerId=model.loanAccount.loanCustomerRelations[0].customerId;
                             model.loanAccount.urnNo=model.loanAccount.loanCustomerRelations[0].urn; 
                         }
 
-                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == "Screening" && model.loanAccount.productCategory == 'MEL' && !model.loanAccount.isBusinessCaptured){
+                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == "Screening" && model.loanAccount.productCategory == 'MEL' && !model.loanAccount.isBusinessCaptured && model.loanAccount.urnNo == null){
                             PageHelper.showProgress("loan-enrolment","Business Details are not captured",5000);
                                 return false;
                         }
 
                         if(model.loanAccount.currentStage && model.loanAccount.currentStage == "CreditAppraisal" && model.loanAccount.productCategory == 'MEL' && !model.loanAccount.isCreditAppraisal){
-                            PageHelper.showProgress("loan-enrolment","CreditAppraisal Details are not captured",5000);
+                            PageHelper.showProgress("loan-enrolment","Business Details are not captured",5000);
                                 return false;
                         }
 
@@ -1508,6 +1526,7 @@ define([],function(){
                             });
                     },
                     proceed: function(model, formCtrl, form, $event){
+                        setDeviation(model);
                          if (model.loanProcess.remarks==null || model.loanProcess.remarks ==""){
                                PageHelper.showProgress("update-loan", "Remarks is mandatory", 3000);
                                PageHelper.hideLoader();
