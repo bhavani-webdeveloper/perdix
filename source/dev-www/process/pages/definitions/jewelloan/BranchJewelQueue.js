@@ -168,6 +168,9 @@ irf.pageCollection.factory(irf.page("jewelloan.BranchJewelQueue"),
 									title: 'Destination Branch',
 									data: 'destinationBranch'
 								},{
+									title: 'Customer FullName',
+									data: 'customerFullName'
+								},{
 									title: 'Account No',
 									data: 'accountNo'
 								},{
@@ -176,28 +179,28 @@ irf.pageCollection.factory(irf.page("jewelloan.BranchJewelQueue"),
 								},{
 									title: 'Jewel Pouch No',
 									data: 'jewelPouchNo'
-								},{
-									title: 'Transit Status',
-									data: 'transitStatus'
-								},{
-									title: 'Customer FullName',
-									data: 'customerFullName'
 								}, {
 									title: 'Disbursed Amount',
 									data: 'disbursedAmountInPaisa'
 								},{
 									title: 'Loan Disbursement Date',
 									data: 'loanDisbursementDate'
-								},{
-									title: 'Investor',
-									data: 'investor'
-								},{
-									title: 'Rejected Reason',
-									data: 'rejectedReason'
-								},{
+								},
+								// {
+								// 	title: 'Investor',
+								// 	data: 'investor'
+								// },{
+								// 	title: 'Rejected Reason',
+								// 	data: 'rejectedReason'
+								// },
+								{
 									title: 'Remarks',
 									data: 'remarks'
-								}
+								},
+								// {
+								// 	title: 'Transit Status',
+								// 	data: 'transitStatus'
+								// }
 							];
 					},
 					getActions: function() {
