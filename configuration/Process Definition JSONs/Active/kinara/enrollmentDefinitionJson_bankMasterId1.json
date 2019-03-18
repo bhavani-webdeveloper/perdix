@@ -4109,6 +4109,15 @@
               "Stage02",
               "Completed"
             ]
+          },
+          "isTransactionAccount":{
+            "title": "isTransactionAccount",
+            "type": "string",
+            "captureStages": [
+              "BasicEnrolment",
+              "Stage02",
+              "Completed"
+            ]
           }
         }
       },
@@ -4371,6 +4380,49 @@
               "type": "integer",
               "minimum": 0,
               "maximum": 10000000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udf1": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udf2": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udf3": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udfDate1": {
+              "type": "string",
+              "format": "date",
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "udfDate2": {
+              "type": "string",
+              "format": "date",
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
