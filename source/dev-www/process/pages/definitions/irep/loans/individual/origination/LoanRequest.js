@@ -1082,6 +1082,15 @@ define([],function(){
                                 }
                             })
                         }
+                    },
+                    "cb-check-update": function(bundleModel, model, params){
+                        $log.info("Inside cb-check-update of LoanRequest");
+                        for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                            if (model.loanAccount.loanCustomerRelations[i].customerId == params.customerId) {
+                                if(params.cbType == 'EQUIFAX')
+                                    model.loanAccount.loanCustomerRelations[i].equifaxCompleted = true;                               
+                            }
+                        }
                     }
                 },
                 form: [],
@@ -1175,7 +1184,17 @@ define([],function(){
                                 PageHelper.showProgress("loan-create","Total tranche amount should match with the Loan amount",5000);
                                 return false;
                             }
-                        
+                            
+                        }
+                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == 'KYC'){
+                            for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                                if (model.loanAccount.loanCustomerRelations[i].customerId) {
+                                    if(!model.loanAccount.loanCustomerRelations[i].equifaxCompleted){
+                                        PageHelper.showProgress("loan-create","CB Check pending. Please do a CB check and then proceed",5000);
+                                        return false;
+                                    }                            
+                                }
+                            }
                         }
                         PageHelper.showProgress('enrolment', 'Updating Loan');
                         model.loanProcess.proceed()
