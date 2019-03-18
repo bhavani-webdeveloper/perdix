@@ -321,7 +321,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                                 "key": "applicant.telecallingResponse",
                                                                 "type": "select",
                                                                 "title": "TELECALLING_RESPONSE",
-                                                                "enumCode": "telecalling_response"
+                                                                "enumCode": "telecalling_response",
+                                                                "required" : true
                                                             },
                                                             {
                                                                 "key": "applicant.noOfCallAttempts",

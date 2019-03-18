@@ -88,7 +88,6 @@ gulp.task('assets', ['ts:scripts', 'ts:perdixConfig'], function(){
             ];
     }
     return gulp.src(src , {base: 'dev-www/'})
-        //.pipe($.if('*.js', babel()))
         .pipe(gulp.dest(buildDirectory));
 })
 
@@ -106,6 +105,18 @@ gulp.task('html', function(){
         .pipe($.if('*.js', $.rev()))
         .pipe($.if('*.css', $.rev()))
         .pipe($.revReplace())
+        .pipe($.if('*.js', babel({
+            "sourceType": "script",
+            "presets": [
+                ["@babel/preset-env", {
+                    "loose": true,
+                    "modules": false
+                }]
+            ],
+            "plugins": [
+                "transform-es2015-template-literals"
+            ]
+        })))
         .pipe($.print())
         .pipe(gulp.dest(buildDirectory))
 })
@@ -211,9 +222,14 @@ gulp.task("clean:tsScripts", function(){
     return del(['./dev-www/tsjs/**/*']);
 })
 gulp.task('ts:scripts', ['clean:tsScripts'], function() {
-    var tsconfig = require("./tsconfig.json");
     return gulp.src('./dev-www/ts/**/*.ts')
-        .pipe(ts(tsconfig.compilerOptions))
+        .pipe(ts({
+            noImplicitAny: true,
+            module: 'AMD',
+            moduleResolution:'node',
+            target: "es5",
+            experimentalDecorators: true
+        }))
         .pipe(gulp.dest('./dev-www/tsjs'));
 });
 

@@ -99,6 +99,7 @@ define({
                             $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
                             var promise = CustomerBankBranch.search({
                                 'ifscCode': inputModel.ifscCode,
+                                'bankName': inputModel.depositBank,
                                 'branchName': inputModel.depositBranch
                             }).$promise;
                             return promise;

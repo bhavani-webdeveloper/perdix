@@ -3046,50 +3046,51 @@
                "captureStages":[
                      "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
-            }
+            },
+            "teleCallingQuestionnaire":{
+               "title":"teleCallingQuestionnaire",
+              "type":"array",
+              "maxItems":null,
+              "items":{
+                 "type":"object",
+                 "required":[
+  
+                 ],
+                 "properties":{
+                    "question":{
+                       "title":"question",
+                       "type":"string",
+                       "minLength":1,
+                       "maxLength":100,
+                       "captureStages":[
+                       "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                    ]
+                    },
+                    "answer":{
+                       "title":"answer",
+                       "type":"string",
+                       "minLength":1,
+                       "maxLength":1000,
+                        "captureStages":[
+                       "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                    ]
+                    },
+                    "remarks":{
+                       "title":"remarks",
+                      "type":"string",
+                       "minLength":1,
+                       "maxLength":1000,
+                       "captureStages":[
+                       "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                    ]
+                    }
+                 }
+              }
+           }
           }
         }
       },
-      "teleCallingQuestionnaire":{
-             "title":"teleCallingQuestionnaire",
-            "type":"array",
-            "maxItems":null,
-            "items":{
-               "type":"object",
-               "required":[
-
-               ],
-               "properties":{
-                  "question":{
-                     "title":"question",
-                     "type":"string",
-                     "minLength":1,
-                     "maxLength":100,
-                     "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
-                  ]
-                  },
-                  "answer":{
-                     "title":"answer",
-                     "type":"string",
-                     "minLength":1,
-                     "maxLength":1000,
-                      "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
-                  ]
-                  },
-                  "remarks":{
-                     "title":"remarks",
-                    "type":"string",
-                     "minLength":1,
-                     "maxLength":1000,
-                     "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
-                  ]
-                  }
-               }
-            }
-         },
+     
         "vehicleAccessories":{
              "title":"vehicleAccessories",
             "type":"array",

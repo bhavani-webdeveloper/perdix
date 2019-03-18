@@ -16,7 +16,7 @@ define({
             initialize: function (model, form, formCtrl) {
                 $log.info("search-list sample got initialized");
                 model.branchName = SessionStore.getBranch();
-                model.branchId = SessionStore.getBranchId();
+                model.branch = SessionStore.getCurrentBranch().branchId;
                 siteCode = SessionStore.getGlobalSetting('siteCode');
             },
     

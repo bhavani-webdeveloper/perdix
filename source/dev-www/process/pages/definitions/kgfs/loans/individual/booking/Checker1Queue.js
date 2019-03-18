@@ -10,7 +10,7 @@ define({
             "subTitle": "",
             initialize: function (model, form, formCtrl) {
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
-                model.branch = SessionStore.getBranch();
+                model.branch = SessionStore.getCurrentBranch().branchId;
                 model.branchId = SessionStore.getBranchId();
             },
             definition: {
@@ -34,9 +34,9 @@ define({
                             }
                         },
                         "centre": {
-                        "title": "CENTRE",
-                        "type": ["integer", "null"],
-                        "x-schema-form": {
+                            "title": "CENTRE",
+                            "type": ["integer", "null"],
+                            "x-schema-form": {
                             "type": "select",
                             "enumCode": "centre",
                             "parentEnumCode": "branch_id",
@@ -71,6 +71,9 @@ define({
                     return formHelper;
                 },
                 getResultsPromise: function (searchOptions, pageOpts) {
+                    if (_.hasIn(searchOptions, 'centreCode')) {
+                        searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
+                    }
                     var promise = IndividualLoan.search({
                         'stage': 'Checker1',
                         'branchName': searchOptions.branch,

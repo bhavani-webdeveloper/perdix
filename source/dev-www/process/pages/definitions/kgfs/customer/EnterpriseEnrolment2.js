@@ -423,7 +423,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EnterpriseFinancials.incomeThroughSales.frequency": {
                         "orderNo": 511,
-                        "required":true
+                        "required":true,
+                        onChange: function (value, form, model) {
+                            computeTotalMonthlySurpluse("value","form", model);
+                        }
                     },
                     "EnterpriseFinancials.incomeThroughSales.invoiceDocId": {
                         "orderNo": 514,
@@ -458,7 +461,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EnterpriseFinancials.rawMaterialExpenses.frequency":{
                         "orderNo": 522,
-                        "required":true
+                        "required":true,
+                        onChange: function (value, form, model) {
+                            computeTotalMonthlySurpluse("value","form", model);
+                        }
                     },
                     "EnterpriseFinancials.monthlySurplus.totalMonthlySurplus": {
                         "orderNo": 524,
@@ -3377,9 +3383,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         model.customer.postOffice = params.customer.postOffice;
                         model.customer.landmark = params.customer.landmark;
                         model.customer.locality = params.customer.locality;
+                        model.customer.pincode = params.customer.pincode;
                         model.customer.villageName = params.customer.villageName;
                         model.customer.district = params.customer.district;
                         model.customer.state = params.customer.state;
+                    },
+                    "load-bank-details-business": function (bundleModel, model, params) {
+                        if (_.hasIn(model, 'loanProcess.applicantEnrolmentProcess') && model.loanProcess.applicantEnrolmentProcess !=null){
+                            model.applicantEnrolmentProcessDetails = {}; 
+                            model.applicantEnrolmentProcessDetails=model.loanProcess.applicantEnrolmentProcess.customer;
+                            model.customer.customerBankAccounts=model.applicantEnrolmentProcessDetails.customerBankAccounts;
+                        }
                     }
                 },
                 form: [

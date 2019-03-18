@@ -11,7 +11,7 @@ SELECT
 FROM ".DB_SCHEMA.".roles r,
      ".DB_SCHEMA.".user_roles ur
 WHERE r.id = ur.role_id
-AND   lower(ur.user_id) = '";
+AND   lower(ur.user_id) = ?";
 
 try {
 	if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -20,8 +20,8 @@ try {
 			echo '{"error": "Required parameter user id is missing"}';
 			return;
 		}
-		$q = $QUERY . strtolower($_GET['userId']) . "'";
-		$stmt = $connection->prepare($q);
+		$stmt = $connection->prepare($QUERY);
+		$stmt->bind_param("s", $_GET['userId']);
 		$stmt->execute();
 		$stmt->bind_result($id, $name, $access_level);
 		$data = '';
