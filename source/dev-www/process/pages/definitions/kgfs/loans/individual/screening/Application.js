@@ -327,6 +327,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                     "load-address": function(pageObj, bundleModel, params){
                         BundleManager.broadcastEvent("load-address-business", params);
                     },
+                    "load-bank-details": function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("load-bank-details-business", params);
+                    },
                     "load_business": function(pageObj, bundleModel, params){
                         console.log(params)
                         model.productCategory = params

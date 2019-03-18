@@ -3387,6 +3387,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         model.customer.villageName = params.customer.villageName;
                         model.customer.district = params.customer.district;
                         model.customer.state = params.customer.state;
+                    },
+                    "load-bank-details-business": function (bundleModel, model, params) {
+                        if (_.hasIn(model, 'loanProcess.applicantEnrolmentProcess') && model.loanProcess.applicantEnrolmentProcess !=null){
+                            model.applicantEnrolmentProcessDetails = {}; 
+                            model.applicantEnrolmentProcessDetails=model.loanProcess.applicantEnrolmentProcess.customer;
+                            model.customer.customerBankAccounts=model.applicantEnrolmentProcessDetails.customerBankAccounts;
+                        }
                     }
                 },
                 form: [
