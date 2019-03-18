@@ -1312,7 +1312,7 @@ define([], function () {
                                         {
                                             "type": "box",
                                             "title": "POST_REVIEW",
-                                            condition: "model.loanAccount.currentStage != 'DocumentUpload' && model.loanAccount.id ",
+                                            condition: "model.loanAccount.currentStage != 'DocumentUpload' && model.loanAccount.id && model.loanAccount.currentStage != 'Checker1' && model.loanAccount.currentStage != 'Checker2'",
                                             "items": [{
                                                     key: "review.action",
                                                     condition: "model.currentStage == 'PendingForPartner' && model.loanHoldRequired!='NO'",

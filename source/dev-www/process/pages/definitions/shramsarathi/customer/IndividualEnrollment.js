@@ -1177,14 +1177,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "type":"amount"
                                 },  
                                 "PhysicalAssets.physicalAssets":{
-                                "add":null
+                                "readonly":true
                                 },
-                                "PhysicalAssets.physicalAssets.assetType":{
-                                    "readonly": true
-                                },
-                                "Machinery.fixedAssetsMachinaries.presentValue":{
-                                    "readonly": true
-                                },
+                              
                                 "FamilyDetails.familyMembers.noOfDependents": {
                                     "readonly": true
                                 },
@@ -1793,9 +1788,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "KYC.addressProofValidUptoDate":{
                         "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
                     },
-                    "Machinery.fixedAssetsMachinaries":{
-                        "title":"FIXED_ASSET"
-                    },
+                   
                     "IndividualInformation.age":{
                         "required":false
                     },
@@ -2149,7 +2142,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
                         "title": "ASSET_TYPE",
                         "type": "select",
-                        "enumCode": "asset_type"
+                        "enumCode": "fixed_asset_type"
                     },
                     "PhysicalAssets.physicalAssets.vehicleModel": {
                         "condition": "model.customer.physicalAssets[arrayIndex].nameOfOwnedAsset=='Two wheeler' || model.customer.physicalAssets[arrayIndex].nameOfOwnedAsset=='Four Wheeler'"
@@ -2177,9 +2170,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Liabilities.liabilities.liabilityType":{
                         "enumCode":"financial_liabilities"
                     },
-                    "Machinery.fixedAssetsMachinaries.machineType":{
-                        "enumCode":"fixed_asset_type"
-                    },
+                  
                     "Liabilities.liabilities.interestRate":{
                         "type":"number",
                         //"enumCode":"rate_of_interest",
@@ -2386,7 +2377,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto",
                     "BankAccounts.customerBankAccounts.isDisbersementAccount",
                     //
-                    // "PhysicalAssets",
+                    "PhysicalAssets",
+                    "PhysicalAssets.physicalAssets.nameOfOwnedAsset",
+                    "PhysicalAssets.physicalAssets.ownedAssetValue",
                     // "PhysicalAssets.financialAssets",
                     // "PhysicalAssets.financialAssets.installmentAmount",
                     // "PhysicalAssets.financialAssets.balance",
@@ -2394,14 +2387,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "EnterpriseFinancials.currentAsset",
                     "EnterpriseFinancials.currentAsset.assetType",
                     "EnterpriseFinancials.currentAsset.value",
-                    "Machinery",
-                    "Machinery.fixedAssetsMachinaries",
-                    "Machinery.fixedAssetsMachinaries.machineType",
-                    "Machinery.fixedAssetsMachinaries.presentValue",
-                    "Machinery.fixedAssetsMachinaries.balance",
+                    // "Machinery",
+                    // "Machinery.fixedAssetsMachinaries",
+                    // "Machinery.fixedAssetsMachinaries.machineType",
+                    // "Machinery.fixedAssetsMachinaries.presentValue",
+                    // "Machinery.fixedAssetsMachinaries.balance",
                     
-                    //"PhysicalAssets.physicalAssets.unit",
-
                     //"IndividualReferences",
                     "IndividualReferences.verifications",
                     "IndividualReferences.verifications.referenceFirstName",
