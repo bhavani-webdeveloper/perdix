@@ -4364,6 +4364,26 @@
                 "Completed"
               ]
             },
+            "cashDeposits": {
+              "title": "Cash Deposits",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100000000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
+            "nonCashDeposits": {
+              "title": "Non Cash Deposits",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100000000,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
             "endMonth": {
               "title": "End Month",
               "type": "string",
