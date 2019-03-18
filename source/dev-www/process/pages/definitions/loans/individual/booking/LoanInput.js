@@ -3290,8 +3290,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                         if (model.additional.product && model.additional.product.productType != 'OD' && trancheTotalAmount > model.loanAccount.loanAmount){
                             PageHelper.showProgress("loan-create","Total tranche amount is more than the Loan amount",5000);
                             return false;
+                        }else if(model.siteCode == 'IREPDhan' && trancheTotalAmount > model.loanAccount.loanAmount){
+                            PageHelper.showProgress("loan-create","Total tranche amount is more than the Loan amount",5000);
+                            return false;
                         }
                         if (model.additional.product && model.additional.product.productType != 'OD' && trancheTotalAmount < model.loanAccount.loanAmount){
+                            PageHelper.showProgress("loan-create","Total tranche amount should match with the Loan amount",5000);
+                            return false;
+                        }else if(model.siteCode == 'IREPDhan' && trancheTotalAmount < model.loanAccount.loanAmount){
                             PageHelper.showProgress("loan-create","Total tranche amount should match with the Loan amount",5000);
                             return false;
                         }
