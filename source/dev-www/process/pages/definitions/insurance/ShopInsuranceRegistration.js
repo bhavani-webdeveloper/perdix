@@ -251,6 +251,7 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                                                    model.insurancePolicyDetailsDTO.customerId = resp.id,
                                                    model.insurancePolicyDetailsDTO.urnNo =resp.urnNo,
                                                    model.insurancePolicyDetailsDTO.contactNumber = resp.mobilePhone
+                                                   model.insurancePolicyDetailsDTO.trxnChannel = "BRANCH";
                                                    
                                                    if (resp.dateOfBirth) {
                                                     model.insurancePolicyDetailsDTO.age = moment().diff(moment(resp.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
@@ -425,8 +426,8 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                                                         offline: true,
                                                         type: "file",
                                                         fileType: "image/*",
-                                                        "category": "Shop",
-                                                        "subCategory": "SHOPPHOTO",
+                                                        "category": "CustomerEnrollment",
+                                                        "subCategory": "PHOTO",
                                                   
                                                         
                                                     }, 

@@ -608,9 +608,16 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                             });
                                         } else if (model.loanAccount.loanCustomerRelations[i].relation === 'GUARANTOR' ||
                                             model.loanAccount.loanCustomerRelations[i].relation === 'Guarantor') {
+                                                for (var j =0;j<model.loanAccount.guarantors.length;j++){
+                                                    if (model.loanAccount.guarantors[j].guaUrnNo == model.loanAccount.loanCustomerRelations[i].urn){
+                                                        var tempGuraName = model.loanAccount.guarantors[j].guaFirstName;
+                                                        break;
+                                                    }
+                                                }
                                             model.loanAccount.guarantors1.push({
                                                 guaUrnNo: model.loanAccount.loanCustomerRelations[i].urn,
-                                                customerId: model.loanAccount.loanCustomerRelations[i].customerId
+                                                customerId: model.loanAccount.loanCustomerRelations[i].customerId,
+                                                guaFirstName : tempGuraName|| null
                                             });
                                         }
                                     }

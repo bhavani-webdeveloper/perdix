@@ -767,10 +767,6 @@ define([],function(){
                         "CollateralInformation.collateral.collateralDocuments": {
                              "required":true
                         },
-                        "LoanMitigants.loanMitigants.parameter":{
-                            maxLength:10,
-                            "pattern": "^[a-zA-Z.]{1,5}$"
-                        },
                         "JewelDetails": {
                             "orderNo": 20,
                             "condition": "model.loanAccount.loanType == 'JEWEL'"
@@ -1161,12 +1157,20 @@ define([],function(){
                                                "key":"loanAccount.loanMitigants[].parameter",
                                                "title":"Deviation",
                                                "type":"string",
+                                               schema: {
+                                                    "pattern": "^[a-zA-Z: ]{0,250}$",
+                                                    "type": ["string", "null"],
+                                                }
                                                
                                             },
                                             "mitigant":{
                                                "key":"loanAccount.loanMitigants[].mitigant",
                                                "title":"Mitigation",
-                                               "type":"string"
+                                               "type":"string",
+                                               schema: {
+                                                    "pattern": "^[a-zA-Z: ]{0,250}$",
+                                                    "type": ["string", "null"],
+                                                }
                                             }
                                         }
                                     }

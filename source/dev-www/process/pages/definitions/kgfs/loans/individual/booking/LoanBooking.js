@@ -414,6 +414,12 @@ define([], function () {
                                     "orderNo": 2,
                                     "readonly": true,
                                     condition: "model.loanAccount.loanType == 'JEWEL'"
+                                },
+                                "UDFFields" : {
+                                    "readonly":true,
+                                },
+                                "CollateralInformation" : {
+                                    "readonly":true,
                                 }
                             }
                         },
@@ -435,6 +441,12 @@ define([], function () {
                                     "orderNo": 2,
                                     "readonly": true,
                                     condition: "model.loanAccount.loanType == 'JEWEL'"
+                                },
+                                "UDFFields" : {
+                                    "readonly":true,
+                                },
+                                "CollateralInformation" : {
+                                    "readonly":true,
                                 }
                             }
                         },
@@ -456,6 +468,12 @@ define([], function () {
                                     "orderNo": 2,
                                     "readonly": true,
                                     condition: "model.loanAccount.loanType == 'JEWEL'"
+                                },
+                                "UDFFields" : {
+                                    "readonly":true,
+                                },
+                                "CollateralInformation" : {
+                                    "readonly":true,
                                 }
                             }
                         }
@@ -1178,7 +1196,7 @@ define([], function () {
                                                     titleMap:{
                                                         "ACH":"ACH",
                                                         "PDC":"PDC",
-                                                        "Others":"Others"
+                                                        "CASH":"CASH"
                                                     },
                                                     "orderNo": 120
                                                 }
