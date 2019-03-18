@@ -273,6 +273,7 @@ define([], function () {
                 return [
                     "LoanDetails",
                     "LoanDetails.centreName",
+                    "LoanDetails.productCategory",
                     "LoanDetails.loanType",
                     "LoanDetails.partner",
                     "LoanDetails.frequency",
@@ -285,7 +286,6 @@ define([], function () {
                     "LoanDetails.processingFeePercentage",
                     "LoanDetails.loanPurpose1",
                     "LoanDetails.loanPurpose2",
-                    "LoanDetails.loanPurpose3",
                     "LoanDetails.borrowers",
                     "LoanDetails.borrowersFatherName",
                     "LoanDetails.borrowersHusbandName",
@@ -365,6 +365,7 @@ define([], function () {
                     "LoanSanction.disbursementSchedules",
                     "LoanSanction.disbursementSchedules.trancheNumber",
                     "LoanSanction.disbursementSchedules.disbursementAmount",
+                    "LoanSanction.disbursementSchedules.moratoriumPeriodInDays",
 
                 ]
             };
@@ -414,6 +415,12 @@ define([], function () {
                                     "orderNo": 2,
                                     "readonly": true,
                                     condition: "model.loanAccount.loanType == 'JEWEL'"
+                                },
+                                "UDFFields" : {
+                                    "readonly":true,
+                                },
+                                "CollateralInformation" : {
+                                    "readonly":true,
                                 }
                             }
                         },
@@ -435,6 +442,12 @@ define([], function () {
                                     "orderNo": 2,
                                     "readonly": true,
                                     condition: "model.loanAccount.loanType == 'JEWEL'"
+                                },
+                                "UDFFields" : {
+                                    "readonly":true,
+                                },
+                                "CollateralInformation" : {
+                                    "readonly":true,
                                 }
                             }
                         },
@@ -456,6 +469,12 @@ define([], function () {
                                     "orderNo": 2,
                                     "readonly": true,
                                     condition: "model.loanAccount.loanType == 'JEWEL'"
+                                },
+                                "UDFFields" : {
+                                    "readonly":true,
+                                },
+                                "CollateralInformation" : {
+                                    "readonly":true,
                                 }
                             }
                         }
@@ -477,6 +496,7 @@ define([], function () {
                     "LoanDetails.loanType": {
                         "orderNo": 2,
                         "required": true,
+                        "readonly": true,
                         "enumCode": "booking_loan_type",
                         "onChange": function(valueObj,context,model){
                             clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
@@ -493,7 +513,7 @@ define([], function () {
                         }
                     },
                     "LoanDetails.partner": {
-                        "orderNo": 2,
+                        "orderNo": 3,
                         "enumCode": "loan_partner",
                         "onChange": function(valueObj,context,model){
                             clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
@@ -758,6 +778,7 @@ define([], function () {
                         "orderNo": 1,
                         "type": "lov",
                         "title": "NAME",
+                        required:true,
                         searchHelper: formHelper,
                         search: function (inputModel, form, model, context) {
                             var out = [];
@@ -801,21 +822,23 @@ define([], function () {
                     },
                     "NomineeDetails.nominees.nomineeDOB": {
                         "orderNo": 2,
-                        
+                        required:true,
                     },
                     // "NomineeDetails.nominees.nomineeRelationship": {
                     //     "readonly": true,
                     //     "type": "text",
                     // },
-                    // "NomineeDetails.nominees.nomineeGender": {
-                    //     "orderNo": 3,
-                    //     "readonly": true,
-                    //     "type": "text"
-                    // },
+                    "NomineeDetails.nominees.nomineeGender": {
+                        "orderNo": 3,
+                        //"readonly": true,
+                        required:true,
+                       // "type": "text"
+                    },
                     "NomineeDetails.nominees.nomineePincode": {
                         "orderNo": 6,
                         fieldType: "number",    
                         autolov: true,
+                        required:true,
                         inputMap: {
                             "district": {
                                 key: "loanAccount.nominees[].nomineeDistrict"
@@ -904,7 +927,16 @@ define([], function () {
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianRelationship": {
                         // "readonly": true,
                         // "type": "text",
-                        "enumCode":"relation",
+                        //"enumCode":"relation",
+                        "titleMap": [{
+                            value: "Relative",
+                            name: "Relative"
+                            },
+                            {
+                                value: "Neighbour",
+                                name: "Neighbour"
+                            },
+                        ],
                         required:true
                     },
                     "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianPincode": {
@@ -968,7 +1000,15 @@ define([], function () {
                     },
                     "LoanSanction.disbursementSchedules":{
                         orderNo:2,
+                    },
+                    //"LoanSanction.disbursementSchedules.disbursementAmount",
+                    "LoanSanction.disbursementSchedules.trancheNumber":{
                         readonly : true,
+                    },
+                    "LoanSanction.disbursementSchedules.disbursementAmount":{
+                        readonly : true,
+                    },
+                    "LoanSanction.disbursementSchedules.mordisbursementAmount":{
                     },
                     "LoanSanction.customerSignatureDate": {
                         orderNo :3,
@@ -1060,6 +1100,9 @@ define([], function () {
                     defaultConfiguration(model,true);
                     
                     self = this;
+                    model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays = 0;
+                   // "LoanSanction.disbursementSchedules.moratoriumPeriodInDays",
+
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
                     p1.then(function (repo) {
                         var formRequest = {
@@ -1084,6 +1127,13 @@ define([], function () {
                                         "LoanDetails": {
                                             "orderNo": 7,
                                             "items": {
+                                                "productCategory":{
+                                                    "key":"loanAccount.productCategory",
+                                                    "title": "PRODUCT_CATEGORY",
+                                                    "type": "text",
+                                                    "readonly":true,
+                                                    "orderNo": 2
+                                                },
                                                 "loanProductName":{
                                                     "title": "PRODUCT_NAME",
                                                     "readonly": true,
@@ -1158,7 +1208,7 @@ define([], function () {
                                                     titleMap:{
                                                         "ACH":"ACH",
                                                         "PDC":"PDC",
-                                                        "Others":"Others"
+                                                        "CASH":"CASH"
                                                     },
                                                     "orderNo": 120
                                                 }
@@ -1182,6 +1232,18 @@ define([], function () {
                                                     "key": "loanAccount.disbursementSchedules[0].customerSignatureDate",
                                                     "type": "date",
                                                     "title": "CUSTOMER_SIGNATURE_DATE"
+                                                },
+                                                "disbursementSchedules": {
+                                                    "key": "loanAccount.disbursementSchedules",
+                                                    "title": "DISBURSEMENT_SCHEDULES",
+                                                    "add": null,
+                                                    "remove": null,
+                                                    "items": {
+                                                    "moratoriumPeriodInDays":{
+                                                        "key": "loanAccount.disbursementSchedules[0].moratoriumPeriodInDays",
+                                                        "title": "MORATORIUM_PERIOD",
+                                                        "type": "string"
+                                                    }}
                                                 }
                                             }
                                         },
@@ -1263,6 +1325,7 @@ define([], function () {
                                             }
                                             
                                         }
+                                      
                                         
                                     },
                                     "additions": [
@@ -1292,7 +1355,7 @@ define([], function () {
                                         {
                                             "type": "box",
                                             "title": "POST_REVIEW",
-                                            condition: "model.loanAccount.currentStage != 'DocumentUpload' && model.loanAccount.id ",
+                                            condition: "model.loanAccount.currentStage != 'DocumentUpload' && model.loanAccount.id && model.loanAccount.currentStage != 'Checker1' && model.loanAccount.currentStage != 'Checker2'",
                                             "items": [{
                                                     key: "review.action",
                                                     condition: "model.currentStage == 'PendingForPartner' && model.loanHoldRequired!='NO'",

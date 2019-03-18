@@ -33,6 +33,22 @@ define({
                                 "screenFilter": true
                             }
                         },
+                        "applicantName": {
+                        "title": "CUSTOMER_NAME",
+                        "type": "string"
+                        },
+                        "urn": {
+                            "title": "URN_NO",
+                            "type": "string"
+                        },
+                        "loanType": {
+                            "title": "PRODUCT_TYPE",
+                            "enumCode": "booking_loan_type",
+                            "type": "string",
+                            "x-schema-form": {
+                                "type": "select"
+                            }
+                        },
                         "partner_code": {
                             "title": "PARTNER_CODE",
                             "type":["string","null"],
@@ -40,11 +56,7 @@ define({
                                 "type":"select",
                                 "enumCode": "partner"
                             }
-                        },
-                        "customerUrnNo": {
-                            "title": "CUSTOMER_URN_NO",
-                            "type": "number"
-                        },
+                        }
                     },
                     "required": ["stage"]
                 },
@@ -57,8 +69,10 @@ define({
                     var promise = IndividualLoan.search({
                         'stage': 'LoanInitiation',
                         'branchId': searchOptions.branch,
+                        'applicantName': searchOptions.applicantName,
+                        'urn': searchOptions.urn,
+                        'loanType':searchOptions.loanType,
                         'partnerCode': searchOptions.partner_code,
-                        'urn': searchOptions.customerUrnNo,
                         'page': pageOpts.pageNo
                     }).$promise;
                     return promise;
@@ -86,10 +100,9 @@ define({
                     getListItem: function (item) {
                         return [
 
-                            "{{'ENTITY_NAME'|translate}} : " + item.customerName,
+                            "{{'CUSTOMER_NAME'|translate}} : " + item.customerName,
+                            "{{'URN_NO'|translate}} : " + item.urn,
                             "{{'LOAN_AMOUNT'|translate}} : " + item.loanAmount,
-                            "{{'LOAN_TYPE'|translate}} : " + item.loanType,
-                            "{{'PARTNER_CODE'|translate}} : " + item.partnerCode,
 
                         ]
                     },
@@ -101,27 +114,16 @@ define({
 						};
                     },
                     getColumns: function() {
-						return [{
-							title: 'LOAN_ID',
-							data: 'id'
-                        },
+						return [
                         {
+                            title: 'CUSTOMER_NAME',
+                            data: 'customerName'
+                        },{
                             title: 'URN_NO',
                             data: 'urn'
-                        },
-                        {
-                            title: 'ENTITY_NAME',
-                            data: 'customerName'
-                        }, {
+                        },{
 							title: 'LOAN_AMOUNT',
 							data: 'loanAmount'
-                        },{
-							title: 'LOAN_TYPE',
-							data: 'loanType'
-                        },
-                        {
-							title: 'PARTNER_CODE',
-							data: 'partnerCode'
                         }
                     ]
 					},

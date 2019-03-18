@@ -163,7 +163,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             cbModel: {
                                             customerId:loanProcess.loanAccount.customerId,
                                             loanId:bundleModel.loanId,
-                                            scoreName:'ConsolidatedScore'
+                                            scoreName:'RiskScore2'
                                         }
                                     }
                                 });
@@ -326,6 +326,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                 eventListeners: {
                     "load-address": function(pageObj, bundleModel, params){
                         BundleManager.broadcastEvent("load-address-business", params);
+                    },
+                    "load-bank-details": function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("load-bank-details-business", params);
                     },
                     "load_business": function(pageObj, bundleModel, params){
                         console.log(params)

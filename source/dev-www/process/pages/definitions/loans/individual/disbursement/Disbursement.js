@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"),
-    ["$log", "Enrollment","BiometricService","elementsUtils", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "Utils","LoanAccount","formHelper","Queries","LoanAccount",
-        function($log, Enrollment,BiometricService,elementsUtils, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource, Utils,LoanAccount,formHelper,Queries,LoanAccount){
+    ["$log", "Enrollment","BiometricService","elementsUtils", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "Utils","LoanAccount","formHelper","Queries",
+        function($log, Enrollment,BiometricService,elementsUtils, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource, Utils,LoanAccount,formHelper,Queries){
 
         var branch = SessionStore.getBranch();
         var siteCode = SessionStore.getGlobalSetting("siteCode");
@@ -109,8 +109,12 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
 
                         Queries.getBankAccountsByProduct(model.additional.productCode,true,false).then(function(res){
                             for(var i=0;i<res.body.length;i++) {
+                                    model.loanAccountDisbursementSchedule.customerNameInBank=resp[0].customerName;
+                                    model.loanAccountDisbursementSchedule.customerAccountNumber=res.body[i].account_number;
+                                    model.loanAccountDisbursementSchedule.ifscCode=res.body[i].ifsc_code;
+                                    model.loanAccountDisbursementSchedule.customerBankBranchName=res.body[i].branch_name;
                                 if(res.body[i].default_disbursement_account){
-                                    model.loanAccountDisbursementSchedule.disbursementFromBankAccountNumber = res.body[i].account_number;
+                                    model.loanAccountDisbursementSchedule.disbursementFromBankAccountNumber = res.body[i].account_number;                                    
                                     break;
                                 }
                             }

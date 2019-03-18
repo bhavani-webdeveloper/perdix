@@ -19,16 +19,16 @@ if (isset($_GET)) {
     include_once('../includes/ConfigureDbs.php');
 
     $error_log = "";
-
-    $NameOfTheScore = $_GET['ScoreName'];
-    $CustomerLoanId = $_GET['LoanId'];
-    $ScoreName = $_GET['ScoreName'];
+    $tempScoreName = (!empty($_GET['ScoreName'])) ? connectDb()->getPdo()->quote($_GET['ScoreName']) : $_GET['ScoreName'];
+    $NameOfTheScore = $tempScoreName;
+    $CustomerLoanId = (!empty($_GET['LoanId'])) ? intval(filter_var((connectDb()->getPdo()->quote($_GET['LoanId'])), FILTER_SANITIZE_NUMBER_INT)) : $_GET['LoanId'];
+    $ScoreName =    $tempScoreName;
     $SessionUserName = "admin";
-    $isScoringOptimizationEnabled = $_GET['isScoringOptimizationEnabled'];
+    $isScoringOptimizationEnabled = (!empty($_GET['isScoringOptimizationEnabled'])) ? connectDb()->getPdo()->quote($_GET['isScoringOptimizationEnabled']) : $_GET['isScoringOptimizationEnabled'];
 
     //get all customer details from loan_accounts table
     $CustomerDetails = "SELECT
-	'$ScoreName' AS 'ScoreName',
+	:ScoreName AS 'ScoreName',
     l.version,
 	l.account_number AS 'loan_accountNumber', 
 	MAX(app.urn_no) AS `urn_no`, 
@@ -63,6 +63,7 @@ if (isset($_GET)) {
         $db = ConnectUAT();
         $CustomerParams = $db->prepare($CustomerDetails);
         $CustomerParams->bindParam("CustomerLoanId", $CustomerLoanId);
+        $CustomerParams->bindParam("ScoreName", $ScoreName);
         $CustomerParams->execute();
         $AvailCustomerParams = $CustomerParams->fetch(PDO::FETCH_ASSOC);
         $db = null;
@@ -89,16 +90,18 @@ if (isset($_GET)) {
         $ScoreCalcCheckQuery = "SELECT ScoreName, ApplicationId, loanVersion, PartnerSelf 
             FROM sc_calculation
             WHERE
-            ApplicationId='$CustomerLoanId'
+            ApplicationId=:CustomerLoanId
             AND loanVersion = $loanVersion
             AND LOWER(PartnerSelf) = LOWER('Self')
             AND ApiVersion = '1'
-            AND ScoreName = '$ScoreName'
+            AND ScoreName = :ScoreName
         ";
 
         try{
             $db = ConnectDb();
             $ScoreCalcCheckParams = $db->prepare($ScoreCalcCheckQuery);
+            $ScoreCalcCheckParams->bindParam(':CustomerLoanId', $CustomerLoanId);
+            $ScoreCalcCheckParams->bindParam(':ScoreName', $ScoreName);
             $ScoreCalcCheckParams->execute();
             $ScoreCalcCheckResults = $ScoreCalcCheckParams->fetchAll(PDO::FETCH_ASSOC);
             $db = null;
@@ -366,11 +369,14 @@ if (isset($_GET)) {
 
     //reserving the record for score details on calculation table
     $UpdateCalculation = "INSERT INTO sc_calculation ( ScoreName, ApplicationId, created_by, created_at) 
-	VALUES ('" . $NameOfTheScore . "', '" . $CustomerLoanId . "', '" . $SessionUserName . "', '" . date('Y-m-d H:i:s') . "')";
+	VALUES (:NameOfTheScore, :CustomerLoanId , :SessionUserName,". date('Y-m-d H:i:s') . "')";
 
     try {
         $db = ConnectDb();
         $calculationTable = $db->prepare($UpdateCalculation);
+        $calculationTable = $db->bindParam(':CustomerLoanId', $CustomerLoanId);
+        $calculationTable = $db->bindParam(':NameOfTheScore', $NameOfTheScore);
+        $calculationTable = $db->bindParam(':SessionUserName',$SessionUserName);
         $calculationTable->execute();
         $db = null;
 

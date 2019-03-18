@@ -277,6 +277,8 @@ define({
                 model.expectedTurnoverObj = {};
                 documentArrayFormation(model);
                 //debugger;
+
+                model.loanAccount.fullAddress = model.loanAccount.nominees[0].nomineeDoorNo + ',' + model.loanAccount.nominees[0].nomineeStreet + ',' + model.loanAccount.nominees[0].nomineeLocality + ',' +  model.loanAccount.nominees[0].nomineeDistrict + ',' + model.loanAccount.nominees[0].nomineeState + '-' + model.loanAccount.nominees[0].nomineePincode  ;
             /*Asset details*/
                 if (model.loanAccount.collateral.length != 0) {
                     model.asset_details = [];
@@ -324,45 +326,46 @@ define({
              }
 
         },
-        form: [{
-                "type": "section",
-                "html": '<div class="col-xs-12">' +
-                    '<div class="box no-border">' +
-                    '<div class="box-body" style="padding-right: 0">' +
-                    '<sf-decorator ng-repeat="item in form.items" form="item" class="ng-scope"></sf-decorator></div></div></div>',
-                "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        key: "loanAccount.linkedAccountNumber",
-                        title: "LINKED_ACCOUNT_NUMBER",
-                        type: "lov",
-                        autolov: true,
-                        readonly:true,
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model, context) {
-                            return LoanProcess.viewLoanaccount({
-                                urn: model.customer.urnNo
-                            }).$promise;
-                        },
-                        getListDisplayItem: function(item, index) {
-                            return [
-                                item.accountId,
-                                item.glSubHead,
-                                item.amount,
-                                item.npa
-                            ];
-                        },
-                        onSelect: function(valueObj, model, context) {
-                            model.loanAccount.npa = valueObj.npa;
-                            model.loanAccount.linkedAccountNumber = valueObj.accountId;
-                        }
-                    }, {
-                        key: "loanAccount.npa",
-                        title: "IS_NPA"
-                    }]
-                }]
-            }, 
+        form: [
+            // {
+            //     "type": "section",
+            //     "html": '<div class="col-xs-12">' +
+            //         '<div class="box no-border">' +
+            //         '<div class="box-body" style="padding-right: 0">' +
+            //         '<sf-decorator ng-repeat="item in form.items" form="item" class="ng-scope"></sf-decorator></div></div></div>',
+            //     "items": [{
+            //         "type": "grid",
+            //         "orientation": "horizontal",
+            //         "items": [{
+            //             key: "loanAccount.linkedAccountNumber",
+            //             title: "LINKED_ACCOUNT_NUMBER",
+            //             type: "lov",
+            //             autolov: true,
+            //             readonly:true,
+            //             searchHelper: formHelper,
+            //             search: function(inputModel, form, model, context) {
+            //                 return LoanProcess.viewLoanaccount({
+            //                     urn: model.customer.urnNo
+            //                 }).$promise;
+            //             },
+            //             getListDisplayItem: function(item, index) {
+            //                 return [
+            //                     item.accountId,
+            //                     item.glSubHead,
+            //                     item.amount,
+            //                     item.npa
+            //                 ];
+            //             },
+            //             onSelect: function(valueObj, model, context) {
+            //                 model.loanAccount.npa = valueObj.npa;
+            //                 model.loanAccount.linkedAccountNumber = valueObj.accountId;
+            //             }
+            //         }, {
+            //             key: "loanAccount.npa",
+            //             title: "IS_NPA"
+            //         }]
+            //     }]
+            // }, 
             {
                 "type": "box",
                 "readonly": true,
@@ -600,8 +603,10 @@ define({
                             "key": "loanAccount.nominees[0].nomineeRelationship",
                             "title": "Relationship To Insured"
                         }, {
-                            "key": "",
+                            "key": "loanAccount.fullAddress",
                             "title": "Address"
+                        },{
+                            // "key": "loanAccount.nominees[0].nomineeDistrict"
                         }]
                     }]
                 }]
@@ -638,6 +643,7 @@ define({
                     "key": "loanAccount.loanDocuments",
                     "view": "fixed",
                     "startEmpty": true,
+                    "readonly":true,
                     "title": "LOAN_DOCUMENT",
                     "titleExpr": "model.loanAccount.loanDocuments[arrayIndex].document",
                     "items": [

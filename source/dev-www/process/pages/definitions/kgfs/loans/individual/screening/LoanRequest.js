@@ -13,7 +13,18 @@ define([],function(){
             var branch = SessionStore.getBranch();
             var podiValue = SessionStore.getGlobalSetting("percentOfDisposableIncome");
             //PMT calculation
-
+            
+            var setDeviation = function(model){
+                      /* Deviations and Mitigations grouping */
+                      if (model.deviationMitigants && model.loanAccount.loanMitigants && _.isArray(model.loanAccount.loanMitigants)){
+                        
+                        for (var i=0; i<model.deviationMitigants.length; i++){
+                            model.loanAccount.loanMitigants.push(model.deviationMitigants[i]);
+                        }      
+                    }
+                    /* End of Deviations and Mitigations grouping */
+            }
+            
             var getGoldRate = function(model){
                 var value = Queries.getGoldRate();
                 value.then(function(resp){
@@ -584,6 +595,13 @@ define([],function(){
                                 computeEstimatedEMI(model);
                             }
                         },
+                        "PreliminaryInformation.loanPurpose2":{
+                            
+                            onChange:function(value,form,model){
+                                model.loanAccount.loanPurpose3=model.loanAccount.loanPurpose2;
+                            }
+
+                        },
                         "PreliminaryInformation.expectedInterestRate": {
                             "required": true,
                             "orderNo":140,
@@ -719,7 +737,7 @@ define([],function(){
                             "offline": true
                         },
                         "LoanDocuments.loanDocuments": {
-                            "title":"ADD_LOAN_DOCUMENT"
+                            "title":"LOAN_DOCUMENT"
                         },
                         "CollateralInformation": {
                             "title":"COLLATERAL",
@@ -727,7 +745,7 @@ define([],function(){
                             "condition": "model.loanAccount.loanType=='SECURED'"
                         },
                         "CollateralInformation.collateral": {
-                            "title":"ADD_COLLATERAL",
+                            "title":"COLLATERAL",
                             "required":true
                         },
                         "CollateralInformation.collateral.collateralType": {
@@ -805,7 +823,6 @@ define([],function(){
                     "PreliminaryInformation.numberOfGuarantorsCoApplicants",                    
                     "PreliminaryInformation.loanPurpose1",
                     "PreliminaryInformation.loanPurpose2",
-                    "PreliminaryInformation.loanPurpose3",
                     "PreliminaryInformation.loanAmountRequested",
                     "PreliminaryInformation.tenureRequested",
                     "PreliminaryInformation.comfortableEMI",
@@ -892,6 +909,8 @@ define([],function(){
                         model.loanAccount.jewelLoanDetails.encoreClosed = false;
                         model.loanAccount.jewelLoanDetails.jewelPouchLocationType = "BRANCH";
                     }
+                    if (_.hasIn(model, 'loanAccount.loanPurpose2') && model.loanAccount.loanPurpose2 !=null && model.loanAccount.loanPurpose2.length > 0)
+                    model.loanAccount.loanPurpose3=model.loanAccount.loanPurpose2;
                     model.loanAccount.interestRateEstimatedEMI={};
                     var postReviewActionArray = {};
                     if(model.loanAccount.currentStage == 'BusinessTeamReview' || model.loanAccount.currentStage == 'CreditOfficerReview' || model.loanAccount.currentStage == 'CreditManagerReview' || model.loanAccount.currentStage == 'CBOCreditHeadReview' || model.loanAccount.currentStage == 'CEOMDReview') {
@@ -962,7 +981,9 @@ define([],function(){
                             }
                             loanMitigantsGrouped[item.parameter].push(item);
                         }
-                        model.loanMitigantsGrouped=loanMitigantsGrouped;                       
+                        model.loanMitigantsGrouped=loanMitigantsGrouped;
+                        model.deviationMitigants  = model.loanAccount.loanMitigants;
+                        model.loanAccount.loanMitigants = null;                        
 
                     }
                     /* End of Deviations and Mitigations grouping */
@@ -1035,7 +1056,7 @@ define([],function(){
                                                     
                                             },
                                             "numberOfGuarantorsCoApplicants":{
-                                                "title":"REQUIRED",
+                                                "title":"Required",
                                                 orderNo:12,
                                                 "type":"html",
                                                 "condition":"model.loanAccount.productCode",
@@ -1117,12 +1138,12 @@ define([],function(){
                                     "deviationDetails": {
                                         "type": "section",
                                         "colClass": "col-sm-12",
-                                        "html": '<table class="table"><colgroup><col width="20%"><col width="20%"></colgroup><thead><tr><th>Parameter Name</th><th>Mitigant</th></tr></thead><tbody>' +
+                                        "html": '<table class="table"><colgroup><col width="20%"><col width="20%"></colgroup><thead><tr><th>Deviation</th><th>Mitigation</th></tr></thead><tbody>' +
                                             '<tr ng-repeat="(parameter,item) in model.loanMitigantsGrouped">' +
                                             '<td>{{ parameter }}</td>' +
                                             '<td><ul class="list-unstyled">' +
                                             '<li ng-repeat="m in item" id="{{m.mitigant}}">' +
-                                            '<input type="checkbox" ng-checked="m.mitigatedStatus"  ng-model="m.mitigatedStatus"> {{ m.mitigant }}' +
+                                            '<input required type="checkbox" ng-checked="m.mitigatedStatus"  ng-model="m.mitigatedStatus"> {{ m.mitigant }}' +
                                             '</li></ul></td></tr></tbody></table>'
                                     },                                    
                                     "loanMitigants":{
@@ -1134,13 +1155,22 @@ define([],function(){
                                         "items":{
                                             "parameter":{
                                                "key":"loanAccount.loanMitigants[].parameter",
-                                               "title":"DEVIATION",
-                                               "type":"string"
+                                               "title":"Deviation",
+                                               "type":"string",
+                                               schema: {
+                                                    "pattern": "^[a-zA-Z: ]{0,250}$",
+                                                    "type": ["string", "null"],
+                                                }
+                                               
                                             },
                                             "mitigant":{
                                                "key":"loanAccount.loanMitigants[].mitigant",
-                                               "title":"MITIGATION",
-                                               "type":"string"
+                                               "title":"Mitigation",
+                                               "type":"string",
+                                               schema: {
+                                                    "pattern": "^[a-zA-Z: ]{0,250}$",
+                                                    "type": ["string", "null"],
+                                                }
                                             }
                                         }
                                     }
@@ -1357,6 +1387,11 @@ define([],function(){
                         model.enterprise = obj.customer;
 
                     },
+                    "business-captures": function(bundleModel, model, params){
+                        model.loanAccount.isBusinessCaptured = typeof params.customer.isCaptured  != undefined ? (params.customer.isCaptured?true:false):false;
+                        model.loanAccount.isCreditAppraisal = typeof params.customer.isCreditAppraisal  != undefined ? (params.customer.isCreditAppraisal?true:false):false; 
+                        model.loanAccount.urnNo = model.customer.urnNo;            
+                    },
                     "dsc-response": function(bundleModel,model,obj){
                         model.loanAccount.loanCustomerRelations = obj;
                     },
@@ -1387,11 +1422,26 @@ define([],function(){
                     return SchemaResource.getLoanAccountSchema().$promise;
                 },
                 actions: {
+                    
                     submit: function(model, formCtrl, form){
+
+                        setDeviation(model);
+
                         if(model.loanAccount.productCategory  != 'MEL'){
                             model.loanAccount.customerId=model.loanAccount.loanCustomerRelations[0].customerId;
                             model.loanAccount.urnNo=model.loanAccount.loanCustomerRelations[0].urn; 
                         }
+
+                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == "Screening" && model.loanAccount.productCategory == 'MEL' && !model.loanAccount.isBusinessCaptured && model.loanAccount.urnNo == null){
+                            PageHelper.showProgress("loan-enrolment","Business Details are not captured",5000);
+                                return false;
+                        }
+
+                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == "CreditAppraisal" && model.loanAccount.productCategory == 'MEL' && !model.loanAccount.isCreditAppraisal){
+                            PageHelper.showProgress("loan-enrolment","Business Details are not captured",5000);
+                                return false;
+                        }
+
                         // model.loanAccount.customerId=model.loanAccount.loanCustomerRelations[0].customerId;
                         /* Loan SAVE */
                         if (!model.loanAccount.id){
@@ -1480,6 +1530,7 @@ define([],function(){
                             });
                     },
                     proceed: function(model, formCtrl, form, $event){
+                        setDeviation(model);
                          if (model.loanProcess.remarks==null || model.loanProcess.remarks ==""){
                                PageHelper.showProgress("update-loan", "Remarks is mandatory", 3000);
                                PageHelper.hideLoader();
@@ -1508,7 +1559,7 @@ define([],function(){
                                 for(i = 0; i< model.loanAccount.loanCustomerRelations.length;i++){
                                     if(model.loanAccount.loanCustomerRelations[i].relation != "Applicant")
                                         continue;
-                                    if(typeof model.loanAccount.loanCustomerRelations[i].dscStatus == "undefined" || model.loanAccount.loanCustomerRelations[i].dscStatus == ""){
+                                    if(typeof model.loanAccount.loanCustomerRelations[i].dscStatus == "undefined" || model.loanAccount.loanCustomerRelations[i].dscStatus == null){
                                         model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = null
                                         break;
                                     }
@@ -1534,7 +1585,7 @@ define([],function(){
                         }
                         PageHelper.showLoader();
                         PageHelper.showProgress('enrolment', 'Updating Loan');
-                        model.loanProcess.proceed()
+                        model.loanProcess.proceed(model.loanProcess.stage)
                             .finally(function () {
                                 PageHelper.hideLoader();
                             })

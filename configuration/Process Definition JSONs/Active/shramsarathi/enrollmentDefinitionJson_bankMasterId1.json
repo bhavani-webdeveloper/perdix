@@ -902,7 +902,6 @@
           "firstName",
           "gender",
           "dateOfBirth",
-          "mobilePhone",
           "maritalStatus"
         ],
         "properties": {

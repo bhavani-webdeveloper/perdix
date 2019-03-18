@@ -67,7 +67,8 @@ irf.pageCollection.factory(irf.page("audit.CreateBranchAudit"), ["$log", "PageHe
                             "required": true
                         }, {
                             "key": "audit_info.end_date",
-                            "type": "date",
+                            "type":"date",
+                            "condition": "model.audit_info.report_date",
                             "required": true
                         }],
                     }, {

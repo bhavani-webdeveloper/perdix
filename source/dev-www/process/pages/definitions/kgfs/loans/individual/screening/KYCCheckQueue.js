@@ -146,7 +146,7 @@ define({
 				},
 				getActions: function () {
 					return [{
-						name: "CHECKER",
+						name: "Checker",
 						desc: "",
 						icon: "fa fa-pencil-square-o",
 						fn: function (item, index) {

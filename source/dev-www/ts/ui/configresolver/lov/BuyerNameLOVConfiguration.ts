@@ -6,7 +6,7 @@ export class BuyerNameLOVConfiguration extends LOVElementConfiguration {
     };
     outputMap: Object = {
     };
-    search: Function = function(inputModel, form, model, context) {        
+    search: Function = function(inputModel, form, model, context) {
         let formHelper = AngularResourceService.getInstance().getNGService("formHelper");
         let $q = AngularResourceService.getInstance().getNGService("$q");
         var out = [];
@@ -25,13 +25,13 @@ export class BuyerNameLOVConfiguration extends LOVElementConfiguration {
             },
             body: out
         });
-    },
+    };
     onSelect: Function= function(valueObj, model, context){
         if (_.isUndefined(model.customer.incomeThroughSales[context.arrayIndex])) {
                 model.customer.incomeThroughSales[context.arrayIndex] = {};
         }
         model.customer.incomeThroughSales[context.arrayIndex].buyerName = valueObj.value;
-    },
+    };
     getListDisplayItem: Function= function(item, index) {
         return [
             item.name

@@ -18,8 +18,8 @@ PDC.getSecurityCheque({accountNumber: model.pdc.accountId} : Search for existanc
 PDC.create : TO carete a new PDC account
 PDC.update : TO update an existing PDC account
 */
-irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"), ["$log", "PDC", "PageHelper", "IndividualLoan", "SessionStore", "$state", "CustomerBankBranch", 'formHelper', "$stateParams", "CustomerBankBranch", "LoanAccount", "Queries", "Utils",
-    function($log, PDC, PageHelper, IndividualLoan, SessionStore, $state, CustomerBankBranch, formHelper, $stateParams, CustomerBankBranch, LoanAccount, Queries, Utils) {
+irf.pageCollection.factory(irf.page("loans.individual.achpdc.PDCRegistration"), ["$log", "PDC", "PageHelper", "IndividualLoan", "SessionStore", "$state", 'formHelper', "$stateParams", "CustomerBankBranch", "LoanAccount", "Queries", "Utils",
+    function($log, PDC, PageHelper, IndividualLoan, SessionStore, $state, formHelper, $stateParams, CustomerBankBranch, LoanAccount, Queries, Utils) {
 
         var branch = SessionStore.getBranch();
         var urnSearch = [];

@@ -186,7 +186,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
             var overridesFields = function (bundlePageObj) {
                 return {
                     "ContactInformation.pincode": {
-                        "title": "pincode",
+                        "title": "Pincode",
                         "required": true,
                         "resolver": "PincodeLOVConfiguration",
                         "searchHelper": formHelper,
@@ -423,14 +423,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EnterpriseFinancials.incomeThroughSales.frequency": {
                         "orderNo": 511,
-                        "required":true
+                        "required":true,
+                        onChange: function (value, form, model) {
+                            computeTotalMonthlySurpluse("value","form", model);
+                        }
                     },
                     "EnterpriseFinancials.incomeThroughSales.invoiceDocId": {
                         "orderNo": 514,
                     },
                     "EnterpriseFinancials.incomeThroughSales.buyerName":{
                         "orderNo": 513,
-                        "title": "OTHER_INCOME_FEILD",
+                        "title": "OTHER_INCOME",
                         "type":"text"
                     },
                     "EnterpriseFinancials.rawMaterialExpenses": {
@@ -458,7 +461,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EnterpriseFinancials.rawMaterialExpenses.frequency":{
                         "orderNo": 522,
-                        "required":true
+                        "required":true,
+                        onChange: function (value, form, model) {
+                            computeTotalMonthlySurpluse("value","form", model);
+                        }
                     },
                     "EnterpriseFinancials.monthlySurplus.totalMonthlySurplus": {
                         "orderNo": 524,
@@ -923,14 +929,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "type": "box",
                         "readonly":true,
                         //"condition":"model.currentStage == 'CreditAppraisal'",
-                        "title": "Sales per product & Gross margin",
+                        "title": "Sales per Product & Gross Margin",
                         "orderNo": 640,
                         colClass: "col-sm-12",
                         "items": {
                             "enterpriseProductSales": {
                                 key: "customer.enterpriseProductSales",
                                 type: "datatable",
-                                title: "Sales per product & Gross margin",
+                                title: "Sales per Product & Gross Margin",
                                 dtlConfig: {
                                     columnsFn: function () {
                                         return $q.resolve({
@@ -993,14 +999,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "ReviewEnterpriseProductSale": {
                         "type": "box",
                         "readonly":true,
-                        "title": "Sales per product & Gross margin",
+                        "title": "Sales per Product & Gross Margin",
                         "orderNo": 640,
                         colClass: "col-sm-12",
                         "items": {
                             "enterpriseProductSales": {
                                 key: "customer.enterpriseProductSales",
                                 type: "datatable",
-                                title: "Sales per product & Gross margin",
+                                title: "Sales per Product & Gross Margin",
                                 dtlConfig: {
                                     columnsFn: function () {
                                         return $q.resolve({
@@ -2080,7 +2086,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             },
                             'estimatedEmi': {
                                 key: "loanAccount.estimatedEmi",
-                                title: "Affordable EMI as stated by the customer",
+                                title: "Affordable EMI as stated by the Customer",
                                 "readonly":true,
                                 "type": "number",
                                 "onChange": function (value, form, model) {
@@ -2095,7 +2101,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             },
                             'coOwnerSalary': {
                                 key: "customer.enterprise.coOwnerSalary",
-                                title: "Actual EMI offered to the borrower",
+                                title: "Actual EMI offered to the Borrower",
                                 "type": "number",
                                 "onChange": function (value, form, model) {
                                     monthlySurpluse(model);
@@ -2103,7 +2109,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             },
                             'employeeSalary': {  
                                 key: "customer.enterprise.employeeSalary",
-                                title: "Loan Amount Eligible for the customer",
+                                title: "Loan Amount Eligible for the Customer",
                                 "type": "number",
                                 "readonly": true
                             },
@@ -3115,7 +3121,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     if (bundlePageObj) {
                         model._bundlePageObj = _.cloneDeep(bundlePageObj);
                     }
-
                     /* Setting data recieved from Bundle */
                     model.loanCustomerRelationType = "Customer";
                     model.currentStage = bundleModel.currentStage;  
@@ -3125,6 +3130,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     /* Setting data for the form */
                     model.loanAccount = model.loanProcess.loanAccount;
                     model.customer = model.enrolmentProcess.customer;
+                    model.customer.isCaptured = false ;
+                    model.customer.isCreditAppraisal = false;
                     model.customer.customerType = "Enterprise";
                     computeEstimatedEmi(model);
                     model.customer.customerBranchId = SessionStore.getCurrentBranch().branchId;
@@ -3153,6 +3160,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     // model.customer.enterprise = {
                         
                     // }
+        
+                    if (_.hasIn(model, 'loanProcess.applicantEnrolmentProcess') && model.loanProcess.applicantEnrolmentProcess !=null){
+                        model.applicantEnrolmentProcessDetails = {}; 
+                        model.applicantEnrolmentProcessDetails=model.loanProcess.applicantEnrolmentProcess.customer;
+                        model.customer.customerBankAccounts=model.applicantEnrolmentProcessDetails.customerBankAccounts;
+                    }
+
                     if(model.customer.enterprise == null){
                         model.customer.enterprise = {}; 
                     }
@@ -3348,8 +3362,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, model.loanCustomerRelationType);
 
                                 /* Setting for the current page */
-                                model.enrolmentProcess = enrolmentProcess;
-                                model.customer = enrolmentProcess.customer;
+                                // model.enrolmentProcess = enrolmentProcess;
+                                // model.customer = enrolmentProcess.customer;
 
                                 /* Setting enterprise customer relation on the enterprise customer */
                                 model.enrolmentProcess.refreshEnterpriseCustomerRelations(model.loanProcess);
@@ -3369,9 +3383,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         model.customer.postOffice = params.customer.postOffice;
                         model.customer.landmark = params.customer.landmark;
                         model.customer.locality = params.customer.locality;
+                        model.customer.pincode = params.customer.pincode;
                         model.customer.villageName = params.customer.villageName;
                         model.customer.district = params.customer.district;
                         model.customer.state = params.customer.state;
+                    },
+                    "load-bank-details-business": function (bundleModel, model, params) {
+                        if (_.hasIn(model, 'loanProcess.applicantEnrolmentProcess') && model.loanProcess.applicantEnrolmentProcess !=null){
+                            model.applicantEnrolmentProcessDetails = {}; 
+                            model.applicantEnrolmentProcessDetails=model.loanProcess.applicantEnrolmentProcess.customer;
+                            model.customer.customerBankAccounts=model.applicantEnrolmentProcessDetails.customerBankAccounts;
+                        }
                     }
                 },
                 form: [
@@ -3412,6 +3434,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     .subscribe(function (enrolmentProcess) {
                                         model.enrolmentProcess.customer.centreName =  model.centreName
                                         model.customer.centreName =  model.centreName
+                                        
+                                        model.customer.isCaptured = true
+                                        BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer}); 
+                                        
                                         PageHelper.showProgress('enrolment', 'Done.', 5000);
                                     }, function (err) {
                                         PageHelper.showErrors(err);
@@ -3433,8 +3459,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         PageHelper.showProgress('enrolment', 'Updating Customer',5000);
                         PageHelper.showLoader();
                         model.customer.expenditures = [];
-
                         model.customer.enterpriseMonthlySales = []
+
+                        if (model.currentStage && model.currentStage == "CreditAppraisal" && model.customer.productCategory == 'MEL' && model.customer.enterprise.employeeSalary<=0){
+                            PageHelper.showProgress("loan-enrolment","Loan Amount Eligible for customer should be more than zero amount",5000);
+                                return false;    
+                        }
+
                         _.forEach(model.customer.monthlySale, function (monthlysale) {
                             for (const key of Object.keys(monthlysale)) {
                                 monthlysales = {}
@@ -3490,9 +3521,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 model.customer.centreName =  model.customer.centreName
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
-                                if(model.currentStage == 'CreditAppraisal'){
+                                
+                                model.customer.isCaptured = true
+                                BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer});
+                                
+                                if(model.currentStage == 'CreditAppraisal'){    
+                                    model.customer.isCreditAppraisal = true
+                                    BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer});
                                     $state.reload();
                                 }
+
                                 BundleManager.pushEvent(model._bundlePageObj.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
                             }, function (err) {
                                 PageHelper.showErrors(err);

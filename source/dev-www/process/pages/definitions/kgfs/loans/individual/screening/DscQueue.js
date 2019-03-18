@@ -140,7 +140,7 @@ define({
                                     'state': 'Page.Bundle',
                                     'pageName': 'kgfs.loans.individual.screening.DscApproval',
                                     'pageId': item.loanId,
-                                    'pageData': item
+                                    'pageData': item,
                                 },{
                                     'state': 'Page.Engine',
                                     'pageName': 'kgfs.loans.individual.screening.DscQueue'

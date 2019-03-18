@@ -728,7 +728,7 @@ var INDIVIDUAL_HTML =
         form: [
             {
                 type: "button",
-                title: "REFRESH",
+                title: "Refresh",
                 notitle: true,
                 onClick: function(model, formCtrl) {
                     refreshCB(model).then(function() {

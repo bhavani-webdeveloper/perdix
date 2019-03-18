@@ -301,7 +301,7 @@ define([], function () {
                                 "items": [
                                     {
                                         key: "customer.applicantname",
-                                        title: "ApplicantName",
+                                        title: "Applicant Name",
                                         readonly: true,
                                         type: "string",
 
@@ -410,6 +410,12 @@ define([], function () {
                 },
                 actions: {
                     doDscOverride: function (model,loanid) {
+                        if (model.customer.dscOverrideRemarks==null || model.customer.dscOverrideRemarks ==""){
+                               PageHelper.showProgress("update-loan", "Remarks is mandatory", 3000);
+                               PageHelper.hideLoader();
+                               return false;
+                        }
+                        
                         if (model.customer.dscOverrideRemarks) {
                             irfProgressMessage.pop("dsc-override", "Performing DSC Override");
                             IndividualLoan.overrideAllLCRMemberDsc({

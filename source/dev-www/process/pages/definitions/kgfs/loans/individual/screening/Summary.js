@@ -87,14 +87,7 @@ define({
         model.deviationDetails = res[12];
         model.deviationParameter = res[12];
         model.ratioDetails = res[13];
-       // model.psychometricScores = res[14].sections;
-        model.cashFlowDetails = res[15];
-        model.businessBankStmtSummary = res[16];
-        model.personalBankStmtSummary = res[17];
-        model.purchaseDetails = res[18];
         model.liabilitiesSummary = res[19];
-        model.machineryDetails = res[20];
-        model.opexDetails = res[21];
 
         model.enterpriseDetails.columns = model.enterpriseDetails.columns.concat(model.ratioDetails.columns);
         _.merge(model.enterpriseDetails.data[0], model.ratioDetails.data[0]);
@@ -123,6 +116,23 @@ define({
         model.assetsAndLiabilities.totalAssets = model.balanceSheet.data[0]['Total Assets'];
         model.assetsAndLiabilities.totalLiabilities = model.balanceSheet.data[0]['Total Liabilities'];
 
+        model.cams = {};
+        model.cams.requestedLoanAmount = model.enterpriseDetails.data[0]['Loan Amount Requested'];
+        // model.cams.freqency=model.enterpriseDetails.data[0]['frequency']
+        model.cams.freqency= 'Monthly';
+        model.cams.tenure = model.enterpriseDetails.data[0]['Tenure'];
+        model.cams.estimatedEmi = model.enterpriseDetails.data[0]['EstimateEmi'];
+        model.cams.sanctionedLoanAmount = model.enterpriseDetails.data[0]['Tin'];
+        model.cams.totalMonthlySurplus = model.enterpriseDetails.data[0]['Avgrage Daily Sale Amount'];
+        model.cams.debtServiceRatio = model.enterpriseDetails.data[0]['Owner Salary'];
+        model.cams.emiEligibleAsPerNetBusinessSurplus = model.enterpriseDetails.data[0]['Net Business Income'];
+        //model.cams.debtServiceRatio = model.enterpriseDetails.data[0]['EstimateEmi'];
+        model.cams.finalEmiEligible = model.enterpriseDetails.data[0]['Working Days In Month'];
+        model.cams.actualEMiOffered = model.enterpriseDetails.data[0]['Co-Owner Salary'];
+        model.cams.loanAmountEligible = model.enterpriseDetails.data[0]['Employee Salary'];
+       // model.cams.sanctionedLoanAmount = model.enterpriseDetails.data[0]['Tin'];
+
+
         model.pl  = {
             household: [],
             business: {}
@@ -130,118 +140,55 @@ define({
 
         if(model.houseHoldPL && model.houseHoldPL.length){
             for (var i=0; i<model.houseHoldPL.length; i++){
-                model.pl.household.push({
-                    income : model.houseHoldPL[i].data[0]['Total Incomes'],
-                    salaryFromBusiness : model.houseHoldPL[i].data[0]['Salary from business'],
-                    otherIncomeSalaries : model.houseHoldPL[i].data[0]['Other Income/salaries'],
-                    familyMemberIncomes : model.houseHoldPL[i].data[0]['Family Member Incomes'],
-                    Expenses : model.houseHoldPL[i].data[0]['Total Expenses'],
-                    declaredEducationExpense : model.houseHoldPL[i].data[0]['Expenses Declared or based on the educational expense whichever is higher'],
-                    emiHouseholdLiabilities : model.houseHoldPL[i].data[0]['EMI\'s of household liabilities'],
-                    netHouseholdIncome : model.houseHoldPL[i].data[0]['Net Household Income']
-                })
+                var relationDetails = (model.houseHoldPL[i].relation_detail).split(" - ");
+                if(relationDetails[0] === "Applicant"){
+                    model.pl.household.push({
+                        income : model.houseHoldPL[i].data[0]['Total Incomes'],
+                        salaryFromBusiness : model.houseHoldPL[i].data[0]['Salary from business'],
+                        otherIncomeSalaries : model.houseHoldPL[i].data[0]['Other Income/salaries'],
+                        familyMemberIncomes : model.houseHoldPL[i].data[0]['Family Member Incomes'],
+                        Expenses : model.houseHoldPL[i].data[0]['Total Expenses'],
+                        declaredEducationExpense : model.houseHoldPL[i].data[0]['Expenses Declared or based on the educational expense whichever is higher'],
+                        emiHouseholdLiabilities : model.houseHoldPL[i].data[0]['EMI\'s of household liabilities'],
+                        netHouseholdIncome : model.houseHoldPL[i].data[0]['Net Household Income'],
+                        relationDetails: model.houseHoldPL[i]['relation_detail']
+                    })
+                }
+               
             }
         }
 
-        model.pl.business.invoice = model.businessPL.data[0]['Invoice'];
-        model.pl.business.invoicePCT = model.businessPL.data[0]['Invoice pct'];
-        model.pl.business.cashRevenue = model.businessPL.data[0]['Cash'];
-        model.pl.business.cashRevenuePCT = model.businessPL.data[0]['Cash pct'];
-        model.pl.business.scrapIncome = model.businessPL.data[0]['Scrap or any business related income'];
-        model.pl.business.scrapIncomePCT = model.businessPL.data[0]['Scrap or any business related income pct'];
-        model.pl.business.totalBusinessIncome = model.businessPL.data[0]['Total Business Revenue'];
-        model.pl.business.purchases = model.businessPL.data[0]['Purchases'];
-        model.pl.business.purchasesPCT = model.businessPL.data[0]['Purchases pct'];
-        model.pl.business.grossIncome = model.businessPL.data[0]['Gross Income'];
-        model.pl.business.Opex = model.businessPL.data[0]['Opex'];
-        model.pl.business.EBITDA = model.businessPL.data[0]['EBITDA'];
-        model.pl.business.EBITDA_PCT = model.businessPL.data[0]['EBITDA pct'];
+        model.pl.business.otherBusinessIncome = model.businessPL.data[0]['Other Business Income'];
+        model.pl.business.purchase = model.businessPL.data[0]['Purchases'];
         model.pl.business.businessLiabilities = model.businessPL.data[0]['Business Liabilities'];
         model.pl.business.netBusinessIncome = model.businessPL.data[0]['Net Business Income'];
-        model.pl.business.netBusinessIncomePCT = model.businessPL.data[0]['Net Business Income pct'];
-        model.pl.business.kinaraEmi = model.businessPL.data[0]['Kinara EMI'];
-        model.pl.business.kinaraEmiPCT = model.businessPL.data[0]['Kinara EMI pct'];
+        model.pl.business.kgfsEMi = model.businessPL.data[0]['Kinara EMI'];
         model.pl.business.netIncome = model.businessPL.data[0]['Net Income'];
-        model.pl.business.finalKinaraEmi = model.businessPL.data[0]['Final Kinara EMI'];
-        model.pl.business.finalKinaraEmiPCT = model.businessPL.data[0]['Final Kinara EMI pct'];
+        model.pl.business.finalKgfsEmi = model.businessPL.data[0]['Final Kinara EMI'];
 
-
-
-        /* Scoring Sections */
-
-        /* Populate seperate scoring section for ScreeningReview screen */
-        // model.screeningScoreDetails = {
-        //     columns: [
-        //         {
-        //             "title": "Parameter",
-        //             "data": "Parameter"
-        //         },
-        //         {
-        //             "title": "Actual Value",
-        //             "data": "Actual Value"
-        //         },
-        //         {
-        //             "title": "ParameterScore",
-        //             "data": "ParameterScore"
-        //         }
-        //     ],
-        //     data: []
-        // };
-        // // debugger;
-        // if (_.hasIn(model.scoreDetails[0], "data") && _.isArray(model.scoreDetails[0].data) && model.scoreDetails[0].data.length > 0) {
-        //     var score1Data = _.cloneDeep(model.scoreDetails[0].data, true);
-        //     _.forEach(score1Data, function(data){
-        //         data["Actual Value"] = data["Applicant"];
-        //         delete data.Applicant;
-        //         delete data["Co-Applicant"];
-        //     });
-
-        //     model.screeningScoreDetails.data = _.concat(model.screeningScoreDetails.data, score1Data);
-        // }
-        // if (_.hasIn(model.scoreDetails[1], "data") && _.isArray(model.scoreDetails[1].data) && model.scoreDetails[1].data.length > 0) {
-        //     model.screeningScoreDetails.data = _.concat(model.screeningScoreDetails.data, model.scoreDetails[1].data);
-        // }
-
-        // debugger;
-
-
-        // for (var i=0;i< model.deviationDetails.data.length; i++){
-        //     var d = model.deviationDetails.data[i];
-        //     if (d.Mitigant && d.Mitigant.length!=0){
-        //         if (d.Mitigant && d.Mitigant!=null){
-        //             d.ListOfMitigants = d.Mitigant.split("|");
-        //         }
-
-        //         if (d.ChosenMitigant && d.ChosenMitigant!=null){
-        //             d.ChosenMitigants = d.ChosenMitigant.split("|")
-        //         }
-
-        //     }
-        // }
-
-        // model.deviationParameter = [];
-        // for (var i=0;i< model.deviationDetails.data.length; i++){
-        //     var d = model.deviationDetails.data[i];
-        //     model.deviationParameter.push(_.cloneDeep(model.deviationDetails.data[i]));
-        //     delete model.deviationParameter[model.deviationParameter.length-1].ListOfMitigants;
-        //     delete model.deviationParameter[model.deviationParameter.length-1].Mitigant;
-        //     model.deviationParameter[model.deviationParameter.length-1].mitigants = [];
-        //     if (d.Mitigant && d.Mitigant.length!=0){
-        //         d.ListOfMitigants = d.Mitigant.split("|");
-        //         for (var j =0; j < d.ListOfMitigants.length; j++) {
-        //             model.deviationParameter[model.deviationParameter.length-1].mitigants.push({mitigantName:d.ListOfMitigants[j]});
-        //         }
-
-        //     }
-        // }
         model.additional = {};
-        // model.additional = {deviations:{deviationParameter: model.deviationParameter,scoreName:scoreName}};
-        // BundleManager.pushEvent('deviation-loaded', model._bundlePageObj, model.additional);
 
         $log.info("Karthik here");
         $log.info(model.additional);
+        model.enterpriseDetailsData = {};
+        model.enterpriseDetailsData['Company Name'] = model.enterpriseDetails.data[0]['Company Name'];
+        model.enterpriseDetailsData['Business Constitution'] = model.enterpriseDetails.data[0]['Business Constitution'];
+        model.enterpriseDetailsData['Business Activity'] = model.enterpriseDetails.data[0]['Business Activity'];
+        model.enterpriseDetailsData['Business Type'] = model.enterpriseDetails.data[0]['Business Type'];
+        model.enterpriseDetailsData['Sector'] = model.enterpriseDetails.data[0]['Sector'];
+        model.enterpriseDetailsData['Loan Product'] = model.enterpriseDetails.data[0]['Loan Product'];
+        model.enterpriseDetailsData['Monthly Turnover'] = model.enterpriseDetails.data[0]['Monthly Turnover'];
+        model.enterpriseDetailsData['Wealth Manager Name'] = model.enterpriseDetails.data[0]['Wealth Manager Name'];
+        model.enterpriseDetailsData['Loan Amount Requested'] = model.enterpriseDetails.data[0]['Loan Amount Requested'];
+        model.enterpriseDetailsData['Interest'] = model.enterpriseDetails.data[0]['Interest'];
+        model.enterpriseDetailsData['Existing Loan Repayments'] = model.enterpriseDetails.data[0]['Existing Loan Repayments'];
+        model.enterpriseDetailsData['Tenure'] = model.enterpriseDetails.data[0]['Tenure'];
+        model.enterpriseDetailsData['Avg Monthly Net Income'] = model.enterpriseDetails.data[0]['Avg Monthly Net Income'];
+        model.enterpriseDetailsData['Average_Bank_Balance'] = model.enterpriseDetails.data[0]['Average_Bank_Balance'];
+        model.enterpriseDetailsData['Average Bank Deposit'] = model.enterpriseDetails.data[0]['Average Bank Deposit'];
+        
 
-        model.enterpriseDetailsData = model.enterpriseDetails.data[0];
+
 
     }; // END OF prepareData()
 
@@ -249,17 +196,16 @@ define({
     var HOUSEHOLD_PL_HTML =
     '<table class="table">'+
         '<colgroup>'+
-            '<col width="30%"> <col width="40%"> <col width="30%">'+
+            '<col width="30%"> <col width="70%">'+
         '</colgroup>'+
         '<tbody>'+
-            '<tr class="table-sub-header"> <th>{{"INCOME" | translate}}</th> <th></th> <th>{{household.income | irfCurrency}}</th> </tr>'+
-            '<tr> <td></td> <td>{{"SALARY_FROM_BUSINESS" | translate}}</td> <td>{{household.salaryFromBusiness | irfCurrency}}</td> </tr>'+
-            '<tr> <td></td> <td>{{"OTHER_INCOME_SALARIES" | translate}}</td> <td>{{household.otherIncomeSalaries | irfCurrency}}</td> </tr>'+
-            '<tr> <td></td> <td>{{"FAMILY_MEMBER_INCOMES" | translate}}</td> <td>{{household.familyMemberIncomes | irfCurrency}}</td> </tr>'+
-            '<tr class="table-sub-header"> <th>{{"EXPENSES" | translate}}</th> <th></th> <th>{{household.Expenses | irfCurrency}}</th> </tr>'+
-            '<tr> <td></td> <td>{{"DECLARED_EDUCATIONAL_EXPENSE" | translate}}</td> <td>{{household.declaredEducationExpense | irfCurrency}}</td> </tr>'+
-            '<tr> <td></td> <td>{{"EMI_HOUSEHOLD_LIABILITIES" | translate}}</td> <td>{{household.emiHouseholdLiabilities | irfCurrency}}</td> </tr>'+
-            '<tr class="table-bottom-summary"> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td></td> <td>{{household.netHouseholdIncome | irfCurrency}}</td> </tr>'+
+            '<tr class="table-sub-header"> <th>{{"INCOME" | translate}}</th> <th></th> </tr>'+
+            '<tr> <td>{{"OTHER_INCOME_SALARIES" | translate}}</td> <td>{{household.otherIncomeSalaries | irfCurrency}}</td> </tr>'+
+            '<tr> <td>{{"FAMILY_MEMBER_INCOMES" | translate}}</td> <td>{{household.familyMemberIncomes | irfCurrency}}</td> </tr>'+
+            '<tr class="table-sub-header"> <th>{{"EXPENSES" | translate}}</th> <th></th></tr>'+
+            '<tr> <td>{{"HOUSEHOLD_EXPENSE" | translate}}</td> <td></td> </tr>'+
+            '<tr> <td>{{"EMI_EXPENSES" | translate}}</td> <td></td> </tr>'+
+            '<tr> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td> {{household.netHouseholdIncome}}</td> </tr>'+
         '</tbody>'+
     '</table>';
 
@@ -278,11 +224,11 @@ define({
                 readonly: true,
             };
 
-            if (key == "FRO Remarks"){
-                item.type = "section";
-                item.htmlClass = "row";
-                item.html = "<div><label class = 'col-sm-4' style = 'text-align: right;'>FRO Remarks</label><div style = 'font-weight: bold;'  class = 'col-sm-8'>{{model.enterpriseDetailsData['FRO Remarks']}}</div></div>";
-            }
+            // if (key == "FRO Remarks"){
+            //     item.type = "section";
+            //     item.htmlClass = "row";
+            //     item.html = "<div><label class = 'col-sm-4' style = 'text-align: right;'>FRO Remarks</label><div style = 'font-weight: bold;'  class = 'col-sm-8'>{{model.enterpriseDetailsData['FRO Remarks']}}</div></div>";
+            // }
             if (bsCounter++ % 2 ==0){
                 bsLeft.push(item)
             } else {
@@ -315,331 +261,48 @@ define({
                 ]
         })
 
-        // form.push({
-        //     "type": "box",
-        //     "colClass": "col-sm-12",
-        //     "title": "SCORING_DETAILS",
-        //     "condition": "model.currentStage=='ScreeningReview'",
-        //     "items": [
-        //         {
-        //             type:"tableview",
-        //             key:"ScoreDetails[0].Parameters",
-        //             // title:"SCORING_DETAILS",
-        //             selectable: false,
-        //             paginate: false,
-        //             searching: false,
-        //             getColumns: function(){
-        //                 return [{
-        //                     title: 'PARAMETER',
-        //                     data: 'ParameterName'
-        //                 }, {
-        //                     title: 'VALUE',
-        //                     data: 'UserInput'
-        //                 }, {
-        //                     title: 'SCORE',
-        //                     data: 'ParamterScore'
-        //                 },{
-        //                     title: 'RESULT',
-        //                     data: 'ParameterPassStatus'
-        //                 }]
-        //             }
-        //         },
-        //         {
-        //             type:"fieldset",
-        //             title:"",
-        //             items:[
-        //                 {
-        //                     "key":"ScoreDetails[0].OverallWeightedScore",
-        //                     "title":"TOTAL_SCREENING_SCORE",
-        //                     readonly:true
-        //                 },
-        //                 {
-        //                     "key":"ScoreDetails[0].OverallPassStatus",
-        //                     "title":"OVERALL_PASS_STATUS",
-        //                     readonly:true
-        //                 }
-        //             ]
-        //         }
-        //     ]
-        // });
 
-//         form.push({
-//             type: "box",
-//             colClass: "col-sm-12 table-box",
-//             condition: "model.siteCode != IREPDhan",
-//             title: "SCORES",
-//             items: [
-//                 {
-//                     type: "section",
-//                     htmlClass: "row",
-//                     html: '<div class="col-sm-3"><div class="stat-container" ><dd class="stat-key"> Total Score</dd><dt class="stat-value"> {{ model.ScoreDetails[0].OverallWeightedScore }}</dt></div></div><div class="col-sm-3"><div class="stat-container" ><dd class="stat-key"> Status</dd><dt class="stat-value" ng-class="{\'text-a-green\': model.ScoreDetails[0].OverallPassStatus==\'PASS\', \'text-a-red\': model.ScoreDetails[0].OverallPassStatus==\'FAIL\'}"> {{ model.ScoreDetails[0].OverallPassStatus }}</dt></div></div><div class="clearfix"></div><hr>'
-//                 },
-//                 {
-//                     type: "section",
-//                     htmlClass: "row",
-//                     items: [
-//                         {
-//                             type: "section",
-//                             htmlClass: "col-sm-12",
-//                             title: model.scoreDetails[0].title,
-//                             html:
-// '<div ng-init="_score=model.scoreDetails[0]">'+
-//     '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{_score.title}} ({{model.totalScores.data[0][_score.title]}})</h3>'+
-//     '<table class="table">'+
-//         '<colgroup>'+
-//             '<col width="25%">'+
-//             '<col width="{{_score.colorPct}}%" ng-repeat-start="i in _score.values">'+
-//             '<col width="{{_score.valuePct}}%" ng-repeat-end>'+
-//         '</colgroup>'+
-//         '<tbody>'+
-//             '<tr>'+
-//                 '<th>Parameter Name</th>'+
-//                 '<th colspan="2" ng-repeat="j in _score.values">{{_score.sections[j].relation_detail}}</th>'+
-//             '</tr>'+
-//             '<tr ng-repeat="data in _score.sections[0].data" ng-init="parameterIndex=$index">'+
-//                 '<td>{{data.Parameter}}</td>'+
-//                 '<td ng-repeat-start="k in _score.values"> <span class="square-color-box" style="background:{{_score.sections[k].data[parameterIndex].color_hexadecimal}}"> </span></td>'+
-//                 '<td ng-repeat-end>{{_score.sections[k].data[parameterIndex].Applicant}}</td></tr>'+
-//         '</tbody>'+
-//     '</table>'+
-// '</div>'
-//                         },
-//                         {
-//                             type: "section",
-//                             htmlClass: "col-sm-12",
-//                             title: model.scoreDetails[1].title,
-//                             html:
-// '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{ model.scoreDetails[1].title }} ({{ model.totalScores.data[0][model.scoreDetails[1].title] }})</h3>'+
-// '<table class="table">'+
-//     '<colgroup><col width="50%"><col width="5%"><col width="45%"></colgroup>'+
-//     '<tbody>'+
-//         '<tr><th>Parameter</th><th></th><th>Actual Value</th></tr>'+
-//         '<tr ng-repeat="data in model.scoreDetails[1].data">'+
-//             '<td>{{ data.Parameter }}</td>'+
-//             '<td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td>'+
-//             '<td>{{ data["Actual Value"] }}</td>'+
-//         '</tr>'+
-//     '</tbody>'+
-// '</table>'
-//                         }
-//                     ]
-//                 },
-//                 {
-//                     type: "section",
-//                     htmlClass: "row",
-//                     items: [
-//                         {
-//                             type: "section",
-//                             htmlClass: "col-sm-6",
-//                             condition: "model.currentStage!='ScreeningReview'",
-//                             title: model.scoreDetails[2].title,
-//                             html: '<h3>{{ model.scoreDetails[2].title }} ({{ model.totalScores.data[0][model.scoreDetails[2].title] }})</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.scoreDetails[2].data"><td>{{ data.Parameter }}</td><td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td><td>{{ data["Actual Value"] }}</td></tr></tbody></table>'
-//                         },
-//                         {
-//                             type: "section",
-//                             htmlClass: "col-sm-6",
-//                             condition: "model.currentStage!='ScreeningReview'",
-//                             title: model.scoreDetails[3].title,
-//                             html: '<h3>{{ model.scoreDetails[3].title }} ({{ model.totalScores.data[0][model.scoreDetails[3].title] }})</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.scoreDetails[3].data"><td>{{ data.Parameter }}</td><td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td><td>{{ data["Actual Value"] }}</td></tr></tbody></table>'
-//                         }
-//                     ]
-//                 }
 
-//             ]
-//         })
+        form.push({
+            type: "box",
+            colClass: "col-sm-12 table-box",
+            "condition": "(model.currentStage !='Screening' && model.currentStage !='MELApplication' && model.currentStage !='Application') && ('model.loanProcess.loanAccount.productCategory' === 'MEL')",
+            title: "CAMS_SUMMARY",
+            items: [
+                {
+                    type: "section",
+                    colClass: "col-sm-12",
+                    html:
+'<table class="table">'+
+    '<colgroup>'+
+        '<col width="33%"> <col width="33%"><col width="33%">'+
+    '</colgroup>'+
+    '<tbody>'+
+        '<tr class="table-sub-header"> <th></th> <th>{{"REQUESTED_BY_APPLICANT" | translate}}</th><th>{{"RECOMMENDED_BY_LOAN_OFFICER" | translate}}</th> </tr>'+
+        '<tr> <td>{{"LOAN_AMOUNT" | translate}}</td><td>{{model.cams.requestedLoanAmount}}</td> <td>{{model.cams.sanctionedLoanAmount}}</td> </tr>'+
+        '<tr> <td>{{"FREQUENCY" | translate}}</td><td>{{ model.cams.freqency}}</td> <td>{{ model.cams.freqency}}</td> </tr>'+
+        '<tr> <td>{{"TERM" | translate}}</td><td>{{ model.cams.tenure}}</td> <td>{{ model.cams.tenure}}</td> </tr>'+
+        '<tr> <td>{{"INSTALLMENT" | translate}}</td><td>{{model.cams.estimatedEmi}}</td><td></td></tr>'+
+        '<tr class="table-sub-header"><th colspan="12">{{"ELIGIBILITY_CALCULATOR" | translate}}</th></tr>'+
+        '<tr><td>{{"TOTAL_MONTHLY_SURPLUS" | translate}}</td><td>{{model.cams.totalMonthlySurplus}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"DEBT_SERVICE_RATIO" | translate}}</td><td>{{model.cams.debtServiceRatio}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"EMI_ELIGIBLE_AS_PER_NET_BUSINESS_SURPLUS" | translate}}</td><td>{{model.cams.emiEligibleAsPerNetBusinessSurplus}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"AFFORDABLE_EMI_AS_STATED_BY_CUSTOMER" | translate}}</td><td>{{model.cams.estimatedEmi}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"FINAL_EMI_ELIGIBILITY" | translate}}</td><td>{{model.cams.finalEmiEligible}}</td><td></td><td></td></tr>'+
+        '<tr><td>{{"ACTUAL_EMI_OFFERED_TO_BORRWER" | translate}}</td><td>{{model.cams.actualEMiOffered}}</td><td></td><td></td></tr>'+
+        '<tr> <td>{{"FINAL_LOAN_AMOUNT_SANCTIONED" | translate}}</td><td>{{model.cams.sanctionedLoanAmount}}</td><td></td></tr>'+
+    '</tbody>'+
+'</table>'
+                }
+            ]
+        });
 
-        // for (i in model.scoreDetails) {
-        //     (function(i){
-        //         form.push({
-        //             type: "box",
-        //             "colClass": "col-sm-6",
-        //             title: model.scoreDetails[i].title + " (" + model.totalScores.data[0][model.scoreDetails[i].title] + ")",
-        //             condition: "model.currentStage!='ScreeningReview'",
-        //             items: [
-        //                 {
-        //                     type: "tableview",
-        //                     key: "scoreDetails[" + i + "].data",
-        //                     title: model.scoreDetails[i].title,
-        //                     selectable: false,
-        //                     paginate: false,
-        //                     searching: false,
-        //                     getColumns: function(){
-        //                         return model.scoreDetails[i].columns;
-        //                     }
-        //                 }
-        //             ]
-        //         });
-        //     })(i)
-
-        //     // form.push()
-        // }
-
-        // form.push({
-        //     type: "box",
-        //     colClass: "col-sm-12",
-        //     condition: "model.currentStage!='ScreeningReview'",
-        //     items: [
-        //         {
-        //             type: "tableview",
-        //             key: "sectorDetails.data",
-        //             title: model.sectorDetails.title,
-        //             selectable: false,
-        //             paginate: false,
-        //             searching: false,
-        //             getColumns: function(){
-        //                 return model.sectorDetails.columns;
-        //             }
-        //         }
-        //     ]
-        // });
-
-        // form.push({
-        //     type: "box",
-        //     colClass: "col-sm-12",
-        //     condition: "model.currentStage!='ScreeningReview'",
-        //     items: [
-        //         {
-        //             type: "tableview",
-        //             key: "subSectorDetails.data",
-        //             title: model.subSectorDetails.title,
-        //             selectable: false,
-        //             paginate: false,
-        //             searching: false,
-        //             getColumns: function(){
-        //                 return model.subSectorDetails.columns;
-        //             }
-        //         }
-        //     ]
-        // });
-
-        // for (i in model.psychometricScores) {
-//             form.push({
-//                 type: "box",
-//                 colClass: "col-sm-12 table-box",
-//                 title: "Psychometric Scores",
-//                 condition: "model.currentStage != 'ScreeningReview' && model.siteCode == 'kinara'",
-//                 items: [
-//                     {
-//                         type: "section",
-//                         colClass: "col-sm-12",
-//                         html:
-//                         // '\
-//                         // <table class="table">\
-//                         //     <colgroup>\
-//                         //         <col width="60%">\
-//                         //         <col width="20%">\
-//                         //         <col width="20%">\
-//                         //     </colgroup>\
-//                         //     <thead>\
-//                         //         <tr>\
-//                         //             <th>Category</th>\
-//                         //             <th>Score</th>\
-//                         //         </tr>\
-//                         //     </thead>\
-//                         //     <tbody>\
-//                         //         <tr ng-repeat="rowData in model.psychometricScores['+i+'].data">\
-//                         //             <td>{{ rowData["Category Name"] }}</td>\
-//                         //             <td style="background: {{ rowData.color_hexadecimal }}"></td>\
-//                         //             <td>{{ rowData["Score"] }}</td>\
-//                         //         </tr>\
-//                         //     </tbody>\
-//                         // </table>\
-//                         // <strong>Total Score </strong> &nbsp; &nbsp; {{ model.psychometricScores['+i+'].summary["Total Score"] }} <br />\
-//                         // <strong>Test Attempt Time </strong> &nbsp; &nbsp; {{ model.psychometricScores['+i+'].summary["Test Attempt Time"] }} <br />\
-//                         // <strong>Attempt Language </strong> &nbsp; &nbsp; {{ model.psychometricScores['+i+'].summary["Attempt Language"] }} <br />'
-//                         '<div ng-init="_scores=model.psychometricScores">'+
-//     //'<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{_score.title}} ({{model.totalScores.data[0][_score.title]}})</h3>'+
-//     '<table class="table table-responsive">'+
-//         // '<colgroup>'+
-//         //     '<col width="25%">'+
-//         //     '<col width="{{_score.colorPct}}%" ng-repeat-start="i in _score.values">'+
-//         //     '<col width="{{_score.valuePct}}%" ng-repeat-end>'+
-//         // '</colgroup>'+
-//         '<tbody>'+
-//             '<tr>'+
-//                 '<th>Parameter Name</th>'+
-//                 '<th>Cut Off Score</th>'+
-//                 '<th colspan="2" ng-repeat="_score in _scores">{{_score.relation_detail}}</th>'+
-//             '</tr>'+
-//             '<tr ng-repeat=" (key, value) in _scores[0].data" ng-init="parameterIndex=$index">'+
-//                 '<td >{{key}}</td>'+
-//                 '<td >{{value["Cut Off Score"]}}</td>' +
-//                 '<td ng-repeat-start="_score in _scores"> <span class="square-color-box" style="background:{{_score.data[key].color_hexadecimal}}"> </span></td>'+
-//                '<td ng-repeat-end>{{_score.data[key].Score}}</td></tr>'+
-
-//             '<tr ng-repeat=" (key, value) in _scores[0].summary" ng-init="parameterIndex=$index">'+
-//                 '<td >{{key}}</td>'+
-//                 '<td ></td>' +
-//                 '<td ng-repeat-start="_score in _scores"></td>' +
-//                 '<td ng-repeat-end ng-style = "key === \'Total Score\' ?{\'font-weight\': \'bold\'} : {}"> {{_score.summary[key]}}</td>'+
-//         '</tbody>'+
-//     '</table>'+
-// '</div>'
-//                     }
-//                 ]
-//             })
-       // }
-
-        // form.push({
-        //     type: "box",
-        //     colClass: "col-sm-12",
-        //     items: [
-        //         {
-        //             type: "tableview",
-        //             key: "houseHoldPL.data",
-        //             title: model.houseHoldPL.title,
-        //             selectable: false,
-        //             paginate: false,
-        //             searching: false,
-        //             getColumns: function(){
-        //                 return model.houseHoldPL.columns;
-        //             }
-        //         }
-        //     ]
-        // })
-
-        // form.push({
-        //     type: "box",
-        //     colClass: "col-sm-12",
-        //     items: [
-        //         {
-        //             type: "tableview",
-        //             key: "businessPL.data",
-        //             title: model.businessPL.title,
-        //             selectable: false,
-        //             paginate: false,
-        //             searching: false,
-        //             getColumns: function(){
-        //                 return model.businessPL.columns;
-        //             }
-        //         }
-        //     ]
-        // })
-
-        // form.push({
-        //     type: "box",
-        //     colClass: "col-sm-12",
-        //     items: [
-        //         {
-        //             type: "tableview",
-        //             key: "balanceSheet.data",
-        //             title: model.balanceSheet.title,
-        //             selectable: false,
-        //             paginate: false,
-        //             searching: false,
-        //             getColumns: function(){
-        //                 return model.balanceSheet.columns;
-        //             }
-        //         }
-        //     ]
-        // })
-
+        
         for (var i=0;i<model.pl.household.length; i++){
             form.push({
                 type: "box",
                 colClass: "col-sm-12 table-box",
-                title: "Household P&L Statement - " + model.houseHoldPL[i].relation_detail,
-                condition: "model.currentStage != 'ScreeningReview'",
+                title: "Household P&L Statement - " + model.pl.household[i].relationDetails,
                 items: [
                     {
                         type: "section",
@@ -679,13 +342,18 @@ define({
         //         ]
         //     });
         // }
-
+        // model.pl.business.otherBusinessIncome = model.businessPL.data[0]['Other Business Income'];
+        // model.pl.business.purchase = model.businessPL.data[0]['Purchases'];
+        // model.pl.business.businessLiabilities = model.businessPL.data[0]['Business Liabilities'];
+        // model.pl.business.netBusinessIncome = model.businessPL.data[0]['Net Business Income'];
+        // model.pl.business.kgfsEMi = model.businessPL.data[0]['Kinara EMI'];
+        // model.pl.business.netIncome = model.businessPL.data[0]['Net Income'];
+        // model.pl.business.finalKgfsEmi = model.businessPL.data[0]['Final Kinara EMI']
 
         form.push({
             type: "box",
             colClass: "col-sm-12 table-box",
             title: "BUSINESS_PL",
-            condition: "model.currentStage != 'ScreeningReview'",
             items: [
                 {
                     type: "section",
@@ -693,24 +361,21 @@ define({
                     html:
 '<table class="table">'+
     '<colgroup>'+
-        '<col width="30%"> <col width="40%"> <col width="30%"> <col width="10%">'+
+        '<col width="30%"> <col width="70%">'+
     '</colgroup>'+
     '<tbody>'+
-        '<tr class="table-sub-header"> <th>{{"REVENUE_TURNOVER" | translate}}</th> <th></th> <th></th> <th></th> </tr>'+
-        '<tr> <td></td><td>{{"INVOICE" | translate}}</td><td>{{model.pl.business.invoice | irfCurrency}}</td> <td>{{model.pl.business.invoicePCT}}</td> </tr>'+
-        '<tr> <td></td><td>{{"CASH" | translate}}</td><td>{{model.pl.business.cashRevenue | irfCurrency}}</td> <td>{{model.pl.business.cashRevenuePCT}}</td> </tr>'+
-        '<tr> <td></td><td>{{"SCRAP_OR_ANY_BUSINESS_INCOME" | translate}}</td><td>{{model.pl.business.scrapIncome | irfCurrency}}</td> <td>{{model.pl.business.scrapIncomePCT }}</td> </tr>'+
-        '<tr class="table-sub-header"> <td>{{"TOTAL_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.pl.business.totalBusinessIncome | irfCurrency}}</td> <td></td> </tr>'+
-        '<tr> <td></td><td></td><td></td></tr><tr> <td>{{"PURCHASES" | translate}}</td><td></td><td>{{model.pl.business.purchases | irfCurrency}}</td> <td>{{model.pl.business.purchasesPCT }}</td> </tr>'+
-        '<tr class="table-sub-header"> <th>{{"GROSS_INCOME" | translate}}</th> <th></th> <th>{{model.pl.business.grossIncome | irfCurrency}}</th> <th></th> </tr>'+
-        '<tr> <td>{{"OPEX" | translate}}</td><td></td><td>{{model.pl.business.Opex | irfCurrency}}</td> <td></td> </tr>'+
-        '<tr> <td><strong>{{"EBITDA" | translate}}</strong></td><td></td><td><strong>{{model.pl.business.EBITDA | irfCurrency}}</strong></td> <td>{{model.pl.business.EBITDA_PCT }}</td> </tr>'+
-        '<tr> <th>{{"EXISTING_LOAN_PAYMENTS" | translate}}</th> <th></th> <th></td> <td></td> </tr>'+
-        '<tr> <td></td><td>{{"BUSINESS_LIABILITIES" | translate}}</td><td>{{model.pl.business.businessLiabilities | irfCurrency}}</td> <td></td> </tr>'+
-        '<tr> <td>{{"NET_BUSINESS_INCOME" | translate}}</td><td></td><td>{{model.pl.business.netBusinessIncome | irfCurrency}}</td> <td>{{model.pl.business.netBusinessIncomePCT }}</td> </tr>'+
-        '<tr class="text"> <td><strong>{{"KINARA_EMI" | translate}}</strong></td><td></td><td><strong>{{model.pl.business.kinaraEmi | irfCurrency}}</strong></td> <td>{{model.pl.business.kinaraEmiPCT }}</td> </tr>'+
-        '<tr> <td><strong>{{"NET_INCOME" | translate}}</strong></td> <td></td> <td><strong>{{model.pl.business.netIncome | irfCurrency}}</strong></td> <td></td> </tr>'+
-        '<tr class="table-bottom-summary"> <td>Final Kinara EMI</td><td></td><td>{{model.pl.business.finalKinaraEmi | irfCurrency}}</td> <td>{{model.pl.business.finalKinaraEmiPCT }}</td> </tr>'+
+        '<tr class="table-sub-header"> <th>{{"REVENUE_TURNOVER" | translate}}</th> <th></th></tr>'+
+        '<tr> <td>{{"INCOME_FROM_BUSINESS" | translate}}</td><td></td> </tr>'+
+        '<tr> <td>{{"OTHER_BUSINESS_INCOME" | translate}}</td><td>{{model.pl.business.otherBusinessIncome}}</td> </tr>'+
+        '<tr > <td><strong>{{"TOTAL_BUSINESS_INCOME" | translate}}<strong></td><td><strong>{{model.pl.business.totalBusinessIncome | irfCurrency}}<strong></td></tr>'+
+        '<tr> <td>{{"PURCHASES" | translate}}</td><td>{{model.pl.business.purchases }}</td></tr>'+
+        '<tr> <td>{{"OTHER_BUSINESS_EXPENSE" | translate}}</td><td>{{}}</td></tr>'+
+        '<tr class="table-sub-header"> <th>{{"EXISTING_LOAN_PAYMENTS" | translate}}</th> <th></th> </tr>'+
+        '<tr> <td>{{"BUSINESS_LIABILITIES" | translate}}</td><td>{{model.pl.business.businessLiabilities | irfCurrency}}</td> </tr>'+
+        '<tr> <td>{{"NET_BUSINESS_INCOME" | translate}}</td><td>{{model.pl.business.netBusinessIncome | irfCurrency}}</td></tr>'+
+        '<tr> <td><strong>{{"KGFS_EMI" | translate}}</strong></td><td><strong>{{model.pl.business.kgfsEmi | irfCurrency}}</strong></td></tr>'+
+        '<tr> <td><strong>{{"NET_INCOME" | translate}}</strong></td><td><strong>{{model.pl.business.netIncome | irfCurrency}}</strong></td></tr>'+
+        '<tr class="table-bottom-summary"><td><strong>Final KGFS EMI</strong></td><td>{{model.pl.business.finalKgfsEmi | irfCurrency}}</td></tr>'+
     '</tbody>'+
 '</table>'
                 }

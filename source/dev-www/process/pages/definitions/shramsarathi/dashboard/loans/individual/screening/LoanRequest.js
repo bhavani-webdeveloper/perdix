@@ -747,9 +747,25 @@ define([],function(){
                                 "LoanRecommendation.udf3":{
                                     "readonly": false
                                 },
-                                "LoanCustomerRelations": {
+                                "LoanCustomerRelations.loanCustomerRelations.customerId": {
                                     "orderNo": 2,
                                     "readonly": true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.urn": {
+                                    "orderNo": 2,
+                                    "readonly": true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.name": {
+                                    "orderNo": 2,
+                                    "readonly": true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.relation": {
+                                    "orderNo": 2,
+                                    "readonly": true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
+                                    "orderNo": 2,
+                                    "readonly": false
                                 },
                                 "DeductionsFromLoan": {
                                     "orderNo": 3,
@@ -1576,7 +1592,7 @@ define([],function(){
                     "PreliminaryInformation.linkedAccountNumber",
                     "PreliminaryInformation.linkedAccountNumber1",
                     "PreliminaryInformation.baseLoanAccount",
-                    "PreliminaryInformation.npa",
+                    //"PreliminaryInformation.npa",
                     "PreliminaryInformation.loan",
                     "PreliminaryInformation.loanPurpose1",
                     "PreliminaryInformation.loanPurpose2",
@@ -1649,7 +1665,7 @@ define([],function(){
                     // "LoanRecommendation.udf8",
                     // "LoanRecommendation.udf3",
  
-                     "LoanSanction",
+                     //"LoanSanction",
                      "LoanSanction.sanctionDate",
                      "LoanSanction.numberOfDisbursements",
                      "LoanSanction.disbursementSchedules",
@@ -1872,10 +1888,10 @@ define([],function(){
                                                 type: "select",
                                                 required: true,
                                                 "titleMap": {
-                                                    "New Loan": "New Loan",
-                                                    "Renewal": "Renewal",
-                                                    "Loan Restructure": "Loan Restructure",
-                                                    "Internal Foreclosure": "Internal Foreclosure"
+                                                   "New Loan": "New Loan",
+                                                   "Renewal": "Renewal",
+                                                   "Loan Restructure": "Loan Restructure",
+                                                   "Internal Foreclosure": "Internal Foreclosure"
                                                 },
                                                 "orderNo": 1,
                                                 condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal'",

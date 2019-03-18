@@ -857,7 +857,20 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                 viewLoan: function(model, formCtrl, form, $event) {
                     Utils.confirm("Save the data before proceed").then(function() {
                         $log.info("Inside ViewLoan()");
-                        if(model.loanView) {
+                        if(model.siteCode == 'shramsarathi'){
+                            irfNavigator.go({
+                                state: "Page.Bundle",
+                                pageName: "shramsarathi.dashboard.loans.individual.screening.LoanView",
+                                pageId: model.loanAccount.id,
+                                pageData: null},
+                                {
+                                    state: "Page.Engine",
+                                    pageName: $stateParams.pageName,
+                                    pageId: $stateParams.pageId,
+                                    pageData: $stateParams.pageData
+                                })
+                        }
+                       else if(model.loanView) {
                             irfNavigator.go({
                                 state: "Page.Bundle",
                                 pageName: model.loanView,

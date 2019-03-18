@@ -30,7 +30,7 @@ irf.pageCollection.controller(irf.controller("bank.survey"), ["$log", "$q", "Uti
                         "bank_survey.block",
                         "bank_survey.population",
                         "bank_survey.region",
-                        "bank_survey.house_hold" {
+                        "bank_survey.house_hold", {
                             key: "bank_survey.area_type",
                             type: "select",
                             titleMap: {

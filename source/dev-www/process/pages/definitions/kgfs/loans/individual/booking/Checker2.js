@@ -75,6 +75,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             minimum: 1,
                             maximum: 1,
                             order:90
+                        },
+                        {
+                            pageName: 'kgfs.loans.individual.booking.TeleVerification',
+                            title: 'TELE_VERIFICATION',
+                            pageClass: 'tele-verification',
+                            minimum: 1,
+                            maximum: 1,
+                            order:90
                         }
                     ]);
                 },
@@ -172,7 +180,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanAccount: loanProcess.loanAccount
                                     }
                                 });
-                                
+                                $this.bundlePages.push({
+                                    pageClass: 'tele-verification',
+                                    model:{
+                                        loanProcess: loanProcess
+                                    }
+                                });
                                 deferred.resolve();
                             });
 
@@ -216,7 +229,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
                                 $this.bundlePages.push({
-                                    pageClass: 'document-verification',
+                                    pageClass: 'tele-verification',
                                     model:{
                                         loanProcess: loanProcess
                                     }

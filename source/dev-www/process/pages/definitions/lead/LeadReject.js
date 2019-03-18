@@ -1,7 +1,7 @@
-irf.pageCollection.factory(irf.page("lead.LeadReject"), ["$log", "$state", "$filter", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "entityManager", "$q", "irfProgressMessage",
+irf.pageCollection.factory(irf.page("lead.LeadReject"), ["$log", "$state", "$filter", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage",
     "PageHelper", "Utils", "entityManager", "BiometricService", "PagesDefinition", "Queries",
 
-    function($log, $state, $filter, $stateParams, Lead, LeadHelper, SessionStore, formHelper, entityManager, $q, irfProgressMessage,
+    function($log, $state, $filter, $stateParams, Lead, LeadHelper, SessionStore, formHelper, $q, irfProgressMessage,
         PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries) {
 
         var branch = SessionStore.getBranch();

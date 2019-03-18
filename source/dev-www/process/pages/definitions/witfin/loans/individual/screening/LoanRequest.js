@@ -220,7 +220,11 @@ define([], function() {
                                 },
                                 "LoanRecommendation":{
                                     "orderNo":60
-                                }
+                                },
+                                "FieldInvestigationDetails": {
+                                    "readonly": true
+                                },
+                                
                             }
                         },
                         "GoNoGoApproval1": {

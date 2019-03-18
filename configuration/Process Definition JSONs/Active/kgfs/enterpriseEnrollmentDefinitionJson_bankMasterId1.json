@@ -2705,6 +2705,11 @@
                             "type": "string",
                             "refCodeCategory": "frequency",
                             "captureStages": ["BasicEnrolment", "Completed"]
+                        },
+                        "invoiceDocId":{
+                            "title": "InvoiceDocId",
+                            "type": "string",
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         }
 
                     }
@@ -2782,6 +2787,11 @@
                             "title": "Frequency",
                             "type": "string",
                             "refCodeCategory": "frequency",
+                            "captureStages": ["BasicEnrolment", "Completed"]
+                        },
+                        "invoiceDocId":{
+                            "title": "InvoiceDocId",
+                            "type": "string",
                             "captureStages": ["BasicEnrolment", "Completed"]
                         }
                     }

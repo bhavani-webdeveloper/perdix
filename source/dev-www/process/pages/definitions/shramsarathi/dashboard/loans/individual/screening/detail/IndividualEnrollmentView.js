@@ -7,7 +7,7 @@ define({
                 "type": "schema-form",
                 "title": "INDIVIDUAL_ENROLLMENT",
                 "subTitle": "",
-                initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
+                initialize: function(model, form, formCtrl, bundlePageObj, bundleModel,params) {
                     var self = this;
                     model.bundlePageObj = bundlePageObj;
                     model.bundleModel = bundleModel;
@@ -96,7 +96,24 @@ define({
                         if ( ref_flag == "true" && countNull != model.customer.verifications.length){
                             model.UIUDF.REFERENCE_CHECK_RESPONSE = "Positive"
                         }
+
+                        /* Outstanding Debt */
+
+                        var monthly_installment = 0;
+                        var outstanding_bal = 0;
+                        // var liability ;
+                        // _.each(liability, function(liability) {
+                        //     if (liability.summary['Customer ID'] == model.customer.id) {
+                        //        // model.UIUDF.liabilities = _.cloneDeep(liability.data)
+                        //         monthly_installment += liability.summary['Total Monthly Installment'];
+                        //         outstanding_bal += liability.summary['Total Outstanding Loan Amount'];
     
+                        //     }
+                        // })
+                        model.UIUDF.liability_fields.active_accounts = model.UIUDF.liabilities.length;
+                        model.UIUDF.liability_fields.monthly_installment = monthly_installment;
+                        model.UIUDF.liability_fields.outstanding_bal = outstanding_bal;
+
                         /*Household fields */
     
                         var decExpanse = 0;
@@ -108,6 +125,7 @@ define({
                         })
                         model.decHouseExpanse = decExpanse;
                         // model.household=res.expenditures;
+
                         /*Family Section*/
                         self.form = self.formSource;
                         var family = {
@@ -394,10 +412,12 @@ define({
                                 }, {
                                     "key": "customer.fatherFirstName",
                                     "title": "FATHER_FULL_NAME",
-                                }, {
-                                    "key": "customer.motherName",
-                                    "title": "Mother's Full Name"
-                                }, {
+                                }, 
+                                // {
+                                //     "key": "customer.motherName",
+                                //     "title": "Mother's Full Name"
+                                // }, 
+                                {
                                     "key": "customer.maritalStatus"
                                 }, {
                                     "key": "customer.spouseFirstName",
@@ -466,17 +486,27 @@ define({
                                     "type": "string"
                                 },{
                                     "key": "customer.place"
+                                },
+                                {
+                                    "key":"customer.udf.userDefinedFieldValues.udf4",
+                                    "title":"IN_CURRENT_ADDRESS_SINCE",
+                                    "type":"string"
                                 }]
                             }, {
                                 "type": "grid",
                                 "orientation": "vertical",
                                 "items": [{
-                                    "key": "customer.udf.userDefinedFieldValues.udf3",
-                                    "title":"RENT_LEASE_STATUS",
+                                    "key": "customer.houseStatus",
+                                    "title":"HOUSE_STATUS",
                                     "type": "string"
+                                },
+                                {
+                                    "key": "customer.noOfRooms",
+                                    "title":"NO_OF_ROOMS",
+                                    "type": "number"
                                 },{
-                                    "key": "customer.udf.userDefinedDateFieldValues.udfDate1",
-                                    "title":"RENT_LEASE_AGREEMENT_VALID_TILL",
+                                    "key": "customer.udf.userDefinedFieldValues.udf5",
+                                    "title":"IN_CURRENT_AREA_SINCE",
                                     "type": "string"
                                 }]
                             }]
@@ -567,7 +597,7 @@ define({
                                         }
                                     }, {
                                         "title": "Average Bank Balance",
-                                        "data": "BankAvgBal",
+                                        "data": "averageBankBalance",
                                         render: function(data, type, full, meta) {
                                             return irfCurrencyFilter(full['BankAvgBal'])
                                         }
@@ -902,7 +932,7 @@ define({
                                 "type": "grid",
                                 "orientation": "vertical",
                                 "items": [{
-                                    "key": "household.annualExpenses",
+                                    "key": "model.customer.expenditures[0].annualExpenses",
                                     "title": "Income",
                                     "type": "amount"
                                 }, {
@@ -1100,7 +1130,6 @@ define({
                         /*Liability Section*/
                         var monthly_installment = 0;
                         var outstanding_bal = 0;
-    
                         _.each(liability, function(liability) {
                             if (liability.summary['Customer ID'] == model.customer.id) {
                                // model.UIUDF.liabilities = _.cloneDeep(liability.data)

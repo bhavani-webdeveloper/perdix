@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page('customer360.loans.View'),
-    ["PagesDefinition", "$log", "formHelper", "LoanAccount", "$state", "SessionStore", "LoanAccount", "$stateParams","PageHelper","$q",
-        function(PagesDefinition, $log, formHelper, LoanAccount, $state, SessionStore, LoanAccount, $stateParams, PageHelper,$q){
+    ["PagesDefinition", "$log", "formHelper", "LoanAccount", "$state", "SessionStore", "$stateParams","PageHelper","$q",
+        function(PagesDefinition, $log, formHelper, LoanAccount, $state, SessionStore, $stateParams, PageHelper,$q){
             var pageConfig = {};
             var isPageConfigResolve = false;
             var isApplicableValue = function(param){

@@ -7,11 +7,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
             pageType: "Engine",
             dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper",
                 "$q", "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
-                "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","irfProgressMessage","Files","translateFilter","BranchCreationResource"],
+                "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","irfProgressMessage","Files","translateFilter","BranchCreationResource","Lead"],
 
             $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
                 PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch,
-                BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,irfProgressMessage,Files,translateFilter,BranchCreationResource) {
+                BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,irfProgressMessage,Files,translateFilter,BranchCreationResource,Lead) {
 
                 AngularResourceService.getInstance().setInjector($injector);
                 var branch = SessionStore.getBranch();
@@ -810,6 +810,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         "EDF":{
                             orderNo: 140
                         },
+                        "EDF.condition" : {
+                            "title": "Agree with the Terms and Conditions Accept"
+                        },
                         "bankAccounts.customerBankAccounts.accountNumber":{
                             "required": true
                         },
@@ -1062,6 +1065,31 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         if (branchId && !model.customer.customerBranchId) {
                             model.customer.customerBranchId = branchId;
                         };
+                        if ($stateParams && $stateParams.pageData) {
+                            var data = $stateParams.pageData.pageData;
+                           // model.leadenrollmentdetail.mobileNo = data.mobileNo
+                           Lead.get({
+                            id: data.id
+                        }).$promise.then(
+                            function(res) {
+                                model.customer = res;
+                                model.customer.dateOfBirth = res.dob;
+                                model.customer.mobilePhone = res.mobileNo;
+                                model.customer.firstName = res.leadName;
+                                model.customer.customerBranchId = res.branchId;
+                                model.customer.street = res.addressLine2;
+                                model.customer.doorNo = res.addressLine1;
+                                model.customer.locality = res.area;
+                                model.customer.villageName = res.cityTownVillage;
+                                model.customer.landLineNo = res.alternateMobileNo;
+                                model.customer.age = moment().diff(moment(res.dob, SessionStore.getSystemDateFormat()), 'years');
+                            },
+                            function(err) {
+                                console.log(err);
+                                PageHelper.showError(err);
+                            });
+                        }
+
                        //start
                            if (!Utils.isCordova) {
                                BranchCreationResource.getBranchByID({

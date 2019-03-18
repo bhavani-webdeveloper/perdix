@@ -138,7 +138,7 @@ define({
                     getActions: function () {
                         return [
                         {
-                            name: "DO DSC Override",
+                            name: "Do DSC Override",
                             desc: "",
                             icon: "fa fa-book",
                             fn: function (item, index) {

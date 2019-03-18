@@ -10,7 +10,7 @@ define({
             "subTitle": "",
             initialize: function (model, form, formCtrl) {
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
-                model.branch = SessionStore.getBranch();
+                model.branch = SessionStore.getCurrentBranch().branchId;
                 model.branchId = SessionStore.getBranchId();
             },
             definition: {
@@ -33,48 +33,36 @@ define({
                                 "enumCode": "branch"
                             }
                         },
-                        'loanType':
-                        {
-                            'title': "LOAN_TYPE",
-                            "type": ["string", "null"],
+                        "centre": {
+                            "title": "CENTRE",
+                            "type": ["integer", "null"],
                             "x-schema-form": {
-                                "type": "select",
-                                "screenFilter": true,
-                                "enumCode": "booking_loan_type"
+                            "type": "select",
+                            "enumCode": "centre",
+                            "parentEnumCode": "branch_id",
+                            "parentValueExpr": "model.branch",
+                            "screenFilter": true
                             }
                         },
-                        "loan_product": {
-                            "title": "Loan Product",
-                            "type": "string",
-    
-                            "x-schema-form": {
-                                "type": "lov",
-                                "lovonly": true,
-                                search: function (inputModel, form, model, context) {
-                                    var loanProduct = formHelper.enum('loan_product').data;
-                                    var products = $filter('filter')(loanProduct, {parentCode: model.partner_code ? model.partner_code : undefined}, true);
-    
-                                    return $q.resolve({
-                                        headers: {
-                                            "x-total-count": products.length
-                                        },
-                                        body: products
-                                    });
-                                },
-                                onSelect: function (valueObj, model, context) {
-                                    model.loan_product = valueObj.field1;
-                                },
-                                getListDisplayItem: function (item, index) {
-                                    return [
-                                        item.name
-                                    ];
-                                },
-                            }
+                        "applicantName": {
+                        "title": "CUSTOMER_NAME",
+                        "type": "string"
                         },
-                        "accountNumber":
-                        {
-                            "title": "ACCOUNT_NUMBER",
+                        "urn": {
+                            "title": "URN_NO",
                             "type": "string"
+                        },
+                        "loanAccountNo": {
+                            "title": "LOAN_ACCOUNT_NO",
+                            "type": "string"
+                        },
+                        "partner_code": {
+                            "title": "PARTNER_CODE",
+                            "type":["string","null"],
+                            "x-schema-form": {
+                                "type":"select",
+                                "enumCode": "partner"
+                            }
                         }
                     },
                     "required": []
@@ -83,13 +71,17 @@ define({
                     return formHelper;
                 },
                 getResultsPromise: function (searchOptions, pageOpts) {
+                    if (_.hasIn(searchOptions, 'centreCode')) {
+                        searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
+                    }
                     var promise = IndividualLoan.search({
                         'stage': 'Checker1',
-                        'branch': searchOptions.branch,
-                        'loanType': searchOptions.loanType,
-                        'productName': searchOptions.productName,
-                        'requestType': searchOptions.requestType,
-                        'accountNumber': searchOptions.accountNumber,
+                        'branchName': searchOptions.branch,
+                        'centreCode': searchOptions.centre,
+                        'applicantName': searchOptions.applicantName,
+                        'urn':searchOptions.urn,
+                        'accountNumber':searchOptions.loanAccountNo,
+                        'partnerCode': searchOptions.partner_code,
                         'page': pageOpts.pageNo
                     }).$promise;
                     return promise;
@@ -115,12 +107,11 @@ define({
                     getListItem: function (item) {
                         return [
 
-                            "{{'ACCOUNT_NUMBER'|translate}} : " + item.accountNumber,
-                            "{{'ENTITY_NAME'|translate}} : " + item.customerName,
-                            "{{'LOAN_AMOUNT'|translate}} : " + item.loanAmount,
-                            "{{'LOAN_TYPE'|translate}} : " + item.loanType,
-                            "{{'PARTNER_CODE'|translate}} : " + item.partnerCode,
-                            "{{'PROCESS_TYPE'|translate}} : " + item.processType
+                            "{{'CUSTOMER_NAME'|translate}} : " + item.customerName,
+                            "{{'URN_NO'|translate}} : " + item.urn,
+                            "{{'LOAN_ACCOUNT_NO'|translate}} : " + item.accountNumber,
+                            "{{'LOAN_AMOUNT_SANCTIONED'|translate}} : " + item.loanAmount,
+                            "{{'DOCUMENT_UPLOADED_TIME'|translate}} : " + item.applicationDate
 
                         ]
                     },
@@ -134,22 +125,24 @@ define({
                     getColumns: function () {
                         return [
                             {
-                                title: 'LOAN_ID',
-                                data: 'loanId'
-                            }, {
-                                title: 'ENTITY_NAME',
+                                title: 'CUSTOMER_NAME',
                                 data: 'customerName'
                             },
                             {
-                                title: 'ACCOUNT_NUMBER',
-                                data: 'accountNumber'
-                            }, {
-                                title: 'PRODUCT_TYPE',
-                                data: 'productCode'
-                            }, {
-                                title: 'APPLICATION_DATE',
-                                data: 'applicationDate'
+                                title: 'URN_NO',
+                                data: 'urn'
                             },
+                            {
+                                title: 'LOAN_ACCOUNT_NO',
+                                data: 'accountNumber'
+                            },
+                            {
+                                title: 'LOAN_AMOUNT_SANCTIONED',
+                                data: 'loanAmount'
+                            },{
+                                title: 'DCOUEMT_UPLOADED_TIME',
+                                data: 'applicationDate'
+                            }
                         ]
                     },
                     getActions: function () {

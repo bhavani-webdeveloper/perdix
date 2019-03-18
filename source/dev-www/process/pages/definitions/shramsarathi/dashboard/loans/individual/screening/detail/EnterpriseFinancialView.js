@@ -22,7 +22,7 @@ define({
 				// 	"html": '<br><div style="text-align:center">Waiting for summary..<br><br><ripple-loader></ripple-loader></div>'
 				// }];
 				Misc.getSummary({"customer_id":model.customerId}).$promise.then(function(resp){
-				//Misc.getSummary({"customer_id":77}).$promise.then(function(resp){
+				//Misc.getSummary({"customer_id":77}).$promise.then(function(resp){ 
 				   console.log(model);
 				   console.log("------model");
 					console.log(resp);
@@ -117,13 +117,15 @@ define({
 						'<tr><td>{{"No. of Children" | translate}}</td><td>{{model.familyInfo.noOfChildren }}</td></tr>'+
 						'<tr><td>{{"No of school going" | translate}}</td><td>{{model.familyInfo.noOfSchoolGoing }}</td></tr>'+
 						'<tr><td>{{"No. of college going" | translate}}</td><td>{{model.familyInfo.noOfCollegeGoing }}</td></tr>'+
+						'<tr><td>{{"Proposed Amount" | translate}}</td><td>{{model.proposedAmount }}</td></tr>'+
 						'</tbody>' +
 						'</table>'
-				},{
-					"type":"text",
-					"title":"Proposed Amount",
-					"key":"model.proposedAmount"
-				}
+				},
+				// {
+				// 	"type":"text",
+				// 	"title":"Proposed Amount",
+				// 	"key":"model.proposedAmount"
+				//}
 			]
 			}
 		

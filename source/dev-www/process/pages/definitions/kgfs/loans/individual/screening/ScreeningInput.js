@@ -169,15 +169,15 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 }
 
-
-                                 $this.bundlePages.push({
-                                    pageClass: 'business',
-                                    model: {
-                                        enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
-                                        loanProcess: loanProcess
-                                    }
-                                });
-
+                                if (loanProcess.loanAccount.productCategory == 'MEL') {
+                                    $this.bundlePages.push({
+                                        pageClass: 'business',
+                                        model: {
+                                            enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                            loanProcess: loanProcess
+                                        }
+                                    });
+                                }
                                 $this.bundlePages.push({
                                     pageClass: 'loan-request',
                                     model: {
@@ -284,6 +284,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                     "load-address": function(pageObj, bundleModel, params){
                         BundleManager.broadcastEvent("load-address-business", params);
                     },
+                    "load-bank-details": function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("load-bank-details-business", params);
+                    },
                     "load_business": function(pageObj, bundleModel, params){
                         console.log(params)
                         model.productCategory = params
@@ -334,6 +337,11 @@ define(["perdix/domain/model/loan/LoanProcess",
                         $log.info("Inside new-loan of CBCheck");
                         BundleManager.broadcastEvent("new-loan", params);
                     },
+                    "business-capture": function(pageObj, bundleModel, params){
+                        $log.info("Inside business-capture of Screening");
+                        BundleManager.broadcastEvent("business-captures", params);
+                    },
+                    
                     "applicant-updated": function(pageObj, bundlePageObj, obj){
                         /* Update other pages */
                         BundleManager.broadcastEvent("applicant-updated", obj);

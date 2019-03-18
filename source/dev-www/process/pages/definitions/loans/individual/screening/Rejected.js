@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page('loans.individual.screening.Rejected'),
-	["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
+	["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams"
         ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
         "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan", "BundleManager", "irfNavigator",
-        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
+        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
         	$log.info("Inside LoanBookingBundle");
         	return {
         		"type": "page-bundle",

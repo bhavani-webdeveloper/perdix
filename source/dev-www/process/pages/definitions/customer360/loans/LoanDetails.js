@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
-    ["PagesDefinition", "translateFilter", "$log", "GroupProcess", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal", "irfNavigator", "RepaymentReminder", "Misc", "$httpParamSerializer", "Misc",
-        function (PagesDefinition, translateFilter, $log, GroupProcess, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal, irfNavigator, RepaymentReminder, Misc, $httpParamSerializer, Misc) {
+    ["PagesDefinition", "translateFilter", "$log", "GroupProcess", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal", "irfNavigator", "RepaymentReminder", "Misc", "$httpParamSerializer",
+        function (PagesDefinition, translateFilter, $log, GroupProcess, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal, irfNavigator, RepaymentReminder, Misc, $httpParamSerializer) {
 
             var transactionDetailHtml = "\
         <irf-simple-summary-table irf-table-def='model.orgTransactionDetails' />\
@@ -608,9 +608,16 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                             });
                                         } else if (model.loanAccount.loanCustomerRelations[i].relation === 'GUARANTOR' ||
                                             model.loanAccount.loanCustomerRelations[i].relation === 'Guarantor') {
+                                                for (var j =0;j<model.loanAccount.guarantors.length;j++){
+                                                    if (model.loanAccount.guarantors[j].guaUrnNo == model.loanAccount.loanCustomerRelations[i].urn){
+                                                        var tempGuraName = model.loanAccount.guarantors[j].guaFirstName;
+                                                        break;
+                                                    }
+                                                }
                                             model.loanAccount.guarantors1.push({
                                                 guaUrnNo: model.loanAccount.loanCustomerRelations[i].urn,
-                                                customerId: model.loanAccount.loanCustomerRelations[i].customerId
+                                                customerId: model.loanAccount.loanCustomerRelations[i].customerId,
+                                                guaFirstName : tempGuraName|| null
                                             });
                                         }
                                     }
