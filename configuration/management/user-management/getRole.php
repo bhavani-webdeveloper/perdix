@@ -20,7 +20,7 @@ try {
 			echo '{"error": "Required parameter user id is missing"}';
 			return;
 		}
-		$stmt = $connection->prepare($q);
+		$stmt = $connection->prepare($QUERY);
 		$stmt->bindParam(":userId", $_GET['userId']);
 		$stmt->execute();
 		$stmt->bind_result($id, $name, $access_level);
