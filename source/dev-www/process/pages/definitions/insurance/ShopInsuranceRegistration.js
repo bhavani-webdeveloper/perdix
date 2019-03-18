@@ -422,7 +422,7 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                                                 "items": {
                                                     "shopPhoto":{
                                                         title:"SHOP_PHOTO",
-                                                        key: "insurancePolicyDetailsDTO.insurancePhotosDTO[].fileId",
+                                                        key: "insurancePolicyDetailsDTO.insurancePhotosDTO[].photoCode",
                                                         offline: true,
                                                         type: "file",
                                                         fileType: "image/*",
