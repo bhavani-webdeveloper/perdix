@@ -54,7 +54,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "KYC.addressProof": {
                                     "readonly": false,
-                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'" 
                                 },
                                 "KYC.addressProofImageId": {
                                     "required": true,
@@ -232,7 +232,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "resolver": "IndividualCustomerIDLOVConfiguration"
                                 },
                                 "KYC.identityProof": {
-                                    "required": true
+                                    "required": true,
+                                    onChange: function(value, form, model) {
+                                       if(model.customer.identityProof=='Aadhaar Card'){
+                                        model.customer.addressPfSameAsIdProof='YES'
+                                       }else{
+                                        model.customer.addressPfSameAsIdProof='NO'
+                                       }
+                                       
+                                    }
+                                 
                                 },
                                 "KYC.identityProofImageId": {
                                     "required": true
@@ -2812,12 +2821,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "orderNo":60,
                                             "onChange": function(modelValue, form, model, formCtrl, event) {
                                                         if(model.customer.addressPfSameAsIdProof==='YES'){
-                                                            model.customer.addressProof=model.customer.identityProof,
-                                                            model.customer.addressProofNo=model.customer.identityProofNo,
-                                                            model.customer.addressProofImageId=model.customer.identityProofImageId,
-                                                            model.customer.addressProofReverseImageId=model.customer.identityProofReverseImageId,
-                                                            model.customer.addressProofIssueDate=model.customer.idProofIssueDate,
-                                                            model.customer.addressProofValidUptoDate=model.customer.idProofValidUptoDate
+                                                            model.customer.addressProof=model.customer.identityProof;
+                                                            model.customer.addressProofNo=model.customer.identityProofNo;
+                                                            model.customer.addressProofImageId=model.customer.identityProofImageId;
+                                                            model.customer.addressProofReverseImageId=model.customer.identityProofReverseImageId;
+                                                            model.customer.addressProofIssueDate=model.customer.idProofIssueDate;
+                                                            model.customer.addressProofValidUptoDate=model.customer.idProofValidUptoDate;
                                                         }
                                                     }    
                                         },
@@ -3610,6 +3619,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             return false;
                         }
 
+                        if((model.customer.addressPfSameAsIdProof==='YES') && (model.customer.identityProof=='Aadhaar Card')){
+                            model.customer.addressProof=model.customer.identityProof;
+                            model.customer.addressProofNo=model.customer.identityProofNo;
+                            model.customer.addressProofImageId=model.customer.identityProofImageId;
+                            model.customer.addressProofReverseImageId=model.customer.identityProofReverseImageId;
+                            model.customer.addressProofIssueDate=model.customer.idProofIssueDate;
+                            model.customer.addressProofValidUptoDate=model.customer.idProofValidUptoDate;
+                        }
+                        
                         // $q.all start
                         model.enrolmentProcess.save()
                             .finally(function () {
@@ -3658,6 +3676,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         PageHelper.clearErrors();
                         if (PageHelper.isFormInvalid(form)) {
                             return false;
+                        }
+                        if((model.customer.addressPfSameAsIdProof==='YES') && (model.customer.identityProof=='Aadhaar Card')){
+                            model.customer.addressProof=model.customer.identityProof;
+                            model.customer.addressProofNo=model.customer.identityProofNo;
+                            model.customer.addressProofImageId=model.customer.identityProofImageId;
+                            model.customer.addressProofReverseImageId=model.customer.identityProofReverseImageId;
+                            model.customer.addressProofIssueDate=model.customer.idProofIssueDate;
+                            model.customer.addressProofValidUptoDate=model.customer.idProofValidUptoDate;
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();

@@ -277,6 +277,8 @@ define({
                 model.expectedTurnoverObj = {};
                 documentArrayFormation(model);
                 //debugger;
+
+                model.loanAccount.fullAddress = model.loanAccount.nominees[0].nomineeDoorNo + ',' + model.loanAccount.nominees[0].nomineeStreet + ',' + model.loanAccount.nominees[0].nomineeLocality + ',' +  model.loanAccount.nominees[0].nomineeDistrict + ',' + model.loanAccount.nominees[0].nomineeState + '-' + model.loanAccount.nominees[0].nomineePincode  ;
             /*Asset details*/
                 if (model.loanAccount.collateral.length != 0) {
                     model.asset_details = [];
@@ -601,8 +603,10 @@ define({
                             "key": "loanAccount.nominees[0].nomineeRelationship",
                             "title": "Relationship To Insured"
                         }, {
-                            "key": "",
+                            "key": "loanAccount.fullAddress",
                             "title": "Address"
+                        },{
+                            // "key": "loanAccount.nominees[0].nomineeDistrict"
                         }]
                     }]
                 }]
