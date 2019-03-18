@@ -1179,7 +1179,7 @@ define([], function () {
                                                     titleMap:{
                                                         "ACH":"ACH",
                                                         "PDC":"PDC",
-                                                        "Others":"Others"
+                                                        "CASH":"CASH"
                                                     },
                                                     "orderNo": 120
                                                 }
