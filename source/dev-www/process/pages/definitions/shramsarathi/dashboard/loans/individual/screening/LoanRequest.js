@@ -747,9 +747,25 @@ define([],function(){
                                 "LoanRecommendation.udf3":{
                                     "readonly": false
                                 },
-                                "LoanCustomerRelations": {
+                                "LoanCustomerRelations.loanCustomerRelations.customerId": {
                                     "orderNo": 2,
                                     "readonly": true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.urn": {
+                                    "orderNo": 2,
+                                    "readonly": true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.name": {
+                                    "orderNo": 2,
+                                    "readonly": true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.relation": {
+                                    "orderNo": 2,
+                                    "readonly": true
+                                },
+                                "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
+                                    "orderNo": 2,
+                                    "readonly": false
                                 },
                                 "DeductionsFromLoan": {
                                     "orderNo": 3,
