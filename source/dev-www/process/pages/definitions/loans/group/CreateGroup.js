@@ -368,7 +368,7 @@ define({
                             model.group.jlgGroupMembers[context.arrayIndex].relation = "Father";
                             model.group.jlgGroupMembers[context.arrayIndex].witnessFirstName = "";
                             model.group.jlgGroupMembers[context.arrayIndex].witnessRelationship= "";
-                            Enrollment.getCustomerById({id:valueObj.customerId}).$promise
+                            Enrollment.getCustomerById({id:valueObj.id}).$promise
                                  .then(function(res){
                                  model.group.jlgGroupMembers[context.arrayIndex].maritalStatus = res.maritalStatus;
                                  model.group.jlgGroupMembers[context.arrayIndex].loanAmount = res.requestedLoanAmount;
