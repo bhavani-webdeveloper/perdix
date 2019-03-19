@@ -13,8 +13,7 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 $log.info("Create Branch Page loaded");
-                model.branch = model.branch||{};
-                model.siteCode = SessionStore.getGlobalSetting("siteCode");
+                model.branch= model.branch||{};
 
                 if ($stateParams.pageId) {
                     PageHelper.showLoader();
@@ -247,18 +246,7 @@ define({
                         "SAGEM": "SAGEM",
                         "SECUGEN": "SECUGEN"
                     },
-                    "title": "FINGER_PRINT_DEVICE_TYPE",
-                    "condition":"model.siteCode == 'shramsarathi'"
-                }, {
-                    "key": "branch.fingerPrintDeviceType",
-                    "required":true,
-                    "type": "select",
-                    "titleMap": {
-                        "SAGEM": "SAGEM",
-                        "SECUGEN": "SECUGEN"
-                    },
-                    "title": "FINGER_PRINT_DEVICE_TYPE",
-                    "condition":"model.siteCode != 'shramsarathi'"
+                    "title": "FINGER_PRINT_DEVICE_TYPE"
                 }, {
                     "key": "branch.eodAuthenticationType",
                     "required":false,
@@ -267,18 +255,7 @@ define({
                         "PASSWORD": "PASSWORD",
                         "FINGERPRINT": "FINGERPRINT"
                     },
-                    "title": "EOD_AUTHENTICATION_TYPE",
-                    "condition":"model.siteCode == 'shramsarathi'"
-                },{
-                    "key": "branch.eodAuthenticationType",
-                    "required":true,
-                    "type": "select",
-                    "titleMap": {
-                        "PASSWORD": "PASSWORD",
-                        "FINGERPRINT": "FINGERPRINT"
-                    },
-                    "title": "EOD_AUTHENTICATION_TYPE",
-                    "condition":"model.siteCode != 'shramsarathi'"
+                    "title": "EOD_AUTHENTICATION_TYPE"
                 }]
             },
             {
