@@ -13,7 +13,8 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 $log.info("Create Branch Page loaded");
-                model.branch= model.branch||{};
+                model.branch = model.branch||{};
+                model.siteCode = SessionStore.getGlobalSetting("siteCode");
 
                 if ($stateParams.pageId) {
                     PageHelper.showLoader();
@@ -240,14 +241,35 @@ define({
                     "title": "SOL_ID"
                 }, {
                     "key": "branch.fingerPrintDeviceType",
+                    "required":false,
+                    "type": "select",
+                    "titleMap": {
+                        "SAGEM": "SAGEM",
+                        "SECUGEN": "SECUGEN"
+                    },
+                    "title": "FINGER_PRINT_DEVICE_TYPE",
+                    "condition":"model.siteCode == 'shramsarathi'"
+                }, {
+                    "key": "branch.fingerPrintDeviceType",
                     "required":true,
                     "type": "select",
                     "titleMap": {
                         "SAGEM": "SAGEM",
                         "SECUGEN": "SECUGEN"
                     },
-                    "title": "FINGER_PRINT_DEVICE_TYPE"
+                    "title": "FINGER_PRINT_DEVICE_TYPE",
+                    "condition":"model.siteCode != 'shramsarathi'"
                 }, {
+                    "key": "branch.eodAuthenticationType",
+                    "required":false,
+                    "type": "select",
+                    "titleMap": {
+                        "PASSWORD": "PASSWORD",
+                        "FINGERPRINT": "FINGERPRINT"
+                    },
+                    "title": "EOD_AUTHENTICATION_TYPE",
+                    "condition":"model.siteCode == 'shramsarathi'"
+                },{
                     "key": "branch.eodAuthenticationType",
                     "required":true,
                     "type": "select",
@@ -255,7 +277,8 @@ define({
                         "PASSWORD": "PASSWORD",
                         "FINGERPRINT": "FINGERPRINT"
                     },
-                    "title": "EOD_AUTHENTICATION_TYPE"
+                    "title": "EOD_AUTHENTICATION_TYPE",
+                    "condition":"model.siteCode != 'shramsarathi'"
                 }]
             },
             {
