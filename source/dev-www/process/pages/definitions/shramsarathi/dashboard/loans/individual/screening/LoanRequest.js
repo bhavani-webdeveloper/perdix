@@ -118,9 +118,9 @@ define([],function(){
                                 "LoanCustomerRelations": {
                                     "orderNo": 2
                                 },
-                                "DeductionsFromLoan": {
-                                    "orderNo": 3
-                                },
+                                // "DeductionsFromLoan": {
+                                //     "orderNo": 3
+                                // },
                                 "LoanMitigants": {
                                     "orderNo": 4
                                 },
@@ -250,10 +250,10 @@ define([],function(){
                                     "orderNo": 2,
                                     "readonly": true
                                 },
-                                "DeductionsFromLoan": {
-                                    "orderNo": 3,
-                                    "readonly": true
-                                },
+                                // "DeductionsFromLoan": {
+                                //     "orderNo": 3,
+                                //     "readonly": true
+                                // },
                                 "LoanMitigants": {
                                     "orderNo": 4
                                 },
@@ -465,6 +465,7 @@ define([],function(){
                                 "ProposedUtilizationPlan",
                                 "LoanSanction",
                                 "LoanMitigants",
+                                "DeductionsFromLoan",
                                 "LoanRecommendation.udf8",
                                 "LoanRecommendation.udf3",
                                 "LoanMitigants.deviationParameter",
@@ -605,7 +606,7 @@ define([],function(){
                         "Sanction": {
                             "excludes": [
                                 "ProposedUtilizationPlan",
-                                //"DeductionsFromLoan",
+                                "DeductionsFromLoan",
                                 "LoanMitigants",
                                 "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
@@ -661,7 +662,7 @@ define([],function(){
                         "Screening":{
                             "excludes": [
                                 "ProposedUtilizationPlan",
-                                //"DeductionsFromLoan",
+                                "DeductionsFromLoan",
                                 "LoanMitigants",
                                 "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
@@ -767,9 +768,9 @@ define([],function(){
                                     "orderNo": 2,
                                     "readonly": false
                                 },
-                                "DeductionsFromLoan": {
-                                    "orderNo": 3,
-                                },
+                                // "DeductionsFromLoan": {
+                                //     "orderNo": 3,
+                                // },
                                 "LoanMitigants": {
                                     "orderNo": 4
                                 },
@@ -803,7 +804,7 @@ define([],function(){
                         "ScreeningReview":{
                             "excludes": [
                                 "ProposedUtilizationPlan",
-                                //"DeductionsFromLoan",
+                                "DeductionsFromLoan",
                                 "LoanMitigants",
                                 "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
@@ -834,10 +835,10 @@ define([],function(){
                                     "orderNo": 1,
                                     "readonly": true
                                 },
-                                "DeductionsFromLoan":{
-                                    "readonly": true,
-                                    "orderNo":3
-                                },
+                                // "DeductionsFromLoan":{
+                                //     "readonly": true,
+                                //     "orderNo":3
+                                // },
                                 "LoanRecommendation.udf8":{
                                     "readonly": true
                                 },
@@ -1022,9 +1023,9 @@ define([],function(){
                                 "NomineeDetails.nominees.nomineePincode":{
                                     "required":true
                                 },
-                                "DeductionsFromLoan":{
-                                    "readonly":true,
-                                },
+                                // "DeductionsFromLoan":{
+                                //     "readonly":true,
+                                // },
                                 "PreliminaryInformation":{
                                     "readonly":true,
                                 },
@@ -1104,9 +1105,9 @@ define([],function(){
                                     "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
                                  },
   
-                                "DeductionsFromLoan":{
-                                    "readonly":true
-                                },
+                                // "DeductionsFromLoan":{
+                                //     "readonly":true
+                                // },
                                 "LoanMitigants":{
                                     "readonly":true
                                 },
@@ -1133,9 +1134,9 @@ define([],function(){
                                 "PreliminaryInformation": {
                                     "readonly": true
                                 },
-                                "DeductionsFromLoan":{
-                                    "readonly": true,
-                                },
+                                // "DeductionsFromLoan":{
+                                //     "readonly": true,
+                                // },
                                 "AdditionalLoanInformation": {
                                     "readonly": true
                                 },
@@ -1568,9 +1569,9 @@ define([],function(){
                         "DeductionsFromLoan.estimatedEmi":{
                             "title": "EXPECTED_SECURITY_EMI",
                         },
-                        "DeductionsFromLoan":{
-                            "orderNo" : 30
-                        },
+                        // "DeductionsFromLoan":{
+                        //     "orderNo" : 30
+                        // },
                         "LoanMitigants":{
                             "orderNo" : 40
                         },
@@ -1968,7 +1969,8 @@ define([],function(){
                                                 "type": "amount",
                                                 "orderNo":40,
                                                 "title": "INSTALLMENT_AMOUNT",
-                                                "readonly": false
+                                                "readonly": false,
+                                                "required": true
                                             },
                                             // "estimatedEmi1":{
                                             //     "key": "loanAccount.estimatedEmi",
@@ -2005,6 +2007,7 @@ define([],function(){
                                                     "key":"loanAccount.disbursementSchedules[].modeOfDisbursement",
                                                     "title":"MODE_OF_DISBURSEMENT",
                                                     "type":"select",
+                                                    "required": true,
                                                     "enumCode":"mode_of_disbursement"
                                                 },
                                                 "collectionDate":{
