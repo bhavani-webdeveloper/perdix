@@ -49,7 +49,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             title: 'BUSINESS',
                             pageClass: 'business',
                             minimum: 1,
-                            maximum: 1,
+                            maximum: 0,
                             order:40
                         },
                         {
@@ -164,7 +164,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 }
 
-                                 if (loanProcess.loanAccount.productCategory == 'MEL') {
+                                if (loanProcess.loanAccount.productCategory == 'MEL') {
                                     $this.bundlePages.push({
                                         pageClass: "business",
                                         model: {
@@ -174,7 +174,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     });
                                 }
 
-                               $this.bundlePages.push({
+                                    $this.bundlePages.push({
                                     pageClass: 'loan-booking',
                                     model:{
                                         loanProcess: loanProcess

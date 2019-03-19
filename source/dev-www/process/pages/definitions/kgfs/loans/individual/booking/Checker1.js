@@ -49,7 +49,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             title: 'BUSINESS',
                             pageClass: 'business',
                             minimum: 1,
-                            maximum: 1,
+                            maximum: 0,
                             order:40
                         },
                         {
@@ -156,6 +156,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             }
                                         });
                                     }
+                                }
+                                
+                                if (loanProcess.loanAccount.productCategory == 'MEL') {
+                                    $this.bundlePages.push({
+                                        pageClass: "business",
+                                        model: {
+                                            enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                            loanProcess: loanProcess
+                                        }
+                                    });
                                 }
 
                                  if (loanProcess.loanAccount.productCategory == 'MEL') {

@@ -3609,17 +3609,33 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         model.enrolmentProcess.refreshEnterpriseCustomerRelations(model.loanProcess);
                     },
                     "load-address-business": function (bundleModel, model, params) {
-                        model.customer.mobilePhone = params.customer.mobilePhone;
-                        model.customer.landLineNo = params.customer.landLineNo;
-                        model.customer.doorNo = params.customer.doorNo;
-                        model.customer.street = params.customer.street;
-                        model.customer.postOffice = params.customer.postOffice;
-                        model.customer.landmark = params.customer.landmark;
-                        model.customer.locality = params.customer.locality;
-                        model.customer.pincode = params.customer.pincode;
-                        model.customer.villageName = params.customer.villageName;
-                        model.customer.district = params.customer.district;
-                        model.customer.state = params.customer.state;
+                        if(params.customer.fcuStatu){
+                            model.customer.mobilePhone = params.customer.mobilePhone;
+                            model.customer.landLineNo = params.customer.landLineNo;
+                            model.customer.doorNo = params.customer.doorNo;
+                            model.customer.street = params.customer.street;
+                            model.customer.postOffice = params.customer.postOffice;
+                            model.customer.landmark = params.customer.landmark;
+                            model.customer.locality = params.customer.locality;
+                            model.customer.pincode = params.customer.pincode;
+                            model.customer.villageName = params.customer.villageName;
+                            model.customer.district = params.customer.district;
+                            model.customer.state = params.customer.state;
+                        }
+                        else{
+                            model.customer.mobilePhone = null;
+                            model.customer.landLineNo = null;
+                            model.customer.doorNo = null;
+                            model.customer.street = null;
+                            model.customer.postOffice = null;
+                            model.customer.landmark = null;
+                            model.customer.locality = null;
+                            model.customer.pincode = null;
+                            model.customer.villageName = null;
+                            model.customer.district =null;
+                            model.customer.state = null;
+                        }
+                    
                     },
                     "load-bank-details-business": function (bundleModel, model, params) {
                         if (_.hasIn(model, 'loanProcess.applicantEnrolmentProcess') && model.loanProcess.applicantEnrolmentProcess !=null){
@@ -3652,6 +3668,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     submit: function (model, form, formName) {
                         PageHelper.clearErrors();
                         if (PageHelper.isFormInvalid(form)) {
+                            return false;
+                        }
+                        // for (i in model.customer.enterpriseRegistrations){
+                        //     if(model.customer.enterpriseRegistrations[i].registeredDate > model.customer.enterpriseRegistrations[i].expiryDate){
+                        //         PageHelper.showErrors({data:{error:"Registration date cant be greater than valid upto date...."}});
+                        //         return false;
+                        //     } 
+                        // }
+                        var dateFlag;
+                        model.customer.enterpriseRegistrations.map((epReg => {
+                            if(epReg.registeredDate > epReg.expiryDate){
+                                dateFlag = true;
+                            }
+                        }))
+                        if(dateFlag){
+                            PageHelper.showErrors({data:{error:"Registration date cant be greater than valid upto date...."}});   
                             return false;
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
