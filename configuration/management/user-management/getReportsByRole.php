@@ -30,7 +30,6 @@ if (!$result) {
 } else {
 	$data = array();
 	while($output = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-		var_dump($output);
 		$data[] = $output;
 	}
 	$query->close();
