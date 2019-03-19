@@ -377,7 +377,7 @@ define({
                                  model.group.jlgGroupMembers[context.arrayIndex].loanPurpose1 = res.requestedLoanPurpose;
                                  model.group.jlgGroupMembers[context.arrayIndex].witnessFirstName = undefined;
                                  model.group.jlgGroupMembers[context.arrayIndex].witnessRelationship = undefined;
-
+                                 model.group.jlgGroupMembers[context.arrayIndex].spouseFirstName = res.spouseFirstName;
                                 for (i in res.familyMembers) {
                                     var obj = {};
                                     if(model.group.jlgGroupMembers[context.arrayIndex].urnNo != res.familyMembers[i].enrolledUrnNo){
