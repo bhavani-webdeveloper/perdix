@@ -2827,6 +2827,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             model.customer.addressProofReverseImageId=model.customer.identityProofReverseImageId;
                                                             model.customer.addressProofIssueDate=model.customer.idProofIssueDate;
                                                             model.customer.addressProofValidUptoDate=model.customer.idProofValidUptoDate;
+                                                        }else{
+                                                            model.customer.addressProof = null;
+                                                            model.customer.addressProofNo=null;
+                                                            model.customer.addressProofImageId=null;
+                                                            model.customer.addressProofReverseImageId=null;
+                                                            model.customer.addressProofIssueDate=null;
+                                                            model.customer.addressProofValidUptoDate=null;
                                                         }
                                                     }    
                                         },
