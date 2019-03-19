@@ -677,6 +677,7 @@ define({
                 "type": "box",
                 "colClass": "col-sm-12",
                 "readonly":false,
+              
                 "title": "Loan Recommendation",
                 "items": [{
                     "type": "grid",
@@ -687,23 +688,31 @@ define({
                         "items": [{
                             "key": "loanAccount.loanAmount",
                             "title": "LOAN_AMOUNT",
+                            "required":false
                            // "type": "amount",                      
                         }, 
                         {
                             title:"DURATION_IN_MONTHS",
-                            "key": "loanAccount.tenure",           
+                            "key": "loanAccount.tenure", 
+                            "required":false,   
+                            "schema": {  
+                                "type": ["integer", "string"],
+                                "pattern": "^([6-9]|[1-5][0-9]|60)$"
+                            },       
                             onChange:function(value,form,model){
                                 computeEMI(model);
                             }
                         }, 
                         {
                             "key": "loanAccount.estimatedEmi",
-                            "title": "ESTIMATED_KINARA_EMI"
+                            "title": "ESTIMATED_KINARA_EMI",
+                            "required":false
                            //"type": "amount",
                         }, 
                         {
                             "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf10",
-                            "title": "REMARK_OF_IN_FAVOUR_LOAN"
+                            "title": "REMARK_OF_IN_FAVOUR_LOAN",
+                            "required":false
                            // "type": "string",       
                         }, 
                         {
@@ -712,7 +721,8 @@ define({
                           // "type": "number",
                             onChange:function(value,form,model){
                                 computeEMI(model);
-                            }
+                            },
+                            "required":false
                         }]
                     },
                      {
@@ -722,30 +732,33 @@ define({
                            "type":"select",
                             "key":"loanAccount.disbursementSchedules[0].modeOfDisbursement",
                             "title":"MODE_OF_DISBURSEMENT",
-                            "enumCode":"mode_of_disbursement"
+                            "enumCode":"mode_of_disbursement",
+                            "required":false
                         }, 
                         {
                             "key":"loanAccount.disbursementSchedules[0].firstRepaymentDate",
                             "title":"COLLECTION_DATE",
-                            "type":"date"
+                            "type":"date",
+                            "required":false
                          
                         },
                          {
                             "key":"loanAccount.disbursementSchedules[0].actualDisbursementDate",
                             "title":"DISBURSEMENT_DATE",
-                            "type":"date"
+                            "type":"date",
+                            "required":false
                           
                         },
                         {
                             "key":"loanAccount.disbursementSchedules[0].moratoriumPeriodInDays",
-                            "title":"GRACE_PERIOD"
-                           
-                            
+                            "title":"GRACE_PERIOD",
+                            "required":false
                         },
                         {
                             "key":"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf12",
                             "title":"DATE",
-                            "type":"date"
+                            "type":"date",
+                            "required":false
                         },
                     ]
                     }]
@@ -1188,8 +1201,13 @@ define({
                     })
                 },*/
                 save: function(model, formCtrl, form, $event) {
+                    
                     $log.info("Inside save()");
                     PageHelper.clearErrors();
+                    if (PageHelper.isFormInvalid(formCtrl)) {
+                        return false;
+                    }
+                    formCtrl.scope.$broadcast('schemaFormValidate');
 
                     /*DEVIATION AND MITIGATION - SAVING SELECTED MITIGANTS*/
                     

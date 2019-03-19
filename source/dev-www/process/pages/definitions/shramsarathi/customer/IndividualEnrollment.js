@@ -43,6 +43,9 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     "loanProcess.loanAccount.currentStage": {
                         "Initiation": {
                             "excludes": [], "overrides": {
+                                "PhysicalAssets":{
+                                    "title":"FIXED_ASSET"
+                                },
                                 "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
                                     "title": "ASSET_TYPE",
                                     "type": "select",
@@ -2011,8 +2014,12 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                         "required": true,
                         "resolver": "IFSCCodeLOVConfiguration"
                     },
+                    "PhysicalAssets":{
+                        "title":"FIXED_ASSET"
+                    },
+
                     "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
-                        "enumCode": "asset_type"
+                        "enumCode": "fixed_asset_type"
                     },
                     // "FamilyDetails.familyMembers.relationShip": {
                     //     "condition":"(model.customer.familyMembers[arrayIndex].relationShip).toUpperCase() =='SELF'",

@@ -1940,6 +1940,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "PhysicalAssets":{
                         "title":"FIXED_ASSET"
                     },
+                    "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
+                        "enumCode": "fixed_asset_type"
+                    },
                     "IndividualInformation.customerBranchId": {
                         "required": true,
                         "readonly": true
