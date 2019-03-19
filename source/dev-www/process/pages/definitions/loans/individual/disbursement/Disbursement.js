@@ -27,7 +27,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                 model.additional = {"branchName":branch};            
                 model.CBSDate=SessionStore.getCBSDate();
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
-                model.CanChangeRepaymentDateIndisbursement = SessionStore.getGlobalSetting("CanChangeRepaymentDateIndisbursement");
+                model.CanChangeRepaymentDateIndisbursement = SessionStore.getGlobalSetting("CanChangeRepaymentDateIndisbursement");                
                 model.validateDisbursementDate = function(model){
                     if(model.siteCode == "IREPDhan" && (moment(model.loanAccountDisbursementSchedule.scheduledDisbursementDate).isAfter(model.CBSDate))){
                         PageHelper.setError({
@@ -112,7 +112,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                     model.loanAccountDisbursementSchedule.customerNameInBank=resp[0].customerName;
                                     model.loanAccountDisbursementSchedule.customerAccountNumber=res.body[i].account_number;
                                     model.loanAccountDisbursementSchedule.ifscCode=res.body[i].ifsc_code;
-                                    model.loanAccountDisbursementSchedule.customerBankBranchName=res.body[i].branch_name;
+                                    model.loanAccountDisbursementSchedule.customerBankBranchName=res.body[i].branch_name;                                    
                                 if(res.body[i].default_disbursement_account){
                                     model.loanAccountDisbursementSchedule.disbursementFromBankAccountNumber = res.body[i].account_number;                                    
                                     break;
@@ -121,6 +121,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         });
                         // to validate customer profile updated or not
                         if(model.siteCode == 'KGFS') {
+                            model.loanAccountDisbursementSchedule.scheduledDisbursementDate = moment().format(SessionStore.getSystemDateFormat());
                             Queries.getCustomerById(model.additional.customerId).then(function (res) {
                                 if(moment().diff(moment(res, 'YYYY-MM-DD'), 'days') <= 7) {
                                     PageHelper.setWarning({message:"Profile Edited in last 7 days. Please refer customer history for same."});
@@ -183,7 +184,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             model.additional.netDisbursementAmount = Number(resp[0].amount);
                             model.loanAccountDisbursementSchedule.modeOfDisbursement = "CASH";
                         }
-
 
                         Enrollment.getCustomerById({
                                 id: model.additional.customerId
