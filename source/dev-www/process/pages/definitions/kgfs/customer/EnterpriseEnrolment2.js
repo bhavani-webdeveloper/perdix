@@ -3108,6 +3108,240 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 }
                             }
                         },
+                        "DocumentUpload": {
+                            "excludes": [
+                                "BankAccounts",
+                                "Liabilities",
+                                "BuyerDetails",
+                                "SuppliersDeatils",
+                                "PreliminaryInformation",
+                                "EstimatedSales",
+                                "DailySales",
+                                "ReviewDailySales",
+                                "AnnualSales",
+                                "ReviewAnnualSales",
+                                "EnterpriseProductSale",
+                                "ReviewEnterpriseProductSale",
+                                "MonthlyBusinessExpense",
+                                "ReviewMonthlyBusinessExpense",
+                                "OtherBusinessIncomes",
+                                "ReviewOtherBusinessIncomes",
+                                "PersonalExpenses",
+                                "ReviewPersonalExpenses",
+                                "LiabilityRepayment",
+                                "ReviewLiabilityRepayment",
+                                "NetBusinessIncome"
+                            ],
+                            "overrides": {
+                                "EnterpriseInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation":{
+                                    "readonly": true
+                                },
+                                "EnterpriseFinancials":{
+                                    "readonly": true
+                                },
+                                "BuyerDetails":{
+                                    "readonly": true
+                                },
+                                "SuppliersDeatils":{
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation":{
+                                    "readonly": true
+                                },
+                                "EstimatedSales":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                },
+                                "NetBusinessIncome":{
+                                    "readonly": true
+                                },
+                                "TotalMonthlySurplus":{
+                                    "readonly": true
+                                },
+                                "MonthlyBusinessExpense":{
+                                    "readonly": true
+                                },
+                                "OtherBusinessIncomes":{
+                                    "readonly": true
+                                },
+                                "PersonalExpenses":{
+                                    "readonly": true
+                                },
+                                "LiabilityRepayment":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "Checker1": {
+                            "excludes": [
+                                "BankAccounts",
+                                "Liabilities",
+                                "BuyerDetails",
+                                "SuppliersDeatils",
+                                "PreliminaryInformation",
+                                "EstimatedSales",
+                                "DailySales",
+                                "ReviewDailySales",
+                                "AnnualSales",
+                                "ReviewAnnualSales",
+                                "EnterpriseProductSale",
+                                "ReviewEnterpriseProductSale",
+                                "MonthlyBusinessExpense",
+                                "ReviewMonthlyBusinessExpense",
+                                "OtherBusinessIncomes",
+                                "ReviewOtherBusinessIncomes",
+                                "PersonalExpenses",
+                                "ReviewPersonalExpenses",
+                                "LiabilityRepayment",
+                                "ReviewLiabilityRepayment",
+                                "NetBusinessIncome"
+                            ],
+                            "overrides": {
+                                "EnterpriseInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation":{
+                                    "readonly": true
+                                },
+                                "EnterpriseFinancials":{
+                                    "readonly": true
+                                },
+                                "BuyerDetails":{
+                                    "readonly": true
+                                },
+                                "SuppliersDeatils":{
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation":{
+                                    "readonly": true
+                                },
+                                "EstimatedSales":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                },
+                                "NetBusinessIncome":{
+                                    "readonly": true
+                                },
+                                "TotalMonthlySurplus":{
+                                    "readonly": true
+                                },
+                                "MonthlyBusinessExpense":{
+                                    "readonly": true
+                                },
+                                "OtherBusinessIncomes":{
+                                    "readonly": true
+                                },
+                                "PersonalExpenses":{
+                                    "readonly": true
+                                },
+                                "LiabilityRepayment":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                }
+                            }
+                        },
+                        "Checker2": {
+                            "excludes": [
+                                "BankAccounts",
+                                "Liabilities",
+                                "BuyerDetails",
+                                "SuppliersDeatils",
+                                "PreliminaryInformation",
+                                "EstimatedSales",
+                                "DailySales",
+                                "ReviewDailySales",
+                                "AnnualSales",
+                                "ReviewAnnualSales",
+                                "EnterpriseProductSale",
+                                "ReviewEnterpriseProductSale",
+                                "MonthlyBusinessExpense",
+                                "ReviewMonthlyBusinessExpense",
+                                "OtherBusinessIncomes",
+                                "ReviewOtherBusinessIncomes",
+                                "PersonalExpenses",
+                                "ReviewPersonalExpenses",
+                                "LiabilityRepayment",
+                                "ReviewLiabilityRepayment",
+                                "NetBusinessIncome"
+                            ],
+                            "overrides": {
+                                "EnterpriseInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation":{
+                                    "readonly": true
+                                },
+                                "EnterpriseFinancials":{
+                                    "readonly": true
+                                },
+                                "BuyerDetails":{
+                                    "readonly": true
+                                },
+                                "SuppliersDeatils":{
+                                    "readonly": true
+                                },
+                                "PreliminaryInformation":{
+                                    "readonly": true
+                                },
+                                "EstimatedSales":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                },
+                                "NetBusinessIncome":{
+                                    "readonly": true
+                                },
+                                "TotalMonthlySurplus":{
+                                    "readonly": true
+                                },
+                                "MonthlyBusinessExpense":{
+                                    "readonly": true
+                                },
+                                "OtherBusinessIncomes":{
+                                    "readonly": true
+                                },
+                                "PersonalExpenses":{
+                                    "readonly": true
+                                },
+                                "LiabilityRepayment":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                }
+                            }
+                        },
                         
                     }
                 }

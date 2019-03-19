@@ -45,6 +45,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:30
                         },
                         {
+                            pageName: 'kgfs.customer.EnterpriseEnrolment2',
+                            title: 'BUSINESS',
+                            pageClass: 'business',
+                            minimum: 1,
+                            maximum: 1,
+                            order:40
+                        },
+                        {
                             pageName: 'kgfs.loans.individual.booking.LoanBooking',
                             title: 'LOAN_BOOKING',
                             pageClass: 'loan-booking',
@@ -150,6 +158,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 }
 
+                                 if (loanProcess.loanAccount.productCategory == 'MEL') {
+                                    $this.bundlePages.push({
+                                        pageClass: "business",
+                                        model: {
+                                            enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                            loanProcess: loanProcess
+                                        }
+                                    });
+                                }
+
                                $this.bundlePages.push({
                                     pageClass: 'loan-booking',
                                     model:{
@@ -198,12 +216,24 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         }
                                     });
                                 }
+
+                                 if (loanProcess.loanAccount.productCategory == 'MEL') {
+                                    $this.bundlePages.push({
+                                        pageClass: "business",
+                                        model: {
+                                            enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                            loanProcess: loanProcess
+                                        }
+                                    });
+                                }
+
                                 $this.bundlePages.push({
                                     pageClass: 'loan-booking',
                                     model:{
                                         loanProcess: loanProcess
                                     }
                                 });
+                                
                                 
                                 $this.bundlePages.push({
                                     pageClass: 'cb-check',
