@@ -6,7 +6,7 @@ irf.pageCollection.factory(irf.page("jewelloan.ReturnRequestQueue"),
                 $log.info("Inside submit()");
 
                 var branches               = formHelper.enum('branch_id').data;
-                destinationBranchId        = model.jewelloanResponse[0].destinationBranchId;
+                destinationBranchId        = items[0].destinationBranchId;
                
                 for (var i=0;i<branches.length && i<items.length; i++){
                     var branch = branches[i];
