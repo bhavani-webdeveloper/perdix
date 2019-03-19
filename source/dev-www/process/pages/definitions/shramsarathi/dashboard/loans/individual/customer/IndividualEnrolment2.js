@@ -54,7 +54,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "KYC.addressProof": {
                                     "readonly": false,
-                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'" 
                                 },
                                 "KYC.addressProofImageId": {
                                     "required": true,
@@ -156,14 +156,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "Screening": {
                             "excludes": [
-                               // "IndividualFinancials",
+                               "IndividualFinancials",
                                 "HouseVerification.latitude",
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
-                                "IndividualReferences",
+                                //"IndividualReferences",
                                 "IndividualInformation.centreId",
                                 "References",
-                                "KYC.firstName",
+                                "KYC.firstName"
                             ],
                             "overrides": {
 
@@ -201,8 +201,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                                     }
                                 }
-                            }
-                        ,
+                            },
                                 "KYC": {
                                     "orderNo": 1
                                 },
@@ -232,7 +231,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "resolver": "IndividualCustomerIDLOVConfiguration"
                                 },
                                 "KYC.identityProof": {
-                                    "required": true
+                                    "required": true,
+                                    onChange: function(value, form, model) {
+                                       if(model.customer.identityProof=='Aadhaar Card'){
+                                        model.customer.addressPfSameAsIdProof='YES'
+                                       }else{
+                                        model.customer.addressPfSameAsIdProof='NO'
+                                       }
+                                       
+                                    }
+                                 
                                 },
                                 "KYC.identityProofImageId": {
                                     "required": true
@@ -1097,7 +1105,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "FamilyDetails.familyMembers.noOfDependents",
                                 "PhysicalAssets",
                                 "IndividualFinancials",
-                                //"References",
+                                "References",
                                 
                             ],
                             "overrides": {
@@ -2497,7 +2505,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     // "Machinery.fixedAssetsMachinaries.presentValue",
                     // "Machinery.fixedAssetsMachinaries.balance",
                     
+<<<<<<< Updated upstream
                     //"IndividualReferences",
+=======
+                    //"PhysicalAssets.physicalAssets.unit",
+
+                    "IndividualReferences",
+>>>>>>> Stashed changes
                     "IndividualReferences.verifications",
                     "IndividualReferences.verifications.referenceFirstName",
                     "IndividualReferences.verifications.mobileNo",
@@ -2510,7 +2524,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualReferences.verifications.ReferenceCheck.financialStatus",
                     "IndividualReferences.verifications.ReferenceCheck.customerResponse",
 
-                    //"References",
+                    "References",
                     "References.verifications",
                     "References.verifications.relationship",
                     "References.verifications.businessName",
@@ -2523,7 +2537,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "References.verifications.ReferenceCheck.opinion",
                     "References.verifications.ReferenceCheck.financialStatus",
                     "References.verifications.ReferenceCheck.knownSince",
-                    //"References.verifications.ReferenceCheck.goodsSold",
+                    // "References.verifications.ReferenceCheck.goodsSold",
                     // "References.verifications.ReferenceCheck.goodsBought",
                     // "References.verifications.ReferenceCheck.paymentTerms",
                     // "References.verifications.ReferenceCheck.modeOfPayment",
@@ -2812,12 +2826,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "orderNo":60,
                                             "onChange": function(modelValue, form, model, formCtrl, event) {
                                                         if(model.customer.addressPfSameAsIdProof==='YES'){
-                                                            model.customer.addressProof=model.customer.identityProof,
-                                                            model.customer.addressProofNo=model.customer.identityProofNo,
-                                                            model.customer.addressProofImageId=model.customer.identityProofImageId,
-                                                            model.customer.addressProofReverseImageId=model.customer.identityProofReverseImageId,
-                                                            model.customer.addressProofIssueDate=model.customer.idProofIssueDate,
-                                                            model.customer.addressProofValidUptoDate=model.customer.idProofValidUptoDate
+                                                            model.customer.addressProof=model.customer.identityProof;
+                                                            model.customer.addressProofNo=model.customer.identityProofNo;
+                                                            model.customer.addressProofImageId=model.customer.identityProofImageId;
+                                                            model.customer.addressProofReverseImageId=model.customer.identityProofReverseImageId;
+                                                            model.customer.addressProofIssueDate=model.customer.idProofIssueDate;
+                                                            model.customer.addressProofValidUptoDate=model.customer.idProofValidUptoDate;
                                                         }
                                                     }    
                                         },
@@ -3312,7 +3326,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "ReferenceCheck": {
                                                     type: "fieldset",
                                                     title: "REFERENCE_CHECK",
-                                                    //"condition": "model.currentStage=='FieldAppraisal'",
+                                                    //"condition": "model.currentStage=='ScreeningInput'",
                                                     items: {
                                                         /*,
                                                         {
@@ -3473,6 +3487,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         })
                         .then(function (form) {
                             self.form = form;
+                            console.log(form);
+                            console.log("_________________Testing form data___________");
                         });
 
                     /* Form rendering ends */
@@ -3610,6 +3626,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             return false;
                         }
 
+                        if((model.customer.addressPfSameAsIdProof==='YES') && (model.customer.identityProof=='Aadhaar Card')){
+                            model.customer.addressProof=model.customer.identityProof;
+                            model.customer.addressProofNo=model.customer.identityProofNo;
+                            model.customer.addressProofImageId=model.customer.identityProofImageId;
+                            model.customer.addressProofReverseImageId=model.customer.identityProofReverseImageId;
+                            model.customer.addressProofIssueDate=model.customer.idProofIssueDate;
+                            model.customer.addressProofValidUptoDate=model.customer.idProofValidUptoDate;
+                        }
+                        
                         // $q.all start
                         model.enrolmentProcess.save()
                             .finally(function () {
@@ -3658,6 +3683,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         PageHelper.clearErrors();
                         if (PageHelper.isFormInvalid(form)) {
                             return false;
+                        }
+                        if((model.customer.addressPfSameAsIdProof==='YES') && (model.customer.identityProof=='Aadhaar Card')){
+                            model.customer.addressProof=model.customer.identityProof;
+                            model.customer.addressProofNo=model.customer.identityProofNo;
+                            model.customer.addressProofImageId=model.customer.identityProofImageId;
+                            model.customer.addressProofReverseImageId=model.customer.identityProofReverseImageId;
+                            model.customer.addressProofIssueDate=model.customer.idProofIssueDate;
+                            model.customer.addressProofValidUptoDate=model.customer.idProofValidUptoDate;
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();

@@ -365,6 +365,7 @@ define([], function () {
                     "LoanSanction.disbursementSchedules",
                     "LoanSanction.disbursementSchedules.trancheNumber",
                     "LoanSanction.disbursementSchedules.disbursementAmount",
+                    "LoanSanction.disbursementSchedules.moratoriumPeriodInDays",
 
                 ]
             };
@@ -999,7 +1000,15 @@ define([], function () {
                     },
                     "LoanSanction.disbursementSchedules":{
                         orderNo:2,
+                    },
+                    //"LoanSanction.disbursementSchedules.disbursementAmount",
+                    "LoanSanction.disbursementSchedules.trancheNumber":{
                         readonly : true,
+                    },
+                    "LoanSanction.disbursementSchedules.disbursementAmount":{
+                        readonly : true,
+                    },
+                    "LoanSanction.disbursementSchedules.mordisbursementAmount":{
                     },
                     "LoanSanction.customerSignatureDate": {
                         orderNo :3,
@@ -1091,6 +1100,9 @@ define([], function () {
                     defaultConfiguration(model,true);
                     
                     self = this;
+                    model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays = 0;
+                   // "LoanSanction.disbursementSchedules.moratoriumPeriodInDays",
+
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
                     p1.then(function (repo) {
                         var formRequest = {
@@ -1220,6 +1232,18 @@ define([], function () {
                                                     "key": "loanAccount.disbursementSchedules[0].customerSignatureDate",
                                                     "type": "date",
                                                     "title": "CUSTOMER_SIGNATURE_DATE"
+                                                },
+                                                "disbursementSchedules": {
+                                                    "key": "loanAccount.disbursementSchedules",
+                                                    "title": "DISBURSEMENT_SCHEDULES",
+                                                    "add": null,
+                                                    "remove": null,
+                                                    "items": {
+                                                    "moratoriumPeriodInDays":{
+                                                        "key": "loanAccount.disbursementSchedules[0].moratoriumPeriodInDays",
+                                                        "title": "MORATORIUM_PERIOD",
+                                                        "type": "string"
+                                                    }}
                                                 }
                                             }
                                         },
@@ -1301,6 +1325,7 @@ define([], function () {
                                             }
                                             
                                         }
+                                      
                                         
                                     },
                                     "additions": [
