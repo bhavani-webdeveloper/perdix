@@ -81,7 +81,7 @@ function($log,$stateParams,formHelper,PageHelper, Utils,irfNavigator,JewelLoan,S
                             data: 'customerFullName'
                         }, {
                             title: 'Disbursed Amount',
-                            data: 'disbursedAmountInPaisa'
+                            data: 'disbursedAmount'
                         },{
                             title: 'Loan Disbursement Date',
                             data: 'loanDisbursementDate'
