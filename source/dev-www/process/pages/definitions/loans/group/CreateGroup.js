@@ -415,7 +415,7 @@ define({
                         "key": "group.jlgGroupMembers[].maritalStatus",
                         "title": "MARITAL_STATUS",
                         "type":"select",
-                        "condition":"!model.group.partnerCode=='AXIS'",
+                        "condition":"model.group.partnerCode!='AXIS'",
                         "enumCode":"marital_status"
                     },
                     {
