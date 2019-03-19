@@ -550,6 +550,11 @@
                         "maxLength": 15,
                         "captureStages": ["BasicEnrolment", "Completed"]
                     },
+                    "fcuStatus":{
+                        "title": "FCU_STATUS",
+                        "type": "boolen",
+                        "captureStages": ["BasicEnrolment", "Completed"]
+                    },
                     "inCurrentAddressSince": {
                         "title": "In Correct Address Since",
                         "type": "string",

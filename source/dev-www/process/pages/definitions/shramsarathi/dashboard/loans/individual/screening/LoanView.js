@@ -67,6 +67,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             maximum: 1,
                             order:50
                         },
+                        {
+                            pageName: 'shramsarathi.dashboard.loans.individual.screening.televerification',
+                            title: 'TELEVERIFICATION',
+                            pageClass: 'televerification',
+                            minimum: 1,
+                            maximum: 1,
+                            order:55
+                        },
                         // {
                         //     pageName: 'base.dashboard.loans.individual.screening.VehicleDetails',
                         //     title: 'VEHICLE_DETAILS',
@@ -278,6 +286,12 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                                 $this.bundlePages.push({
                                     pageClass: 'loan-request',
+                                    model: {
+                                        loanProcess: loanProcess
+                                    }
+                                });
+                                $this.bundlePages.push({
+                                    pageClass: 'televerification',
                                     model: {
                                         loanProcess: loanProcess
                                     }
