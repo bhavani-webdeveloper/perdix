@@ -218,7 +218,7 @@ function($log,$stateParams,formHelper,PageHelper, Utils,irfNavigator,JewelLoan,S
                 sourceBranchId      = model.jewelloanResponse[0].sourceBranchId;
                 destinationBranchId = model.jewelloanResponse[0].destinationBranchId;
                 remarks             = model.jewelloanResponse.remarks    
-                rejectedRemarks     = jewelloanResponse.rejectedRemarks;
+                rejectedRemarks     = model.jewelloanResponse.rejectedRemarks;
                
                 for (var i=0;i<branches.length && i<model.jewelloanResponse.length; i++){
                     var branch = branches[i];
@@ -264,8 +264,7 @@ function($log,$stateParams,formHelper,PageHelper, Utils,irfNavigator,JewelLoan,S
                 .$promise
                 .then(function(res){
                     PageHelper.showProgress("Assign-Jewel", "Done.", 3000);
-                    $log.info(res);
-                    $log.info(items);
+                    irfNavigator.goBack();
                 }, function(httpRes){
                     PageHelper.showProgress("Assign-Jewel", "Oops. Some error occured.", 3000);
                     PageHelper.showErrors(httpRes);
