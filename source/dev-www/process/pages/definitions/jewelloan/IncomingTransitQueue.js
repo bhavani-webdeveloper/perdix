@@ -46,7 +46,7 @@ irf.pageCollection.factory(irf.page("jewelloan.IncomingTransitQueue"),
             .$promise
 			.then(function(res){
 				PageHelper.showProgress("Assign-Jewel", "Done.", 3000);
-				$log.info(res);
+				irfNavigator.goBack();
 			}, function(httpRes){
 				PageHelper.showProgress("Assign-Jewel", "Oops. Some error occured.", 3000);
 				PageHelper.showErrors(httpRes);
