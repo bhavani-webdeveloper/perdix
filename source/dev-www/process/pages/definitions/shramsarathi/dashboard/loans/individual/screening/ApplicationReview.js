@@ -82,7 +82,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             //     minimum: 1,
                             //     maximum: 1,
                             //     order: 6
-                            // },
+                            // }, 
                             {
                                 pageName: 'loans.individual.screening.CreditBureauView',//CreditBureauView
                                 title: 'CREDIT_BUREAU',

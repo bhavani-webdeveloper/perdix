@@ -3342,7 +3342,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 }
                             }
                         },
-                        
                     }
                 }
             }

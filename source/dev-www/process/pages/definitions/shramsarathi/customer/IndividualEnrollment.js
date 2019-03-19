@@ -1,4 +1,4 @@
-// pageUID: "shramsarathi.dashboard.loans.individual.customer.IndividualEnrolment2",
+// pageUID: "shramsarathi.dashboard.loans.individual.customer.IndividualEnrolment",
 define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/AngularResourceService'], function (EnrolmentProcess, AngularResourceService) {
     EnrolmentProcess = EnrolmentProcess['EnrolmentProcess'];
     return {
@@ -40,6 +40,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             var configFile = function () {
                 return {
                     "loanProcess.loanAccount.currentStage": {
+               "Initiation":{ "excludes": [], "overrides": {  "IndividualInformation.centreId": {
+                "required": true,
+                "readonly": false,
+                "title": "ZONE_ID"
+            },
+            "IndividualInformation.centreId1":{
+                "title": "ZONE_NAME"
+            }}},
+
+
                         "Application":
                         {
                             "excludes": [
@@ -2196,7 +2206,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                 return [
                     "KYC",
-                    "KYC.customerId",
+                    //"KYC.customerId",
                     "KYC.firstName",
                     "KYC.identityProofFieldSet",
                     "KYC.identityProof",
@@ -2227,7 +2237,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualInformation.centreId",
                     "IndividualInformation.centreId1",
                     "IndividualInformation.customerId",
-                    "IndividualInformation.urnNo",
+                    // "IndividualInformation.urnNo",
                     "IndividualInformation.photoImageId",
                     "IndividualInformation.existingLoan",
                     "IndividualInformation.title",
@@ -2461,17 +2471,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         'family_fields': {}
                     };
 
-                    /* Setting data recieved from Bundle */
-                    // model.loanCustomerRelationType =getLoanCustomerRelation(bundlePageObj.pageClass);
-                    // model.pageClass = bundlePageObj.pageClass;
-                    // model.currentStage = bundleModel.currentStage;
-                    model.currentStage = "Initiation";
-                   
-                    // model.enrolmentProcess.currentStage = model.currentStage;
                     model.enrolmentProcess={};
-                    model.enrolmentProcess.currentStage = model.currentStage;
-                    model.customer = model.enrolmentProcess.customer;
-                    model.customer.addressPfSameAsIdProof = "NO";
+                    loanProcess.loanAccount.currentStage="Initiation";
+                    EnrolmentProcess.createNewProcess()
+                    .subscribe(function(enrolmentProcess) {
+                        // loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, LoanCustomerRelationTypes.APPLICANT);
+                        model.enrolmentProcess=enrolmentProcess;
+                    });
+                        /* Setting data recieved from Bundle */
+                        // model.loanCustomerRelationType =getLoanCustomerRelation(bundlePageObj.pageClass);
+                        //  model.pageClass = bundlePageObj.pageClass;
+                        model.pageClass = "applicant";
+                        // model.currentStage = bundleModel.currentStage;
+                        model.currentStage = "Initiation";
+                        // model.enrolmentProcess.currentStage = model.currentStage;
+           
+            // model.enrolmentProcess.currentStage = model.currentStage;
+              model.customer = model.enrolmentProcess.customer;
+             model.customer.addressPfSameAsIdProof = "NO";
                     // }
                     /* End of setting data recieved from Bundle */
                     // set Age from DateOfBirth
@@ -3526,6 +3543,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             });
                     },
                     proceed: function (model, form, formName) {
+                    
                         PageHelper.clearErrors();
                         if (PageHelper.isFormInvalid(form)) {
                             return false;

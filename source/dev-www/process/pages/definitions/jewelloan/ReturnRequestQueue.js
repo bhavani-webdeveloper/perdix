@@ -169,6 +169,7 @@ irf.pageCollection.factory(irf.page("jewelloan.ReturnRequestQueue"),
 								response[i].transitStatus    	= transitStatusValue;
 								response[i].sourceBranch 	 	= sourceBranchName;
 								response[i].destinationBranch	= destinationBranchName;
+								response[i].disbursedAmount     = (response[i].disbursedAmountInPaisa/100);
 								}
 							return response;
 						}
@@ -184,7 +185,7 @@ irf.pageCollection.factory(irf.page("jewelloan.ReturnRequestQueue"),
 							item.jewelPouchNo,
 							item.transitStatus,
 							item.customerFullName,
-							item.disbursedAmountInPaisa,
+							item.disbursedAmount,
 							item.investor,
 							item.loanDisbursementDate,
 							item.rejectedReason,
@@ -225,7 +226,7 @@ irf.pageCollection.factory(irf.page("jewelloan.ReturnRequestQueue"),
 									data: 'customerFullName'
 								}, {
 									title: 'Disbursed Amount',
-									data: 'disbursedAmountInPaisa'
+									data: 'disbursedAmount'
 								},{
 									title: 'Loan Disbursement Date',
 									data: 'loanDisbursementDate'
