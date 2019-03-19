@@ -1,6 +1,7 @@
 // pageUID: "shramsarathi.dashboard.loans.individual.customer.IndividualEnrolment",
-define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/AngularResourceService'], function (EnrolmentProcess, AngularResourceService) {
-    EnrolmentProcess = EnrolmentProcess['EnrolmentProcess'];
+define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/AngularResourceService'], function (LoanProcess,EnrolmentProcess, AngularResourceService) {
+    var LoanProcess = LoanProcess["LoanProcess"];
+    var EnrolmentProcess = EnrolmentProcess['EnrolmentProcess'];
     return {
         pageUID: "shramsarathi.customer.IndividualEnrollment",
         pageType: "Engine",
@@ -40,14 +41,23 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             var configFile = function () {
                 return {
                     "loanProcess.loanAccount.currentStage": {
-               "Initiation":{ "excludes": [], "overrides": {  "IndividualInformation.centreId": {
-                "required": true,
-                "readonly": false,
-                "title": "ZONE_ID"
-            },
-            "IndividualInformation.centreId1":{
-                "title": "ZONE_NAME"
-            }}},
+                        "Initiation": {
+                            "excludes": [], "overrides": {
+                                "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
+                                    "title": "ASSET_TYPE",
+                                    "type": "select",
+                                    "enumCode": "fixed_asset_type"
+                                },
+                                "IndividualInformation.centreId": {
+                                    "required": true,
+                                    "readonly": false,
+                                    "title": "ZONE_ID"
+                                },
+                                "IndividualInformation.centreId1": {
+                                    "title": "ZONE_NAME"
+                                }
+                            }
+                        },
 
 
                         "Application":
@@ -2460,7 +2470,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
             return {
                 "type": "schema-form",
-                "title": "INDIVIDUAL_ENROLLMENT_2",
+                "title": "INDIVIDUAL_ENROLLMENT",
                 "subTitle": "",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                     // $log.info("Inside initialize of IndividualEnrolment2 -SPK " + formCtrl.$name);
@@ -2472,7 +2482,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     };
 
                     model.enrolmentProcess={};
-                    loanProcess.loanAccount.currentStage="Initiation";
+                    LoanProcess.createNewProcess().subscribe(function(loanProcess) {
+                        model.loanProcess=loanProcess;
+                    });
+                    model.loanProcess.loanAccount.currentStage="Initiation";
                     EnrolmentProcess.createNewProcess()
                     .subscribe(function(enrolmentProcess) {
                         // loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, LoanCustomerRelationTypes.APPLICANT);
