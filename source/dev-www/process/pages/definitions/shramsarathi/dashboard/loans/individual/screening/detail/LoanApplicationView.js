@@ -439,47 +439,47 @@ define({
                     }]
                 }]
             },
-             {
-                "type": "box",
-                "readonly": true,
-                "colClass": "col-sm-12",
-                "overrideType": "default-view",
-                "title": "Additional Loan Information",
-                "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "loanAccount.estimatedDateOfCompletion",
-                            "title": "Estimated Date Of Completion"
-                        }, {
-                            "key": "loanAccount.productCategory",
-                            "title": "Product Type"
-                        }, {
-                            "key": "loanAccount.customerSignDateExpected",
-                            "title": "Expected customer sign date"
-                        }]
-                    }, {
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "loanAccount.proposedHires",
-                            "title": "Proposed Hires",
-                            "type": "number"
-                        }, {
-                            "key": "loanAccount.percentageIncreasedIncome",
-                            "title": "% of Increased Income",
-                            "type": "number"
-                        }, {
-                            "key": "loanAccount.percentageInterestSaved",
-                            "title": "% of Interest Saved",
-                            "type": "number"
-                        }]
-                    }]
-                }]
-            }, 
+            //  {
+            //     "type": "box",
+            //     "readonly": true,
+            //     "colClass": "col-sm-12",
+            //     "overrideType": "default-view",
+            //     "title": "Additional Loan Information",
+            //     "items": [{
+            //         "type": "grid",
+            //         "orientation": "horizontal",
+            //         "items": [{
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [{
+            //                 "key": "loanAccount.estimatedDateOfCompletion",
+            //                 "title": "Estimated Date Of Completion"
+            //             }, {
+            //                 "key": "loanAccount.productCategory",
+            //                 "title": "Product Type"
+            //             }, {
+            //                 "key": "loanAccount.customerSignDateExpected",
+            //                 "title": "Expected customer sign date"
+            //             }]
+            //         }, {
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [{
+            //                 "key": "loanAccount.proposedHires",
+            //                 "title": "Proposed Hires",
+            //                 "type": "number"
+            //             }, {
+            //                 "key": "loanAccount.percentageIncreasedIncome",
+            //                 "title": "% of Increased Income",
+            //                 "type": "number"
+            //             }, {
+            //                 "key": "loanAccount.percentageInterestSaved",
+            //                 "title": "% of Interest Saved",
+            //                 "type": "number"
+            //             }]
+            //         }]
+            //     }]
+            // }, 
             {
                 "type": "box",
                 "readonly": true,

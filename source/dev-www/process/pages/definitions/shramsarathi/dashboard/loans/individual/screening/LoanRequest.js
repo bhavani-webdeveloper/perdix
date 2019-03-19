@@ -190,6 +190,7 @@ define([],function(){
                                 "NomineeDetails.nominees.nomineeButton",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
+                                "AdditionalLoanInformation",
                                 "LoanRecommendation",
                                 "CollateralDetails"          
                             ],
@@ -279,6 +280,7 @@ define([],function(){
                                 "LoanSanction",
                                 "DeductionsFromLoan",
                                 "LoanMitigants",
+                                "AdditionalLoanInformation",
                                 "LoanMitigants.deviationParameter",
                                 "CollateralDetails"              
                             ],
@@ -425,6 +427,7 @@ define([],function(){
                                 "LoanMitigants",
                                 "LoanRecommendation.udf8",
                                 "LoanRecommendation.udf3",
+                                "AdditionalLoanInformation",
                                 "LoanMitigants.deviationParameter",
                                 "CollateralDetails"             
                             ],
@@ -467,6 +470,7 @@ define([],function(){
                                 "LoanMitigants",
                                 "DeductionsFromLoan",
                                 "LoanRecommendation.udf8",
+                                "AdditionalLoanInformation",
                                 "LoanRecommendation.udf3",
                                 "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
@@ -514,6 +518,7 @@ define([],function(){
                                 "DeductionsFromLoan",
                                 "LoanMitigants",
                                 "LoanMitigants.deviationParameter",
+                                "AdditionalLoanInformation",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
                                 "NomineeDetails.nominees.nomineeButton",
@@ -559,6 +564,7 @@ define([],function(){
                                 "LoanSanction",
                                 "DeductionsFromLoan",
                                 "LoanMitigants",
+                                "AdditionalLoanInformation",
                                 "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
@@ -608,6 +614,7 @@ define([],function(){
                                 "ProposedUtilizationPlan",
                                 "DeductionsFromLoan",
                                 "LoanMitigants",
+                                "AdditionalLoanInformation",
                                 "LoanMitigants.deviationParameter",
                                 "PreliminaryInformation.actualAmountRequired",
                                 "PreliminaryInformation.fundsFromDifferentSources",
@@ -889,6 +896,7 @@ define([],function(){
                                 "LoanRecommendation.securityEmiRequired",
                                 "LoanMitigants.loanMitigantsByParameter", 
                                 "LoanSanction",
+                                "AdditionalLoanInformation",
                                 "LoanSanction.sanctionDate",
                                 "LoanSanction.numberOfDisbursements",
                                 "LoanSanction.disbursementSchedules",
@@ -1043,6 +1051,9 @@ define([],function(){
                             }
                         },
                         "SanctionInput":{
+                            "excludes":[
+                                "AdditionalLoanInformation",
+                            ],
                             "overrides":{
                                 "LoanCustomerRelations": {
                                     "readonly": true
@@ -1052,6 +1063,7 @@ define([],function(){
                         "ZonalRiskReview":{
                             "excludes":[
                                 "LoanRecommendation.securityEmiRequired",
+                                "AdditionalLoanInformation",
                                 "LoanMitigants.loanMitigantsByParameter",
                             ],
                             "overrides":{
@@ -1070,6 +1082,7 @@ define([],function(){
                                 "LoanSanction.sanctionDate",
                                 "LoanSanction.numberOfDisbursements",
                                 "LoanSanction.disbursementSchedules",
+                                "AdditionalLoanInformation",
                                 "LoanSanction.disbursementSchedules.disbursementAmount",
                                 "LoanSanction.disbursementSchedules.trancheNumber",
                                 "LoanSanction.disbursementSchedules.tranchCondition",
@@ -1114,9 +1127,9 @@ define([],function(){
                                 "LoanDocuments":{
                                     "readonly":true
                                 },
-                                "AdditionalLoanInformation":{
-                                    "readonly":true
-                                },
+                                // "AdditionalLoanInformation":{
+                                //     "readonly":true
+                                // },
                                 "LoanSanction":{
                                     "readonly":true
                                 },
@@ -1128,6 +1141,7 @@ define([],function(){
                         "loanView":{
                             "excludes": [
                                 "LoanSanction",
+                                "AdditionalLoanInformation",
                                 "PostReview"       
                             ],
                             "overrides":{
@@ -1158,7 +1172,8 @@ define([],function(){
                             "excludes": [
                                 "LoanRecommendation.securityEmiRequired",
                                 "LoanMitigants.loanMitigantsByParameter",  
-                                "CollateralDetails"              
+                                "CollateralDetails",
+                                "AdditionalLoanInformation"             
                             ],
                         }
                     }
@@ -1424,29 +1439,29 @@ define([],function(){
                             "orderNo":70,
                         },
 
-                        "AdditionalLoanInformation":{
-                            "title":"ADDITIONAL_LOAN_INFORMATION",
+                        // "AdditionalLoanInformation":{
+                        //     "title":"ADDITIONAL_LOAN_INFORMATION",
                            // "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal' || model.currentStage == 'SanctionInput'||model.currentStage == 'ZonalRiskReview'",
-                        },
+                        // },
                         // "AdditionalLoanInformation":{
                         //     "title":"ADDITIONAL_LOAN_INFORMATION",
                         //     //condition: "model.currentStage !=  'Application'",
                         //     "condition": "model.currentStage =='Application' || model.currentStage=='FieldAppraisal' || model.currentStage == 'SanctionInput' ||model.currentStage == 'ZonalRiskReview' || model.currentStage=='ApplicationReview' || model.currentStage=='FieldAppraisalReview' ||model.currentStage=='Sanction' || model.currentStage=='CentralRiskReview' || model.currentStage=='CreditCommitteeReview' ||model.currentStage == 'Rejected'||model.currentStage == 'loanView'",
                         // },
-                        "AdditionalLoanInformation.productCategory":{
-                            key: "loanAccount.productCategory",
-                            title:"PRODUCT_TYPE",
-                            readonly:true,
-                            condition:"model.currentStage!='Application' && model.currentStage!='FieldAppraisal'"
-                        },
-                        "AdditionalLoanInformation.productCategory":{
-                            key: "loanAccount.productCategory",
-                            title:"PRODUCT_TYPE",
-                            required:true,
-                            type:"select",
-                            enumCode:"loan_product_category",
-                            condition:"model.currentStage=='Application' || model.currentStage=='FieldAppraisal' || model.currentStage == 'Televerification' "
-                        },
+                        // "AdditionalLoanInformation.productCategory":{
+                        //     key: "loanAccount.productCategory",
+                        //     title:"PRODUCT_TYPE",
+                        //     readonly:true,
+                        //     condition:"model.currentStage!='Application' && model.currentStage!='FieldAppraisal'"
+                        // },
+                        // "AdditionalLoanInformation.productCategory":{
+                        //     key: "loanAccount.productCategory",
+                        //     title:"PRODUCT_TYPE",
+                        //     required:true,
+                        //     type:"select",
+                        //     enumCode:"loan_product_category",
+                        //     condition:"model.currentStage=='Application' || model.currentStage=='FieldAppraisal' || model.currentStage == 'Televerification' "
+                        // },
                         "PreliminaryInformation.tenureRequested": {
                             "required": true,
                             "title":"NO_OF_INSTALLMENTS"
@@ -1675,13 +1690,13 @@ define([],function(){
                      "LoanSanction.disbursementSchedules.tranchCondition",
                     // loanAccount.disbursementSchedules[].disbursementAmount,
 
-                    "AdditionalLoanInformation",
-                    "AdditionalLoanInformation.estimatedDateOfCompletion",
-                    "AdditionalLoanInformation.productCategory",
-                    "AdditionalLoanInformation.customerSignDateExpected",
-                    "AdditionalLoanInformation.proposedHires",
-                    "AdditionalLoanInformation.percentageIncreasedIncome",
-                    "AdditionalLoanInformation.percentageInterestSaved",
+                    // "AdditionalLoanInformation",
+                    // "AdditionalLoanInformation.estimatedDateOfCompletion",
+                    // "AdditionalLoanInformation.productCategory",
+                    // "AdditionalLoanInformation.customerSignDateExpected",
+                    // "AdditionalLoanInformation.proposedHires",
+                    // "AdditionalLoanInformation.percentageIncreasedIncome",
+                    // "AdditionalLoanInformation.percentageInterestSaved",
 
                     "CollateralDetails",
                     "CollateralDetails.collateral",
