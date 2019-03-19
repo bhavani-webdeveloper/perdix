@@ -7,7 +7,8 @@ irf.pageCollection.factory(irf.page("jewelloan.ReturnRequestQueue"),
 
                 var branches               = formHelper.enum('branch_id').data;
                 destinationBranchId        = items[0].destinationBranchId;
-               
+				remarks             	   = items[0].remarks; 
+				
                 for (var i=0;i<branches.length && i<items.length; i++){
                     var branch = branches[i];
                     items[i].destinationBranch      = items.destinationBranch
@@ -47,7 +48,7 @@ irf.pageCollection.factory(irf.page("jewelloan.ReturnRequestQueue"),
            .$promise
                 .then(function(res){
                     PageHelper.showProgress("Assign-Jewel", "Done.", 3000);
-                    $log.info(res);
+                    irfNavigator.goBack();
                 }, function(httpRes){
                     PageHelper.showProgress("Assign-Jewel", "Oops. Some error occured.", 3000);
                     PageHelper.showErrors(httpRes);

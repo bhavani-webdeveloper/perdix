@@ -3342,6 +3342,58 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 }
                             }
                         },
+                        "Rejected" : {
+                            "excludes": [
+                                "DailySales",
+                                "AnnualSales",
+                                "EnterpriseProductSale",
+                                "MonthlyBusinessExpense",
+                                "OtherBusinessIncomes",
+                                "PersonalExpenses",
+                                "LiabilityRepayment"
+                            ],
+                            "overrides": {
+                                "PreliminaryInformation":{
+                                    "readonly": true
+                                },
+                                "EnterpriseInformation": {
+                                    "readonly": true
+                                },
+                                "ContactInformation":{
+                                    "readonly": true
+                                },
+                                "BankAccounts":{
+                                    "readonly": true
+                                },
+                                "Liabilities":{
+                                    "readonly": true
+                                },
+                                "EnterpriseFinancials":{
+                                    "readonly": true
+                                },
+                                "BuyerDetails":{
+                                    "readonly": true
+                                },
+                                "SuppliersDeatils":{
+                                    "readonly": true
+                                },
+                                "EstimatedSales":{
+                                    "readonly": true
+                                },
+                                "MonthlySalesCalculate":{
+                                    "readonly": true
+                                },
+                                "OtherExpenseDetails":{
+                                    "readonly": true
+                                },
+                                "NetBusinessIncome":{
+                                    "readonly": true
+                                },
+                                "TotalMonthlySurplus":{
+                                    "readonly": true
+                                },
+                            }
+                        }
                     }
                 }
             }

@@ -69,7 +69,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                                 "readonly": true
                                                             },                                                        
                                                             {
-                                                                "key": "customer.centreId",
+                                                                "key": "applicant.customer.centreId",
                                                                 "type": "select",
                                                                 "enumCode": "centre",
                                                                 "title": "CENTRE_NAME",
