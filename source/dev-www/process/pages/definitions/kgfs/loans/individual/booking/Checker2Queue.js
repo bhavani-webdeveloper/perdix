@@ -17,7 +17,7 @@ define({
 
             definition: {
                 title: "SEARCH_LOANS",
-                autoSearch: true,
+                //autoSearch: true,
                 searchForm: [
                     "*"
                 ],
@@ -29,6 +29,7 @@ define({
                         {
                             'title': "BRANCH_NAME",
                             "type": ["string", "null"],
+                            "required":true,
                             "x-schema-form": {
                                 "type": "select",
                                 "screenFilter": true,
