@@ -253,8 +253,7 @@ function($log,$stateParams,formHelper,PageHelper, Utils,irfNavigator,JewelLoan,S
             .$promise
                 .then(function(res){
                     PageHelper.showProgress("Assign-Jewel", "Done.", 3000);
-                    $log.info(res);
-                    $log.info(items);
+                    irfNavigator.goBack();
                 }, function(httpRes){
                     PageHelper.showProgress("Assign-Jewel", "Oops. Some error occured.", 3000);
                     PageHelper.showErrors(httpRes);
