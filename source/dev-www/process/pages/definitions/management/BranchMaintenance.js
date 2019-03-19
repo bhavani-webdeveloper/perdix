@@ -240,7 +240,7 @@ define({
                     "title": "SOL_ID"
                 }, {
                     "key": "branch.fingerPrintDeviceType",
-                    "required":true,
+                    "required":false,
                     "type": "select",
                     "titleMap": {
                         "SAGEM": "SAGEM",
@@ -249,7 +249,7 @@ define({
                     "title": "FINGER_PRINT_DEVICE_TYPE"
                 }, {
                     "key": "branch.eodAuthenticationType",
-                    "required":true,
+                    "required":false,
                     "type": "select",
                     "titleMap": {
                         "PASSWORD": "PASSWORD",

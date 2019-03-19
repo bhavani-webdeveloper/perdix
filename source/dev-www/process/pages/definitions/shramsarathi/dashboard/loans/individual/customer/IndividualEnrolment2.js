@@ -162,7 +162,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification.date",
                                 //"IndividualReferences",
                                 "IndividualInformation.centreId",
-                                "References",
+                                //"References",
                                 "KYC.firstName"
                             ],
                             "overrides": {
@@ -2505,13 +2505,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     // "Machinery.fixedAssetsMachinaries.presentValue",
                     // "Machinery.fixedAssetsMachinaries.balance",
                     
-<<<<<<< Updated upstream
                     //"IndividualReferences",
-=======
-                    //"PhysicalAssets.physicalAssets.unit",
-
-                    "IndividualReferences",
->>>>>>> Stashed changes
                     "IndividualReferences.verifications",
                     "IndividualReferences.verifications.referenceFirstName",
                     "IndividualReferences.verifications.mobileNo",
@@ -2832,6 +2826,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             model.customer.addressProofReverseImageId=model.customer.identityProofReverseImageId;
                                                             model.customer.addressProofIssueDate=model.customer.idProofIssueDate;
                                                             model.customer.addressProofValidUptoDate=model.customer.idProofValidUptoDate;
+                                                        }else{
+                                                            model.customer.addressProof = null;
+                                                            model.customer.addressProofNo=null;
+                                                            model.customer.addressProofImageId=null;
+                                                            model.customer.addressProofReverseImageId=null;
+                                                            model.customer.addressProofIssueDate=null;
+                                                            model.customer.addressProofValidUptoDate=null;
                                                         }
                                                     }    
                                         },
@@ -3259,7 +3260,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "type": "box",
                                     "title": "REFERENCES",
                                     "orderNo": 100,
-                                    "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
+                                    "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal' || model.currentStage=='Screening'",
                                     "items": {
                                         "verifications": {
                                             key: "customer.verifications",

@@ -552,7 +552,7 @@
                     },
                     "fcuStatus":{
                         "title": "FCU_STATUS",
-                        "type": "boolen",
+                        "type": "string",
                         "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "inCurrentAddressSince": {
