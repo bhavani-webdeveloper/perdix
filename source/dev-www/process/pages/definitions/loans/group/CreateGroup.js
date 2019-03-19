@@ -415,7 +415,29 @@ define({
                         "key": "group.jlgGroupMembers[].maritalStatus",
                         "title": "MARITAL_STATUS",
                         "type":"select",
+                        "condition":"!model.group.partnerCode=='AXIS'",
                         "enumCode":"marital_status"
+                    },
+                    {
+                        "key": "group.jlgGroupMembers[].maritalStatus",
+                        "title": "MARITAL_STATUS",
+                        "type":"select",
+                        "required":true,
+                        "condition":"model.group.partnerCode=='AXIS'",
+                        "enumCode":"marital_status"
+                    },
+                    {
+                        "key":"group.jlgGroupMembers[].spouseFirstName",
+                        "title":"SPOUSE_FIRST_NAME",
+                        "type":"string",
+                        "required":true,
+                        "condition":"model.group.jlgGroupMembers[arrayIndex].maritalStatus == 'MARRIED' && model.group.partnerCode=='AXIS'"
+                    },{
+                        "key":"group.jlgGroupMembers[].spouseDob",
+                        "title":"SPOUSE_DATE_OF_BIRTH",
+                        "type":"date",
+                        "required":true,
+                        "condition":"model.group.jlgGroupMembers[arrayIndex].maritalStatus == 'MARRIED' && model.group.partnerCode=='AXIS'"
                     },{
                         "key": "group.jlgGroupMembers[].outStandingLoanAmount",
                         "condition":"model.group.partnerCode=='AXIS'",
