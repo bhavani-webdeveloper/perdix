@@ -480,38 +480,38 @@ define({
             //         }]
             //     }]
             // }, 
-            {
-                "type": "box",
-                "readonly": true,
-                "colClass": "col-sm-12",
-                "overrideType": "default-view",
-                "title": "Deductions From Loan Amount",
-                "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "loanAccount.expectedProcessingFeePercentage",
-                            "title": "Expected Processing Fee(in%)",
-                            "type": "number"
-                        }, {
-                            "key": "loanAccount.expectedCommercialCibilCharge",
-                            "title": "Expected CIBIL Charges",
-                            "type": "amount"
-                        }]
-                    }, {
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "loanAccount.estimatedEmi",
-                            "title": "Expected Security EMI(in Rs.)",
-                            "type": "amount"
-                        }]
-                    }]
-                }]
-            },
+            // {
+            //     "type": "box",
+            //     "readonly": true,
+            //     "colClass": "col-sm-12",
+            //     "overrideType": "default-view",
+            //     "title": "Deductions From Loan Amount",
+            //     "items": [{
+            //         "type": "grid",
+            //         "orientation": "horizontal",
+            //         "items": [{
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [{
+            //                 "key": "loanAccount.expectedProcessingFeePercentage",
+            //                 "title": "Expected Processing Fee(in%)",
+            //                 "type": "number"
+            //             }, {
+            //                 "key": "loanAccount.expectedCommercialCibilCharge",
+            //                 "title": "Expected CIBIL Charges",
+            //                 "type": "amount"
+            //             }]
+            //         }, {
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [{
+            //                 "key": "loanAccount.estimatedEmi",
+            //                 "title": "Expected Security EMI(in Rs.)",
+            //                 "type": "amount"
+            //             }]
+            //         }]
+            //     }]
+            // },
              {
                 "type": "box",
                 "readonly": true,

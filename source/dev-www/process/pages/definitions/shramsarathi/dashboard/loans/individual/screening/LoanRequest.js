@@ -1639,10 +1639,10 @@ define([],function(){
                     "LoanCustomerRelations.loanCustomerRelations.relation",
                     "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant",
  
-                     "DeductionsFromLoan",
-                     "DeductionsFromLoan.expectedProcessingFeePercentage",
-                     "DeductionsFromLoan.expectedCommercialCibilCharge",
-                     "DeductionsFromLoan.estimatedEmi",
+                    //  "DeductionsFromLoan",
+                    //  "DeductionsFromLoan.expectedProcessingFeePercentage",
+                    //  "DeductionsFromLoan.expectedCommercialCibilCharge",
+                    //  "DeductionsFromLoan.estimatedEmi",
 
                     //"LoanMitigants",
                     //"LoanMitigants.deviationParameter",
