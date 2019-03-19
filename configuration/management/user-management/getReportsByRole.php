@@ -32,7 +32,7 @@ if (!$result) {
 	while($output = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
 		$data[] = $output;
 	}
-	$query->close();
+	$stmt->close();
 	http_response_code(200);
 	header('X-Total-Count: 100');
 	echo json_encode($data);
