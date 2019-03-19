@@ -676,7 +676,7 @@ define({
             {
                 "type": "box",
                 "colClass": "col-sm-12",
-                "readOnly":true,
+                "readonly":false,
                 "title": "Loan Recommendation",
                 "items": [{
                     "type": "grid",
@@ -687,34 +687,29 @@ define({
                         "items": [{
                             "key": "loanAccount.loanAmount",
                             "title": "LOAN_AMOUNT",
-                           // "type": "amount",
-                            "readonly":true
+                           // "type": "amount",                      
                         }, 
                         {
-                            "key": "loanAccount.tenure",
-                            "title": "TENURE",
-                            "readonly":true,
+                            title:"DURATION_IN_MONTHS",
+                            "key": "loanAccount.tenure",           
                             onChange:function(value,form,model){
                                 computeEMI(model);
                             }
                         }, 
                         {
                             "key": "loanAccount.estimatedEmi",
-                            "title": "ESTIMATED_KINARA_EMI",
+                            "title": "ESTIMATED_KINARA_EMI"
                            //"type": "amount",
-                            "readonly":true
                         }, 
                         {
                             "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf10",
-                            "title": "REMARK_OF_IN_FAVOUR_LOAN",
-                           // "type": "string",
-                            "readonly":true
+                            "title": "REMARK_OF_IN_FAVOUR_LOAN"
+                           // "type": "string",       
                         }, 
                         {
                             "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf11",
                             "title": "POTENTIAL_RISK",
                           // "type": "number",
-                             "readonly":true,
                             onChange:function(value,form,model){
                                 computeEMI(model);
                             }
@@ -724,33 +719,33 @@ define({
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
+                           "type":"select",
                             "key":"loanAccount.disbursementSchedules[0].modeOfDisbursement",
                             "title":"MODE_OF_DISBURSEMENT",
-                            "readonly":true
+                            "enumCode":"mode_of_disbursement"
                         }, 
                         {
                             "key":"loanAccount.disbursementSchedules[0].firstRepaymentDate",
                             "title":"COLLECTION_DATE",
-                            "type":"date",
-                            "readonly":true
+                            "type":"date"
+                         
                         },
                          {
                             "key":"loanAccount.disbursementSchedules[0].actualDisbursementDate",
                             "title":"DISBURSEMENT_DATE",
-                            "type":"date",
-                            "readonly":true
+                            "type":"date"
+                          
                         },
                         {
                             "key":"loanAccount.disbursementSchedules[0].moratoriumPeriodInDays",
-                            "title":"GRACE_PERIOD",
-                            "readonly":true
+                            "title":"GRACE_PERIOD"
+                           
                             
                         },
                         {
                             "key":"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf12",
                             "title":"DATE",
-                            "type":"date",
-                            "readonly":true
+                            "type":"date"
                         },
                     ]
                     }]
