@@ -1778,9 +1778,7 @@ define([],function(){
                     model.loanAccount = model.loanProcess.loanAccount;
                  
                     model.currentStage = model.loanAccount.currentStage;
-                    model.loanAccount.disbursementSchedules=[];
-                   
-
+                    
                     if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
                         model.loanAccount.loanCustomerRelations!=null &&
                         model.loanAccount.loanCustomerRelations.length > 0) {
