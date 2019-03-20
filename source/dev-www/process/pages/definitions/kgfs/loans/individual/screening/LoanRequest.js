@@ -16,19 +16,26 @@ define([],function(){
             
             var setDeviation = function(model){
                       /* Deviations and Mitigations grouping */
-                      debugger;
                         var checkMitigants = true;
                         if(_.isArray(model.loanAccount.loanMitigants) && model.loanAccount.loanMitigants)
                         {
                             if(_.hasIn(model.loanAccount.loanMitigants[0], 'id'))
                                 checkMitigants=false;                            
                         }
-                      if (model.deviationMitigants && model.loanAccount.loanMitigants && _.isArray(model.loanAccount.loanMitigants) && checkMitigants){
-                        for (var i=0; i<model.deviationMitigants.length; i++){
-                            model.loanAccount.loanMitigants.push(model.deviationMitigants[i]);
-                        }  
-
-                    }
+                        if (model.deviationMitigants && model.loanAccount.loanMitigants && _.isArray(model.loanAccount.loanMitigants) && checkMitigants){
+                            for (var i=0; i<model.deviationMitigants.length; i++){
+                                model.loanAccount.loanMitigants.push(model.deviationMitigants[i]);
+                            }
+                        }
+                        else
+                        {
+                            model.loanAccount.loanMitigants=[];
+                            if (model.deviationMitigants){
+                                for (var i=0; i<model.deviationMitigants.length; i++){
+                                    model.loanAccount.loanMitigants.push(model.deviationMitigants[i]);
+                                }                            
+                            }
+                        }
                     /* End of Deviations and Mitigations grouping */
             }
             var getGoldRate = function(model){
@@ -67,6 +74,15 @@ define([],function(){
                 formCtrl.scope.$broadcast('schemaFormValidate');
                 if (formCtrl && formCtrl.$invalid) {
                     PageHelper.showProgress("enrolment","Your form have errors. Please fix them.", 5000);
+                    return false;
+                }
+                return true;
+            };
+
+            var validateDeviationForm = function(formCtrl){
+                formCtrl.scope.$broadcast('schemaFormValidate');
+                if (formCtrl && formCtrl.$invalid) {
+                    PageHelper.showErrors({data:{error:"Mitigation checkbox, Please check this box if you want to proceed"}});
                     return false;
                 }
                 return true;
@@ -1426,7 +1442,7 @@ define([],function(){
                 actions: {
                     
                     submit: function(model, formCtrl, form){                        
-
+                        debugger;
                         if(model.loanAccount.productCategory  != 'MEL'){
                             model.loanAccount.customerId=model.loanAccount.loanCustomerRelations[0].customerId;
                             model.loanAccount.urnNo=model.loanAccount.loanCustomerRelations[0].urn; 
@@ -1529,7 +1545,13 @@ define([],function(){
                                 PageHelper.hideLoader();
                             });
                     },
-                    proceed: function(model, formCtrl, form, $event){                        
+                    proceed: function(model, formCtrl, form, $event){ 
+
+                        validateDeviationForm(formCtrl);
+                        if(PageHelper.isFormInvalid(formCtrl)) {
+                            return false;
+                        }
+                        
                          if (model.loanProcess.remarks==null || model.loanProcess.remarks ==""){
                                PageHelper.showProgress("update-loan", "Remarks is mandatory", 3000);
                                PageHelper.hideLoader();
