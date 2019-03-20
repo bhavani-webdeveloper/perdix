@@ -26,7 +26,6 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 			}
 			PagesDefinition.getPageConfig('Page/Engine/CustomerSearch').then(function(data){
 				model.showBankFilter = data.showBankFilter ? data.showBankFilter : false;
-				setTimeout(function(){formCtrl.submit();}, 0);	
 				$log.info("search-list sample got initialized");
 			});
 		     model.dedupeEnabled = SessionStore.getGlobalSetting("DedupeEnabled");
@@ -386,7 +385,8 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 						}
 					];
 				}
-			}
+			},
+			autoSearch:false
 		}
 	};
 }]);

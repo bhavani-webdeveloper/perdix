@@ -244,7 +244,8 @@ define({
                     "type": "select",
                     "titleMap": {
                         "SAGEM": "SAGEM",
-                        "SECUGEN": "SECUGEN"
+                        "SECUGEN": "SECUGEN",
+                        "MANTRA": "MANTRA"
                     },
                     "title": "FINGER_PRINT_DEVICE_TYPE"
                 }, {

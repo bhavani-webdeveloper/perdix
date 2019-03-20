@@ -322,7 +322,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
         eventListeners: {
             "new-applicant": function(bundleModel, model, params){
                 $log.info("Inside new-applicant of EnterpriseEnrollment");
-
                 var addToRelation = true;
                 for (var i=0;i<model.customer.enterpriseCustomerRelations.length; i++){
                     if (model.customer.enterpriseCustomerRelations[i].linkedToCustomerId == params.customer.id) {
@@ -384,6 +383,18 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     lep.then(function(res){
                         PageHelper.showProgress("customer-load", "Done..", 5000);
                         model.customer = Utils.removeNulls(res, true);
+                        if( model.customer.customerBankAccounts){
+                            for(var i=0;i< model.customer.customerBankAccounts.length;i++){
+                               if (model.customer.customerBankAccounts[i].bankStatements) {
+                                for(var j=0;i< model.customer.customerBankAccounts[i].bankStatements.length;j++){
+                                    if(model.customer.customerBankAccounts[i].bankStatements[j].udf1){
+                                        var b=parseInt(model.customer.customerBankAccounts[i].bankStatements[j].udf1);
+                                        model.customer.customerBankAccounts[i].bankStatements[j].udf1=b;
+                                    }
+                                }
+                            }
+                            }
+                        }
                         overlayData(model, obj);
                         BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                     }, function(httpRes){
@@ -582,6 +593,18 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 .then(function(res){
                                     PageHelper.showProgress("customer-load", "Done..", 5000);
                                     model.customer = Utils.removeNulls(res, true);
+                                    if( model.customer.customerBankAccounts){
+                                        for(var i=0;i< model.customer.customerBankAccounts.length;i++){
+                                           if (model.customer.customerBankAccounts[i].bankStatements) {
+                                            for(var j=0;i< model.customer.customerBankAccounts[i].bankStatements.length;j++){
+                                                if(model.customer.customerBankAccounts[i].bankStatements[j].udf1){
+                                                    var b=parseInt(model.customer.customerBankAccounts[i].bankStatements[j].udf1);
+                                                    model.customer.customerBankAccounts[i].bankStatements[j].udf1=b;
+                                                }
+                                            }
+                                        }
+                                        }
+                                    }
                                     BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                                 }, function(httpRes){
                                     PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
@@ -1596,6 +1619,15 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 type: "amount"
                             },
                             {
+                                key: "customer.customerBankAccounts[].isTransactionAccount",
+                                title: "PREFFERED_BANK",
+                                "type": "select",
+                                "titleMap": {
+                                    "YES": "YES",
+                                    "NO": "NO"
+                                }
+                            },
+                            {
                                 key: "customer.customerBankAccounts[].bankStatements",
                                 type: "array",
                                 title: "STATEMENT_DETAILS",
@@ -1617,7 +1649,19 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                                 model.customer.customerBankAccounts[context.arrayIndexes[0]].bankStatements[context.arrayIndexes[1]].totalDeposits = result.totalCredit;
                                                 model.customer.customerBankAccounts[context.arrayIndexes[0]].bankStatements[context.arrayIndexes[1]].totalWithdrawals = result.totalDebit;
                                         },
-                                        title: "TOTAL_DEPOSITS"
+                                        title:"BUYER_DEPOSITS"
+                                    },
+                                    {
+                                        key: "customer.customerBankAccounts[].bankStatements[].udf1",
+                                        type: "amount",
+                                        required:true,
+                                       calculator: true,
+                                       creditDebitBook: true,
+                                        onDone: function(result, model, context){
+                                                model.customer.customerBankAccounts[context.arrayIndexes[0]].bankStatements[context.arrayIndexes[1]].udf1 = result.totalCredit;
+                                                model.customer.customerBankAccounts[context.arrayIndexes[0]].bankStatements[context.arrayIndexes[1]].totalWithdrawals = result.totalDebit;
+                                        },
+                                        title:"TOTAL_DEPOSITS"
                                     },
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].totalWithdrawals",
@@ -1722,6 +1766,16 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                 type: "amount"
                             },
                             {
+                                key: "customer.customerBankAccounts[].isTransactionAccount",
+                                title: "PREFFERED_BANK",
+                                "type": "select",
+                                "default": true,
+                                "titleMap": {
+                                    "YES": "YES",
+                                    "NO": "NO"
+                                },
+                            },
+                            {
                                 key:"customer.customerBankAccounts[].bankStatementDocId",
                                 type:"file",
                                 title:"BANK_STATEMENT_UPLOAD",
@@ -1746,8 +1800,21 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].totalDeposits",
                                         type: "amount",
-                                        title: "TOTAL_DEPOSITS"
+                                        title: "BUYER_DEPOSITS"
                                     },
+                                      {
+                                        key: "customer.customerBankAccounts[].bankStatements[].udf1",
+                                        type: "amount",
+                                        required:true,
+                                       calculator: true,
+                                       creditDebitBook: true,
+                                        onDone: function(result, model, context){
+                                                model.customer.customerBankAccounts[context.arrayIndexes[0]].bankStatements[context.arrayIndexes[1]].totalDeposits = result.totalCredit;
+                                                model.customer.customerBankAccounts[context.arrayIndexes[0]].bankStatements[context.arrayIndexes[1]].totalWithdrawals = result.totalDebit;
+                                        },
+                                        title:"TOTAL_DEPOSITS"
+                                    },
+                                    
                                     {
                                         key: "customer.customerBankAccounts[].bankStatements[].totalWithdrawals",
                                         type: "amount",
@@ -4218,6 +4285,30 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             },
             save: function(model, formCtrl, formName){
                 $log.info("Inside save()");
+                if(model.customer.customerBankAccounts){
+                    var isPreferredCount=0;
+                    var returnFlag=false;
+                    angular.forEach(model.customer.customerBankAccounts,function(customerBankAC,key){
+                        if(customerBankAC.isTransactionAccount==="YES"){
+                            isPreferredCount++;
+                            if(isPreferredCount>1){
+                                PageHelper.showProgress("Multiple","Only one bank account can be selected as preferred bank account", 5000);
+                                //return false;
+                                returnFlag=true;
+                            }
+                        }
+                    });
+                    if(returnFlag){
+                        return false;
+                    }
+                    if(isPreferredCount==0){
+                        PageHelper.showProgress("minimum","Please select one bank account as Preferred Bank account", 9000);
+                        return false;
+                    }
+                }else{
+                    PageHelper.showProgress("EmptyAccountDetails","Bank Account Detail is Mandatory", 5000);
+                                return false;
+                }
                 formCtrl.scope.$broadcast('schemaFormValidate');
 
                 var DedupeEnabled = SessionStore.getGlobalSetting("DedupeEnabled") || 'N';
@@ -4274,6 +4365,19 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     PageHelper.showProgress('enrolment', 'Done.', 5000);
                     Utils.removeNulls(resp.customer, true);
                     model.customer = resp.customer;
+                   
+                    if( model.customer.customerBankAccounts){
+                        for(var i=0;i< model.customer.customerBankAccounts.length;i++){
+                           if (model.customer.customerBankAccounts[i].bankStatements) {
+                            for(var j=0;i< model.customer.customerBankAccounts[i].bankStatements.length;j++){
+                                if(model.customer.customerBankAccounts[i].bankStatements[j].udf1){
+                                    var b=parseInt(model.customer.customerBankAccounts[i].bankStatements[j].udf1);
+                                    model.customer.customerBankAccounts[i].bankStatements[j].udf1=b;
+                                }
+                            }
+                        }
+                        }
+                    }
                     if (model._bundlePageObj){
                         BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                     }
@@ -4291,7 +4395,29 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
             submit: function(model, form, formName){
                 $log.info("Inside submit()");
                 $log.warn(model);
-
+            if(model.customer.customerBankAccounts){
+                var isPreferredCount=0;
+                var returnFlag=false;
+                angular.forEach(model.customer.customerBankAccounts,function(customerBankAC,key){
+                    if(customerBankAC.isTransactionAccount==="YES"){
+                        isPreferredCount++;
+                        if(isPreferredCount>1){
+                            PageHelper.showProgress("Multiple","Only one bank account can be selected as preferred bank account", 5000);
+                            returnFlag =true;
+                        }
+                    }
+                });
+                if(returnFlag){
+                    return false;
+                }
+                if(isPreferredCount==0){
+                    PageHelper.showProgress("minimum","Please select one bank account as Preferred Bank account", 9000);
+                    return false;
+                }
+            }else{
+                PageHelper.showProgress("EmptyAccountDetails","Bank Account Detail is Mandatory", 5000);
+                            return false;
+            }
                 var DedupeEnabled = SessionStore.getGlobalSetting("DedupeEnabled") || 'N';
                 var sortFn = function(unordered){
                     var out = {};
@@ -4382,6 +4508,19 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     PageHelper.showProgress('enrolmet','Done.', 5000);
                     Utils.removeNulls(resp.customer,true);
                     model.customer = resp.customer;
+                    if( model.customer.customerBankAccounts){
+                        for(var i=0;i< model.customer.customerBankAccounts.length;i++){
+                         if (model.customer.customerBankAccounts[i].bankStatements) {
+                                for(var j=0;i< model.customer.customerBankAccounts[i].bankStatements.length;j++){
+                                    if(model.customer.customerBankAccounts[i].bankStatements[j].udf1){
+                                        var b=parseInt(model.customer.customerBankAccounts[i].bankStatements[j].udf1);
+                                        model.customer.customerBankAccounts[i].bankStatements[j].udf1=b;
+                                    }
+                                }
+                            }
+                        }
+                        
+                    }
                     if (model._bundlePageObj){
                         BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer});
                         if (DedupeEnabled == 'Y' && model.currentStage == "Screening") {
