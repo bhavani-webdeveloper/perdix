@@ -16,15 +16,17 @@ define([],function(){
             
             var setDeviation = function(model){
                       /* Deviations and Mitigations grouping */
-                      if (model.deviationMitigants && model.loanAccount.loanMitigants && _.isArray(model.loanAccount.loanMitigants)){
-                        
+                        var checkMitigants = true;
+                        if(_.hasIn(model.loanAccount.loanMitigants[0], 'id'))
+                            checkMitigants=false;
+                      if (model.deviationMitigants && model.loanAccount.loanMitigants && _.isArray(model.loanAccount.loanMitigants) && checkMitigants){
                         for (var i=0; i<model.deviationMitigants.length; i++){
                             model.loanAccount.loanMitigants.push(model.deviationMitigants[i]);
-                        }      
+                        }  
+
                     }
                     /* End of Deviations and Mitigations grouping */
             }
-            
             var getGoldRate = function(model){
                 var value = Queries.getGoldRate();
                 value.then(function(resp){
@@ -1423,9 +1425,7 @@ define([],function(){
                 },
                 actions: {
                     
-                    submit: function(model, formCtrl, form){
-
-                        setDeviation(model);
+                    submit: function(model, formCtrl, form){                        
 
                         if(model.loanAccount.productCategory  != 'MEL'){
                             model.loanAccount.customerId=model.loanAccount.loanCustomerRelations[0].customerId;
@@ -1458,7 +1458,7 @@ define([],function(){
                         if(!(policyBasedOnLoanType(model.loanAccount.loanType,model))){
                             PageHelper.showProgress('loan-process','Oops Some Error',2000);
                             return false;}
-                                                    
+                        setDeviation(model);                                                    
                         model.loanProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
@@ -1473,7 +1473,7 @@ define([],function(){
                                 /* Collateral */
                                 BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount});                                    
                                 Utils.removeNulls(value, true);
-                                PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
+                                PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);                                
 
                             }, function (err) {
                                 PageHelper.showErrors(err);
@@ -1529,8 +1529,7 @@ define([],function(){
                                 PageHelper.hideLoader();
                             });
                     },
-                    proceed: function(model, formCtrl, form, $event){
-                        setDeviation(model);
+                    proceed: function(model, formCtrl, form, $event){                        
                          if (model.loanProcess.remarks==null || model.loanProcess.remarks ==""){
                                PageHelper.showProgress("update-loan", "Remarks is mandatory", 3000);
                                PageHelper.hideLoader();
@@ -1585,6 +1584,7 @@ define([],function(){
                         }
                         PageHelper.showLoader();
                         PageHelper.showProgress('enrolment', 'Updating Loan');
+                        setDeviation(model);
                         model.loanProcess.proceed(model.loanProcess.stage)
                             .finally(function () {
                                 PageHelper.hideLoader();
