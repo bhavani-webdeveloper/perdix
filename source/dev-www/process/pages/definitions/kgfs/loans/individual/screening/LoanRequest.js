@@ -16,9 +16,13 @@ define([],function(){
             
             var setDeviation = function(model){
                       /* Deviations and Mitigations grouping */
+                      debugger;
                         var checkMitigants = true;
-                        if(_.hasIn(model.loanAccount.loanMitigants[0], 'id'))
-                            checkMitigants=false;
+                        if(_.isArray(model.loanAccount.loanMitigants) && model.loanAccount.loanMitigants)
+                        {
+                            if(_.hasIn(model.loanAccount.loanMitigants[0], 'id'))
+                                checkMitigants=false;                            
+                        }
                       if (model.deviationMitigants && model.loanAccount.loanMitigants && _.isArray(model.loanAccount.loanMitigants) && checkMitigants){
                         for (var i=0; i<model.deviationMitigants.length; i++){
                             model.loanAccount.loanMitigants.push(model.deviationMitigants[i]);
