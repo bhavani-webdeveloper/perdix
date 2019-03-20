@@ -240,6 +240,7 @@ define({
             "type": "box",
                 "colClass": "col-sm-12 table-box",
                 "title": "Business Summary",
+                "condition": "model.loanProcess.loanAccount.productCategory  == 'MEL'",
                 "readonly": true,
                 "items": [
                     {
@@ -354,6 +355,7 @@ define({
             type: "box",
             colClass: "col-sm-12 table-box",
             title: "BUSINESS_PL",
+            "condition": "model.loanProcess.loanAccount.productCategory  == 'MEL'",
             items: [
                 {
                     type: "section",
@@ -441,6 +443,7 @@ define({
              type: "box",
             colClass: "col-sm-12 table-box",
             title: model.liabilitiesSummary.title,
+            "condition": "model.loanProcess.loanAccount.productCategory  == 'MEL'",
             items: items
         });
 
