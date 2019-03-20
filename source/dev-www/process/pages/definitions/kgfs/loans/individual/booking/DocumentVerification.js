@@ -625,7 +625,7 @@ define({
                         return false;
                     }
                     /** Checking Televerification for Applicant*/
-                    if(_.isEmpty(model.loanAccount.telecallingDetails[0].telecallingResponse)) {
+                    if(_.isEmpty(model.loanAccount.telecallingDetails)) {
                         PageHelper.showProgress("proceed-loan", "Televerification details are Mandatory.", 3000);
                         return false;
                     }
