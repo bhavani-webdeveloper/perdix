@@ -1168,11 +1168,7 @@ define([],function(){
                                             "mitigant":{
                                                "key":"loanAccount.loanMitigants[].mitigant",
                                                "title":"Mitigation",
-                                               "type":"string",
-                                               schema: {
-                                                    "pattern": "^[a-zA-Z: ]{0,250}$",
-                                                    "type": ["string", "null"],
-                                                }
+                                               "type":"string"
                                             }
                                         }
                                     }
