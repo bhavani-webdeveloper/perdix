@@ -3492,7 +3492,7 @@
                       "totalSales": {
                         "title": "totalSales",
                         "type": "number",
-                        "minimum": 10,
+                        "minimum": 0,
                         "maximum": 1000000,
                         "captureStages": [
                           "BasicEnrolment",
