@@ -1552,7 +1552,17 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 key:"loanAccount.commercialCibilCharge",
                                 type:"amount",
+                                required:true,
+                                condition:"!model.additional.config.loanAccount_commercialCibilCharge",
+                                onChange:function(value,form,model){
+                                    getSanctionedAmount(model);
+                                }
+                            },
+                            {
+                                key:"loanAccount.commercialCibilCharge",
+                                type:"amount",
                                 required:false,
+                                condition:"model.additional.config.loanAccount_commercialCibilCharge",
                                 onChange:function(value,form,model){
                                     getSanctionedAmount(model);
                                 }
@@ -1560,6 +1570,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 key:"loanAccount.securityEmiRequired",
                                 type:"select",
+                                condition:"!model.additional.config.loanAccount_securityEmiRequired",
+                                required: true,
+                                enumCode: "decisionmaker"
+                            },
+                            {
+                                key:"loanAccount.securityEmiRequired",
+                                type:"select",
+                                condition:"model.additional.config.loanAccount_securityEmiRequired",
                                 required: false,
                                 enumCode: "decisionmaker"
                             },
@@ -2466,7 +2484,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     }
                 ]
             },
-
                 {
                 "type": "box",
                 "title": "",
