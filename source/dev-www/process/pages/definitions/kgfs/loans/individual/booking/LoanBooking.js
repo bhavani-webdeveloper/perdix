@@ -283,7 +283,6 @@ define([], function () {
                     "LoanDetails.loanAmountRequested",
                     "LoanDetails.requestedTenure",
                     "LoanDetails.interestRate",
-                    "LoanDetails.processingFeePercentage",
                     "LoanDetails.loanPurpose1",
                     "LoanDetails.loanPurpose2",
                     "LoanDetails.borrowers",
