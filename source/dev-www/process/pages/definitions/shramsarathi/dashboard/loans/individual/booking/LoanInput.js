@@ -866,6 +866,7 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.boo
                             {
                                 key:"loanAccount.commercialCibilCharge",
                                 type:"amount",
+                                required:false,
                                 "condition" : "model.siteCode != 'IREPDhan' && model.siteCode != 'pahal' && model.siteCode != 'witfin'",
                                 onChange:function(value,form,model){
                                     getSanctionedAmount(model);
@@ -874,7 +875,7 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.boo
                             {
                                 key:"loanAccount.securityEmiRequired",
                                 type:"select",
-                                required: true,
+                                required: false,
                                 enumCode: "decisionmaker",
                                 "condition" : "model.siteCode != 'IREPDhan'"
                             },
@@ -1334,6 +1335,7 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.boo
                             {
                                 key:"loanAccount.commercialCibilCharge",
                                 type:"amount",
+                                required:false,
                                 onChange:function(value,form,model){
                                     getSanctionedAmount(model);
                                 }
@@ -1341,7 +1343,7 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.boo
                             {
                                 key:"loanAccount.securityEmiRequired",
                                 type:"select",
-                                required: true,
+                                required: false,
                                 enumCode: "decisionmaker"
                             },
                             {
