@@ -157,6 +157,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
 
                         model.loanAccountDisbursementSchedule.overrideStatus = "Requested";
                         model.loanAccountDisbursementSchedule.moratoriumPeriodInDays =model.additional.moratoriumPeriodInDays;
+                        if(model.siteCode=='IREPDhan'){
                         if(!model.additional.moratoriumPeriodInDays){
                             model.loanAccountDisbursementSchedule.moratoriumPeriodInDays = 0;
                         }
@@ -175,6 +176,10 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         else{
                             model.loanAccountDisbursementSchedule.firstRepaymentDate = null;
                         }
+                    }
+                    else{
+                        model.loanAccountDisbursementSchedule.firstRepaymentDate =model.additional.firstRepaymentDate;
+                    }
                         if(model.siteCode == 'kgfs') {
                             model.loanAccountDisbursementSchedule.firstRepaymentDate =model.additional.firstRepaymentDate;
                         }
