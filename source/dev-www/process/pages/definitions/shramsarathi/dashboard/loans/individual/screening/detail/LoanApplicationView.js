@@ -439,79 +439,79 @@ define({
                     }]
                 }]
             },
-             {
-                "type": "box",
-                "readonly": true,
-                "colClass": "col-sm-12",
-                "overrideType": "default-view",
-                "title": "Additional Loan Information",
-                "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "loanAccount.estimatedDateOfCompletion",
-                            "title": "Estimated Date Of Completion"
-                        }, {
-                            "key": "loanAccount.productCategory",
-                            "title": "Product Type"
-                        }, {
-                            "key": "loanAccount.customerSignDateExpected",
-                            "title": "Expected customer sign date"
-                        }]
-                    }, {
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "loanAccount.proposedHires",
-                            "title": "Proposed Hires",
-                            "type": "number"
-                        }, {
-                            "key": "loanAccount.percentageIncreasedIncome",
-                            "title": "% of Increased Income",
-                            "type": "number"
-                        }, {
-                            "key": "loanAccount.percentageInterestSaved",
-                            "title": "% of Interest Saved",
-                            "type": "number"
-                        }]
-                    }]
-                }]
-            }, 
-            {
-                "type": "box",
-                "readonly": true,
-                "colClass": "col-sm-12",
-                "overrideType": "default-view",
-                "title": "Deductions From Loan Amount",
-                "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "loanAccount.expectedProcessingFeePercentage",
-                            "title": "Expected Processing Fee(in%)",
-                            "type": "number"
-                        }, {
-                            "key": "loanAccount.expectedCommercialCibilCharge",
-                            "title": "Expected CIBIL Charges",
-                            "type": "amount"
-                        }]
-                    }, {
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "loanAccount.estimatedEmi",
-                            "title": "Expected Security EMI(in Rs.)",
-                            "type": "amount"
-                        }]
-                    }]
-                }]
-            },
+            //  {
+            //     "type": "box",
+            //     "readonly": true,
+            //     "colClass": "col-sm-12",
+            //     "overrideType": "default-view",
+            //     "title": "Additional Loan Information",
+            //     "items": [{
+            //         "type": "grid",
+            //         "orientation": "horizontal",
+            //         "items": [{
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [{
+            //                 "key": "loanAccount.estimatedDateOfCompletion",
+            //                 "title": "Estimated Date Of Completion"
+            //             }, {
+            //                 "key": "loanAccount.productCategory",
+            //                 "title": "Product Type"
+            //             }, {
+            //                 "key": "loanAccount.customerSignDateExpected",
+            //                 "title": "Expected customer sign date"
+            //             }]
+            //         }, {
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [{
+            //                 "key": "loanAccount.proposedHires",
+            //                 "title": "Proposed Hires",
+            //                 "type": "number"
+            //             }, {
+            //                 "key": "loanAccount.percentageIncreasedIncome",
+            //                 "title": "% of Increased Income",
+            //                 "type": "number"
+            //             }, {
+            //                 "key": "loanAccount.percentageInterestSaved",
+            //                 "title": "% of Interest Saved",
+            //                 "type": "number"
+            //             }]
+            //         }]
+            //     }]
+            // }, 
+            // {
+            //     "type": "box",
+            //     "readonly": true,
+            //     "colClass": "col-sm-12",
+            //     "overrideType": "default-view",
+            //     "title": "Deductions From Loan Amount",
+            //     "items": [{
+            //         "type": "grid",
+            //         "orientation": "horizontal",
+            //         "items": [{
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [{
+            //                 "key": "loanAccount.expectedProcessingFeePercentage",
+            //                 "title": "Expected Processing Fee(in%)",
+            //                 "type": "number"
+            //             }, {
+            //                 "key": "loanAccount.expectedCommercialCibilCharge",
+            //                 "title": "Expected CIBIL Charges",
+            //                 "type": "amount"
+            //             }]
+            //         }, {
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [{
+            //                 "key": "loanAccount.estimatedEmi",
+            //                 "title": "Expected Security EMI(in Rs.)",
+            //                 "type": "amount"
+            //             }]
+            //         }]
+            //     }]
+            // },
              {
                 "type": "box",
                 "readonly": true,
@@ -676,7 +676,8 @@ define({
             {
                 "type": "box",
                 "colClass": "col-sm-12",
-                "readOnly":true,
+                "readonly":false,
+              
                 "title": "Loan Recommendation",
                 "items": [{
                     "type": "grid",
@@ -687,13 +688,17 @@ define({
                         "items": [{
                             "key": "loanAccount.loanAmount",
                             "title": "LOAN_AMOUNT",
-                           // "type": "amount",
-                            "readonly":true
+                            "required":false
+                           // "type": "amount",                      
                         }, 
                         {
-                            "key": "loanAccount.tenure",
-                            "title": "TENURE",
-                            "readonly":true,
+                            title:"DURATION_IN_MONTHS",
+                            "key": "loanAccount.tenure", 
+                            "required":false,   
+                            "schema": {  
+                                "type": ["integer", "string"],
+                                "pattern": "^([6-9]|[1-5][0-9]|60)$"
+                            },       
                             onChange:function(value,form,model){
                                 computeEMI(model);
                             }
@@ -701,56 +706,59 @@ define({
                         {
                             "key": "loanAccount.estimatedEmi",
                             "title": "ESTIMATED_KINARA_EMI",
+                            "required":false
                            //"type": "amount",
-                            "readonly":true
                         }, 
                         {
                             "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf10",
                             "title": "REMARK_OF_IN_FAVOUR_LOAN",
-                           // "type": "string",
-                            "readonly":true
+                            "required":false
+                           // "type": "string",       
                         }, 
                         {
                             "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf11",
                             "title": "POTENTIAL_RISK",
                           // "type": "number",
-                             "readonly":true,
                             onChange:function(value,form,model){
                                 computeEMI(model);
-                            }
+                            },
+                            "required":false
                         }]
                     },
                      {
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
+                           "type":"select",
                             "key":"loanAccount.disbursementSchedules[0].modeOfDisbursement",
                             "title":"MODE_OF_DISBURSEMENT",
-                            "readonly":true
+                            "enumCode":"mode_of_disbursement",
+                            "required":false
                         }, 
                         {
                             "key":"loanAccount.disbursementSchedules[0].firstRepaymentDate",
                             "title":"COLLECTION_DATE",
                             "type":"date",
-                            "readonly":true
+                            "required":false
+                         
                         },
                          {
                             "key":"loanAccount.disbursementSchedules[0].actualDisbursementDate",
                             "title":"DISBURSEMENT_DATE",
                             "type":"date",
-                            "readonly":true
+                            "required":false
+                          
                         },
                         {
                             "key":"loanAccount.disbursementSchedules[0].moratoriumPeriodInDays",
                             "title":"GRACE_PERIOD",
-                            "readonly":true
-                            
+                            "required":false
                         },
                         {
                             "key":"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf12",
                             "title":"DATE",
                             "type":"date",
-                            "readonly":true
+                            "required":false
                         },
                     ]
                     }]
@@ -1193,8 +1201,13 @@ define({
                     })
                 },*/
                 save: function(model, formCtrl, form, $event) {
+                    
                     $log.info("Inside save()");
                     PageHelper.clearErrors();
+                    if (PageHelper.isFormInvalid(formCtrl)) {
+                        return false;
+                    }
+                    formCtrl.scope.$broadcast('schemaFormValidate');
 
                     /*DEVIATION AND MITIGATION - SAVING SELECTED MITIGANTS*/
                     

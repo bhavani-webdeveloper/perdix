@@ -108,28 +108,23 @@ irf.pageCollection.factory(irf.page("jewelloan.BranchJewelQueue"),
 							var sourceBranchName = null;
 							var destinationBranchName = null;
 	
-							for (var i=0; i<response.length; i++){
+							for (var i=0; i<response.length; i++){								
 								for (var j=0; j<branches.length; j++){
 									var branch = branches[j];
-									if (branch.code == response[i].sourceBranchId)
-								 		sourceBranchName = branch.name;
+									if (branch.code == response[i].sourceBranchId){
+										 response[i].sourceBranch = branch.name;
+									}		 
 								 	if (response[i].destinationBranchId != null && branch.code == response[i].destinationBranchId){	
-										 destinationBranchName = branch.name ;
-										 if	(sourceBranchName!=null && destinationBranchName!=null)
-									 		break; 	
+										response[i].destinationBranch	= branch.name ;	
 									 }	
-									 if (response[i].destinationBranchId == null && sourceBranchName!=null )
-									 		break;
+									 else{
+										response[i].destinationBranch = "";
+									 }
 								}
-							}	
-
-							for (var i=0;i<response.length;i++){
 								response[i].customerFullName 	= response[i].customerFirstName + " "+(response[i].customerLastName!=null?response[i].customerLastName:"");
 								response[i].transitStatus    	= transitStatusValue;
-								response[i].sourceBranch 	 	= sourceBranchName;
-								response[i].destinationBranch	= destinationBranchName;
 								response[i].disbursedAmount     = (response[i].disbursedAmountInPaisa/100);
-								}
+							}	
 							return response;
 						}
 						return [];
