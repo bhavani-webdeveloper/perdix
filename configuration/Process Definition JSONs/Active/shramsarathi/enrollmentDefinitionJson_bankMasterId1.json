@@ -1748,7 +1748,7 @@
           "items": []
         },
         "required": [
-          "nameOfOwnedAsset"
+          
         ],
         "properties": {
           "kyc1ProofType": {
@@ -2114,7 +2114,7 @@
             "nameOfOwnedAsset": {
               "title": "Name Of Owned Asset",
               "type": "string",
-              "refCodeCategory": "asset_type",
+              "refCodeCategory": "fixed_asset_type",
               "captureStages": [
                 "BasicEnrolment",
                 "Completed"
