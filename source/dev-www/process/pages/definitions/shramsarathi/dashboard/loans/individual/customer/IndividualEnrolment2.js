@@ -328,9 +328,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 // "FamilyDetails.familyMembers.relationShip": {
                                 //     "readonly": true
                                 // },
-                                "HouseVerification.ownership": {
-                                    "required": true
-                                },
+                                // "HouseVerification.ownership": {
+                                //     "required": true
+                                // },
                                 "HouseVerification.udf30": {
                                     "required": true
                                 },
@@ -513,9 +513,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "FamilyDetails.familyMembers": {
                                     "title": "MIGRANT_DETAILS"
                                 },
-                                "HouseVerification.ownership": {
-                                    "required": true
-                                },
+                                // "HouseVerification.ownership": {
+                                //     "required": true
+                                // },
                                 "HouseVerification.udf30": {
                                     "required": true
                                 },
@@ -798,9 +798,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 // "FamilyDetails.familyMembers.relationShip": {
                                 //     "readonly": true
                                 // },
-                                "HouseVerification.ownership": {
-                                    "required": true
-                                },
+                                // "HouseVerification.ownership": {
+                                //     "required": true
+                                // },
                                 "HouseVerification.udf30": {
                                     "required": true
                                 },
@@ -1630,9 +1630,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 // "FamilyDetails.familyMembers.relationShip": {
                                 //     "readonly": true
                                 // },
-                                "HouseVerification.ownership": {
-                                    "required": true
-                                },
+                                // "HouseVerification.ownership": {
+                                //     "required": true
+                                // },
                                 "HouseVerification.udf30": {
                                     "required": true
                                 },
@@ -2075,7 +2075,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "HouseVerification.inCurrentAreaSince": {
                         "key": "customer.udf.userDefinedFieldValues.udf5",
                         "enumCode": "years_in_current_area",
-                        "required": true,
+                        "required": false,
                         "orderNo": 40
                     },
                     "HouseVerification.latitude": {
@@ -2460,8 +2460,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "HouseVerification.inCurrentAreaSince",
                     "HouseVerification.latitude",
                     "HouseVerification.houseVerificationPhoto",
-                    "HouseVerification.date",
-                    "HouseVerification.place",
+                    // "HouseVerification.date",
+                    // "HouseVerification.place",
                     "HouseVerification.houseStatus",
                     "HouseVerification.noOfRooms",
                     //"HouseVerification.rentLeaseStatus",
