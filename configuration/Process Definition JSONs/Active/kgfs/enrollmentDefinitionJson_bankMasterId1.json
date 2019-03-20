@@ -3365,13 +3365,6 @@
                     ]
                   }
                 }
-            },
-            "riskProfile":{
-                "title": "Risk Profile",
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 10,
-                "captureStages":["Completed"]
             }
         }
     }
