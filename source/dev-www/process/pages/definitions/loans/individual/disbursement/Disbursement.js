@@ -175,7 +175,10 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         else{
                             model.loanAccountDisbursementSchedule.firstRepaymentDate = null;
                         }
-                       // model.loanAccountDisbursementSchedule.firstRepaymentDate =model.additional.firstRepaymentDate;
+                        if(model.siteCode == 'kgfs') {
+                            model.loanAccountDisbursementSchedule.firstRepaymentDate =model.additional.firstRepaymentDate;
+                        }
+                        
 
 
                         model.loanAccountDisbursementSchedule.disbursementAmount = Number(resp[0].amount);
