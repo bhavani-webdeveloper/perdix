@@ -429,7 +429,7 @@ define({
                             "title": "Expected Interest Rate",
                         }, {
                             "key": "loanAccount.estimatedEmi",
-                            "title": "EXPECTED_MAITREYA_EMI",
+                            "title": "EXPECTED_SHRAMSARATHI_EMI",
                             "type": "amount"
                         }, {
                             "key": "loanAccount.emiRequested",

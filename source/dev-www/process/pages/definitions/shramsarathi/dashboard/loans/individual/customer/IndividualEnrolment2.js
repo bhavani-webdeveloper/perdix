@@ -328,9 +328,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 // "FamilyDetails.familyMembers.relationShip": {
                                 //     "readonly": true
                                 // },
-                                "HouseVerification.ownership": {
-                                    "required": true
-                                },
+                                // "HouseVerification.ownership": {
+                                //     "required": true
+                                // },
                                 "HouseVerification.udf30": {
                                     "required": true
                                 },
@@ -513,9 +513,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "FamilyDetails.familyMembers": {
                                     "title": "MIGRANT_DETAILS"
                                 },
-                                "HouseVerification.ownership": {
-                                    "required": true
-                                },
+                                // "HouseVerification.ownership": {
+                                //     "required": true
+                                // },
                                 "HouseVerification.udf30": {
                                     "required": true
                                 },
@@ -798,9 +798,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 // "FamilyDetails.familyMembers.relationShip": {
                                 //     "readonly": true
                                 // },
-                                "HouseVerification.ownership": {
-                                    "required": true
-                                },
+                                // "HouseVerification.ownership": {
+                                //     "required": true
+                                // },
                                 "HouseVerification.udf30": {
                                     "required": true
                                 },
@@ -1630,9 +1630,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 // "FamilyDetails.familyMembers.relationShip": {
                                 //     "readonly": true
                                 // },
-                                "HouseVerification.ownership": {
-                                    "required": true
-                                },
+                                // "HouseVerification.ownership": {
+                                //     "required": true
+                                // },
                                 "HouseVerification.udf30": {
                                     "required": true
                                 },
@@ -2075,7 +2075,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "HouseVerification.inCurrentAreaSince": {
                         "key": "customer.udf.userDefinedFieldValues.udf5",
                         "enumCode": "years_in_current_area",
-                        "required": true,
+                        "required": false,
                         "orderNo": 40
                     },
                     "HouseVerification.latitude": {
@@ -2375,7 +2375,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.landmark",
                     //"ContactInformation.collectionArea",
                     "ContactInformation.mandal",
-                    "ContactInformation.taluk",
                     "ContactInformation.pincode",
                     "ContactInformation.locality",
                     "ContactInformation.villageName",
@@ -2460,8 +2459,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "HouseVerification.inCurrentAreaSince",
                     "HouseVerification.latitude",
                     "HouseVerification.houseVerificationPhoto",
-                    "HouseVerification.date",
-                    "HouseVerification.place",
+                    // "HouseVerification.date",
+                    // "HouseVerification.place",
                     "HouseVerification.houseStatus",
                     "HouseVerification.noOfRooms",
                     //"HouseVerification.rentLeaseStatus",
@@ -2636,8 +2635,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         //     "type": "number",
                                         //    // "orderNo": 100
                                         // },
-                                        "taluk": {
-                                            "key": "customer.taluk",
+                                        "mandal": {
+                                            "key": "customer.VillageName",
                                             "title": "SUB_DISTRICT",
                                             "type": "string",
                                             "required":false,
@@ -3046,11 +3045,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     type: "array",
                                                     startEmpty: true,
                                                     items: {
+                                                        "workSector":{
+                                                            "key":"customer.familyMembers[].incomes[].workSector",
+                                                            "title":"WORK_SECTOR",
+                                                            "type":"select",
+                                                            "enumCode":"work_sector",
+                                                            "required": true,
+                                                            "orderNo": 1
+                                                        },
                                                         "incomeSource": {
                                                             key: "customer.familyMembers[].incomes[].incomeSource",
                                                             type: "select",
                                                             title:"OCCUPATION",
-                                                            required: false
+                                                            required: false,
+                                                            "parentEnumCode": "work_sector",
+                                                            "parentValueExpr": "model.customer.familyMembers[context.arrayIndex].incomes[context.arrayIndex].workSector",
+                                                            "orderNo": 2
                                                         },
                                                         "incomeEarned": {
                                                             key: "customer.familyMembers[].incomes[].incomeEarned",
@@ -3064,13 +3074,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             key: "customer.familyMembers[].incomes[].frequency",
                                                             type: "select",
                                                             "enumCode":"income_frequency"
-                                                        },
-                                                        "workSector":{
-                                                            "key":"customer.familyMembers[].incomes[].workSector",
-                                                            "title":"WORK_SECTOR",
-                                                            "type":"select",
-                                                            "enumCode":"work_sector",
-                                                            "required": true
                                                         },
                                                         "occupationType":{
                                                             "key":"customer.familyMembers[].incomes[].occupationType",
