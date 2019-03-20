@@ -174,6 +174,9 @@ define([],function(){
                                 "LoanCustomerRelations.loanCustomerRelations.relation": {
                                    "readonly": true
                                 },
+                                "NomineeDetails.nominees.nomineeRelationship": {
+                                    "enumCode":"relationship"
+                                },
                                 "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
                                    "required": true
@@ -223,7 +226,10 @@ define([],function(){
                                 "NomineeDetails": {
                                     "orderNo": 8,
                                     "readonly": true
-                                },                               
+                                }, 
+                                "NomineeDetails.nominees.nomineeRelationship": {
+                                    "enumCode":"relationship"
+                                },                              
                                 "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
                                 }         
@@ -268,6 +274,9 @@ define([],function(){
                                     "add": null,
                                     "remove": null,
                                     "startEmpty": false
+                                },
+                                "NomineeDetails.nominees.nomineeRelationship": {
+                                    "enumCode":"relationship"
                                 },
                                 "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'"
@@ -365,6 +374,9 @@ define([],function(){
                                 "NomineeDetails.nominees.nomineeRelationship": {
                                    "required":true
                                 },
+                                "NomineeDetails.nominees.nomineeRelationship": {
+                                    "enumCode":"relationship"
+                                },
                                 "CollateralDetails.collateral.collateralDescription": {
                                     "required": true,
                                    "orderNo":10
@@ -457,7 +469,10 @@ define([],function(){
                                 "NomineeDetails": {
                                     "orderNo": 8,
                                     "readonly": true
-                                },                               
+                                },    
+                                "NomineeDetails.nominees.nomineeRelationship": {
+                                    "enumCode":"relationship"
+                                },                           
                                 "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
                                 }     
@@ -550,7 +565,10 @@ define([],function(){
                                 "NomineeDetails": {
                                     "orderNo": 8,
                                     "readonly": true
-                                },                               
+                                }, 
+                                "NomineeDetails.nominees.nomineeRelationship": {
+                                    "enumCode":"relationship"
+                                },                              
                                 "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
                                 }
@@ -602,7 +620,10 @@ define([],function(){
                                 "NomineeDetails": {
                                     "orderNo": 8,
                                     "readonly": true
-                                },                               
+                                },  
+                                "NomineeDetails.nominees.nomineeRelationship": {
+                                    "enumCode":"relationship"
+                                },                             
                                 "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
                                 }     
@@ -656,7 +677,10 @@ define([],function(){
                                 },
                                 "LoanSanction":{
                                     "orderNo": 9
-                                },                          
+                                },  
+                                "NomineeDetails.nominees.nomineeRelationship": {
+                                    "enumCode":"relationship"
+                                },                        
                                 "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
                                 },     
@@ -795,6 +819,9 @@ define([],function(){
                                 "PreliminaryInformation.expectedPortfolioInsurancePremium": {
                                     "readonly": true
                                 },
+                                "NomineeDetails.nominees.nomineeRelationship": {
+                                    "enumCode":"relationship"
+                                },
                                 // "NomineeDetails": {
                                 //     "orderNo": 8,
                                 //     "readonly": false
@@ -876,7 +903,10 @@ define([],function(){
                                  },
                                  "LoanSanction":{
                                      "orderNo": 9
-                                 },                          
+                                 }, 
+                                 "NomineeDetails.nominees.nomineeRelationship": {
+                                    "enumCode":"relationship"
+                                },                         
                                 "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
                                 }     
@@ -939,6 +969,9 @@ define([],function(){
                                 },
                                 "LoanSanction":{
                                     "orderNo": 9
+                                },
+                                "NomineeDetails.nominees.nomineeRelationship": {
+                                    "enumCode":"relationship"
                                 },                          
                                 "LoanCustomerRelations.loanCustomerRelations.relationshipWithApplicant": {
                                    "condition": "model.loanAccount.loanCustomerRelations[arrayIndex].relation !== 'Applicant'",
@@ -974,6 +1007,9 @@ define([],function(){
                                 },
                                 "NomineeDetails.nominees.nomineeRelationship":{
                                     "required":true
+                                },
+                                "NomineeDetails.nominees.nomineeRelationship": {
+                                    "enumCode":"relationship"
                                 },
                                 "NomineeDetails.nominees.nomineePincode":{
                                     "required":true
@@ -1027,6 +1063,9 @@ define([],function(){
                                 },
                                 "NomineeDetails.nominees.nomineeRelationship":{
                                     "required":true
+                                },
+                                "NomineeDetails.nominees.nomineeRelationship": {
+                                    "enumCode":"relationship"
                                 },
                                 "NomineeDetails.nominees.nomineePincode":{
                                     "required":true
@@ -1291,6 +1330,9 @@ define([],function(){
                     "NomineeDetails.nominees.nomineeFirstName":{
                         "required":true
                     },
+                        "NomineeDetails.nominees.nomineeRelationship": {
+                            "enumCode":"relationship"
+                        },
                   
                     // "PostReview.reject.rejectReason":{
                     //     "enumCode":"loan_rejection_reason"
@@ -1502,6 +1544,9 @@ define([],function(){
                         },
                         "NomineeDetails.nominees.nomineeRelationship": {
                             "orderNo": 100
+                        },
+                        "NomineeDetails.nominees.nomineeRelationship": {
+                            "enumCode":"relationship"
                         },
                         "NomineeDetails.nominees.nomineePincode": {
                             "resolver": "NomineePincodeLOVConfiguration",

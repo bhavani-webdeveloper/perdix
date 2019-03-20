@@ -93,7 +93,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                 var x = (((Math.pow(((model.loanAccount.interestRate / 12)+1), model.loanAccount.tenure)) - 1) * (model.customer.enterprise.workingDaysInMonth))
                 var y = ((Math.pow(((model.loanAccount.interestRate/ 12)+1), model.loanAccount.tenure)) * ((model.loanAccount.interestRate/ 12)))
                 model.customer.enterprise.employeeSalary = (x/y);
-                    "TotalMonthlySurplus.tin"
+                    "TotalMonthlySurplus.insurancePremiumAmount"
             }
             var computeEstimatedEmi = function (model) {
                 if (model.loanAccount.loanAmountRequested == '' || model.loanAccount.interestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenure == '')
@@ -2113,8 +2113,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 "type": "number",
                                 "readonly": true
                             },
-                            'tin': {
-                                key: "customer.enterprise.tin",
+                            'insurancePremiumAmount': {
+                                key: "customer.enterprise.insurancePremiumAmount",
                                 title: "Final Loan Amount Sanctioned ",
                                 "type": "number"
                             }
@@ -2329,7 +2329,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "TotalMonthlySurplus.workingDaysInMonth",
                     "TotalMonthlySurplus.coOwnerSalary",
                     "TotalMonthlySurplus.employeeSalary",
-                    "TotalMonthlySurplus.tin"
+                    "TotalMonthlySurplus.insurancePremiumAmount"
                 ]
             }
             
@@ -3462,7 +3462,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         if(model.customer.enterprise){
                             model.customer.enterprise.monthlyTurnover = model.customer.enterprise.monthlyTurnover? Number(model.customer.enterprise.monthlyTurnover):0;
                             model.customer.enterprise.monthlyBusinessExpenses = model.customer.enterprise.monthlyBusinessExpenses? Number(model.customer.enterprise.monthlyBusinessExpenses):0;
-                            model.customer.enterprise.tin = model.customer.enterprise.tin? Number(model.customer.enterprise.tin):0;
+                            model.customer.enterprise.insurancePremiumAmount = model.customer.enterprise.insurancePremiumAmount? Number(model.customer.enterprise.insurancePremiumAmount):0;
                             model.customer.enterprise.coOwnerSalary = model.customer.enterprise.coOwnerSalary? Number(model.customer.enterprise.coOwnerSalary):0;
                             model.customer.enterprise.monthlyTurnover = model.customer.enterprise.monthlyTurnover? Number(model.customer.enterprise.monthlyTurnover):0;
                         }

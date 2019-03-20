@@ -2044,7 +2044,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.pincode": {
                         "resolver": "PincodeLOVConfiguration",
                         "searchHelper": formHelper
-
                     },
                     "ContactInformation.mailingPincode": {
                         "condition": "!model.customer.mailSameAsResidence",
@@ -2376,6 +2375,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.landmark",
                     //"ContactInformation.collectionArea",
                     "ContactInformation.mandal",
+                    "ContactInformation.taluk",
                     "ContactInformation.pincode",
                     "ContactInformation.locality",
                     "ContactInformation.villageName",
@@ -2636,11 +2636,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         //     "type": "number",
                                         //    // "orderNo": 100
                                         // },
-                                        "mandal": {
-                                            "key": "customer.villageName",
+                                        "taluk": {
+                                            "key": "customer.taluk",
                                             "title": "SUB_DISTRICT",
                                             "type": "string",
-                                            "required":true,
+                                            "required":false,
                                             "readonly":true,
                                             "orderNo": 130
                                         },
@@ -3070,7 +3070,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "title":"WORK_SECTOR",
                                                             "type":"select",
                                                             "enumCode":"work_sector",
-                                                            "required":true
+                                                            "required": true
                                                         },
                                                         "occupationType":{
                                                             "key":"customer.familyMembers[].incomes[].occupationType",
@@ -3550,6 +3550,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 model.customer.state = obj.state;
                                 model.customer.locality = obj.area;
                                 model.customer.villageName = obj.cityTownVillage;
+                                model.customer.taluk = obj.taluk;
                                 model.customer.landLineNo = obj.alternateMobileNo;
                                 model.customer.dateOfBirth = obj.dob;
                                 model.customer.age = moment().diff(moment(obj.dob, SessionStore.getSystemDateFormat()), 'years');
