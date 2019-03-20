@@ -37,29 +37,38 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                     "screenFilter": true
                                 }
                             },
-                            "loanType": {
-                                "key": "product.loanType",
-                                "title": "LOAN_TYPE",
-                                "type": ["string","null"],
+                            "applicantName": {
+                            "title": "CUSTOMER_NAME",
+                            "type": "string"
+                            },
+                            "urn": {
+                                "title": "URN_NO",
+                                "type": "string"
+                            },
+                            "loanAccountNo": {
+                            "title": "LOAN_ACCOUNT_NO",
+                            "type": "string"
+                            },
+                            "scheduledDisbursementDate": {
+                                "title": "SCHEDULED_DISBURSEMENT_DATE",
+                                "type": "string",
                                 "x-schema-form": {
-                                    "type": "select",
-                                    "titleMap": [{
-                                        "name": "JLG",
-                                        "value": "JLG"
-                                    }, {
-                                        "name": "JEWEL",
-                                        "value": "JEWEL"
-                                    }, {
-                                        "name": "SECURED",
-                                        "value": "SECURED",
-                                    }, {
-                                        "name": "UNSECURED",
-                                        "value": "UNSECURED",
-                                    }]
+                                    "type": "date"
                                 }
                             },
+                            "centre": {
+                                "title": "CENTRE_ID",
+                                "type": ["integer", "null"],
+                                "x-schema-form": {
+                                    "type": "select",
+                                    "enumCode": "centre",
+                                    "parentEnumCode": "branch",
+                                    "parentValueExpr": "model.branch",
+                                    "screenFilter": true
+                                }
+                            },                            
                             "loan_product": {
-                                "title": "Loan Product",
+                                "title": "PRODUCT_CODE",
                                 "type": "string",
         
                                 "x-schema-form": {
@@ -88,25 +97,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                         ];
                                     },
                                 }
-                            },
-                            "centre": {
-                                "title": "CENTRE",
-                                "type": ["integer", "null"],
-                                "x-schema-form": {
-                                    "type": "select",
-                                    "enumCode": "centre",
-                                    "parentEnumCode": "branch",
-                                    "parentValueExpr": "model.branch",
-                                    "screenFilter": true
-                                }
-                            },
-                            "scheduledDisbursementDate": {
-                                "title": "SCHEDULED_DISBURSEMENT_DATE",
-                                "type": "string",
-                                "x-schema-form": {
-                                    "type": "date"
-                                }
                             }
+                            
 
                         }
                     },
@@ -118,7 +110,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                             'currentStage': 'ReadyForDisbursement',
                             'branchId':searchOptions.branch,
                             'centreId': searchOptions.centre,
-                            'loanType':searchOptions.loanType,
+                            'customerName': searchOptions.applicantName,
+                            'accountNumber':searchOptions.loanAccountNo,
                             'productCode': searchOptions.loan_product,
                             'customerSignatureDate': searchOptions.customerSignatureDate,
                             'scheduledDisbursementDate': searchOptions.scheduledDisbursementDate,
@@ -150,7 +143,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                         getListItem: function(item){
                             return [
                                 item.customerName + " ( Loan Account #: "+item.accountNumber+")",
-                                "<em>Disbursed Amount:  &#8377;"+((!item.disbursedAmount)?0:item.disbursedAmount)+", Disbursement Amount :  &#8377;"+item.disbursementAmount
+                                "<em>Loan amount sanctioned:  &#8377;"+((!item.disbursedAmount)?0:item.disbursedAmount)+",Disbursed Amount:  &#8377;"+((!item.disbursedAmount)?0:item.disbursedAmount)+", Disbursement Amount :  &#8377;"+item.disbursementAmount
                                 +", Scheduled Disbursement Date :" + ((!item.scheduledDisbursementDate) ? " NA " : item.scheduledDisbursementDate) + (item.productCode?  ", Product Code :" +item.productCode : "" )+(item.groupCode?  ", Group Code :" +item.groupCode : "" ) + "</em>"
                             ]
                         },
