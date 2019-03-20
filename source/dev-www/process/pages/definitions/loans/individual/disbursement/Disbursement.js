@@ -330,7 +330,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         "title": "SCHEDULED_DISBURSEMENT_DATE",
                         "condition": "model.siteCode != 'IREPDhan'",
                         "type": "date",
-                        "required": true
+                        "required": true,
+                        "readonly":true
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.scheduledDisbursementDate",
