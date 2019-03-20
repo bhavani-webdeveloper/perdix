@@ -31,13 +31,13 @@ function(LeadProcess, AngularResourceService) {
                         },
                     },                    
                     "leadProfile.individualDetails.lastName":{
-                        "required": false
+                        "required": true
                     },
                     "leadProfile.individualDetails.dob":{
                         "required": true
                     },
                     "leadProfile.individualDetails.nickName":{
-                        "required": false
+                        "required": true
                     },
                     "leadProfile.individualDetails.educationStatus":{
                         "required":true,
@@ -395,7 +395,7 @@ function(LeadProcess, AngularResourceService) {
                                             "lastName": {
                                                 key: "lead.lastName",
                                                 title: "LAST_NAME",
-                                                "required":true,
+                                                "required":false,
                                                 schema: {
                                                     pattern: "^[a-zA-Z\. ]+$",
                                                 },
@@ -410,7 +410,7 @@ function(LeadProcess, AngularResourceService) {
                                                 },
                                                 validationMessage: {202: "Only alphabets and space are allowed."},
                                                 "orderNo": 60,
-                                                "required":true
+                                                "required":false
                                             }
                                             
                                     },
