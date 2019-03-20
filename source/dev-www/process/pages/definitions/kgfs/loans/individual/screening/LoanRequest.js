@@ -1442,7 +1442,6 @@ define([],function(){
                 actions: {
                     
                     submit: function(model, formCtrl, form){                        
-                        debugger;
                         if(model.loanAccount.productCategory  != 'MEL'){
                             model.loanAccount.customerId=model.loanAccount.loanCustomerRelations[0].customerId;
                             model.loanAccount.urnNo=model.loanAccount.loanCustomerRelations[0].urn; 
