@@ -82,7 +82,7 @@ define([],function(){
             var validateDeviationForm = function(formCtrl){
                 formCtrl.scope.$broadcast('schemaFormValidate');
                 if (formCtrl && formCtrl.$invalid) {
-                    PageHelper.showErrors({data:{error:"Mitigation checkbox, Please check this box if you want to proceed"}});
+                    PageHelper.showErrors({data:{error:"Your form have errors. Please fix them"}});
                     return false;
                 }
                 return true;
