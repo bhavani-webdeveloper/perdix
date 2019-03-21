@@ -105,9 +105,9 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
 
                     "actionboxBeforeSave",
                     "actionboxBeforeSave.save",
-                    //    "actionboxAfterSave",
-                    //    "actionboxAfterSave.OnlinePrint",
-                    //    "actionboxAfterSave.Back"
+                       "actionboxAfterSave",
+                       "actionboxAfterSave.OnlinePrint",
+                       "actionboxAfterSave.Back"
                 ];
 
             }
