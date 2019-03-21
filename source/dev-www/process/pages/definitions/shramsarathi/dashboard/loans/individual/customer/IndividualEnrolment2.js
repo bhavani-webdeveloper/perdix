@@ -46,7 +46,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.firstName",
                                 //"References.verifications.ReferenceCheck",
                                 "IndividualReferences",
-                                "References",   
+                                // "References",   
                             ],
                             "overrides": {
                                 "KYC.addressProofFieldSet":{
@@ -1105,7 +1105,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "FamilyDetails.familyMembers.noOfDependents",
                                 "PhysicalAssets",
                                 "IndividualFinancials",
-                                "References",
+                                // "References",
                                 
                             ],
                             "overrides": {
@@ -1210,7 +1210,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences",
                                
                                 "IndividualFinancials",
-                                "References",
+                                // "References",
                                 "HouseVerification.latitude",
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
