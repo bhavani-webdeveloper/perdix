@@ -74,7 +74,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"FIXED_ASSET"
                                 },
                                 "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
-                                    "enumCode": "fixed_asset_type"
+                                    "enumCode": "fixed_asset_type",
+                                    "title":"FIXED_ASSET"
                                 },
                                 "ContactInformation.villageName": {
                                     "readonly": true,
@@ -180,6 +181,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "EnterpriseFinancials.currentAsset.value":{
+                                    "title": "VALUE_OF_THE_ASSET",
                                     "type":"amount"
                                 },
 
@@ -205,10 +207,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC": {
                                     "orderNo": 1
                                 },
-                                "HouseVerification.place": {
-                                    "condition": "model.customer.ownership == 'Rented but own house in different place'",
-                                    "required": true
-                                },
+                                // "HouseVerification.place": {
+                                //     "condition": "model.customer.ownership == 'Rented but own house in different place'",
+                                //     "required": true
+                                // },
                                 "IndividualInformation": {
                                     "orderNo": 2
                                 },
@@ -958,76 +960,82 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualInformation.centreId1":{
                                     "title": "ZONE_NAME",
                                     "readonly":true
-                                }
-                                // "KYC": {
-                                //     "readonly": true
-                                // },
-                                // "FamilyDetails.familyMembers.noOfDependents": {
-                                //     "readonly": true
-                                // },
-                                // "IndividualInformation": {
-                                //     "readonly": true
-                                // },
+                                },
+                                "KYC": {
+                                    "readonly": true
+                                },
+                                "FamilyDetails.familyMembers.noOfDependents": {
+                                    "readonly": true
+                                },
+                                "IndividualInformation": {
+                                    "readonly": true
+                                },
                                 
-                                // "IndividualFinancials": {
-                                //     "readonly": true
-                                // },
-                                // "ContactInformation": {
-                                //     "readonly": true
-                                // },
-                                // "FamilyDetails": {
-                                //     "readonly": true,
-                                //     "title": "HOUSEHOLD_DETAILS"
-                                // },
+                                "IndividualFinancials": {
+                                    "readonly": true
+                                },
+                                "ContactInformation": {
+                                    "readonly": true
+                                },
+                                "FamilyDetails": {
+                                    "readonly": true,
+                                    "title": "HOUSEHOLD_DETAILS"
+                                },
                                 
-                                // "ContactInformation.villageName": {
-                                //     "readonly": true,
-                                //     "title":"VILLAGE"
-                                // },
-                                // "ContactInformation.district": {
-                                //     "readonly": true
-                                // },
-                                // "ContactInformation.state": {
-                                //     "readonly": true
-                                // },
-                                // "ContactInformation.landLineNo":{
-                                //     "title":"ALTERNATIVE_MOBILE_NO",
+                                "ContactInformation.villageName": {
+                                    "readonly": true,
+                                    "title":"VILLAGE"
+                                },
+                                "ContactInformation.district": {
+                                    "readonly": true
+                                },
+                                "ContactInformation.state": {
+                                    "readonly": true
+                                },
+                                "ContactInformation.landLineNo":{
+                                    "title":"ALTERNATIVE_MOBILE_NO",
                                    
-                                // },
-                                // "ContactInformation.residentialAddressFieldSet":{
-                                //     "title":"SOURCE_ADDRESS"
-                                // },
-                                // "ContactInformation.doorNo":{
-                                //     "title":"HAMLET_FALA",
-                                //     "required":false
-                                // },
-                                // "ContactInformation.permanentAddressFieldSet":{
-                                //     "title":"DESTINATION_ADDRESS"
-                                // },
-                                // "Liabilities": {
-                                //     "readonly": true
-                                // },
-                                // "IndividualReferences": {
-                                //     "readonly": true
-                                // },
-                                // "TrackDetails": {
-                                //     "readonly": true
-                                // },
-                                // "reference": {
-                                //     "readonly": true
-                                // },
-                                // "HouseVerification": {
-                                //     "readonly": true
-                                // },
-                                // "ResidenceVerification": {
-                                //     "readonly": true
-                                // },
-                                // "PhysicalAssets": {
-                                //     "readonly": true
-                                // },
-                                // "BankAccounts.customerBankAccounts": {
-                                //     "readonly": true
-                                // }
+                                },
+                                "ContactInformation.residentialAddressFieldSet":{
+                                    "title":"SOURCE_ADDRESS"
+                                },
+                                "ContactInformation.doorNo":{
+                                    "title":"HAMLET_FALA",
+                                    "required":false
+                                },
+                                "ContactInformation.permanentAddressFieldSet":{
+                                    "title":"DESTINATION_ADDRESS"
+                                },
+                                "Liabilities": {
+                                    "readonly": true
+                                },
+                                "IndividualReferences": {
+                                    "readonly": true
+                                },
+                                "TrackDetails": {
+                                    "readonly": true
+                                },
+                                "reference": {
+                                    "readonly": true
+                                },
+                                "HouseVerification": {
+                                    "readonly": true
+                                },
+                                "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                },
+                                "BankAccounts.customerBankAccounts": {
+                                    "readonly": true
+                                },
+                                "EnterpriseFinancials":{
+                                    "readonly":true
+                                },
+                                "PhysicalAssets.physicalAssets":{
+                                    "readonly":true
+                                }
                             }
                         },
                         "Evaluation": {
@@ -1222,7 +1230,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"FIXED_ASSET"
                                 },
                                 "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
-                                    "enumCode": "fixed_asset_type"
+                                    "enumCode": "fixed_asset_type",
+                                    "title":"FIXED_ASSET"
                                 },
                                 "KYC": {
                                     "readonly": true
@@ -1305,7 +1314,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"FIXED_ASSET"
                                 },
                                 "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
-                                    "enumCode": "fixed_asset_type"
+                                    "enumCode": "fixed_asset_type",
+                                    "title":"FIXED_ASSET"
                                 },
                                 "KYC.addressProofFieldSet":{
                                     "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
@@ -1941,7 +1951,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "title":"FIXED_ASSET"
                     },
                     "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
-                        "enumCode": "fixed_asset_type"
+                        "enumCode": "fixed_asset_type",
+                        "title":"FIXED_ASSET"
                     },
                     "IndividualInformation.customerBranchId": {
                         "required": true,
@@ -2084,12 +2095,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "HouseVerification.houseVerificationPhoto": {
                         "orderNo": 70
                     },
-                    "HouseVerification.date": {
-                        "orderNo": 80
-                    },
-                    "HouseVerification.place": {
-                        "orderNo": 90
-                    },
+                    // "HouseVerification.date": {
+                    //     "orderNo": 80
+                    // },
+                    // "HouseVerification.place": {
+                    //     "orderNo": 90
+                    // },
                     "BankAccounts.customerBankAccounts": {
                         onArrayAdd: function (modelValue, form, model, formCtrl, $event) {
                             modelValue.bankStatements = [];
