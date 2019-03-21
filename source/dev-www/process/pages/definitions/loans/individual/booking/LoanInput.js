@@ -905,6 +905,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 },
                                 onSelect: function(result, model, context) {
                                     $log.info(result);
+                                    model.loanAccount.applicant = result.urnNo;
+                                    model.loanAccount.applicantId = result.id;
                                     var promise = Queries.getCustomerBankAccounts(
                                         result.id
                                     ).then(function(response){
