@@ -958,76 +958,82 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualInformation.centreId1":{
                                     "title": "ZONE_NAME",
                                     "readonly":true
-                                }
-                                // "KYC": {
-                                //     "readonly": true
-                                // },
-                                // "FamilyDetails.familyMembers.noOfDependents": {
-                                //     "readonly": true
-                                // },
-                                // "IndividualInformation": {
-                                //     "readonly": true
-                                // },
+                                },
+                                "KYC": {
+                                    "readonly": true
+                                },
+                                "FamilyDetails.familyMembers.noOfDependents": {
+                                    "readonly": true
+                                },
+                                "IndividualInformation": {
+                                    "readonly": true
+                                },
                                 
-                                // "IndividualFinancials": {
-                                //     "readonly": true
-                                // },
-                                // "ContactInformation": {
-                                //     "readonly": true
-                                // },
-                                // "FamilyDetails": {
-                                //     "readonly": true,
-                                //     "title": "HOUSEHOLD_DETAILS"
-                                // },
+                                "IndividualFinancials": {
+                                    "readonly": true
+                                },
+                                "ContactInformation": {
+                                    "readonly": true
+                                },
+                                "FamilyDetails": {
+                                    "readonly": true,
+                                    "title": "HOUSEHOLD_DETAILS"
+                                },
                                 
-                                // "ContactInformation.villageName": {
-                                //     "readonly": true,
-                                //     "title":"VILLAGE"
-                                // },
-                                // "ContactInformation.district": {
-                                //     "readonly": true
-                                // },
-                                // "ContactInformation.state": {
-                                //     "readonly": true
-                                // },
-                                // "ContactInformation.landLineNo":{
-                                //     "title":"ALTERNATIVE_MOBILE_NO",
+                                "ContactInformation.villageName": {
+                                    "readonly": true,
+                                    "title":"VILLAGE"
+                                },
+                                "ContactInformation.district": {
+                                    "readonly": true
+                                },
+                                "ContactInformation.state": {
+                                    "readonly": true
+                                },
+                                "ContactInformation.landLineNo":{
+                                    "title":"ALTERNATIVE_MOBILE_NO",
                                    
-                                // },
-                                // "ContactInformation.residentialAddressFieldSet":{
-                                //     "title":"SOURCE_ADDRESS"
-                                // },
-                                // "ContactInformation.doorNo":{
-                                //     "title":"HAMLET_FALA",
-                                //     "required":false
-                                // },
-                                // "ContactInformation.permanentAddressFieldSet":{
-                                //     "title":"DESTINATION_ADDRESS"
-                                // },
-                                // "Liabilities": {
-                                //     "readonly": true
-                                // },
-                                // "IndividualReferences": {
-                                //     "readonly": true
-                                // },
-                                // "TrackDetails": {
-                                //     "readonly": true
-                                // },
-                                // "reference": {
-                                //     "readonly": true
-                                // },
-                                // "HouseVerification": {
-                                //     "readonly": true
-                                // },
-                                // "ResidenceVerification": {
-                                //     "readonly": true
-                                // },
-                                // "PhysicalAssets": {
-                                //     "readonly": true
-                                // },
-                                // "BankAccounts.customerBankAccounts": {
-                                //     "readonly": true
-                                // }
+                                },
+                                "ContactInformation.residentialAddressFieldSet":{
+                                    "title":"SOURCE_ADDRESS"
+                                },
+                                "ContactInformation.doorNo":{
+                                    "title":"HAMLET_FALA",
+                                    "required":false
+                                },
+                                "ContactInformation.permanentAddressFieldSet":{
+                                    "title":"DESTINATION_ADDRESS"
+                                },
+                                "Liabilities": {
+                                    "readonly": true
+                                },
+                                "IndividualReferences": {
+                                    "readonly": true
+                                },
+                                "TrackDetails": {
+                                    "readonly": true
+                                },
+                                "reference": {
+                                    "readonly": true
+                                },
+                                "HouseVerification": {
+                                    "readonly": true
+                                },
+                                "ResidenceVerification": {
+                                    "readonly": true
+                                },
+                                "PhysicalAssets": {
+                                    "readonly": true
+                                },
+                                "BankAccounts.customerBankAccounts": {
+                                    "readonly": true
+                                },
+                                "EnterpriseFinancials":{
+                                    "readonly":true
+                                },
+                                "PhysicalAssets.physicalAssets":{
+                                    "readonly":true
+                                }
                             }
                         },
                         "Evaluation": {
