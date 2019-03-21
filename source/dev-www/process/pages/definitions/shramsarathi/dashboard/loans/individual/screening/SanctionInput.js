@@ -77,6 +77,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:60
                             },
                             {
+                                pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.EnterpriseFinancialView',
+                                title: 'FINANCIAL_INFORMATION_SUMMARY',
+                                pageClass: 'business-finance',
+                                minimum: 1,
+                                maximum: 1,
+                                order: 70
+                            },
+                            {
                                 pageName: 'irep.loans.individual.origination.Review',
                                 title: 'REVIEW',
                                 pageClass: 'loan-review',
@@ -254,13 +262,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 }
 
 
-                                // $this.bundlePages.push({
-                                //     pageClass: 'business',
-                                //     model: {
-                                //         enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
-                                //         loanProcess: loanProcess
-                                //     }
-                                // });
+                                
+                                $this.bundlePages.push({
+                                    pageClass: 'business-finance',
+                                    model: {
+                                        customerId: res.customerId,
+                                        enrolmentProcess: res.loanCustomerEnrolmentProcess
+                                    }
+                                });
 
                                 $this.bundlePages.push({
                                     pageClass: 'loan-recommendation',
