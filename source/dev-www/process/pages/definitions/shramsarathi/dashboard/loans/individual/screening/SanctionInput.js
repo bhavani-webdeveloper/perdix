@@ -66,7 +66,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'loan-recommendation',
                                 minimum: 1,
                                 maximum: 1,
-                                order: 50
+                                order: 40
                             },
                             {
                                 pageName: 'loans.individual.screening.CreditBureauView',
@@ -74,7 +74,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'cbview',
                                 minimum: 1,
                                 maximum: 1,
-                                order:60
+                                order:50
                             },
                             {
                                 pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.EnterpriseFinancialView',
@@ -82,12 +82,20 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'business-finance',
                                 minimum: 1,
                                 maximum: 1,
-                                order: 70
+                                order: 60
                             },
                             {
                                 pageName: 'irep.loans.individual.origination.Review',
                                 title: 'REVIEW',
                                 pageClass: 'loan-review',
+                                minimum: 1,
+                                maximum: 1,
+                                order:70
+                            },
+                            {
+                                pageName: 'shramsarathi.dashboard.loans.individual.screening.televerification',
+                                title: 'TELE_VERIFICATION',
+                                pageClass: 'televerification',
                                 minimum: 1,
                                 maximum: 1,
                                 order:80
@@ -130,10 +138,11 @@ define(["perdix/domain/model/loan/LoanProcess",
                     //     }
                     // }
                 ],
+                
                     "onAddNewTab": function(definition, bundleModel){ /* returns model on promise resolution. */
                         var deferred = $q.defer();
                         var model = null;
-                        var loanProcess = bundleModel.loanProcess;
+                         loanProcess = bundleModel.loanProcess;
 
                         switch (definition.pageClass){
                             case 'co-applicant':
@@ -234,7 +243,10 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 //         }
                                 //     }
                                 // });
-
+                                // LoanProcessts.get(bundleModel.loanId)
+                                // .subscribe(function(loanProcess){
+                                //     bundleModel.loanProcess = loanProcess;
+                                //     })
                                 
                                 $this.bundlePages.push({
                                     pageClass: 'applicant',
@@ -292,6 +304,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanAccount: res
                                     }
                                 });
+                                $this.bundlePages.push({
+                                    pageClass: 'televerification',
+                                    model: {
+                                    enrolmentProcess: bundleModel.loanAccount.loloanCustomerEnrolmentProcess,
+                                    loanProcess: bundleModel.loanAccount
+                                    }
+                                });
 
                             //    $this.bundlePages.push({
                             //         pageClass: 'balance-sheet-history',
@@ -314,6 +333,7 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                     },
                     eventListeners: {
+
                         "on-customer-load": function(pageObj, bundleModel, params){
 
                         },
@@ -324,6 +344,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     BundleManager.broadcastEvent("applicant-updated", params.customer);
                                     break;
                             }
+                        },
+                        "televerification": function(pageObj, bundleModel, params){
                         },
                         "new-enrolment": function(pageObj, bundleModel, params){
                             switch (pageObj.pageClass){
@@ -366,7 +388,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                         },
                         "business": function(pageObj, bundleModel, params) {
                             BundleManager.broadcastEvent("business-customer", params);
-                        }
+                        },
+                       
                     }
 
                 }

@@ -3,6 +3,7 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.scr
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
 		var branch = SessionStore.getBranch();
+		console.log(branch);
 		var centres = SessionStore.getCentres();
 		var centreId=[];
 	    if (centres && centres.length) {
@@ -93,7 +94,7 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.scr
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-	                    'branchName':searchOptions.branch,
+	                    'branchName':searchOptions.branchName,
 	                    'stage': 'ScreeningReview',
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
