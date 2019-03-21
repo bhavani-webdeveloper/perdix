@@ -3728,12 +3728,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         //         return false;
                         //     } 
                         // }
-                        var dateFlag;
-                        model.customer.enterpriseRegistrations.map((epReg => {
-                            if(epReg.registeredDate > epReg.expiryDate){
-                                dateFlag = true;
-                            }
-                        }))
+                        var dateFlag;     
+                        if (model.customer.enterpriseRegistrations != 'undefined' && model.customer.enterpriseRegistrations != null)
+                        {                            
+                            model.customer.enterpriseRegistrations.map((epReg => {
+                                if(epReg.registeredDate > epReg.expiryDate){
+                                    dateFlag = true;
+                                }
+                            }))
+                        }               
                         if(dateFlag){
                             PageHelper.showErrors({data:{error:"Registration date cant be greater than valid upto date...."}});   
                             return false;
