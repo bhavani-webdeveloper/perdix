@@ -3632,8 +3632,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             .then(function (enrolmentProcess) {
                                 if (!enrolmentProcess) {
                                     /* IF no enrolment present, reset to applicant */
+                                    if (_.hasIn(model, 'customer.enterpriseCustomerRelations') && model.customer.enterpriseCustomerRelations !=null){
                                     model.customer.enterpriseCustomerRelations[0].linkedToCustomerId = params.customer.id;
                                     model.customer.enterpriseCustomerRelations[0].linkedToCustomerName = params.customer.firstName;
+                                    }
                                     //model.customer.firstName = params.customer.firstName;
                                     model.customer.villageName = params.customer.villageName;
                                     model.customer.pincode = params.customer.pincode;
