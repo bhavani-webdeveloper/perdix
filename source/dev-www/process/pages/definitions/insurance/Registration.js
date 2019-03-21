@@ -619,11 +619,10 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
-                                model.insurancePolicyDetailsDTO = value.insurancePolicyDetailsDTO[0];
+                                model.insurancePolicyDetailsDTO = value.insurancePolicyDetailsDTO;
                                 model.submissionDone = true;
                                 idPresent = true;
                                 PageHelper.showProgress('Insurance', 'Insurance Registration Saved', 5000);
-                                irfNavigator.goBack();
                             }, function (err) {
                                 PageHelper.showProgress('Insurance', 'Insurance Registration Failed', 5000);
                                 PageHelper.showErrors(err);
