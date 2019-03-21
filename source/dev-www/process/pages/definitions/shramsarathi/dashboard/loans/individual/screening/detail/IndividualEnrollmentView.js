@@ -8,6 +8,12 @@ define({
                 "title": "INDIVIDUAL_ENROLLMENT",
                 "subTitle": "",
                 initialize: function(model, form, formCtrl, bundlePageObj, bundleModel,params) {
+                    console.log(model);
+                    console.log("------MOdel");
+                    console.log(form);
+                    console.log("------Form");
+                    console.log(formCtrl);
+                    console.log("------FormCtrl");
                     var self = this;
                     model.bundlePageObj = bundlePageObj;
                     model.bundleModel = bundleModel;
@@ -484,9 +490,10 @@ define({
                                     "key": "customer.ownership",
                                     "title": "PREMISES_OWNERSHIP",
                                     "type": "string"
-                                },{
-                                    "key": "customer.place"
                                 },
+                                // {
+                                //     "key": "customer.place"
+                                // },
                                 {
                                     "key":"customer.udf.userDefinedFieldValues.udf4",
                                     "title":"IN_CURRENT_ADDRESS_SINCE",
@@ -742,19 +749,23 @@ define({
                                             return full['liabilityLoanPurpose']
                                         }
     
-                                    }, {
+                                    }, 
+                                    {
                                         "title": "START_DATE",
                                         "data": "startDate",
                                         render: function(data, type, full, meta) {
                                             return full['startDate']
                                         }
-                                    }, {
+
+                                    }, 
+                                    {
                                         "title": "MATURITY_DATE",
                                         "data": "maturityDate",
                                         render: function(data, type, full, meta) {
                                             return full['maturityDate']
                                         }
-                                    }, {
+                                    }, 
+                                    {
                                         "title": "NO_OF_INSTALLMENT_PAID",
                                         "data": "noOfInstalmentPaid",
                                         render: function(data, type, full, meta) {
