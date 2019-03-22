@@ -14,6 +14,7 @@ define({
                     console.log("------Form");
                     console.log(formCtrl);
                     console.log("------FormCtrl");
+
                     var self = this;
                     model.bundlePageObj = bundlePageObj;
                     model.bundleModel = bundleModel;
@@ -107,15 +108,15 @@ define({
 
                         var monthly_installment = 0;
                         var outstanding_bal = 0;
-                        // var liability ;
-                        // _.each(liability, function(liability) {
-                        //     if (liability.summary['Customer ID'] == model.customer.id) {
-                        //        // model.UIUDF.liabilities = _.cloneDeep(liability.data)
-                        //         monthly_installment += liability.summary['Total Monthly Installment'];
-                        //         outstanding_bal += liability.summary['Total Outstanding Loan Amount'];
+                        var liability ;
+                        _.each(liability, function(liability) {
+                            if (liability.summary['Customer ID'] == model.customer.id) {
+                               // model.UIUDF.liabilities = _.cloneDeep(liability.data)
+                                monthly_installment += liability.summary['Total Monthly Installment'];
+                                outstanding_bal += liability.summary['Total Outstanding Loan Amount'];
     
-                        //     }
-                        // })
+                            }
+                        })
                         model.UIUDF.liability_fields.active_accounts = model.UIUDF.liabilities.length;
                         model.UIUDF.liability_fields.monthly_installment = monthly_installment;
                         model.UIUDF.liability_fields.outstanding_bal = outstanding_bal;
