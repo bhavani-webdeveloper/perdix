@@ -203,9 +203,9 @@ define({
             '<tr> <td>{{"OTHER_INCOME_SALARIES" | translate}}</td> <td>{{household.otherIncomeSalaries | irfCurrency}}</td> </tr>'+
             '<tr> <td>{{"FAMILY_MEMBER_INCOMES" | translate}}</td> <td>{{household.familyMemberIncomes | irfCurrency}}</td> </tr>'+
             '<tr class="table-sub-header"> <th>{{"EXPENSES" | translate}}</th> <th></th></tr>'+
-            '<tr> <td>{{"HOUSEHOLD_EXPENSE" | translate}}</td> <td></td> </tr>'+
-            '<tr> <td>{{"EMI_EXPENSES" | translate}}</td> <td></td> </tr>'+
-            '<tr> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td> {{household.netHouseholdIncome}}</td> </tr>'+
+            '<tr> <td>{{"HOUSEHOLD_EXPENSE" | translate}}</td> <td>{{household.declaredEducationExpense | irfCurrency }}</td> </tr>'+
+            '<tr> <td>{{"EMI_EXPENSES" | translate}}</td> <td>{{household.emiHouseholdLiabilities | irfCurrency }}</td> </tr>'+
+            '<tr> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td>{{household.netHouseholdIncome | irfCurrency}}</td> </tr>'+
         '</tbody>'+
     '</table>';
 
