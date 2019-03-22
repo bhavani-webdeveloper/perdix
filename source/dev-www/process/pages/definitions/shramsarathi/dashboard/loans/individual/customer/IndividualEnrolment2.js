@@ -3165,8 +3165,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "type":"text",
                                                             "required":true,
                                                             "schema": {
-                                                                "pattern": "^[0-9]*$",
-                                                                "type": ["integer", "string"]
+                                                                "pattern": "^\$[0-9]+(\.[0-9])?$",
+                                                                "type": ["decimal"]
                                                             }
                                                         },
                                                         "avarageReturn":{
