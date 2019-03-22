@@ -24,7 +24,7 @@ if (isset($_GET)) {
     $CustomerLoanId = $_GET['LoanId'];
     $ScoreName =    $tempScoreName;
     $SessionUserName = "admin";
-    $isScoringOptimizationEnabled = (!empty($_GET['isScoringOptimizationEnabled'])) ? connectDb()->getPdo()->quote($_GET['isScoringOptimizationEnabled']) : $_GET['isScoringOptimizationEnabled'];
+    $isScoringOptimizationEnabled = $_GET['isScoringOptimizationEnabled'];
 
     //get all customer details from loan_accounts table
     $CustomerDetails = "SELECT
@@ -374,9 +374,9 @@ if (isset($_GET)) {
     try {
         $db = ConnectDb();
         $calculationTable = $db->prepare($UpdateCalculation);
-        $calculationTable = $db->bindParam(':CustomerLoanId', $CustomerLoanId);
-        $calculationTable = $db->bindParam(':NameOfTheScore', $NameOfTheScore);
-        $calculationTable = $db->bindParam(':SessionUserName',$SessionUserName);
+        $calculationTable->bindParam(':CustomerLoanId', $CustomerLoanId);
+        $calculationTable->bindParam(':NameOfTheScore', $NameOfTheScore);
+        $calculationTable->bindParam(':SessionUserName',$SessionUserName);
         $calculationTable->execute();
         $db = null;
 
