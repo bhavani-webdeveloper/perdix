@@ -19,9 +19,9 @@ if (isset($_GET)) {
     include_once('../includes/ConfigureDbs.php');
 
     $error_log = "";
-    $tempScoreName = (!empty($_GET['ScoreName'])) ? connectDb()->getPdo()->quote($_GET['ScoreName']) : $_GET['ScoreName'];
+    $tempScoreName =  $_GET['ScoreName'];
     $NameOfTheScore = $tempScoreName;
-    $CustomerLoanId = (!empty($_GET['LoanId'])) ? intval(filter_var((connectDb()->getPdo()->quote($_GET['LoanId'])), FILTER_SANITIZE_NUMBER_INT)) : $_GET['LoanId'];
+    $CustomerLoanId = $_GET['LoanId'];
     $ScoreName =    $tempScoreName;
     $SessionUserName = "admin";
     $isScoringOptimizationEnabled = (!empty($_GET['isScoringOptimizationEnabled'])) ? connectDb()->getPdo()->quote($_GET['isScoringOptimizationEnabled']) : $_GET['isScoringOptimizationEnabled'];
