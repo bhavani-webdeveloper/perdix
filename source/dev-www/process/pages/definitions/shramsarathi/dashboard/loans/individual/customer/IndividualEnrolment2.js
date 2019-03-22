@@ -2594,7 +2594,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.UIUDF = {
                         'family_fields': {}
                     };
-
                     /* Setting data recieved from Bundle */
                     model.loanCustomerRelationType =getLoanCustomerRelation(bundlePageObj.pageClass);
                     model.pageClass = bundlePageObj.pageClass;
@@ -2606,6 +2605,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.enrolmentProcess.currentStage = model.currentStage;
                     model.customer = model.enrolmentProcess.customer;
                     model.customer.addressPfSameAsIdProof="NO";
+                    
+                    if(model.customer.familyMembers[0].relationShip == 'self')
+                    {
+                        model.customer.familyMembers[0].relationShip = 'Self'
+                    }
+
                     // }
                     /* End of setting data recieved from Bundle */
                     // set Age from DateOfBirth
