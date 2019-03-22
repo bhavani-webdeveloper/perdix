@@ -68,25 +68,24 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                 }
                             },
                             "loanType": {
-                            "key": "product.loanType",
-                            "title": "LOAN_TYPE",
-                            "type": ["string","null"],
-                            "x-schema-form": {
-                                    "type": "select",
-                                    "titleMap": [{
-                                        "name": "JLG",
-                                        "value": "JLG"
-                                    }, {
-                                        "name": "JEWEL",
-                                        "value": "JEWEL"
-                                    }, {
-                                        "name": "SECURED",
-                                        "value": "SECURED",
-                                    }, {
-                                        "name": "UNSECURED",
-                                        "value": "UNSECURED",
-                                    }]
-                                }
+                                "key": "product.loanType",
+                                "title": "LOAN_TYPE",
+                                "type": ["string","null"],
+                                "x-schema-form": {
+                                        "type": "select",
+                                        "enumCode": "booking_loan_type",                                        
+                                    }
+                            },
+                            "productCategory":{
+                                "key": "product.productCategory",
+                                "title": "PRODUCT_CATEGORY",
+                                "type": ["string","null"],
+                                    "x-schema-form": {
+                                        "type": "select",
+                                        "enumCode": "loan_product_category_master",
+                                        "parentEnumCode": "booking_loan_type",
+                                        "screenFilter": true
+                                    }
                             },                            
                             "loan_product": {
                                 "title": "PRODUCT_CODE",
@@ -97,6 +96,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                     "lovonly": true,
                                     search: function (inputModel, form, model, context) {
                                         var loanProduct = formHelper.enum('loan_product').data;
+                                        debugger;
                                         var products = $filter('filter')(loanProduct, 
                                             {   
                                                 parentCode: model.partner_code ? model.partner_code : undefined,
