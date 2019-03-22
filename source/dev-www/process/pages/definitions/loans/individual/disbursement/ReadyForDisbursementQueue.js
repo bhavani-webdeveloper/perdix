@@ -66,6 +66,27 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                     "parentValueExpr": "model.branch",
                                     "screenFilter": true
                                 }
+                            },
+                            "loanType": {
+                            "key": "product.loanType",
+                            "title": "LOAN_TYPE",
+                            "type": ["string","null"],
+                            "x-schema-form": {
+                                    "type": "select",
+                                    "titleMap": [{
+                                        "name": "JLG",
+                                        "value": "JLG"
+                                    }, {
+                                        "name": "JEWEL",
+                                        "value": "JEWEL"
+                                    }, {
+                                        "name": "SECURED",
+                                        "value": "SECURED",
+                                    }, {
+                                        "name": "UNSECURED",
+                                        "value": "UNSECURED",
+                                    }]
+                                }
                             },                            
                             "loan_product": {
                                 "title": "PRODUCT_CODE",
@@ -113,6 +134,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                             'customerName': searchOptions.applicantName,
                             'accountNumber':searchOptions.loanAccountNo,
                             'productCode': searchOptions.loan_product,
+                            'loanType':searchOptions.loanType,
                             'customerSignatureDate': searchOptions.customerSignatureDate,
                             'scheduledDisbursementDate': searchOptions.scheduledDisbursementDate,
                             'page': pageOpts.pageNo,
