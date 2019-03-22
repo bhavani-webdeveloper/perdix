@@ -46,7 +46,11 @@ irf.pageCollection.factory(irf.page("jewelloan.IncomingTransitQueue"),
             .$promise
 			.then(function(res){
 				PageHelper.showProgress("Assign-Jewel", "Done.", 3000);
-				irfNavigator.goBack();
+				//irfNavigator.goBack();
+				irfNavigator.go({
+					state: "Page.Engine",
+					pageName: "jewelloan.IncomingTransitQueue"
+					});
 			}, function(httpRes){
 				PageHelper.showProgress("Assign-Jewel", "Oops. Some error occured.", 3000);
 				PageHelper.showErrors(httpRes);
@@ -61,7 +65,7 @@ irf.pageCollection.factory(irf.page("jewelloan.IncomingTransitQueue"),
 
 
         var destinationBranchId = SessionStore.getBranchId();
-        var sourceBranch = SessionStore.getBranch();
+        //var sourceBranch = SessionStore.getBranch();
         var loginuser   = SessionStore.getLoginname();
 		var branch = SessionStore.getBranch();
 		var transitStatusValue 	= 'IN_TRANSIT' ;
@@ -76,7 +80,7 @@ irf.pageCollection.factory(irf.page("jewelloan.IncomingTransitQueue"),
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.originBranch = branch;
-				model.sourceBranch = sourceBranch;
+				//model.sourceBranch = sourceBranch;
 				model.jewelloan = model.jewelloan || {};
 				$log.info("search-list sample got initialized");
 			},
@@ -210,35 +214,32 @@ irf.pageCollection.factory(irf.page("jewelloan.IncomingTransitQueue"),
 									title: 'Destination Branch',
 									data: 'destinationBranch'
 								},{
-									title: 'Account No',
-									data: 'accountNo'
+									title: 'Customer Name',
+									data: 'customerFullName'
 								},{
 									title: 'URN No',
 									data: 'urnNo'
 								},{
-									title: 'Jewel Pouch No',
-									data: 'jewelPouchNo'
+									title: 'Account No',
+									data: 'accountNo'
+								},{
+									title: 'Disbursement Date',
+									data: 'loanDisbursementDate'
+								},{
+									title: 'Disbursed Amount',
+									data: 'disbursedAmount'
 								},{
 									title: 'Transit Status',
 									data: 'transitStatus'
 								},{
-									title: 'Customer FullName',
-									data: 'customerFullName'
-								}, {
-									title: 'Disbursed Amount',
-									data: 'disbursedAmount'
-								},{
-									title: 'Loan Disbursement Date',
-									data: 'loanDisbursementDate'
-								},{
-									title: 'Investor',
-									data: 'investor'
-								},{
-									title: 'Rejected Reason',
-									data: 'rejectedReason'
+									title: 'Jewel Pouch No',
+									data: 'jewelPouchNo'
 								},{
 									title: 'Remarks',
 									data: 'remarks'
+								},{
+									title: 'Reject Reason',
+									data: 'rejectedReason'
 								}
 							];
                     },
@@ -253,7 +254,6 @@ irf.pageCollection.factory(irf.page("jewelloan.IncomingTransitQueue"),
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(items) {
-								
 								if (items.length == 0) {
 									PageHelper.showProgress("bulk-create", "Atleast one loan should be selected for Batch creation", 5000);
 									return false;

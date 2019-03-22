@@ -48,7 +48,10 @@ irf.pageCollection.factory(irf.page("jewelloan.ReturnRequestQueue"),
            .$promise
                 .then(function(res){
                     PageHelper.showProgress("Assign-Jewel", "Done.", 3000);
-                    irfNavigator.goBack();
+                    irfNavigator.go({
+						state: "Page.Engine",
+						pageName: "jewelloan.ReturnRequestQueue"
+						});
                 }, function(httpRes){
                     PageHelper.showProgress("Assign-Jewel", "Oops. Some error occured.", 3000);
                     PageHelper.showErrors(httpRes);
@@ -61,7 +64,7 @@ irf.pageCollection.factory(irf.page("jewelloan.ReturnRequestQueue"),
         
 
         var sourceBranchId      = SessionStore.getBranchId();
-        var destinationBranch   = SessionStore.getBranch();
+        //var destinationBranch   = SessionStore.getBranch();
         var loginuser           = SessionStore.getLoginname();
 		var branch              = SessionStore.getBranch();
 		var transitStatusValue 	= 'RETURN_REQUESTED' ;
@@ -75,12 +78,12 @@ irf.pageCollection.factory(irf.page("jewelloan.ReturnRequestQueue"),
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.originBranch = branch;
-				model.destinationBranch = destinationBranch;
+				//model.destinationBranch = destinationBranch;
 				model.jewelloan = model.jewelloan || {};
 				$log.info("search-list sample got initialized");
 			},
 			definition: {
-				title: "SEARCH_SOURCE_BRANCH",
+				title: "SEARCH_DESTINATION_BRANCH",
 				searchForm: [
 					"*"
 				], 
@@ -211,36 +214,32 @@ irf.pageCollection.factory(irf.page("jewelloan.ReturnRequestQueue"),
 									title: 'Destination Branch',
 									data: 'destinationBranch'
 								},{
-									title: 'Account No',
-									data: 'accountNo'
+									title: 'Customer Name',
+									data: 'customerFullName'
 								},{
 									title: 'URN No',
 									data: 'urnNo'
 								},{
-									title: 'Jewel Pouch No',
-									data: 'jewelPouchNo'
+									title: 'Account No',
+									data: 'accountNo'
+								},{
+									title: 'Disbursement Date',
+									data: 'loanDisbursementDate'
+								},{
+									title: 'Disbursed Amount',
+									data: 'disbursedAmount'
 								},{
 									title: 'Transit Status',
 									data: 'transitStatus'
 								},{
-									title: 'Customer FullName',
-									data: 'customerFullName'
-								}, {
-									title: 'Disbursed Amount',
-									data: 'disbursedAmount'
-								},{
-									title: 'Loan Disbursement Date',
-									data: 'loanDisbursementDate'
-								},{
-									title: 'Investor',
-									data: 'investor'
-								}
-								,{
-									title: 'Rejected Reason',
-									data: 'rejectedReason'
+									title: 'Jewel Pouch No',
+									data: 'jewelPouchNo'
 								},{
 									title: 'Remarks',
 									data: 'remarks'
+								},{
+									title: 'Reject Reason',
+									data: 'rejectedReason'
 								}
 							];
                     },

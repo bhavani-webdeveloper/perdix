@@ -369,7 +369,8 @@ define([],function(){
                                 },
                                 "NomineeDetails.nominees.nomineePincode": {
                                    "required": true,
-                                   "resolver": "NomineePincodeLOVConfiguration"
+                                   "resolver": "NomineePincodeLOVConfigurationShramsarathi",
+                                   "autolov": false
                                 },
                                 "NomineeDetails.nominees.nomineeRelationship": {
                                    "required":true
@@ -1551,9 +1552,11 @@ define([],function(){
                             "enumCode":"relationship"
                         },
                         "NomineeDetails.nominees.nomineePincode": {
-                            "resolver": "NomineePincodeLOVConfiguration",
+                            "resolver": "NomineePincodeLOVConfigurationShramsarathi",
+                            // "resolver": "PincodeLOVConfigurationShramsarathi",
                             "orderNo":70,
-                            "required":true
+                            "required":true,
+                            "autolov": false
                         },
                         "NomineeDetails.nominees.nomineeDoorNo": {
                             "orderNo": 40,
