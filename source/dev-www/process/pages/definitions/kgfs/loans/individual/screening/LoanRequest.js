@@ -79,13 +79,17 @@ define([],function(){
                 return true;
             };
 
-            var validateDeviationForm = function(formCtrl){
-                formCtrl.scope.$broadcast('schemaFormValidate');
-                if (formCtrl && formCtrl.$invalid) {
-                    PageHelper.showErrors({data:{error:"Your form have errors. Please fix them"}});
-                    return false;
+            var validateDeviation=[];            
+            var validateDeviationForm = function(model){
+                validateDeviation=[];
+                if (_.hasIn(model, 'loanAccount.loanMitigants') && _.isArray(model.loanAccount.loanMitigants) && model.loanAccount.loanMitigants !=null) {
+                    _.forEach(model.loanAccount.loanMitigants, function(mitigantStatus,item){
+                        if(mitigantStatus.mitigatedStatus)
+                            delete  validateDeviation[item];
+                        else
+                            validateDeviation[item]=mitigantStatus.mitigatedStatus;
+                    })
                 }
-                return true;
             };
 
             var getRelationFromClass = function(relation){
@@ -1165,7 +1169,7 @@ define([],function(){
                                             '<td>{{ parameter }}</td>' +
                                             '<td><ul class="list-unstyled">' +
                                             '<li ng-repeat="m in item" id="{{m.mitigant}}">' +
-                                            '<input required type="checkbox" ng-checked="m.mitigatedStatus"  ng-model="m.mitigatedStatus"> {{ m.mitigant }}' +
+                                            '<input type="checkbox" ng-checked="m.mitigatedStatus"  ng-model="m.mitigatedStatus"> {{ m.mitigant }}' +
                                             '</li></ul></td></tr></tbody></table>'
                                     },                                    
                                     "loanMitigants":{
@@ -1545,12 +1549,13 @@ define([],function(){
                             });
                     },
                     proceed: function(model, formCtrl, form, $event){ 
-
-                        validateDeviationForm(formCtrl);
-                        if(PageHelper.isFormInvalid(formCtrl)) {
+                        setDeviation(model);
+                        validateDeviationForm(model);
+                        if(_.isArray(validateDeviation) && validateDeviation.length > 0) {
+                            PageHelper.showErrors({data:{error:"Mitigation checkbox, Please check this box if you want to proceed"}});
                             return false;
                         }
-                        
+
                          if (model.loanProcess.remarks==null || model.loanProcess.remarks ==""){
                                PageHelper.showProgress("update-loan", "Remarks is mandatory", 3000);
                                PageHelper.hideLoader();
@@ -1605,7 +1610,6 @@ define([],function(){
                         }
                         PageHelper.showLoader();
                         PageHelper.showProgress('enrolment', 'Updating Loan');
-                        setDeviation(model);
                         model.loanProcess.proceed(model.loanProcess.stage)
                             .finally(function () {
                                 PageHelper.hideLoader();
