@@ -250,7 +250,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.identityProofNo": {
                                     "required": true,
                                     "schema": {
-                                        "pattern": "(^\\d{4}\\d{4}\\d{4}$)|(^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$)",
+                                        "pattern": "(^\\d{4}\\d{4}\\d{4}$)|(^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$)|(^[a-zA-Z]{6}[0-9]{5}$)",
                                         "type": ["integer", "string"]
                                     }
                                 },
@@ -767,7 +767,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ContactInformation.mailingPincode": {
                                     "condition": "!model.customer.mailSameAsResidence",
-                                    "resolver": "MailingPincodeLOVConfiguration"
+                                    // "resolver": "MailingPincodeLOVConfiguration"
+                                    "resolver": "PincodeLOVConfigurationShramsarathi",
+                                    "autolov": false
                                 },
                                 "ContactInformation.mailingLandmark": {
                                     "condition": "!model.customer.mailSameAsResidence",
@@ -1621,7 +1623,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ContactInformation.mailingPincode": {
                                     "condition": "!model.customer.mailSameAsResidence",
-                                    "resolver": "MailingPincodeLOVConfiguration",
+                                    // "resolver": "MailingPincodeLOVConfiguration",
+                                    "resolver": "PincodeLOVConfigurationShramsarathi",
+                                    "autolov": false
                                 },
                                 "ContactInformation.mailingLocality": {
                                     "condition": "!model.customer.mailSameAsResidence",
@@ -2053,12 +2057,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "condition": "!model.customer.mailSameAsResidence"
                     },
                     "ContactInformation.pincode": {
-                        "resolver": "PincodeLOVConfiguration",
-                        "searchHelper": formHelper
+                        "resolver": "PincodeLOVConfigurationShramsarathi",
+                        "searchHelper": formHelper,
+                        "autolov": false
                     },
                     "ContactInformation.mailingPincode": {
                         "condition": "!model.customer.mailSameAsResidence",
-                        "resolver": "MailingPincodeLOVConfiguration"
+                        // "resolver": "MailingPincodeLOVConfiguration"
+                        "resolver": "PincodeLOVConfigurationShramsarathi",
+                        "autolov": false
                     },
                     "FamilyDetails.familyMembers.relationShip":{
                         "title":"RELATIONSHIP_WITH_MIGRANT",
@@ -2249,7 +2256,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "ContactInformation.mailingPincode": {
                         "condition": "!model.customer.mailSameAsResidence",
-                        "resolver": "MailingPincodeLOVConfiguration"
+                        // "resolver": "MailingPincodeLOVConfiguration"
+                        "resolver": "PincodeLOVConfigurationShramsarathi",
+                        "autolov": false
                     },
                     "ContactInformation.mailingLocality": {
                         "condition": "!model.customer.mailSameAsResidence",
@@ -2647,7 +2656,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         //    // "orderNo": 100
                                         // },
                                         "mandal": {
-                                            "key": "customer.villageName",
+                                            "key": "customer.taluk",
                                             "title": "SUB_DISTRICT",
                                             "type": "string",
                                             "required":false,
@@ -3529,7 +3538,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 },
                 eventListeners: {
                     "lead-loaded": function (bundleModel, model, obj) {
-
                         return $q.when()
                             .then(function () {
                                 if (obj.applicantCustomerId) {
@@ -3564,6 +3572,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 model.customer.state = obj.state;
                                 model.customer.locality = obj.area;
                                 model.customer.villageName = obj.cityTownVillage;
+                                model.customer.taluk = obj.taluk;
                                 model.customer.landLineNo = obj.alternateMobileNo;
                                 model.customer.dateOfBirth = obj.dob;
                                 model.customer.age = moment().diff(moment(obj.dob, SessionStore.getSystemDateFormat()), 'years');
