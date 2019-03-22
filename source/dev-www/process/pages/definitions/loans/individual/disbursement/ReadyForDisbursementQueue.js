@@ -96,7 +96,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                     "lovonly": true,
                                     search: function (inputModel, form, model, context) {
                                         var loanProduct = formHelper.enum('loan_product').data;
-                                        debugger;
                                         var products = $filter('filter')(loanProduct, 
                                             {   
                                                 parentCode: model.partner_code ? model.partner_code : undefined,

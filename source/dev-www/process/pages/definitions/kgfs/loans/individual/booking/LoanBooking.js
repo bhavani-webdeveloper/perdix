@@ -724,10 +724,11 @@ define([], function () {
                     },
                     "LoanDetails.witnessDetails.witnessDOB": {
                         "type": "date",
-                        "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3"
+                        "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf3",
+                        "readonly":true
                     },
                     "LoanDetails.witnessDetails.witnessRelationship": {
-                        "readonly": false,
+                        "readonly": true,
                         "require": false
                     },
                     "NomineeDetails": {
