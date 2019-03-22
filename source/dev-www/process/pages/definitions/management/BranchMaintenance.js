@@ -305,6 +305,13 @@ define({
                     if(!model.branch.operationalStatus){
                        model.branch.operationalStatus='ACTIVE'; 
                     }
+                    if(!model.branch.fingerPrintDeviceType || model.branch.fingerPrintDeviceType == null){
+                        model.branch.fingerPrintDeviceType = 'SAGEM'; 
+                     }
+                    if(!model.branch.eodAuthenticationType || model.branch.eodAuthenticationType == null){
+                        model.branch.eodAuthenticationType = 'PASSWORD'; 
+                     } 
+
                     PageHelper.showLoader();
                     PageHelper.showProgress("Branch Save", "Working...");
                     if (model.branch.id) {
