@@ -183,14 +183,17 @@ define(["perdix/domain/model/loan/LoanProcess",
                             bundleModel.loanId = $stateParams.pageId;
                             IndividualLoan.get({
                                 id: bundleModel.loanId
+                                
                             })
                             .$promise
                             .then(
                                 function(res) {
-                                    bundleModel.loanAccount = res;
+                                    LoanProcessts.get(bundleModel.loanId)
+                                    .subscribe(function(loanProcessts){
+                                        bundleModel.loanAccount = res;
 
-                                bundleModel.applicant = {};
-                                bundleModel.coApplicants = [];
+                                    bundleModel.applicant = {};
+                                 bundleModel.coApplicants = [];
                                 bundleModel.guarantors = [];
                                 bundleModel.business = {};
                                 bundleModel.urnNos = [];
@@ -303,12 +306,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     model: {
                                         loanAccount: res
                                     }
-                                });
+                                });debugger
                                 $this.bundlePages.push({
                                     pageClass: 'televerification',
                                     model: {
-                                    enrolmentProcess: bundleModel.loanAccount.loloanCustomerEnrolmentProcess,
-                                    loanProcess: bundleModel.loanAccount
+                                    enrolmentProcess:loanProcessts.loanCustomerEnrolmentProcess,
+                                    loanProcess: loanProcessts
                                     }
                                 });
 
@@ -322,8 +325,8 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                                 deferred.resolve();
 
-                            });
-
+                                });
+                            })
                         }
                         return deferred.promise;
                     },

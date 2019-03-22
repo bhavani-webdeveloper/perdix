@@ -60,7 +60,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             {
                                                                 "key": "applicant.customer.centreId",
                                                                 "type": "lov",
-                                                                "title": "CENTRE",
+                                                                "title": "ZONE_ID",
                                                                 "filter": {
                                                                     "parentCode": "branch_id"
                                                                 },
@@ -69,10 +69,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                                 "readonly": true
                                                             },                                                        
                                                             {
-                                                                "key": "customer.centreId",
+                                                                "key": "applicant.customer.centreId",
                                                                 "type": "select",
                                                                 "enumCode": "centre",
-                                                                "title": "CENTRE_NAME",
+                                                                "title": "ZONE_NAME",
                                                                 "readonly": true
                                                             },
                                                             {

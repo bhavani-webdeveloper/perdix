@@ -90,10 +90,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                 model.customer.enterprise.avgDailySaleAmount = ((model.customer.enterprise.netBusinessIncome ? model.customer.enterprise.netBusinessIncome : 0) + (model.customer.enterprise.additionalIncomeConsidered ? model.customer.enterprise.additionalIncomeConsidered : 0) - (model.customer.enterprise.totalPersonalExpense ? model.customer.enterprise.totalPersonalExpense : 0) - (model.customer.enterprise.totalEmiAmount ? model.customer.enterprise.totalEmiAmount : 0))
                 model.customer.enterprise.avgMonthlyNetIncome = (model.customer.enterprise.avgDailySaleAmount * (model.customer.enterprise.ownerSalary ? model.customer.enterprise.ownerSalary : 0));
                 model.customer.enterprise.workingDaysInMonth = Math.min((model.customer.enterprise.avgMonthlyNetIncome ? model.customer.enterprise.avgMonthlyNetIncome : 0), (model.loanAccount.estimatedEmi? model.loanAccount.estimatedEmi: 0));
-                var x = (((Math.pow(((model.loanAccount.interestRate / 12)+1), model.loanAccount.tenure)) - 1) * (model.customer.enterprise.workingDaysInMonth))
-                var y = ((Math.pow(((model.loanAccount.interestRate/ 12)+1), model.loanAccount.tenure)) * ((model.loanAccount.interestRate/ 12)))
+                var x = (((Math.pow(((model.loanAccount.interestRate / 12)), model.loanAccount.tenure) +1) * (model.customer.enterprise.workingDaysInMonth)) - 1)
+                var y = ((Math.pow(((model.loanAccount.interestRate/ 12)), model.loanAccount.tenure)+1) * ((model.loanAccount.interestRate/ 12))) + model.loanAccount.loanAmountRequested
                 model.customer.enterprise.employeeSalary = (x/y);
-                    "TotalMonthlySurplus.insurancePremiumAmount"
             }
             var computeEstimatedEmi = function (model) {
                 if (model.loanAccount.loanAmountRequested == '' || model.loanAccount.interestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenure == '')
@@ -534,14 +533,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "BuyerDetails": {
                         "orderNo": 530,
-                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction' || model.currentStage == 'BusinessTeamReview' || model.currentStage == 'CreditOfficerReview' || model.currentStage == 'CreditManagerReview' || model.currentStage == 'CBOCreditHeadReview' || model.currentStage == 'CEOMDReview'",
                     },
                     "BuyerDetails.buyerDetails.paymentFrequency": {
                         "type": "text"
                     },
                     "SuppliersDeatils": {
                         "orderNo": 535,
-                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction' || model.currentStage == 'BusinessTeamReview' || model.currentStage == 'CreditOfficerReview' || model.currentStage == 'CreditManagerReview' || model.currentStage == 'CBOCreditHeadReview' || model.currentStage == 'CEOMDReview'",
                     },
                     "MonthlySalesCalculate":{
                         "orderNo": 740
@@ -630,7 +629,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "PreliminaryInformation": {
                         "type": "box",
-                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction' || model.currentStage == 'BusinessTeamReview' || model.currentStage == 'CreditOfficerReview' || model.currentStage == 'CreditManagerReview' || model.currentStage == 'CBOCreditHeadReview' || model.currentStage == 'CEOMDReview'",
                         "title": "PRELIMINARY_INFORMATION",
                         "items": {
                             "loanAmountRequested": {
@@ -699,7 +698,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EstimatedSales": {
                         "type": "box",
-                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction'",
+                        "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction' || model.currentStage == 'BusinessTeamReview' || model.currentStage == 'CreditOfficerReview' || model.currentStage == 'CreditManagerReview' || model.currentStage == 'CBOCreditHeadReview' || model.currentStage == 'CEOMDReview'",
                         "title": "INITIALISE_ESTIMATE_OF_SALES",
                         "items": {
                             'monthlyBusinessExpenses': {
