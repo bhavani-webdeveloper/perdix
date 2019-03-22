@@ -102,7 +102,15 @@ define({
 	                                ];
 	                            }
 							}
-						}
+						},
+						'branch': {
+	                    	'title': "BRANCH",
+	                    	"type": ["string", "null"],
+							"x-schema-form": {
+								"type":"userbranch",
+								"screenFilter": true
+							}
+	                    }
 					},
 					"required": []
 				},
@@ -110,8 +118,6 @@ define({
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
-
-
 					var promise = Lead.search({
 						'branchName': searchOptions.branchName,
 						'currentStage': "Incomplete",
@@ -211,7 +217,6 @@ define({
 								});
 							},
 							isApplicable: function(item, index) {
-
 								return true;
 							}
 						}];

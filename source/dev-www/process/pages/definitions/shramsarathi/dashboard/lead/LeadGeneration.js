@@ -440,11 +440,11 @@ function(LeadProcess, AngularResourceService) {
                                                 titleMap:[
                                                     {
                                                         "name":"yes",
-                                                        "value":true
+                                                        "value":"true"
                                                     },
                                                     {
                                                         "name":"no",
-                                                        "value":false
+                                                        "value":"false"
                                                     }
                                                 ],
                                                 schema:{

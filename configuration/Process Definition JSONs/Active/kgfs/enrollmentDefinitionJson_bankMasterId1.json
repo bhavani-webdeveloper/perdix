@@ -428,6 +428,13 @@
                         "maxLength": 16,
                         "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
+                    "riskProfile":{
+                        "title": "Risk Profile",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 10,
+                        "captureStages":["Completed"]
+                    },
                     "parentCustomerId": {
                         "title": "Parent Customer Id",
                         "type": "string",
@@ -1027,13 +1034,6 @@
                         "minLength": 1,
                         "maxLength": 100,
                         "captureStages": ["Stage02", "Completed"]
-                    },
-                    "riskProfile":{
-                        "title": "Risk Profile",
-                        "type": "string",
-                        "minLength": 1,
-                        "maxLength": 10,
-                        "captureStages":["Completed"]
                     }
                 }
             },
@@ -1815,6 +1815,13 @@
                         "minLength": 1,
                         "maxLength": 100,
                         "captureStages": ["Stage01", "Stage02", "EDF", "Completed"]
+                    },
+                    "riskProfile":{
+                        "title": "Risk Profile",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 10,
+                        "captureStages":["Completed"]
                     },
                     "landLineNo": {
                         "title": "landLineNo",
