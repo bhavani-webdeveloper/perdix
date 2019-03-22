@@ -114,7 +114,8 @@ define({
                             "{{'URN_NO'|translate}} : " + item.urn,
                             "{{'LOAN_ACCOUNT_NO'|translate}} : " + item.accountNumber,
                             "{{'LOAN_AMOUNT_SANCTIONED'|translate}} : " + item.loanAmount,
-                            "{{'DCOUEMT_UPLOADED_TIME'|translate}} : " + item.applicationDate
+                            "{{'DCOUEMT_UPLOADED_TIME'|translate}} : " + item.applicationDate,
+                            "{{'PRODUCT_TYPE'|translate}} : " + item.loanType,
 
                         ]
                     },
@@ -128,6 +129,9 @@ define({
                     getColumns: function () {
                         return [
                              {
+                                title: 'LOAN_ID',
+                                data: 'id'
+                            },{
                                 title: 'CUSTOMER_NAME',
                                 data: 'customerName'
                             },
@@ -145,6 +149,9 @@ define({
                             },{
                                 title: 'DCOUEMT_UPLOADED_TIME',
                                 data: 'applicationDate'
+                            },{
+                                title: 'PRODUCT_TYPE',
+                                data: 'loanType'
                             }
                         ]
                     },
