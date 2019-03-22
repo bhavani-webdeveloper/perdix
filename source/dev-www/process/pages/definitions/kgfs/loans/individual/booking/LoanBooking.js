@@ -1736,6 +1736,11 @@ define([], function () {
                             });
                     },
                     proceed: function (model, formCtrl, form, $event) {
+                        if (_.hasIn(model, 'review.targetStage'))
+                        {
+                            model.review.targetStage='';
+                            model.loanProcess.stage='';
+                        }
                         formCtrl.scope.$broadcast('schemaFormValidate');
 					    if(!formCtrl.$valid){
                             PageHelper.showProgress('form-error', 'Your form have errors. Please fix them.',5000);

@@ -1548,7 +1548,12 @@ define([],function(){
                                 PageHelper.hideLoader();
                             });
                     },
-                    proceed: function(model, formCtrl, form, $event){ 
+                    proceed: function(model, formCtrl, form, $event){
+                    if (_.hasIn(model, 'review.targetStage'))
+                    {
+                        model.review.targetStage='';
+                        model.loanProcess.stage='';
+                    } 
                         setDeviation(model);
                         validateDeviationForm(model);
                         if(_.isArray(validateDeviation) && validateDeviation.length > 0) {
