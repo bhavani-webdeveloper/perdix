@@ -164,7 +164,7 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                                 },
                                 {
                                     key: "customer.customerBankAccounts[].isTransactionAccount",
-                                    title: "PREFFERED_BANK",
+                                    title: "PREFERRED_BANK",
                                     "type": "select",
                                     "titleMap": {
                                         "YES": "YES",

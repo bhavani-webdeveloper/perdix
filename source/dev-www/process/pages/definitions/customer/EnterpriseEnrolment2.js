@@ -1631,7 +1631,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key: "customer.customerBankAccounts[].isTransactionAccount",
-                                title: "PREFFERED_BANK",
+                                title: "PREFERRED_BANK",
                                 "type": "select",
                                 "titleMap": {
                                     "YES": "YES",

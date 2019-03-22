@@ -157,7 +157,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "Screening": {
                             "excludes": [
-                               "IndividualFinancials",
+                            //    "IndividualFinancials",
                                 "HouseVerification.latitude",
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
@@ -892,7 +892,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "HOUSEHOLD_DETAILS"
+                                    "title": "HOUSE_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -1219,7 +1219,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences.verifications.ReferenceCheck",
                                 "IndividualReferences",
                                
-                                "IndividualFinancials",
+                                // "IndividualFinancials",
                                 // "References",
                                 "HouseVerification.latitude",
                                 "HouseVerification.houseVerificationPhoto",
