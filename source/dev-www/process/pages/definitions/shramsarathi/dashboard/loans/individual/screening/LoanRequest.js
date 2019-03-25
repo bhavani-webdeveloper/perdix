@@ -2103,7 +2103,7 @@ define([],function(){
                                                     "enumCode":"mode_of_disbursement"
                                                 },
                                                 "collectionDate":{
-                                                    "key":"loanAccount.disbursementSchedules[].firstRepaymentDate",
+                                                    "key":"loanAccount.firstRepaymentDate",
                                                     "title":"COLLECTION_DATE",
                                                     "type":"date",
                                                     "required":true
