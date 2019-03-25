@@ -405,12 +405,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 
                                 "BankAccounts.customerBankAccounts.accountNumber": {
                                     required: true,
-                                    // "maxLength": 16,
-                                    // "minLength": 10,
                                     "schema": {
-                                        "pattern": "^[0-9]+$",
-                                        "minimum": 10,
-                                        "maximum": 16
+                                        "pattern": "^[0-9]{10,16}$",
+                                        // "type": ["integer"] 
                                     }
                                    
                                 },
