@@ -9,11 +9,12 @@ import java.time.*;
         spousePortFolioInsurancePremium = null;
         spousePortfolioInsuranceServiceCharge = null;
         spousePortfolioInsuranceServiceTax = null;
+	portfolioInsurancePremium = null;
         portfolioInsuranceUrn = (loanAccount.getPortfolioInsuranceUrn() == null || loanAccount.getPortfolioInsuranceUrn() == "") ? customer.getUrnNo() : loanAccount.getPortfolioInsuranceUrn();
         customerData = customerRepository.findByUrnNoAndCustomerStatusAndKgfsBankName(portfolioInsuranceUrn,user.getBankName());
         
         loanAmount = loanAccount.getLoanAmount();    
-        insuranceRateCode = "DEFAULT";        
+        insuranceRateCode ="DEFAULT";       
         if(loanProduct !=null && loanProduct.getInsuranceRateCode() !=null){
             insuranceRateCode = loanProduct.getInsuranceRateCode();
         }
@@ -41,15 +42,12 @@ import java.time.*;
             factor=applicationProperties.getFactor().getBulletFactor();
         }
         
-        double calculateFactor = (int)noOfInstallments/factor;
-        if(calculateFactor.compareTo(new BigDecimal(1)) == -1){
-                calculateFactor = BigDecimal.ZERO;
+		double customerTenureInYear = (int)(noOfInstallments/factor);
+        if (noOfInstallments%factor != 0) {
+        	
+				customerTenureInYear++;
+			
         }
-        customerTenureInYear = noOfInstallments - calculateFactor * factor;
-        if(customerTenureInYear == 0)
-            customerTenureInYear = calculateFactor;
-        else
-            customerTenureInYear = calculateFactor + 1;
     
         int cutOffInstallment = 0;
         if(frequency.equals("daily")){
@@ -70,14 +68,12 @@ import java.time.*;
             cutOffInstallment = applicationProperties.getCutOffInstallment().getYearlyCutOffInstallmentNumber();
         }        
         
-        insuranceType = (Integer.parseInt(loanAccount.getTenure()) < cutOffInstallment) ? "Group" :  "Individual";
-        if(insuranceType.equals("Group") && (applicationProperties.getPortfolioInsuranceGroupTenureYearly() == false)){
-            customerTenureInYear = Integer.parseInt(loanAccount.getTenure());
-        }
+   
+		insuranceType = "Individual";
         
-        if(customerData != null){
+        if(customerData != null && loanAmount > 5000 ){
             gender = customerData.getGender();
-            birthdate = customer.getDateOfBirth();
+            birthdate = customerData.getDateOfBirth();
             ageOfCustomer = Period.between(birthdate, LocalDate.now()).getYears();
             portfolioInsuranceMaster = portfolioInsuranceMasterRepository.findByAgeAndGenderAndTenureInYearAndSumAssuredAndInsuranceTypeAndInsuranceRateCode(ageOfCustomer, gender, customerTenureInYear, loanAmount, insuranceType, insuranceRateCode);
             if(portfolioInsuranceMaster != null){
@@ -94,20 +90,16 @@ import java.time.*;
                 }
             }
         }        
-        if(loanProduct.getSpouseInsuranceRequired().equals("YES")){
+        if(loanProduct.getSpouseInsuranceRequired().equals("YES") && loanAmount > 5000){
             if(customerData != null){
                 spouseGender = null;
                 ageOfSpouseCustomer = null
-                if(('MARRIED').equals(customer.getMaritalStatus())) {
-                    spouseGender = (customer.getGender().equals("Male")) ? "FEMALE" : "MALE";
-                    dateOfBirth = customer.getSpouseDateOfBirth();
-                    ageOfSpouseCustomer = Period.between(dateOfBirth, LocalDate.now()).getYears();
-                } else if (loanAccount.getWitnessFirstName() != null) {
-                    familyMembers = familyRepository.findByCustomerId (customer.getId());
+                if (loanAccount.getWitnessFirstName() != null) {
+                    familyMembers = familyRepository.findByCustomerId (customer.getParentCustomerId().equals(0L) ? customer.getId(): customer.getParentCustomerId());
                     if(familyMembers != null) {
                         for (int i = 0; i < familyMembers.size(); i++) {
-                            if (loanAccount.getWitnessFirstName() != null &&  loanAccount.getWitnessFirstName().equals(familyMembers[i].getFamilyMemberFirstName())
-                                && loanAccount.getWitnessRelationship() != null && loanAccount.getWitnessRelationship().equals(familyMembers[i].getRelationShip())) {
+                            if (loanAccount.getWitnessFirstName() != null &&  loanAccount.getWitnessFirstName().equals(familyMembers[i].getFamilyMemberFirstName())) {
+            
                                 spouseGender = familyMembers[i].getGender();
                                 dateOfBirth = familyMembers[i].getDateOfBirth();
                                 ageOfSpouseCustomer = Period.between(dateOfBirth, LocalDate.now()).getYears();
@@ -120,7 +112,7 @@ import java.time.*;
                 sportfolioInsuranceMaster = portfolioInsuranceMasterRepository.findByAgeAndGenderAndTenureInYearAndSumAssuredAndInsuranceTypeAndInsuranceRateCode(ageOfSpouseCustomer, spouseGender, customerTenureInYear, loanAmount, insuranceType, insuranceRateCode);
                 if(sportfolioInsuranceMaster != null){
                     spousePortFolioInsurancePremium = sportfolioInsuranceMaster.getTotalPremium();
-                    if(portfolioInsuranceMaster.getServiceTax() != null)
+                    if(sportfolioInsuranceMaster.getServiceTax() != null)
                         spousePortfolioInsuranceServiceTax = portfolioInsuranceMaster.getServiceTax();
                     else
                         spousePortfolioInsuranceServiceTax = new BigDecimal(0);
@@ -131,4 +123,11 @@ import java.time.*;
                     }
                 }
             }
+        }
+if(spousePortFolioInsurancePremium != null && customerPortFolioInsurancePremium != null){
+        	portfolioInsurancePremium =   new BigDecimal(Math.round(spousePortFolioInsurancePremium + customerPortFolioInsurancePremium));
+        }else if (spousePortFolioInsurancePremium != null){
+        	portfolioInsurancePremium =   new BigDecimal(Math.round(spousePortFolioInsurancePremium));
+        }else if (customerPortFolioInsurancePremium != null){
+        	portfolioInsurancePremium =   new BigDecimal(Math.round(customerPortFolioInsurancePremium));
         }

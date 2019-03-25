@@ -16,9 +16,9 @@ MainApp.directive('irfHeader', function(){
 });
 
 MainApp.controller("irfHeaderController",
-["$scope", "$log", "$http", "$templateCache", "irfConfig", "SessionStore", "$translate", "languages", "$state", "$q", "User",
+["$scope", "$log", "$rootScope", "$templateCache", "irfConfig", "SessionStore", "$translate", "languages", "$state", "$q", "User",
 	"authService", "irfSimpleModal", "irfProgressMessage", "irfStorageService", "Utils", "Auth", "PageHelper", "Account", "formHelper", "elementsUtils",
-function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translate, languages, $state, $q, User,
+function($scope, $log, $rootScope, $templateCache, irfConfig, SessionStore, $translate, languages, $state, $q, User,
 	authService, irfSimpleModal, irfProgressMessage, irfStorageService, Utils, Auth, PageHelper, Account, formHelper, elementsUtils) {
 
 	$scope.ss = SessionStore;
@@ -72,23 +72,30 @@ function($scope, $log, $http, $templateCache, irfConfig, SessionStore, $translat
 	$scope.preventClose = function($event){
 		$event.stopPropagation();
 	}
-
-	/* Loading branch details */
-	var branches = SessionStore.getItem("UserAllowedBranches");
-	//getting the home branch details from masters
-	var homeBranch = Account.getHomeBranchForUser();
-	var homebranchCode = homeBranch.branchCode;
-	/* Need to add homebranch to list, if its already not there */
-	var indexForHome = _.findIndex(branches, function(b){
-		return b.branchCode == homebranchCode;
-	})
-
-	if (indexForHome == -1) {
-		branches.push(homeBranch);
+	var userbranchesfn = function () {
+		try {
+			/* Loading branch details */
+			var branches = SessionStore.getItem("UserAllowedBranches");
+			//getting the home branch details from masters
+			var homeBranch = Account.getHomeBranchForUser();
+			var homebranchCode = homeBranch.branchCode;
+			/* Need to add homebranch to list, if its already not there */
+			var indexForHome = _.findIndex(branches, function(b){
+				return b.branchCode == homebranchCode;
+			})
+		
+			if (indexForHome == -1) {
+				branches.push(homeBranch);
+			}
+		
+			$scope.branchSwitch.allowedBranches = branches;
+			$scope.branchSwitch.selectedBranch = $scope.branchSwitch.currentBranch;
+		} catch (e) {
+			$log.error(e);
+		}
 	}
-
-	$scope.branchSwitch.allowedBranches = branches;
-	$scope.branchSwitch.selectedBranch = $scope.branchSwitch.currentBranch;
+	$rootScope.$on("irf-user-allowed-branches-loaded", userbranchesfn);
+	if (SessionStore.getItem("UserAllowedBranches")) userbranchesfn();
 
 	$scope.showLogs = function() {
 		var allLogs = $log.getAllLogs();

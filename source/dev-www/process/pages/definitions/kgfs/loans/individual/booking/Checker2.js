@@ -45,6 +45,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:30
                         },
                         {
+                            pageName: 'kgfs.customer.EnterpriseEnrolment2',
+                            title: 'BUSINESS',
+                            pageClass: 'business',
+                            minimum: 1,
+                            maximum: 0,
+                            order:40
+                        },
+                        {
                             pageName: 'kgfs.loans.individual.booking.LoanBooking',
                             title: 'LOAN_BOOKING',
                             pageClass: 'loan-booking',
@@ -72,6 +80,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageName: 'kgfs.loans.individual.booking.DocumentVerification',
                             title: 'DOCUMENT_VERIFICATION',
                             pageClass: 'document-verification',
+                            minimum: 1,
+                            maximum: 1,
+                            order:90
+                        },
+                        {
+                            pageName: 'kgfs.loans.individual.booking.TeleVerification',
+                            title: 'TELE_VERIFICATION',
+                            pageClass: 'tele-verification',
                             minimum: 1,
                             maximum: 1,
                             order:90
@@ -148,7 +164,17 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 }
 
-                               $this.bundlePages.push({
+                                if (loanProcess.loanAccount.productCategory == 'MEL') {
+                                    $this.bundlePages.push({
+                                        pageClass: "business",
+                                        model: {
+                                            enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                            loanProcess: loanProcess
+                                        }
+                                    });
+                                }
+
+                                    $this.bundlePages.push({
                                     pageClass: 'loan-booking',
                                     model:{
                                         loanProcess: loanProcess
@@ -172,7 +198,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanAccount: loanProcess.loanAccount
                                     }
                                 });
-                                
+                                $this.bundlePages.push({
+                                    pageClass: 'tele-verification',
+                                    model:{
+                                        loanProcess: loanProcess
+                                    }
+                                });
                                 deferred.resolve();
                             });
 
@@ -192,6 +223,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         pageClass: "applicant",
                                         model: {
                                             enrolmentProcess: loanProcess.applicantEnrolmentProcess,
+                                            loanProcess: loanProcess
+                                        }
+                                    });
+                                }
+
+                                 if (loanProcess.loanAccount.productCategory == 'MEL') {
+                                    $this.bundlePages.push({
+                                        pageClass: "business",
+                                        model: {
+                                            enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
                                             loanProcess: loanProcess
                                         }
                                     });
@@ -216,7 +257,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
                                 $this.bundlePages.push({
-                                    pageClass: 'document-verification',
+                                    pageClass: 'tele-verification',
                                     model:{
                                         loanProcess: loanProcess
                                     }

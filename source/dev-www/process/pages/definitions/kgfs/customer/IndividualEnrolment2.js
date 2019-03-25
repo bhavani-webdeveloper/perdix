@@ -117,7 +117,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                             }
                         },
-                        "LosDSCOverride":{
+                        "DSCOverride":{
                             "overrides":{
                                 "IndividualInformation":{
                                     "readonly":true
@@ -168,7 +168,137 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
 
                             }
-                        }    
+                        },  
+                        "BusinessTeamReview":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
+                        }, 
+                        "CreditOfficerReview":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
+                        }, 
+                        "CreditManagerReview":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
+                        }, 
+                        "CBOCreditHeadReview":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
+                        }, 
+                        "CEOMDReview":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
+                        }, 
                     }
                 }
                     
@@ -176,10 +306,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             var overridesFields = function (bundlePageObj) {
                return {
                         "IndividualReferences":{
-                            title:"REFERENCE"
+                            title:"REFERENCE",
+                            condition:"model.pageClass !='guarantor' && model.pageClass !='co-applicant'"
                         },
                         "IndividualReferences.verifications":{
-                            title:"REFERENCE"
+                            title:"REFERENCE",
+                            titleExpr: null
                         },
                         "IndividualReferences.verifications.referenceFirstName":{
                             orderNo:10,
@@ -288,11 +420,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "IndividualInformation.religion":{
                             orderNo: 90,
-                            "type": "string",
+                            "type": "select",
                             "required": false
                         },
                         "IndividualInformation.language":{
-                            "type": "string",
+                            "type": "select",
                             "required": false
                         },
                         "IndividualInformation.area":{
@@ -359,7 +491,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 var centreCode = formHelper.enum('centre').data;
     
                                 var centreName = $filter('filter')(centreCode, {value: parentModel.customer.centreId}, true);
-                                if(centreName && centreName.length > 0) {
+                                if(centreName && centreName.length > 0 && model.centreId !=undefined) {
                                     model.centreName = centreName[0].name;
                                 }
     
@@ -451,6 +583,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     'firstName': inputModel.firstName,
                                     'centreId':inputModel.centreId,
                                     'customerType':"individual",
+                                    'stage':'Completed',
                                     'urnNo': inputModel.urnNo
                                 }).$promise;
                                 return promise;
@@ -487,9 +620,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         /* Setting on the current page */
                                         model.enrolmentProcess = enrolmentProcess;
                                         model.customer = enrolmentProcess.customer;
-    
                                         BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
-                                        BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
+                                        BundleManager.pushEvent('load-bank-details', model._bundlePageObj, {customer: model.customer});
+                                        BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer});
                                     })
                             }
                         },
@@ -549,14 +682,36 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "key": "customer.addressProofIssueDate",
                             orderNo: 120,
                             condition: "!model.customer.addressProofSameAsIdProof",
-                            "type": "date"
+                            "type": "date",
+                            onChange: function (value, form, model, event) {
+                                if(model.customer.addressProofIssueDate){
+                                    var addressProof1IssueDate = moment(model.customer.addressProofIssueDate, SessionStore.getSystemDateFormat());
+                                    var addressProof1ValidUptoDate = moment(model.customer.addressProofValidUptoDate, SessionStore.getSystemDateFormat());
+                                    if (addressProof1ValidUptoDate < addressProof1IssueDate) {
+                                        model.customer.addressProofIssueDate = null;
+                                        PageHelper.showErrors({data:{error:"Address Proof Issue Date always more than Address Proof valid Upto Date"}});
+                                        return false;
+                                    }
+                                }
+                            }
                         },
                         "KYC.addressProofValidUptoDate": {
                             "title":"VALID_UPTO",
                             "key": "customer.addressProofValidUptoDate",
                             orderNo: 130,
                             condition: "!model.customer.addressProofSameAsIdProof",
-                            "type": "date"
+                            "type": "date",
+                            onChange: function (value, form, model, event) {
+                                if(model.customer.addressProofValidUptoDate){
+                                    var addressProof1IssueDate = moment(model.customer.addressProofIssueDate, SessionStore.getSystemDateFormat());
+                                    var addressProof1ValidUptoDate = moment(model.customer.addressProofValidUptoDate, SessionStore.getSystemDateFormat());
+                                    if (addressProof1ValidUptoDate < addressProof1IssueDate) {
+                                        model.customer.addressProofValidUptoDate = null;
+                                        PageHelper.showErrors({data:{error:"Address Proof valid Upto Date always more than Address Proof Issue Date"}});
+                                        return false;
+                                    }
+                                }
+                            }
                         },
                         "ContactInformation.mobilePhone":{
                             "required": true,
@@ -582,117 +737,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             type: "lov",
                             fieldType: "string",
                             autolov: true,
-                            inputMap: {
-                                "mailingPincode": "customer.mailingPincode",
-                                "mailingDivision": "customer.mailingLocality",
-                                "mailingtaluk": "customer.mailingtaluk",
-                                "region": "customer.villageName",
-                                "mailingDistrict": {
-                                    key: "customer.mailingDistrict"
-                                },
-                                "mailingState": {
-                                    key: "customer.mailingState"
-                                }
-                            },
-                            outputMap: {
-                                "mailingDivision": "customer.mailingLocality",
-                                "mailingPincode": "customer.mailingPincode",
-                                "mailingDistrict": "customer.mailingDistrict",
-                                "mailingState": "customer.mailingDivision"
-                            },
-                            searchHelper: formHelper,
-                            initialize: function (inputModel) {
-                                $log.warn('in pincode initialize');
-                                $log.info(inputModel);
-                                inputModel.region = undefined;
-                            },
-                            search: function (inputModel, form, model) {
-                                if (!inputModel.mailingPincode) {
-                                    return $q.reject();
-                                }
-                                return Queries.searchPincodes(
-                                    inputModel.mailingPincode,
-                                    inputModel.mailingDistrict,
-                                    inputModel.mailingState,
-                                    inputModel.mailingDivision,
-                                    inputModel.region,
-                                    inputModel.mailingtaluk
-                                );
-                            },
-                            getListDisplayItem: function (item, index) {
-                                return [
-                                    item.division + ', ' + item.region,
-                                    item.pincode,
-                                    item.district + ', ' + item.state
-                                ];
-                            },
-                            onSelect: function (result, model, context) {
-                                model.customer.mailingPincode = (new Number(result.pincode)).toString();
-                                model.customer.mailingLocality = result.division;
-                                model.customer.mailingState = result.state;
-                                model.customer.mailingDistrict = result.district;
-                            }
+                            "resolver": "MailingPincodeLOVConfiguration",
+                            "searchHelper": formHelper,
+
                         },
                         "ContactInformation.pincode": {
                             "type": "lov",
                             "title": "PIN_CODE",
                             fieldType: "number",
                             autolov: true,
-                            inputMap: {
-                                "pincode": {
-                                    key:  "customer.pincode"
-                                },
-                                "division": {
-                                    key: "customer.locality"
-                                },
-                                "region": {
-                                    key: "customer.villageName"
-                                },
-                                "taluk": {
-                                    key: "customer.taluk"
-                                },
-                                "district": {
-                                    key: "customer.district"
-                                },
-                                "state": {
-                                    key: "customer.state"
-                                }
-                            },
-                            outputMap: {
-                                "division": "customer.locality",
-                                "region": "customer.villageName",
-                                "pincode": "customer.pincode",
-                                "district": "customer.district",
-                                "state": "customer.state",
-                            },
-                            searchHelper: formHelper,
-                            initialize: function (inputModel) {
-                                $log.warn('in pincode initialize');
-                                $log.info(inputModel);
-                            },
-                            search: function (inputModel, form, model) {
-                                if (!inputModel.pincode) {
-                                    return $q.reject();
-                                }
-                                return Queries.searchPincodes(
-                                    inputModel.pincode,
-                                    inputModel.district,
-                                    inputModel.state,
-                                    inputModel.division,
-                                    inputModel.region,
-                                    inputModel.taluk
-                                );
-                            },
-                            getListDisplayItem: function (item, index) {
-                                return [
-                                    item.division + ', ' + item.region,
-                                    item.pincode,
-                                    item.district + ', ' + item.state,
-                                ];
-                            },
-                            onSelect: function (result, model, context) {
-                                $log.info(result);
-                            }
+                            "resolver": "PincodeLOVConfiguration",
+                            "searchHelper": formHelper,
                         },
                         "ContactInformation.locality":{
                             title:"LOCALITY1"
@@ -711,10 +766,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "ContactInformation.residentialAddressAlsoBusinessAddress":{
                             "onChange": function (modelValue, form, model) {
                                 if(model.customer.fcuStatu){
-                                    model.customer.fcuStatus = 1;  
+                                    model.customer.fcuStatus = "1";  
                                 }
                                 else{
-                                    model.customer.fcuStatus = 0; 
+                                    model.customer.fcuStatus = "0"; 
                                 }
                                 BundleManager.pushEvent('load-address', model._bundlePageObj,{customer: model.customer});
                             }
@@ -992,6 +1047,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             required: true,
                             enumCode: "house_ownership",
                         },
+                        "FamilyDetails": {
+                            condition:"model.pageClass !='guarantor' && model.pageClass !='co-applicant'"
+                        },
                         "FamilyDetails.familyMembers": {
                             "title":"FAMILY_DETAILS"
                         },
@@ -1047,81 +1105,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             inputmode: "number",
                             numberType: "tel"
                         },
-                        "FamilyDetails.familyMembers.customerId": {
-                            key: "customer.familyMembers[].customerId",
-                            orderNo: 20,
-                            condition: "model.customer.familyMembers[arrayIndex].relationShip !== 'self'",
-                            type: "lov",
-                            "inputMap": {
-                                "firstName": {
-                                    "key": "customer.firstName",
-                                    "title": "CUSTOMER_NAME"
-                                },
-                                "branchName": {
-                                    "key": "customer.kgfsName",
-                                    "type": "select"
-                                }
-                            },
-                            "outputMap": {
-                                "id": "customer.familyMembers[arrayIndex].customerId",
-                                "firstName": "customer.familyMembers[arrayIndex].familyMemberFirstName"
-                            },
-                            "searchHelper": formHelper,
-                            "search": function (inputModel, form) {
-                                $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                var promise = Enrollment.search({
-                                    'branchName': inputModel.branchName || SessionStore.getBranch(),
-                                    'firstName': inputModel.firstName,
-                                }).$promise;
-                                return promise;
-                            },
-                            onSelect: function (valueObj, model, context) {
-                                var rowIndex = context.arrayIndex;
-                                PageHelper.showLoader();
-                                Enrollment.getCustomerById({
-                                    id: valueObj.id
-                                }, function (resp, header) {
-
-                                    model.customer.familyMembers[rowIndex].gender = resp.gender;
-                                    model.customer.familyMembers[rowIndex].dateOfBirth = resp.dateOfBirth;
-                                    model.customer.familyMembers[rowIndex].maritalStatus = resp.maritalStatus;
-                                    model.customer.familyMembers[rowIndex].age = moment().diff(moment(resp.dateOfBirth), 'years');
-                                    model.customer.familyMembers[rowIndex].mobilePhone = resp.mobilePhone;
-                                    model.customer.familyMembers[rowIndex].relationShip = "";
-
-                                    var selfIndex = _.findIndex(resp.familyMembers, function (o) {
-                                        return o.relationShip.toUpperCase() == 'SELF'
-                                    });
-
-                                    if (selfIndex != -1) {
-                                        model.customer.familyMembers[rowIndex].healthStatus = resp.familyMembers[selfIndex].healthStatus;
-                                        model.customer.familyMembers[rowIndex].educationStatus = resp.familyMembers[selfIndex].educationStatus;
-                                    }
-                                    PageHelper.hideLoader();
-                                    irfProgressMessage.pop("cust-load", "Load Complete", 2000);
-                                }, function (resp) {
-                                    PageHelper.hideLoader();
-                                    irfProgressMessage.pop("cust-load", "An Error Occurred. Failed to fetch Data", 5000);
-
-                                });
-
-                            },
-                            getListDisplayItem: function (data, index) {
-                                return [
-                                    [data.firstName, data.fatherFirstName].join(' '),
-                                    data.id
-                                ];
-                            }
-                        },
                         "FamilyDetails.familyMembers.familyMemberFirstName":{
                             orderNo:10,
                             title:"FAMILY_MEMBER_NAME"
                         },                       
                         "IndividualFinancials":{
-                            "title":"HOUSEHOLD_EXPENSES"
+                            "title":"HOUSEHOLD_EXPENSES",
+                            condition:"model.pageClass !='guarantor' && model.pageClass !='co-applicant'"
                         },
                         "IndividualFinancials.expenditures":{
-                            "title":"ADD_HOUSEHOLD_EXPENSES"
+                            "title":"ADD_HOUSEHOLD_EXPENSES",
+                            "titleExpr":"('HOUSEHOLD_EXPENSES'|translate)"
                         },                        
                         "IndividualFinancials.expenditures.expenditureSource":{
                             "required":true,
@@ -1198,7 +1192,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "ContactInformation.mailingDoorNo",
                 "ContactInformation.mailingStreet",
                 "ContactInformation.mailingLocality",
+                "ContactInformation.mailingVillageName",
                 "ContactInformation.mailingPostoffice",
+                "ContactInformation.mailinglandmark",
                 "ContactInformation.mailingDistrict",
                 "ContactInformation.mailingPincode",
                 "ContactInformation.mailingState",
@@ -1264,11 +1260,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.loanCustomerRelationType =getLoanCustomerRelation(bundlePageObj.pageClass);
                     model.pageClass = bundlePageObj.pageClass;
                     model.currentStage = bundleModel.currentStage;
-                    model.enrolmentProcess.currentStage =  model.currentStage;
+                    // model.enrolmentProcess.currentStage =  model.currentStage;
                     /* End of setting data recieved from Bundle */
 
                     /* Setting data for the form */
                     model.customer = model.enrolmentProcess.customer;
+                     if (typeof model.customer.udf == "undefined" || model.customer.udf == null) {                    
+                    model.customer.udf = {};
+                    model.customer.udf.userDefinedFieldValues = {};
+                    }
+                    else {
+                        if(!isNaN(model.customer.udf.userDefinedFieldValues.udf32) && model.customer.udf.userDefinedFieldValues.udf32 !=null)
+                        model.customer.udf.userDefinedFieldValues.udf32=Number(model.customer.udf.userDefinedFieldValues.udf32);
+                    }
                     var branchId = SessionStore.getBranchId();
                     if(branchId && !model.customer.customerBranchId)
                         {
@@ -1282,7 +1286,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             model.UIUDF.family_fields.dependent_family_member++;
                     });
 
-                    if(model.customer.fcuStatus == 1){
+                    if(model.customer.fcuStatus == "1"){
                         model.customer.fcuStatu = true  
                     }
                     else{
@@ -1312,10 +1316,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             }
                                         },
                                         "spouseAadharNumber":{
-                                            "key":"customer.aadhaarNo",
+                                            key:"customer.udf.userDefinedFieldValues.udf32",
                                             "title": "SPOUSE_AADHAR_NUMBER",
                                             condition: "model.customer.maritalStatus==='MARRIED'",
                                             "type": "string",
+                                            schema: {
+                                                "pattern": "^[2-9]{1}[0-9]{11}$",
+                                                "type": ["string", "null"],
+                                            }
                                         }
                                     }
                                 },
@@ -1343,6 +1351,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "schema":{  
                                                "default":false
                                             }
+                                        },
+                                        "mailinglandmark":{
+                                            "key":"customer.previousRentDetails",
+                                            "orderNo":185,
+                                            "title":"LANDMARK"
+                                        },
+                                        "mailingVillageName":{
+                                            "key":"customer.nickName",
+                                            "orderNo":205,
+                                            "title":"VILLAGE_NAME"
                                         }
                                     }
                                 },
@@ -1373,7 +1391,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "educationLevel":{
                                                     "key": "customer.familyMembers[].educationStatus",
                                                     "title":"EDUCATION_LEVEL",
-                                                    "type":"string"
+                                                    "type":"select"
                                                 },
                                                 "incomeDetails":{
                                                     "key": "customer.familyMembers[].udfId2",
@@ -1531,6 +1549,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             PageHelper.showProgress("enrolment", "Your form have errors. Please fix them.", 5000);
                             return false;
                         }
+                        
+                        if (model.customer.addressProof == 'Aadhar card' && !_.isNull(model.customer.addressProofNo)){
+                            model.customer.aadhaarNo = model.customer.addressProofNo;
+                        }
 
                         // $q.all start
                         model.enrolmentProcess.save()
@@ -1554,6 +1576,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         PageHelper.clearErrors();
                         if(PageHelper.isFormInvalid(form)) {
                             return false;
+                        }
+                        if (model.customer.addressProof == 'Aadhar card' && !_.isNull(model.customer.addressProofNo)){
+                            model.customer.aadhaarNo = model.customer.addressProofNo;
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
@@ -1581,7 +1606,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             return false;
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
+                        if (model.customer.addressProof == 'Aadhar card' && !_.isNull(model.customer.addressProofNo)){
+                            model.customer.aadhaarNo = model.customer.addressProofNo;
+                        }
                         PageHelper.showLoader();
+
                         model.enrolmentProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
@@ -1590,6 +1619,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 formHelper.resetFormValidityState(form);
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
+                                if (typeof model.customer.udf.userDefinedFieldValues != "undefined")
+                                model.customer.udf.userDefinedFieldValues.udf32=Number(model.customer.udf.userDefinedFieldValues.udf32);
+                    
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                                 BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer});
 

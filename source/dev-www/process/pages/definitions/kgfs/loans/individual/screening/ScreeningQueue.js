@@ -42,7 +42,6 @@ define({
 					"centre": {
 						"title": "CENTRE",
 						"type": ["integer", "null"],
-                       // "required":true,
 						"x-schema-form": {
 							"type": "select",
 							"enumCode": "centre",
@@ -61,7 +60,7 @@ define({
 					},
 					"loanType": {
 						"title": "PRODUCT_TYPE",
-						"enumCode": "product_type",
+						"enumCode": "booking_loan_type",
 						"type": "string",
 						"x-schema-form": {
 							"type": "select"
@@ -109,6 +108,7 @@ define({
 					return [
 						item.applicantName,
 						item.urn,
+						item.centreName,
 						item.loanAmount,
 						item.loanType,
 						item.partnerCode,
@@ -131,6 +131,9 @@ define({
 						},{
 							title: 'CUSTOMER_NAME',
 							data: 'applicantName'
+						},{
+							title: 'CENTRE_NAME',
+							data: 'centreName'
 						},{
 							title:'LOAN_AMOUNT',
 							data:'loanAmount'

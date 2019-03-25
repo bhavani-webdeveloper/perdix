@@ -31,8 +31,8 @@ if (isset($_GET)) {
         die();
     }
 
-    $error_log = "";
-    $CustomerLoanId = $_GET['LoanId'];
+    $error_log = "";  
+    $CustomerLoanId = (!empty($_GET['LoanId']))? intval(filter_var(($defaultDb->getPdo()->quote($_GET['LoanId'])), FILTER_SANITIZE_NUMBER_INT)): $_GET['LoanId'];
     $authInfo = 'Bearer '.$_GET['auth_token'];
     $SessionUserName = "admin";
     $userInfo = $perdixService->accountInfo($authInfo);

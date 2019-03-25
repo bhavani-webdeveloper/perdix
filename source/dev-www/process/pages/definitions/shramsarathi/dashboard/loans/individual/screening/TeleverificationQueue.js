@@ -56,17 +56,26 @@ define({
                             	"type": "select"
                             }
                         },
-                        "centre": {
-							"title": "ZONE_NAME",
+                        'branch': {
+	                    	'title': "BRANCH",
+	                    	"type": ["string", "null"],
+							"x-schema-form": {
+								"type":"userbranch",
+								"screenFilter": true
+							}
+	                    },
+						"centre": {
+                            "title": "ZONE_NAME",
+                            "required":false,
 							"type": ["integer", "null"],
 							"x-schema-form": {
 								"type": "select",
 								"enumCode": "centre",
-								"parentEnumCode": "branch",
-								"parentValueExpr": "model.branchId",
+								"parentEnumCode": "branch_id",
+								"parentValueExpr": "model.branch",
 								"screenFilter": true
 							}
-						}
+						},
 
 
 					},
@@ -90,7 +99,7 @@ define({
 					return IndividualLoan.search({
 	                    'stage': 'Televerification',
 	                    'centreCode':  searchOptions.centre,
-	                    'branchName':searchOptions.branch,
+	                    'branchName':searchOptions.branchName,
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,

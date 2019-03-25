@@ -3,6 +3,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.BranchRepliedCon
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, Messaging, LoanBookingCommons, irfNavigator) {
 		var branch = SessionStore.getBranch();
 		var centres = SessionStore.getCentres();
+		var siteCode = SessionStore.getGlobalSetting('siteCode');
 		var currentBranch = SessionStore.getCurrentBranch();
 		var centreId=[];
 	    if (centres && centres.length) {
@@ -180,6 +181,28 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.BranchRepliedCon
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
+								entityManager.setModel('loans.individual.screening.LoanView', {
+									_request: item
+								});
+								irfNavigator.go({
+									state: "Page.Bundle",
+									pageName: "loans.individual.screening.LoanView",
+									pageId: item.loanId
+								}, {
+									state: 'Page.Engine',
+                                    pageName: "loans.individual.screening.BranchRepliedConversationQueue"
+								});
+							},
+							isApplicable: function(item, index) {
+
+								return siteCode != 'witfin' ? true : false;
+							}
+						},
+						{
+							name: "REVIEW",
+							desc: "",
+							icon: "fa fa-pencil-square-o",
+							fn: function(item, index) {
 								entityManager.setModel('witfin.loans.individual.screening.LoanView', {
 									_request: item
 								});
@@ -194,7 +217,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.BranchRepliedCon
 							},
 							isApplicable: function(item, index) {
 
-								return true;
+								return siteCode == 'witfin' ? true : false;
 							}
 						}];
 					}

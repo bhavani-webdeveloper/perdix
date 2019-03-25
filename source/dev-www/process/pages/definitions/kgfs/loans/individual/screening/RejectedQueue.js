@@ -60,7 +60,7 @@ define({
 					},
 					"loanType": {
 						"title": "PRODUCT_TYPE",
-						"enumCode": "product_type",
+						"enumCode": "booking_loan_type",
 						"type": "string",
 						"x-schema-form": {
 							"type": "select"
@@ -107,6 +107,7 @@ define({
 				getListItem: function (item) {
 					return [
 						item.applicantName,
+						item.centreName,
 						item.urn,
 						item.loanAmount,
 						item.loanType,
@@ -131,6 +132,9 @@ define({
 							title: 'CUSTOMER_NAME',
 							data: 'applicantName'
 						},{
+							title: 'CENTRE_NAME',
+							data: 'centreName'
+						},{
 							title:'LOAN_AMOUNT',
 							data:'loanAmount'
 						},{
@@ -143,7 +147,7 @@ define({
 				},
 				getActions: function () {
 					return [{
-						name: "REVERT REJECT",
+						name: "Revert Reject",
 						desc: "",
 						icon: "fa fa-pencil-square-o",
 						fn: function (item, index) {

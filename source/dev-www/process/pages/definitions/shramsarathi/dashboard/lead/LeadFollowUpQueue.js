@@ -98,7 +98,15 @@ define({
 	                                ];
 	                            }
 							}
-						}
+						},
+						'branch': {
+	                    	'title': "BRANCH",
+	                    	"type": ["string", "null"],
+							"x-schema-form": {
+								"type":"userbranch",
+								"screenFilter": true
+							}
+	                    }
 
 					},
 					"required": []

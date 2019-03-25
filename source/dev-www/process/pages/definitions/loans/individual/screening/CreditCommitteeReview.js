@@ -1,6 +1,6 @@
-irf.pageCollection.factory(irf.page('loans.individual.screening.CreditCommitteeReview'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
+irf.pageCollection.factory(irf.page('loans.individual.screening.CreditCommitteeReview'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
     "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "Message", "irfNavigator", "Scoring",
-    function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, Message, irfNavigator, Scoring) {
+    function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, Message, irfNavigator, Scoring) {
         $log.info("Inside LoanBookingBundle");
         var getBundleDefinition = function () {
             var definition = [{
@@ -115,17 +115,17 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CreditCommitteeR
                 return out;
             },
 
-            bundleActions: [{
-                name: "Conversation",
-                desc: "",
-                icon: "fa fa-comment",
-                fn: function (bundleModel) {
-                    Message.openOrCreateConversation("Loan", $stateParams.pageId);
-                },
-                isApplicable: function (bundleModel) {
-                    return true;
-                }
-            }],
+            // bundleActions: [{
+            //     name: "Conversation",
+            //     desc: "",
+            //     icon: "fa fa-comment",
+            //     fn: function (bundleModel) {
+            //         Message.openOrCreateConversation("Loan", $stateParams.pageId);
+            //     },
+            //     isApplicable: function (bundleModel) {
+            //         return true;
+            //     }
+            // }],
 
             "pre_pages_initialize": function (bundleModel) {
                 $log.info("Inside pre_page_initialize");
@@ -197,10 +197,10 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CreditCommitteeR
                                 $this.bundlePages.push({
                                     pageClass: 'summary',
                                     model: {
-                                        cbModel: {
-                                            customerId: res.customerId,
-                                            loanId: bundleModel.loanId,
-                                            scoreName: 'RiskScore3'
+                                            cbModel: {
+                                            customerId:loanProcess.loanAccount.customerId,
+                                            loanId:bundleModel.loanId,
+                                            scoreName:'RiskScore2'
                                         }
                                     }
                                 });

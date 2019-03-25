@@ -50,7 +50,16 @@ irf.pageCollection.factory(irf.page("audit.detail.JewelAppraisal"),
                     if (_.isObject(model.jewel_appraisal.jewel_assets)) {
                         recomputeJewelDifference(model);
                     }
+                    if(model.jewel_appraisal.jewel_assets == null || model.jewel_appraisal.jewel_assets ==""){
 
+                        model.jewel_appraisal.jewel_assets = model.jewel_appraisal.jewel_assets || {};
+                        model.jewel_appraisal.jewel_assets.number_of_pouches_in_hand = 0; 
+                        model.jewel_appraisal.jewel_assets.number_of_pouches_in_hq = 0;
+                        model.jewel_appraisal.jewel_assets.total_on_hand = 0;
+                        model.jewel_appraisal.jewel_assets.CMS_difference = "0";
+               
+                    }
+                    
                     self.form = [{
                         type: "box",
                         readonly: model.readonly || model.readonlyExceptComments,

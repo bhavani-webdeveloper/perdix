@@ -74,7 +74,7 @@
                 "maxItems": 10,
                 "items": {
                     "type": "object",
-                    "required": ["familyMemberFirstName", "relationShip", "gender", "dateOfBirth", "educationStatus"],
+                    "required": ["familyMemberFirstName", "relationShip", "educationStatus"],
                     "properties": {
                         "familyMemberFirstName": {
                             "title": "First Name",
@@ -428,6 +428,13 @@
                         "maxLength": 16,
                         "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
+                    "riskProfile":{
+                        "title": "Risk Profile",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 10,
+                        "captureStages":["Completed"]
+                    },
                     "parentCustomerId": {
                         "title": "Parent Customer Id",
                         "type": "string",
@@ -494,6 +501,13 @@
                         "maxLength": 100,
                         "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
+                    "nickName": {
+                        "title": "nickName",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
+                    },
                     "locality": {
                         "title": "Locality",
                         "type": "string",
@@ -506,6 +520,13 @@
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 45,
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
+                    },
+                    "previousRentDetails": {
+                        "title": "Previous Rent Details",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
                         "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "postOffice": {
@@ -706,6 +727,13 @@
                         "type": "string",
                         "format": "date",
                         "captureStages": ["Stage01","Stage02" ,"Completed"]
+                    },
+                    "udf32": {
+                        "title": "Spouse Aadhaar Number",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": ["Completed"]
                     },
                     "careOf": {
                         "title": "Care Of",
@@ -1788,6 +1816,13 @@
                         "maxLength": 100,
                         "captureStages": ["Stage01", "Stage02", "EDF", "Completed"]
                     },
+                    "riskProfile":{
+                        "title": "Risk Profile",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 10,
+                        "captureStages":["Completed"]
+                    },
                     "landLineNo": {
                         "title": "landLineNo",
                         "type": "string",
@@ -2050,7 +2085,7 @@
             "enterprise": {
                 "title": "Enterprise",
                 "type": "object",
-                "required": ["corporateName", "businessName", "businessConstitution"],
+                "required": ["corporateName", "businessName"],
                 "properties": {
                     "customerNumber": {
                         "title": "customerNumber",
@@ -3297,7 +3332,7 @@
                     }
                 }
               },
-                "enterpriseProductSales": {
+            "enterpriseProductSales": {
                 "title": "Enterprise Product Sales",
                 "type": "object",
                 "required": ["productName","salePrice","costPrice","quantity"],

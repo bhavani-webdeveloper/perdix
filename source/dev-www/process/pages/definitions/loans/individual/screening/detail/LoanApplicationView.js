@@ -92,8 +92,8 @@ define({
             model.expectedTurnoverObj['totalOutstandingAmount'] = oustandingAmount;
             
             if(model.expectedTurnoverObj['annualTurnover'] && model.expectedTurnoverObj['annualTurnover'] != 0){
-                var kinaraExposureToAnnualTurovr = ((oustandingAmount + model.expectedTurnoverObj['loanAmountRecommended'])/model.expectedTurnoverObj['annualTurnover']).toFixed(2);
-                var kinaraExposureToAnnualTurnover = (kinaraExposureToAnnualTurovr*100)+"%";
+                var kinaraExposureToAnnualTurovr = ((oustandingAmount + model.expectedTurnoverObj['loanAmountRecommended'])/model.expectedTurnoverObj['annualTurnover']);
+                var kinaraExposureToAnnualTurnover = (kinaraExposureToAnnualTurovr*100).toFixed(2)+"%";
                 model.expectedTurnoverObj['kinaraExposureToAnnualTurover'] = kinaraExposureToAnnualTurnover;
             }
             else{
@@ -457,6 +457,9 @@ define({
                             "key": "loanAccount.loanPurpose2",
                             "title": "Loan SubPurpose"
                         }, {
+                            "key": "loanAccount.productCategory",
+                            "title":"PRODUCT_CATEGORY",
+                        }, {
                             "key": "loanAccount.loanAmountRequested",
                             "title": "Loan Amount Requested",
                             "type": "amount"
@@ -740,7 +743,7 @@ define({
                             }
                         }, {
                             "key": "loanAccount.tenure",
-                            "title": "Duration(months)"/*,
+                            "title": "DURATION_IN_MONTHS"/*,
                             "type": "number"*/
                             ,
                             onChange:function(value,form,model){
@@ -808,7 +811,7 @@ define({
                                     "render": currencyRightRender
                                 },
                                 {
-                                    "title": "LOAN_PRODUCT",
+                                    "title": "PRODUCT_CATEGORY",
                                     "data": "loan_product",
                                     "render": self.strongRender
                                 },

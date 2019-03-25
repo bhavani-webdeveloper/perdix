@@ -440,7 +440,49 @@
                      "LiabilityAccount", "DisbursementConfirmation"
                   ]
                },
-
+               "collateralTtype":{
+                  "title":"collateralTtype",
+                  "type":"string",
+                  "minLength":1,
+                  "maxLength":100,             
+                  "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+               "bookDebtPercentage":{
+                  "title":"bookDebtPercentage",
+                  "type":"number",
+                  "captureStages":[
+                      "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+               "cashCollateralPercentage":{
+                  "title":"cashCollateralPercentage",
+                 "type":"string",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                      "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+               "collateralType":{
+                  "title":"TYPE_OF_COLLATERAL",
+					   "type":"string",
+                  "minimum":1,
+                  "maximum":10000000,
+                  "captureStages":[
+                     "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
+               "lenderTdsRate":{
+                  "title":"lenderTdsRate",
+                 "type":"number",
+                  "minLength":1,
+                  "maxLength":100,
+                  "captureStages":[
+                      "LiabilityAccount", "DisbursementConfirmation"
+                  ]
+               },
 			   "agentContactPerson":{
                   "title":"agentContactPerson",
                   "type":"string",

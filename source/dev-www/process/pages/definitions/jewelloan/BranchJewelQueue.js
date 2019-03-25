@@ -2,15 +2,15 @@ irf.pageCollection.factory(irf.page("jewelloan.BranchJewelQueue"),
  ["$log", "formHelper","PageHelper", "JewelLoan", "$q", "SessionStore","irfNavigator","irfProgressMessage",
 	function($log, formHelper,PageHelper, JewelLoan,$q, SessionStore,irfNavigator,irfProgressMessage) {
 		
-		var branch = SessionStore.getBranch();
-		var transitStatusValue = true ;
+		var originBranchId = SessionStore.getBranchId();
+		var transitStatusValue 	= '' ;
+		var istransitStatus 	= true ;
 		
 		return {
 			"type": "search-list",
 			"title": "BRANCH_JEWEL_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				model.originBranch = branch;
 				model.jewelloan = model.jewelloan || {};
 				$log.info("search-list sample got initialized");
 			},
@@ -71,21 +71,24 @@ irf.pageCollection.factory(irf.page("jewelloan.BranchJewelQueue"),
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
-					transitStatusValue = typeof searchOptions.transitStatus != 'undefined' ? (searchOptions.transitStatus.toLowerCase() == 'source' || searchOptions.transitStatus.toLowerCase() == 'destination') ? true: false:false;
+					istransitStatus	   = typeof searchOptions.transitStatus != 'undefined' ? (searchOptions.transitStatus.toLowerCase() == 'source' || searchOptions.transitStatus.toLowerCase() == 'destination') ? true: false:false;	
+					transitStatusValue = searchOptions.transitStatus ;
 					var promise = JewelLoan.search({
-						'sourceBranch'			: branch,
-						'currentStage'			: "JewelLoanSummary",
-						'fromDate'				: searchOptions.fromDate,
-						'toDate'				: searchOptions.toDate,
-						'urnNo'					: searchOptions.urnNo,
-						'accountNo'				: searchOptions.accountNo,
-						'transitStatus'			: searchOptions.transitStatus,
-						'page'					: pageOpts.pageNo,
-						'per_page'				: pageOpts.itemsPerPage,
-					}).$promise;
-					return promise;
-				},
-				paginationOptions: {
+									"originBranchid"	  : originBranchId,
+									'currentStage'		  : "BranchJewelQueue",
+									"fromDate"			  : searchOptions.fromDate,
+									"toDate"			  : searchOptions.toDate,	
+									"urnNo"				  : searchOptions.urnNo,
+									"accountNo"			  : searchOptions.accountNo,
+									"transitStatus"		  : searchOptions.transitStatus,
+									//"sourceBranchId"	  : originBranchId,	
+									//"destinationBranchId" : originBranch
+									'page'				  : pageOpts.pageNo,
+									'per_page'			  : pageOpts.itemsPerPage,
+									}).$promise;
+									return promise;
+							},
+					paginationOptions: {
 					"getItemsPerPage": function(response, headers) {
 						return 100;
 					},
@@ -100,9 +103,28 @@ irf.pageCollection.factory(irf.page("jewelloan.BranchJewelQueue"),
 					itemCallback: function(item, index) {},
 					getItems: function(response, headers) {
 						if (response != null && response.length && response.length != 0) {
-							for (var i=0;i<response.length;i++){
-								response[i].customerFullName = response[i].customerFirstName + " "+response[i].customerLastName;
+
+							var branches = formHelper.enum('branch_id').data;
+							var sourceBranchName = null;
+							var destinationBranchName = null;
+	
+							for (var i=0; i<response.length; i++){								
+								for (var j=0; j<branches.length; j++){
+									var branch = branches[j];
+									if (branch.code == response[i].sourceBranchId){
+										 response[i].sourceBranch = branch.name;
+									}		 
+								 	if (response[i].destinationBranchId != null && branch.code == response[i].destinationBranchId){	
+										response[i].destinationBranch	= branch.name ;	
+									 }	
+									 else{
+										response[i].destinationBranch = "";
+									 }
 								}
+								response[i].customerFullName 	= response[i].customerFirstName + " "+(response[i].customerLastName!=null?response[i].customerLastName:"");
+								response[i].transitStatus    	= transitStatusValue;
+								response[i].disbursedAmount     = (response[i].disbursedAmountInPaisa/100);
+							}	
 							return response;
 						}
 						return [];
@@ -112,16 +134,15 @@ irf.pageCollection.factory(irf.page("jewelloan.BranchJewelQueue"),
 							item.id,
 							item.accountNo,
 							item.sourceBranch,
-							item.destinataionBranch,
+							item.destinationBranch,
 							item.urnNo,
 							item.jewelPouchNo,
 							item.transitStatus,
 							item.customerFullName,
-							item.disbursedAmountInPaisa,
+							item.disbursedAmount,
 							item.investor,
-							item.jewelPouchNo,
 							item.loanDisbursementDate,
-							item.rejectedRemarks,
+							item.rejectedReason,
 							item.remarks
 						]
 					},
@@ -143,37 +164,32 @@ irf.pageCollection.factory(irf.page("jewelloan.BranchJewelQueue"),
 									title: 'Destination Branch',
 									data: 'destinationBranch'
 								},{
-									title: 'Account No',
-									data: 'accountNo'
+									title: 'Customer Name',
+									data: 'customerFullName'
 								},{
 									title: 'URN No',
 									data: 'urnNo'
 								},{
+									title: 'Account No',
+									data: 'accountNo'
+								},{
+									title: 'Disbursement Date',
+									data: 'loanDisbursementDate'
+								},{
+									title: 'Disbursed Amount',
+									data: 'disbursedAmount'
+								},{
 									title: 'Jewel Pouch No',
 									data: 'jewelPouchNo'
 								},{
-									title: 'Transit Status',
-									data: 'transitStatus'
-								},{
-									title: 'Customer FullName',
-									data: 'customerFullName'
-								}, {
-									title: 'Disbursed Amount',
-									data: 'disbursedAmountInPaisa'
-								},{
-									title: 'Loan Disbursement Date',
-									data: 'loanDisbursementDate'
-								},{
-									title: 'Investor',
-									data: 'investor'
-								},{
-									title: 'Rejected Remarks',
-									data: 'rejectedRemarks'
-								},{
 									title: 'Remarks',
 									data: 'remarks'
-								}];
-					},
+								},{
+									title: 'Reject Reason',
+									data: 'rejectedReason'
+								}
+							];
+                    },
 					getActions: function() {
 						return [];
 					},
@@ -205,10 +221,9 @@ irf.pageCollection.factory(irf.page("jewelloan.BranchJewelQueue"),
 						
 	
 							},
-								
-						
+
 						    isApplicable: function (items) {
-						        return transitStatusValue == true;
+						        return istransitStatus == true;
 						    }
 						}
 						

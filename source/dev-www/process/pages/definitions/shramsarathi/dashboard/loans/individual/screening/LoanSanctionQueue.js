@@ -25,19 +25,20 @@ define({
 						'branch': {
 	                    	'title': "BRANCH",
 	                    	"type": ["string", "null"],
-	                    	"enumCode": "branch",
 							"x-schema-form": {
-								"type": "userbranch",
+								"type":"userbranch",
 								"screenFilter": true
 							}
 	                    },
 						"centre": {
-							"title": "ZONE_NAME",
+                            "title": "ZONE_NAME",
+                            "required":false,
 							"type": ["integer", "null"],
 							"x-schema-form": {
 								"type": "select",
 								"enumCode": "centre",
-								"parentEnumCode": "branch",
+								"parentEnumCode": "branch_id",
+								"parentValueExpr": "model.branch",
 								"screenFilter": true
 							}
 						},
@@ -81,7 +82,7 @@ define({
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'villageName':searchOptions.villageName,
-	                    'branchName': searchOptions.branch,
+	                    'branchName': searchOptions.branchName,
 	                    'centreCode': searchOptions.centre,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
@@ -136,7 +137,7 @@ define({
 							data: 'branchName'
 						},
 						{
-							title: 'SPOKE_NAME',
+							title: 'ZONE_NAME',
 							data: 'centreName'
 						},
 						{

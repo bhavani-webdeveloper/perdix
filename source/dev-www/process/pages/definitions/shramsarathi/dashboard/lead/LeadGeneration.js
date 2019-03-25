@@ -8,10 +8,10 @@ function(LeadProcess, AngularResourceService) {
        pageType: "Engine",
         //pageType: "Adhoc",
         dependencies: ["$log", "$state", "$filter", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "entityManager", "$q", "irfProgressMessage",
-        "PageHelper", "Utils", "entityManager", "BiometricService", "PagesDefinition", "Queries", "IrfFormRequestProcessor", "$injector", "irfNavigator", "User"],
+        "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "IrfFormRequestProcessor", "$injector", "irfNavigator", "User"],
 
         $pageFn: function($log, $state, $filter, $stateParams, Lead, LeadHelper, SessionStore, formHelper, entityManager, $q, irfProgressMessage,
-            PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries, IrfFormRequestProcessor, $injector, irfNavigator, User) {
+            PageHelper, Utils, BiometricService, PagesDefinition, Queries, IrfFormRequestProcessor, $injector, irfNavigator, User) {
                 console.log("lead generation test");
 
             var branch = SessionStore.getBranch();
@@ -24,14 +24,20 @@ function(LeadProcess, AngularResourceService) {
                     "leadProfile.individualDetails.maritalStatus":{
                         "required":true
                     },
+                    "leadProfile.migrantDetails.migrantDependantLabourFamily":{
+                        "schema": {
+                            "title":"MIGRANT",
+                            "type": ["string", "null"],
+                        },
+                    },                    
                     "leadProfile.individualDetails.lastName":{
-                        "required": false
+                        "required": true
                     },
                     "leadProfile.individualDetails.dob":{
                         "required": true
                     },
                     "leadProfile.individualDetails.nickName":{
-                        "required": false
+                        "required": true
                     },
                     "leadProfile.individualDetails.educationStatus":{
                         "required":true,
@@ -60,7 +66,7 @@ function(LeadProcess, AngularResourceService) {
                     "leadProfile.leadDetails": {
                         "orderNo" : 15,
                     },
-                    "leadProfile.leadDetails.individualDetails.gender": {
+                    "leadProfile.individualDetails.gender": {
                         "required": true
                     },
                     "leadProfile.individualDetails.existingApplicant":{
@@ -74,7 +80,7 @@ function(LeadProcess, AngularResourceService) {
                         "required": true
                     },
                     "leadProfile.centerName": {
-                        "lovonly": true
+                        //"lovonly": true
                     },
                     "productDetails.screeningDate": {
                         "condition": "(model.lead.interestedInProduct==='YES' && model.lead.leadStatus ==='Screening')",
@@ -107,7 +113,7 @@ function(LeadProcess, AngularResourceService) {
                     },
                     "productDetails.interestedInProduct": {
                         "orderNo" : 10,
-                        "required":false,
+                        "required":true,
                         // enumCode: "decisionmaker",
                         // "onChange": function(modelValue, form, model) {
                         //         if (model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO') {
@@ -166,7 +172,8 @@ function(LeadProcess, AngularResourceService) {
                     },
                     "leadProfile.centerName":{
                         "title":"ZONE",
-                        "orderNo" : 5
+                        "orderNo" : 5,
+                        "lovonly": true,
                     },
                     "leadProfile.individualDetails.leadName":{
                         "title":"APPLICANT_FIRST_NAME"
@@ -196,7 +203,8 @@ function(LeadProcess, AngularResourceService) {
                     },
                     "leadProfile.contactDetails.addressLine1":{
                         "title":"HAMLET_FALA",
-                        "orderNo":12
+                        "orderNo":12,
+                        "required":false
                     },
                     "leadProfile.contactDetails.alternateMobileNo":{
                         orderNo: 10
@@ -387,7 +395,7 @@ function(LeadProcess, AngularResourceService) {
                                             "lastName": {
                                                 key: "lead.lastName",
                                                 title: "LAST_NAME",
-                                                "required":true,
+                                                "required":false,
                                                 schema: {
                                                     pattern: "^[a-zA-Z\. ]+$",
                                                 },
@@ -402,7 +410,7 @@ function(LeadProcess, AngularResourceService) {
                                                 },
                                                 validationMessage: {202: "Only alphabets and space are allowed."},
                                                 "orderNo": 60,
-                                                "required":true
+                                                "required":false
                                             }
                                             
                                     },
@@ -413,7 +421,7 @@ function(LeadProcess, AngularResourceService) {
                                         "items":{
                                              "subDistrict": {
                                                      "key":"lead.cityTownVillage",
-                                                     "title":"SUBDISTRICT",
+                                                     "title":"SUB_DISTRICT",
                                                      "readonly":true,
                                                      "required":true
                                                  }
@@ -425,18 +433,18 @@ function(LeadProcess, AngularResourceService) {
                                         "orderNo": 30,
                                         "items": {
                                             "migrantDependantLabourFamily": {
-                                                key: "lead.udf.userDefinedFieldValues.udf2",
+                                                key: "lead.udf.userDefinedFieldValues.udf1",
                                                 title: "MIGRANT_DEPENDENT_LABOUR_FAMILY",
                                                 required:true,
                                                 type:"radios",
                                                 titleMap:[
                                                     {
                                                         "name":"yes",
-                                                        "value":true
+                                                        "value":"true"
                                                     },
                                                     {
                                                         "name":"no",
-                                                        "value":false
+                                                        "value":"false"
                                                     }
                                                 ],
                                                 schema:{
@@ -577,9 +585,15 @@ function(LeadProcess, AngularResourceService) {
                         return deferred.promise;
                     },
 
-                    submit: function(model, form, formName) {
+                    submit: function(model, formCtrl, form, formName) {
                         $log.info("Inside submit()");
                         PageHelper.showLoader();
+                        
+                        formCtrl.scope.$broadcast('schemaFormValidate');
+					    if(!formCtrl.$valid){
+                            PageHelper.showProgress('form-error', 'Your form have errors. Please fix them.',5000);
+                            return
+                        }
 
                         var reqData = _.cloneDeep(model);
                         var centres = formHelper.enum('centre').data;

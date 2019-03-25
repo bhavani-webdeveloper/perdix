@@ -15,7 +15,7 @@ define(["perdix/domain/model/loan/LoanProcess",
             $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,IndividualLoan, Lead, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager, Message) {
                 return {
                     "type": "page-bundle",
-                    "title": "APPICATION_REVIEW",
+                    "title": "APPLICATION_REVIEW",
                     "subTitle": "",
                     "bundleDefinitionPromise": function() {
                         return $q.resolve([
@@ -75,14 +75,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 maximum: 1,
                                 order: 70
                             },
-                            // {
-                            //     pageName: 'shramsarathi.dashboard.loans.individual.screening.Summary',
-                            //     title: 'SUMMARY',
-                            //     pageClass: 'summary',
-                            //     minimum: 1,
-                            //     maximum: 1,
-                            //     order: 6
-                            // },
+                            {
+                                pageName: 'shramsarathi.dashboard.loans.individual.screening.Summary',
+                                title: 'SUMMARY',
+                                pageClass: 'summary',
+                                minimum: 1,
+                                maximum: 1,
+                                order: 6
+                            }, 
                             {
                                 pageName: 'loans.individual.screening.CreditBureauView',//CreditBureauView
                                 title: 'CREDIT_BUREAU',

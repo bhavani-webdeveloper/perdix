@@ -14,32 +14,25 @@
         </div>
         <!-- search form -->
         <form action="#" method="get" class="sidebar-form">
-            <div class="input-group">
-                <input ng-model="menuFilter" type="text" class="form-control" placeholder="{{ 'SEARCH' | translate }}...">
-          <span class="input-group-btn">
-            <a ng-click="menuFilter=''" class="btn btn-flat"><i ng-if="menuFilter" class="fa fa-close"></i>
-            </a>
-          </span>
-            </div>
+            <input ng-model="menuFilter" type="text" class="form-control" placeholder="{{ 'SEARCH' | translate }}...">
         </form>
         <!-- /.search form -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
-            <li class="header">{{ definition.title | translate }}</li>
-            <li ng-repeat="menu in definition.items | filter:menuFilter" ng-class="{active:isActive(menu.id)}" class="treeview">
+            <li ng-repeat="menu in definition.items | filter:menuFilter" class="treeview">
                 <a ng-click="loadPage($event, menu)" href="#" class="online-link">
                     <i class="{{menu.iconClass || 'fa fa-bars'}}"></i> <span>{{ menu.title | translate }}</span>
                     <i ng-if="menu.items" class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul ng-if="menu.items" class="treeview-menu">
-                    <li ng-repeat="subMenu in menu.items | filter:menuFilter" ng-class="{active:isActive(subMenu.id)}" style="position:relative">
+                    <li ng-repeat="subMenu in menu.items | filter:menuFilter" style="position:relative">
                         <a ng-click="loadPage($event, subMenu)" href="#">
                             <i class="{{subMenu.iconClass || 'fa fa-circle-o'}}"></i>
                             {{ subMenu.title | translate }}
                             <i ng-if="subMenu.items" class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul ng-if="subMenu.items" class="treeview-menu">
-                            <li ng-repeat="subsubMenu in subMenu.items | filter:menuFilter" ng-class="{active:isActive(subsubMenu.id)}">
+                            <li ng-repeat="subsubMenu in subMenu.items | filter:menuFilter">
                                 <a ng-click="loadPage($event, subsubMenu)" href="#">
                                     <i class="{{subsubMenu.iconClass || 'fa fa-circle'}}"></i>
                                     {{ subsubMenu.title | translate }}
@@ -69,4 +62,5 @@
 .offline-link.small-pad {
     padding: 12px 10px 12px 14px !important;
 }
+</style>
 </aside>

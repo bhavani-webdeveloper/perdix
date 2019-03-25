@@ -24,7 +24,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'applicant',
                             minimum: 1,
                             maximum: 1,
-                            order:10
+                            order:30
                         },
                         {
                             pageName: 'kgfs.customer.IndividualEnrolment2',
@@ -32,7 +32,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'co-applicant',
                             minimum: 1,
                             maximum: 0,
-                            order:11
+                            order:40
                         },
                         {
                             pageName: 'kgfs.customer.IndividualEnrolment2',
@@ -40,15 +40,15 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'guarantor',
                             minimum: 1,
                             maximum: 0,
-                            order:12
+                            order:50
                         },
                         {
                             pageName: 'kgfs.customer.EnterpriseEnrolment2',
                             title: 'BUSINESS',
                             pageClass: 'business',
                             minimum: 1,
-                            maximum: 1,
-                            order:40
+                            maximum: 0,
+                            order:60
                         },
                         {
                             pageName: 'kgfs.loans.individual.screening.LoanRequest',
@@ -56,7 +56,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'loan-request',
                             minimum: 1,
                             maximum: 1,
-                            order:60
+                            order:70
                         },
                         {
                             pageName: 'kgfs.loans.individual.screening.CreditBureauView',
@@ -64,7 +64,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'cbview',
                             minimum: 1,
                             maximum: 1,
-                            order:9
+                            order:20
                         },
                         {
                             pageName: 'kgfs.loans.individual.screening.Summary',
@@ -72,7 +72,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'summary',
                             minimum: 1,
                             maximum: 1,
-                            order: 5
+                            order: 10
                         },                            
                         {
                                 pageName: 'kgfs.loans.individual.screening.Review',
@@ -160,15 +160,10 @@ define(["perdix/domain/model/loan/LoanProcess",
                                $this.bundlePages.push({
                                     pageClass: 'summary',
                                     model: {
-                                        // cbModel: {
-                                        //     customerId:loanProcess.loanAccount.customerId,
-                                        //     loanId:bundleModel.loanId,
-                                        //     scoreName:'RiskScore3'
-                                        // }41254
-                                          cbModel: {
+                                            cbModel: {
                                             customerId:loanProcess.loanAccount.customerId,
-                                            loanId:41254,
-                                            scoreName:'ConsolidatedScore'
+                                            loanId:bundleModel.loanId,
+                                            scoreName:'RiskScore2'
                                         }
                                     }
                                 });
@@ -185,6 +180,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         $this.bundlePages.push({
                                             pageClass: 'co-applicant',
                                             model: {
+                                                enrolmentProcess: loanProcess.coApplicantsEnrolmentProcesses[i],
                                                 loanRelation: loanAccount.coApplicantsEnrolmentProcesses[i]
                                             }
                                         });
@@ -195,6 +191,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         $this.bundlePages.push({
                                             pageClass: 'guarantor',
                                             model: {
+                                                enrolmentProcess: loanProcess.guarantorsEnrolmentProcesses[i],
                                                 loanRelation: loanAccount.guarantorsEnrolmentProcesses[i]
                                             }
                                         });
@@ -212,7 +209,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         });
                                     }
                                 }
-                                
+
                                 $this.bundlePages.push({
                                     pageClass: 'loan-request',
                                     model: {
@@ -329,6 +326,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                 eventListeners: {
                     "load-address": function(pageObj, bundleModel, params){
                         BundleManager.broadcastEvent("load-address-business", params);
+                    },
+                    "load-bank-details": function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("load-bank-details-business", params);
                     },
                     "load_business": function(pageObj, bundleModel, params){
                         console.log(params)

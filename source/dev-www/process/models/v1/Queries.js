@@ -1472,12 +1472,29 @@ irf.models.factory('Queries', [
         },deferred.reject);
         return deferred.promise;
     };
-    resource.getCustomerById = function(id){
+    resource.getCustomerById = function(id,flag){
         var deferred = $q.defer();
         resource.getResult("customers.list",{"id":id}).then(function(value){
+            if (typeof flag != undefined && flag == true){
+                if(value && value.results.length > 0){
+                    Object.prototype.toString.call(value.results) == '[object Array]' ? deferred.resolve(value.results[0]) : deferred.resolve(value.results)
+    
+                }
+            }
+            else{
+                if(value && value.results.length > 0){
+                    Object.prototype.toString.call(value.results) == '[object Array]' ? deferred.resolve(value.results[0].last_edited_at) : deferred.resolve(value.results.last_edited_at)
+    
+                }
+            }
+        },deferred.reject);
+        return deferred.promise;
+    };
+    resource.getInsuranceDocuments = function(productCode){
+        var deferred = $q.defer();
+        resource.getResult("getInsuranceDocuments.list",{"productCode":productCode}).then(function(value){
             if(value && value.results.length > 0){
-                Object.prototype.toString.call(value.results) == '[object Array]' ? deferred.resolve(value.results[0].last_edited_at) : deferred.resolve(value.results.last_edited_at)
-
+                deferred.resolve(value.results);
             }
         },deferred.reject);
         return deferred.promise;

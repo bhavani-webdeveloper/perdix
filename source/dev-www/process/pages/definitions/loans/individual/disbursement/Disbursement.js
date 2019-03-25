@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"),
-    ["$log", "Enrollment","BiometricService","elementsUtils", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "Utils","LoanAccount","formHelper","Queries","LoanAccount",
-        function($log, Enrollment,BiometricService,elementsUtils, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource, Utils,LoanAccount,formHelper,Queries,LoanAccount){
+    ["$log", "Enrollment","BiometricService","elementsUtils", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "Utils","LoanAccount","formHelper","Queries",
+        function($log, Enrollment,BiometricService,elementsUtils, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource, Utils,LoanAccount,formHelper,Queries){
 
         var branch = SessionStore.getBranch();
         var siteCode = SessionStore.getGlobalSetting("siteCode");
@@ -27,7 +27,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                 model.additional = {"branchName":branch};            
                 model.CBSDate=SessionStore.getCBSDate();
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
-                model.CanChangeRepaymentDateIndisbursement = SessionStore.getGlobalSetting("CanChangeRepaymentDateIndisbursement");
+                model.CanChangeRepaymentDateIndisbursement = SessionStore.getGlobalSetting("CanChangeRepaymentDateIndisbursement");                
                 model.validateDisbursementDate = function(model){
                     if(model.siteCode == "IREPDhan" && (moment(model.loanAccountDisbursementSchedule.scheduledDisbursementDate).isAfter(model.CBSDate))){
                         PageHelper.setError({
@@ -41,6 +41,9 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     if(model.loanAccountDisbursementSchedule.moratoriumPeriodInDays){
                         model.loanAccountDisbursementSchedule.firstRepaymentDate  = model.loanAccountDisbursementSchedule.scheduleStartDate
                     }
+                    else{
+                        model.loanAccountDisbursementSchedule.firstRepaymentDate  = null
+                    }
 
                 }
                 model.validateDisbursementStartDate = function(model){
@@ -49,6 +52,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         PageHelper.setError({
                             message: "scheduled start date should be greater than or equal to disbursement date" + " " + moment(model.loanAccountDisbursementSchedule.scheduledDisbursementDate).format(SessionStore.getDateFormat())
                         });
+                        model.loanAccountDisbursementSchedule.scheduleStartDate = null;
                         return;
                     }
 
@@ -105,13 +109,25 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
 
                         Queries.getBankAccountsByProduct(model.additional.productCode,true,false).then(function(res){
                             for(var i=0;i<res.body.length;i++) {
+                                    model.loanAccountDisbursementSchedule.customerNameInBank=resp[0].customerName;
+                                    model.loanAccountDisbursementSchedule.customerAccountNumber=res.body[i].account_number;
+                                    model.loanAccountDisbursementSchedule.ifscCode=res.body[i].ifsc_code;
+                                    model.loanAccountDisbursementSchedule.customerBankBranchName=res.body[i].branch_name;                                    
                                 if(res.body[i].default_disbursement_account){
-                                    model.loanAccountDisbursementSchedule.disbursementFromBankAccountNumber = res.body[i].account_number;
+                                    model.loanAccountDisbursementSchedule.disbursementFromBankAccountNumber = res.body[i].account_number;                                    
                                     break;
                                 }
                             }
                         });
-
+                        // to validate customer profile updated or not
+                        if(model.siteCode == 'KGFS') {
+                            model.loanAccountDisbursementSchedule.scheduledDisbursementDate = moment().format(SessionStore.getSystemDateFormat());
+                            Queries.getCustomerById(model.additional.customerId).then(function (res) {
+                                if(moment().diff(moment(res, 'YYYY-MM-DD'), 'days') <= 7) {
+                                    PageHelper.setWarning({message:"Profile Edited in last 7 days. Please refer customer history for same."});
+                                }
+                        });
+                        }
                         /*if(model.siteCode == 'KGFS' && resp[0].fees) {
                             model.additional.feeamount = [];
                             for (var i = 0; i < resp[0].fees.length; i++){
@@ -141,6 +157,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
 
                         model.loanAccountDisbursementSchedule.overrideStatus = "Requested";
                         model.loanAccountDisbursementSchedule.moratoriumPeriodInDays =model.additional.moratoriumPeriodInDays;
+                        if(model.siteCode=='IREPDhan'){
                         if(!model.additional.moratoriumPeriodInDays){
                             model.loanAccountDisbursementSchedule.moratoriumPeriodInDays = 0;
                         }
@@ -153,13 +170,20 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             modelValue = new Date(model.loanAccountDisbursementSchedule.scheduledDisbursementDate);
                             model.loanAccountDisbursementSchedule.scheduleStartDate = moment(new Date(modelValue.setDate(modelValue.getDate()+ model.loanAccountDisbursementSchedule.moratoriumPeriodInDays ))).format("YYYY-MM-DD");
                           }
-                        if(model.loanAccountDisbursementSchedule.moratoriumPeriodInDays){
+                        if(model.loanAccountDisbursementSchedule.moratoriumPeriodInDays > 0){
                         model.loanAccountDisbursementSchedule.firstRepaymentDate = model.loanAccountDisbursementSchedule.scheduleStartDate;
                         }
                         else{
                             model.loanAccountDisbursementSchedule.firstRepaymentDate = null;
                         }
-                       // model.loanAccountDisbursementSchedule.firstRepaymentDate =model.additional.firstRepaymentDate;
+                    }
+                    else{
+                        model.loanAccountDisbursementSchedule.firstRepaymentDate =model.additional.firstRepaymentDate;
+                    }
+                       
+                    // model.loanAccountDisbursementSchedule.firstRepaymentDate =model.additional.firstRepaymentDate;
+                        
+                        
 
 
                         model.loanAccountDisbursementSchedule.disbursementAmount = Number(resp[0].amount);
@@ -168,7 +192,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             model.additional.netDisbursementAmount = Number(resp[0].amount);
                             model.loanAccountDisbursementSchedule.modeOfDisbursement = "CASH";
                         }
-
 
                         Enrollment.getCustomerById({
                                 id: model.additional.customerId
@@ -307,7 +330,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         "title": "SCHEDULED_DISBURSEMENT_DATE",
                         "condition": "model.siteCode != 'IREPDhan'",
                         "type": "date",
-                        "required": true
+                        "required": true,
+                        "readonly":true
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.scheduledDisbursementDate",
@@ -321,7 +345,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.firstRepaymentDate",
-                        "condition":"model.siteCode=='IREPDhan' && model.loanAccountDisbursementSchedule.moratoriumPeriodInDays && model.CanChangeRepaymentDateIndisbursement",
+                        "condition":"model.siteCode=='IREPDhan' && model.loanAccountDisbursementSchedule.moratoriumPeriodInDays != '0' && model.CanChangeRepaymentDateIndisbursement",
                         "title":"FIRST_REPAYMENT_DATE",
                         "type":"date",
                         "readonly":true,
@@ -332,7 +356,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.firstRepaymentDate",
-                        "condition":"model.siteCode=='IREPDhan' && !model.loanAccountDisbursementSchedule.moratoriumPeriodInDays && model.CanChangeRepaymentDateIndisbursement",
+                        "condition":"model.siteCode=='IREPDhan' && model.loanAccountDisbursementSchedule.moratoriumPeriodInDays == '0' && model.CanChangeRepaymentDateIndisbursement",
                         "title":"FIRST_REPAYMENT_DATE",
                         "type":"date",
                         "onChange": function(value ,form ,model, event){

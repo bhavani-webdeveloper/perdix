@@ -8,7 +8,7 @@ $PM_QUERY = "
 SELECT p.id, p.uri, rpa.id rpa_id, rpa.page_config, p.title, p.icon_class, p.state, p.page_name
 FROM ".DB_SCHEMA.".pages p
 LEFT OUTER
-JOIN ".DB_SCHEMA.".role_page_access rpa ON p.id = rpa.page_id AND rpa.role_id = 
+JOIN ".DB_SCHEMA.".role_page_access rpa ON p.id = rpa.page_id AND rpa.role_id = ?
 ";
 
 $role_id = $_GET['roleId'];
@@ -16,11 +16,12 @@ $role_id = $_GET['roleId'];
 $query = $PM_QUERY;
 if (empty($role_id)) {
 	die('{"error":"Role Id is mandatory"}');
-} else {
-	$query = $PM_QUERY . $role_id;
-}
+} 
 
-$result = $connection->query($query);
+$stmt = $connection->prepare($PM_QUERY);
+$stmt->bind_param("i", $role_id);
+$stmt->execute();
+$result = $stmt->get_result();
 
 if (!$result) {
 	http_response_code(404);

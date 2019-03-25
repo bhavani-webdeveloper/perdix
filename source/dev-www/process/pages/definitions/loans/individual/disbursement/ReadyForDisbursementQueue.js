@@ -37,29 +37,58 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                     "screenFilter": true
                                 }
                             },
+                            "applicantName": {
+                            "title": "CUSTOMER_NAME",
+                            "type": "string"
+                            },
+                            "urn": {
+                                "title": "URN_NO",
+                                "type": "string"
+                            },
+                            "loanAccountNo": {
+                            "title": "LOAN_ACCOUNT_NO",
+                            "type": "string"
+                            },
+                            "scheduledDisbursementDate": {
+                                "title": "SCHEDULED_DISBURSEMENT_DATE",
+                                "type": "string",
+                                "x-schema-form": {
+                                    "type": "date"
+                                }
+                            },
+                            "centre": {
+                                "title": "CENTRE_ID",
+                                "type": ["integer", "null"],
+                                "x-schema-form": {
+                                    "type": "select",
+                                    "enumCode": "centre",
+                                    "parentEnumCode": "branch",
+                                    "parentValueExpr": "model.branch",
+                                    "screenFilter": true
+                                }
+                            },
                             "loanType": {
                                 "key": "product.loanType",
                                 "title": "LOAN_TYPE",
                                 "type": ["string","null"],
                                 "x-schema-form": {
-                                    "type": "select",
-                                    "titleMap": [{
-                                        "name": "JLG",
-                                        "value": "JLG"
-                                    }, {
-                                        "name": "JEWEL",
-                                        "value": "JEWEL"
-                                    }, {
-                                        "name": "SECURED",
-                                        "value": "SECURED",
-                                    }, {
-                                        "name": "UNSECURED",
-                                        "value": "UNSECURED",
-                                    }]
-                                }
+                                        "type": "select",
+                                        "enumCode": "booking_loan_type",                                        
+                                    }
                             },
+                            "productCategory":{
+                                "key": "product.productCategory",
+                                "title": "PRODUCT_CATEGORY",
+                                "type": ["string","null"],
+                                    "x-schema-form": {
+                                        "type": "select",
+                                        "enumCode": "loan_product_category_master",
+                                        "parentEnumCode": "booking_loan_type",
+                                        "screenFilter": true
+                                    }
+                            },                            
                             "loan_product": {
-                                "title": "Loan Product",
+                                "title": "PRODUCT_CODE",
                                 "type": "string",
         
                                 "x-schema-form": {
@@ -67,7 +96,10 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                     "lovonly": true,
                                     search: function (inputModel, form, model, context) {
                                         var loanProduct = formHelper.enum('loan_product').data;
-                                        var products = $filter('filter')(loanProduct, {parentCode: model.partner_code ? model.partner_code : undefined}, true);
+                                        var products = $filter('filter')(loanProduct, 
+                                            {   
+                                                parentCode: model.partner_code ? model.partner_code : undefined,
+                                                field2 : model.loanType ? model.loanType : undefined}, true);
         
                                         return $q.resolve({
                                             headers: {
@@ -85,25 +117,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                         ];
                                     },
                                 }
-                            },
-                            "centre": {
-                                "title": "CENTRE",
-                                "type": ["integer", "null"],
-                                "x-schema-form": {
-                                    "type": "select",
-                                    "enumCode": "centre",
-                                    "parentEnumCode": "branch",
-                                    "parentValueExpr": "model.branch",
-                                    "screenFilter": true
-                                }
-                            },
-                            "scheduledDisbursementDate": {
-                                "title": "SCHEDULED_DISBURSEMENT_DATE",
-                                "type": "string",
-                                "x-schema-form": {
-                                    "type": "date"
-                                }
                             }
+                            
 
                         }
                     },
@@ -115,8 +130,10 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                             'currentStage': 'ReadyForDisbursement',
                             'branchId':searchOptions.branch,
                             'centreId': searchOptions.centre,
-                            'loanType':searchOptions.loanType,
+                            'customerName': searchOptions.applicantName,
+                            'accountNumber':searchOptions.loanAccountNo,
                             'productCode': searchOptions.loan_product,
+                            'loanType':searchOptions.loanType,
                             'customerSignatureDate': searchOptions.customerSignatureDate,
                             'scheduledDisbursementDate': searchOptions.scheduledDisbursementDate,
                             'page': pageOpts.pageNo,
@@ -147,8 +164,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                         getListItem: function(item){
                             return [
                                 item.customerName + " ( Loan Account #: "+item.accountNumber+")",
-                                "<em>Disbursed Amount:  &#8377;"+((!item.disbursedAmount)?0:item.disbursedAmount)+", Disbursement Amount :  &#8377;"+item.disbursementAmount
-                                +", Scheduled Disbursement Date :" + ((!item.scheduledDisbursementDate) ? " NA " : item.scheduledDisbursementDate) + (item.groupCode?  ", Group Code :" +item.groupCode : "" ) + "</em>"
+                                "<em>Loan amount sanctioned:  &#8377;"+((!item.disbursedAmount)?0:item.disbursedAmount)+",Disbursed Amount:  &#8377;"+((!item.disbursedAmount)?0:item.disbursedAmount)+", Disbursement Amount :  &#8377;"+item.disbursementAmount
+                                +", Scheduled Disbursement Date :" + ((!item.scheduledDisbursementDate) ? " NA " : item.scheduledDisbursementDate) + (item.productCode?  ", Product Code :" +item.productCode : "" )+(item.groupCode?  ", Group Code :" +item.groupCode : "" ) + "</em>"
                             ]
                         },
                         getActions: function(){

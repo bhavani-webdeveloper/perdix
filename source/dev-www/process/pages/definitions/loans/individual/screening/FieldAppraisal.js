@@ -1,8 +1,8 @@
 irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal'),
-	["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
-        ,"IndividualLoan", "Lead", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
+	["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams"
+        , "Lead", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
         "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan", "BundleManager", "Message", "irfNavigator",
-        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,IndividualLoan, Lead, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager, Message, irfNavigator) {
+        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Lead, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager, Message, irfNavigator) {
         	$log.info("Inside LoanBookingBundle");
 
         	return {
@@ -122,17 +122,17 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisal')
                     return out;
                 },
 
-                bundleActions: [{
-                    name: "Conversation",
-                    desc: "",
-                    icon: "fa fa-comment",
-                    fn: function(bundleModel) {
-                        Message.openOrCreateConversation("Loan", $stateParams.pageId);
-                    },
-                    isApplicable: function(bundleModel) {
-                        return true;
-                    }
-                }],
+                // bundleActions: [{
+                //     name: "Conversation",
+                //     desc: "",
+                //     icon: "fa fa-comment",
+                //     fn: function(bundleModel) {
+                //         Message.openOrCreateConversation("Loan", $stateParams.pageId);
+                //     },
+                //     isApplicable: function(bundleModel) {
+                //         return true;
+                //     }
+                // }],
 
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");

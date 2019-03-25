@@ -14,6 +14,28 @@ label {
 .btn-xs {
   font-size: 14px;
 }
+.main-sidebar {
+  background-color: white !important;
+}
+.sidebar-form {
+  border: none !important;
+}
+.sidebar-form input[type="text"] {
+  background: transparent !important;
+}
+.sidebar-menu > li > a {
+  color: #666666 !important;
+}
+.sidebar-menu > li > a i {
+  margin-right: 5px;
+}
+.sidebar-menu > li:hover > a,
+.sidebar-menu > li.active > a {
+  background: #fff !important;
+}
+.sidebar-menu > li > .treeview-menu {
+  background: #fff !important;
+}
 .breadcrumb {
   margin-bottom: 0 !important;
 }

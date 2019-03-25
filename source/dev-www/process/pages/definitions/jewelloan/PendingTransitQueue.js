@@ -1,16 +1,19 @@
 irf.pageCollection.factory(irf.page("jewelloan.PendingTransitQueue"),
  ["$log", "formHelper","PageHelper", "JewelLoan", "$q", "SessionStore","irfNavigator","irfProgressMessage",
 	function($log, formHelper,PageHelper, JewelLoan,$q, SessionStore,irfNavigator,irfProgressMessage) {
+		var originBranchId = SessionStore.getBranchId();
+		var sourceBranch = SessionStore.getBranch();
 		var branch = SessionStore.getBranch();
+		var transitStatusValue 	= 'PENDING_TRANSIT' ;
+		var branchId ;
 
-		
 		return {
 			"type": "search-list",
 			"title": "TRANSIT_APPROVAL_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.originBranch = branch;
-				model.sourceBranch = branch;
+				model.sourceBranch = sourceBranch;
 				model.jewelloan = model.jewelloan || {};
 				$log.info("search-list sample got initialized");
 			},
@@ -42,15 +45,24 @@ irf.pageCollection.factory(irf.page("jewelloan.PendingTransitQueue"),
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
+					var branches = formHelper.enum('branch_id').data;
+	
+					for (var i=0;i<branches.length; i++){
+						var branch = branches[i];
+						 if (branch.name == searchOptions.sourceBranch){
+							branchId = branch.code;
+						 }
+					}
+					
 					var promise = JewelLoan.search({
-						'sourceBranch'			: searchOptions.sourceBranch,
-						'currentStage'			: "PendingTransitQueue",
-						'destinataionBranch'	: searchOptions.destinataionBranch,
-						'transitStatus'			: "PENDING_TRANSIT",
-						'page'					: pageOpts.pageNo,
-						'per_page'				: pageOpts.itemsPerPage,
-					}).$promise;
-					return promise;
+						"originBranchid"	  : originBranchId,
+						'currentStage'		  : "PendingTransitQueue",
+						"transitStatus"		  : "PENDING_TRANSIT",
+						"sourceBranchId"	  : branchId,	
+						'page'				  : pageOpts.pageNo,
+						'per_page'			  : pageOpts.itemsPerPage,
+						}).$promise;
+						return promise;
 				},
 				paginationOptions: {
 					"getItemsPerPage": function(response, headers) {
@@ -67,8 +79,32 @@ irf.pageCollection.factory(irf.page("jewelloan.PendingTransitQueue"),
 					itemCallback: function(item, index) {},
 					getItems: function(response, headers) {
 						if (response != null && response.length && response.length != 0) {
+
+							var branches = formHelper.enum('branch_id').data;
+							var sourceBranchName = null;
+							var destinationBranchName = null;
+
+							for (var i=0; i<response.length; i++){
+								for (var j=0; j<branches.length; j++){
+									var branch = branches[j];
+									if (branch.code == response[i].sourceBranchId)
+								 		sourceBranchName = branch.name;
+								 	if (response[i].destinationBranchId != null && branch.code == response[i].destinationBranchId){	
+										 destinationBranchName = branch.name ;
+										 if	(sourceBranchName!=null && destinationBranchName!=null)
+									 		break; 	
+									 }	
+									 if (response[i].destinationBranchId == null && sourceBranchName!=null )
+									 		break;
+								}
+							}	
+
 							for (var i=0;i<response.length;i++){
-								response[i].customerFullName = response[i].customerFirstName + " "+response[i].customerLastName;
+								response[i].customerFullName 	= response[i].customerFirstName + " "+(response[i].customerLastName!=null?response[i].customerLastName:"");
+								response[i].transitStatus    	= transitStatusValue;
+								response[i].sourceBranch 	 	= sourceBranchName;
+								response[i].destinationBranch	= destinationBranchName;
+								response[i].disbursedAmount     = (response[i].disbursedAmountInPaisa/100);
 								}
 							return response;
 						}
@@ -79,22 +115,16 @@ irf.pageCollection.factory(irf.page("jewelloan.PendingTransitQueue"),
 							item.id,
 							item.accountNo,
 							item.sourceBranch,
-							item.destinataionBranch,
+							item.destinationBranch,
 							item.urnNo,
 							item.jewelPouchNo,
 							item.transitStatus,
-							item.currentMarketGoldRateInPaisa,
 							item.customerFullName,
-                        	//item.customerFirstName,
-							item.disbursedAmountInPaisa,
-							item.grossWeightInGrams,
+							item.disbursedAmount,
 							item.investor,
-							item.jewelPouchNo,
 							item.loanDisbursementDate,
-							item.loanSendDate,
-							item.marketValueInPaisa,
-							item.netWeightInGrams,
-							item.rejectedRemarks
+							item.rejectedReason,
+							item.remarks
 						]
 					},
 					getTableConfig: function() {
@@ -115,58 +145,35 @@ irf.pageCollection.factory(irf.page("jewelloan.PendingTransitQueue"),
 									title: 'Destination Branch',
 									data: 'destinationBranch'
 								},{
-									title: 'Account No',
-									data: 'accountNo'
+									title: 'Customer Name',
+									data: 'customerFullName'
 								},{
 									title: 'URN No',
 									data: 'urnNo'
 								},{
-									title: 'Jewel Pouch No',
-									data: 'jewelPouchNo'
+									title: 'Account No',
+									data: 'accountNo'
+								},{
+									title: 'Disbursement Date',
+									data: 'loanDisbursementDate'
+								},{
+									title: 'Disbursed Amount',
+									data: 'disbursedAmount'
 								},{
 									title: 'Transit Status',
 									data: 'transitStatus'
 								},{
-									title: 'CurrentMarket GoldRate In Ps.',
-									data: 'currentMarketGoldRateInPaisa'
-								},{
-									title: 'Customer FullName',
-									data: 'customerFullName'
-								},{
-									title: 'Disbursed Amount InPaisa',
-									data: 'disbursedAmountInPaisa'
-								}, {
-									title: 'GrossWeight InGrams',
-									data: 'grossWeightInGrams'
-								},{
-									title: 'Investor',
-									data: 'investor'
-								},
-								{
-									title: 'JewelPouch No',
+									title: 'Jewel Pouch No',
 									data: 'jewelPouchNo'
-								},
-								{
-									title: 'Loan Disbursement Date',
-									data: 'loanDisbursementDate'
-								},    
-								{
-									title: 'Loan Send Date',
-									data: 'loanSendDate'
-								},
-								{
-									title: 'Market Value InPaisa',
-									data: 'marketValueInPaisa'
-								},    
-								{
-									title: 'NetWeight InGrams',
-									data: 'netWeightInGrams'
-								},        
-								{
-									title: 'Rejected Remarks',
-									data: 'rejectedRemarks'
-								}];
-					},
+								},{
+									title: 'Remarks',
+									data: 'remarks'
+								},{
+									title: 'Reject Reason',
+									data: 'rejectedReason'
+								}
+							];
+                    },
 					getActions: function() {
 						return [];
 					},
@@ -180,8 +187,7 @@ irf.pageCollection.factory(irf.page("jewelloan.PendingTransitQueue"),
 								if (items.length == 0) {
 									PageHelper.showProgress("bulk-create", "Atleast one loan should be selected for Batch creation", 5000);
 									return false;
-								}
-								//BulkJewelPouchUpdate(items);	
+								}	
 								irfNavigator.go({
 									'state': 'Page.Engine',
 									'pageName': 'jewelloan.JewelPouchApproval',
@@ -191,7 +197,6 @@ irf.pageCollection.factory(irf.page("jewelloan.PendingTransitQueue"),
 	
 							},
 								
-						
 						    isApplicable: function (items) {
 						        return true;
 						    }

@@ -31,26 +31,26 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageName: 'shramsarathi.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'CO_APPLICANT',
                                 pageClass: 'co-applicant',
-                                minimum: 3,
-                                maximum: 0,
+                                minimum: 0,
+                                maximum: 1,
                                 order:20
                             },
                             {
                                 pageName: 'shramsarathi.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'GUARANTOR',
                                 pageClass: 'guarantor',
-                                minimum: 3,
-                                maximum: 0,
+                                minimum: 0,
+                                maximum: 1,
                                 order:30
                             },
-                            {
-                                pageName: 'shramsarathi.dashboard.loans.individual.customer.EnterpriseEnrolment2',
-                                title: 'BUSINESS',
-                                pageClass: 'business',
-                                minimum: 1,
-                                maximum: 1,
-                                order:40
-                            },
+                            // {
+                            //     pageName: 'shramsarathi.dashboard.loans.individual.customer.EnterpriseEnrolment2',
+                            //     title: 'BUSINESS',
+                            //     pageClass: 'business',
+                            //     minimum: 1,
+                            //     maximum: 1,
+                            //     order:40
+                            // },
                             {
                                 pageName: 'shramsarathi.dashboard.loans.individual.screening.LoanRequest',
                                 title: 'LOAN_REQUEST',
@@ -183,37 +183,39 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess: loanProcess
                                     }
                                 });
-
-                                if(_.hasIn(loanAccount, 'coApplicantCustomers')) {
-                                    for (var i=0;i<loanAccount.coApplicantCustomers.length; i++){
+                                //debugger;
+                                if(_.hasIn(loanAccount, 'coApplicantsEnrolmentProcesses')) {
+                                    for (var i=0;i<loanProcess.coApplicantsEnrolmentProcesses.length; i++){
                                         $this.bundlePages.push({
                                             pageClass: 'co-applicant',
                                             model: {
-                                                loanRelation: loanAccount.coApplicantCustomers[i]
+                                                enrolmentProcess: loanProcess.coApplicantsEnrolmentProcesses[i],
+                                                loanProcess: loanProcess
                                             }
                                         });
                                     }
                                 }
-
-                                if(_.hasIn(loanAccount, 'guarantorCustomers')) {
-                                    for (var i=0;i<loanAccount.guarantorCustomers.length; i++){
+                                //debugger;
+                                if(_.hasIn(loanAccount, 'guarantorsEnrolmentProcesses')) {
+                                    for (var i=0;i<loanProcess.guarantorsEnrolmentProcesses.length; i++){
                                         $this.bundlePages.push({
                                             pageClass: 'guarantor',
                                             model: {
-                                                loanRelation: loanAccount.guarantorCustomers[i]
+                                                enrolmentProcess: loanProcess.guarantorsEnrolmentProcesses[i],
+                                                loanProcess: loanProcess
                                             }
                                         });
                                     }
                                 }
 
 
-                                $this.bundlePages.push({
-                                    pageClass: 'business',
-                                    model: {
-                                        enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
-                                        loanProcess: loanProcess
-                                    }
-                                });
+                                // $this.bundlePages.push({
+                                //     pageClass: 'business',
+                                //     model: {
+                                //         enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                //         loanProcess: loanProcess
+                                //     }
+                                // });
 
                                 // $this.bundlePages.push({
                                 //     pageClass: 'vehicle-details',

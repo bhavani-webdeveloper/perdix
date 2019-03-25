@@ -118,8 +118,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "LenderInformation",
                     "LenderInformation.firstName",
                     "LenderInformation.lenderType",
-                    //"LenderInformation.source",
+                    "LenderInformation.source",
                     "LenderInformation.companyOperatingSince",
+                    "LenderInformation.businessConstitution",
+                    "LenderInformation.enterpriseRegistrations",
+                    "LenderInformation.enterpriseRegistrations.registrationType",
+                    "LenderInformation.enterpriseRegistrations.registrationNumber",
+                    "LenderInformation.enterpriseRegistrations.documentId",
 
                     "LenderContactDetails",
                     "LenderContactDetails.LenderContactDetails",
@@ -189,6 +194,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "title": "LENDER_REGISTRATION",
                 "subTitle": "",
                 initialize: function (model, form, formCtrl) {
+                    model.siteCode = SessionStore.getGlobalSetting("siteCode");
                     if(_.hasIn($stateParams, "pageId") && !_.isNull($stateParams.pageId)) {
                         PageHelper.showLoader();
                         EnrolmentProcess.fromCustomerID($stateParams.pageId)
@@ -206,10 +212,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                                 model.customer = model.enrolmentProcess.customer;
                                 model.customer.customerType = "Lender";
-                                model.customer.currentStage = 'BasicEnrolment';
+                                model.customer.currentStage = 'BasicEnrolment'; 
+                                
+                                if(model.siteCode == 'KGFS'){
+                                  model.customer.enterpriseRegistrations = model.customer.enterpriseRegistrations || [];
+                                  model.customer.enterpriseRegistrations.push({
+                                      'registrationType': 'GST'
+                                  });
+                                  model.customer.enterpriseRegistrations.push({
+                                      'registrationType': 'PAN'
+                                  });
+                                }
                             });
                     }
-
+                    
                     var self = this;
                     var formRequest = {
                         "overrides": overridesFields(model),
@@ -217,6 +233,53 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "excludes": [],
                         "options": {
                             "repositoryAdditions": {
+                                "LenderInformation": {
+                                    "items": {
+                                        "enterpriseRegistrations": {
+                                            "key": "customer.enterpriseRegistrations",
+                                            "type": "array",
+                                            // "startEmpty": true,
+                                            "condition":"model.siteCode == 'KGFS'",
+                                            "view": "fixed",
+                                            "add": null,
+                                            "remove": null,
+                                            "title": "REGISTRATION_DETAILS",
+                                            titleExpr: "model.customer.enterpriseRegistrations[arrayIndex].registrationType +  ' Details' | translate",
+                                            "items": {
+                                                "registrationType": {
+                                                    "key": "customer.enterpriseRegistrations[].registrationType",
+                                                    "type": "select",
+                                                    "titleMap": {
+                                                        "GST": "GST",
+                                                        "PAN": "PAN"
+                                                    },
+                                                    "required": true,
+                                                    "readonly": true,
+                                                    "notitle": true,
+                                                    "type": "hidden",
+                                                    // "enumCode": "business_registration_type",
+                                                    "orderNo": 220
+                                                },
+                                                "registrationNumber": {
+                                                    "key": "customer.enterpriseRegistrations[].registrationNumber",
+                                                    "title": "REGISTRATION_NUMBER",
+                                                    "required": true,
+                                                    "orderNo": 230
+                                                },
+                                                "documentId": {
+                                                    "key": "customer.enterpriseRegistrations[].documentId",
+                                                    "type": "file",
+                                                    "title": "REGISTRATION_DOCUMENT",
+                                                    "category": "CustomerEnrollment",
+                                                    "subCategory": "REGISTRATIONDOCUMENT",
+                                                    "fileType": "application/pdf",
+                                                    "using": "scanner",
+                                                    "orderNo": 260
+                                                }
+                                            }
+                                        },
+                                    }
+                                },
                                 "LenderContactInformation": {
                                     "type": "box",
                                     "title": "CONTACT_INFORMATION",
@@ -418,7 +481,30 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             PageHelper.showProgress("enrolment", "Your form have errors. Please fix them.", 5000);
                             return false;
                         }
-
+                        if(model.siteCode == 'KGFS'){
+                            try{
+                                var count = 0;
+                                for (var i = 0; i < model.customer.enterpriseRegistrations.length; i++) {
+                                    if ((model.customer.enterpriseRegistrations[i].registrationType === "GST" || model.customer.enterpriseRegistrations[i].registrationType === "PAN")
+                                    && model.customer.enterpriseRegistrations[i].registrationNumber != ""
+                                    && model.customer.enterpriseRegistrations[i].registrationNumber != null){
+                                        var regex = "";
+                                        if(model.customer.enterpriseRegistrations[i].registrationType === "GST"){
+                                            regex = /^[a-zA-Z0-9]{15}$/;
+                                        }else{
+                                            regex = /^[a-zA-Z0-9]{10}$/;
+                                        }
+                                        if(regex.test(model.customer.enterpriseRegistrations[i].registrationNumber) == false){
+                                            PageHelper.showProgress("Registration","Please enter valid " + model.customer.enterpriseRegistrations[i].registrationType + " no",9000);
+                                            return false;
+                                        }
+                                    }
+                                }
+                            }
+                            catch(err){
+                                console.error(err);
+                            }
+                        }
                         // $q.all start
                         PageHelper.showLoader();
 

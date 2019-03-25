@@ -1117,7 +1117,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     if(model.loanAccount.linkedAccountNumber && model.siteCode == 'kinara'){
                         if(model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase()=='renewal'){
                             model.loanAccount.processingFeePercentage=0.2;
-                            model.loanAccount.processingFeeInPaisa=(02*model.loanAccount.loanAmount);
+                            model.loanAccount.processingFeeInPaisa=(2*model.loanAccount.loanAmount);
                         }
                         var loanfee = parseInt(model.loanAccount.processingFeeInPaisa / 100) + model.loanAccount.commercialCibilCharge + model.loanAccount.portfolioInsurancePremium + parseInt(model.loanAccount.portfolioInsuranceServiceCharge - model.loanAccount.portfolioInsuranceServiceTax) + model.loanAccount.fee3 + model.loanAccount.fee4 + model.loanAccount.fee5 + model.loanAccount.securityEmi;
                         if (loanfee) {

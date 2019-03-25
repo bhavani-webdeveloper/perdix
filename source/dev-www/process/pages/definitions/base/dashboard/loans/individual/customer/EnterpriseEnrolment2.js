@@ -65,6 +65,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId":{
                         type: "lov",
+                        "required": true,
                         title: "CUSTOMER_ID",
                             inputMap: {
                                 "firstName": {
@@ -2745,7 +2746,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
 
                                 if (response.customer_id == model.customer.id){
-                                    return false;
+                                   // return false;
                                 }
 
                                 return EnrolmentProcess.fromCustomerID(response.customer_id).toPromise();
@@ -2845,7 +2846,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         if(PageHelper.isFormInvalid(form)) {
                             return false;
                         }
-                        
+                        //model.enrolmentProcess.customer = model.customer;
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
                         model.enrolmentProcess.proceed()
@@ -2858,7 +2859,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent(model._bundlePageObj.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                             }, function (err) {
-                                PageHelper.showErrors(err.message);
+                                PageHelper.showErrors(err);
                                 PageHelper.showProgress('enrolment', err.message, 5000);                                
                                 PageHelper.hideLoader();
                             });

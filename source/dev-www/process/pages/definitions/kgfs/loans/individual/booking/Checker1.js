@@ -10,8 +10,8 @@ define(["perdix/domain/model/loan/LoanProcess",
     return {
         pageUID: "kgfs.loans.individual.booking.Checker1",
         pageType: "Bundle",
-        dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "Lead", "PageHelper", "irfStorageService", "$filter", "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "irfNavigator"],
-        $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, Lead, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
+        dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "LoanAccount", "Lead", "PageHelper", "irfStorageService", "$filter", "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "irfNavigator"],
+        $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, LoanAccount, Lead, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
             return {
                 "type": "page-bundle",
                 "title": "CHECKER_1",
@@ -43,6 +43,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             minimum: 1,
                             maximum: 3,
                             order:30
+                        },
+                        {
+                            pageName: 'kgfs.customer.EnterpriseEnrolment2',
+                            title: 'BUSINESS',
+                            pageClass: 'business',
+                            minimum: 1,
+                            maximum: 0,
+                            order:40
                         },
                         {
                             pageName: 'kgfs.loans.individual.booking.LoanBooking',
@@ -149,6 +157,26 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         });
                                     }
                                 }
+                                
+                                if (loanProcess.loanAccount.productCategory == 'MEL') {
+                                    $this.bundlePages.push({
+                                        pageClass: "business",
+                                        model: {
+                                            enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                            loanProcess: loanProcess
+                                        }
+                                    });
+                                }
+
+                                 if (loanProcess.loanAccount.productCategory == 'MEL') {
+                                    $this.bundlePages.push({
+                                        pageClass: "business",
+                                        model: {
+                                            enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                            loanProcess: loanProcess
+                                        }
+                                    });
+                                }
 
                                $this.bundlePages.push({
                                     pageClass: 'loan-booking',
@@ -198,12 +226,24 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         }
                                     });
                                 }
+
+                                 if (loanProcess.loanAccount.productCategory == 'MEL') {
+                                    $this.bundlePages.push({
+                                        pageClass: "business",
+                                        model: {
+                                            enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                            loanProcess: loanProcess
+                                        }
+                                    });
+                                }
+
                                 $this.bundlePages.push({
                                     pageClass: 'loan-booking',
                                     model:{
                                         loanProcess: loanProcess
                                     }
                                 });
+                                
                                 
                                 $this.bundlePages.push({
                                     pageClass: 'cb-check',

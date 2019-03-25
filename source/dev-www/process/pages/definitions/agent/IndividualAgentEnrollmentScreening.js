@@ -4,8 +4,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/domain/model/ag
     return {
         pageUID: "agent.IndividualAgentEnrollmentScreening",
         pageType: "Bundle",
-        dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "Agent", "formHelper", "$stateParams", "Enrollment", "Lead", "PageHelper", "irfStorageService", "$filter", "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "irfNavigator"],
-        $pageFn: function($log, $q, $timeout, SessionStore, $state, entityManager, Agent, formHelper, $stateParams, Enrollment, Lead, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
+        dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "Agent", "formHelper", "$stateParams", "Lead", "PageHelper", "irfStorageService", "$filter", "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "irfNavigator"],
+        $pageFn: function($log, $q, $timeout, SessionStore, $state, entityManager, Agent, formHelper, $stateParams, Lead, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
             return {
                 "type": "page-bundle",
                 "title": "INDIVIDUAL_AGENT",

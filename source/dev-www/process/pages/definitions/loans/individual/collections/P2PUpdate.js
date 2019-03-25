@@ -125,6 +125,19 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                 }
                             },
                             {
+                                key:"previousPromise.visitedDate",
+                                title:"VISITED_DATE",
+                                type:"date",
+                                //type:"amount",
+                                readonly:true
+                            },
+                            {
+                                key:"previousPromise.contactable",
+                                title:"ACTION",
+                                "type":"select",
+                                "enumCode":"contactable"
+                            },
+                            {
                                 key: "previousPromise.udf1",
                                 title: "BUSINESS_RUNNING",
                             },
@@ -233,10 +246,10 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                     },
                     {
                         key:"promise.contactable",
-                        title:"CONTACTABLE",
+                        title:"ACTION",
                         required: true,
                         "type":"select",
-                        "enumCode":"decisionmaker"
+                        "enumCode":"contactable"
                     }, {
                         key: "promise.latitude",
                         title: "LOCATION",

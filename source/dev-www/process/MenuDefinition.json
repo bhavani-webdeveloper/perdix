@@ -20,6 +20,7 @@
                 "Page/Engine/ProfileInformation",
                 "Page/Engine/kgfs.customer.Enrollment",
                 "Page/Engine/customer.IndividualEnrollment",
+                "Page/Engine/shramsarathi.customer.IndividualEnrollment",
                 "Page/Engine/customer.EnterpriseEnrollment",
                 "Page/Engine/customer.IndividualEnrollment3",
                 "Page/Engine/CBCheck",
@@ -47,8 +48,8 @@
         "Page/Adhoc/shramsarathi.dashboard.loans.LoanOriginationDashboard",
         "Page/Adhoc/witfin.loans.VehicleValuationDashboard",
         "Page/Adhoc/pahal.loans.LoanOriginationDashboard",
-        "Page/Adhoc/kgfs.loans.LoanBookingDashboard",
         "Page/Adhoc/kgfs.loans.LoanOriginationDashboard",
+        "Page/Adhoc/kgfs.loans.LoanBookingDashboard",
         "Page/Adhoc/base.dashboard.lead.LeadDashboard",
         "Page/Adhoc/base.dashboard.loans.LoanOriginationDashboard",
        

@@ -666,7 +666,18 @@ define({
                         'financialsGraph':{}
                         };
                         var ratios={};
-                    if(params){
+                    if(params.length){
+                        for(var i=0;i<params.length;i++){
+                            params[i][3].tableData.data[0].net_business_income=params[i][1].data[0]['Net Business Income'];
+                            params[i][3].tableData.data[0].Purchases=params[i][1].data[0].Purchases;
+                            params[i][3].tableData.data[0].Opex=params[i][1].data[0].Opex;
+                            params[i][3].tableData.data[0].net_business_income_pct=params[i][1].data[0]['Net Business Income pct'];
+                            params[i][3].tableData.data[0].net_income=params[i][1].data[0]['Net Income'];
+                            params[i][3].tableData.data[0].kinara_emi=params[i][1].data[0]['Kinara EMI'];
+                            params[i][3].tableData.data[0]. kinara_emi_pct =params[i][1].data[0]['Kinara EMI pct'];
+                            params[i][3].tableData.data[0].business_liabilities=params[i][1].data[0]['Business Liabilities'];
+                        }
+                        
                        _.forEach(params, function(params){
                             prepareFinancialData['tableData'].push(params[3].tableData);
                             prepareFinancialData['tableRatios'].push(params[3].tableData['ratios']);

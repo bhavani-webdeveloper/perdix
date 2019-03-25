@@ -2,10 +2,10 @@ define({
     pageUID: "shramsarathi.dashboard.lead.LeadReject",
     pageType: "Engine",
     dependencies: ["$log", "$state", "$filter", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "entityManager", "$q", "irfProgressMessage",
-    "PageHelper", "Utils", "entityManager", "BiometricService", "PagesDefinition", "Queries", "irfNavigator"],
+    "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "irfNavigator"],
 
     $pageFn: function($log, $state, $filter, $stateParams, Lead, LeadHelper, SessionStore, formHelper, entityManager, $q, irfProgressMessage,
-        PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries, irfNavigator) {
+        PageHelper, Utils, BiometricService, PagesDefinition, Queries, irfNavigator) {
 
         var branch = SessionStore.getBranch();
         return {
@@ -170,10 +170,12 @@ define({
                                         }, {
                                             key: "lead.addressLine1",
                                             "title": "DOOR_NO"
-                                        }, {
-                                            key: "lead.addressLine2",
-                                            "title": "STREET"
-                                        }, {
+                                        }, 
+                                        // {
+                                        //     key: "lead.addressLine2",
+                                        //     "title": "STREET"
+                                        // }, 
+                                        {
                                             key: "lead.pincode",
                                             type: "lov",
                                             fieldType: "number",

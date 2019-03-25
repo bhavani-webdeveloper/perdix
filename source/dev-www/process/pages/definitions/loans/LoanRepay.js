@@ -1,11 +1,20 @@
 irf.pageCollection.factory(irf.page('loans.LoanRepay'),
-    ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
+    ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams"
         ,"LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
         "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch","Queries", "Utils", "IndividualLoan","LoanCollection","PagesDefinition","irfNavigator","Locking",
-        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, 
+        function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams,LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, 
             Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan,LoanCollection,PagesDefinition,irfNavigator,Locking) {
 
-            function backToLoansList(){
+            var titleMapConfig = function(config,model){
+                var additional = model.additional || {};
+                additional.titleMap = additional.titleMap || {};
+                for (var i=0; i< config.length; i++){   
+                    additional.titleMap[config[i][0]] = config[i][1];
+                }
+                model.additional = additional;
+                return;
+            }
+                function backToLoansList(){
                 try {
                     var urnNo = ($stateParams.pageId.split("."))[1];
                     $state.go("Page.Engine", {
@@ -55,6 +64,14 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         };
                         _.defaults(data, defaultConfig);
                         model.pageConfig = data;
+                        // if (typeof data.conditionConfig != undefined){
+                        //     titleMapConfig(data.conditionConfig,model);
+                        // }
+                        // else{
+                        //     titleMapConfig([
+                        //         ["Advance Payment","Advance Payment"]
+                        //     ],model)
+                        // }
                     });
 
                     var config = {
@@ -65,8 +82,14 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                         unapprovedAmount: 0,
                         unapprovedTransactionsCount: 0
                     };
+                    model.additional.titleMap = {
+                        "Scheduled Demand":"Scheduled Demand",
+                        "Fee Payment":"Fee Payment",
+                        "Pre-closure":"Pre-closure",
+                        "Prepayment":"Prepayment",
+                        "PenalInterestPayment":"PenalInterestPayment"
+                    }
                     model.siteCode = SessionStore.getGlobalSetting("siteCode");
-
                     model.additional.suspenseCode = SessionStore.getGlobalSetting("loan.individual.collection.suspenseCollectionAccount");
 
 
@@ -323,7 +346,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 key:"repayment.transactionName",
                                 "type":"select",
                                 "required": true,
-                                condition: "!model._pageGlobals.hideTransactionName && model.siteCode != 'witfin'",
+                                condition: "!model._pageGlobals.hideTransactionName && model.siteCode != 'witfin' && model.siteCode != 'shramsarathi'",
                                 titleMap: {
                                     "Scheduled Demand":"Scheduled Demand",
                                     "Fee Payment":"Fee Payment",
@@ -356,6 +379,34 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     "Fee Payment":"Fee Payment",
                                     "Pre-closure":"Pre-closure",
                                     "PenalInterestPayment":"PenalInterestPayment"
+                                },
+                                onChange: function(value ,form, model){
+                                    if ( value == 'Pre-closure'){
+                                        model.repayment.amount = model.repayment.totalPayoffAmountToBePaid;
+                                    } else if (value == 'Scheduled Demand'){
+                                        model.repayment.amount = Utils.ceil(model.repayment.totalDue);
+                                    }else if(value == 'PenalInterestPayment'){
+                                        model.repayment.amount = model.repayment.bookedNotDuePenalInterest;
+                                    }else if(value == 'Fee Payment'){
+                                        model.repayment.amount = model.repayment.feeDue;
+                                    } else {
+                                        model.repayment.amount = null;
+                                    }
+                                    model.repayment.demandAmount = model.repayment.amount || 0;
+                                }
+                            },
+                            {
+                                key:"repayment.transactionName",
+                                "type":"select",
+                                "required": true,
+                                condition: "!model._pageGlobals.hideTransactionName && model.siteCode == 'shramsarathi'",
+                                titleMap: {
+                                    "Scheduled Demand":"Scheduled Demand",
+                                    "Fee Payment":"Fee Payment",
+                                    "Pre-closure":"Pre-closure",
+                                    "Prepayment":"Prepayment",
+                                    "PenalInterestPayment":"PenalInterestPayment",
+                                    "Advance Payment":"Advance Payment"
                                 },
                                 onChange: function(value ,form, model){
                                     if ( value == 'Pre-closure'){

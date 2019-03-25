@@ -291,7 +291,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             $this.bundlePages.push({
                                         pageClass: 'financialInfoSummary',
                                         model: {
-                                        customerId: loanAccount.customerId,
+                                        customerId: loanProcess.loanAccount.customerId,
                                         enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess
                                         }
                                     });

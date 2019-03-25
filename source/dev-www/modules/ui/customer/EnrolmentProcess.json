@@ -1523,7 +1523,6 @@
                         "key":"customer.familyMembers[].maritalStatus",
                         "type": "select",
                         "title": "MARITAL_STATUS"
-
                     },
                     "incomes": {
                         "key": "customer.familyMembers[].incomes",
@@ -1537,7 +1536,7 @@
                                 "enumCode": "occupation"
                             },
                             "incomeType": {
-                                "key": "",
+                                "key": "customer.familyMembers[].incomes[].incomeType",
                                 "title": "INCOME_TYPE",
                                 "type": "select",
                                 "enumCode": "income_types"
@@ -1659,6 +1658,12 @@
                         "fileType": "application/pdf",
                         "using": "scanner",
                         "orderNo": 120
+                    },
+                    "tenure":{
+                        "key": "customer.liabilities[].tenure",
+                        "title": "LOAN_TENURE",
+                        "type":"text",
+                        "orderNo": 125
                     }
                 }
             }

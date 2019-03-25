@@ -46,8 +46,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageName: 'kgfs.customer.EnterpriseEnrolment2',
                             title: 'BUSINESS',
                             pageClass: 'business',
-                            minimum: 1,
-                            maximum: 1,
                             order:40
                         },
                         {
@@ -154,7 +152,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             pageClass: 'co-applicant',
                                             model: {
                                                 enrolmentProcess: loanProcess.coApplicantsEnrolmentProcesses[i],
-                                                loanRelation: loanAccount.coApplicantsEnrolmentProcesses[i]
+                                                loanProcess: loanProcess
                                             }
                                         });
                                     }
@@ -165,21 +163,21 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             pageClass: 'guarantor',
                                             model: {
                                                 enrolmentProcess: loanProcess.guarantorsEnrolmentProcesses[i],
-                                                loanRelation: loanAccount.guarantorsEnrolmentProcesses[i]
+                                                loanProcess: loanProcess
                                             }
                                         });
                                     }
                                 }
 
-
-                                 $this.bundlePages.push({
-                                    pageClass: 'business',
-                                    model: {
-                                        enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
-                                        loanProcess: loanProcess
-                                    }
-                                });
-
+                                if (loanProcess.loanAccount.productCategory == 'MEL') {
+                                    $this.bundlePages.push({
+                                        pageClass: 'business',
+                                        model: {
+                                            enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                            loanProcess: loanProcess
+                                        }
+                                    });
+                                }
                                 $this.bundlePages.push({
                                     pageClass: 'loan-request',
                                     model: {
@@ -200,14 +198,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                             });
 
                     } else {
-                        if($stateParams.pageData){
-                            var productCategory = $stateParams.pageData.productCategory; 
-                        }
                         LoanProcess.createNewProcess()
                             .subscribe(function(loanProcess){
                                 loanProcess.loanAccount.currentStage = 'Screening';
                                 bundleModel.loanProcess = loanProcess;
-                                loanProcess.loanAccount.productCategory = productCategory;
+                                if($stateParams.pageData){
+                                    var productCategory = $stateParams.pageData.productCategory; 
+                                    loanProcess.loanAccount.loanType = $stateParams.pageData.loanType;
+                                    loanProcess.loanAccount.productCategory = productCategory;
+                                }
+                                
                                  if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
 
                                     var _leadId = $stateParams.pageData['lead_id'];
@@ -284,6 +284,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                     "load-address": function(pageObj, bundleModel, params){
                         BundleManager.broadcastEvent("load-address-business", params);
                     },
+                    "load-bank-details": function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("load-bank-details-business", params);
+                    },
                     "load_business": function(pageObj, bundleModel, params){
                         console.log(params)
                         model.productCategory = params
@@ -334,6 +337,11 @@ define(["perdix/domain/model/loan/LoanProcess",
                         $log.info("Inside new-loan of CBCheck");
                         BundleManager.broadcastEvent("new-loan", params);
                     },
+                    "business-capture": function(pageObj, bundleModel, params){
+                        $log.info("Inside business-capture of Screening");
+                        BundleManager.broadcastEvent("business-captures", params);
+                    },
+                    
                     "applicant-updated": function(pageObj, bundlePageObj, obj){
                         /* Update other pages */
                         BundleManager.broadcastEvent("applicant-updated", obj);

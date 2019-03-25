@@ -49,7 +49,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             title: 'BUSINESS',
                             pageClass: 'business',
                             minimum: 1,
-                            maximum: 1,
+                            maximum: 0,
                             order:40
                         },
                         {
@@ -76,6 +76,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:60
                         },
                         {
+                            pageName: 'kgfs.loans.individual.screening.Summary',
+                            title: 'SUMMARY',
+                            pageClass: 'summary',
+                            minimum: 1,
+                            maximum: 1,
+                            order: 5
+                        }, 
+                        {
                             pageName: 'kgfs.loans.individual.screening.Review',
                             title: 'REVIEW',
                             pageClass: 'loan-review',
@@ -101,7 +109,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 },
                 "pre_pages_initialize": function(bundleModel){
                     $log.info("Inside pre_page_initialize");
-                    bundleModel.currentStage = "LosDSCOverride";
+                    bundleModel.currentStage = "DSCOverride";
                     var deferred = $q.defer();
 
                     var $this = this;
@@ -125,7 +133,17 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 //    // irfNavigator.goBack();
                                 //     return;
                                 // }
-
+                                
+                                $this.bundlePages.push({
+                                    pageClass: 'summary',
+                                    model: {
+                                            cbModel: {
+                                            customerId:loanProcess.loanAccount.customerId,
+                                            loanId:bundleModel.loanId,
+                                            scoreName:'RiskScore2'
+                                        }
+                                    }
+                                });
                                 $this.bundlePages.push({
                                     pageClass: 'applicant',
                                     model: {
@@ -140,7 +158,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             pageClass: 'co-applicant',
                                             model: {
                                                 enrolmentProcess: loanProcess.coApplicantsEnrolmentProcesses[i],
-                                                loanRelation: loanAccount.coApplicantsEnrolmentProcesses[i]
+                                                loanProcess: loanProcess
                                             }
                                         });
                                     }
@@ -151,7 +169,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             pageClass: 'guarantor',
                                             model: {
                                                 enrolmentProcess: loanProcess.guarantorsEnrolmentProcesses[i],
-                                                loanRelation: loanAccount.guarantorsEnrolmentProcesses[i]
+                                                loanProcess: loanProcess
                                             }
                                         });
                                     }
@@ -202,7 +220,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 },
                 "post_pages_initialize": function(bundleModel){
                     $log.info("Inside post_page_initialize");
-                    BundleManager.broadcastEvent('origination-stage', 'LosDSCOverride');
+                    BundleManager.broadcastEvent('origination-stage', 'DSCOverride');
                     if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
                         PageHelper.showLoader();
                         PageHelper.showProgress("KYC-input", 'Loading lead details');

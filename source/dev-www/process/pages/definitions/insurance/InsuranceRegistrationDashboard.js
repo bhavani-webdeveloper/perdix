@@ -10,7 +10,9 @@ irf.pageCollection.controller(irf.controller("insurance.InsuranceRegistrationDas
             "items": [
                 "Page/Engine/insurance.Registration",
                 "Page/Engine/insurance.RegistrationTLI",
-                "Page/Engine/insurance.InsuranceRegistrationQueue"
+                "Page/Engine/insurance.InsuranceRegistrationQueue",
+                "Page/Engine/insurance.InsuranceFeedUpload",
+                "Page/Engine/insurance.ShopInsuranceRegistration"
             ]
         };
 

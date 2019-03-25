@@ -48,7 +48,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             title: 'BUSINESS',
                             pageClass: 'business',
                             minimum: 1,
-                            maximum: 1,
+                            maximum: 0,
                             order:40
                         },
                         {
@@ -64,7 +64,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             title: 'DSC',
                             pageClass: 'dsc-check',
                             minimum: 1,
-                            maximum: 1,
+                            maximum: 0,
                             order:70
                         },
                         {
@@ -74,6 +74,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             minimum: 1,
                             maximum: 1,
                             order:60
+                        },
+                        {
+                            pageName: 'kgfs.loans.individual.screening.Summary',
+                            title: 'SUMMARY',
+                            pageClass: 'summary',
+                            minimum: 1,
+                            maximum: 1,
+                            order: 6
                         },
                         {
                             pageName: 'kgfs.loans.individual.screening.Review',
@@ -160,6 +168,17 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 // }
 
                                 $this.bundlePages.push({
+                                    pageClass: 'summary',
+                                    model: {
+                                            cbModel: {
+                                            customerId:loanProcess.loanAccount.customerId,
+                                            loanId:bundleModel.loanId,
+                                            scoreName:'RiskScore2'
+                                        }
+                                    }
+                                });
+
+                                $this.bundlePages.push({
                                     pageClass: 'applicant',
                                     model: {
                                         enrolmentProcess: loanProcess.applicantEnrolmentProcess,
@@ -173,7 +192,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             pageClass: 'co-applicant',
                                             model: {
                                                 enrolmentProcess: loanProcess.coApplicantsEnrolmentProcesses[i],
-                                                loanRelation: loanAccount.coApplicantsEnrolmentProcesses[i]
+                                                loanProcess: loanProcess
                                             }
                                         });
                                     }
@@ -184,12 +203,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             pageClass: 'guarantor',
                                             model: {
                                                 enrolmentProcess: loanProcess.guarantorsEnrolmentProcesses[i],
-                                                loanRelation: loanAccount.guarantorsEnrolmentProcesses[i]
+                                                loanProcess: loanProcess
                                             }
                                         });
                                     }
                                 }
-                                
+
                                 if(loanProcess.loanAccount.productCategory == 'MEL'){
                                     if (loanProcess.loanCustomerEnrolmentProcess) {
                                         $this.bundlePages.push({

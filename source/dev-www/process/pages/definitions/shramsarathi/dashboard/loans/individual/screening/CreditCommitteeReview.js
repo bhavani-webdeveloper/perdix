@@ -72,6 +72,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                         maximum: 1,
                         order: 80
                     }, 
+                    {
+                        pageName: 'shramsarathi.dashboard.loans.individual.screening.televerification',
+                        title: 'TELE_VERIFICATION',
+                        pageClass: 'televerification',
+                        minimum: 1,
+                        maximum: 1,
+                        order:90
+                        }
                     // {
                     //     pageName: 'loans.individual.misc.BalanceSheetHistory',
                     //     title: 'BALANCE_SHEET_HISTORY',
@@ -201,6 +209,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess: loanProcess
                                     }
                                 });
+                                $this.bundlePages.push({
+                                    pageClass: 'televerification',
+                                    model: {
+                                    enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                    loanProcess: loanProcess
+                                    }
+                                    });
 
                                 for (i in customerIds.coApplicants) {
                                     $this.bundlePages.push({
@@ -296,6 +311,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                             BundleManager.broadcastEvent("test-listener", {
                                 name: "SHAHAL AGAIN"
                             });
+                        },
+                        "televerification": function(pageObj, bundleModel, params){
                         },
                         "new-enrolment": function(pageObj, bundleModel, params) {
                             switch (pageObj.pageClass) {

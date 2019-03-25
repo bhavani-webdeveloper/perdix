@@ -35,10 +35,10 @@ define({
 							"title": "LEAD_NAME",
 							"type": "string"
 						},
-						"businessName": {
-							"title": "BUSINESS_NAME",
-							"type": "string"
-						},
+						// "businessName": {
+						// 	"title": "BUSINESS_NAME",
+						// 	"type": "string"
+						// },
 						"area": {
 							"title": "PANCHAYAT",
 							"type": "string"
@@ -89,7 +89,15 @@ define({
 	                                ];
 	                            }
 							}
-						}
+						},
+						'branch': {
+	                    	'title': "BRANCH",
+	                    	"type": ["string", "null"],
+							"x-schema-form": {
+								"type":"userbranch",
+								"screenFilter": true
+							}
+	                    }
 
 					},
 					"required": []
@@ -118,7 +126,7 @@ define({
 						'currentStage': "Inprocess",
 						'leadName': searchOptions.leadName,
 						'leadStatus': 'Reject',
-						'businessName': searchOptions.businessName,
+						// 'businessName': searchOptions.businessName,
 						'area': searchOptions.area,
 						'cityTownVillage': searchOptions.cityTownVillage,
 						'page': pageOpts.pageNo,
@@ -150,7 +158,7 @@ define({
 						return [
 							item.leadId,
 							item.leadName,
-							item.businessName,
+							// item.businessName,
 							item.branchName,
 							item.addressLine1,
 							item.cityTownVillage,
@@ -172,10 +180,12 @@ define({
 						}, {
 							title: 'Lead Name',
 							data: 'leadName'
-						}, {
-							title: 'Business Name',
-							data: 'businessName'
-						}, {
+						},
+						//  {
+						// 	title: 'Business Name',
+						// 	data: 'businessName'
+						// }, 
+						{
 							title: 'Address Line1',
 							data: 'addressLine1'
 						}, {

@@ -5,10 +5,10 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
         pageUID: "pahal.lead.LeadGeneration",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$filter", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "entityManager", "$q", "irfProgressMessage",
-        "PageHelper", "Utils", "entityManager", "BiometricService", "PagesDefinition", "Queries", "IrfFormRequestProcessor", "$injector", "irfNavigator", "User"],
+        "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "IrfFormRequestProcessor", "$injector", "irfNavigator", "User"],
 
         $pageFn: function($log, $state, $filter, $stateParams, Lead, LeadHelper, SessionStore, formHelper, entityManager, $q, irfProgressMessage,
-            PageHelper, Utils, entityManager, BiometricService, PagesDefinition, Queries, IrfFormRequestProcessor, $injector, irfNavigator, User) {
+            PageHelper, Utils, BiometricService, PagesDefinition, Queries, IrfFormRequestProcessor, $injector, irfNavigator, User) {
 
             var branch = SessionStore.getBranch();
             AngularResourceService.getInstance().setInjector($injector);
@@ -57,19 +57,23 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                         "enumCode": "dealer"
                     },
                     "productDetails.interestedInProduct": {
-                        "orderNo" : 10
+                        "orderNo" : 10,
+                        "required":true
                     },
                     "productDetails.loanAmountRequested": {
-                        "orderNo": 60
+                        "orderNo": 60,
+                        "required":true
                     },
                     "productDetails.loanPurpose1": {
-                        "orderNo": 20
+                        "orderNo": 20,
+                        "required":true
                     },
                     "productDetails.loanPurpose2": {
                         "orderNo": 30
                     },
                     "productDetails.productRequiredBy": {
-                        "orderNo": 50
+                        "orderNo": 50,
+                        "required":true
                     },
                     "productDetails.screeningDate": {
                         "orderNo": 60
@@ -79,7 +83,9 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
 
                     },
                     "productDetails.productRejectionReason.productRejectReason":{
-                        "condition" : "model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO' "
+                        "condition" : "model.lead.interestedInProduct == 'NO' || model.lead.eligibleForProduct == 'NO' ",
+                        "enumCode":"lead_reject_reason",
+                        "required":true
 
                     },
                      "productDetails.productRejectionReason.productRejectAdditinalRemarks":{

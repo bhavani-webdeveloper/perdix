@@ -11,7 +11,7 @@
           "stageType":"CAPTURE",
           "sendSms":"No",
           "smsCategory":"LoanBooking",
-          "isAccountOpening":false,
+          "isAccountOpening": false,
           "riskScoreName":"RiskScore1",
           "allowedRoles":[
              "WM"
@@ -55,7 +55,73 @@
           ]
        },
        {
-          "order":5,
+         "order":5,
+         "code":"BusinessTeamReview",
+         "name":"Business Team Review",
+         "stageType":"CAPTURE",
+         "sendSms":"No",
+         "smsCategory":"LoanBooking",
+         "isAccountOpening":false,
+         "riskScoreName":"RiskScore2",
+         "allowedRoles":[
+            "WM"
+         ]
+       },
+       {
+         "order":6,
+         "code":"CreditOfficerReview",
+         "name":"Credit Officer Review",
+         "stageType":"CAPTURE",
+         "sendSms":"No",
+         "smsCategory":"LoanBooking",
+         "isAccountOpening":false,
+         "riskScoreName":"RiskScore2",
+         "allowedRoles":[
+            "WM"
+         ]
+       },
+       {
+         "order":7,
+         "code":"CreditManagerReview",
+         "name":"Credit Manager Review",
+         "stageType":"CAPTURE",
+         "sendSms":"No",
+         "smsCategory":"LoanBooking",
+         "isAccountOpening":false,
+         "riskScoreName":"RiskScore2",
+         "allowedRoles":[
+            "WM"
+         ]
+       },
+       {
+         "order":8,
+         "code":"CBOCreditHeadReview",
+         "name":"CBO & Credit Head Review",
+         "stageType":"CAPTURE",
+         "sendSms":"No",
+         "smsCategory":"LoanBooking",
+         "isAccountOpening":false,
+         "riskScoreName":"RiskScore2",
+         "allowedRoles":[
+            "WM"
+         ]
+       },
+       {
+         "order":9,
+         "code":"CEOMDReview",
+         "name":"CEO & MD Review",
+         "stageType":"CAPTURE",
+         "sendSms":"No",
+         "smsCategory":"LoanBooking",
+         "isAccountOpening":false,
+         "riskScoreName":"RiskScore2",
+         "allowedRoles":[
+            "WM"
+         ]
+       },
+
+       {
+          "order":10,
           "code":"DSCApproval",
           "name":"DSC Approval",
           "stageType":"CAPTURE",
@@ -67,9 +133,9 @@
              "WM"
           ]
        },
-       {
-          "order":6,
-          "code":"LosDSCOverride",
+        {
+          "order":11,
+          "code":"DSCOverride",
           "name":"DSC Override",
           "stageType":"CAPTURE",
           "sendSms":"No",
@@ -77,11 +143,11 @@
           "isAccountOpening":false,
           "riskScoreName":"RiskScore3",
           "allowedRoles":[
-             "WM"
+            "WM"
           ]
-       },
+      },
        {
-          "order":7,
+          "order":12,
           "code":"KYCCheck",
           "name":"KYC Check",
           "stageType":"CAPTURE",
@@ -93,7 +159,7 @@
           ]
        },
        {
-          "order":8,
+          "order":13,
           "code":"RiskReviewAndLoanSanction",
           "name":"Risk Review And Loan Sanction",
           "stageType":"CAPTURE",
@@ -105,7 +171,7 @@
           ]
        },
        {
-         "order":9,
+         "order":14,
          "code": "Rejected",
          "name": "Rejected",
          "stageType": "CAPTURE",
@@ -117,7 +183,7 @@
          ]
       },
        {
-          "order":10,
+          "order":15,
           "code":"LoanInitiation",
           "name":"Loan Input",
           "stageType":"CAPTURE",
@@ -130,19 +196,20 @@
           ]
        },
        {
-        "order":11,
+        "order":16,
         "code":"DocumentUpload",
         "name":"Document Download and Upload",
         "stageType":"CAPTURE",
         "sendSms":"No",
         "smsCategory":"LoanBooking",
         "isAccountOpening":true,
+        "multipleLoanNotAllowedForLoanType":true,
         "allowedRoles":[
            "WM"
         ]
      },
      {
-        "order":12,
+        "order":17,
         "code":"Checker1",
         "name":"Checker1",
         "stageType":"CAPTURE",
@@ -154,7 +221,7 @@
         ]
      },
      {
-       "order":13,
+       "order":18,
        "code":"Checker2",
        "name":"Checker2",
        "stageType":"CAPTURE",
@@ -166,7 +233,7 @@
        ]
     },
        {
-         "order":14,
+         "order":19,
          "code":"Completed",
          "name":"Completed",
          "stageType":"CAPTURE",
@@ -205,7 +272,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
                    ]
                 },
                 "processType":{
@@ -259,7 +326,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation", "PendingForPartner"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation", "PendingForPartner"
                    ]
                 },
                 "productCode":{
@@ -268,7 +335,16 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation", "PendingForPartner"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation", "PendingForPartner"
+                   ]
+                },
+                "productCode":{
+                   "title":"Product Code",
+                   "type":"string",
+                   "minLength":1,
+                   "maxLength":100,
+                   "captureStages":[
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation", "PendingForPartner"
                    ]
                 },
                 "loanAmount":{
@@ -277,7 +353,7 @@
                    "minimum":1,
                    "maximum":10000000,
                    "captureStages":[
-                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","KYCCheck","RiskReviewAndLoanSanction", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
                 "doCustomerLoanAmount":{
@@ -564,7 +640,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","KYCCheck","RiskReviewAndLoanSanction","Rejected","ApplicationReview","FieldAppraisal","Sanction", "LoanInitiation", 
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","Rejected","ApplicationReview","FieldAppraisal","Sanction", "LoanInitiation", 
                       "PendingForPartner",
                        "DocumentUpload",
                        "DocumentVerification"
@@ -955,7 +1031,7 @@
                    "title":"Frequency",
                    "type":"string",
                    "captureStages":[
-                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
                    ]
                 },
                 "assetAvailableForHypothecation": {
@@ -977,21 +1053,21 @@
                    "title": "frequencyRequested",
                    "type": "string",
                    "captureStages": [
-                       "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Application", "LoanInitiation"
+                       "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Application", "LoanInitiation"
                    ]
                 },
                 "emiRequested": {
                    "title": "emiRequested",
                    "type": "number",
                    "captureStages": [
-                       "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Application", "LoanInitiation"
+                       "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Application", "LoanInitiation"
                    ]
                 },
                 "estimatedEmi": {
                    "title": "estimatedEmi",
                    "type": "number",
                    "captureStages": [
-                       "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","KYCCheck","RiskReviewAndLoanSanction","ApplicationReview","FieldAppraisal","SanctionInput", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation", "FieldAppraisal"
+                       "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","ApplicationReview","FieldAppraisal","SanctionInput", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation", "FieldAppraisal"
                    ]
                 },
                 "expectedPortfolioInsurancePremium": {
@@ -1089,7 +1165,7 @@
                    "title": "psychometricCompleted",
                    "type": "string",
                    "captureStages": [
-                       "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
+                       "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
                    ]
                 },
                 "partnerApprovalStatus":{
@@ -1418,6 +1494,171 @@
                    }
                 }
              }
+          },
+          "teleCallingDetails": {
+            "title": "teleCallingDetails",
+            "type": "array",
+            "maxItems": 10,
+            "items": {
+              "type": "object",
+              "required": [
+              ],
+              "properties": {
+                "customerCalled": {
+                  "title": "customerCalled",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages":[
+                         "Checker2"
+                      ]
+                },
+                "customerNotCalledReason": {
+                  "title": "customerNotCalledReason",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages":[
+                         "Checker2"
+                      ]
+                },
+                "customerNotCalledRemarks": {
+                  "title": "customerNotCalledRemarks",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500,
+                  "captureStages":[
+                         "Checker2"
+                      ]
+                },
+                "customerCalledDate": {
+                  "title": "customerCalledDate",
+                  "type": "date",
+                  
+                  "captureStages":[
+                         "Checker2"
+                      ]
+                },
+                "customerCalledBy": {
+                  "title": "customerCalledBy",
+                  "type": "string",
+                  
+                  "captureStages":[
+                         "Checker2"
+                      ]
+                },
+                "customerCalledAt": {
+                  "title": "customerCalledAt",
+                  "type": "date",
+                 
+                  "captureStages":[
+                         "Checker2"
+                      ]
+                },
+                "customerKnownSinceYears": {
+                  "title": "customerKnownSinceYears",
+                  "type": "number",
+                  "captureStages":[
+                        "Checker2"
+                      ]
+                },
+                "relationshipWithCustomer": {
+                  "title": "relationshipWithCustomer",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 20,
+                  "captureStages":[
+                        "Checker2"
+                      ]
+                },
+                "referenceOpinionOnCustomer": {
+                  "title": "referenceOpinionOnCustomer",
+                  "type": "string",
+                  "captureStages":[
+                     "Checker2"
+                      ]
+                },
+                "customerFinancialStatus": {
+                  "title": "customerFinancialStatus",
+                  "type": "string",
+                  "captureStages":[
+                     "Checker2"
+                      ]
+                },
+                "telecallingResponse": {
+                  "title": "telecallingResponse",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "captureStages":[
+                     "Checker2"
+                      ]
+                },
+                "telecallingRemarks": {
+                  "title": "telecallingRemarks",
+                  "type": "string",
+                  "captureStages":[
+                     "Checker2"
+                      ]
+                },
+                "personContacted": {
+                  "title": "personContacted",
+                  "type": "string",
+                  "captureStages":[
+                     "Checker2"
+                      ]
+                },
+                "contactNumber": {
+                  "title": "contactNumber",
+                  "type": "string",
+                   "captureStages": [
+                     "Checker2"
+                        ]
+                      },
+                "occupation": {
+                  "title": "occupation",
+                  "type": "string",
+                   "captureStages":[
+                        "Checker2"
+                      ]
+                },
+                "address": {
+                  "title": "address",
+                  "type": "string",
+                   "captureStages":[
+                     "Checker2"
+                      ]
+                },
+                "personType": {
+                  "title": "personType",
+                  "type": "string",
+                   "captureStages":[
+                     "Checker2"
+                      ]
+                },
+                "partyType": {
+                  "title": "partyType",
+                  "type": "string",
+                   "captureStages":[
+                     "Checker2"
+                      ]
+                },
+             "noOfCallAttempts": {
+                  "title": "noOfCallAttempts",
+                  "type": "number",
+                   "captureStages":[
+                     "Checker2"
+                      ]
+                },
+             "followupCallRequired": {
+                  "title": "followupCallRequired",
+                  "type": "date",
+                   "captureStages":[
+                     "Checker2"
+                      ]
+                }
+              }
+            }
           },
           "guarantor":{
              "title":"Guarantor Details",
@@ -3190,7 +3431,7 @@
                       "title":"Collateral Type",
                       "type":"string",
                       "captureStages":[
-                        "Screening","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                        "Screening","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
                       ],
                       "refCodeCategory":"collateral_type"
                    },
@@ -3511,7 +3752,7 @@
                       "title":"propertyOwnerName",
                       "type":"string",
                       "captureStages":[
-                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3575,7 +3816,7 @@
                       "title":"udf1",
                       "type":"string",
                       "captureStages":[
-                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3583,7 +3824,7 @@
                       "title":"udf4",
                       "type":"string",
                       "captureStages":[
-                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3591,15 +3832,15 @@
                       "title":"udf2",
                       "type":"string",
                       "captureStages":[
-                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
                       ]
                    },
  
                    "udf3":{
                       "title":"udf3",
-                      "type":"string",
+                      "type":"number",
                       "captureStages":[
-                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3607,7 +3848,7 @@
                       "title":"udf5",
                       "type":"string",
                       "captureStages":[
-                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
                       ]
                    }
  
@@ -3630,7 +3871,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                        "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","KYCCheck","RiskReviewAndLoanSanction","ApplicationReview","FieldAppraisalReview","ZonalRiskReview","CentralRiskReview","CreditCommitteeReview","Rejected"
+                        "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","ApplicationReview","FieldAppraisalReview","ZonalRiskReview","CentralRiskReview","CreditCommitteeReview","Rejected"
                       ]
                    },
                    "mitigant":{
@@ -3639,14 +3880,14 @@
                       "minimum":1,
                       "maximum":100000000,
                       "captureStages":[
-                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","KYCCheck","RiskReviewAndLoanSanction","FieldAppraisalReview","ZonalRiskReview", "CentralRiskReview","CreditCommitteeReview","Rejected"
+                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","FieldAppraisalReview","ZonalRiskReview", "CentralRiskReview","CreditCommitteeReview","Rejected"
                       ]
                    },
                     "mitigatedStatus":{
                       "title":"mitigatedStatus",
                       "type":"boolean",
                       "captureStages":[
-                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","KYCCheck","RiskReviewAndLoanSanction"
+                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction"
                       ]
                    },
                    "riskScore":{
@@ -3655,7 +3896,7 @@
                       "minimum":1,
                       "maximum":100000000,
                       "captureStages":[
-                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","KYCCheck","RiskReviewAndLoanSanction","FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview","CreditCommitteeReview","Rejected"
+                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview","CreditCommitteeReview","Rejected"
                       ]
                    }
                 }
@@ -3700,6 +3941,20 @@
                       "Screening", "LoanInitiation", "PendingForPartner"
                    ]
                 },
+                "udf5": {
+                  "title": "DSC Override status",
+                  "type": "boolean",
+                  "captureStages": [
+                     "Screening", "LoanInitiation", "PendingForPartner", "DSCApproval"
+                  ]
+                },
+                "udf6": {
+                  "title": "Product Name",
+                  "type": "string",
+                  "captureStages": [
+                     "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","LoanBooking","LinkedAccountVerification"
+                  ]
+                },
                 "udf7": {
                    "title": "Eligible Disposable Income",
                    "type": "number",
@@ -3707,7 +3962,7 @@
                       "Screening", "LoanInitiation", "PendingForPartner"
                    ]
                 }
-             }
+               }
           },
           "userDefinedDateFields":{
              "title":"User Defined Date Details",
@@ -3790,7 +4045,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","KYCCheck","RiskReviewAndLoanSanction","DocumentVerification","LoanBooking","Completed","LinkedAccountVerification"
+                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","DocumentVerification","LoanBooking","Completed","LinkedAccountVerification"
                       ]
                    },
                    "documentStatus":{
@@ -3808,7 +4063,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","LosDSCOverride","KYCCheck","RiskReviewAndLoanSanction","LoanBooking","LinkedAccountVerification"
+                        "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","LoanBooking","LinkedAccountVerification"
                      ]
                    }
                 }

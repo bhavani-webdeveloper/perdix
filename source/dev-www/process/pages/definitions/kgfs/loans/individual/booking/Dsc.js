@@ -374,19 +374,13 @@ define([], function () {
                                                 "onClick": "actions.doDscOverride(model,model.loanAccount.id)"
                                             }
                                         ]
-                                    },
-                                    {
-                                        "type": "button",
-                                        "condition" : "model.customer.loanSaved && model.loanAccount.currentStage == 'LoanInitiation' ",  
-                                        "title": "DSC_REQUEST",
-                                        "onClick": "actions.getDscDetails(model,model.loanAccount.id)"
-                                    },
+                                    },                                    
                                     {
                                         "type": "button",
                                         "title": "VIEW_DSC_RESPONSE",
                                         "icon": "fa fa-eye",
                                         "style": "btn-primary",
-                                        "condition":"model.customer.dscStatus && model.loanAccount.currentStage == 'LoanInitiation'",
+                                        "condition":"model.customer.dscStatus && (model.loanAccount.currentStage == 'LoanInitiation' || model.loanAccount.currentStage == 'DocumentUpload' || model.loanAccount.currentStage == 'Checker1' || model.loanAccount.currentStage == 'Checker2') ",
                                         "onClick": function(model, formCtrl, form, event) {
                                             console.log(form);
                                             console.warn(event);

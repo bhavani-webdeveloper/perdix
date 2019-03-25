@@ -411,6 +411,10 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                     "DisbursementDetails.repaymentTenure",
                     "DisbursementDetails.repaymentFrequency",
                     "DisbursementDetails.repaymentMode",
+                    "DisbursementDetails.bookDebtPercentage",
+                    "DisbursementDetails.PercentageOfCashCollateral",
+                    "DisbursementDetails.collateralType",
+                    "DisbursementDetails.lenderTdsRate",
 
                     "LoanAmountDeduction",
                     "LoanAmountDeduction.liabilityFeeDetails",
@@ -500,6 +504,34 @@ define(['perdix/domain/model/lender/LoanBooking/LiabilityLoanAccountBookingProce
                         "excludes": [],
                         "options": {
                             "repositoryAdditions": {
+                                "DisbursementDetails": {
+                                    "items": {                            
+                                        "bookDebtPercentage": {
+                                            "key": "liabilityAccount.bookDebtPercentage",
+                                            "type": "number",
+                                            "condition": "model.siteCode='KGFS'",
+                                            "title": "PERCENTAGE_Of_BOOK_DEBT"
+                                        },                      
+                                        "PercentageOfCashCollateral": {
+                                            "key": "liabilityAccount.cashCollateralPercentage",
+                                            "type": "string",
+                                            "condition": "model.siteCode='KGFS'",
+                                            "title": "Percentage_Of_Cash_Collateral"
+                                        },                    
+                                        "collateralType": {
+                                            "key": "liabilityAccount.collateralTtype",
+                                            "type": "string",
+                                            "condition": "model.siteCode='KGFS'",
+                                            "title": "TYPE_OF_COLLATERAL"
+                                        },                  
+                                        "lenderTdsRate": {
+                                            "key": "liabilityAccount.lenderTdsRate",
+                                            "type": "string",
+                                            "condition": "model.siteCode='KGFS'",
+                                            "title": "LENDER_TDS_RATE"
+                                        }
+                                    }
+                                },
                                  "Liabilityschedules": {
                                             "type": "box",
                                             "title": "SCHEDULE_DOWNLOAD",

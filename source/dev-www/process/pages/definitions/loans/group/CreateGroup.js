@@ -307,30 +307,12 @@ define({
                                 "type": "select",
                                 "parentEnumCode": "branch_id",
                                 "parentValueExpr": "model.branchId",
-                            },
-                            "status": {
-                                "key": "group.status",
-                                "title": "STATUS",
-                                "type": "select",
-                                "titleMap": [{
-                                    "name": "All",
-                                    "value": ""
-                                }, {
-                                    "name": "Processed",
-                                    "value": "PROCESSED"
-                                }, {
-                                    "name": "Pending",
-                                    "value": "PENDING"
-                                }, {
-                                    "name": "Error",
-                                    "value": "ERROR"
-                                }]
-                            },
+                            }
                         },
                         "outputMap": {
                             "urnNo": "group.jlgGroupMembers[arrayIndex].urnNo",
                             "firstName": "group.jlgGroupMembers[arrayIndex].firstName",
-                            "fatherFirstName": "group.jlgGroupMembers[arrayIndex].husbandOrFatherFirstName",
+                            "fatherFirstName": "group.jlgGroupMembers[arrayIndex].fatherFirstName",
                             "customerId": "group.jlgGroupMembers[arrayIndex].customerId",
                             "spouseFirstName": "group.jlgGroupMembers[arrayIndex].spouseFirstName"
                         },
@@ -345,15 +327,13 @@ define({
                                     break;
                                 }
                             }
-                            var today = moment(new Date());
-                            var nDaysBack = moment(new Date()).subtract(nDays, 'days');
+                            
                             console.log(inputModel);
-                            var promise = CreditBureau.listCreditBureauStatus({
+                            var promise = Enrollment.search({
                                 'branchName': branchName,
-                                'status': inputModel.status,
                                 'centreId': inputModel.centreId,
-                                'fromDate': nDaysBack.format('YYYY-MM-DD'),
-                                'toDate': today.format('YYYY-MM-DD')
+                                'customerType':'INDIVIDUAL',
+                                'stage' : 'Completed'
                             }).$promise.then(function(response){
                                 $log.info(response.body);
                                 var ret = [];
@@ -388,8 +368,14 @@ define({
                             model.group.jlgGroupMembers[context.arrayIndex].relation = "Father";
                             model.group.jlgGroupMembers[context.arrayIndex].witnessFirstName = "";
                             model.group.jlgGroupMembers[context.arrayIndex].witnessRelationship= "";
-                            Enrollment.getCustomerById({id:valueObj.customerId}).$promise
+                            Enrollment.getCustomerById({id:valueObj.id}).$promise
                                  .then(function(res){
+                                     model.group.jlgGroupMembers[context.arrayIndex].husbandOrFatherFirstName = res.fatherFirstName;
+                                     if (res.maritalStatus == 'Married' && res.gender == "FEMALE"){
+                                         model.group.jlgGroupMembers[context.arrayIndex].relation = "Husband";
+                                         model.group.jlgGroupMembers[context.arrayIndex].husbandOrFatherFirstName = res.spouseFirstName;
+                                     }
+                                    
                                  model.group.jlgGroupMembers[context.arrayIndex].maritalStatus = res.maritalStatus;
                                  model.group.jlgGroupMembers[context.arrayIndex].loanAmount = res.requestedLoanAmount;
                                  model.group.jlgGroupMembers[context.arrayIndex].loanAmountRequested = res.requestedLoanAmount;
@@ -397,7 +383,7 @@ define({
                                  model.group.jlgGroupMembers[context.arrayIndex].loanPurpose1 = res.requestedLoanPurpose;
                                  model.group.jlgGroupMembers[context.arrayIndex].witnessFirstName = undefined;
                                  model.group.jlgGroupMembers[context.arrayIndex].witnessRelationship = undefined;
-
+                                 model.group.jlgGroupMembers[context.arrayIndex].spouseFirstName = res.spouseFirstName;
                                 for (i in res.familyMembers) {
                                     var obj = {};
                                     if(model.group.jlgGroupMembers[context.arrayIndex].urnNo != res.familyMembers[i].enrolledUrnNo){
@@ -435,7 +421,29 @@ define({
                         "key": "group.jlgGroupMembers[].maritalStatus",
                         "title": "MARITAL_STATUS",
                         "type":"select",
+                        "condition":"model.group.partnerCode!='AXIS'",
                         "enumCode":"marital_status"
+                    },
+                    {
+                        "key": "group.jlgGroupMembers[].maritalStatus",
+                        "title": "MARITAL_STATUS",
+                        "type":"select",
+                        "required":true,
+                        "condition":"model.group.partnerCode=='AXIS'",
+                        "enumCode":"marital_status"
+                    },
+                    {
+                        "key":"group.jlgGroupMembers[].spouseFirstName",
+                        "title":"SPOUSE_FIRST_NAME",
+                        "type":"string",
+                        "required":true,
+                        "condition":"model.group.jlgGroupMembers[arrayIndex].maritalStatus == 'MARRIED' && model.group.partnerCode=='AXIS'"
+                    },{
+                        "key":"group.jlgGroupMembers[].spouseDob",
+                        "title":"SPOUSE_DATE_OF_BIRTH",
+                        "type":"date",
+                        "required":true,
+                        "condition":"model.group.jlgGroupMembers[arrayIndex].maritalStatus == 'MARRIED' && model.group.partnerCode=='AXIS'"
                     },{
                         "key": "group.jlgGroupMembers[].outStandingLoanAmount",
                         "condition":"model.group.partnerCode=='AXIS'",

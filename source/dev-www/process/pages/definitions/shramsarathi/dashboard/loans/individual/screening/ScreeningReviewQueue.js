@@ -3,6 +3,7 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.scr
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
 		var branch = SessionStore.getBranch();
+		console.log(branch);
 		var centres = SessionStore.getCentres();
 		var centreId=[];
 	    if (centres && centres.length) {
@@ -40,19 +41,20 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.scr
 	                    'branch': {
 	                    	'title': "BRANCH",
 	                    	"type": ["string", "null"],
-	                    	"enumCode": "branch",
 							"x-schema-form": {
-								"type": "userbranch",
+								"type":"userbranch",
 								"screenFilter": true
 							}
 	                    },
-                        "centre": {
-							"title": "ZONE_NAME",
+						"centre": {
+                            "title": "ZONE_NAME",
+                            "required":false,
 							"type": ["integer", "null"],
 							"x-schema-form": {
 								"type": "select",
 								"enumCode": "centre",
-								"parentEnumCode": "branch",
+								"parentEnumCode": "branch_id",
+								"parentValueExpr": "model.branch",
 								"screenFilter": true
 							}
 						},
@@ -92,7 +94,7 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.scr
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-	                    'branchName':searchOptions.branch,
+	                    'branchName':searchOptions.branchName,
 	                    'stage': 'ScreeningReview',
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
@@ -145,6 +147,9 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.scr
 					},
 					getColumns: function() {
 						return [{
+                            title: 'ID',
+                            data: 'loanId'
+						},{
 							title: 'SCREENING_DATE',
 							data: 'screeningDate'
 						}, {

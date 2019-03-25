@@ -240,16 +240,17 @@ define({
                     "title": "SOL_ID"
                 }, {
                     "key": "branch.fingerPrintDeviceType",
-                    "required":true,
+                    "required":false,
                     "type": "select",
                     "titleMap": {
                         "SAGEM": "SAGEM",
-                        "SECUGEN": "SECUGEN"
+                        "SECUGEN": "SECUGEN",
+                        "MANTRA": "MANTRA"
                     },
                     "title": "FINGER_PRINT_DEVICE_TYPE"
                 }, {
                     "key": "branch.eodAuthenticationType",
-                    "required":true,
+                    "required":false,
                     "type": "select",
                     "titleMap": {
                         "PASSWORD": "PASSWORD",
@@ -304,6 +305,13 @@ define({
                     if(!model.branch.operationalStatus){
                        model.branch.operationalStatus='ACTIVE'; 
                     }
+                    if(!model.branch.fingerPrintDeviceType || model.branch.fingerPrintDeviceType == null){
+                        model.branch.fingerPrintDeviceType = 'SAGEM'; 
+                     }
+                    if(!model.branch.eodAuthenticationType || model.branch.eodAuthenticationType == null){
+                        model.branch.eodAuthenticationType = 'PASSWORD'; 
+                     } 
+
                     PageHelper.showLoader();
                     PageHelper.showProgress("Branch Save", "Working...");
                     if (model.branch.id) {

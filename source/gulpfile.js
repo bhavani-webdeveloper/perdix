@@ -7,6 +7,7 @@ var gulpLoadPlugins = require('gulp-load-plugins');
 var argv = require('yargs').argv;
 var ts = require('gulp-typescript');
 var merge = require('merge2');
+var babel = require("gulp-babel");
 var $ = gulpLoadPlugins();
 
 /*
@@ -104,6 +105,18 @@ gulp.task('html', function(){
         .pipe($.if('*.js', $.rev()))
         .pipe($.if('*.css', $.rev()))
         .pipe($.revReplace())
+        .pipe($.if('*.js', babel({
+            "sourceType": "script",
+            "presets": [
+                ["@babel/preset-env", {
+                    "loose": true,
+                    "modules": false
+                }]
+            ],
+            "plugins": [
+                "transform-es2015-template-literals"
+            ]
+        })))
         .pipe($.print())
         .pipe(gulp.dest(buildDirectory))
 })

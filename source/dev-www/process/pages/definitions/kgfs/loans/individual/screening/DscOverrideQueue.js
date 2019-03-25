@@ -58,7 +58,7 @@ define({
 
                 getResultsPromise: function (searchOptions, pageOpts) {
                     var promise = IndividualLoan.search({
-                        'stage': 'LosDSCOverride',
+                        'stage': 'DSCOverride',
                         'branchId': searchOptions.branch,
                         'centreCode': searchOptions.centre,
                         'urn': searchOptions.customerUrnNo,
@@ -91,6 +91,7 @@ define({
                         return [
 
                             "{{'ENTITY_NAME'|translate}} : " + item.customerName,
+                             "{{'CENTRE_NAME'|translate}} : " + item.centreName,
                             "{{'URN_NO'|translate}} : " + item.urn,
                             "{{'LOAN_AMOUNT'|translate}} : " + item.loanAmount,
                             "{{'LOAN_TYPE'|translate}} : " + item.loanType,
@@ -115,8 +116,12 @@ define({
 							data: 'urn'
                         }, 
                         {
-                            title: 'ENTITY_NAME',
-                            data: 'customerName'
+                            title: 'CUSTOMER_NAME',
+                            data: 'applicantName'
+                        }, 
+                        {
+                            title: 'CENTRE_NAME',
+                            data: 'centreName'
                         }, {
 							title: 'LOAN_AMOUNT',
 							data: 'loanAmount'
@@ -127,16 +132,13 @@ define({
                         {
 							title: 'PARTNER_CODE',
 							data: 'partnerCode'
-                        },{
-							title: 'PROCESS_TYPE',
-							data: 'processType'
                         },
                     ]
 					},
                     getActions: function () {
                         return [
                         {
-                            name: "DO DSC Override",
+                            name: "Do DSC Override",
                             desc: "",
                             icon: "fa fa-book",
                             fn: function (item, index) {

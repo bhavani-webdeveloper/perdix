@@ -125,7 +125,7 @@ irf.pageCollection.factory(irf.page("lead.leadAssignmentPendingQueue"),
 							title: 'Address Line1',
 							data: 'addressLine1'
 						}, {
-							title: 'City/Town Village',
+							title: 'City/Town/Village',
 							data: 'cityTownVillage'
 						}, {
 							title: 'Area',

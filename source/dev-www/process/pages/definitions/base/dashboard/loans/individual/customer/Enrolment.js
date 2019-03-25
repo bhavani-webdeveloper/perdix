@@ -64,6 +64,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "EnterpriseInformation.enterpriseCustomerRelations.linkedToCustomerId":{
                         type: "lov",
+                        "required": true,
                         title: "CUSTOMER_ID",
                             inputMap: {
                                 "firstName": {
@@ -2690,9 +2691,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                      //"BankAccounts.customerBankAccounts.bankStatementDocId",
                      "BankAccounts.customerBankAccounts.bankStatements",
                      "BankAccounts.customerBankAccounts.bankStatements.startMonth",
-                     // "BankAccounts.customerBankAccounts.bankStatements.openingBalance",
-                     // "BankAccounts.customerBankAccounts.bankStatements.closingBalance",
-                     // "BankAccounts.customerBankAccounts.bankStatements.emiAmountdeducted",
+                     "BankAccounts.customerBankAccounts.bankStatements.openingBalance",
+                     "BankAccounts.customerBankAccounts.bankStatements.closingBalance",
+                     "BankAccounts.customerBankAccounts.bankStatements.emiAmountdeducted",
                      "BankAccounts.customerBankAccounts.bankStatements.cashDeposits",
                     "BankAccounts.customerBankAccounts.bankStatements.nonCashDeposits",
                      "BankAccounts.customerBankAccounts.bankStatements.totalDeposits",
@@ -4160,7 +4161,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent(model._bundlePageObj.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                             }, function (err) {
-                                PageHelper.showErrors(err.message);
+                                PageHelper.showErrors(err);
                                 PageHelper.showProgress('enrolment', err.message, 5000);                                
                                 PageHelper.hideLoader();
                             });

@@ -1172,6 +1172,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                 }
                             },
                             "guarantor": {
+                                "excludes": [
+                                    "FamilyDetails"
+                                ],
                                 "overrides": {
                                     "KYC": {
                                         "readonly": false
@@ -1195,6 +1198,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                 }
                             },
                             "co-applicant": {
+                                "excludes": [
+                                    "FamilyDetails"
+                                ],
                                 "overrides": {
                                     "KYC": {
                                         "readonly": false

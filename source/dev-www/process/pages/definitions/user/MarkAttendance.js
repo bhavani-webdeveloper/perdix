@@ -52,6 +52,7 @@ irf.pageCollection.factory(irf.page("user.MarkAttendance"),
                             .then(function(user){
                                 PageHelper.showProgress('loading-user', 'Done.', 5000);
                                 model.user = user;
+                                model.fingerPrintDeviceType = "MANTRA";
                                 model.customer = {};
                                 Enrollment.getCustomerById({id:user.customerId}).$promise.then(function(resp){
                                     model.customer = resp;
@@ -113,6 +114,7 @@ irf.pageCollection.factory(irf.page("user.MarkAttendance"),
                                     IN  : "IN",
                                     OUT : "OUT",
                                 },
+                                required: true,
                                 "onChange": function(modelValue, form, model) {
                                     if (model.customer.type) {
                                         model.customer.datetime = new Date().toLocaleDateString()+ ' ' + new Date().toLocaleTimeString();
@@ -186,7 +188,7 @@ irf.pageCollection.factory(irf.page("user.MarkAttendance"),
                                         };
                                     },
                                     onValidate: function(valueObj,status,form,model){
-                                       
+                                        model.customer.biometricAuthentication = valueObj.type + " "+valueObj.name;
                                     }
                                 }
                          ]
@@ -248,7 +250,7 @@ irf.pageCollection.factory(irf.page("user.MarkAttendance"),
                             Queries.getBankName(model.bankId).then(function(data){
                                 model.user.bankName = data;
                                 // PageHelper.showLoader();
-                                PageHelper.showProgress("user-update", 'Working...');
+                                PageHelper.showProgress("user-update", 'Working...',4000);
 
                                 if (!(model.customer.fpOverrideRequested) && !(model.customer.isBiometricValidated)){
                                     PageHelper.hideLoader();
@@ -274,10 +276,12 @@ irf.pageCollection.factory(irf.page("user.MarkAttendance"),
                                                 .finally(function(){
                                                     PageHelper.hideLoader();
                                                 })
+                                            },function(httpResponse){
 
-                                        //}
-
-                                    })
+                                            })
+                                            .finally(function(){ 
+                                                PageHelper.hideBlockingLoader();
+                                            })
 
                             })
                         }

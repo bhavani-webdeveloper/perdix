@@ -24,6 +24,7 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "for
                     if (optionData.type == "dropdown") {
                         model.auditIssue.option = optionData.type_of_issue_options[0].option_label;
                     };
+                    model.current_stage=model.auditIssue.current_stage;
                     model.type_of_issue_id = model.auditIssue.type_of_issue_id;
                     model.auditIssue.title = master.typeofissues[model.type_of_issue_id].description;
                     model.auditIssue.branch_name = master.branch_name[model.auditIssue.branch_id].node_code;
@@ -56,6 +57,16 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "for
                                 key: "auditIssue.id",
                                 "title": "ISSUE_ID",
                                 "readonly": true
+                            },{
+                                "key": "auditIssue.auditProcessID",
+                                "title": "PROCESS_NAME",
+                                "readonly": true,
+                                "condition":"model.siteCode == 'KGFS'"
+                            }, {
+                                "key": "auditIssue.auditSubProcessID",
+                                "title": "SUB_PROCESS_NAME",
+                                "readonly": true,
+                                "condition":"model.siteCode == 'KGFS'"
                             }, {
                                 "key": "auditIssue.title",
                                 "title": "ISSUE",
@@ -79,13 +90,26 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "for
                                 "title": "AUDITOR_DEVIATION",
                                 "type": "html",
                                 "readonly": true
-                            }, {
+                            },
+                            //  {
+                            //     key: "auditIssue.closed_on",
+                            //     type: "date",
+                            //     "readonly": true,
+                            //     "condition":"model.siteCode != 'KGFS'"
+                            // }, {
+                            //     key: "auditIssue.closed_by",
+                            //     "readonly": true,
+                            //     "condition":"model.siteCode != 'KGFS'"
+                            // }, 
+                            {
                                 key: "auditIssue.closed_on",
                                 type: "date",
-                                "readonly": true
+                                "readonly": true,
+                                "condition":"model.siteCode == 'KGFS' && model.current_stage == 'close'"
                             }, {
                                 key: "auditIssue.closed_by",
-                                "readonly": true
+                                "readonly": true,
+                                "condition":"model.siteCode == 'KGFS' && model.current_stage == 'close'"
                             }, {
                                 key: "auditIssue.audit_report_date",
                                 type: "date",
@@ -134,25 +158,27 @@ irf.pageCollection.factory(irf.page("audit.IssueDetails"), ["irfNavigator", "for
                                     "name": "Unconfirm",
                                     "value": 2
                                 }]
-                            }, {
-                                "key": "auditIssue.confirmity_status",
-                                "title": "STATUS",
-                                "condition": "model.readonly || model.type!='audit'",
-                                "type": "radios",
-                                "titleMap": [{
-                                    "name": "Confirmed",
-                                    "value": 1
-                                }, {
-                                    "name": "Unconfirmed",
-                                    "value": 2
-                                }],
-                                "readonly": true
-                            }, {
-                                type: "textarea",
-                                key: "auditIssue.comments",
-                                "condition": "model.actions.showComments(model, true)",
-                                "readonly": true
-                            }, {
+                            },
+                            //  {
+                            //     "key": "auditIssue.confirmity_status",
+                            //     "title": "STATUS",
+                            //     "condition": "(model.readonly || model.type!='audit') && model.siteCode != 'KGFS'",
+                            //     "type": "radios",
+                            //     "titleMap": [{
+                            //         "name": "Confirmed",
+                            //         "value": 1
+                            //     }, {
+                            //         "name": "Unconfirmed",
+                            //         "value": 2
+                            //     }],
+                            //     "readonly": true
+                            // // }, {
+                            // //     type: "textarea",
+                            // //     key: "auditIssue.comments",
+                            // //     "condition": "model.actions.showComments(model, true)",
+                            // //     "readonly": true
+                            // },
+                             {
                                 type: "textarea",
                                 key: "auditIssue.comments",
                                 "condition": "model.actions.showComments(model, false)",
