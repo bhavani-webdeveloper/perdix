@@ -9,9 +9,15 @@ export class KGFSSendBacktoStageLOVConfiguration extends LOVElementConfiguration
 		let $q = AngularResourceService.getInstance().getNGService("$q");
 		let formHelper = AngularResourceService.getInstance().getNGService("formHelper");
         let stage1 = model.loanProcess.loanAccount.currentStage;
+        let productCategory = model.loanProcess.loanAccount.productCategory;
         if(model.loanAccount.currentStage=='Rejected')
         let stage1= model.review.preStage;
-
+        
+        if(productCategory == 'Consumer' || productCategory == 'Personal')
+        let targetstage = formHelper.enum('targetstagemelpersonal').data;
+        else if(productCategory == 'JEWEL')
+        let targetstage = formHelper.enum('targetstagemeljewel').data;
+        else
         let targetstage = formHelper.enum('targetstagemel').data;
         let out = [];
         for (let i = 0; i < targetstage.length; i++) {
