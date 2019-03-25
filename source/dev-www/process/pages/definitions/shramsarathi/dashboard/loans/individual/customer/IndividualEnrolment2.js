@@ -804,7 +804,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "condition": "!model.customer.mailSameAsResidence",
                                     // "resolver": "MailingPincodeLOVConfiguration"
                                     "resolver": "PincodeLOVConfigurationShramsarathi",
-                                    "autolov": false
+                                    "autolov": true
                                 },
                                 "ContactInformation.mailingLandmark": {
                                     "condition": "!model.customer.mailSameAsResidence",
@@ -1660,7 +1660,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "condition": "!model.customer.mailSameAsResidence",
                                     // "resolver": "MailingPincodeLOVConfiguration",
                                     "resolver": "PincodeLOVConfigurationShramsarathi",
-                                    "autolov": false
+                                    "autolov": true
                                 },
                                 "ContactInformation.mailingLocality": {
                                     "condition": "!model.customer.mailSameAsResidence",
@@ -2098,13 +2098,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.pincode": {
                         "resolver": "PincodeLOVConfigurationShramsarathi",
                         "searchHelper": formHelper,
-                        "autolov": false
+                        "autolov": true
                     },
                     "ContactInformation.mailingPincode": {
                         "condition": "!model.customer.mailSameAsResidence",
                         // "resolver": "MailingPincodeLOVConfiguration"
                         "resolver": "PincodeLOVConfigurationShramsarathi",
-                        "autolov": false
+                        "autolov": true
                     },
                     "FamilyDetails.familyMembers.relationShip":{
                         "title":"RELATIONSHIP_WITH_MIGRANT",
@@ -2297,7 +2297,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "condition": "!model.customer.mailSameAsResidence",
                         // "resolver": "MailingPincodeLOVConfiguration"
                         "resolver": "PincodeLOVConfigurationShramsarathi",
-                        "autolov": false
+                        "autolov": true
                     },
                     "ContactInformation.mailingLocality": {
                         "condition": "!model.customer.mailSameAsResidence",
@@ -2645,10 +2645,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.customer = model.enrolmentProcess.customer;
                     model.customer.addressPfSameAsIdProof="NO";
                     
-                    if(model.customer.familyMembers[0].relationShip == 'self')
-                    {
-                        model.customer.familyMembers[0].relationShip = 'Self'
-                    }
+                    if ( model.customer.familyMembers.length > 0)
+                        if(model.customer.familyMembers[0].relationShip == 'self')
+                            model.customer.familyMembers[0].relationShip = 'Self';
 
                     // }
                     /* End of setting data recieved from Bundle */
@@ -3165,8 +3164,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "type":"text",
                                                             "required":true,
                                                             "schema": {
-                                                                "pattern": "^[0-9]*$",
-                                                                "type": ["integer", "string"]
+                                                                "pattern": "^\$[0-9]+(\.[0-9])?$",
+                                                                "type": ["decimal"]
                                                             }
                                                         },
                                                         "avarageReturn":{
