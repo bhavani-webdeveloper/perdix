@@ -405,7 +405,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             console.log(model)
                             computeTotalMonthlySurpluse("value","form",model);
                         },
-                        "startEmpty":false
+                        "startEmpty":false,
+                        offline:false
                     },
                     "EnterpriseFinancials.incomeThroughSales.incomeType": {
                         "type": "select",
@@ -429,6 +430,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EnterpriseFinancials.incomeThroughSales.invoiceDocId": {
                         "orderNo": 514,
+                        offline:false
+
                     },
                     "EnterpriseFinancials.incomeThroughSales.buyerName":{
                         "orderNo": 513,
@@ -3601,6 +3604,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
                         })
                         .then(function (form) {
+                            debugger;
                             self.form = form;
                         });
                 },
