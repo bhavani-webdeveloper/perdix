@@ -2345,9 +2345,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                   
                     "Liabilities.liabilities.interestRate":{
-                        "type":"number",
+                        "type":"text",
                         //"enumCode":"rate_of_interest",
                         "orderNo":22,
+                        "schema": {
+                            "pattern": "^([1-9]|1[0])$", 
+                            // "type": ["decimal,integer"]
+                        }
                     },
                     "KYC.additionalKYCs.kyc1ProofType":{
                         "enumCode":"age_proof",
