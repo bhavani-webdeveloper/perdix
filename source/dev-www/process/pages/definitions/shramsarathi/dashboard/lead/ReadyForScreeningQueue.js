@@ -146,7 +146,8 @@ define({
 						'per_page': pageOpts.itemsPerPage,
 						'area': searchOptions.area,
 						'cityTownVillage': searchOptions.cityTownVillage,
-						'centreName': searchOptions.centre
+						'centreName': searchOptions.centre,
+						'screeningDate':searchOptions.screeningDate
 					}).$promise;
 					return promise;
 				},

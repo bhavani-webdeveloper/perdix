@@ -3161,10 +3161,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                         "avarageTimeSpend":{
                                                             "key":"customer.familyMembers[].incomes[].averageTimeSpent",
                                                             "title":"AVERAGE_TIME_SPENT",
-                                                            "type":"number",
+                                                            "type":"text",
                                                             "required":true,
                                                             "schema": {
-                                                                "pattern": "^0\.[0-9][0-9]$",
+                                                                "pattern": "^0\.[0-9]{2}$",
                                                                 // "type": ["decimal,integer"]
                                                             }
                                                         },
