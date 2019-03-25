@@ -3645,6 +3645,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     if (model.customer.familyMembers[i].relationShip.toUpperCase() == "SELF") {
                                         model.customer.familyMembers[i].educationStatus = obj.educationStatus;
                                     }
+                                    else{
+                                        model.customer.familyMembers[i].age= moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                    }
                                 }
                             })
 
