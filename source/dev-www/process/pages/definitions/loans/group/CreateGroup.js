@@ -370,6 +370,12 @@ define({
                             model.group.jlgGroupMembers[context.arrayIndex].witnessRelationship= "";
                             Enrollment.getCustomerById({id:valueObj.id}).$promise
                                  .then(function(res){
+                                     model.group.jlgGroupMembers[context.arrayIndex].husbandOrFatherFirstName = res.fatherFirstName;
+                                     if (res.maritalStatus == 'Married' && res.gender == "FEMALE"){
+                                         model.group.jlgGroupMembers[context.arrayIndex].relation = "Husband";
+                                         model.group.jlgGroupMembers[context.arrayIndex].husbandOrFatherFirstName = res.spouseFirstName;
+                                     }
+                                    
                                  model.group.jlgGroupMembers[context.arrayIndex].maritalStatus = res.maritalStatus;
                                  model.group.jlgGroupMembers[context.arrayIndex].loanAmount = res.requestedLoanAmount;
                                  model.group.jlgGroupMembers[context.arrayIndex].loanAmountRequested = res.requestedLoanAmount;
