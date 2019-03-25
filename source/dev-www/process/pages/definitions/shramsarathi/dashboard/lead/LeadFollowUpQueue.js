@@ -56,6 +56,14 @@ define({
 							}
 						}
 						,
+						'branch': {
+	                    	'title': "BRANCH",
+	                    	"type": ["string", "null"],
+							"x-schema-form": {
+								"type":"userbranch",
+								"screenFilter": true
+							}
+	                    },
 						"centre": {
 							"title": "ZONE_NAME",
 							"type": "string",
@@ -98,15 +106,8 @@ define({
 	                                ];
 	                            }
 							}
-						},
-						'branch': {
-	                    	'title': "BRANCH",
-	                    	"type": ["string", "null"],
-							"x-schema-form": {
-								"type":"userbranch",
-								"screenFilter": true
-							}
-	                    }
+						}
+						
 
 					},
 					"required": []
