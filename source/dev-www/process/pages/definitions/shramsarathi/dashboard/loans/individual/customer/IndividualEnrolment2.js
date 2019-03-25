@@ -2355,9 +2355,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                   
                     "Liabilities.liabilities.interestRate":{
-                        "type":"number",
+                        "type":"text",
                         //"enumCode":"rate_of_interest",
                         "orderNo":22,
+                        "schema": {
+                            "pattern": "^([1-9]|1[0])$", 
+                            // "type": ["decimal,integer"]
+                        }
                     },
                     "KYC.additionalKYCs.kyc1ProofType":{
                         "enumCode":"age_proof",
@@ -3171,10 +3175,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                         "avarageTimeSpend":{
                                                             "key":"customer.familyMembers[].incomes[].averageTimeSpent",
                                                             "title":"AVERAGE_TIME_SPENT",
-                                                            "type":"number",
+                                                            "type":"text",
                                                             "required":true,
                                                             "schema": {
-                                                                "pattern": "^0\.[0-9][0-9]$",
+                                                                "pattern": "^0\.[0-9]{2}$",
                                                                 // "type": ["decimal,integer"]
                                                             }
                                                         },

@@ -79,6 +79,14 @@ define({
 								"screenFilter": true
 							}
 						},
+						'branch': {
+	                    	'title': "BRANCH",
+	                    	"type": ["string", "null"],
+							"x-schema-form": {
+								"type":"userbranch",
+								"screenFilter": true
+							}
+	                    },
 						"centre": {
 							"title": "ZONE_NAME",
 							"type": "string",
@@ -121,15 +129,8 @@ define({
 	                                ];
 	                            }
 							}
-						},
-						'branch': {
-	                    	'title': "BRANCH",
-	                    	"type": ["string", "null"],
-							"x-schema-form": {
-								"type":"userbranch",
-								"screenFilter": true
-							}
-	                    }
+						}
+						
 					},
 					"required": []
 				},
@@ -145,7 +146,8 @@ define({
 						'per_page': pageOpts.itemsPerPage,
 						'area': searchOptions.area,
 						'cityTownVillage': searchOptions.cityTownVillage,
-						'centreName': searchOptions.centre
+						'centreName': searchOptions.centre,
+						'screeningDate':searchOptions.screeningDate
 					}).$promise;
 					return promise;
 				},

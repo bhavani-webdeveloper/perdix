@@ -1,4 +1,6 @@
 {  
+   "autoPaymentInitStage": "ReadyForAutoDispatch",
+   "autoPaymentHoldStage": "PaymentCompleted",
    "stages":[  
       {  
          "order":1,
