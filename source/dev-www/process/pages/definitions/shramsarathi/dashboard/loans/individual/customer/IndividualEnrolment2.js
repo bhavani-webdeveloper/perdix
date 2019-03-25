@@ -895,7 +895,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "IndividualFinancials.expenditures.expenditureSource": {
-                                    "required": true
+                                    "required": true,
+                                    //"type":"select",
+                                    "enumCode":"expense_type"
                                 },
                                 // "FamilyDetails.familyMembers.familyMemberFirstName": {
                                 //     "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
@@ -1722,7 +1724,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "IndividualFinancials.expenditures.expenditureSource": {
-                                    "required": true
+                                    "required": true,
+                                    //"type":"select",
+                                    "enumCode":"expense_type"
                                 },
                                 // "FamilyDetails.familyMembers.familyMemberFirstName": {
                                 //     "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
@@ -1924,6 +1928,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "IndividualFinancials.expenditures.frequency":{
                         "required":true
                     },
+                    "IndividualFinancials":{
+                        "title":"EXPENSE"
+                    },
+                   
                     "FamilyDetails.familyMembers.incomes.occupation":{
                         "required":true
                     },
@@ -2321,7 +2329,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "condition": "model.customer.physicalAssets[arrayIndex].nameOfOwnedAsset=='Two wheeler' || model.customer.physicalAssets[arrayIndex].nameOfOwnedAsset=='Four Wheeler'"
                     },
                     "IndividualFinancials.expenditures.expenditureSource": {
-                        "required": true
+                        "required": true,
+                        //"type":"select",
+                        "enumCode":"expense_type"
                     },
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth": {
                         "required": false
@@ -2841,20 +2851,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         }
                                     }
                                 },
-                                "IndividualFinancials":{
-                                    "items":{
-                                        "expenditures":{
-                                            "items":{
-                                                "from":{
-                                                    "key":"customer.expenditures[].expenseType",
-                                                    "title":"EXPENSE_FROM",
-                                                    "type":"select",
-                                                    "enumCode":"expense_type"
-                                                },
-                                            }
-                                        },
-                                    }
-                                },
+                                // "IndividualFinancials":{
+                                //     "items":{
+                                //         "expenditures":{
+                                //             "items":{
+                                //                 "from":{
+                                //                     "key":"customer.expenditures[].expenseType",
+                                //                     "title":"EXPENSE_FROM",
+                                //                     "type":"select",
+                                //                     "enumCode":"expense_type"
+                                //                 },
+                                //             }
+                                //         },
+                                //     }
+                                // },
                                 "KYC": {
                                     "items": {
                                         "firstName": {
