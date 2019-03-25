@@ -405,9 +405,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 
                                 "BankAccounts.customerBankAccounts.accountNumber": {
                                     required: true,
+                                    // "maxLength": 16,
+                                    // "minLength": 10,
                                     "schema": {
-                                        "pattern": "^[0-9]{16}$",
-                                        // "type": ["integer"]
+                                        "pattern": "^[0-9]+$",
+                                        "minimum": 10,
+                                        "maximum": 16
                                     }
                                    
                                 },
@@ -3161,10 +3164,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                         "avarageTimeSpend":{
                                                             "key":"customer.familyMembers[].incomes[].averageTimeSpent",
                                                             "title":"AVERAGE_TIME_SPENT",
-                                                            "type":"text",
+                                                            "type":"number",
                                                             "required":true,
                                                             "schema": {
-                                                                "pattern": "^0\.[1-9]$",
+                                                                "pattern": "^0\.[0-9][0-9]$",
                                                                 // "type": ["decimal,integer"]
                                                             }
                                                         },
