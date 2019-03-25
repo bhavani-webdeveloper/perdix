@@ -407,7 +407,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     required: true,
                                     "schema": {
                                         "pattern": "^[0-9]{16}$",
-                                        //"type": ["integer"]
+                                        // "type": ["integer"]
                                     }
                                    
                                 },
@@ -802,9 +802,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ContactInformation.mailingPincode": {
                                     "condition": "!model.customer.mailSameAsResidence",
-                                    // "resolver": "MailingPincodeLOVConfiguration"
-                                    "resolver": "PincodeLOVConfigurationShramsarathi",
-                                    "autolov": true
+                                    "resolver": "MailingPincodeLOVConfigurationShramsarathi",
+                                    // "resolver": "PincodeLOVConfigurationShramsarathi",
+                                    "autolov": false
                                 },
                                 "ContactInformation.mailingLandmark": {
                                     "condition": "!model.customer.mailSameAsResidence",
@@ -1658,9 +1658,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ContactInformation.mailingPincode": {
                                     "condition": "!model.customer.mailSameAsResidence",
-                                    // "resolver": "MailingPincodeLOVConfiguration",
-                                    "resolver": "PincodeLOVConfigurationShramsarathi",
-                                    "autolov": true
+                                    "resolver": "MailingPincodeLOVConfigurationShramsarathi",
+                                    // "resolver": "PincodeLOVConfigurationShramsarathi",
+                                    "autolov": false
                                 },
                                 "ContactInformation.mailingLocality": {
                                     "condition": "!model.customer.mailSameAsResidence",
@@ -1908,7 +1908,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                        "key": "customer.liabilities[].noOfInstalmentPaid",
                        "type" : "select",
                         "orderNo":23,
-                        "enumCode": "no_of_payments"
+                        "enumCode": "no_of_payments" 
                     },
                     // "FamilyDetails.familyMembers.dateOfBirth":{
                     //     "onChange": function (modelValue, form, model, formCtrl, event) {
@@ -2098,13 +2098,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.pincode": {
                         "resolver": "PincodeLOVConfigurationShramsarathi",
                         "searchHelper": formHelper,
-                        "autolov": true
+                        "autolov": false
                     },
                     "ContactInformation.mailingPincode": {
                         "condition": "!model.customer.mailSameAsResidence",
-                        // "resolver": "MailingPincodeLOVConfiguration"
-                        "resolver": "PincodeLOVConfigurationShramsarathi",
-                        "autolov": true
+                        "resolver": "MailingPincodeLOVConfigurationShramsarathi",
+                        // "resolver": "PincodeLOVConfigurationShramsarathi",
+                        "autolov": false
                     },
                     "FamilyDetails.familyMembers.relationShip":{
                         "title":"RELATIONSHIP_WITH_MIGRANT",
@@ -2295,9 +2295,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "ContactInformation.mailingPincode": {
                         "condition": "!model.customer.mailSameAsResidence",
-                        // "resolver": "MailingPincodeLOVConfiguration"
-                        "resolver": "PincodeLOVConfigurationShramsarathi",
-                        "autolov": true
+                        "resolver": "MailingPincodeLOVConfigurationShramsarathi",
+                        // "resolver": "PincodeLOVConfigurationShramsarathi",
+                        "autolov": false
                     },
                     "ContactInformation.mailingLocality": {
                         "condition": "!model.customer.mailSameAsResidence",
@@ -3164,8 +3164,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "type":"text",
                                                             "required":true,
                                                             "schema": {
-                                                                "pattern": "^\$[0-9]+(\.[0-9])?$",
-                                                                "type": ["decimal"]
+                                                                "pattern": "^0\.[1-9]$",
+                                                                // "type": ["decimal,integer"]
                                                             }
                                                         },
                                                         "avarageReturn":{
