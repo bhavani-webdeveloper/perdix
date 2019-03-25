@@ -222,14 +222,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-                             $this.bundlePages.push({
-                                        pageClass: 'business-financial',
-                                        model: {
-                                            customerId: loanProcess.loanAccount.customerId,
-                                            enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
-                                           // loanProcess: loanProcess
-                                        }
-                             });
+                            //  $this.bundlePages.push({
+                            //             pageClass: 'business-financial',
+                            //             model: {
+                            //                 customerId: loanProcess.loanAccount.customerId,
+                            //                 enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                            //                // loanProcess: loanProcess
+                            //             }
+                            //  });
 
                                 deferred.resolve();                          
                             });
