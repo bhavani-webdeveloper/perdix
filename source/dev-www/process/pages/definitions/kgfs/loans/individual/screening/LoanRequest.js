@@ -203,8 +203,8 @@ define([],function(){
 
             var policyBasedOnLoanType = function(loanType,model){
                 if (loanType == "JEWEL"){
-                    if(model.loanAccount.loanAmountRequested >= (parseInt(model.loanAccount.ornamentsAppraisals[0].marketValueInPaisa/100))*75){
-                        var errMsg = 'Loan amount should be less then ' + ((parseInt(model.loanAccount.ornamentsAppraisals[0].marketValueInPaisa/100))*75);
+                    if(model.loanAccount.loanAmountRequested >= ((model.loanAccount.ornamentsAppraisals[0].marketValueInPaisa/100))*75){
+                        var errMsg = 'Loan amount should be less then ' + parseFloat((model.loanAccount.ornamentsAppraisals[0].marketValueInPaisa/100)*75).toFixed(2);
                         PageHelper.showErrors({data:{error:errMsg}});
                         return false;
                     }
