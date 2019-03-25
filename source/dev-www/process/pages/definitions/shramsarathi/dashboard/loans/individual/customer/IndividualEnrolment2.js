@@ -65,6 +65,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.firstName",
                                 //"References.verifications.ReferenceCheck",
                                 "IndividualReferences",
+                                "HouseVerification.houseVerificationPhoto"
                                 // "References",   
                             ],
                             "overrides": {

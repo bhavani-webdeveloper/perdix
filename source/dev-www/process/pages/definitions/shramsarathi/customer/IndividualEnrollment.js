@@ -46,6 +46,9 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 "ContactInformation.careOf",
                                 "ContactInformation.postOffice",
                                 "ContactInformation.mailingPostoffice",
+                                "HouseVerification.houseVerificationPhoto",
+                                "HouseVerification.place",
+                                "HouseVerification.date"
                                 
 
                             ], "overrides": {
@@ -83,7 +86,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 "KYC.firstName",
                                 //"References.verifications.ReferenceCheck",
                                 "IndividualReferences",
-                                "References",   
+                                "References"
+                              
                             ],
                             "overrides": {
                                 "KYC.addressProofFieldSet":{
