@@ -4,6 +4,7 @@
    "customerMaxAgeBcProduct":75,
    "customerAgeLimitForSingleFemale":35,
    "productValidationFromStage":"LoanBooking",
+   "disbursemenStrategy": "SAVE_AND_PROCEED",
    "stages":[
       {
          "order":1,

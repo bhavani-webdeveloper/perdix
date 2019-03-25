@@ -1,5 +1,5 @@
-irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerification"), ["$log", "SessionStore", "$state","irfNavigator", "$stateParams", "PageHelper", "IndividualLoan", "LoanBookingCommons", "Utils", "Files", "Queries", "formHelper", "$q", "$filter",
-    function($log, SessionStore, $state, irfNavigator, $stateParams, PageHelper, IndividualLoan, LoanBookingCommons, Utils, Files, Queries, formHelper, $q, $filter) {
+irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerification"), ["$log", "SessionStore", "$state","irfNavigator", "$stateParams", "PageHelper", "IndividualLoan", "LoanBookingCommons", "Utils", "Files", "Queries", "formHelper", "$q", "$filter","PaymentBank",
+    function($log, SessionStore, $state, irfNavigator, $stateParams, PageHelper, IndividualLoan, LoanBookingCommons, Utils, Files, Queries, formHelper, $q, $filter,PaymentBank) {
 
         var docRejectReasons = [];
         Queries.getLoanProductDocumentsRejectReasons("individual_loan").then(function(resp){
@@ -34,6 +34,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                     PageHelper.showProgress('loan-load', 'Loading done.', 2000);
                     model.loanAccount = res;
                     uploadedExistingDocs=_.cloneDeep(res.loanDocuments);
+                    PaymentBank.validation({ifscCode:model.loanAccount.customerBankIfscCode},function(response,headersGetter){
+                        model.loanAccount.isRegisterBank=response;
+                    },function(resp){
+                    });
+                   
+                    //model.loanAccount.isRegisterBank = PaymentBank.validation({ifscCode:model.loanAccount.customerBankIfscCode});
                    
                     /* DO BASIC VALIDATION */
                     if (res.currentStage!= 'DocumentVerification'){
@@ -198,6 +204,43 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                         key: "loanAccount.customerBranch",
                         "readonly":true,
                         title: "BRANCH_NAME"
+                    },
+                    {
+                        "key": "loanAccount.modeOfDisburments",
+                        "title": "MODE_OF_DISBURSEMENTS",
+                        "lovonly": true,
+                        "type": "lov",
+                        bindMap: {
+                         "IfscCode": "loanAccount.customerBankIfscCode",
+                        },
+                        autolov: true,
+                        required: true,
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model, context) {
+                            var out = [{mode: "MANUAL"}];   
+                            if(model.loanAccount.isRegisterBank){
+                                out.push({
+                                    mode: "AUTO"
+                                });
+                            } 
+                            return $q.resolve({
+                                headers: {
+                                    "x-total-count": out.length
+                                },
+                                body: out
+                            });
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            model.loanAccount.modeOfDisburments = valueObj.mode;
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.mode                                
+                            ];
+                        },
+                        onChange: function(value, form, model) {
+                        
+                        }
                     }]
                 }]
             },{
@@ -971,6 +1014,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                     var reqParamData = {
                         'loanAccount': _.cloneDeep(model.loanAccount),
                         'loanProcessAction': 'PROCEED',
+                        'modeOfDisbursement': model.loanAccount.modeOfDisburments,
                     };
                     var allowedStatues = ['APPROVED', 'REJECTED'];
                     reqParamData.loanAccount.status = null;
