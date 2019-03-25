@@ -188,7 +188,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 $this.bundlePages.push({
                                     pageClass: 'business-finance',
                                     model: {
-                                        customerId: loanAccount.customerId,
+                                        customerId: loanProcess.loanAccount.customerId,
                                         enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess
                                     }
                                 });
@@ -213,14 +213,23 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     model: {
                                         loanAccount: loanAccount
                                     }
-                                }); 
+                                });  
                                 $this.bundlePages.push({
                                     pageClass: 'televerification',
                                     model: {
                                     enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
                                     loanProcess: loanProcess
                                     }
-                                    });
+                                });
+
+                            //  $this.bundlePages.push({
+                            //             pageClass: 'business-financial',
+                            //             model: {
+                            //                 customerId: loanProcess.loanAccount.customerId,
+                            //                 enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                            //                // loanProcess: loanProcess
+                            //             }
+                            //  });
 
                                 deferred.resolve();                          
                             });

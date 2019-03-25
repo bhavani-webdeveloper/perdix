@@ -42,7 +42,13 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                 return {
                     "loanProcess.loanAccount.currentStage": {
                         "Initiation": {
-                            "excludes": [], "overrides": {
+                            "excludes": [
+                                "ContactInformation.careOf",
+                                "ContactInformation.postOffice",
+                                "ContactInformation.mailingPostoffice",
+                                
+
+                            ], "overrides": {
                                 "PhysicalAssets":{
                                     "title":"FIXED_ASSET"
                                 },
@@ -58,7 +64,15 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 },
                                 "IndividualInformation.centreId1": {
                                     "title": "ZONE_NAME"
-                                }
+                                },
+                                "HouseVerification.inCurrentAreaSince": {
+                                    "required": false,
+                                },
+                                "ContactInformation.doorNo":{
+                                    "title":"HAMLET_FALA",
+                                    "required": false,
+                                },
+
                             }
                         },
 
