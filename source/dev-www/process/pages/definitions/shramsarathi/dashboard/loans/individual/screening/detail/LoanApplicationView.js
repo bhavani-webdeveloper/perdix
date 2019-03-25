@@ -736,7 +736,7 @@ define({
                             "required":false
                         }, 
                         {
-                            "key":"loanAccount.disbursementSchedules[0].firstRepaymentDate",
+                            "key":"loanAccount.firstRepaymentDate",
                             "title":"COLLECTION_DATE",
                             "type":"date",
                             "required":false
