@@ -2331,7 +2331,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "TotalMonthlySurplus.workingDaysInMonth",
                     "TotalMonthlySurplus.coOwnerSalary",
                     "TotalMonthlySurplus.employeeSalary",
-                    "TotalMonthlySurplus.insurancePremiumAmount"
                 ]
             }
             
@@ -3604,7 +3603,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
                         })
                         .then(function (form) {
-                            debugger;
                             self.form = form;
                         });
                 },
