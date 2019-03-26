@@ -177,7 +177,7 @@ define([], function () {
                         model.customer = resp;
                     })
                 }
-            
+
                 if (model.loanAccount && model.loanAccount.id) {
                     PageHelper.showLoader();
                     IndividualLoan.loanRemarksSummary({
@@ -690,18 +690,23 @@ define([], function () {
                         searchHelper: formHelper,
                         search: function (inputModel, form, model, context) {
                             var out = [];
-                            if (!model.customer.familyMembers) {
+                            var applicantCustomer = [];
+                            if (typeof model.loanProcess == "undefined" || typeof model.loanProcess.applicantEnrolmentProcess == "undefined" || typeof model.loanProcess.applicantEnrolmentProcess.customer == "undefined") {
+                                return out;
+                            }
+                            applicantCustomer = model.loanProcess.applicantEnrolmentProcess.customer;
+                            if (!applicantCustomer) {
                                 return out;
                             }
 
-                            for (var i = 0; i < model.customer.familyMembers.length; i++) {
-                                if(!(model.customer.urnNo == model.customer.familyMembers[i].enrolledUrnNo)){
-                                out.push({
-                                    name: model.customer.familyMembers[i].familyMemberFirstName,
-                                    dob: model.customer.familyMembers[i].dateOfBirth,
-                                    relationship: model.customer.familyMembers[i].relationShip
-                                })
-                            }
+                            for (var i = 0; i < applicantCustomer.familyMembers.length; i++) {
+                                if(!(applicantCustomer.urnNo == applicantCustomer.familyMembers[i].enrolledUrnNo)){
+                                    out.push({
+                                        name: applicantCustomer.familyMembers[i].familyMemberFirstName,
+                                        dob: applicantCustomer.familyMembers[i].dateOfBirth,
+                                        relationship: applicantCustomer.familyMembers[i].relationShip
+                                    })
+                                }
                             }
                             return $q.resolve({
                                 headers: {
@@ -781,17 +786,22 @@ define([], function () {
                         searchHelper: formHelper,
                         search: function (inputModel, form, model, context) {
                             var out = [];
-                            if (!model.customer.familyMembers) {
+                            var applicantCustomer = [];
+                            if (typeof model.loanProcess == "undefined" || typeof model.loanProcess.applicantEnrolmentProcess == "undefined" || typeof model.loanProcess.applicantEnrolmentProcess.customer == "undefined") {
+                                return out;
+                            }
+                            applicantCustomer = model.loanProcess.applicantEnrolmentProcess.customer;
+                            if (!applicantCustomer) {
                                 return out;
                             }
 
-                            for (var i = 0; i < model.customer.familyMembers.length; i++) {
-                                if(!(model.customer.urnNo == model.customer.familyMembers[i].enrolledUrnNo)){
+                            for (var i = 0; i < applicantCustomer.familyMembers.length; i++) {
+                                if(!(applicantCustomer.urnNo == applicantCustomer.familyMembers[i].enrolledUrnNo)){
                                     out.push({
-                                        name: model.customer.familyMembers[i].familyMemberFirstName,
-                                        dob: model.customer.familyMembers[i].dateOfBirth,
-                                        relationship: model.customer.familyMembers[i].relationShip,
-                                        gender: model.customer.familyMembers[i].gender
+                                        name: applicantCustomer.familyMembers[i].familyMemberFirstName,
+                                        dob: applicantCustomer.familyMembers[i].dateOfBirth,
+                                        relationship: applicantCustomer.familyMembers[i].relationShip,
+                                        gender: applicantCustomer.familyMembers[i].gender
                                     })
                                 }
                             }
@@ -881,17 +891,24 @@ define([], function () {
                         searchHelper: formHelper,
                         search: function (inputModel, form, model, context) {
                             var out = [];
-                            if (!model.customer.familyMembers) {
+                            var applicantCustomer = [];
+                            if (typeof model.loanProcess == "undefined" || typeof model.loanProcess.applicantEnrolmentProcess == "undefined" || typeof model.loanProcess.applicantEnrolmentProcess.customer == "undefined") {
+                                return out;
+                            }
+                            applicantCustomer = model.loanProcess.applicantEnrolmentProcess.customer;
+                            if (!applicantCustomer) {
                                 return out;
                             }
 
-                            for (var i = 0; i < model.customer.familyMembers.length; i++) {
-                                out.push({
-                                    name: model.customer.familyMembers[i].familyMemberFirstName,
-                                    dob : model.customer.familyMembers[i].dateOfBirth,
-                                    relationship: model.customer.familyMembers[i].relationShip,
-                                    gender: model.customer.familyMembers[i].gender
-                                })
+                            for (var i = 0; i < applicantCustomer.familyMembers.length; i++) {
+                                if(!(applicantCustomer.urnNo == applicantCustomer.familyMembers[i].enrolledUrnNo)){
+                                    out.push({
+                                        name: applicantCustomer.familyMembers[i].familyMemberFirstName,
+                                        dob: applicantCustomer.familyMembers[i].dateOfBirth,
+                                        relationship: applicantCustomer.familyMembers[i].relationShip,
+                                        gender: applicantCustomer.familyMembers[i].gender
+                                    })
+                                }
                             }
                             return $q.resolve({
                                 headers: {
@@ -906,9 +923,9 @@ define([], function () {
                                 model.loanAccount.nominees[context.arrayIndex] = [];
                             }
                             model.loanAccount.nominees[context.arrayIndex].guardianFirstName = valueObj.name;
-                            model.loanAccount.nominees[context.arrayIndex].guardianRelationWithMinor = valueObj.relationship;
+                            model.loanAccount.nominees[context.arrayIndex].guardianRelationship = valueObj.relationship;
                             model.loanAccount.nominees[context.arrayIndex].guardianGender = valueObj.gender;
-                            model.loanAccount.nominees[context.arrayIndex].nomineeDOB = valueObj.dob
+                            model.loanAccount.nominees[context.arrayIndex].guardianDOB = valueObj.dob
                         },
 
                         getListDisplayItem: function (item, index) {
