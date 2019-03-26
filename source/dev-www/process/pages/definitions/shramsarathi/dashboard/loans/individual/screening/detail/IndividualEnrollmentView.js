@@ -27,7 +27,8 @@ define({
                         'bankAccount': [],
                         'cibil': {},
                         'highmark': {},
-                        'customer_address': {}
+                        'customer_address': {},
+                        'current_assets': []
                     };                
                     Enrollment.getCustomerById({
                         id: model.customerId
@@ -50,6 +51,7 @@ define({
                         model.UIUDF.bankAccount=res.customerBankAccounts;
                         model.UIUDF.liabilities=res.liabilities;
                         model.household=model.expenditures;
+                        model.UIUDF.current_assets = res.currentAssets;
                         //debugger;
                         var centres = formHelper.enum("centre").data;
                         for (var i=0;i<centres.length;i++){
@@ -74,8 +76,10 @@ define({
                             if (member.incomes.length == 0)
                                 model.UIUDF.family_fields.dependent_family_member++;
                         });
+
                         /*Household Assets field*/
-                        model.UIUDF.household_fields.total_Assets = model.customer.physicalAssets.length; /* what assets i need to take*/
+                        model.UIUDF.household_fields.total_Assets = model.customer.physicalAssets.length;
+                        /* what assets i need to take*/
                         model.UIUDF.household_fields.total_Value = 0;
                         _.each(model.customer.physicalAssets, function(Assets) {
                             model.UIUDF.household_fields.total_Value += parseInt(Assets.ownedAssetValue);
@@ -83,6 +87,13 @@ define({
     
                         /*Cibil/highmark fields*/
                         
+                        /* Current Assets */
+                        model.UIUDF.current_assets.assets = model.customer.currentAssets.length;
+                        model.UIUDF.current_assets.total = 0;
+                        _.each(model.customer.currentAssets,function(Asset){
+                            model.UIUDF.current_assets.total += parseInt(Asset.assetValue);
+                        });
+
                         /*Reference Check fields*/
                         model.UIUDF.REFERENCE_CHECK_RESPONSE = 'NA';
                         var ref_flag = "true";
@@ -475,7 +486,8 @@ define({
                                 }]
                             }]
                         }]
-                    }, {
+                    }, 
+                    {
                         "type": "box",
                         "readonly": true,
                         "colClass": "col-sm-12",
@@ -519,7 +531,7 @@ define({
                                 }]
                             }]
                         }]
-                    }, {
+                    },{
                         "type": "box",
                         "readonly": true,
                         "colClass": "col-sm-12",
@@ -798,7 +810,7 @@ define({
                                 }
                             }]
                         }]
-                    }, {
+                    },{
                         "type": "box",
                         "readonly": true,
                         "colClass": "col-sm-12",
@@ -865,7 +877,67 @@ define({
                                 }
                             }]
                         }]
-                    }, {
+                    },{
+                        "type": "box",
+                        "readonly": true,
+                        "colClass": "col-sm-12",
+                        "overrideType": "default-view",
+                        "title": "Current Assets",
+                        "condition": "model.UIUDF.current_assets.assets !=0",
+                        "items": [{
+                            "type": "grid",
+                            "orientation": "horizontal",
+                            "items": [{
+                                "type": "grid",
+                                "orientation": "vertical",
+                                "items": [{
+                                    "key": "UIUDF.current_assets.assets",
+                                    "title": "Total Assets",
+                                    "type": "number"
+                                }]
+                            }, {
+                                "type": "grid",
+                                "orientation": "vertical",
+                                "items": [{
+                                    "key": "UIUDF.current_assets.total",
+                                    "title": "Total Value",
+                                    "type": "amount"
+                                }]
+                            }]
+                        }, {
+                            "type": "expandablesection",
+                            "items": [{
+                                "type": "tableview",
+                                "key": "customer.currentAssets",
+                                "title": "",
+                                "transpose": true,
+                                "selectable": false,
+                                "editable": false,
+                                "tableConfig": {
+                                    "searching": false,
+                                    "paginate": false,
+                                    "pageLength": 10,
+                                },
+                                getColumns: function() {
+                                    return [{
+                                        "title": "ASSET_TYPE",
+                                        "data": "assetType"
+                                    },{
+                                        "title": "Asset Value",
+                                        "data": "assetValue",
+                                        render: function(data, type, full, meta) {
+                                            if (data)
+                                                return irfCurrencyFilter(data)
+                                            else return "NA"
+                                        }
+                                    }];
+                                },
+                                getActions: function() {
+                                    return [];
+                                }
+                            }]
+                        }]  
+                },{
                         "type": "box",
                         "colClass": "col-sm-12",
                         "overrideType": "default-view",
