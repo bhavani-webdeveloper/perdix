@@ -1061,8 +1061,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 key:"loanAccount.commercialCibilCharge",
                                 type:"amount",
                                 required:false,
-                                "condition" : "model.siteCode != 'IREPDhan' && model.siteCode != 'pahal' && model.siteCode != 'witfin'",
-                                onChange:function(value,form,model){
+                                "condition" : "model.siteCode != 'IREPDhan' && model.siteCode != 'pahal' && model.siteCode != 'witfin'&& model.siteCode != 'shramsarathi'",                            onChange:function(value,form,model){
                                     getSanctionedAmount(model);
                                 }
                             },
@@ -1071,18 +1070,19 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 type:"select",
                                 required: false,
                                 enumCode: "decisionmaker",
-                                "condition" : "model.siteCode != 'IREPDhan'"
+                                "condition" : "model.siteCode != 'IREPDhan' && model.siteCode != 'shramsarathi'"
                             },
                             {
                                 key:"loanAccount.processingFeePercentage",
                                 type:"number",
                                 "readonly" : nonEditable['loanAccount.processingFeePercentage'],
-                                "title":"PROCESSING_FEES_IN_PERCENTAGE"
+                                "title":"PROCESSING_FEES_IN_PERCENTAGE",
+                                "condition" : "model.siteCode != 'shramsarathi'"
                             },
                             {
                                 key:"loanAccount.otherFee",
                                 type:"amount",
-                                "condition" : "model.siteCode != 'IREPDhan' && model.siteCode!='pahal'"
+                                "condition" : "model.siteCode != 'IREPDhan' && model.siteCode!='pahal' && model.siteCode != 'shramsarathi'"
                             },
                             {
                                 key:"loanAccount.fee5",

@@ -1168,6 +1168,13 @@
                        "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
                    ]
                 },
+                "dscOverrideRemarks": {
+                   "title": "dscOverrideRemarks",
+                   "type": "string",
+                   "captureStages": [
+                       "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
+                   ]
+                },
                 "partnerApprovalStatus":{
                    "title":"partnerApprovalStatus",
                    "type":"string",

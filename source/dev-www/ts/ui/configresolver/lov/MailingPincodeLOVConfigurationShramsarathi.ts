@@ -35,7 +35,8 @@ export class MailingPincodeLOVConfigurationShramsarathi extends LOVElementConfig
         return Queries.searchPincodes(
             inputModel.mailingPincode,
             inputModel.mailingDistrict,
-            inputModel.mailingState
+            inputModel.mailingState,
+            inputModel.mailingDivision
         );
     };
     getListDisplayItem: Function = function(item, index) {

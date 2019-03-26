@@ -230,7 +230,7 @@ function($log,$stateParams,formHelper,PageHelper, Utils,irfNavigator,JewelLoan,S
 
                     if((model.jewelloanResponse[i].transitStatus && model.jewelloanResponse[i].transitStatus.toUpperCase() == 'PENDING_TRANSIT') &&
                         (model.jewelloanResponse[i].originBranchId != model.jewelloanResponse[i].sourceBranchId)){
-                            model.jewelloanResponse[i].status =  "RETURN_REQUESTED" 
+                            model.jewelloanResponse[i].status =  "DESTINATION" 
                      }
                      else {
                         model.jewelloanResponse[i].status =  "SOURCE" 
