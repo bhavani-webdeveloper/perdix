@@ -427,6 +427,7 @@ define([], function () {
                                 $log.info(resp);
                                 PageHelper.hideLoader();
                                 irfProgressMessage.pop("dsc-override", "Override Succeeded", 2000);
+                                BundleManager.pushEvent('dsc-status',resp); 
                                 if(resp && resp.length)
                                 {
                                     for(i=0;i<resp.length;i++)
