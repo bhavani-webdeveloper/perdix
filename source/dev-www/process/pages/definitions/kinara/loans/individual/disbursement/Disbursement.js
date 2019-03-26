@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"),
+irf.pageCollection.factory(irf.page("kinara.loans.individual.disbursement.Disbursement"),
     ["$log", "Enrollment","BiometricService","elementsUtils", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "Utils","LoanAccount","formHelper","Queries","LoanAccount",
         function($log, Enrollment,BiometricService,elementsUtils, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource, Utils,LoanAccount,formHelper,Queries,LoanAccount){
 

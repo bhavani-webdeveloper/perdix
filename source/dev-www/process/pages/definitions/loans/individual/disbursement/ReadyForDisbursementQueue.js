@@ -10,6 +10,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                     model.branchName = SessionStore.getBranch();
                     model.stage = 'ReadyForDisbursement';
                     model.branch = SessionStore.getCurrentBranch().branchId;
+                    
                     //model.branchId = SessionStore.getCurrentBranch().branchId;
                     console.log(model);
                 },
@@ -175,10 +176,18 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                     desc: "",
                                     fn: function(item, index){
                                         entityManager.setModel('loans.individual.disbursement.Disbursement', {_disbursement:item});
-                                        $state.go("Page.Engine",{
-                                            pageName:"loans.individual.disbursement.Disbursement",
-                                            pageId:[item.loanId,item.id].join(".")
-                                        });
+                                        var siteCode = SessionStore.getGlobalSetting("siteCode");
+                                        if(siteCode=="kinara"){
+                                            $state.go("Page.Engine",{
+                                                pageName:"kinara.loans.individual.disbursement.Disbursement",
+                                                pageId:[item.loanId,item.id].join(".")
+                                            });
+                                        }else{
+                                            $state.go("Page.Engine",{
+                                                pageName:"loans.individual.disbursement.Disbursement",
+                                                pageId:[item.loanId,item.id].join(".")
+                                            });
+                                        }
                                       },
                                     isApplicable: function(item, index){
                                         return true;
