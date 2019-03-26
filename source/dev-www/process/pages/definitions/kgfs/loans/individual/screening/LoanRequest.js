@@ -200,11 +200,22 @@ define([],function(){
                     model[baseKey] = {};
                 }
             }
+            var totalMarketValueInPaisa = 0;
 
             var policyBasedOnLoanType = function(loanType,model){
                 if (loanType == "JEWEL"){
-                    if(model.loanAccount.loanAmountRequested >= ((model.loanAccount.ornamentsAppraisals[0].marketValueInPaisa/100))*75){
-                        var errMsg = 'Loan amount should be less then ' + parseFloat((model.loanAccount.ornamentsAppraisals[0].marketValueInPaisa/100)*75).toFixed(2);
+
+                    for (var i = model.loanAccount.ornamentsAppraisals.length - 1; i >= 0; i--) {
+                        totalMarketValueInPaisa +=(model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa || 0);
+                    }
+
+                    if(model.loanAccount.loanAmountRequested >= ((totalMarketValueInPaisa/100))*75){
+                        var errMsg = 'Loan amount should be less then ' + parseFloat((totalMarketValueInPaisa/100)*75).toFixed(2);
+                        PageHelper.showErrors({data:{error:errMsg}});
+                        return false;
+                    }
+                    if(model.loanAccount.loanAmount >= ((totalMarketValueInPaisa/100))*75){
+                        var errMsg = 'RecommendedLoan amount should be less then ' + parseFloat((totalMarketValueInPaisa/100)*75).toFixed(2);
                         PageHelper.showErrors({data:{error:errMsg}});
                         return false;
                     }
