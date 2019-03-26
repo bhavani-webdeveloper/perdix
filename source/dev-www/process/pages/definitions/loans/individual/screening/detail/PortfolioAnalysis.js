@@ -266,7 +266,7 @@ define({
                                     }
                                 },
                                 {
-                                    "title": "Business liabilities",
+                                    "title": "Existing Loan Repayments",
                                     "data": "business_liabilities",
                                     render: function(data, type, full, meta) {
                                         
@@ -666,7 +666,7 @@ define({
                         'financialsGraph':{}
                         };
                         var ratios={};
-                    if(params.length){
+                    if(params.length){            
                         for(var i=0;i<params.length;i++){
                             params[i][3].tableData.data[0].net_business_income=params[i][1].data[0]['Net Business Income'];
                             params[i][3].tableData.data[0].Purchases=params[i][1].data[0].Purchases;
