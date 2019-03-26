@@ -50,7 +50,8 @@ define({
                        
                         model.UIUDF.bankAccount=res.customerBankAccounts;
                         model.UIUDF.liabilities=res.liabilities;
-                        model.household=model.expenditures;
+                        model.UIUDF.expenditures=res.expenditures;
+                        model.UIUDF.income=res.familyMembers;
                         model.UIUDF.current_assets = res.currentAssets;
                         //debugger;
                         var centres = formHelper.enum("centre").data;
@@ -117,8 +118,6 @@ define({
 
                         /* Outstanding Debt */
 
-                        var monthly_installment = 0;
-                        var outstanding_bal = 0;
                         var liability ;
                         _.each(liability, function(liability) {
                             if (liability.summary['Customer ID'] == model.customer.id) {
@@ -129,8 +128,6 @@ define({
                             }
                         })
                         model.UIUDF.liability_fields.active_accounts = model.UIUDF.liabilities.length;
-                        model.UIUDF.liability_fields.monthly_installment = monthly_installment;
-                        model.UIUDF.liability_fields.outstanding_bal = outstanding_bal;
 
                         /*Household fields */
     
@@ -561,15 +558,15 @@ define({
                                 "type": "grid",
                                 "orientation": "vertical",
                                 "items": [{
-                                    "key": "totalAccount",
+                                    "key": "UIUDF.bankAccount.length",
                                     "title": "Total no of Account",
                                     "type": "number"
                                 }, {
-                                    "key": "checkBounced",
+                                    "key": "UIUDF.bankAccount[0].bankStatements[0].noOfChequeBounced",
                                     "title": "Total no of Cheque Bounce",
                                     "type": "number"
                                 }, {
-                                    "key": "emiBounce",
+                                    "key": "UIUDF.bankAccount[0].bankStatements[0].noOfEmiChequeBounced",
                                     "title": "Total no EMI Bounce",
                                     "type": "number"
                                 }]
@@ -615,7 +612,8 @@ define({
                                         render: function(data, type, full, meta) {
                                             return full['accountNumber']
                                         }
-                                    }, {
+                                    }, 
+                                    {
                                         "title": "Average Bank Balance",
                                         "data": "averageBankBalance",
                                         render: function(data, type, full, meta) {
@@ -627,7 +625,8 @@ define({
                                         render: function(data, type, full, meta) {
                                             return irfCurrencyFilter(full['BankAvgDep'])
                                         }
-                                    }, {
+                                    },
+                                     {
                                         "title": "Account Name",
                                         "data": "customerNameAsInBank",
                                         render: function(data, type, full, meta) {
@@ -705,11 +704,11 @@ define({
                                     "title": "No of Active Loans",
                                     "type": "number"
                                 }, {
-                                    "key": "UIUDF.liability_fields.monthly_installment",
+                                    "key": "UIUDF.liabilities[0].installmentAmountInPaisa",
                                     "title": "Total Monthly Instalments",
                                     "type": "amount"
                                 }, {
-                                    "key": "UIUDF.liability_fields.outstanding_bal",
+                                    "key": "UIUDF.liabilities[0].outstandingAmountInPaisa",
                                     "title": "OUTSTANDING_AMOUNT",
                                     "type": "amount"
                                 }]
@@ -1016,16 +1015,16 @@ define({
                                 "type": "grid",
                                 "orientation": "vertical",
                                 "items": [{
-                                    "key": "model.customer.expenditures[0].annualExpenses",
+                                    "key": "UIUDF.income[0].incomes[0].incomeEarned",
                                     "title": "Income",
                                     "type": "amount"
                                 }, {
-                                    "key": "decHouseExpanse",
+                                    "key": "UIUDF.expenditures[0].annualExpenses",
                                     "title": "Expenses",
                                     "type": "amount"
                                 }, {
-                                    "key": "household_new.netHouseholdIncome",
-                                    "title": "Net Household Income",
+                                    "key": "UIUDF.income[0].incomes[0].incomeEarned",
+                                    "title": "Net House Hold Income",
                                     "type": "amount"
     
                                 }]
@@ -1035,20 +1034,20 @@ define({
                             "items": [{
                                 "type": "section",
                                 "colClass": "col-sm-12",
-                                "html": '<div ng-init="household = model.household_new">' +
+                                "html": '<div>' +
                                     '<table class="table">' +
                                     '<colgroup>' +
                                     '<col width="30%"> <col width="40%"> <col width="30%">' +
                                     '</colgroup>' +
                                     '<tbody>' +
-                                    '<tr class="table-sub-header"> <th>{{"INCOME" | translate}}</th> <th></th> <th>{{household.income | irfCurrency}}</th> </tr>' +
+                                    '<tr class="table-sub-header"> <th>{{"INCOME" | translate}}</th> <th></th> <th>{{model.UIUDF.income[0].incomes[0].incomeEarned | irfCurrency}}</th> </tr>' +
                                     '<tr> <td></td> <td>{{"SALARY_FROM_BUSINESS" | translate}}</td> <td>{{household.salaryFromBusiness | irfCurrency}}</td> </tr>' +
                                     '<tr> <td></td> <td>{{"OTHER_INCOME_SALARIES" | translate}}</td> <td>{{household.otherIncomeSalaries | irfCurrency}}</td> </tr>' +
-                                    '<tr> <td></td> <td>{{"FAMILY_MEMBER_INCOMES" | translate}}</td> <td>{{household.familyMemberIncomes | irfCurrency}}</td> </tr>' +
-                                    '<tr class="table-sub-header"> <th>{{"EXPENSES" | translate}}</th> <th></th> <th>{{household.Expenses | irfCurrency}}</th> </tr>' +
+                                    '<tr> <td></td> <td>{{"FAMILY_MEMBER_INCOMES" | translate}}</td> <td>{{model.UIUDF.income[0].incomes[0].incomeEarned | irfCurrency}}</td> </tr>' +
+                                    '<tr class="table-sub-header"> <th>{{"EXPENSES" | translate}}</th> <th></th> <th>{{model.UIUDF.expenditures[0].annualExpenses | irfCurrency}}</th> </tr>' +
                                     '<tr> <td></td> <td>{{"DECLARED_EDUCATIONAL_EXPENSE" | translate}}</td> <td>{{household.declaredEducationExpense | irfCurrency}}</td> </tr>' +
                                     '<tr> <td></td> <td>{{"EMI_HOUSEHOLD_LIABILITIES" | translate}}</td> <td>{{household.emiHouseholdLiabilities | irfCurrency}}</td> </tr>' +
-                                    '<tr class="table-bottom-summary"> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td></td> <td>{{household.netHouseholdIncome | irfCurrency}}</td> </tr>' +
+                                    '<tr class="table-bottom-summary"> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td></td> <td>{{ model.UIUDF.income[0].incomes[0].incomeEarned| irfCurrency}}</td> </tr>' +
                                     '</tbody>' +
                                     '</table>' + '</div>'
                             }]
