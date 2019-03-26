@@ -703,7 +703,8 @@ var INDIVIDUAL_HTML =
                 $('#individual_'+k)[0].contentWindow.document.write(v.individual.reportHtml);
             }
             if (v.cibil && v.cibil.pdfRender){
-                pdfjsLib.getDocument(Files.getFileDownloadURL(v._cbilFileId)).then(doc =>{
+                var url = Files.getFileDownloadURL(v._cbilFileId);
+                pdfjsLib.getDocument(url).then(doc =>{
                             var viewer = document.getElementById(v._cibilPdfId);
                             while(viewer.firstChild)
                                 viewer.removeChild(viewer.firstChild);
@@ -743,7 +744,7 @@ var INDIVIDUAL_HTML =
             //model.CBType = JSON.parse(SessionStore.getGlobalSetting("CBCheckType").replace(/'/g, '"'));
             if (model.CBType && model.CBType.length) {
                 for (i in model.CBType) {
-                    (model.CBType[i] == "CIBIL")?model.CIBIL = true:(model.CBType[i] == "BASE"?model.BASE = true:(model.CBType[i] == "EQUIFAX"?model.EQUIFAX = true:(model.CBType[i] == "CHMHUB"?model.CHMHUB=true:(model.CBType[i] == "INDIVIDUAL"?model.INDIVIDUAL=true:false))));
+                    (model.CBType[i] == "CIBIL" || model.CBType[i] == "CIBILCR")?model.CIBIL = true:(model.CBType[i] == "BASE"?model.BASE = true:(model.CBType[i] == "EQUIFAX"?model.EQUIFAX = true:(model.CBType[i] == "CHMHUB"?model.CHMHUB=true:(model.CBType[i] == "INDIVIDUAL"?model.INDIVIDUAL=true:false))));
                 }
             } else {
                 model.CIBIL = true;
