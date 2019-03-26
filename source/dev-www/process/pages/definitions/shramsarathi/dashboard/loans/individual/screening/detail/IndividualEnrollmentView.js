@@ -1006,7 +1006,7 @@ define({
                         "type": "box",
                         "colClass": "col-sm-12",
                         "readonly": true,
-                        "title": "Household P&L",
+                        "title": "INCOME_AND_EXPENSE",
                         "condition": "model.bundlePageObj.pageClass !='guarantor'",
                         "overrideType": "default-view",
                         "items": [{

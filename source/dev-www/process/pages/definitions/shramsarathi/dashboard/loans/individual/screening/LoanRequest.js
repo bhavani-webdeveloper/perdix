@@ -2123,12 +2123,12 @@ define([],function(){
                                             }
                                         }
                                         ,
-                                        // "date":{
-                                        //     "key":"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf12",
-                                        //     "title":"DATE",
-                                        //     "type":"date",
-                                        //     "required":true
-                                        // }
+                                        "date":{
+                                            "key":"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf12",
+                                            "title":"DATE",
+                                            "type":"date",
+                                            "required":true
+                                        }
                                     
                                         }
  
