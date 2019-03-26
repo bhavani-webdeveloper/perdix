@@ -145,7 +145,7 @@ define({
                                 title: 'LOAN_AMOUNT_SANCTIONED',
                                 data: 'loanAmount'
                             },{
-                                title: 'DCOUEMT_UPLOADED_TIME',
+                                title: 'DOCUMENT_UPLOADED_TIME',
                                 data: 'applicationDate'
                             },{
                                 title: 'PRODUCT_TYPE',

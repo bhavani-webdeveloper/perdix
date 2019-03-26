@@ -12,8 +12,9 @@ define([],function(){
                           BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository, $injector, irfNavigator) {
             var branch = SessionStore.getBranch();
             var podiValue = SessionStore.getGlobalSetting("percentOfDisposableIncome");
-            //PMT calculation
             
+            //PMT calculation
+
             var setDeviation = function(model){
                       /* Deviations and Mitigations grouping */
                         var checkMitigants = true;
@@ -200,9 +201,10 @@ define([],function(){
                     model[baseKey] = {};
                 }
             }
-            var totalMarketValueInPaisa = 0;
+            
 
             var policyBasedOnLoanType = function(loanType,model){
+                var totalMarketValueInPaisa = 0;
                 if (loanType == "JEWEL"){
 
                     for (var i = model.loanAccount.ornamentsAppraisals.length - 1; i >= 0; i--) {
