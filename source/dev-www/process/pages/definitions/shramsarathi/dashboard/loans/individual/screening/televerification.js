@@ -113,13 +113,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                                 "fileType": "image/*",
                                                                 "readonly": true
                                                             },
-                                                            {
-                                                                "key": "applicant.customer.customerCategory",
-                                                                "title": "CUSTOMER_CATEGORY",
-                                                                "type": "select",
-                                                                "enumCode": "lead_category",
-                                                                "readonly":true
-                                                            }
+                                                            // {
+                                                            //     "key": "applicant.customer.customerCategory",
+                                                            //     "title": "CUSTOMER_CATEGORY",
+                                                            //     "type": "select",
+                                                            //     "enumCode": "lead_category",
+                                                            //     "readonly":true
+                                                            // }
                                                         ]                                                    
                                                     },
                                                     {
