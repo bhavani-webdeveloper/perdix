@@ -488,6 +488,7 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 		                            document.getElementById("statusMatchTrue").style.visibility = 'hidden';
 		                            document.getElementById("statusMatchFalse").style.visibility = 'hidden';
 									document.getElementById("notCaptured").style.visibility = 'visible';
+									console.log(error);
 									$log.info("verify error");
 		                        });
 		                }, function (err) {
@@ -740,7 +741,12 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 								if(i!=5)
 			                    document.getElementById(baseElem[i].id).disabled = false;
 							};
-							document.getElementById("notCaptured").style.visibility = 'visible';
+							if(err.status==-1){
+								console.log("server restart");
+								document.getElementById("Please restart the server").style.visibility = 'visible';
+							}else{
+								document.getElementById("notCaptured").style.visibility = 'visible';
+							}
 			                $log.info(err);
 			            }
 			        );
