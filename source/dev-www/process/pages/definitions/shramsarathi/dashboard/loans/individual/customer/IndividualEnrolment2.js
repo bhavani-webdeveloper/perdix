@@ -1340,6 +1340,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "BankAccounts.customerBankAccounts": {
                                     "readonly": true
+                                },
+                                "IndividualFinancials.expenditures":{
+                                    "readonly": true
                                 }
                             }
                         },
