@@ -694,7 +694,6 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 							lastCapturedFingerValidationStatus = verifyResponse.match;
 							document.getElementById("notCaptured").style.visibility = 'hidden';
 							document.getElementById("serverMessage").style.visibility = 'hidden';
-							serverMessage
 							if (lastCapturedFingerValidationStatus) {
 							    document.getElementById("statusMatchTrue").style.visibility = 'visible';
 								document.getElementById("statusMatchFalse").style.visibility = 'hidden';
