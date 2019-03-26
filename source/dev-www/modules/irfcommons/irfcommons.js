@@ -462,6 +462,7 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 					document.getElementById("statusMatchTrue").style.visibility = 'hidden';
 					document.getElementById("statusMatchFalse").style.visibility = 'hidden';
 					document.getElementById("notCaptured").style.visibility = 'hidden';
+					document.getElementById("serverMessage").style.visibility = 'hidden';
 		        },
 		        takeDataForMantra: function () {fpMatchStatus="";
 		            Files.getBase64DataFromFileId(fileId, {}, true)
@@ -486,8 +487,14 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 		                        },
 		                        function (error) {
 		                            document.getElementById("statusMatchTrue").style.visibility = 'hidden';
-		                            document.getElementById("statusMatchFalse").style.visibility = 'hidden';
-									document.getElementById("notCaptured").style.visibility = 'visible';
+									document.getElementById("statusMatchFalse").style.visibility = 'hidden';
+
+									if(error.status==-1){
+										document.getElementById("serverMessage").style.visibility = 'visible';
+									}else{
+										document.getElementById("notCaptured").style.visibility = 'visible';
+									}
+									
 									console.log(error);
 									$log.info("verify error");
 		                        });
@@ -657,6 +664,7 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 					'<div style="padding-left: 100px;"><button id="statusMatchTrue"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 350%; color: green;">✓</button>'+
 					'<button id="statusMatchFalse"  class="" style="font-size: 8px; visibility:hidden; background-color:white;  font-size: 450%; border: aliceblue; color: red;">x</button>'+
 					'<button id="notCaptured"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Not Captured</button> <div>'+
+					'<button id="serverMessage"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Please restart the server</button> <div>'+
 					'<div id="submitPanel" ><button id="validateLastCapturedFP" class="btn btn-primary" ng-click="$close(model.validateLastCaptured())" style="margin-top: 10%; margin-right: 10%; visibility:hidden;">VALIDATE LAST CAPTURED</button>' +
 					'<button id="" class="btn btn-primary" ng-click="$close(model.submitFPDetails())" style="margin-top: 10%; margin-right: 10%;">Submit</button></div>'+
 			        '<style>.button {background-color: #4CAF50' +
@@ -685,6 +693,8 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 			            function (verifyResponse) {
 							lastCapturedFingerValidationStatus = verifyResponse.match;
 							document.getElementById("notCaptured").style.visibility = 'hidden';
+							document.getElementById("serverMessage").style.visibility = 'hidden';
+							serverMessage
 							if (lastCapturedFingerValidationStatus) {
 							    document.getElementById("statusMatchTrue").style.visibility = 'visible';
 								document.getElementById("statusMatchFalse").style.visibility = 'hidden';
@@ -696,7 +706,12 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 			            function (error) {
 							document.getElementById("statusMatchTrue").style.visibility = 'hidden';
 							document.getElementById("statusMatchFalse").style.visibility = 'hidden';
-							document.getElementById("notCaptured").style.visibility = 'visible';
+							if(error.status==-1){
+								document.getElementById("serverMessage").style.visibility = 'visible';
+							}
+							else{
+								document.getElementById("notCaptured").style.visibility = 'visible';
+							}
 							$log.info("verify error");
 			            });
 			    }
@@ -743,7 +758,7 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 							};
 							if(err.status==-1){
 								console.log("server restart");
-								document.getElementById("Please restart the server").style.visibility = 'visible';
+								document.getElementById("serverMessage").style.visibility = 'visible';
 							}else{
 								document.getElementById("notCaptured").style.visibility = 'visible';
 							}
@@ -761,6 +776,7 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 						document.getElementById("statusMatchTrue").style.visibility = 'hidden';
 						document.getElementById("statusMatchFalse").style.visibility = 'hidden';
 						document.getElementById("notCaptured").style.visibility = 'hidden';
+						document.getElementById("serverMessage").style.visibility = 'hidden';
 			            result = uploadFingerPrint(targetElem);
 			            for (var i = 0; i < result.length; i++) {
 
