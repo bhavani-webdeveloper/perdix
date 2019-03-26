@@ -363,7 +363,7 @@ define([], function () {
                                         items: [
                                             {
                                                 title: "REMARKS",
-                                                key: "customer.dscOverrideRemarks",
+                                                key: "loanAccount.dscOverrideRemarks",
                                                 type: "textarea",
                                                 required: true
                                             },
@@ -410,18 +410,18 @@ define([], function () {
                 },
                 actions: {
                     doDscOverride: function (model,loanid) {
-                        if (model.customer.dscOverrideRemarks==null || model.customer.dscOverrideRemarks ==""){
+                        if (model.loanAccount.dscOverrideRemarks==null || model.loanAccount.dscOverrideRemarks ==""){
                                PageHelper.showProgress("update-loan", "Remarks is mandatory", 3000);
                                PageHelper.hideLoader();
                                return false;
                         }
                         
-                        if (model.customer.dscOverrideRemarks) {
+                        if (model.loanAccount.dscOverrideRemarks) {
                             irfProgressMessage.pop("dsc-override", "Performing DSC Override");
                             IndividualLoan.overrideAllLCRMemberDsc({
                                 customerId: model.loanAccount.customerId,
                                 loanId: model.loanAccount.id,
-                                remarks: model.customer.dscOverrideRemarks,
+                                remarks: model.loanAccount.dscOverrideRemarks,
                                 action: 'approve'
                             }, {}, function (resp, headers) {
                                 $log.info(resp);
