@@ -117,7 +117,7 @@ define({
 						'<tr><td>{{"No. of Children" | translate}}</td><td>{{model.familyInfo.noOfChildren }}</td></tr>'+
 						'<tr><td>{{"No of school going" | translate}}</td><td>{{model.familyInfo.noOfSchoolGoing }}</td></tr>'+
 						'<tr><td>{{"No. of college going" | translate}}</td><td>{{model.familyInfo.noOfCollegeGoing }}</td></tr>'+
-						'<tr><td>{{"Proposed Amount" | translate}}</td><td>{{model.proposedAmount }}</td></tr>'+
+						'<tr style="display:none"><td>{{"Proposed Amount" | translate}}</td><td>{{model.proposedAmount }}</td></tr>'+
 						'</tbody>' +
 						'</table>'
 				},

@@ -155,7 +155,10 @@ define([],function(){
                                     "resolver": "LoanPurpose1LOVConfiguration"
                                 },
                                 "PreliminaryInformation.loanPurpose2": {
-                                    "resolver": "LoanPurpose2LOVConfiguration"
+                                    "resolver": "LoanPurpose2LOVConfiguration",
+                                    "onChange":function(valueObj,form,model){
+                                        model.loanAccount.loanPurpose3 = null;
+                                    }
                                 },                               
                                 "LoanCustomerRelations.loanCustomerRelations": {
                                     "add": null,
@@ -369,7 +372,8 @@ define([],function(){
                                 },
                                 "NomineeDetails.nominees.nomineePincode": {
                                    "required": true,
-                                   "resolver": "NomineePincodeLOVConfiguration"
+                                   "resolver": "NomineePincodeLOVConfigurationShramsarathi",
+                                   "autolov": false
                                 },
                                 "NomineeDetails.nominees.nomineeRelationship": {
                                    "required":true
@@ -1551,9 +1555,11 @@ define([],function(){
                             "enumCode":"relationship"
                         },
                         "NomineeDetails.nominees.nomineePincode": {
-                            "resolver": "NomineePincodeLOVConfiguration",
+                            "resolver": "NomineePincodeLOVConfigurationShramsarathi",
+                            // "resolver": "PincodeLOVConfigurationShramsarathi",
                             "orderNo":70,
-                            "required":true
+                            "required":true,
+                            "autolov": false
                         },
                         "NomineeDetails.nominees.nomineeDoorNo": {
                             "orderNo": 40,
@@ -1909,6 +1915,9 @@ define([],function(){
 
                         })
                     }
+                    if (model.loanAccount.loanPurpose3 != undefined && model.loanAccount.loanPurpose3 != ""){
+                        model.loanAccount.loanPurpose3temp = model.loanAccount.loanPurpose3; 
+                    }
  
                     self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
@@ -1923,9 +1932,32 @@ define([],function(){
                                     "PreliminaryInformation":{
                                         "items": {
                                             "loanPurpose3": {
-                                                "key":"loanAccount.loanPurpose2",
-                                              "title":"LOAN_SUB_PURPOSE_2",
-                                              "type":"text",
+                                                "title":"LOAN_SUB_PURPOSE_2",
+                                                key: "loanAccount.loanPurpose3temp",
+                                                // condition:"model.additional.config.loanAccount_loanPurpose3",
+                                                "type": "lov",
+                                                "lovonly":true,
+                                                "required":true,
+                                                outputMap: {
+                                                    "loan_purpose": "loanAccount.loanPurpose3"
+                                                },
+                                                bindMap:{
+                                                    "purpose1":"loanAccount.loanPurpose1",
+                                                    "purpose2":"loanAccount.loanPurpose2"
+                                                },
+                                                searchHelper: formHelper,
+                                                search: function (inputModel, form, model) {
+                                                        return Queries.getLoanPurpose3(model.loanAccount.loanPurpose1, model.loanAccount.loanPurpose2);
+                                                },
+                                                getListDisplayItem: function (item, index) {
+                                                    return [
+                                                        item.loan_purpose
+                                                    ];
+                                                },
+                                                onSelect:function(valueObj,model,context){
+                                                    model.loanAccount.loanPurpose3 = valueObj.loan_purpose;
+                                                    model.loanAccount.loanPurpose3temp = valueObj.loan_purpose;
+                                                },
                                               "orderNo":40
                                             },
                                             "referenceFrom": {
@@ -2071,7 +2103,7 @@ define([],function(){
                                                     "enumCode":"mode_of_disbursement"
                                                 },
                                                 "collectionDate":{
-                                                    "key":"loanAccount.disbursementSchedules[].firstRepaymentDate",
+                                                    "key":"loanAccount.firstRepaymentDate",
                                                     "title":"COLLECTION_DATE",
                                                     "type":"date",
                                                     "required":true

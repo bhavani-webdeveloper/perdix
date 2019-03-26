@@ -42,7 +42,16 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                 return {
                     "loanProcess.loanAccount.currentStage": {
                         "Initiation": {
-                            "excludes": [], "overrides": {
+                            "excludes": [
+                                "ContactInformation.careOf",
+                                "ContactInformation.postOffice",
+                                "ContactInformation.mailingPostoffice",
+                                "HouseVerification.houseVerificationPhoto",
+                                "HouseVerification.place",
+                                "HouseVerification.date"
+                                
+
+                            ], "overrides": {
                                 "PhysicalAssets":{
                                     "title":"FIXED_ASSET"
                                 },
@@ -58,7 +67,15 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 },
                                 "IndividualInformation.centreId1": {
                                     "title": "ZONE_NAME"
-                                }
+                                },
+                                "HouseVerification.inCurrentAreaSince": {
+                                    "required": false,
+                                },
+                                "ContactInformation.doorNo":{
+                                    "title":"HAMLET_FALA",
+                                    "required": false,
+                                },
+
                             }
                         },
 
@@ -69,7 +86,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 "KYC.firstName",
                                 //"References.verifications.ReferenceCheck",
                                 "IndividualReferences",
-                                "References",   
+                                "References"
+                              
                             ],
                             "overrides": {
                                 "KYC.addressProofFieldSet":{
@@ -1757,7 +1775,10 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                         "required":false
                     },
                    "Liabilities.liabilities.noOfInstalmentPaid":{
-                        "orderNo":23
+                    "key": "customer.liabilities[].noOfInstalmentPaid",
+                    "type" : "select",
+                     "orderNo":23,
+                     "enumCode": "no_of_payments" 
                     },
                     // "FamilyDetails.familyMembers.dateOfBirth":{
                     //     "onChange": function (modelValue, form, model, formCtrl, event) {
@@ -2530,6 +2551,10 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     else if (branchId && !model.customer.customerBranchId) {
                         model.customer.customerBranchId = branchId;
                     };
+                    /*initialize Self */
+                    if ( model.customer.familyMembers.length > 0)
+                    if(model.customer.familyMembers[0].relationShip == 'self')
+                        model.customer.familyMembers[0].relationShip = 'Self';
 
                     /* End of setting data for the form */
                     model.UIUDF.family_fields.dependent_family_member = 0;
@@ -2985,7 +3010,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                                             "title":"WORK_SECTOR",
                                                             "type":"select",
                                                             "enumCode":"work_sector",
-                                                            "required":true
+                                                            "required":true,
+                                                            "orderNo": 1
                                                         },
                                                         "occupationType":{
                                                             "key":"customer.familyMembers[].incomes[].occupationType",

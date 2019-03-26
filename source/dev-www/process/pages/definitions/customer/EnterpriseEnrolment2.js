@@ -235,12 +235,23 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
 
 
             if (_.hasIn(model, 'loanRelation')){
-                console.log(model.loanRelation);
                 var custId = model.loanRelation.customerId;
                 Enrollment.getCustomerById({id:custId})
                     .$promise
                     .then(function(res){
                         model.customer = res;
+                        if( model.customer.customerBankAccounts){
+                            for(var i=0;i< model.customer.customerBankAccounts.length;i++){
+                               if (model.customer.customerBankAccounts[i].bankStatements) {
+                                for(var j=0;j< model.customer.customerBankAccounts[i].bankStatements.length;j++){
+                                    if(model.customer.customerBankAccounts[i].bankStatements[j].udf1){
+                                        var b=parseInt(model.customer.customerBankAccounts[i].bankStatements[j].udf1);
+                                        model.customer.customerBankAccounts[i].bankStatements[j].udf1=b;
+                                    }
+                                }
+                            }
+                            }
+                        }
                         model.customer.enterprise.registrationType = "GST No";
                         if (model.customer.stockMaterialManagement) {
                         model.proxyIndicatorsHasValue = true;
@@ -386,7 +397,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                         if( model.customer.customerBankAccounts){
                             for(var i=0;i< model.customer.customerBankAccounts.length;i++){
                                if (model.customer.customerBankAccounts[i].bankStatements) {
-                                for(var j=0;i< model.customer.customerBankAccounts[i].bankStatements.length;j++){
+                                for(var j=0;j< model.customer.customerBankAccounts[i].bankStatements.length;j++){
                                     if(model.customer.customerBankAccounts[i].bankStatements[j].udf1){
                                         var b=parseInt(model.customer.customerBankAccounts[i].bankStatements[j].udf1);
                                         model.customer.customerBankAccounts[i].bankStatements[j].udf1=b;
@@ -596,7 +607,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     if( model.customer.customerBankAccounts){
                                         for(var i=0;i< model.customer.customerBankAccounts.length;i++){
                                            if (model.customer.customerBankAccounts[i].bankStatements) {
-                                            for(var j=0;i< model.customer.customerBankAccounts[i].bankStatements.length;j++){
+                                            for(var j=0;j< model.customer.customerBankAccounts[i].bankStatements.length;j++){
                                                 if(model.customer.customerBankAccounts[i].bankStatements[j].udf1){
                                                     var b=parseInt(model.customer.customerBankAccounts[i].bankStatements[j].udf1);
                                                     model.customer.customerBankAccounts[i].bankStatements[j].udf1=b;
@@ -1620,7 +1631,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             },
                             {
                                 key: "customer.customerBankAccounts[].isTransactionAccount",
-                                title: "PREFFERED_BANK",
+                                title: "PREFERRED_BANK",
                                 "type": "select",
                                 "titleMap": {
                                     "YES": "YES",
@@ -4369,7 +4380,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     if( model.customer.customerBankAccounts){
                         for(var i=0;i< model.customer.customerBankAccounts.length;i++){
                            if (model.customer.customerBankAccounts[i].bankStatements) {
-                            for(var j=0;i< model.customer.customerBankAccounts[i].bankStatements.length;j++){
+                            for(var j=0;j< model.customer.customerBankAccounts[i].bankStatements.length;j++){
                                 if(model.customer.customerBankAccounts[i].bankStatements[j].udf1){
                                     var b=parseInt(model.customer.customerBankAccounts[i].bankStatements[j].udf1);
                                     model.customer.customerBankAccounts[i].bankStatements[j].udf1=b;
@@ -4511,7 +4522,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                     if( model.customer.customerBankAccounts){
                         for(var i=0;i< model.customer.customerBankAccounts.length;i++){
                          if (model.customer.customerBankAccounts[i].bankStatements) {
-                                for(var j=0;i< model.customer.customerBankAccounts[i].bankStatements.length;j++){
+                                for(var j=0;j< model.customer.customerBankAccounts[i].bankStatements.length;j++){
                                     if(model.customer.customerBankAccounts[i].bankStatements[j].udf1){
                                         var b=parseInt(model.customer.customerBankAccounts[i].bankStatements[j].udf1);
                                         model.customer.customerBankAccounts[i].bankStatements[j].udf1=b;

@@ -310,7 +310,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             condition:"model.pageClass !='guarantor' && model.pageClass !='co-applicant'"
                         },
                         "IndividualReferences.verifications":{
-                            title:"REFERENCE"
+                            title:"REFERENCE",
+                            titleExpr: null
                         },
                         "IndividualReferences.verifications.referenceFirstName":{
                             orderNo:10,

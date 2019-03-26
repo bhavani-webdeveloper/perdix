@@ -736,7 +736,7 @@ define({
                             "required":false
                         }, 
                         {
-                            "key":"loanAccount.disbursementSchedules[0].firstRepaymentDate",
+                            "key":"loanAccount.firstRepaymentDate",
                             "title":"COLLECTION_DATE",
                             "type":"date",
                             "required":false
@@ -826,53 +826,54 @@ define({
                                 return [];
                             }                            
                         }]
-            },{
-                "type": "box",
-                "title": "Expected Turnover",
-                "readOnly": true,
-                "colClass": "col-sm-12",
-                "items":[{
-                        "type": "tableview",
-                        "key": "customerHistoryFinancials.tableData1",
-                        "transpose" : true,
-                        "title": "",
-                        "selectable": "false",
-                        "editable": "false",
-                        "tableConfig":{
-                            "searching": false,
-                            "paginate": false,
-                            "pageLength": 10,
-                        },
-                        getColumns: function() {
-                            return [{
-                                "title": "Parameter",
-                                "data": "actualValue",
-                                "render": self.strongRender
-                            },{
-                                "title": "Total Outstanding Of All Existing Loan",
-                                "data": "totalOutstandingAmount",
-                                "render": currencyRightRender
-                            },{
-                                "title": "Current Recommended Loan Amount",
-                                "data": "loanAmountRecommended",
-                                "render": currencyRightRender
-                            },
-                            {
-                                "title": "Annual Turnover",
-                                "data": "annualTurnover",
-                                "render": currencyRightRender
-                            },
-                            {
-                                "title": "Exposure To Annual Turnover",
-                                "data": "kinaraExposureToAnnualTurover"
-                            }
-                        ];
-                        },
-                        getActions: function() {
-                            return [];
-                        }                            
-                    }]
-        },
+            },
+        //     {
+        //         "type": "box",
+        //         "title": "Expected Turnover",
+        //         "readOnly": true,
+        //         "colClass": "col-sm-12",
+        //         "items":[{
+        //                 "type": "tableview",
+        //                 "key": "customerHistoryFinancials.tableData1",
+        //                 "transpose" : true,
+        //                 "title": "",
+        //                 "selectable": "false",
+        //                 "editable": "false",
+        //                 "tableConfig":{
+        //                     "searching": false,
+        //                     "paginate": false,
+        //                     "pageLength": 10,
+        //                 },
+        //                 getColumns: function() {
+        //                     return [{
+        //                         "title": "Parameter",
+        //                         "data": "actualValue",
+        //                         "render": self.strongRender
+        //                     },{
+        //                         "title": "Total Outstanding Of All Existing Loan",
+        //                         "data": "totalOutstandingAmount",
+        //                         "render": currencyRightRender
+        //                     },{
+        //                         "title": "Current Recommended Loan Amount",
+        //                         "data": "loanAmountRecommended",
+        //                         "render": currencyRightRender
+        //                     },
+        //                     {
+        //                         "title": "Annual Turnover",
+        //                         "data": "annualTurnover",
+        //                         "render": currencyRightRender
+        //                     },
+        //                     {
+        //                         "title": "Exposure To Annual Turnover",
+        //                         "data": "kinaraExposureToAnnualTurover"
+        //                     }
+        //                 ];
+        //                 },
+        //                 getActions: function() {
+        //                     return [];
+        //                 }                            
+        //             }]
+        // },
         {
 
             "type": "box",		

@@ -10,6 +10,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                     model.branchName = SessionStore.getBranch();
                     model.stage = 'ReadyForDisbursement';
                     model.branch = SessionStore.getCurrentBranch().branchId;
+                    
                     //model.branchId = SessionStore.getCurrentBranch().branchId;
                     console.log(model);
                 },
@@ -41,10 +42,10 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                             "title": "CUSTOMER_NAME",
                             "type": "string"
                             },
-                            "urn": {
-                                "title": "URN_NO",
-                                "type": "string"
-                            },
+                            // "urn": { /** as there is no query parameter in search api */
+                            //     "title": "URN_NO",
+                            //     "type": "string"
+                            // },
                             "loanAccountNo": {
                             "title": "LOAN_ACCOUNT_NO",
                             "type": "string"
@@ -66,6 +67,26 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                     "parentValueExpr": "model.branch",
                                     "screenFilter": true
                                 }
+                            },
+                            "loanType": {
+                                "key": "product.loanType",
+                                "title": "LOAN_TYPE",
+                                "type": ["string","null"],
+                                "x-schema-form": {
+                                        "type": "select",
+                                        "enumCode": "booking_loan_type",                                        
+                                    }
+                            },
+                            "productCategory":{
+                                "key": "product.productCategory",
+                                "title": "PRODUCT_CATEGORY",
+                                "type": ["string","null"],
+                                    "x-schema-form": {
+                                        "type": "select",
+                                        "enumCode": "loan_product_category_master",
+                                        "parentEnumCode": "booking_loan_type",
+                                        "screenFilter": true
+                                    }
                             },                            
                             "loan_product": {
                                 "title": "PRODUCT_CODE",
@@ -113,6 +134,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                             'customerName': searchOptions.applicantName,
                             'accountNumber':searchOptions.loanAccountNo,
                             'productCode': searchOptions.loan_product,
+                            'loanType':searchOptions.loanType,
                             'customerSignatureDate': searchOptions.customerSignatureDate,
                             'scheduledDisbursementDate': searchOptions.scheduledDisbursementDate,
                             'page': pageOpts.pageNo,
@@ -154,10 +176,18 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                     desc: "",
                                     fn: function(item, index){
                                         entityManager.setModel('loans.individual.disbursement.Disbursement', {_disbursement:item});
-                                        $state.go("Page.Engine",{
-                                            pageName:"loans.individual.disbursement.Disbursement",
-                                            pageId:[item.loanId,item.id].join(".")
-                                        });
+                                        var siteCode = SessionStore.getGlobalSetting("siteCode");
+                                        if(siteCode=="kinara"){
+                                            $state.go("Page.Engine",{
+                                                pageName:"kinara.loans.individual.disbursement.Disbursement",
+                                                pageId:[item.loanId,item.id].join(".")
+                                            });
+                                        }else{
+                                            $state.go("Page.Engine",{
+                                                pageName:"loans.individual.disbursement.Disbursement",
+                                                pageId:[item.loanId,item.id].join(".")
+                                            });
+                                        }
                                       },
                                     isApplicable: function(item, index){
                                         return true;
