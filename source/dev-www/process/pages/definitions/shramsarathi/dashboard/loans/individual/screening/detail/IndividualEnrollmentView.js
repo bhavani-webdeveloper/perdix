@@ -419,9 +419,11 @@ define({
                                 "items": [{
                                     "key": "customer.urnNo",
                                     "title": "URN"
-                                }, {
-                                    "key": "customer.religion"
-                                }, {
+                                }, 
+                                // {
+                                //     "key": "customer.religion"
+                                // }, 
+                                {
                                     "key": "customer.caste",
                                     "title": "CASTE"
                                 }, {
