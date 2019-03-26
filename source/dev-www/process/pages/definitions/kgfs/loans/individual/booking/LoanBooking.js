@@ -751,6 +751,10 @@ define([], function () {
                             }
                         }
                     },
+                    "JewelDetails.jewelPouchNo":{
+                        readonly : true,
+                        "condition": "model.loanAccount.currentStage == 'LoanInitiation'"
+                    },
                     "JewelDetails.ornamentDetails.carat":{
                         "type":"select",
                         "titleMap": [{
