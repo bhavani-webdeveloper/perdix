@@ -22,7 +22,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     if (temp[i].code == code)
                         return temp[i].name;
                 }
-                return "Fixed Asset";
+                return temp[i].name;
             }
             var getCurrentByCode= function(code){
                 var temp = formHelper.enum('current_asset_type').data;
@@ -31,7 +31,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     if (temp[i].code == code)
                         return temp[i].name;
                 }
-                return "Current Asset";
+                return temp[i].name;
             }
 
 
@@ -91,7 +91,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
                                 },
                                 "PhysicalAssets.physicalAssets":{
-                                    "title":"FIXED_ASSETS",
+                                    //"title":"FIXED_ASSETS",
                             
                                     
                                 },
@@ -192,7 +192,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "overrides": {
                                
                                 "PhysicalAssets.physicalAssets":{
-                                    "title":"FIXED_ASSET",
+                                    //"title":"FIXED_ASSET",
                                     "titleExpr": "model.customer.physicalAssets[arrayIndex].titleExpr",
 
                                 },
@@ -1264,11 +1264,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             ],
                             "overrides": {
                                 "PhysicalAssets.physicalAssets":{
-                                    "title":"FIXED_ASSET"
+                                  "title":"FIXED_ASSET",
+                                    "titleExpr": "model.customer.physicalAssets[arrayIndex].titleExpr",
                                 },
                                 "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
                                     "enumCode": "fixed_asset_type",
                                     "title":"FIXED_ASSET"
+                                },
+                                "EnterpriseFinancials.currentAsset":{
+                                    "titleExpr":"model.customer.currentAssets[arrayIndex].titleExpr",
                                 },
                                 "KYC": {
                                     "readonly": true
@@ -1348,11 +1352,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             ],
                             "overrides": {
                                 "PhysicalAssets.physicalAssets":{
-                                    "title":"FIXED_ASSET"
+                                   // "title":"FIXED_ASSET",
+                                    "titleExpr": "model.customer.physicalAssets[arrayIndex].titleExpr",
                                 },
                                 "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
                                     "enumCode": "fixed_asset_type",
                                     "title":"FIXED_ASSET"
+                                },
+                                "EnterpriseFinancials.currentAsset":{
+                                    "titleExpr":"model.customer.currentAssets[arrayIndex].titleExpr",
                                 },
                                 "KYC.addressProofFieldSet":{
                                     "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
@@ -1912,6 +1920,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "orderNo":23,
                         "enumCode": "no_of_payments" 
                     },
+                    "EnterpriseFinancials.currentAsset":{
+                        "titleExpr":"model.customer.currentAssets[arrayIndex].titleExpr",
+                    },
                     // "FamilyDetails.familyMembers.dateOfBirth":{
                     //     "onChange": function (modelValue, form, model, formCtrl, event) {
                     //         if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
@@ -1998,6 +2009,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "PhysicalAssets":{
                         "title":"FIXED_ASSET"
+                    },
+                    "PhysicalAssets.physicalAssets":{
+                        "titleExpr": "model.customer.physicalAssets[arrayIndex].titleExpr"
                     },
                     "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
                         "enumCode": "fixed_asset_type",
@@ -2692,6 +2706,26 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         });
                     }
                     model.customer.addressPfSameAsIdProof="NO";
+
+                    if(model.customer.currentAssets!== undefined){
+                        if(model.customer.currentAssets.length > 0){
+                            for(var i=0;i<model.customer.currentAssets.length;i++){
+                                model.customer.currentAssets[i].titleExpr = model.customer.currentAssets[i].assetType;
+                            }
+                           
+                        }
+                    }
+                  
+                     if(model.customer.physicalAssets!== undefined){
+                    if(model.customer.physicalAssets.length > 0)
+                    {
+                        for(var i=0;i<model.customer.physicalAssets.length;i++){
+                            model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
+                        }
+                    } 
+                }  
+                       
+                    
                     /* Form rendering starts */
                     var self = this;
                     var formRequest = {
