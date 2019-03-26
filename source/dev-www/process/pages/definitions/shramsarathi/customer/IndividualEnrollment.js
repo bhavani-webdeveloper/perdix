@@ -1775,7 +1775,10 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                         "required":false
                     },
                    "Liabilities.liabilities.noOfInstalmentPaid":{
-                        "orderNo":23
+                    "key": "customer.liabilities[].noOfInstalmentPaid",
+                    "type" : "select",
+                     "orderNo":23,
+                     "enumCode": "no_of_payments" 
                     },
                     // "FamilyDetails.familyMembers.dateOfBirth":{
                     //     "onChange": function (modelValue, form, model, formCtrl, event) {
