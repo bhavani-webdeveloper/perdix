@@ -41,10 +41,10 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                             "title": "CUSTOMER_NAME",
                             "type": "string"
                             },
-                            "urn": {
-                                "title": "URN_NO",
-                                "type": "string"
-                            },
+                            // "urn": { /** as there is no query parameter in search api */
+                            //     "title": "URN_NO",
+                            //     "type": "string"
+                            // },
                             "loanAccountNo": {
                             "title": "LOAN_ACCOUNT_NO",
                             "type": "string"
