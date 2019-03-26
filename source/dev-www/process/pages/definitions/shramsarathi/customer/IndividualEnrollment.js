@@ -2551,6 +2551,10 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     else if (branchId && !model.customer.customerBranchId) {
                         model.customer.customerBranchId = branchId;
                     };
+                    /*initialize Self */
+                    if ( model.customer.familyMembers.length > 0)
+                    if(model.customer.familyMembers[0].relationShip == 'self')
+                        model.customer.familyMembers[0].relationShip = 'Self';
 
                     /* End of setting data for the form */
                     model.UIUDF.family_fields.dependent_family_member = 0;
