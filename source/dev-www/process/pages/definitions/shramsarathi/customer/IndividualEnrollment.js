@@ -3010,7 +3010,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                                             "title":"WORK_SECTOR",
                                                             "type":"select",
                                                             "enumCode":"work_sector",
-                                                            "required":true
+                                                            "required":true,
+                                                            "orderNo": 1
                                                         },
                                                         "occupationType":{
                                                             "key":"customer.familyMembers[].incomes[].occupationType",
