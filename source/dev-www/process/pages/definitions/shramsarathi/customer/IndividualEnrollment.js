@@ -1787,6 +1787,10 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     //         }
                     //     }
                     // },
+                    
+                    "IndividualFinancials":{
+                        "title":"EXPENSE"
+                    },
                     "IndividualFinancials.expenditures.annualExpenses":{
                         "required":true,
                         "title":"EXPENSE_AMOUNT"
@@ -2196,7 +2200,9 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                         "condition": "model.customer.physicalAssets[arrayIndex].nameOfOwnedAsset=='Two wheeler' || model.customer.physicalAssets[arrayIndex].nameOfOwnedAsset=='Four Wheeler'"
                     },
                     "IndividualFinancials.expenditures.expenditureSource": {
-                        "required": true
+                        "required": true,
+                        //"type":"select",
+                        "enumCode":"expense_type"
                     },
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth": {
                         "required": false
@@ -2333,7 +2339,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     "IndividualFinancials.expenditures.expenditureSource",
                     "IndividualFinancials.expenditures.annualExpenses",
                     "IndividualFinancials.expenditures.frequency",
-                    "IndividualFinancials.expenditures.from",
+                   // "IndividualFinancials.expenditures.from",
 
                     "FamilyDetails",
                     "FamilyDetails.familyMembers",
