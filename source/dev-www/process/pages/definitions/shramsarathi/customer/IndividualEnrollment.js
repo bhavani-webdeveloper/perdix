@@ -52,6 +52,13 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 
 
                             ], "overrides": {
+                                "IndividualInformation.dateOfBirth":{ 
+                                    "onChange": function (modelValue, form, model) {
+                                    if (model.customer.dateOfBirth) {
+                                        model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                    }
+                               }
+                            },
                                 "PhysicalAssets":{
                                     "title":"FIXED_ASSET"
                                 },
@@ -219,7 +226,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     if (model.customer.dateOfBirth) {
                                         model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                                     }
-                                }
+                               }
                             }
                         ,
                                 "KYC": {
