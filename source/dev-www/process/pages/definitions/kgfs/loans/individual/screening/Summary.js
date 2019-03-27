@@ -137,21 +137,21 @@ define({
             household: [],
             business: {}
         };
-        var totalBusinessLiabilities  = 0;
-        if (_.isArray(model.liabilitiesSummary.subgroups) && model.liabilitiesSummary.subgroups.length > 0){
-            for (var i=0;i<model.liabilitiesSummary.subgroups.length; i++){
-                if (_.isArray(model.liabilitiesSummary.subgroups[i].data) && model.liabilitiesSummary.subgroups[i].data.length > 0){
+        // var totalBusinessLiabilities  = 0;
+        // if (_.isArray(model.liabilitiesSummary.subgroups) && model.liabilitiesSummary.subgroups.length > 0){
+        //     for (var i=0;i<model.liabilitiesSummary.subgroups.length; i++){
+        //         if (_.isArray(model.liabilitiesSummary.subgroups[i].data) && model.liabilitiesSummary.subgroups[i].data.length > 0){
                     
-                    for (var j=0;j<model.liabilitiesSummary.subgroups[i].data.length; j++){
-                        var noOfMonth = 12;
-                        if(model.liabilitiesSummary.subgroups[i].data[j]['Start Date'] != null) {
-                            noOfMonth = getNoOfMonth();
-                        }
-                        totalBusinessLiabilities = totalBusinessLiabilities + (model.liabilitiesSummary.subgroups[i].data[j]['Installment Amount'] * noOfMonth)
-                    }
-                }
-            }
-        }
+        //             for (var j=0;j<model.liabilitiesSummary.subgroups[i].data.length; j++){
+        //                 var noOfMonth = 12;
+        //                 if(model.liabilitiesSummary.subgroups[i].data[j]['Start Date'] != null) {
+        //                     noOfMonth = getNoOfMonth();
+        //                 }
+        //                 totalBusinessLiabilities = totalBusinessLiabilities + (model.liabilitiesSummary.subgroups[i].data[j]['Installment Amount'] * noOfMonth)
+        //             }
+        //         }
+        //     }
+        // }
 
         if(model.houseHoldPL && model.houseHoldPL.length){
             for (var i=0; i<model.houseHoldPL.length; i++){
@@ -164,7 +164,7 @@ define({
                         familyMemberIncomes : model.houseHoldPL[i].data[0]['Family Member Incomes'],
                         Expenses : model.houseHoldPL[i].data[0]['Total Expenses'],
                         declaredEducationExpense : model.houseHoldPL[i].data[0]['Household Expenses'],
-                        emiHouseholdLiabilities : model.businessPL.data[0]['Business Liabilities'],
+                        emiHouseholdLiabilities : (model.businessPL.data[0]['Business Liabilities'] * 12),
                         netHouseholdIncome : model.houseHoldPL[i].data[0]['Net Household Income'],
                         relationDetails: model.houseHoldPL[i]['relation_detail']
                     })
@@ -178,7 +178,7 @@ define({
         model.pl.business.purchase = model.businessPL.data[0]['Total Purchases'];
         
         //model.pl.business.businessLiabilities = totalBusinessLiabilities;
-        model.pl.business.businessLiabilities = model.businessPL.data[0]['Business Liabilities'];
+        model.pl.business.businessLiabilities = model.businessPL.data[0]['Business Liabilities'] * 12;
         model.pl.business.businessExpense = model.businessPL.data[0]['Business Expenses'];
         model.pl.business.personalExpense = model.businessPL.data[0]['Personal Expenses'];
         model.pl.business.netBusinessIncome = model.businessPL.data[0]['Monthly Sales'] - model.businessPL.data[0]['Business Expenses'];
@@ -210,17 +210,17 @@ define({
 
 
     }; // END OF prepareData()
-    var getNoOfMonth = function(startDate) {
-        var startTime = new Date(startDate);
-        var totalNoOfMonth = 0;
-        var startMonth = startTime.getMonth();
-        if(startMonth > 3) {
-            totalNoOfMonth = (12 - startMonth) + 3;
-        } else {
-            totalNoOfMonth = 3 - startMonth;
-        }
-        return totalNoOfMonth;
-    }
+    // var getNoOfMonth = function(startDate) {
+    //     var startTime = new Date(startDate);
+    //     var totalNoOfMonth = 0;
+    //     var startMonth = startTime.getMonth();
+    //     if(startMonth > 3) {
+    //         totalNoOfMonth = (12 - startMonth) + 3;
+    //     } else {
+    //         totalNoOfMonth = 3 - startMonth;
+    //     }
+    //     return totalNoOfMonth;
+    // }
 
     var HOUSEHOLD_PL_HTML =
     '<table class="table">'+
