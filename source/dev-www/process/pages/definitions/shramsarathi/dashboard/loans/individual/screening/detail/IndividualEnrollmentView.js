@@ -616,16 +616,17 @@ define({
                                         }
                                     }, 
                                     {
-                                        "title": "Average Bank Balance",
-                                        "data": "BankAvgBal",
+                                        "title": "Bank Balance",
+                                        "data": "bankStatements[0].balanceAsOn15th",
                                         render: function(data, type, full, meta) {
-                                            return irfCurrencyFilter(full['BankAvgBal'])
+                                            return irfCurrencyFilter(full.bankStatements[0].balanceAsOn15th)
+                                            //return irfCurrencyFilter(full.incomes[0].incomeEarned);
                                         }
                                     }, {
-                                        "title": "Average Bank Deposit",
+                                        "title": "Bank Deposit",
                                         "data": "BankAvgDep",
                                         render: function(data, type, full, meta) {
-                                            return irfCurrencyFilter(full['BankAvgDep'])
+                                            return irfCurrencyFilter(full.bankStatements[0].totalDeposits)
                                         }
                                     },
                                      {
@@ -1311,7 +1312,7 @@ define({
                         model.avarage_withdrawal=params.avarage_withdrawal;
                         model.UIUDF.bankAccount.BankAvgBal=params.avarage_balance;
                         model.UIUDF.bankAccount.BankAvgDep=params.avarage_deposit;
-                        debugger;
+                        //debugger;
                 
                     }
                 },

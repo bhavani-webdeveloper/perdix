@@ -652,9 +652,6 @@ define({
                         });
                 },
                 reject: function (model, formCtrl, form, $event) {
-                    if (PageHelper.isFormInvalid(formCtrl)) {
-                        return false;
-                    }
                     PageHelper.showLoader();
                     model.loanProcess.reject()
                         .finally(function () {
