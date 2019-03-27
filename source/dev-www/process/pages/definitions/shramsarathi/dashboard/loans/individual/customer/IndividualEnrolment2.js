@@ -3656,7 +3656,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                                 model.customer.mobilePhone = obj.mobileNo;
                                 model.customer.gender = obj.gender;
-                                model.customer.firstName = obj.leadName;
+                                model.customer.firstName = obj.leadName+' '+obj.lastName;
                                 model.customer.maritalStatus = obj.maritalStatus;
                                 model.customer.customerBranchId = obj.branchId;
                                 model.customer.centreId = obj.centreId;
