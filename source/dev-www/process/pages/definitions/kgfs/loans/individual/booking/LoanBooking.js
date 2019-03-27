@@ -268,6 +268,14 @@ define([], function () {
                 }
             }
 
+            var mapNomineeAddress = function(model){
+                /** Here guardianTitle column is used as flag to capture AddressSameasBorrower due to no other column exists in nominee_details table*/
+                if (model.loanAccount.nominees[0].isnomineeAddressSameasBorrower)
+                    model.loanAccount.nominees[0].guardianTitle = "YES";
+                else
+                    model.loanAccount.nominees[0].guardianTitle = "NO";   
+                }
+
             // View Functions
             var getIncludes = function (model) {
                 return [
@@ -1123,6 +1131,12 @@ define([], function () {
                         getGoldRate(model);
                     }
                     
+                     /** Here guardianTitle column is used as flag to capture AddressSameasBorrower due to no other column exists in nominee_details table*/
+                if (model.loanAccount.nominees[0].guardianTitle && model.loanAccount.nominees[0].guardianTitle == "YES")
+                    model.loanAccount.nominees[0].isnomineeAddressSameasBorrower = true;
+                else
+                    model.loanAccount.nominees[0].isnomineeAddressSameasBorrower = false;
+
                     self = this;
                     model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays = 0;
                    // "LoanSanction.disbursementSchedules.moratoriumPeriodInDays",
@@ -1276,7 +1290,7 @@ define([], function () {
                                                 "nominees": {
                                                     "items": {
                                                         "nomineeAddressSameasBorrower": {
-                                                            "key": "loanAccount.nominees[].nomineeAddressSameAsCustomer",                        
+                                                            "key": "loanAccount.nominees[].isnomineeAddressSameasBorrower",                        
                                                             "type": "checkbox",
                                                             "title": "ADDRESS_SAME_AS_BORROWER",
                                                             "schema": {
@@ -1699,6 +1713,7 @@ define([], function () {
                         if(!(policyBasedOnLoanType(model.loanAccount.loanType,model))){
                             PageHelper.showProgress('loan-process','Oops Some Error',2000);
                             return false;}
+                        mapNomineeAddress(model);    
                         model.loanProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
@@ -1779,7 +1794,9 @@ define([], function () {
                         
                         if(!(policyBasedOnLoanType(model.loanAccount.loanType,model)))
                             return false;
-
+                        
+                        mapNomineeAddress(model);    
+                        
                         var toStage=model.loanProcess.stage||null;
                         model.loanProcess.proceed(toStage)
                             .finally(function () {

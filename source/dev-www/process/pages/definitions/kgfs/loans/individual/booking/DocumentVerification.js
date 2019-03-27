@@ -70,6 +70,11 @@ define({
                     PageHelper.showErrors(httpRes);
                 });
             },
+            eventListeners: {
+                "teleVerification-capture": function(bundleModel, model, params){
+                    model.loanAccount.telecallingDetails = params.customer.telecallingDetails;            
+                }
+            },
             form: [
             {
                 "type": "box",
