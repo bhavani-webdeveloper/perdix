@@ -174,7 +174,7 @@ define({
         }
         model.pl.business.incomeFromBusiness = model.businessPL.data[0]['Income From Business'];
         model.pl.business.otherBusinessIncome = model.businessPL.data[0]['Other Business Income'];
-        model.pl.business.totalBusinessIncome = model.businessPL.data[0]['Income From Business'] + model.businessPL.data[0]['Other Business Income'];
+        model.pl.business.totalBusinessIncome = parseInt(model.businessPL.data[0]['Income From Business']) + parseInt(model.businessPL.data[0]['Other Business Income']);
         model.pl.business.purchase = model.businessPL.data[0]['Total Purchases'];
         
         //model.pl.business.businessLiabilities = totalBusinessLiabilities;
