@@ -3003,6 +3003,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                                             key: "customer.familyMembers[].incomes[].incomeSource",
                                                             type: "select",
                                                             title:"OCCUPATION",
+                                                            "parentEnumCode": "work_sector",
+                                                            "parentValueExpr": "model.customer.familyMembers[context.arrayIndex].incomes[context.arrayIndex].workSector",
                                                             required: false
                                                         },
                                                         "incomeEarned": {
