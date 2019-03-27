@@ -1314,8 +1314,6 @@ define({
                         model.avarage_withdrawal=params.avarage_withdrawal;
                         model.UIUDF.bankAccount.BankAvgBal=params.avarage_balance;
                         model.UIUDF.bankAccount.BankAvgDep=params.avarage_deposit;
-                        //debugger;
-                
                     }
                 },
                 actions: {}

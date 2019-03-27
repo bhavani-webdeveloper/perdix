@@ -17,6 +17,16 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                  readonly: true
              };*/
 
+             var getFixedByCode= function(code){
+                var temp = formHelper.enum('fixed_asset_type').data;
+                console.log("enum",temp);
+                for (var i=0;i<temp.length;i++){
+                    if (temp[i].code == code)
+                        return temp[i].name;
+                }
+                return temp[i].name;
+            }
+
             var preSaveOrProceed = function (reqData) {
                 if (_.hasIn(reqData, 'customer.familyMembers') && _.isArray(reqData.customer.familyMembers)) {
                     var selfExist = false
@@ -59,13 +69,16 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     }
                                }
                             },
-                                "PhysicalAssets":{
+                                "PhysicalAssets.physicalAssets":{
                                     "title":"FIXED_ASSET"
                                 },
                                 "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
                                     "title": "ASSET_TYPE",
                                     "type": "select",
-                                    "enumCode": "fixed_asset_type"
+                                    "enumCode": "fixed_asset_type",
+                                    onChange: function(valueObj,context,model){
+                                        model.customer.physicalAssets[context.arrayIndex].titleExpr = getFixedByCode(valueObj.toString());
+                                     }
                                 },
                                 "IndividualInformation.centreId": {
                                     "required": true,
@@ -1917,7 +1930,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                         "orderNo":400
                     },
                     "PhysicalAssets":{
-                        "title":"FINANCIAL_ASSET"
+                        "title":"FIXED_ASSET"
                     },
                     "IndividualInformation.customerBranchId": {
                         "required": true,
@@ -2090,13 +2103,14 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     "BankAccounts.customerBankAccounts.ifscCode": {
                         "required": true,
                         "resolver": "IFSCCodeLOVConfiguration"
-                    },
+                    }, 
                     "PhysicalAssets":{
                         "title":"FIXED_ASSET"
                     },
 
                     "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
-                        "enumCode": "fixed_asset_type"
+                        "enumCode": "fixed_asset_type",
+                        "title":"FIXED_ASSET"
                     },
                     // "FamilyDetails.familyMembers.relationShip": {
                     //     "condition":"(model.customer.familyMembers[arrayIndex].relationShip).toUpperCase() =='SELF'",
@@ -2484,6 +2498,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     "BankAccounts.customerBankAccounts.isDisbersementAccount",
                     //
                     "PhysicalAssets",
+                    "PhysicalAssets.physicalAssets",
                     "PhysicalAssets.physicalAssets.nameOfOwnedAsset",
                     "PhysicalAssets.physicalAssets.ownedAssetValue",
                     // "PhysicalAssets.financialAssets",

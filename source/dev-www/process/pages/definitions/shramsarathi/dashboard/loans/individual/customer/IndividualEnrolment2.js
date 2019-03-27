@@ -34,7 +34,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 return temp[i].name;
             }
 
-
             var preSaveOrProceed = function (reqData) {
                 if (_.hasIn(reqData, 'customer.familyMembers') && _.isArray(reqData.customer.familyMembers)) {
                     var selfExist = false
@@ -91,9 +90,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
                                 },
                                 "PhysicalAssets.physicalAssets":{
-                                    //"title":"FIXED_ASSETS",
-                            
-                                    
+                                    //"title":"FIXED_ASSETS",  
                                 },
                                 "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
                                     "enumCode": "fixed_asset_type",
