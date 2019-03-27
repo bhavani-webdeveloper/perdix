@@ -796,7 +796,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 //     "condition": "!model.customer.mailSameAsResidence"
                                 // },
                                 "ContactInformation.mailingMobilePhone": {
-                                    "condition": "!model.customer.mailSameAsResidence"
+                                    "condition": "!model.customer.mailSameAsResidence",
                                 },
                                 "ContactInformation.mailingPostoffice": {
                                     "condition": "!model.customer.mailSameAsResidence"
@@ -1339,6 +1339,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     
                                 },
                                 "BankAccounts.customerBankAccounts": {
+                                    "readonly": true
+                                },
+                                "IndividualFinancials.expenditures":{
                                     "readonly": true
                                 }
                             }
@@ -2723,7 +2726,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
                         }
                     } 
-                }  
+                    }  
                        
                     
                     /* Form rendering starts */
@@ -2775,7 +2778,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "mailingMobileNo":{
                                             "key":"ContactInformation.mailingMobileNo",
                                             "title":"DESTINATION_PHONE_NO",
-                                            "type":"number",
+                                            "type":"text",
+                                            "schema":{
+                                                "pattern": "^[0-9]{10,10}$"
+                                            },
                                             "condition": "!model.customer.mailSameAsResidence"
                                         }
                                     }
@@ -3210,8 +3216,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "type":"text",
                                                             "required":true,
                                                             "schema": {
-                                                                // "pattern": "^0\.[0-9]{2}$",
-                                                                // "pattern": "(^0\.0?[1-9]\d*|^[1-9]{1,3}\.\d+)",
                                                                 "pattern": "^(0\.[0-9]{1,3}|[1-9]\.[0-9]{1,3}|[1-9][0-9]\.[0-9]{1,3}|[1-9][0-9][0-9]\.[0-9]{1,3})$",
                                                                 // "type": ["decimal,integer"]
                                                             }
@@ -3703,6 +3707,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                             }
                         }
+
+                        /*Fixed asset */
+                        if(model.customer.currentAssets!== undefined){
+                            if(model.customer.currentAssets.length > 0){
+                                for(var i=0;i<model.customer.currentAssets.length;i++){
+                                    model.customer.currentAssets[i].titleExpr = model.customer.currentAssets[i].assetType;
+                                }
+                               
+                            }
+                        }
+                      
+                         if(model.customer.physicalAssets!== undefined){
+                        if(model.customer.physicalAssets.length > 0)
+                        {
+                            for(var i=0;i<model.customer.physicalAssets.length;i++){
+                                model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
+                            }
+                        } 
+                    }  
+
+
                     },
                     "new-co-applicant": function(bundleModel,model,obj){
                         if(model.customer.familyMembers){
@@ -3711,6 +3736,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                             }
                         }
+                        /* fixed Asset */
+
+                        if(model.customer.currentAssets!== undefined){
+                            if(model.customer.currentAssets.length > 0){
+                                for(var i=0;i<model.customer.currentAssets.length;i++){
+                                    model.customer.currentAssets[i].titleExpr = model.customer.currentAssets[i].assetType;
+                                }
+                               
+                            }
+                        }
+                      
+                         if(model.customer.physicalAssets!== undefined){
+                        if(model.customer.physicalAssets.length > 0)
+                        {
+                            for(var i=0;i<model.customer.physicalAssets.length;i++){
+                                model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
+                            }
+                        } 
+                        }  
                     },
                     "new-guarantor": function(bundleModel,model,obj){
                         if(model.customer.familyMembers){
@@ -3719,6 +3763,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                             }
                         }
+                        /*fixed Asset */
+                        if(model.customer.currentAssets!== undefined){
+                            if(model.customer.currentAssets.length > 0){
+                                for(var i=0;i<model.customer.currentAssets.length;i++){
+                                    model.customer.currentAssets[i].titleExpr = model.customer.currentAssets[i].assetType;
+                                }
+                               
+                            }
+                        }
+                      
+                         if(model.customer.physicalAssets!== undefined){
+                        if(model.customer.physicalAssets.length > 0)
+                        {
+                            for(var i=0;i<model.customer.physicalAssets.length;i++){
+                                model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
+                            }
+                        } 
+                        }  
                     }
                 },
                 offline: false,

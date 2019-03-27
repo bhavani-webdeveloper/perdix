@@ -415,6 +415,11 @@ define([], function () {
                                PageHelper.hideLoader();
                                return false;
                         }
+
+                        if(model.customer.dscStatus && model.customer.dscStatus == "DSC_OVERRIDDEN"){
+                            irfProgressMessage.pop("dsc-override", "Already DSC Overridden", 2000);
+                            return false; 
+                        }
                         
                         if (model.loanAccount.dscOverrideRemarks) {
                             irfProgressMessage.pop("dsc-override", "Performing DSC Override");
@@ -426,7 +431,7 @@ define([], function () {
                             }, {}, function (resp, headers) {
                                 $log.info(resp);
                                 PageHelper.hideLoader();
-                                irfProgressMessage.pop("dsc-override", "Override Succeeded", 2000);
+                                irfProgressMessage.pop("dsc-override", "DSC Overridden", 2000);
                                 if(resp && resp.length)
                                 {
                                     for(i=0;i<resp.length;i++)

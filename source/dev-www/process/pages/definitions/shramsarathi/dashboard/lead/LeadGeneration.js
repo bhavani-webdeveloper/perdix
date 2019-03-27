@@ -445,6 +445,7 @@ function(LeadProcess, AngularResourceService) {
                                                     {
                                                         "name":"no",
                                                         "value":"false"
+                                                        
                                                     }
                                                 ],
                                                 schema:{

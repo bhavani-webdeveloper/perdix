@@ -743,13 +743,17 @@ define([], function () {
                         "orderNo": 2,
                         "condition": "model.loanAccount.loanType == 'JEWEL'"
                     },
-                    "JewelDetails.ornamentDetails.netWeight":{
+                    "JewelDetails.ornamentDetails.netWeight":{ 
                         onChange:function(valueObj,context,model){
                             var carat = model.loanAccount.ornamentsAppraisals[context.arrayIndex].qualityInCarats;
                             if(carat){
                                 setGoldRate(valueObj,carat,model,context.arrayIndex);
                             }
                         }
+                    },
+                    "JewelDetails.jewelPouchNo":{
+                        readonly : true,
+                        "condition": "model.loanAccount.currentStage == 'LoanInitiation'"
                     },
                     "JewelDetails.ornamentDetails.carat":{
                         "type":"select",
@@ -1115,6 +1119,9 @@ define([], function () {
                     model.customer = {};
                     model.loanAccount = model.loanProcess.loanAccount;
                     defaultConfiguration(model,true);
+                    if(model.loanAccount.loanType == 'JEWEL' && model.loanAccount.currentStage == 'LoanInitiation'){
+                        getGoldRate(model);
+                    }
                     
                     self = this;
                     model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays = 0;
