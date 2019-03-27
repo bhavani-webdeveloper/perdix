@@ -2726,7 +2726,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
                         }
                     } 
-                }  
+                    }  
                        
                     
                     /* Form rendering starts */
@@ -3707,6 +3707,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                             }
                         }
+
+                        /*Fixed asset */
+                        if(model.customer.currentAssets!== undefined){
+                            if(model.customer.currentAssets.length > 0){
+                                for(var i=0;i<model.customer.currentAssets.length;i++){
+                                    model.customer.currentAssets[i].titleExpr = model.customer.currentAssets[i].assetType;
+                                }
+                               
+                            }
+                        }
+                      
+                         if(model.customer.physicalAssets!== undefined){
+                        if(model.customer.physicalAssets.length > 0)
+                        {
+                            for(var i=0;i<model.customer.physicalAssets.length;i++){
+                                model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
+                            }
+                        } 
+                    }  
+
+
                     },
                     "new-co-applicant": function(bundleModel,model,obj){
                         if(model.customer.familyMembers){
@@ -3715,6 +3736,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                             }
                         }
+                        /* fixed Asset */
+
+                        if(model.customer.currentAssets!== undefined){
+                            if(model.customer.currentAssets.length > 0){
+                                for(var i=0;i<model.customer.currentAssets.length;i++){
+                                    model.customer.currentAssets[i].titleExpr = model.customer.currentAssets[i].assetType;
+                                }
+                               
+                            }
+                        }
+                      
+                         if(model.customer.physicalAssets!== undefined){
+                        if(model.customer.physicalAssets.length > 0)
+                        {
+                            for(var i=0;i<model.customer.physicalAssets.length;i++){
+                                model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
+                            }
+                        } 
+                        }  
                     },
                     "new-guarantor": function(bundleModel,model,obj){
                         if(model.customer.familyMembers){
@@ -3723,6 +3763,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                             }
                         }
+                        /*fixed Asset */
+                        if(model.customer.currentAssets!== undefined){
+                            if(model.customer.currentAssets.length > 0){
+                                for(var i=0;i<model.customer.currentAssets.length;i++){
+                                    model.customer.currentAssets[i].titleExpr = model.customer.currentAssets[i].assetType;
+                                }
+                               
+                            }
+                        }
+                      
+                         if(model.customer.physicalAssets!== undefined){
+                        if(model.customer.physicalAssets.length > 0)
+                        {
+                            for(var i=0;i<model.customer.physicalAssets.length;i++){
+                                model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
+                            }
+                        } 
+                        }  
                     }
                 },
                 offline: false,
