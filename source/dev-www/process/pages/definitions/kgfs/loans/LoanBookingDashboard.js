@@ -40,7 +40,7 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanBookingDashboard"),
                     'partner': userPartner,
                     'stage': "LoanInitiation",
                     'page': 1,
-                    'per_page': 100
+                    'per_page': 1
                 }, function(response) {
                     liqMenu.data = Number(response.headers['x-total-count']) || 0;
                 });
@@ -52,7 +52,7 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanBookingDashboard"),
                     'partner': userPartner,
                     'stage': "DSCOverride",
                     'page': 1,
-                    'per_page': 100
+                    'per_page': 1
                 }, function(response) {
                     dscoverrideMenu.data = Number(response.headers['x-total-count']) || 0;
                 });
@@ -64,7 +64,7 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanBookingDashboard"),
                     'partner': userPartner,
                     'stage': "DocumentUpload",
                     'page': 1,
-                    'per_page': 100
+                    'per_page': 1
                 }, function(response) {
                     DocUplMenu.data = Number(response.headers['x-total-count']) || 0;
                 });
@@ -77,7 +77,7 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanBookingDashboard"),
                     'partner': userPartner,
                     'stage': "Checker1",
                     'page': 1,
-                    'per_page': 100
+                    'per_page': 1
                 }, function(response) {
                     checker1Menu.data = Number(response.headers['x-total-count']) || 0;
                 });
@@ -90,7 +90,7 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanBookingDashboard"),
                     'partner': userPartner,
                     'stage': "Checker2",
                     'page': 1,
-                    'per_page': 100
+                    'per_page': 1
                 }, function(response) {
                     checker2Menu.data = Number(response.headers['x-total-count']) || 0;
                 });
