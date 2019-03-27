@@ -164,7 +164,7 @@ define({
                         familyMemberIncomes : model.houseHoldPL[i].data[0]['Family Member Incomes'],
                         Expenses : model.houseHoldPL[i].data[0]['Total Expenses'],
                         declaredEducationExpense : model.houseHoldPL[i].data[0]['Household Expenses'],
-                        emiHouseholdLiabilities : (model.businessPL.data[0]['Business Liabilities'] * 12),
+                        emiHouseholdLiabilities : (parseInt(model.businessPL.data[0]['Business Liabilities']) * 12),
                         netHouseholdIncome : model.houseHoldPL[i].data[0]['Net Household Income'],
                         relationDetails: model.houseHoldPL[i]['relation_detail']
                     })
@@ -181,9 +181,11 @@ define({
         model.pl.business.businessLiabilities = model.businessPL.data[0]['Business Liabilities'] * 12;
         model.pl.business.businessExpense = model.businessPL.data[0]['Business Expenses'];
         model.pl.business.personalExpense = model.businessPL.data[0]['Personal Expenses'];
-        model.pl.business.netBusinessIncome = model.businessPL.data[0]['Monthly Sales'] - model.businessPL.data[0]['Business Expenses'];
-        model.pl.business.kgfsEMi = ((model.pl.business.netBusinessIncome + model.pl.business.otherBusinessIncome) - (model.pl.business.personalExpense + model.businessPL.data[0]['Total Emi Amount'])) * model.businessPL.data[0]['Own Salary'];
-        model.pl.business.netIncome = model.pl.business.netBusinessIncome - (model.pl.business.kgfsEMi + model.businessPL.data[0]['Personal Expenses']);;
+        model.pl.business.netBusinessIncome = parseFloat(model.businessPL.data[0]['Monthly Sales']) - parseInt(model.businessPL.data[0]['Business Expenses']);
+        model.pl.business.kgfsEMi = ((model.pl.business.netBusinessIncome + parseInt(model.pl.business.otherBusinessIncome)) - (parseInt(model.pl.business.personalExpense) + parseInt(model.businessPL.data[0]['Total Emi Amount']))) * parseInt(model.businessPL.data[0]['Own Salary']);
+        model.pl.business.netIncome = Math.round(model.pl.business.netBusinessIncome - (model.pl.business.kgfsEMi + model.businessPL.data[0]['Personal Expenses']));
+        model.pl.business.netBusinessIncome = Math.round(model.pl.business.netBusinessIncome);
+        model.pl.business.kgfsEMi = Math.round(model.pl.business.kgfsEMi);
         //model.pl.business.finalKgfsEmi = model.businessPL.data[0]['Final Kinara EMI'];
         model.additional = {};
 
@@ -399,12 +401,12 @@ define({
         '<tr> <td>{{"INCOME_FROM_BUSINESS" | translate}}</td><td>{{model.pl.business.incomeFromBusiness}}</td> </tr>'+
         '<tr> <td>{{"OTHER_BUSINESS_INCOME" | translate}}</td><td>{{model.pl.business.otherBusinessIncome}}</td> </tr>'+
         '<tr > <td><strong>{{"TOTAL_BUSINESS_INCOME" | translate}}<strong></td><td><strong>{{model.pl.business.totalBusinessIncome | irfCurrency}}<strong></td></tr>'+
-        '<tr> <td>{{"PURCHASES" | translate}}</td><td>{{model.pl.business.purchases }}</td></tr>'+
+        '<tr> <td>{{"PURCHASES" | translate}}</td><td>{{model.pl.business.purchase }}</td></tr>'+
         '<tr> <td>{{"OTHER_BUSINESS_EXPENSE" | translate}}</td><td>{{model.pl.business.businessExpense}}</td></tr>'+
         '<tr class="table-sub-header"> <th>{{"EXISTING_LOAN_PAYMENTS" | translate}}</th> <th></th> </tr>'+
         '<tr> <td>{{"BUSINESS_LIABILITIES" | translate}}</td><td>{{model.pl.business.businessLiabilities | irfCurrency}}</td> </tr>'+
         '<tr> <td>{{"NET_BUSINESS_INCOME" | translate}}</td><td>{{model.pl.business.netBusinessIncome | irfCurrency}}</td></tr>'+
-        '<tr> <td><strong>{{"KGFS_EMI" | translate}}</strong></td><td><strong>{{model.pl.business.kgfsEmi | irfCurrency}}</strong></td></tr>'+
+        '<tr> <td><strong>{{"KGFS_EMI" | translate}}</strong></td><td><strong>{{model.pl.business.kgfsEMi | irfCurrency}}</strong></td></tr>'+
         '<tr> <td><strong>{{"PERSONAL_EXPENSE" | translate}}</strong></td><td><strong>{{model.pl.business.personalExpense | irfCurrency}}</strong></td></tr>'+
         '<tr> <td><strong>{{"NET_INCOME" | translate}}</strong></td><td><strong>{{model.pl.business.netIncome | irfCurrency}}</strong></td></tr>'+
        
