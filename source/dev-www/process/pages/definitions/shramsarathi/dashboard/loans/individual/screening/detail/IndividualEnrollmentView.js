@@ -168,7 +168,7 @@ define({
                                     "type": "grid",
                                     "orientation": "vertical",
                                     "items": [{
-                                        "key": "UIUDF.family_fields.total_household_income",
+                                        "key": "UIUDF.income[0].incomes[0].incomeEarned",
                                         "type": "amount",
                                         "title": "Total Household income"
                                     }, {
@@ -616,16 +616,16 @@ define({
                                         }
                                     }, 
                                     {
-                                        "title": "Bank Balance",
+                                        "title": "Average Bank Balance",
                                         "data": "BankAvgBal",
                                         render: function(data, type, full, meta) {
-                                            return irfCurrencyFilter(full['bankStatements[].balanceAsOn15th'])
+                                            return irfCurrencyFilter(full['BankAvgBal'])
                                         }
                                     }, {
-                                        "title": "Bank Deposit",
+                                        "title": "Average Bank Deposit",
                                         "data": "BankAvgDep",
                                         render: function(data, type, full, meta) {
-                                            return irfCurrencyFilter(full['bankStatements[].cashDeposits'])
+                                            return irfCurrencyFilter(full['BankAvgDep'])
                                         }
                                     },
                                      {
