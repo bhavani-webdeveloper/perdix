@@ -816,7 +816,7 @@ define({
                         "readonly": true,
                         "colClass": "col-sm-12",
                         "overrideType": "default-view",
-                        "title": "Household Assets",
+                        "title": "Fixed Assets",
                         "condition": "model.UIUDF.household_fields.total_Assets !=0",
                         "items": [{
                             "type": "grid",
@@ -856,11 +856,13 @@ define({
                                     return [{
                                         "title": "ASSET_TYPE",
                                         "data": "nameOfOwnedAsset"
-                                    }, {
-                                        "title": "REGISTERED_OWNER",
-                                        "data": "registeredOwner"
+                                    }, 
+                                    // {
+                                    //     "title": "REGISTERED_OWNER",
+                                    //     "data": "registeredOwner"
     
-                                    }, {
+                                    // }, 
+                                    {
                                         "title": "Asset Value",
                                         "data": "ownedAssetValue",
                                         render: function(data, type, full, meta) {
@@ -868,10 +870,12 @@ define({
                                                 return irfCurrencyFilter(data)
                                             else return "NA"
                                         }
-                                    }, {
-                                        "title": "AREA_UNITS_OF_ASSETS",
-                                        "data": "unit"
-                                    }];
+                                    }, 
+                                    // {
+                                    //     "title": "AREA_UNITS_OF_ASSETS",
+                                    //     "data": "unit"
+                                    // }
+                                ];
                                 },
                                 getActions: function() {
                                     return [];
