@@ -38,7 +38,9 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanBookingDashboard"),
                 IndividualLoan.search({
                     'branchId': branchId,
                     'partner': userPartner,
-                    'stage': "LoanInitiation"
+                    'stage': "LoanInitiation",
+                    'page': 1,
+                    'per_page': 100
                 }, function(response) {
                     liqMenu.data = Number(response.headers['x-total-count']) || 0;
                 });
@@ -48,7 +50,9 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanBookingDashboard"),
                 IndividualLoan.search({
                     'branchId': branchId,
                     'partner': userPartner,
-                    'stage': "DSCOverride"
+                    'stage': "DSCOverride",
+                    'page': 1,
+                    'per_page': 100
                 }, function(response) {
                     dscoverrideMenu.data = Number(response.headers['x-total-count']) || 0;
                 });
@@ -58,7 +62,9 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanBookingDashboard"),
                 IndividualLoan.search({
                     'branchId': branchId,
                     'partner': userPartner,
-                    'stage': "DocumentUpload"
+                    'stage': "DocumentUpload",
+                    'page': 1,
+                    'per_page': 100
                 }, function(response) {
                     DocUplMenu.data = Number(response.headers['x-total-count']) || 0;
                 });
@@ -69,7 +75,9 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanBookingDashboard"),
                 IndividualLoan.search({
                     'branchId': branchId,
                     'partner': userPartner,
-                    'stage': "Checker1"
+                    'stage': "Checker1",
+                    'page': 1,
+                    'per_page': 100
                 }, function(response) {
                     checker1Menu.data = Number(response.headers['x-total-count']) || 0;
                 });
@@ -80,7 +88,9 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanBookingDashboard"),
                 IndividualLoan.search({
                     'branchId': branchId,
                     'partner': userPartner,
-                    'stage': "Checker2"
+                    'stage': "Checker2",
+                    'page': 1,
+                    'per_page': 100
                 }, function(response) {
                     checker2Menu.data = Number(response.headers['x-total-count']) || 0;
                 });
