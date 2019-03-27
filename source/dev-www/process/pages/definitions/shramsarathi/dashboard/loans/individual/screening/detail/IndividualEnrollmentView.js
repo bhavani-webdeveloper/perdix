@@ -53,6 +53,7 @@ define({
                         model.UIUDF.expenditures=res.expenditures;
                         model.UIUDF.income=res.familyMembers;
                         model.UIUDF.current_assets = res.currentAssets;
+                        
                         //debugger;
                         var centres = formHelper.enum("centre").data;
                         for (var i=0;i<centres.length;i++){
@@ -68,7 +69,8 @@ define({
                         //     res.district,
                         //     res.state
                         // ].join(', ') + ' - ' + res.pincode;
-    
+                        model.netincome=model.UIUDF.income[0].incomes[0].incomeEarned - model.UIUDF.expenditures[0].annualExpenses;
+                       // debugger;
                         /*Family fields*/
                         model.UIUDF.family_fields.family_member_count = model.customer.familyMembers.length;
                         model.UIUDF.family_fields.dependent_family_member = 0;/*
@@ -1030,7 +1032,7 @@ define({
                                     "title": "Expenses",
                                     "type": "amount"
                                 }, {
-                                    "key": "UIUDF.income[0].incomes[0].incomeEarned",
+                                    "key": "netincome",
                                     "title": "Net House Hold Income",
                                     "type": "amount"
     
@@ -1048,13 +1050,13 @@ define({
                                     '</colgroup>' +
                                     '<tbody>' +
                                     '<tr class="table-sub-header"> <th>{{"INCOME" | translate}}</th> <th></th> <th>{{model.UIUDF.income[0].incomes[0].incomeEarned | irfCurrency}}</th> </tr>' +
-                                    '<tr> <td></td> <td>{{"SALARY_FROM_BUSINESS" | translate}}</td> <td>{{household.salaryFromBusiness | irfCurrency}}</td> </tr>' +
-                                    '<tr> <td></td> <td>{{"OTHER_INCOME_SALARIES" | translate}}</td> <td>{{household.otherIncomeSalaries | irfCurrency}}</td> </tr>' +
+                                    //'<tr> <td></td> <td>{{"SALARY_FROM_BUSINESS" | translate}}</td> <td>{{household.salaryFromBusiness | irfCurrency}}</td> </tr>' +
+                                    //'<tr> <td></td> <td>{{"OTHER_INCOME_SALARIES" | translate}}</td> <td>{{household.otherIncomeSalaries | irfCurrency}}</td> </tr>' +
                                     '<tr> <td></td> <td>{{"FAMILY_MEMBER_INCOMES" | translate}}</td> <td>{{model.UIUDF.income[0].incomes[0].incomeEarned | irfCurrency}}</td> </tr>' +
                                     '<tr class="table-sub-header"> <th>{{"EXPENSES" | translate}}</th> <th></th> <th>{{model.UIUDF.expenditures[0].annualExpenses | irfCurrency}}</th> </tr>' +
                                     '<tr> <td></td> <td>{{"DECLARED_EDUCATIONAL_EXPENSE" | translate}}</td> <td>{{household.declaredEducationExpense | irfCurrency}}</td> </tr>' +
                                     '<tr> <td></td> <td>{{"EMI_HOUSEHOLD_LIABILITIES" | translate}}</td> <td>{{household.emiHouseholdLiabilities | irfCurrency}}</td> </tr>' +
-                                    '<tr class="table-bottom-summary"> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td></td> <td>{{ model.UIUDF.income[0].incomes[0].incomeEarned| irfCurrency}}</td> </tr>' +
+                                    '<tr class="table-bottom-summary"> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td></td> <td>{{ model.UIUDF.income[0].incomes[0].incomeEarned - model.UIUDF.expenditures[0].annualExpenses| irfCurrency}}</td> </tr>' +
                                     '</tbody>' +
                                     '</table>' + '</div>'
                             }]
