@@ -1387,6 +1387,13 @@
                          "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
+                   "nomineeAddressSameAsCustomer":{
+                     "title":"Nominee Address Same as Borrower",
+                     "type":"boolean",
+                     "captureStages":[
+                        "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                     ]
+                   },
                    "guardianTitle":{
                       "title":"Guardian Title",
                       "type":"string",
