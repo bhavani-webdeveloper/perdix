@@ -3543,11 +3543,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         if (model.customer.enterpriseProductSales.length != 0) {
                             getEnterpriseProductDetails(model)
                         }
-                        if(model.customer.otherBusinessIncomes.length !=0){
-                            getBusinessExpenseData('value', model, 'row');
-                            getPersonalExpenses('value', model, 'row');
-                            getOtherBusinessIncomeDet('', model, '') ;
-                        }
                         if(model.customer.liabilities.length >  0 && model.customer.liabilities[0].customerLiabilityRepayments){
                             model.customer.enterprise.totalLoanAmount = 0;
                             model.customer.enterprise.totalEmiAmount = 0;
@@ -3557,6 +3552,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 model.customer.enterprise.totalLoanAmount = model.customer.enterprise.totalLoanAmount + Number(liability.udf1);
                                 model.customer.enterprise.totalEmiAmount = model.customer.enterprise.totalEmiAmount + liability.emiAmount;
                             })
+                        }
+                        if(model.customer.otherBusinessIncomes.length !=0){
+                            getBusinessExpenseData('value', model, 'row');
+                            getPersonalExpenses('value', model, 'row');
+                            getOtherBusinessIncomeDet('', model, '') ;
                         }
                     }
                     
