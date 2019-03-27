@@ -544,15 +544,15 @@ define({
                                 "type": "grid",
                                 "orientation": "vertical",
                                 "items": [{
-                                    "key": "BankAvgDep",
+                                    "key": "avarage_deposit",
                                     "title": "Average Monthly Deposit",
                                     "type": "amount"
                                 }, {
-                                    "key": "BankAvgWithdrawl",
+                                    "key": "avarage_withdrawal",
                                     "title": "Average Monthly Withdrawls",
                                     "type": "amount"
                                 }, {
-                                    "key": "BankAvgBal",
+                                    "key": "avarage_balance",
                                     "title": "Average Monthly Balances",
                                     "type": "amount"
                                 }]
@@ -616,16 +616,16 @@ define({
                                         }
                                     }, 
                                     {
-                                        "title": "Average Bank Balance",
-                                        "data": "averageBankBalance",
+                                        "title": "Bank Balance",
+                                        "data": "BankAvgBal",
                                         render: function(data, type, full, meta) {
-                                            return irfCurrencyFilter(full['BankAvgBal'])
+                                            return irfCurrencyFilter(full['bankStatements[].balanceAsOn15th'])
                                         }
                                     }, {
-                                        "title": "Average Bank Deposit",
+                                        "title": "Bank Deposit",
                                         "data": "BankAvgDep",
                                         render: function(data, type, full, meta) {
-                                            return irfCurrencyFilter(full['BankAvgDep'])
+                                            return irfCurrencyFilter(full['bankStatements[].cashDeposits'])
                                         }
                                     },
                                      {
@@ -1299,6 +1299,16 @@ define({
                                 value: model.business.centreId
                             })[0].name;
                         }
+                    },
+                    "Financial-Summary":function(bundleModel,model,params){
+                        console.log("Financial-Summary event listener",params);
+                        model.avarage_balance=params.avarage_balance;
+                        model.avarage_deposit=params.avarage_deposit;
+                        model.avarage_withdrawal=params.avarage_withdrawal;
+                        model.UIUDF.bankAccount.BankAvgBal=params.avarage_balance;
+                        model.UIUDF.bankAccount.BankAvgDep=params.avarage_deposit;
+                        debugger;
+                
                     }
                 },
                 actions: {}
