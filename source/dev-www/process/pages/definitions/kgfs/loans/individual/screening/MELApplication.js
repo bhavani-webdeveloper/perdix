@@ -256,6 +256,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         },
                                         "uploadMELApplicationForm":{
                                         "key": "loanAccount.documents[].documentId",
+                                        "required":true,
                                         "notitle": true,
                                         "type": "file",
                                         "category": "ACH",
