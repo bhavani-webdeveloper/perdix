@@ -82,6 +82,39 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     "title":"HAMLET_FALA",
                                     "required": false,
                                 },
+                                "KYC.addressProofFieldSet":{
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProof": {
+                                    "readonly": false,
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofImageId": {
+                                    "required": true,
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofNo": {
+                                    "required": true,
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofIssueDate":{
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofValidUptoDate":{
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.identityProof": {
+                                    "required": true,
+                                    onChange: function(value, form, model) {
+                                       if(model.customer.identityProof=='Aadhaar Card'){
+                                        model.customer.addressPfSameAsIdProof='YES'
+                                       }else{
+                                        model.customer.addressPfSameAsIdProof='NO'
+                                       }
+                                       
+                                    }
+                                 
+                                }
 
                             }
                         },
@@ -257,11 +290,23 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 "KYC.customerId": {
                                     "resolver": "IndividualCustomerIDLOVConfiguration"
                                 },
-                                "KYC.identityProof": {
-                                    "required": true
-                                },
+                                // "KYC.identityProof": {
+                                //     "required": true
+                                // },
                                 "KYC.identityProofImageId": {
                                     "required": true
+                                },
+                                "KYC.identityProof": {
+                                    "required": true,
+                                    onChange: function(value, form, model) {
+                                       if(model.customer.identityProof=='Aadhaar Card'){
+                                        model.customer.addressPfSameAsIdProof='YES'
+                                       }else{
+                                        model.customer.addressPfSameAsIdProof='NO'
+                                       }
+                                       
+                                    }
+                                 
                                 },
                                 "KYC.identityProofNo": {
                                     "required": true,
@@ -2790,6 +2835,14 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                                             model.customer.addressProofIssueDate=model.customer.idProofIssueDate,
                                                             model.customer.addressProofValidUptoDate=model.customer.idProofValidUptoDate
                                                         }
+                                                        else{
+                                                            model.customer.addressProof = null;
+                                                            model.customer.addressProofNo=null;
+                                                            model.customer.addressProofImageId=null;
+                                                            model.customer.addressProofReverseImageId=null;
+                                                            model.customer.addressProofIssueDate=null;
+                                                            model.customer.addressProofValidUptoDate=null;
+                                                        }
                                                     }    
                                         },
                                         "addressProofBackside":{
@@ -3584,6 +3637,16 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                             return false;
                         }
 
+                        if((model.customer.addressPfSameAsIdProof==='YES') && (model.customer.identityProof=='Aadhaar Card')){
+                            model.customer.addressProof=model.customer.identityProof;
+                            model.customer.addressProofNo=model.customer.identityProofNo;
+                            model.customer.addressProofImageId=model.customer.identityProofImageId;
+                            model.customer.addressProofReverseImageId=model.customer.identityProofReverseImageId;
+                            model.customer.addressProofIssueDate=model.customer.idProofIssueDate;
+                            model.customer.addressProofValidUptoDate=model.customer.idProofValidUptoDate;
+                        }
+                        
+
                         // $q.all start
                         model.enrolmentProcess.save()
                             .finally(function () {
@@ -3634,6 +3697,16 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                         if (PageHelper.isFormInvalid(form)) {
                             return false;
                         }
+
+                        if((model.customer.addressPfSameAsIdProof==='YES') && (model.customer.identityProof=='Aadhaar Card')){
+                            model.customer.addressProof=model.customer.identityProof;
+                            model.customer.addressProofNo=model.customer.identityProofNo;
+                            model.customer.addressProofImageId=model.customer.identityProofImageId;
+                            model.customer.addressProofReverseImageId=model.customer.identityProofReverseImageId;
+                            model.customer.addressProofIssueDate=model.customer.idProofIssueDate;
+                            model.customer.addressProofValidUptoDate=model.customer.idProofValidUptoDate;
+                        }
+
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
                         model.enrolmentProcess.save()
