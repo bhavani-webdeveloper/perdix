@@ -1387,7 +1387,7 @@
                          "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
-                   "nomineeAddressSameasBorrower":{
+                   "nomineeAddressSameAsCustomer":{
                      "title":"Nominee Address Same as Borrower",
                      "type":"boolean",
                      "captureStages":[
