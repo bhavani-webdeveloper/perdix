@@ -1350,7 +1350,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             orderNo:149,
                                             "schema":{  
                                                "default":false
-                                            }
+                                            },
+                                            condition:"model.loanProcess.loanAccount.productCategory == 'MEL'"
                                         },
                                         "mailinglandmark":{
                                             "key":"customer.previousRentDetails",
