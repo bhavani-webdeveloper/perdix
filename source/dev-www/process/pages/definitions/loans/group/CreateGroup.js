@@ -371,7 +371,7 @@ define({
                             Enrollment.getCustomerById({id:valueObj.id}).$promise
                                  .then(function(res){
                                      model.group.jlgGroupMembers[context.arrayIndex].husbandOrFatherFirstName = res.fatherFirstName;
-                                     if (res.maritalStatus == 'Married' && res.gender == "FEMALE"){
+                                     if (res.maritalStatus == 'MARRIED' && res.gender == "FEMALE" && res.spouseFirstName != null){
                                          model.group.jlgGroupMembers[context.arrayIndex].relation = "Husband";
                                          model.group.jlgGroupMembers[context.arrayIndex].husbandOrFatherFirstName = res.spouseFirstName;
                                      }
