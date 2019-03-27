@@ -168,7 +168,7 @@ define({
                                     "type": "grid",
                                     "orientation": "vertical",
                                     "items": [{
-                                        "key": "UIUDF.family_fields.total_household_income",
+                                        "key": "UIUDF.income[0].incomes[0].incomeEarned",
                                         "type": "amount",
                                         "title": "Total Household income"
                                     }, {
@@ -544,15 +544,15 @@ define({
                                 "type": "grid",
                                 "orientation": "vertical",
                                 "items": [{
-                                    "key": "BankAvgDep",
+                                    "key": "avarage_deposit",
                                     "title": "Average Monthly Deposit",
                                     "type": "amount"
                                 }, {
-                                    "key": "BankAvgWithdrawl",
+                                    "key": "avarage_withdrawal",
                                     "title": "Average Monthly Withdrawls",
                                     "type": "amount"
                                 }, {
-                                    "key": "BankAvgBal",
+                                    "key": "avarage_balance",
                                     "title": "Average Monthly Balances",
                                     "type": "amount"
                                 }]
@@ -616,16 +616,17 @@ define({
                                         }
                                     }, 
                                     {
-                                        "title": "Average Bank Balance",
-                                        "data": "averageBankBalance",
+                                        "title": "Bank Balance",
+                                        "data": "bankStatements[0].balanceAsOn15th",
                                         render: function(data, type, full, meta) {
-                                            return irfCurrencyFilter(full['BankAvgBal'])
+                                            return irfCurrencyFilter(full.bankStatements[0].balanceAsOn15th)
+                                            //return irfCurrencyFilter(full.incomes[0].incomeEarned);
                                         }
                                     }, {
-                                        "title": "Average Bank Deposit",
+                                        "title": "Bank Deposit",
                                         "data": "BankAvgDep",
                                         render: function(data, type, full, meta) {
-                                            return irfCurrencyFilter(full['BankAvgDep'])
+                                            return irfCurrencyFilter(full.bankStatements[0].totalDeposits)
                                         }
                                     },
                                      {
@@ -816,7 +817,7 @@ define({
                         "readonly": true,
                         "colClass": "col-sm-12",
                         "overrideType": "default-view",
-                        "title": "Household Assets",
+                        "title": "Fixed Assets",
                         "condition": "model.UIUDF.household_fields.total_Assets !=0",
                         "items": [{
                             "type": "grid",
@@ -856,11 +857,13 @@ define({
                                     return [{
                                         "title": "ASSET_TYPE",
                                         "data": "nameOfOwnedAsset"
-                                    }, {
-                                        "title": "REGISTERED_OWNER",
-                                        "data": "registeredOwner"
+                                    }, 
+                                    // {
+                                    //     "title": "REGISTERED_OWNER",
+                                    //     "data": "registeredOwner"
     
-                                    }, {
+                                    // }, 
+                                    {
                                         "title": "Asset Value",
                                         "data": "ownedAssetValue",
                                         render: function(data, type, full, meta) {
@@ -868,10 +871,12 @@ define({
                                                 return irfCurrencyFilter(data)
                                             else return "NA"
                                         }
-                                    }, {
-                                        "title": "AREA_UNITS_OF_ASSETS",
-                                        "data": "unit"
-                                    }];
+                                    }, 
+                                    // {
+                                    //     "title": "AREA_UNITS_OF_ASSETS",
+                                    //     "data": "unit"
+                                    // }
+                                ];
                                 },
                                 getActions: function() {
                                     return [];
@@ -1299,6 +1304,16 @@ define({
                                 value: model.business.centreId
                             })[0].name;
                         }
+                    },
+                    "Financial-Summary":function(bundleModel,model,params){
+                        console.log("Financial-Summary event listener",params);
+                        model.avarage_balance=params.avarage_balance;
+                        model.avarage_deposit=params.avarage_deposit;
+                        model.avarage_withdrawal=params.avarage_withdrawal;
+                        model.UIUDF.bankAccount.BankAvgBal=params.avarage_balance;
+                        model.UIUDF.bankAccount.BankAvgDep=params.avarage_deposit;
+                        //debugger;
+                
                     }
                 },
                 actions: {}

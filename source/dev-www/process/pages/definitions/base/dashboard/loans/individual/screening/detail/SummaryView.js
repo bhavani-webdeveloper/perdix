@@ -183,7 +183,7 @@ define({
             } 
 
            api(params).$promise.then(function(response) {
-                model.ScoreDetails = response.ScoreDetails[0];
+                model.ScoreDetails = response.ScoreDetails;
             }).finally(function() {
                 var onSuccessPromise = Scoring.financialSummary({
                     loan_id: model.cbModel.loanId,

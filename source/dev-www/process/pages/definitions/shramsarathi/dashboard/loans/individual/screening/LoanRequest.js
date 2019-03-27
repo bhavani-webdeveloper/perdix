@@ -368,7 +368,7 @@ define([],function(){
                                     "orderNo": 41,
                                 },
                                 "NomineeDetails.nominees.nomineeDoorNo": {
-                                   "required":true
+                                   "required":false
                                 },
                                 "NomineeDetails.nominees.nomineePincode": {
                                    "required": true,
@@ -1009,7 +1009,7 @@ define([],function(){
                                     "required":true
                                 },
                                 "NomineeDetails.nominees.nomineeDoorNo":{
-                                    "required":true
+                                    "required":false
                                 },
                                 "NomineeDetails.nominees.nomineeRelationship":{
                                     "required":true

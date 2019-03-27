@@ -172,7 +172,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             customerId:loanProcess.loanAccount.customerId,
                                             loanId:bundleModel.loanId,
                                             scoreName:'RiskScore2'
-                                        }
+                                        },
+                                        loanProcess: loanProcess
                                     }
                                 });
                                 $this.bundlePages.push({

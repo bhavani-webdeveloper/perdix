@@ -1394,7 +1394,7 @@ define([],function(){
                 eventListeners: {
                     "new-applicant": function (bundleModel, model, obj) {
                         model.customer = obj.customer;
-                        clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
+                      //  clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
                         model.loanAccount.customerId = model.customer.id;
                         model.loanAccount.urnNo = model.customer.urnNo;
                         defaultConfiguration(model,false);

@@ -71,7 +71,7 @@ function(LeadProcess, AngularResourceService) {
                     },
                     "leadProfile.individualDetails.existingApplicant":{
                         // "condition":"(model.lead.centreName!==NULL)",
-                    bindMap: {
+                    bindMap: { 
                         "ZoneName": "lead.centreName",
                         "LeadType": "lead.customerTypeString"
                     }
