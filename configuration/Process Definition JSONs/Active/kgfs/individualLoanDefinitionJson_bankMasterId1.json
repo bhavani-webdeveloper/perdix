@@ -1976,7 +1976,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
                    ]
                 },
                 "jewelPouchLocationId":{
@@ -1985,7 +1985,7 @@
                    "minimum":1,
                    "maximum":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
                    ]
                 },
                 "jewelPouchNo":{
@@ -1994,7 +1994,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
                    ]
                 },
                 "jewelPouchMovementId":{
@@ -2003,21 +2003,21 @@
                    "minimum":1,
                    "maximum":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
                    ]
                 },
                 "transitRequest":{
                    "title":"Transit Request",
                    "type":"boolean",
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
                    ]
                 },
                 "encoreClosed":{
                    "title":"Encore Closed",
                    "type":"boolean",
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
                    ]
                 }
              }
