@@ -401,10 +401,19 @@ define({
                             searchHelper: formHelper,
                             search: function (inputModel, form, model, context) {
                                 var stage1 = model.loanAccount.currentStage;
-                                var booking_target_stage = formHelper.enum('booking_target_stage').data;
+                                var productCategory = model.loanProcess.loanAccount.productCategory;
+                                if(model.loanAccount.currentStage=='Rejected')
+                                var stage1= model.review.preStage;
+                                
+                                if(productCategory == 'Consumer' || productCategory == 'Personal')
+                                var targetstage = formHelper.enum('targetstagemelpersonal').data;
+                                else if(productCategory == 'JEWEL')
+                                var targetstage = formHelper.enum('targetstagemeljewel').data;
+                                else
+                                var targetstage = formHelper.enum('targetstagemel').data;
                                 var out = [];
-                                for (var i = 0; i < booking_target_stage.length; i++) {
-                                    var t = booking_target_stage[i];
+                                for (var i = 0; i < targetstage.length; i++) {
+                                    var t = targetstage[i];
                                     if (t.field1 == stage1) {
                                         out.push({
                                             name: t.name,
