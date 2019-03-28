@@ -885,7 +885,8 @@ define({
                                 }
                             }]
                         }]
-                    },{
+                    },
+                    {
                         "type": "box",
                         "readonly": true,
                         "colClass": "col-sm-12",
