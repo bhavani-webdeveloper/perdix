@@ -69,7 +69,17 @@ define({
                         //     res.district,
                         //     res.state
                         // ].join(', ') + ' - ' + res.pincode;
-                        model.netincome=model.UIUDF.income[0].incomes[0].incomeEarned - model.UIUDF.expenditures[0].annualExpenses;
+                        if(model.UIUDF.income[0].incomes[0]!=undefined){
+                            debugger;
+                            model.netincome=model.UIUDF.income[0].incomes[0].incomeEarned - model.UIUDF.expenditures[0].annualExpenses;
+                            debugger;
+                        }
+                        else
+                        {
+                            //model.UIUDF.income[0].incomes[0].incomeEarned=0;
+                            model.netincome= 0 - model.UIUDF.expenditures[0].annualExpenses;
+                            debugger;
+                        }
                        // debugger;
                         /*Family fields*/
                         model.UIUDF.family_fields.family_member_count = model.customer.familyMembers.length;
@@ -656,7 +666,8 @@ define({
                                         render: function(data, type, full, meta) {
                                             return full['netBankingAvailable']
                                         }
-                                    }, {
+                                    },
+                                    {
                                         "title": "Limit",
                                         "data": "limit",
                                         render: function(data, type, full, meta) {
@@ -684,7 +695,8 @@ define({
                                                 '<a  href="' + url[5] + '">' + title[5] + '</a><br>' +
                                                 '</div>'
                                         }
-                                    }];
+                                    }
+                                ];
                                 },
                                 getActions: function() {
                                     return [];
