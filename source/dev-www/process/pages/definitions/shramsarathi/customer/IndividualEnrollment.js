@@ -98,6 +98,9 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                         model.customer.currentAssets[context.arrayIndex].titleExpr = getCurrentByCode(valueObj.toString());
                                      }
                                 },
+                                "IndividualInformation.customerId":{
+                                    "readonly": true,
+                                },
                                 "IndividualInformation.centreId": {
                                     "required": true,
                                     "readonly": false,
@@ -401,7 +404,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     "title":"DESTINATION_ADDRESS"
                                 },
                                 "IndividualInformation.customerId": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    
                                 },
                                 "IndividualInformation.urnNo": {
                                     "readonly": true
