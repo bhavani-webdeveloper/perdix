@@ -123,7 +123,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                             ]
                         },
                         getActions: function(){
-                            return [
+                            return  PagesDefinition.getUserAllowedQueueActionsDefinition([
                                 {
                                     name: "View Details",
                                     desc: "",
@@ -160,6 +160,45 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                     }
                                 },
                                 {
+                                    name: "COLLECTION_STATUS",
+                                    desc: "",
+                                    fn: function(item, index){
+                                       // entityManager.setModel('loans.individual.collections.P2PUpdate', {_bounce:item,_screen:"BounceQueue"});
+                                        $state.go('Page.Engine', {pageName: 'loans.individual.collections.P2PUpdate', pageId: item.accountNumber});
+                                    },
+                                    isApplicable: function(item, index){
+                                        var siteCode = SessionStore.getGlobalSetting('siteCode');
+<<<<<<< HEAD
+                                        if(siteCode == 'sambandh') {
+                                            return false;
+=======
+                                        
+                                        if(siteCode == 'witfin') { 
+                                            return true
+                                        }else{
+                                            return false
+>>>>>>> 602c087ae... Witfin Page Permission addition
+                                        }
+                                    }
+                                },
+                                {
+                                    name: "COLLECT_ADHOC_CHARGES",
+                                    desc: "",
+                                    fn: function(item, index){
+                                        $state.go("Page.Engine",{
+                                            pageName:"loans.individual.collections.ChargeFee",
+                                            pageId:item.accountNumber
+                                        });
+                                    },
+                                    isApplicable: function(item, index){
+                                        var siteCode = SessionStore.getGlobalSetting('siteCode');
+                                        if(siteCode == 'witfin') { 
+                                            return true
+                                        }else{
+                                            return false
+                                        }                                     }
+                                },
+                                {
                                     name: "Amend",
                                     desc: "",
                                     fn: function(item, index){
@@ -168,32 +207,33 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                             pageId: [item.accountNumber,item.urnNo].join(".")
                                         })
                                     },
+                                    pagePermission:'Page/Engine/loans.LoanAmend',
                                     isApplicable: function(item, index){
                                         var siteCode = SessionStore.getGlobalSetting('siteCode');
-                                        if(siteCode == 'sambandh') {
+                                        if(siteCode == 'sambandh'||siteCode == 'KGFS') {
                                             return false;
                                         }
                                         return true;
                                     }
                                 },
-                                { 
-                                    name: "Payer Datails",
-                                    desc: "",
-                                    fn: function(item, index){
-                                        $state.go('Page.Engine', {
-                                            pageName: 'loans.PayersDetails',
-                                            pageId: [item.accountNumber,item.urnNo].join(".")
-                                        })
-                                    },
-                                    isApplicable: function(item, index){
-                                        var siteCode = SessionStore.getGlobalSetting('siteCode');
-                                        if(siteCode == 'witfin') { 
-                                            return true
-                                        }else{
-                                            return false
-                                        }
-                                    }
-                                },
+                                // { 
+                                //     name: "Payer Datails",
+                                //     desc: "",
+                                //     fn: function(item, index){
+                                //         $state.go('Page.Engine', {
+                                //             pageName: 'loans.PayersDetails',
+                                //             pageId: [item.accountNumber,item.urnNo].join(".")
+                                //         })
+                                //     },
+                                //     isApplicable: function(item, index){
+                                //         var siteCode = SessionStore.getGlobalSetting('siteCode');
+                                //         if(siteCode == 'witfin') { 
+                                //             return true
+                                //         }else{
+                                //             return false
+                                //         }
+                                //     }
+                                // },
                                  { 
                                     name: "Unmark NPA",
                                     desc: "",
@@ -203,7 +243,9 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                             pageId: [item.accountNumber,item.urnNo].join(".")
                                         })
                                     },
+                                    pagePermission:'Page/Engine/loans.UnmarkNPA',
                                     isApplicable: function(item, index){
+<<<<<<< HEAD
                                         var model={};
                                         model.pageConfig = {};
                                         model.pageConfig.IsUnMarkNPA = true; // default value for IsunmarkNPA
@@ -220,6 +262,16 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                         } else {
                                             return false
                                         };
+=======
+                                            var siteCode = SessionStore.getGlobalSetting('siteCode');
+
+                                            if(siteCode == 'KGFS')
+                                            {
+                                                return false;
+                                            };
+                                            return true;
+                                              
+>>>>>>> 602c087ae... Witfin Page Permission addition
                                     }
                                 }, { 
                                     name: "FREEZE_ACCOUNT",
@@ -231,6 +283,47 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                     },
                                     isApplicable: function(item, index){
                                         return isApplicableValue('isFreezeAccountAccess');
+                                    }
+                                },
+                                {
+                                    name: "ACH_REGISTRATION",
+                                    desc: "",
+                                    fn: function(item, index){
+                                        //EntityManager.setModel("loans.individual.achpdc.ACHRegistration",{_loanAch:item});
+                                        $state.go("Page.Engine",{
+                                            pageName:"loans.individual.achpdc.ACHRegistration",
+                                            pageId:item.accountId, 
+                                            pageData: item
+                                        });
+                                    },
+                                    isApplicable: function(item, index){
+                                        var siteCode = SessionStore.getGlobalSetting('siteCode');
+                                        if(siteCode == 'witfin') { 
+                                            return true
+                                        }else{
+                                            return false
+                                        }
+                                    }
+                                },
+                                {
+                                    name: "PDC_REGISTRATION",
+                                    desc: "",
+                                    fn: function(item, index){
+                                        //EntityManager.setModel("loans.individual.achpdc.PDCRegistration",{_pdc:item});
+                                        $state.go("Page.Engine",{
+                                            pageName:"loans.individual.achpdc.PDCRegistration",
+                                            pageId:item.accountId,
+                                            pageData: item
+                                        });
+                                    },
+                                    isApplicable: function(item, index){
+                                        var siteCode = SessionStore.getGlobalSetting('siteCode');
+                                        if(siteCode == 'witfin') { 
+                                            return true
+                                        }else{
+                                            return false
+                                        }
+        
                                     }
                                 },
                                 {
@@ -273,7 +366,8 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                         if(siteCode == 'pahal') return true;
                                     }
                                 }
-                            ];
+                            ]
+                            );
                         }
                     }
                 }
