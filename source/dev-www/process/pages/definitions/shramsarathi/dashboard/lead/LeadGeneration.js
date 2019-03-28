@@ -232,7 +232,8 @@ function(LeadProcess, AngularResourceService) {
                             "region": "lead.cityTownVillage",
                             "pincode": "lead.pincode",
                             "district": "lead.district",
-                            "state": "lead.state"
+                            "state": "lead.state",
+                            "taluk":"lead.taluk"
 
                         },
                         searchHelper: formHelper,
