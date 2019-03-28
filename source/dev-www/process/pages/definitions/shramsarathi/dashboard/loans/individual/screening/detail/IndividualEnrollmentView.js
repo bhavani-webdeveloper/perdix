@@ -69,7 +69,15 @@ define({
                         //     res.district,
                         //     res.state
                         // ].join(', ') + ' - ' + res.pincode;
-                        model.netincome=model.UIUDF.income[0].incomes[0].incomeEarned - model.UIUDF.expenditures[0].annualExpenses;
+                        if(model.UIUDF.income[0].incomes[0]!=undefined){
+                            
+                            model.netincome=model.UIUDF.income[0].incomes[0].incomeEarned - model.UIUDF.expenditures[0].annualExpenses;
+                        }
+                        else
+                        {
+                            //model.UIUDF.income[0].incomes[0].incomeEarned=0;
+                            model.netincome= 0 - model.UIUDF.expenditures[0].annualExpenses;
+                        }
                        // debugger;
                         /*Family fields*/
                         model.UIUDF.family_fields.family_member_count = model.customer.familyMembers.length;
@@ -656,35 +664,37 @@ define({
                                         render: function(data, type, full, meta) {
                                             return full['netBankingAvailable']
                                         }
-                                    }, {
-                                        "title": "Limit",
-                                        "data": "limit",
-                                        render: function(data, type, full, meta) {
-                                            return full['limit']
-                                        }
-                                    }, {
-                                        "title": "Bank Statement's",
-                                        "data": "",
-                                        render: function(data, type, full, meta) {
-                                            var title = [];
-                                            var url = [];
-                                            for (i = 0; i < full.BankStatements.length; i++) {
-                                                url.push(Model_ELEM_FC.fileStreamUrl + "/" + full.BankStatements[i]['Bank Statement File ID']);
-                                                title.push(moment(full.BankStatements[i].Month).format('MMMM YYYY'));
-                                            }
-                                            //return '<div  ng-repeat = "i in ' + url + '"  ><p ng-repeat="j in'+title+'"><a  href={{i}} style="cursor:pointer">{{j}}</a></p></div>'
-                                            /*return data?'<a ng-href="'+Model_ELEM_FC.fileStreamUrl+'/'+data+'" style="cursor:pointer"></a>':'';*/
+                                    }
+                                    // {
+                                    //     "title": "Limit",
+                                    //     "data": "limit",
+                                    //     render: function(data, type, full, meta) {
+                                    //         return full['limit']
+                                    //     }
+                                    // }, {
+                                    //     "title": "Bank Statement's",
+                                    //     "data": "",
+                                    //     render: function(data, type, full, meta) {
+                                    //         var title = [];
+                                    //         var url = [];
+                                    //         for (i = 0; i < full.BankStatements.length; i++) {
+                                    //             url.push(Model_ELEM_FC.fileStreamUrl + "/" + full.BankStatements[i]['Bank Statement File ID']);
+                                    //             title.push(moment(full.BankStatements[i].Month).format('MMMM YYYY'));
+                                    //         }
+                                    //         //return '<div  ng-repeat = "i in ' + url + '"  ><p ng-repeat="j in'+title+'"><a  href={{i}} style="cursor:pointer">{{j}}</a></p></div>'
+                                    //         /*return data?'<a ng-href="'+Model_ELEM_FC.fileStreamUrl+'/'+data+'" style="cursor:pointer"></a>':'';*/
     
-                                            return '<div >' +
-                                                '<a  href="' + url[0] + '">' + title[0] + '</a><br>' +
-                                                '<a  href="' + url[1] + '">' + title[1] + '</a><br>' +
-                                                '<a  href="' + url[2] + '">' + title[2] + '</a><br>' +
-                                                '<a  href="' + url[3] + '">' + title[3] + '</a><br>' +
-                                                '<a  href="' + url[4] + '">' + title[4] + '</a><br>' +
-                                                '<a  href="' + url[5] + '">' + title[5] + '</a><br>' +
-                                                '</div>'
-                                        }
-                                    }];
+                                    //         return '<div >' +
+                                    //             '<a  href="' + url[0] + '">' + title[0] + '</a><br>' +
+                                    //             '<a  href="' + url[1] + '">' + title[1] + '</a><br>' +
+                                    //             '<a  href="' + url[2] + '">' + title[2] + '</a><br>' +
+                                    //             '<a  href="' + url[3] + '">' + title[3] + '</a><br>' +
+                                    //             '<a  href="' + url[4] + '">' + title[4] + '</a><br>' +
+                                    //             '<a  href="' + url[5] + '">' + title[5] + '</a><br>' +
+                                    //             '</div>'
+                                    //     }
+                                    // }
+                                ];
                                 },
                                 getActions: function() {
                                     return [];
@@ -786,7 +796,8 @@ define({
                                         "title": "NO_OF_INSTALLMENT_PAID",
                                         "data": "noOfInstalmentPaid",
                                         render: function(data, type, full, meta) {
-                                            return full['noOfInstalmentPaid']
+                                            if (data) return data;
+                                            return full['noOfInstalmentPaid'].toString();
                                         }
     
                                     }, {
