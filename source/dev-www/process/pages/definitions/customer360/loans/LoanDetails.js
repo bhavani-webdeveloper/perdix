@@ -20,7 +20,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                 model.additional = model.additional || {};
                 model.additional.config = {};
                 for (var i=0; i<config.length; i++){
-                    model.additional.config[(config[i].replace('.','_'))];
+                    model.additional.config[(config[i].replace('.','_'))] = true;
                 }
             }
 
@@ -1765,6 +1765,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         "type": "box",
                         "colClass": "col-sm-12",
                         "title": "INVOICE",
+                        condition:"!model.additional.config.isInvoiceNotAccess",
                         "htmlClass": "text-danger",
                         "items": [{
                             type: "section",
@@ -2552,7 +2553,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     {
                         "type": "box",
                         "title": "PAYER_DETAILS",
-                        "condition": "model.siteCode != 'IREPDhan'",
+                        "condition": "model.siteCode != 'IREPDhan' && !model.additional.config.isPayerDetailsNotAccess",
                         "items": [{
                                 "key": "loanAccount.payeeName",
                                 "title": "PAYEE_NAME",
