@@ -334,9 +334,9 @@ define([],function(){
                                 "PreliminaryInformation.collectionPaymentType": {
                                     "required": true
                                 },
-                                "PreliminaryInformation.expectedPortfolioInsurancePremium": {
-                                    "readonly": true
-                                },
+                                // "PreliminaryInformation.expectedPortfolioInsurancePremium": {
+                                //     "readonly": true
+                                // },
                                 "LoanCustomerRelations.loanCustomerRelations": {
                                     "add": null,
                                     "remove": null,
@@ -822,9 +822,9 @@ define([],function(){
                                     "orderNo": 7,
                                     "readonly": false
                                 },
-                                "PreliminaryInformation.expectedPortfolioInsurancePremium": {
-                                    "readonly": true
-                                },
+                                // "PreliminaryInformation.expectedPortfolioInsurancePremium": {
+                                //     "readonly": true
+                                // },
                                 "NomineeDetails.nominees.nomineeRelationship": {
                                     "enumCode":"relationship"
                                 },
@@ -1677,7 +1677,7 @@ define([],function(){
                     "PreliminaryInformation.emiRequested",
                     //"PreliminaryInformation.emiPaymentDateRequested",
                     "PreliminaryInformation.collectionPaymentType",
-                    "PreliminaryInformation.expectedPortfolioInsurancePremium",
+                    // "PreliminaryInformation.expectedPortfolioInsurancePremium",
                     "PreliminaryInformation.BusinessSaveWarning",
                     "PreliminaryInformation.MedicalTestWarning",
                     //"PreliminaryInformation.actualAmountRequired",
