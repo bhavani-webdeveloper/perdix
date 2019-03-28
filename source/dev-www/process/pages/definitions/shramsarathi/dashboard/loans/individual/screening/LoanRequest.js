@@ -2082,7 +2082,7 @@ define([],function(){
                                             "key":"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf11",
                                             "title":"POTENTIAL_RISK",
                                             "type":"select",
-                                            "required":true,
+                                            "required":false,
                                             "titleMap":{"yes":"yes","no":"no"}
                                         },
                                         "loanDisbursementSchedule":{
