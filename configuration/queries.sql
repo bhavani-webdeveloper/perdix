@@ -99,3 +99,4 @@ getBankName = SELECT bank_name from bank_master where id =:bankId
 getInsuranceFormName = SELECT product_code, document_code as `FormName`,is_mandatory from insurance_documents_master where product_code = :productCode
 getInsuranceDocuments.list = SELECT product_code as `productCode`,document_code as `documentCode`,is_mandatory as `isMandatory` from insurance_documents_master where product_code = :productCode
 getTelecallingSnapshotId = SELECT max(telecalling_details_id) as `telecalling_id` from telecalling_details_snapshot where process_type = 'CUSTOMER' and customer_id = :customer_id
+productCode.type = SELECT loan_type as loanType from loan_products where product_code = :productCode
