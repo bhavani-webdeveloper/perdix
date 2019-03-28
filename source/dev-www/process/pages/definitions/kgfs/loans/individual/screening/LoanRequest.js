@@ -1055,7 +1055,7 @@ define([],function(){
                                             },
                                             "productType": {
                                                 "key":"loanAccount.loanType",
-                                                "title": "PRODUCT_TYPE",
+                                                "title": "LOAN_TYPE",
                                                 "readonly":true,
                                                 "type": "select",
                                                 "orderNo": 9
