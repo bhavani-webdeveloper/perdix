@@ -108,6 +108,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         model.customer.currentAssets[context.arrayIndex].titleExpr = getCurrentByCode(valueObj.toString());
                                      }
                                 },
+                                "IndividualInformation.customerId": {
+                                    "readonly": true
+                                },
+                                "IndividualInformation.urnNo": {
+                                    "readonly": true
+                                },
                                 "ContactInformation.villageName": {
                                     "readonly": true,
                                     "title":"VILLAGE",
@@ -3181,8 +3187,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             type: "select",
                                                             title:"OCCUPATION",
                                                             required: false,
+                                                            // filter:{"parentCode": "work_sector"},
+                                                            "enumCode": "occupation",
                                                             "parentEnumCode": "work_sector",
-                                                            "parentValueExpr": "model.customer.familyMembers[context.arrayIndex].incomes[context.arrayIndex].workSector",
+                                                            "parentValueExpr":"model.customer.familyMembers[context.arrayIndex].incomes[context.arrayIndex].workSector",
                                                             "orderNo": 2
                                                         },
                                                         "incomeEarned": {
@@ -3643,6 +3651,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 },
                 eventListeners: {
                     "lead-loaded": function (bundleModel, model, obj) {
+                        debugger;
                         return $q.when()
                             .then(function () {
                                 if (obj.applicantCustomerId) {
