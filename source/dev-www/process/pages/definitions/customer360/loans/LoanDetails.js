@@ -20,7 +20,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                 model.additional = model.additional || {};
                 model.additional.config = {};
                 for (var i=0; i<config.length; i++){
-                    model.additional.config[(config[i].replace('.','_'))];
+                    model.additional.config[(config[i].replace('.','_'))] = true;
                 }
             }
 
