@@ -2296,6 +2296,13 @@
                         "maximum": 10000000,
                         "captureStages": ["Stage01", "Stage02", "EDF", "Completed"]
                     },
+                    "serviceTaxNumber": {
+                        "title": "serviceTaxNumber",
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 10000000,
+                        "captureStages": ["Stage01", "Stage02", "EDF", "Completed"]
+                    },
                     "monthlyBusinessExpenses": {
                         "title": "monthlyBusinessExpenses",
                         "type": "number",
