@@ -10,8 +10,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                            PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository) {
             
             var configFile = function () {
-        return {
-
+                return {
+                    "loanProcess.loanAccount.currentStage": {
+                        "CreditCommitteeReview":
+                        {
+                            "excludes": [
+                            ],
+                            "overrides": {
+                                "ApplicantTeleverification":{"readonly":true}
+                            }
+                        }
+                    }
                 }
             }
             var overridesFields = function (bundlePageObj) {
@@ -20,6 +29,58 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var getIncludes = function (model) {
                 return [
+                    "ApplicantInformation",
+                    "ApplicantInformation.personalInformationFieldSet",
+                    "ApplicantInformation.branchName",
+                    "ApplicantInformation.zoneId",
+                    "ApplicantInformation.urnNo",
+                    "ApplicantInformation.firstName",
+                    "ApplicantInformation.dob",
+                    "ApplicantInformation.gender",
+                    "ApplicantInformation.fatherName",
+                    "ApplicantInformation.customerPhoto",
+                    "ApplicantInformation.kycFieldSet",
+                    "ApplicantInformation.identityProofNo",
+                    "ApplicantInformation.identityProof",
+                    "ApplicantInformation.addressProof",
+                    "ApplicantInformation.contactInformationFieldSet",
+                    "ApplicantInformation.mobileNo",
+                    "ApplicantInformation.doorNo",
+                    "ApplicantInformation.pincode",
+                    "ApplicantInformation.locality",
+                    "ApplicantInformation.villageName",
+                    "ApplicantInformation.district",
+                    "ApplicantInformation.state",
+                    "ApplicantInformation.bankAccounts",
+                    "ApplicantInformation.bankAccounts.ifscCode",
+                    "ApplicantInformation.bankAccounts.customerBankBranchName",
+                    "ApplicantInformation.bankAccounts.customerNameAsInBank",
+                    "ApplicantInformation.bankAccounts.accountNumber",
+                    "ApplicantInformation.loanDetailsFieldSet",
+                    "ApplicantInformation.loanPurpose1",
+                    "ApplicantInformation.amountRequested",
+                    "ApplicantInformation.frequency",
+                    "ApplicantInformation.tenure",
+                    "ApplicantInformation.remarksFieldSet",
+                    "ApplicantInformation.remarks",
+                    "ApplicantInformation.feedback",
+
+
+                    "ApplicantTeleverification",
+                    "ApplicantTeleverification.callingAttemptsFieldSet",
+                    "ApplicantTeleverification.telecallingResponse",
+                    "ApplicantTeleverification.noOfCallAttempts",
+                    "ApplicantTeleverification.followupCallRequired",
+                    "ApplicantTeleverification.telecallingRemarks",
+                    "ApplicantTeleverification.questions",
+                    "ApplicantTeleverification.telecallingQuestionnaireList",
+                    "ApplicantTeleverification.telecallingQuestionnaireList.question",
+                    "ApplicantTeleverification.telecallingQuestionnaireList.answer1",
+                    "ApplicantTeleverification.telecallingQuestionnaireList.answer2",
+                    "ApplicantTeleverification.telecallingQuestionnaireList.answer3",
+                    "ApplicantTeleverification.telecallingQuestionnaireList.answer4",
+
+
                 ];
 
             }
@@ -31,696 +92,363 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "excludes": [],
                     "options": {
                         "repositoryAdditions": {
-                        },
-                        "additions": [
-                            {
-                                "type": "section",
-                                "htmlClass": "col-sm-12",
-                                "items": [
-                                    {
-                                        "type": "section",
-                                        "htmlClass": "row",
-                                        "items": [
-                                            {
-                                                "type": "box",
-                                                "title": "APPLICANT_INFORMATION",
-                                                "colClass": "col-xs-6 col-md-6",
-                                                "items": [                                                                
-                                                    {
-                                                        "type": "fieldset",
-                                                        "title": "PERSONAL_INFORMATION",
-                                                        "items": [
-                                                            {
-                                                                "key": "applicant.customer.customerBranchId",
-                                                                "title": "BRANCH_NAME",
-                                                                "type": "select",
-                                                                "enumCode": "branch_id",
-                                                                "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "applicant.customer.centreId",
-                                                                "type": "lov",
-                                                                "title": "ZONE_ID",
-                                                                "filter": {
-                                                                    "parentCode": "branch_id"
-                                                                },
-                                                                "parentEnumCode": "branch_id",
-                                                                "parentValueExpr": "model.applicant.customer.customerBranchId",
-                                                                "readonly": true
-                                                            },                                                        
-                                                            {
-                                                                "key": "applicant.customer.centreId",
-                                                                "type": "select",
-                                                                "enumCode": "centre",
-                                                                "title": "ZONE_NAME",
-                                                                "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "applicant.customer.urnNo",
-                                                                "title": "URN_NO",
-                                                                "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "applicant.customer.firstName",
-                                                                "title": "FULL_NAME",
-                                                                "type": "string",
-                                                                "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "applicant.customer.dateOfBirth",
-                                                                "title": "DATE_OF_BIRTH",
-                                                                "type": "date",
-                                                                "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "applicant.customer.gender",
-                                                                "type": "radios",
-                                                                "title": "GENDER",
-                                                                "enumCode": "gender",
-                                                                "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "applicant.customer.fatherFirstName",
-                                                                "title": "FATHER_FULL_NAME",
-                                                                "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "applicant.customer.photoImageId",
-                                                                "type": "file",
-                                                                "title": "CUSTOMER_PHOTO",
-                                                                "category": "CustomerEnrollment",
-                                                                "subCategory": "PHOTO",
-                                                                "fileType": "image/*",
-                                                                "readonly": true
-                                                            },
-                                                            // {
-                                                            //     "key": "applicant.customer.customerCategory",
-                                                            //     "title": "CUSTOMER_CATEGORY",
-                                                            //     "type": "select",
-                                                            //     "enumCode": "lead_category",
-                                                            //     "readonly":true
-                                                            // }
-                                                        ]                                                    
-                                                    },
-                                                    {
-                                                        "type": "fieldset",
-                                                        "title": "KYC",
-                                                        "items": [
-                                                            {
-                                                                "key": "applicant.customer.identityProofNo",
-                                                                "title": "IDENTITY_PROOFNO",
-                                                                "type": "barcode",
-                                                                "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "applicant.customer.identityProofImageId",
-                                                                "type": "file",
-                                                                "fileType": "application/pdf",
-                                                                "using": "scanner",
-                                                                "title": "IDENTITY_PROOF_DOCUMENT",
-                                                                "category": "CustomerEnrollment",
-                                                                "subCategory": "IDENTITYPROOF",
-                                                                "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "applicant.customer.addressProofNo",
-                                                                "type": "qrcode",
-                                                                "title": "ADDRESS_PROOF_NO",
-                                                                "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "applicant.customer.addressProofImageId",
-                                                                "type": "file",
-                                                                "fileType": "application/pdf",
-                                                                "using": "scanner",
-                                                                "title": "ADDRESS_PROOF_IMAGE_ID",
-                                                                "category": "CustomerEnrollment",
-                                                                "subCategory": "ADDRESSPROOF",
-                                                                "readonly": true
-                                                            }
-                                                        ]                                                    
-                                                    },
-                                                    {
-                                                        "type": "fieldset",
-                                                        "title": "CONTACT_INFORMATION",
-                                                        "items": [
-                                                            {
-                                                                "key": "applicant.customer.mobilePhone",
-                                                                "type": "text",
-                                                                "title": "MOBILE_PHONE",
-                                                                "inputmode": "number",
-                                                                "numberType": "tel",
-                                                                "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "applicant.customer.doorNo",
-                                                                "title": "DOOR_NO",
-                                                                "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "applicant.customer.pincode",
-                                                                "title": "PIN_CODE",
-                                                                "type": "lov",
-                                                                "fieldType": "number",
-                                                                "autolov": true,
-                                                                "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "applicant.customer.locality",
-                                                                "title": "LOCALITY",
-                                                                "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "applicant.customer.villageName",
-                                                                "title": "VILLAGE_NAME",
-                                                                "enumCode":"village",
-                                                                "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "applicant.customer.district",                                                            
-                                                                "title": "DISTRICT",
-                                                                "enumCode":"district",
-                                                                "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "applicant.customer.state",
-                                                                "title": "STATE",
-                                                                "readonly": true
-                                                            }
-                                                        ]                                                    
-                                                    },
-                                                    {
-                                                        "type": "array",
-                                                        "title": "BANK_ACCOUNTS",
-                                                        "view": "fixed",
-                                                        "add": null,
-                                                        "remove": null,
-                                                        "key": "applicant.customer.customerBankAccounts",
-                                                        "items": [
-                                                            {
-                                                                "key": "applicant.customer.customerBankAccounts[].ifscCode",
-                                                                "resolver": "BankIFSCLOVConfiguration",
-                                                                "type": "lov",
-                                                                "lovonly": true,
-                                                                "title": "IFSC_CODE",
-                                                                "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "applicant.customer.customerBankAccounts[].customerBankName",
-                                                                "title": "BANK_NAME",
-                                                                "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "applicant.customer.customerBankAccounts[].customerBankBranchName",
-                                                                "title": "BANK_BRANCH_NAME",
-                                                                "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "applicant.customer.customerBankAccounts[].customerNameAsInBank",
-                                                                "title": "CUSTOMER_NAME_IN_BANK",
-                                                                "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "applicant.customer.customerBankAccounts[].accountNumber",
-                                                                "title": "ACCOUNT_NUMBER",
-                                                                "readonly": true
-                                                            }
-                                                        ]                                                    
-                                                    },
-                                                    {
-                                                        "type": "fieldset",
-                                                        "title": "LOAN_DETAILS",
-                                                        "items": [
-                                                            {
-                                                                "key": "loanAccount.loanPurpose1",
-                                                                "type": "lov",
-                                                                "resolver": "LoanPurpose1LOVConfiguration",
-                                                                "autolov": true,
-                                                                "title": "LOAN_PURPOSE_LEVEL_1",
-                                                                "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "loanAccount.loanAmountRequested",
-                                                                "type": "amount",
-                                                                "title": "REQUESTED_LOAN_AMOUNT",
-                                                                "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "loanAccount.frequencyRequested",
-                                                                "type": "select",
-                                                                "title": "FREQUENCY_REQUESTED",
-                                                                "enumCode": "frequency",
-                                                                "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "loanAccount.tenureRequested",
-                                                                "type": "number",
-                                                                "title": "TENURE_REQUESETED",
-                                                                "readonly": true
-                                                             }
-                                                             //,
-                                                            // {
-                                                            //     "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5",
-                                                            //     "title" : "FLAT_RATE",
-                                                            //     "type": "string",
-                                                            //     "readonly" : true
-                                                            // },
-                                                            // {
-                                                            //     "key": "loanAccount.expectedInterestRate",
-                                                            //     "type": "number",
-                                                            //     "title": "NOMINAL_RATE",
-                                                            //     "readonly": true
-                                                            // }
-                                                        ]                                                    
-                                                    },{
-                                                        "type": "fieldset",
-                                                        "title": "Remarks",
-                                                        "items":[
-                                                            {
-                                                                "title":"REMARKS",
-                                                                "type":"text"
-                                                            },
-                                                            {
-                                                                "title":"FEEDBACK",
-                                                                "type":"textarea"
-                                                            }
-                                                        ]
-                                                    }
-                                                ]
+
+                            "ApplicantInformation": {
+                                "type": "box",
+                                "orderNo": 1,
+                                "title": "APPLICANT_INFORMATION",
+                                "items": {
+
+                                    "personalInformationFieldSet": {
+                                        "type": "fieldset",
+                                        "title": "PERSONAL_INFORMATION",
+                                        "items": []
+                                    },
+                                    "branchName": {
+
+                                        "key": "applicant.customer.customerBranchId",
+                                        "title": "BRANCH_NAME",
+                                        "type": "select",
+                                        "enumCode": "branch_id",
+                                        "readonly": true
+
+                                    },
+                                    "zoneId": {
+                                        "key": "applicant.customer.centreId",
+                                        "type": "lov",
+                                        "title": "ZONE_ID",
+                                        "filter": {
+                                            "parentCode": "branch_id"
+                                        },
+                                        "parentEnumCode": "branch_id",
+                                        "parentValueExpr": "model.applicant.customer.customerBranchId",
+                                        "readonly": true
+                                    },
+                                    "zoneName": {
+                                        "key": "applicant.customer.centreId",
+                                        "type": "select",
+                                        "enumCode": "centre",
+                                        "title": "ZONE_NAME",
+                                        "readonly": true
+                                    },
+                                    "urnNo": {
+                                        "key": "applicant.customer.urnNo",
+                                        "title": "URN_NO",
+                                        "readonly": true
+                                    },
+                                    "firstName": {
+                                        "key": "applicant.customer.firstName",
+                                        "title": "FULL_NAME",
+                                        "type": "string",
+                                        "readonly": true
+                                    },
+                                    "dob": {
+                                        "key": "applicant.customer.dateOfBirth",
+                                        "title": "DATE_OF_BIRTH",
+                                        "type": "date",
+                                        "readonly": true
+                                    },
+                                    "gender": {
+                                        "key": "applicant.customer.gender",
+                                        "type": "radios",
+                                        "title": "GENDER",
+                                        "enumCode": "gender",
+                                        "readonly": true
+                                    },
+                                    "fatherName": {
+                                        "key": "applicant.customer.fatherFirstName",
+                                        "title": "FATHER_FULL_NAME",
+                                        "readonly": true
+                                    },
+                                    "customerPhoto": {
+                                        "key": "applicant.customer.photoImageId",
+                                        "type": "file",
+                                        "title": "CUSTOMER_PHOTO",
+                                        "category": "CustomerEnrollment",
+                                        "subCategory": "PHOTO",
+                                        "fileType": "image/*",
+                                        "readonly": true
+                                    },
+                                    "kycFieldSet": {
+                                        "type": "fieldset",
+                                        "title": "KYC",
+                                        "items": []
+                                    },
+                                    "identityProofNo": {
+                                        "key": "applicant.customer.identityProofNo",
+                                        "title": "IDENTITY_PROOFNO",
+                                        "type": "barcode",
+                                        "readonly": true
+                                    },
+                                    "identityProof": {
+                                        "key": "applicant.customer.identityProofImageId",
+                                        "type": "file",
+                                        "fileType": "application/pdf",
+                                        "using": "scanner",
+                                        "title": "IDENTITY_PROOF_DOCUMENT",
+                                        "category": "CustomerEnrollment",
+                                        "subCategory": "IDENTITYPROOF",
+                                        "readonly": true
+                                    },
+                                    "addressProof": {
+                                        "key": "applicant.customer.addressProofNo",
+                                        "type": "qrcode",
+                                        "title": "ADDRESS_PROOF_NO",
+                                        "readonly": true
+                                    },
+                                    "addressProof": {
+                                        "key": "applicant.customer.addressProofImageId",
+                                        "type": "file",
+                                        "fileType": "application/pdf",
+                                        "using": "scanner",
+                                        "title": "ADDRESS_PROOF_IMAGE_ID",
+                                        "category": "CustomerEnrollment",
+                                        "subCategory": "ADDRESSPROOF",
+                                        "readonly": true
+                                    },
+                                    "contactInformationFieldSet": {
+                                        "type": "fieldset",
+                                        "title": "CONTACT_INFORMATION",
+                                        "items": []
+                                    }, "mobileNo": {
+                                        "key": "applicant.customer.mobilePhone",
+                                        "type": "text",
+                                        "title": "MOBILE_PHONE",
+                                        "inputmode": "number",
+                                        "numberType": "tel",
+                                        "readonly": true
+                                    }, "doorNo": {
+                                        "key": "applicant.customer.doorNo",
+                                        "title": "DOOR_NO",
+                                        "readonly": true
+                                    },
+                                    "pincode": {
+                                        "key": "applicant.customer.pincode",
+                                        "title": "PIN_CODE",
+                                        "type": "lov",
+                                        "fieldType": "number",
+                                        "autolov": true,
+                                        "readonly": true
+                                    },
+                                    "locality": {
+                                        "key": "applicant.customer.locality",
+                                        "title": "LOCALITY",
+                                        "readonly": true
+                                    },
+                                    "villageName": {
+                                        "key": "applicant.customer.villageName",
+                                        "title": "VILLAGE_NAME",
+                                        "enumCode": "village",
+                                        "readonly": true
+                                    },
+                                    "district": {
+                                        "key": "applicant.customer.district",
+                                        "title": "DISTRICT",
+                                        "enumCode": "district",
+                                        "readonly": true
+                                    },
+                                    "state": {
+                                        "key": "applicant.customer.state",
+                                        "title": "STATE",
+                                        "readonly": true
+                                    },
+                                    "bankAccounts": {
+                                        "type": "array",
+                                        "title": "BANK_ACCOUNTS",
+                                        "view": "fixed",
+                                        "add": null,
+                                        "remove": null,
+                                        "key": "applicant.customer.customerBankAccounts",
+                                        "items": {
+                                            "ifscCode": {
+                                                "key": "applicant.customer.customerBankAccounts[].ifscCode",
+                                                "resolver": "BankIFSCLOVConfiguration",
+                                                "type": "lov",
+                                                "lovonly": true,
+                                                "title": "IFSC_CODE",
+                                                "readonly": true
                                             },
-                                            {
-                                                "type": "box",
-                                                "colClass": "col-xs-6 col-md-6",
-                                                "title": "APPLICANT_TELE_VERIFICATION",
-                                                "items": [
-                                                    {
-                                                        "type": "fieldset",
-                                                        "title": "CALLING_ATTEMPTS",
-                                                        "items": [
-                                                            {
-                                                                "key": "applicant.telecallingResponse",
-                                                                "type": "select",
-                                                                "title": "TELECALLING_RESPONSE",
-                                                                "enumCode": "telecalling_response"
-                                                            },
-                                                            {
-                                                                "key": "applicant.noOfCallAttempts",
-                                                                "type": "number",
-                                                                "title": "NO_OF_CALLATTEMPTS"
-                                                            },
-                                                            {
-                                                                "key": "applicant.followupCallRequired",
-                                                                "type": "date",
-                                                                "title": "FOLLOWUP_ON"
-                                                            },
-                                                            {
-                                                                "key": "applicant.telecallingRemarks",
-                                                                "type": "textarea",
-                                                                "title": "TELECALLING_REMARKS"
-                                                            }
-                                                        ]
-                                                    },
-                                                    {
-                                                        "type": "fieldset",
-                                                        "title": "QUESTIONS",
-                                                        "items": [
-                                                            {
-                                                                "key": "applicant.telecallingQuestionnaireList",
-                                                                "type": "array",
-                                                                "add": null,
-                                                                "remove": null,
-                                                                "view": "fixed",
-                                                                "items":  [
-                                                                    {
-                                                                        "key": "applicant.telecallingQuestionnaireList[].question",
-                                                                        "type": "textarea",
-                                                                        "title": "QUESTION",
-                                                                        "readonly": true
-                                                                    },
-                                                                    {
-                                                                        "key": "applicant.telecallingQuestionnaireList[].answer",                                                                            
-                                                                        "type": "string",  
-                                                                        "title": "ANSWER",
-                                                                        "condition":"model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='string'"
-                                                                    },
-                                                                    {
-                                                                        "key": "applicant.telecallingQuestionnaireList[].answer",                                                                            
-                                                                        "type": "textarea",  
-                                                                        "title": "ANSWER",
-                                                                        "condition":"model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='textarea'"
-                                                                    },
-                                                                    {
-                                                                        "key": "applicant.telecallingQuestionnaireList[].answer",                                                                            
-                                                                        "type": "number",  
-                                                                        "title": "ANSWER",
-                                                                        "condition":"model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='number'"
-                                                                    },
-                                                                    {
-                                                                        "key": "applicant.telecallingQuestionnaireList[].answer",                                                                            
-                                                                        "title": "ANSWER",
-                                                                        "condition":"model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='select'",
-                                                                        "type": "lov",
-                                                                        "autolov": true,
-                                                                        "lovonly": true,
-                                                                        "bindMap": {},
-                                                                        "searchHelper": formHelper,
-                                                                        "search": function(inputModel, form, model, context) {
-                                                                            var list = {};
-                                                                            list = model.applicant.telecallingQuestionnaireList[context.arrayIndex].select;
-
-                                                                            var out = [];
-                                                                            _.forEach(list, function(val) {
-                                                                                out.push({"name":val});
-                                                                            });
-
-                                                                            return $q.resolve({
-                                                                                headers: {
-                                                                                    "x-total-count": out.length
-                                                                                },
-                                                                                body: out
-                                                                            });
-                                                                        },
-                                                                        onSelect: function(valueObj, model, context) {
-                                                                            model.applicant.telecallingQuestionnaireList[context.arrayIndex].answer = valueObj.name;
-                                                                        },
-                                                                        getListDisplayItem: function(item, index) {
-                                                                            return [
-                                                                                item.name
-                                                                            ];
-                                                                        }
-                                                                    }
-                                                                ]
-                                                            }
-                                                        ]
-                                                    }
-                                                ]
+                                            "customerBankName": {
+                                                "key": "applicant.customer.customerBankAccounts[].customerBankName",
+                                                "title": "BANK_NAME",
+                                                "readonly": true
+                                            },
+                                            "customerBankBranchName": {
+                                                "key": "applicant.customer.customerBankAccounts[].customerBankBranchName",
+                                                "title": "BANK_BRANCH_NAME",
+                                                "readonly": true
+                                            },
+                                            "customerNameAsInBank": {
+                                                "key": "applicant.customer.customerBankAccounts[].customerNameAsInBank",
+                                                "title": "CUSTOMER_NAME_IN_BANK",
+                                                "readonly": true
+                                            },
+                                            "accountNumber": {
+                                                "key": "applicant.customer.customerBankAccounts[].accountNumber",
+                                                "title": "ACCOUNT_NUMBER",
+                                                "readonly": true
                                             }
-                                        ]
+                                        }
+
+
+                                    }, "loanDetailsFieldSet": {
+                                        "type": "fieldset",
+                                        "title": "LOAN_DETAILS",
+                                        "items": []
+                                    },
+                                    "loanPurpose1": {
+                                        "key": "loanAccount.loanPurpose1",
+                                        "type": "lov",
+                                        "resolver": "LoanPurpose1LOVConfiguration",
+                                        "autolov": true,
+                                        "title": "LOAN_PURPOSE_LEVEL_1",
+                                        "readonly": true
+                                    },
+                                    "amountRequested": {
+                                        "key": "loanAccount.loanAmountRequested",
+                                        "type": "amount",
+                                        "title": "REQUESTED_LOAN_AMOUNT",
+                                        "readonly": true
+                                    },
+                                    "frequency": {
+                                        "key": "loanAccount.frequencyRequested",
+                                        "type": "select",
+                                        "title": "FREQUENCY_REQUESTED",
+                                        "enumCode": "frequency",
+                                        "readonly": true
+                                    },
+                                    "tenure": {
+                                        "key": "loanAccount.tenureRequested",
+                                        "type": "number",
+                                        "title": "TENURE_REQUESETED",
+                                        "readonly": true
+                                    }, "remarksFieldSet": {
+                                        "type": "fieldset",
+                                        "title": "Remarks",
+                                        "items": []
+                                    },
+                                    "remarks": {
+                                        "title": "REMARKS",
+                                        "type": "text"
+                                    },
+                                    "feedback": {
+                                        "title": "FEEDBACK",
+                                        "type": "textarea"
                                     }
-                                ]
+                                }
                             },
-                            // {
-                            //     "type": "section",
-                            //     "htmlClass": "col-sm-12",
-                            //     "items": [
-                            //        {
-                            //             "type": "section",
-                            //             "htmlClass": "row",
-                            //             "items": [
-                            //                 {
-                            //                     "type": "box",
-                            //                     "title": "BUSINESS_INFORMATION",
-                            //                     "colClass": "col-xs-6 col-md-6",
-                            //                     "items": [
+                            "ApplicantTeleverification": {
+                                "type": "box",
+                                
+                                "title": "APPLICANT_TELE_VERIFICATION",
+                                "orderNo": 3,
+                                "items": {
+                                    "callingAttemptsFieldSet": {
+                                        "type": "fieldset",
+                                        "title": "CALLING_ATTEMPTS",
+                                        "items": []
+                                    },
+                                    "telecallingResponse": {
+                                        "key": "applicant.telecallingResponse",
+                                        "type": "select",
+                                        "title": "TELECALLING_RESPONSE",
+                                        "enumCode": "telecalling_response"
+                                    },
+                                    "noOfCallAttempts": {
+                                        "key": "applicant.noOfCallAttempts",
+                                        "type": "number",
+                                        "title": "NO_OF_CALLATTEMPTS"
+                                    },
+                                    "followupCallRequired": {
+                                        "key": "applicant.followupCallRequired",
+                                        "type": "date",
+                                        "title": "FOLLOWUP_ON"
+                                    },
+                                    "telecallingRemarks": {
+                                        "key": "applicant.telecallingRemarks",
+                                        "type": "textarea",
+                                        "title": "TELECALLING_REMARKS"
+                                    },
+                                    "questions": {
+                                        "type": "fieldset",
+                                        "title": "QUESTIONS",
+                                        "items": []
+                                    },
+                                    "telecallingQuestionnaireList": {
+                                        "key": "applicant.telecallingQuestionnaireList",
+                                        "type": "array",
+                                        "add": null,
+                                        "remove": null,
+                                        "view": "fixed",
+                                        "items": {
+                                            "question":{
+                                                "key": "applicant.telecallingQuestionnaireList[].question",
+                                                "type": "textarea",
+                                                "title": "QUESTION",
+                                                "readonly": true
+                                            },
+                                            "answer1":{
+                                                "key": "applicant.telecallingQuestionnaireList[].answer",
+                                                "type": "string",
+                                                "title": "ANSWER",
+                                                "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='string'"
+                                            },
+                                            "answer2":{
+                                                "key": "applicant.telecallingQuestionnaireList[].answer",
+                                                "type": "textarea",
+                                                "title": "ANSWER",
+                                                "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='textarea'"
+                                            },
+                                            "answer3":{
+                                                "key": "applicant.telecallingQuestionnaireList[].answer",
+                                                "type": "number",
+                                                "title": "ANSWER",
+                                                "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='number'"
+                                            },
+                                            "answer4":{
+                                                "key": "applicant.telecallingQuestionnaireList[].answer",
+                                                "title": "ANSWER",
+                                                "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='select'",
+                                                "type": "lov",
+                                                "autolov": true,
+                                                "lovonly": true,
+                                                "bindMap": {},
+                                                "searchHelper": formHelper,
+                                                "search": function (inputModel, form, model, context) {
+                                                    var list = {};
+                                                    list = model.applicant.telecallingQuestionnaireList[context.arrayIndex].select;
 
-                            //                        {
-                            //                             "key": "loanCustomer.customer.id",
-                            //                             "type": "number",
-                            //                             "title": "ENTITY_ID",
-                            //                             "readonly": true
-                            //                         },
-                            //                         {
-                            //                             "key": "loanCustomer.customer.enterprise.businessConstitution",
-                            //                             "title": "CONSTITUTION",
-                            //                             "type": "select",
-                            //                             "enumCode": "constitution",
-                            //                             "schema": {
-                            //                                 "required": false
-                            //                             },
-                            //                             "readonly": true
-                            //                         },
-                            //                         {
-                            //                             "key": "loanCustomer.customer.mobilePhone",
-                            //                             "type": "text",
-                            //                             "title": "MOBILE_PHONE",
-                            //                             "inputmode": "number",
-                            //                             "numberType": "tel",
-                            //                             "readonly": true
-                            //                         },
-                            //                         {
-                            //                             "key": "loanCustomer.customer.doorNo",
-                            //                             "title": "DOOR_NO",
-                            //                             "readonly": true
-                            //                         },
-                            //                         {
-                            //                             "key": "loanCustomer.customer.pincode",
-                            //                             "title": "PIN_CODE",
-                            //                             "type": "lov",
-                            //                             "fieldType": "number",
-                            //                             "autolov": true,
-                            //                             "readonly": true
-                            //                         },
-                            //                         {
-                            //                             "key": "loanCustomer.customer.locality",
-                            //                             "title": "LOCALITY",
-                            //                             "readonly": true
-                            //                         },
-                            //                         {
-                            //                             "key": "loanCustomer.customer.villageName",
-                            //                             "title": "VILLAGE_NAME",
-                            //                             "readonly": true
-                            //                         },
-                            //                         {
-                            //                             "key": "loanCustomer.customer.district",
-                            //                             "title": "DISTRICT",
-                            //                             "readonly": true
-                            //                         },
-                            //                         {
-                            //                             "key": "loanCustomer.customer.state",
-                            //                             "title": "STATE",
-                            //                             "readonly": true
-                            //                         }
-                            //                     ]
-                            //                 },
-                            //                 {
-                            //                     "type": "box",
-                            //                     "colClass": "col-xs-6 col-md-6",
-                            //                     "title": "TELE_VERIFICATION",
-                            //                     "items": [
-                            //                         {
-                            //                             "type": "fieldset",
-                            //                             "title": "CALLING_ATTEMPTS",
-                            //                             "items": [
-                            //                                 {
-                            //                                     "key": "loanCustomer.telecallingResponse",
-                            //                                     "type": "select",
-                            //                                     "title": "TELECALLING_RESPONSE",
-                            //                                     "enumCode": "telecalling_response"
-                            //                                 },
-                            //                                 {
-                            //                                     "key": "loanCustomer.noOfCallAttempts",
-                            //                                     "type": "number",
-                            //                                     "title": "NO_OF_CALLATTEMPTS"
-                            //                                 },
-                            //                                 {
-                            //                                     "key": "loanCustomer.followupCallRequired",
-                            //                                     "type": "date",
-                            //                                     "title": "FOLLOWUP_ON"
-                            //                                 },
-                            //                                 {
-                            //                                     "key": "loanCustomer.telecallingRemarks",
-                            //                                     "type": "textarea",
-                            //                                     "title": "TELECALLING_REMARKS"
-                            //                                 }
-                            //                             ]
-                            //                         }
-                            //                         //,
-                            //                         // {
-                            //                         //     "type": "fieldset",
-                            //                         //     "title": "QUESTIONS",
-                            //                         //     "items": [
-                            //                         //         {
-                            //                         //             "key": "loanCustomer.telecallingQuestionnaireList",
-                            //                         //             "type": "array",
-                            //                         //             "add": null,
-                            //                         //             "remove": null,
-                            //                         //             "view": "fixed",
-                            //                         //             "items":  [
-                            //                         //                 {
-                            //                         //                     "key": "loanCustomer.telecallingQuestionnaireList[].question",
-                            //                         //                     "type": "textarea",
-                            //                         //                     "title": "QUESTION",
-                            //                         //                     "readonly": true
-                            //                         //                 },
-                            //                         //                 {
-                            //                         //                     "key": "loanCustomer.telecallingQuestionnaireList[].answer",                                                                            
-                            //                         //                     "type": "string",  
-                            //                         //                     "title": "ANSWER",
-                            //                         //                     "condition":"model.loanCustomer.telecallingQuestionnaireList[arrayIndex].input_type=='string'"
-                            //                         //                 },
-                            //                         //                 {
-                            //                         //                     "key": "loanCustomer.telecallingQuestionnaireList[].answer",                                                                            
-                            //                         //                     "type": "textarea",  
-                            //                         //                     "title": "ANSWER",
-                            //                         //                     "condition":"model.loanCustomer.telecallingQuestionnaireList[arrayIndex].input_type=='textarea'"
-                            //                         //                 },
-                            //                         //                 {
-                            //                         //                     "key": "loanCustomer.telecallingQuestionnaireList[].answer",                                                                            
-                            //                         //                     "type": "number",  
-                            //                         //                     "title": "ANSWER",
-                            //                         //                     "condition":"model.loanCustomer.telecallingQuestionnaireList[arrayIndex].input_type=='number'"
-                            //                         //                 },
-                            //                         //                 {
-                            //                         //                     "key": "loanCustomer.telecallingQuestionnaireList[].answer", 
-                            //                         //                     "title": "ANSWER",
-                            //                         //                     "condition":"model.loanCustomer.telecallingQuestionnaireList[arrayIndex].input_type=='select'",
-                            //                         //                     "type": "lov",
-                            //                         //                     "autolov": true,
-                            //                         //                     "lovonly": true,
-                            //                         //                     "bindMap": {},
-                            //                         //                     "searchHelper": formHelper,
-                            //                         //                     "search": function(inputModel, form, model, context) {
-                            //                         //                         var list = {};
-                            //                         //                         list = model.loanCustomer.telecallingQuestionnaireList[context.arrayIndex].select;
+                                                    var out = [];
+                                                    _.forEach(list, function (val) {
+                                                        out.push({ "name": val });
+                                                    });
 
-                            //                         //                         var out = [];
-                            //                         //                         _.forEach(list, function(val) {
-                            //                         //                             out.push({"name":val});
-                            //                         //                         });
+                                                    return $q.resolve({
+                                                        headers: {
+                                                            "x-total-count": out.length
+                                                        },
+                                                        body: out
+                                                    });
+                                                },
+                                                onSelect: function (valueObj, model, context) {
+                                                    model.applicant.telecallingQuestionnaireList[context.arrayIndex].answer = valueObj.name;
+                                                },
+                                                getListDisplayItem: function (item, index) {
+                                                    return [
+                                                        item.name
+                                                    ];
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
-                            //                         //                         return $q.resolve({
-                            //                         //                             headers: {
-                            //                         //                                 "x-total-count": out.length
-                            //                         //                             },
-                            //                         //                             body: out
-                            //                         //                         });
-                            //                         //                     },
-                            //                         //                     onSelect: function(valueObj, model, context) {
-                            //                         //                         model.loanCustomer.telecallingQuestionnaireList[context.arrayIndex].answer = valueObj.name;;
-                            //                         //                     },
-                            //                         //                     getListDisplayItem: function(item, index) {
-                            //                         //                         return [
-                            //                         //                             item.name
-                            //                         //                         ];
-                            //                         //                     }
-                            //                         //                 }
-                            //                         //             ]
-                            //                         //         }
-                            //                         //     ]
-                            //                         // }
-                            //                     ]
-                            //                 }
-                            //             ]
-                            //         }
-                            //     ]
-                            // },
-                            // {
-                            //     "type": "section",
-                            //     "htmlClass": "col-sm-12",
-                            //     "items": [
-                            //        {
-                            //             "type": "section",
-                            //             "htmlClass": "row",
-                            //             "items": [
-                            //                 {
-                            //                     "type": "box",
-                            //                     "colClass": "col-xs-6 col-md-6",
-                            //                     "title": "VEHICLE",
-                            //                     "items": [
-                            //                         {
-                            //                             "type": "fieldset",
-                            //                             "title": "Vehicle Details",
-                            //                             "items": [
-                            //                                 {
-                            //                                     "key": "loanAccount.vehicleLoanDetails.vehicleType",
-                            //                                     "type": "text",
-                            //                                     "title": "Vehicle type",
-                            //                                     "readonly": true
-                            //                                 },
-                            //                                 {
-                            //                                     "key": "loanAccount.vehicleLoanDetails.usedFor",
-                            //                                     "type": "text",
-                            //                                     "title": "Nature of Use",
-                            //                                     "readonly": true
-                            //                                 },
-                            //                                 {
-                            //                                     "key": "loanAccount.vehicleLoanDetails.endUse",
-                            //                                     "type": "text",
-                            //                                     "title": "End use of the vehicle",
-                            //                                     "readonly": true
-                            //                                 },
-                            //                                 {
-                            //                                     "key": "loanAccount.vehicleLoanDetails.segment",
-                            //                                     "type": "text",
-                            //                                     "title": "Segment",
-                            //                                     "readonly": true
-                            //                                 },
-                            //                                 {
-                            //                                     "key": "loanAccount.vehicleLoanDetails.vehicleModel",
-                            //                                     "type": "text",
-                            //                                     "title": "Model",
-                            //                                     "readonly": true
-                            //                                 },
-                            //                                 {
-                            //                                     "key": "loanAccount.vehicleLoanDetails.yearOfManufacture",
-                            //                                     "type": "date",
-                            //                                     "title": "Manufacture Year",
-                            //                                     "readonly": true
-                            //                                 },
-                            //                                 {
-                            //                                     "key": "loanAccount.vehicleLoanDetails.registrationNumber",
-                            //                                     "type": "text",
-                            //                                     "title": "Registration no",
-                            //                                     "readonly": true
-                            //                                 },
-                            //                                 {
-                            //                                     "key": "loanAccount.vehicleLoanDetails.price",
-                            //                                     "type": "number",
-                            //                                     "title": "Purchase price",
-                            //                                     "readonly": true
-                            //                                 },
-                            //                                 {
-                            //                                     "key": "loanAccount.vehicleLoanDetails.insuredDeclaredValue",
-                            //                                     "type": "number",
-                            //                                     "title": "IDV",
-                            //                                     "readonly": true
-                            //                                 }
-                            //                             ]
-                            //                         },
-                            //                         {
-                            //                             "type": "fieldset",
-                            //                             "title": "Vehicle Viability",
-                            //                             "items": [
-                            //                                 {
-                            //                                     "key": "loanAccount.vehicleLoanDetails.fcfToEmi",
-                            //                                     "type": "number",
-                            //                                     "title": "FCF:EMI",
-                            //                                     "readonly": true
-                            //                                 }
-                            //                             ]
-                            //                         },
-                            //                         {
-                            //                             "type": "fieldset",
-                            //                             "title": "Vehicle Valuation",
-                            //                             "items": [
-                            //                                 {
-                            //                                     "key": "loanAccount.vehicleLoanDetails.currentMarketValue",
-                            //                                     "type": "number",
-                            //                                     "title": "Market value as on date of inspection",
-                            //                                     "readonly": true
-                            //                                 },
-                            //                                 {
-                            //                                     "key": "loanAccount.vehicleLoanDetails.distressValue",
-                            //                                     "type": "number",
-                            //                                     "title": "Distress value",
-                            //                                     "readonly": true
-                            //                                 },
-                            //                                 {
-                            //                                     "key": "loanAccount.vehicleLoanDetails.futureLife",
-                            //                                     "type": "number",
-                            //                                     "title": "Expected future life of vehicle",
-                            //                                     "readonly": true
-                            //                                 }
-                            //                             ]
-                            //                         }
-                            //                     ]
-                            //                 }
-                            //             ]
-                            //         }
-                            //     ]
-                            // },
+                        },
+                        "additions": [   
                             {
                                 "type": "actionbox",
+                                "orderNo": 5,
                                 "items": [
                                     {
                                         "type": "button",
