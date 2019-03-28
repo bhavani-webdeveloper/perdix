@@ -415,7 +415,7 @@ define({
                                 else if(productCategory == 'JEWEL')
                                 var targetstage = formHelper.enum('targetstagemeljewel').data;
                                 else
-                                var targetstage = formHelper.enum('targetstagemel').data;
+                                var targetstage = formHelper.enum('booking_target_stage').data;
                                 var out = [];
                                 for (var i = 0; i < targetstage.length; i++) {
                                     var t = targetstage[i];
