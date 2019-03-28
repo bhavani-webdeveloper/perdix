@@ -409,11 +409,12 @@ define({
                         //     "key": "loanAccount.emiPaymentDateRequested",
                         //     "title": "Requested EMI Payment Date"
                         // },
-                         {
-                            "key": "loanAccount.expectedPortfolioInsurancePremium",
-                            "title": "Expected Portfolio Insurance Premium",
-                            "type": "amount"
-                        }]
+                        //  {
+                        //     "key": "loanAccount.expectedPortfolioInsurancePremium",
+                        //     "title": "Expected Portfolio Insurance Premium",
+                        //     "type": "amount"
+                        // }
+                    ]
                     }, {
                         "type": "grid",
                         "orientation": "vertical",
