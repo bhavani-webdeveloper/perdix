@@ -60,9 +60,21 @@ define([], function () {
                 }
             }
             var policyBasedOnLoanType = function(loanType,model){
+                var totalMarketValueInPaisa = 0;
+
+                for (var i = model.loanAccount.ornamentsAppraisals.length - 1; i >= 0; i--) {
+                    totalMarketValueInPaisa +=(model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa || 0);
+                }
+
                 if (loanType == "JEWEL"){
-                    if(model.loanAccount.loanAmountRequested >= (parseInt(model.loanAccount.ornamentsAppraisals[0].marketValueInPaisa/100))*75){
-                        var errMsg = 'Loan amount should be less then ' + ((parseInt(model.loanAccount.ornamentsAppraisals[0].marketValueInPaisa/100))*75);
+                     if(model.loanAccount.loanAmountRequested >= ((totalMarketValueInPaisa/100))*75){
+                        var errMsg = 'Loan amount should be less then ' + parseFloat((totalMarketValueInPaisa/100)*75).toFixed(2);
+                        PageHelper.showErrors({data:{error:errMsg}});
+                        return false;
+                    }
+
+                    if(model.loanAccount.loanAmount >= ((totalMarketValueInPaisa/100))*75){
+                        var errMsg = 'SanctionedLoan amount should be less then ' + parseFloat((totalMarketValueInPaisa/100)*75).toFixed(2);
                         PageHelper.showErrors({data:{error:errMsg}});
                         return false;
                     }
@@ -278,7 +290,7 @@ define([], function () {
 
             // View Functions
             var getIncludes = function (model) {
-                return [
+                return [ 
                     "LoanDetails",
                     "LoanDetails.centreName",
                     "LoanDetails.productCategory",

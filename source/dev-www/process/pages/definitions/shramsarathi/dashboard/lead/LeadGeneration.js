@@ -237,7 +237,7 @@ function(LeadProcess, AngularResourceService) {
                         },
                         searchHelper: formHelper,
                         search: function (inputModel, form, model) {
-                            return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
+                            return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state, inputModel.division);
                         },
                         getListDisplayItem: function (item, index) {
                             return [
