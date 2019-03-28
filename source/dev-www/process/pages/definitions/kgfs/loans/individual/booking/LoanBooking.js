@@ -1144,10 +1144,12 @@ define([], function () {
                     }
                     
                      /** Here guardianTitle column is used as flag to capture AddressSameasBorrower due to no other column exists in nominee_details table*/
-                if (model.loanAccount.nominees[0].guardianTitle && model.loanAccount.nominees[0].guardianTitle == "YES")
-                    model.loanAccount.nominees[0].isnomineeAddressSameasBorrower = true;
-                else
-                    model.loanAccount.nominees[0].isnomineeAddressSameasBorrower = false;
+                if (_.hasIn(model, "loanAccount.nominees[0]")) {
+                    if (model.loanAccount.nominees[0].guardianTitle && model.loanAccount.nominees[0].guardianTitle == "YES")
+                        model.loanAccount.nominees[0].isnomineeAddressSameasBorrower = true;
+                    else
+                        model.loanAccount.nominees[0].isnomineeAddressSameasBorrower = false;                    
+                }
 
                     self = this;
                     model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays = 0;
