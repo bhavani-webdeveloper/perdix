@@ -2127,7 +2127,7 @@ define([],function(){
                                             "key":"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf12",
                                             "title":"DATE",
                                             "type":"date",
-                                            "required":true
+                                            "required":false
                                         }
                                     
                                         }
