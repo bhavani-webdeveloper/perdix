@@ -70,15 +70,13 @@ define({
                         //     res.state
                         // ].join(', ') + ' - ' + res.pincode;
                         if(model.UIUDF.income[0].incomes[0]!=undefined){
-                            debugger;
+                            
                             model.netincome=model.UIUDF.income[0].incomes[0].incomeEarned - model.UIUDF.expenditures[0].annualExpenses;
-                            debugger;
                         }
                         else
                         {
                             //model.UIUDF.income[0].incomes[0].incomeEarned=0;
                             model.netincome= 0 - model.UIUDF.expenditures[0].annualExpenses;
-                            debugger;
                         }
                        // debugger;
                         /*Family fields*/
