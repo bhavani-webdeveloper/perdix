@@ -90,7 +90,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
                                 },
                                 "PhysicalAssets.physicalAssets":{
-                                    //"title":"FIXED_ASSET",
+                                    "title":"FIXED_ASSET",
                                     "titleExpr": "model.customer.physicalAssets[arrayIndex].titleExpr",
 
                                 },
@@ -206,7 +206,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "overrides": {
                                
                                 "PhysicalAssets.physicalAssets":{
-                                    //"title":"FIXED_ASSET",
+                                    "title":"FIXED_ASSET",
                                     "titleExpr": "model.customer.physicalAssets[arrayIndex].titleExpr",
 
                                 },
@@ -1088,6 +1088,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly":true
                                 },
                                 "PhysicalAssets.physicalAssets":{
+                                    "title": "FIXED_ASSET",
                                     "readonly":true
                                 }
                             }
@@ -1369,7 +1370,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             ],
                             "overrides": {
                                 "PhysicalAssets.physicalAssets":{
-                                   // "title":"FIXED_ASSET",
+                                   "title":"FIXED_ASSET",
                                     "titleExpr": "model.customer.physicalAssets[arrayIndex].titleExpr",
                                 },
                                 "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
@@ -2028,7 +2029,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "title":"FIXED_ASSET"
                     },
                     "PhysicalAssets.physicalAssets":{
-                        "titleExpr": "model.customer.physicalAssets[arrayIndex].titleExpr"
+                        "titleExpr": "model.customer.physicalAssets[arrayIndex].titleExpr",
+                        "title":"FIXED_ASSET"
                     },
                     "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
                         "enumCode": "fixed_asset_type",
@@ -3173,6 +3175,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     "orderNo": 11,
                                                     key: "customer.familyMembers[].incomes",
                                                     type: "array",
+                                                    readonly: true,
                                                     startEmpty: true,
                                                     items: {
                                                         "workSector":{
@@ -3189,7 +3192,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             title:"OCCUPATION",
                                                             required: false,
                                                             // filter:{"parentCode": "work_sector"},
-                                                            "enumCode": "occupation",
+                                                            // "enumCode": "occupation",
                                                             "parentEnumCode": "work_sector",
                                                             "parentValueExpr":"model.customer.familyMembers[context.arrayIndex].incomes[context.arrayIndex].workSector",
                                                             "orderNo": 60
