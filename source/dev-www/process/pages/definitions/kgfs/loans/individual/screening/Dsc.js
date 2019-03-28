@@ -194,6 +194,7 @@ define([], function () {
                                     model.customer.loanPurpose1 = model.loanAccount.loanPurpose1;
                                     model.customer.loanSaved = true;
                                     model.customer.dscStatus = model.loanAccount.loanCustomerRelations[i].dscStatus;
+                                    model.customer.dscOverrideRemarks = model.loanAccount.loanCustomerRelations[i].dscOverrideRemarks;
                                 }
                             }
                         }
@@ -363,7 +364,7 @@ define([], function () {
                                         items: [
                                             {
                                                 title: "REMARKS",
-                                                key: "loanAccount.dscOverrideRemarks",
+                                                key: "customer.dscOverrideRemarks",
                                                 type: "textarea",
                                                 required: true
                                             },
