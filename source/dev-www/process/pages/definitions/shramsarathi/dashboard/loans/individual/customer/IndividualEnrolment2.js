@@ -90,12 +90,23 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
                                 },
                                 "PhysicalAssets.physicalAssets":{
-                                    //"title":"FIXED_ASSETS",  
+                                    //"title":"FIXED_ASSET",
+                                    "titleExpr": "model.customer.physicalAssets[arrayIndex].titleExpr",
+
                                 },
                                 "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
                                     "enumCode": "fixed_asset_type",
-                                    "title":"FIXED_ASSET",
-            
+                                    onChange: function(valueObj,context,model){
+                                        model.customer.physicalAssets[context.arrayIndex].titleExpr = getFixedByCode(valueObj.toString());
+                                     }
+                                },
+                                "EnterpriseFinancials.currentAsset":{
+                                    "titleExpr":"model.customer.currentAssets[arrayIndex].titleExpr",
+                                },
+                                "EnterpriseFinancials.currentAsset.assetType":{
+                                    onChange: function(valueObj,context,model){
+                                        model.customer.currentAssets[context.arrayIndex].titleExpr = getCurrentByCode(valueObj.toString());
+                                     }
                                 },
                                 "ContactInformation.villageName": {
                                     "readonly": true,
