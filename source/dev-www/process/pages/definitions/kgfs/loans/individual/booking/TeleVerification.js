@@ -338,9 +338,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                                 
                                                             },
                                                             {
-                                                                "key": "applicant.udf29",
+                                                                "key": "applicant.customerCalled",
                                                                 "type": "date",
                                                                 "title": "CUSTOMER_CALLED",
+                                                                "readonly":true
                                                             },
                                                             {
                                                                 "key": "telecalling.applicant.telecallingRemarks",
@@ -384,12 +385,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     // Setting necessary parties to child arrays.
                     model.applicant.customer = model.loanProcess.applicantEnrolmentProcess.customer;
                     model.loanCustomer.customer = model.loanProcess.loanCustomerEnrolmentProcess.customer;
+
                     // applicant telecalling details
                     var telecallingApplicant= _.filter(model.loanAccount.telecallingDetails, {"partyType": "applicant"}); 
                     if(telecallingApplicant.length != 0) {
                         model.telecalling.applicant = telecallingApplicant[telecallingApplicant.length -1];
                     }
                     
+                    if (_.hasIn(model, 'telecalling.applicant.customerCalled'))
+                    model.telecalling.applicant.customerCalled=moment("YYYY-MM-DD", SessionStore.getSystemDateFormat());
+
                     model.telecalling.loanCustomer = _.filter(model.loanAccount.telecallingDetails, {"partyType": "loanCustomer"});
                     if (_.hasIn(model, 'loanProcess.applicantEnrolmentProcess') && model.loanProcess.applicantEnrolmentProcess !=null){
                         model.applicantEnrolmentProcessDetails = {}; 
@@ -449,6 +454,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         model.applicant.customerId = model.applicant.customer.id;
                         model.applicant.partyType = "applicant";
                         model.applicant.customerCalledAt = new Date();
+                        model.applicant.customerCalled = new Date();                        
                         model.applicant.telecallingResponse = model.telecalling.applicant.telecallingResponse;
                         model.applicant.noOfCallAttempts = model.telecalling.applicant.noOfCallAttempts;
                         model.applicant.followupCallRequired = model.telecalling.applicant.followupCallRequired;
