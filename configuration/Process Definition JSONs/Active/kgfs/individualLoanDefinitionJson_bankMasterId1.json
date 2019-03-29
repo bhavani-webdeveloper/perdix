@@ -1664,13 +1664,6 @@
                    "captureStages":[
                      "Checker2"
                       ]
-                },
-                "customerCalled": {
-                  "title": "customerCalled",
-                  "type": "string",
-                   "captureStages":[
-                     "Checker2"
-                      ]
                 }
               }
             }

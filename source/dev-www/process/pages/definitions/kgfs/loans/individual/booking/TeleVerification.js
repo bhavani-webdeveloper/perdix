@@ -377,7 +377,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "subTitle": "",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
 
-                  
                     model.loanCustomer = {};
                     model.applicant = {};
                     model.telecalling = [];
@@ -393,7 +392,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     }
                     
                     if (_.hasIn(model, 'telecalling.applicant.customerCalled'))
-                    model.telecalling.applicant.customerCalled=moment("YYYY-MM-DD", SessionStore.getSystemDateFormat());
+                    model.applicant.customerCalled=moment().format(SessionStore.getSystemDateFormat());
 
                     model.telecalling.loanCustomer = _.filter(model.loanAccount.telecallingDetails, {"partyType": "loanCustomer"});
                     if (_.hasIn(model, 'loanProcess.applicantEnrolmentProcess') && model.loanProcess.applicantEnrolmentProcess !=null){
@@ -454,7 +453,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         model.applicant.customerId = model.applicant.customer.id;
                         model.applicant.partyType = "applicant";
                         model.applicant.customerCalledAt = new Date();
-                        model.applicant.customerCalled = new Date();                        
                         model.applicant.telecallingResponse = model.telecalling.applicant.telecallingResponse;
                         model.applicant.noOfCallAttempts = model.telecalling.applicant.noOfCallAttempts;
                         model.applicant.followupCallRequired = model.telecalling.applicant.followupCallRequired;
