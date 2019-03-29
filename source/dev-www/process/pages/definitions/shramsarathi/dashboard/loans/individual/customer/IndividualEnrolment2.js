@@ -3661,7 +3661,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 },
                 eventListeners: {
                     "lead-loaded": function (bundleModel, model, obj) {
-                        debugger;
+                            
                         return $q.when()
                             .then(function () {
                                 if (obj.applicantCustomerId) {
