@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("jewelloan.ReturnRequestQueue"),
- ["$log", "formHelper","PageHelper", "JewelLoan", "$q", "SessionStore","irfNavigator","irfProgressMessage","Utils",
-	function($log, formHelper,PageHelper, JewelLoan,$q, SessionStore,irfNavigator,irfProgressMessage,Utils) {
+ ["$log", "formHelper","PageHelper", "JewelLoan", "$q", "SessionStore","irfNavigator","irfProgressMessage","Utils","$state",
+	function($log, formHelper,PageHelper, JewelLoan,$q, SessionStore,irfNavigator,irfProgressMessage,Utils,$state) {
         
             var BulkJewelPouchUpdate = function(items) {
                 $log.info("Inside submit()");
@@ -48,10 +48,11 @@ irf.pageCollection.factory(irf.page("jewelloan.ReturnRequestQueue"),
            .$promise
                 .then(function(res){
                     PageHelper.showProgress("Assign-Jewel", "Done.", 3000);
-                    irfNavigator.go({
-						state: "Page.Engine",
-						pageName: "jewelloan.ReturnRequestQueue"
-						});
+                    // irfNavigator.go({
+					// 	state: "Page.Engine",
+					// 	pageName: "jewelloan.ReturnRequestQueue"
+					// 	});
+					$state.reload();
                 }, function(httpRes){
                     PageHelper.showProgress("Assign-Jewel", "Oops. Some error occured.", 3000);
                     PageHelper.showErrors(httpRes);

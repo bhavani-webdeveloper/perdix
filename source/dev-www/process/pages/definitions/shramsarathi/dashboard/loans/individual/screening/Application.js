@@ -64,7 +64,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             //     title: 'BUSINESS',
                             //     pageClass: 'business',
                             //     minimum: 1,
-                            //     maximum: 1,
+                            //     maximum: 1,                  
                             //     order:40
                             // },
                             // {

@@ -1055,7 +1055,7 @@ define([],function(){
                                             },
                                             "productType": {
                                                 "key":"loanAccount.loanType",
-                                                "title": "PRODUCT_TYPE",
+                                                "title": "LOAN_TYPE",
                                                 "readonly":true,
                                                 "type": "select",
                                                 "orderNo": 9
@@ -1582,8 +1582,12 @@ define([],function(){
                             });
 
                     },
-                    sendBack: function(model, formCtrl, form, $event){                       
-                        PageHelper.showLoader();
+                    sendBack: function(model, formCtrl, form, $event){      
+                        
+                        if(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5){
+                            model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = "false"
+                        }
+                            PageHelper.showLoader();
                        if (model.loanProcess.remarks==null || model.loanProcess.remarks =="" || model.review.targetStage ==null || model.review.targetStage ==""){
                                PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
                                PageHelper.hideLoader();

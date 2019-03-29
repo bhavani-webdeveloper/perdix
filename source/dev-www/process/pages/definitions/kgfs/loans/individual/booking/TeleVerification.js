@@ -468,6 +468,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             })
                             .subscribe(function(value) {
                                 PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
+                                  
+                                    BundleManager.pushEvent('teleVerification-capture', model._bundlePageObj, {loanAccount: model.loanAccount});
+                                
                             }, function(err) {
                                 PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);

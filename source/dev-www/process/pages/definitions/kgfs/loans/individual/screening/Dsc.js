@@ -194,6 +194,7 @@ define([], function () {
                                     model.customer.loanPurpose1 = model.loanAccount.loanPurpose1;
                                     model.customer.loanSaved = true;
                                     model.customer.dscStatus = model.loanAccount.loanCustomerRelations[i].dscStatus;
+                                    model.customer.dscOverrideRemarks = model.loanAccount.loanCustomerRelations[i].dscOverrideRemarks;
                                 }
                             }
                         }
@@ -363,7 +364,7 @@ define([], function () {
                                         items: [
                                             {
                                                 title: "REMARKS",
-                                                key: "loanAccount.dscOverrideRemarks",
+                                                key: "customer.dscOverrideRemarks",
                                                 type: "textarea",
                                                 required: true
                                             },
@@ -410,7 +411,7 @@ define([], function () {
                 },
                 actions: {
                     doDscOverride: function (model,loanid) {
-                        if (model.loanAccount.dscOverrideRemarks==null || model.loanAccount.dscOverrideRemarks ==""){
+                        if (model.customer.dscOverrideRemarks==null || model.customer.dscOverrideRemarks ==""){
                                PageHelper.showProgress("update-loan", "Remarks is mandatory", 3000);
                                PageHelper.hideLoader();
                                return false;
@@ -421,17 +422,18 @@ define([], function () {
                             return false; 
                         }
                         
-                        if (model.loanAccount.dscOverrideRemarks) {
+                        if (model.customer.dscOverrideRemarks) {
                             irfProgressMessage.pop("dsc-override", "Performing DSC Override");
                             IndividualLoan.overrideAllLCRMemberDsc({
                                 customerId: model.loanAccount.customerId,
                                 loanId: model.loanAccount.id,
-                                remarks: model.loanAccount.dscOverrideRemarks,
+                                remarks: model.customer.dscOverrideRemarks,
                                 action: 'approve'
                             }, {}, function (resp, headers) {
                                 $log.info(resp);
                                 PageHelper.hideLoader();
                                 irfProgressMessage.pop("dsc-override", "DSC Overridden", 2000);
+                                BundleManager.pushEvent('dsc-status',resp); 
                                 if(resp && resp.length)
                                 {
                                     for(i=0;i<resp.length;i++)

@@ -11,6 +11,9 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         var CBType;
         var loanAmount = model.loanAccount.loanAmountRequested;
         var loanPurpose;
+        var partner = model.loanAccount.partnerCode;
+        var subModuleCode;
+        var productCode = model.loanAccount.productCode;
         if(customerType=='APP'){
             customerId = model.customer.applicantid;
             // loanAmount = model.customer.loanAmount;
@@ -30,23 +33,53 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         //loanPurpose = 'Agriculture';
         PageHelper.clearErrors();
         if (CBType != 'CHMHUB') {
-            CreditBureau.postcreditBureauCheck({
-                customerId: customerId,
-                type: CBType,
-                purpose: loanPurpose,
-                loanAmount: loanAmount
-            }, function(response) {
 
-                checkResponse(response, model, customerType, CBType, index);
+            Queries.getLoanProduct(productCode).then(
+                function(res) {                                       
+                model.loanType = res.body[0].loanType;
+                if(SessionStore.getGlobalSetting('siteCode')  == 'KGFS'){
+                    if(model.loanType == 'JLG'){
+                        subModuleCode = 'MFI';
+                        if(partner == 'AXIS'){
+                            partnerCode = 'AXIS';
+                        }else{
+                            partnerCode = 'PFSPL';
+                        }	
+                    }else if(model.loanType == 'JEWEL'){
+                        model.loanLimit = SessionStore.getGlobalSetting("cibilSubModuleCodeLimitJewel");
+                        partnerCode = 'PFSPL';
+                        subModuleCode = 'COMBO';
+                        if(model.loanLimit && model.loanAmount <= model.loanLimit)
+                            subModuleCode = 'MFI';
+                    }else{
+                        partnerCode = 'PFSPL';
+                        subModuleCode = 'COMBO';
+                    }	
+                }
+                CreditBureau.postcreditBureauCheck({
+                    customerId: customerId,
+                    type: CBType,
+                    purpose: loanPurpose,
+                    loanAmount: loanAmount,
+                    productCode: productCode,
+                    subModuleCode: subModuleCode,
+                    partnerCode: partnerCode
 
-            }, function(errorResponse) {
-                PageHelper.hideLoader();
-                PageHelper.showErrors(errorResponse);
-                if (errorResponse && errorResponse.data && errorResponse.data.error)
-                    PageHelper.showProgress("cb-check", errorResponse.data.error, 5000);
-                else
-                    PageHelper.showProgress("cb-check", "Failed while placing Credit Bureau Request", 5000);
-            });
+                }, function(response) {
+    
+                    checkResponse(response, model, customerType, CBType, index);
+    
+                }, function(errorResponse) {
+                    PageHelper.hideLoader();
+                    PageHelper.showErrors(errorResponse);
+                    if (errorResponse && errorResponse.data && errorResponse.data.error)
+                        PageHelper.showProgress("cb-check", errorResponse.data.error, 5000);
+                    else
+                        PageHelper.showProgress("cb-check", "Failed while placing Credit Bureau Request", 5000);
+                });
+            });  
+
+            
         } else {
             model.idenCheck.customerId = customerId;
             model.idenCheck.type = CBType;

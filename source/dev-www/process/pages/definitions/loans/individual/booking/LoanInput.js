@@ -2164,7 +2164,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 {
                 "type": "box",
                 "title": "",
-                "condition": "model.siteCode != 'IFMRCapital' && !model.additional.config.isInsurancePolicy",
+                "condition": "model.siteCode != 'IFMRCapital'",
                 "items":[
                     {
                         "type":"fieldset",
@@ -2238,6 +2238,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     {
                         "type":"fieldset",
                         "title":"INSURANCE_POLICY",
+                        condition:"!model.additional.config.isInsurancePolicy",
                         "items":[
                             {
                                 "key":"additional.portfolioUrnSelector",

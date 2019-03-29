@@ -1,8 +1,8 @@
 define({
         pageUID: "shramsarathi.dashboard.loans.individual.screening.detail.IndividualEnrollmentView",
         pageType: "Engine",
-        dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "Model_ELEM_FC", "CreditBureau", "irfElementsConfig", "$filter"],
-        $pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, Model_ELEM_FC, CreditBureau, irfElementsConfig, $filter) {
+        dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "Model_ELEM_FC", "CreditBureau", "irfElementsConfig", "$filter","BundleManager"],
+        $pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, Model_ELEM_FC, CreditBureau, irfElementsConfig, $filter,BundleManager) {
             return {
                 "type": "schema-form",
                 "title": "INDIVIDUAL_ENROLLMENT",
@@ -53,6 +53,9 @@ define({
                         model.UIUDF.expenditures=res.expenditures;
                         model.UIUDF.income=res.familyMembers;
                         model.UIUDF.current_assets = res.currentAssets;
+                        
+
+                        BundleManager.broadcastEvent('Individual_Enrollment', res);
                         //debugger;
                         var centres = formHelper.enum("centre").data;
                         for (var i=0;i<centres.length;i++){
@@ -68,7 +71,16 @@ define({
                         //     res.district,
                         //     res.state
                         // ].join(', ') + ' - ' + res.pincode;
-    
+                        if(model.UIUDF.income[0].incomes[0]!=undefined){
+                            
+                            model.netincome=model.UIUDF.income[0].incomes[0].incomeEarned - model.UIUDF.expenditures[0].annualExpenses;
+                        }
+                        else
+                        {
+                            //model.UIUDF.income[0].incomes[0].incomeEarned=0;
+                            model.netincome= 0 - model.UIUDF.expenditures[0].annualExpenses;
+                        }
+                       // debugger;
                         /*Family fields*/
                         model.UIUDF.family_fields.family_member_count = model.customer.familyMembers.length;
                         model.UIUDF.family_fields.dependent_family_member = 0;/*
@@ -159,11 +171,13 @@ define({
                                         "key": "UIUDF.family_fields.family_member_count",
                                         "title": "No. of Family Members",
                                         "type": "number"
-                                    }, {
-                                        "key": "UIUDF.family_fields.dependent_family_member",
-                                        "title": "No. of Dependent Family Members",
-                                        "type": "number"
-                                    }]
+                                    },
+                                    //  {
+                                    //     "key": "UIUDF.family_fields.dependent_family_member",
+                                    //     "title": "No. of Dependent Family Members",
+                                    //     "type": "number"
+                                    // }
+                                ]
                                 }, {
                                     "type": "grid",
                                     "orientation": "vertical",
@@ -654,35 +668,37 @@ define({
                                         render: function(data, type, full, meta) {
                                             return full['netBankingAvailable']
                                         }
-                                    }, {
-                                        "title": "Limit",
-                                        "data": "limit",
-                                        render: function(data, type, full, meta) {
-                                            return full['limit']
-                                        }
-                                    }, {
-                                        "title": "Bank Statement's",
-                                        "data": "",
-                                        render: function(data, type, full, meta) {
-                                            var title = [];
-                                            var url = [];
-                                            for (i = 0; i < full.BankStatements.length; i++) {
-                                                url.push(Model_ELEM_FC.fileStreamUrl + "/" + full.BankStatements[i]['Bank Statement File ID']);
-                                                title.push(moment(full.BankStatements[i].Month).format('MMMM YYYY'));
-                                            }
-                                            //return '<div  ng-repeat = "i in ' + url + '"  ><p ng-repeat="j in'+title+'"><a  href={{i}} style="cursor:pointer">{{j}}</a></p></div>'
-                                            /*return data?'<a ng-href="'+Model_ELEM_FC.fileStreamUrl+'/'+data+'" style="cursor:pointer"></a>':'';*/
+                                    }
+                                    // {
+                                    //     "title": "Limit",
+                                    //     "data": "limit",
+                                    //     render: function(data, type, full, meta) {
+                                    //         return full['limit']
+                                    //     }
+                                    // }, {
+                                    //     "title": "Bank Statement's",
+                                    //     "data": "",
+                                    //     render: function(data, type, full, meta) {
+                                    //         var title = [];
+                                    //         var url = [];
+                                    //         for (i = 0; i < full.BankStatements.length; i++) {
+                                    //             url.push(Model_ELEM_FC.fileStreamUrl + "/" + full.BankStatements[i]['Bank Statement File ID']);
+                                    //             title.push(moment(full.BankStatements[i].Month).format('MMMM YYYY'));
+                                    //         }
+                                    //         //return '<div  ng-repeat = "i in ' + url + '"  ><p ng-repeat="j in'+title+'"><a  href={{i}} style="cursor:pointer">{{j}}</a></p></div>'
+                                    //         /*return data?'<a ng-href="'+Model_ELEM_FC.fileStreamUrl+'/'+data+'" style="cursor:pointer"></a>':'';*/
     
-                                            return '<div >' +
-                                                '<a  href="' + url[0] + '">' + title[0] + '</a><br>' +
-                                                '<a  href="' + url[1] + '">' + title[1] + '</a><br>' +
-                                                '<a  href="' + url[2] + '">' + title[2] + '</a><br>' +
-                                                '<a  href="' + url[3] + '">' + title[3] + '</a><br>' +
-                                                '<a  href="' + url[4] + '">' + title[4] + '</a><br>' +
-                                                '<a  href="' + url[5] + '">' + title[5] + '</a><br>' +
-                                                '</div>'
-                                        }
-                                    }];
+                                    //         return '<div >' +
+                                    //             '<a  href="' + url[0] + '">' + title[0] + '</a><br>' +
+                                    //             '<a  href="' + url[1] + '">' + title[1] + '</a><br>' +
+                                    //             '<a  href="' + url[2] + '">' + title[2] + '</a><br>' +
+                                    //             '<a  href="' + url[3] + '">' + title[3] + '</a><br>' +
+                                    //             '<a  href="' + url[4] + '">' + title[4] + '</a><br>' +
+                                    //             '<a  href="' + url[5] + '">' + title[5] + '</a><br>' +
+                                    //             '</div>'
+                                    //     }
+                                    // }
+                                ];
                                 },
                                 getActions: function() {
                                     return [];
@@ -784,7 +800,8 @@ define({
                                         "title": "NO_OF_INSTALLMENT_PAID",
                                         "data": "noOfInstalmentPaid",
                                         render: function(data, type, full, meta) {
-                                            return full['noOfInstalmentPaid']
+                                            if (data) return data;
+                                            return full['noOfInstalmentPaid'].toString();
                                         }
     
                                     }, {
@@ -883,7 +900,8 @@ define({
                                 }
                             }]
                         }]
-                    },{
+                    },
+                    {
                         "type": "box",
                         "readonly": true,
                         "colClass": "col-sm-12",
@@ -1030,35 +1048,37 @@ define({
                                     "title": "Expenses",
                                     "type": "amount"
                                 }, {
-                                    "key": "UIUDF.income[0].incomes[0].incomeEarned",
+                                    "key": "netincome",
                                     "title": "Net House Hold Income",
                                     "type": "amount"
     
                                 }]
                             }]
-                        }, {
-                            "type": "expandablesection",
-                            "items": [{
-                                "type": "section",
-                                "colClass": "col-sm-12",
-                                "html": '<div>' +
-                                    '<table class="table">' +
-                                    '<colgroup>' +
-                                    '<col width="30%"> <col width="40%"> <col width="30%">' +
-                                    '</colgroup>' +
-                                    '<tbody>' +
-                                    '<tr class="table-sub-header"> <th>{{"INCOME" | translate}}</th> <th></th> <th>{{model.UIUDF.income[0].incomes[0].incomeEarned | irfCurrency}}</th> </tr>' +
-                                    '<tr> <td></td> <td>{{"SALARY_FROM_BUSINESS" | translate}}</td> <td>{{household.salaryFromBusiness | irfCurrency}}</td> </tr>' +
-                                    '<tr> <td></td> <td>{{"OTHER_INCOME_SALARIES" | translate}}</td> <td>{{household.otherIncomeSalaries | irfCurrency}}</td> </tr>' +
-                                    '<tr> <td></td> <td>{{"FAMILY_MEMBER_INCOMES" | translate}}</td> <td>{{model.UIUDF.income[0].incomes[0].incomeEarned | irfCurrency}}</td> </tr>' +
-                                    '<tr class="table-sub-header"> <th>{{"EXPENSES" | translate}}</th> <th></th> <th>{{model.UIUDF.expenditures[0].annualExpenses | irfCurrency}}</th> </tr>' +
-                                    '<tr> <td></td> <td>{{"DECLARED_EDUCATIONAL_EXPENSE" | translate}}</td> <td>{{household.declaredEducationExpense | irfCurrency}}</td> </tr>' +
-                                    '<tr> <td></td> <td>{{"EMI_HOUSEHOLD_LIABILITIES" | translate}}</td> <td>{{household.emiHouseholdLiabilities | irfCurrency}}</td> </tr>' +
-                                    '<tr class="table-bottom-summary"> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td></td> <td>{{ model.UIUDF.income[0].incomes[0].incomeEarned| irfCurrency}}</td> </tr>' +
-                                    '</tbody>' +
-                                    '</table>' + '</div>'
-                            }]
-                        }]
+                        }, 
+                        // {
+                        //     "type": "expandablesection",
+                        //     "items": [{
+                        //         "type": "section",
+                        //         "colClass": "col-sm-12",
+                        //         "html": '<div>' +
+                        //             '<table class="table">' +
+                        //             '<colgroup>' +
+                        //             '<col width="30%"> <col width="40%"> <col width="30%">' +
+                        //             '</colgroup>' +
+                        //             '<tbody>' +
+                        //             '<tr class="table-sub-header"> <th>{{"INCOME" | translate}}</th> <th></th> <th>{{model.UIUDF.income[0].incomes[0].incomeEarned | irfCurrency}}</th> </tr>' +
+                        //             //'<tr> <td></td> <td>{{"SALARY_FROM_BUSINESS" | translate}}</td> <td>{{household.salaryFromBusiness | irfCurrency}}</td> </tr>' +
+                        //             //'<tr> <td></td> <td>{{"OTHER_INCOME_SALARIES" | translate}}</td> <td>{{household.otherIncomeSalaries | irfCurrency}}</td> </tr>' +
+                        //             '<tr> <td></td> <td>{{"FAMILY_MEMBER_INCOMES" | translate}}</td> <td>{{model.UIUDF.income[0].incomes[0].incomeEarned | irfCurrency}}</td> </tr>' +
+                        //             '<tr class="table-sub-header"> <th>{{"EXPENSES" | translate}}</th> <th></th> <th>{{model.UIUDF.expenditures[0].annualExpenses | irfCurrency}}</th> </tr>' +
+                        //             //'<tr> <td></td> <td>{{"DECLARED_EDUCATIONAL_EXPENSE" | translate}}</td> <td>{{household.declaredEducationExpense | irfCurrency}}</td> </tr>' +
+                        //             //'<tr> <td></td> <td>{{"EMI_HOUSEHOLD_LIABILITIES" | translate}}</td> <td>{{household.emiHouseholdLiabilities | irfCurrency}}</td> </tr>' +
+                        //             '<tr class="table-bottom-summary"> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td></td> <td>{{ model.UIUDF.income[0].incomes[0].incomeEarned - model.UIUDF.expenditures[0].annualExpenses| irfCurrency}}</td> </tr>' +
+                        //             '</tbody>' +
+                        //             '</table>' + '</div>'
+                        //     }]
+                        // }
+                    ]
                     }, {
                         "type": "box",
                         "colClass": "col-sm-12",
@@ -1312,8 +1332,6 @@ define({
                         model.avarage_withdrawal=params.avarage_withdrawal;
                         model.UIUDF.bankAccount.BankAvgBal=params.avarage_balance;
                         model.UIUDF.bankAccount.BankAvgDep=params.avarage_deposit;
-                        //debugger;
-                
                     }
                 },
                 actions: {}
