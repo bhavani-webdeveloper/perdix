@@ -19,6 +19,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "overrides": {
                                 "ApplicantTeleverification":{"readonly":true}
                             }
+                        },
+                        "Sanction":
+                        {
+                            "excludes": [
+                            ],
+                            "overrides": {
+                                "ApplicantTeleverification":{"readonly":true}
+                            }
                         }
                     }
                 }
