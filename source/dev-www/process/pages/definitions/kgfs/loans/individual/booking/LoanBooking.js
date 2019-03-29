@@ -1484,12 +1484,12 @@ define([], function () {
                                                             bindMap: {},
                                                             searchHelper: formHelper,
                                                             search: function (inputModel, form, model, context) {
-                                                                var stage1 = model.currentStage;
-
-                                                                if (model.currentStage == 'Application' || model.currentStage == 'ApplicationReview') {
+                                                                var stage1 = model.loanAccount.currentStage;
+                                                                debugger;
+                                                                if (model.loanAccount.currentStage == 'Application' || model.loanAccount.currentStage == 'ApplicationReview') {
                                                                     stage1 = "Application";
                                                                 }
-                                                                if (model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview') {
+                                                                if (model.loanAccount.currentStage == 'FieldAppraisal' || model.loanAccount.currentStage == 'FieldAppraisalReview') {
                                                                     stage1 = "FieldAppraisal";
                                                                 }
 
