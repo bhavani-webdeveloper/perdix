@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page('customer360.loans.View'),
-    ["PagesDefinition", "$log", "formHelper", "LoanAccount", "$state", "SessionStore", "LoanAccount", "$stateParams","PageHelper","$q",
-        function(PagesDefinition, $log, formHelper, LoanAccount, $state, SessionStore, LoanAccount, $stateParams, PageHelper,$q){
+    ["PagesDefinition", "$log", "formHelper", "LoanAccount", "$state", "SessionStore", "$stateParams","PageHelper","$q",
+        function(PagesDefinition, $log, formHelper, LoanAccount, $state, SessionStore, $stateParams, PageHelper,$q){
             var pageConfig = {};
             var isPageConfigResolve = false;
             var isApplicableValue = function(param){
@@ -17,6 +17,16 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                     if(resp)
                         deferred.resolve(resp);
                 })
+                    // if(isPageConfigResolve) {
+                    //   
+                    // }
+                    // else{
+                    //     PagesDefinition.getRolePageConfig('Page/Engine/customer360.loans.View').then(function(resp){    
+                    //         _.isNull(resp) ? pageConfig = null : pageConfig = resp;
+                    //         var value = pageConfig != null ? (pageConfig.length> 0 ? ((pageConfig[param] != null) ? pageConfig[param] : false) : false ): true;
+                    //         defer.resolve(value);
+                    //     },defer.resolve(false))
+                    // }
                 return deferred.promise;
             }
             
@@ -25,8 +35,12 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                 "title": "VIEW_LOANS",
                 "subTitle": "VIEW_LOANS_SUB",
                 initialize: function (model, form, formCtrl) {
-                    $log.info("ViewLoans initialiized");
-                    },
+                    $log.info("ViewLoans initialiized"); 
+                    // PagesDefinition.getRolePageConfig('Page/Engine/customer360.loans.View').then(function(resp){    
+                    //     _.isNull(resp) ? pageConfig = null : pageConfig = resp;
+                    //     isPageConfigResolve = true;
+                    // })          
+                },
                 offline: false,
                 definition: {
                     title: "Loans",
@@ -59,6 +73,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                 deferred.resolve(data);
                             })
                         })
+                        //var urnNo = $stateParams.pageId;
                         return deferred.promise;
                     },
                     paginationOptions: {
@@ -139,7 +154,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                         }
                                         return false;
                                     }
-                                },
+                                }, 
                                 {
                                     name: "Repay",
                                     desc: "",
@@ -168,16 +183,11 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                     },
                                     isApplicable: function(item, index){
                                         var siteCode = SessionStore.getGlobalSetting('siteCode');
-<<<<<<< HEAD
-                                        if(siteCode == 'sambandh') {
-                                            return false;
-=======
                                         
                                         if(siteCode == 'witfin') { 
                                             return true
                                         }else{
                                             return false
->>>>>>> 602c087ae... Witfin Page Permission addition
                                         }
                                     }
                                 },
@@ -245,24 +255,6 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                     },
                                     pagePermission:'Page/Engine/loans.UnmarkNPA',
                                     isApplicable: function(item, index){
-<<<<<<< HEAD
-                                        var model={};
-                                        model.pageConfig = {};
-                                        model.pageConfig.IsUnMarkNPA = true; // default value for IsunmarkNPA
-                                        PagesDefinition.getRolePageConfig("Page/Engine/customer360.loans.View")
-                                            .then(function(data){
-                                                if(!_.isNull(data)){
-                                                    model.pageConfig = data; //set from addl_param
-                                                }
-                                            },function(error){
-                                                PageHelper.showErrors(error)
-                                            });
-                                        if (model.pageConfig.IsUnMarkNPA) {
-                                            return true
-                                        } else {
-                                            return false
-                                        };
-=======
                                             var siteCode = SessionStore.getGlobalSetting('siteCode');
 
                                             if(siteCode == 'KGFS')
@@ -271,7 +263,6 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                             };
                                             return true;
                                               
->>>>>>> 602c087ae... Witfin Page Permission addition
                                     }
                                 }, { 
                                     name: "FREEZE_ACCOUNT",
