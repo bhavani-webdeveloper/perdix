@@ -1554,7 +1554,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         if (model.customer.addressProof == 'Aadhar card' && !_.isNull(model.customer.addressProofNo)){
                             model.customer.aadhaarNo = model.customer.addressProofNo;
                         }
-
+                        if (model.customer.identityProof == 'PAN card' && !_.isNull(model.customer.identityProofNo)){
+                            model.customer.panNo = model.customer.identityProofNo;
+                        }
                         // $q.all start
                         model.enrolmentProcess.save()
                             .finally(function () {
@@ -1580,6 +1582,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         }
                         if (model.customer.addressProof == 'Aadhar card' && !_.isNull(model.customer.addressProofNo)){
                             model.customer.aadhaarNo = model.customer.addressProofNo;
+                        }
+                        if (model.customer.identityProof == 'PAN card' && !_.isNull(model.customer.identityProofNo)){
+                            model.customer.panNo = model.customer.identityProofNo;
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
@@ -1609,6 +1614,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         if (model.customer.addressProof == 'Aadhar card' && !_.isNull(model.customer.addressProofNo)){
                             model.customer.aadhaarNo = model.customer.addressProofNo;
+                        }
+                        if (model.customer.identityProof == 'PAN card' && !_.isNull(model.customer.identityProofNo)){
+                            model.customer.panNo = model.customer.identityProofNo;
                         }
                         PageHelper.showLoader();
 

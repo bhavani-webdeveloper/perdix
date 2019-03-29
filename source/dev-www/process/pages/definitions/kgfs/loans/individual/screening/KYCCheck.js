@@ -64,7 +64,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'cbview',
                             minimum: 1,
                             maximum: 1,
-                            order:50
+                            order:70
                         },
                         {
                             pageName: 'kgfs.loans.individual.screening.Dsc',
@@ -72,7 +72,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'dsc-check',
                             minimum: 1,
                             maximum: 1,
-                            order:70
+                            order:80
                         },
                         {
                             pageName: 'kgfs.loans.individual.screening.Summary',
@@ -88,7 +88,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'loan-review',
                             minimum: 1,
                             maximum: 1,
-                            order:80
+                            order:90
                         }
                     ]);
                 },

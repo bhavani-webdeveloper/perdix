@@ -893,7 +893,8 @@ define([],function(){
                                     "orderNo": 4
                                 },
                                 "LoanDocuments": {
-                                    "orderNo": 5
+                                    "orderNo": 5,
+                                    "readonly": true
                                 },
                                 "AdditionalLoanInformation": {
                                     "orderNo": 6,
@@ -959,7 +960,8 @@ define([],function(){
                                     "orderNo": 4
                                 },
                                 "LoanDocuments": {
-                                    "orderNo": 5
+                                    "orderNo": 5,
+                                    "readonly":true
                                 },
                                 "AdditionalLoanInformation": {
                                     "orderNo": 6,
@@ -2576,9 +2578,9 @@ define([],function(){
                             return false;
                         }
                         if((model.loanAccount.currentStage =='Televerification') && (model.loanAccount.telecallingDetails.length == 0)){
-                            PageHelper.showErrors({"data": {"error":"Tele Verification should be done"}});
+                            PageHelper.showErrors({"data": {"error":"Tele Verification should be Mandatory"}});
                             return false;
-                        }
+                        } 
                         if (!validateForm(formCtrl)){
                             return;
                         }
