@@ -69,8 +69,6 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.place",
                                 "HouseVerification.date"
-                                
-
                             ], "overrides": {
                                 "IndividualInformation.dateOfBirth":{ 
                                     "onChange": function (modelValue, form, model) {
@@ -3320,7 +3318,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     "type": "box",
                                     "title": "REFERENCES",
                                     "orderNo": 100,
-                                    "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
+                                    "condition": "model.currentStage=='Application'||model.currentStage=='Initiation' || model.currentStage=='FieldAppraisal'",
                                     "items": {
                                         "verifications": {
                                             key: "customer.verifications",

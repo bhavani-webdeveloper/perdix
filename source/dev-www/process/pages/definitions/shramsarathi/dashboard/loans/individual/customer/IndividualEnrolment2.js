@@ -1292,6 +1292,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC": {
                                     "readonly": true
                                 },
+                                "References": {
+                                    "readonly": true
+                                },
                                 "EnterpriseFinancials":{
                                     "readonly":true
                                 },
