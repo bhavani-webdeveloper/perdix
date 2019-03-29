@@ -77,6 +77,25 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     }
                                }
                             },
+                            "ContactInformation.villageName": {
+                                "readonly": true,
+                                "title":"VILLAGE"
+                            },
+                            "ContactInformation.district": {
+                                "readonly": true
+                            },
+                            "ContactInformation.state": {
+                                "readonly": true
+                            },
+                            "ContactInformation.mailingLocality": {
+                                "readonly": true
+                            },
+                            "ContactInformation.mailingDistrict": {
+                                "readonly": true
+                            },
+                            "ContactInformation.mailingState": {
+                                "readonly": true
+                            },
                                "PhysicalAssets.physicalAssets":{
                                     //"title":"FIXED_ASSET",
                                     "titleExpr": "model.customer.physicalAssets[arrayIndex].titleExpr",

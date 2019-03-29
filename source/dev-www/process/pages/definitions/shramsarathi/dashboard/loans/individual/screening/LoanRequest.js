@@ -1341,6 +1341,7 @@ define([],function(){
                         "NomineeDetails.nominees.nomineeRelationship": {
                             "enumCode":"relationship"
                         },
+                   
                   
                     // "PostReview.reject.rejectReason":{
                     //     "enumCode":"loan_rejection_reason"
@@ -1559,7 +1560,7 @@ define([],function(){
                         "NomineeDetails.nominees.nomineePincode": {
                             "resolver": "NomineePincodeLOVConfigurationShramsarathi",
                             // "resolver": "PincodeLOVConfigurationShramsarathi",
-                            "orderNo":70,
+                            "orderNo":60,
                             "required":true,
                             "autolov": false
                         },
@@ -1571,15 +1572,19 @@ define([],function(){
                         // "NomineeDetails.nominees.nomineeStreet":{
                         //     "orderNo": 60
                         // },
+                        
                         "NomineeDetails.nominees.nomineeLocality": {
-                            "orderNo":50,
-                            "title":"PANCHAYAT"
+                            "orderNo":70,
+                            "title":"PANCHAYAT",
+                            "readonly":true
                         },
                         "NomineeDetails.nominees.nomineeDistrict":{
-                            "orderNo":80
+                            "orderNo":80,
+                            "readonly":true
                         },
                         "NomineeDetails.nominees.nomineeState":{
-                            "orderNo":90
+                            "orderNo":90,
+                            "readonly":true
                         },
                         "CollateralDetails":{
                             "condition": "model.loanAccount.loanPurpose1=='Asset Purchase'"
