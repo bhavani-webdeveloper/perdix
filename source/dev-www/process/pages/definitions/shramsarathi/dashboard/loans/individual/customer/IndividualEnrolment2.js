@@ -22,7 +22,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     if (temp[i].code == code)
                         return temp[i].name;
                 }
-                return "Fixed Asset";
+                return temp[i].name;
             }
             var getCurrentByCode= function(code){
                 var temp = formHelper.enum('current_asset_type').data;
@@ -31,9 +31,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     if (temp[i].code == code)
                         return temp[i].name;
                 }
-                return "Current Asset";
+                return temp[i].name;
             }
-
 
             var preSaveOrProceed = function (reqData) {
                 if (_.hasIn(reqData, 'customer.familyMembers') && _.isArray(reqData.customer.familyMembers)) {
@@ -91,14 +90,29 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
                                 },
                                 "PhysicalAssets.physicalAssets":{
-                                    "title":"FIXED_ASSETS",
-                            
-                                    
+                                    "title":"FIXED_ASSET",
+                                    "titleExpr": "model.customer.physicalAssets[arrayIndex].titleExpr",
+
                                 },
                                 "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
                                     "enumCode": "fixed_asset_type",
-                                    "title":"FIXED_ASSET",
-            
+                                    onChange: function(valueObj,context,model){
+                                        model.customer.physicalAssets[context.arrayIndex].titleExpr = getFixedByCode(valueObj.toString());
+                                     }
+                                },
+                                "EnterpriseFinancials.currentAsset":{
+                                    "titleExpr":"model.customer.currentAssets[arrayIndex].titleExpr",
+                                },
+                                "EnterpriseFinancials.currentAsset.assetType":{
+                                    onChange: function(valueObj,context,model){
+                                        model.customer.currentAssets[context.arrayIndex].titleExpr = getCurrentByCode(valueObj.toString());
+                                     }
+                                },
+                                "IndividualInformation.customerId": {
+                                    "readonly": true
+                                },
+                                "IndividualInformation.urnNo": {
+                                    "readonly": true
                                 },
                                 "ContactInformation.villageName": {
                                     "readonly": true,
@@ -796,7 +810,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 //     "condition": "!model.customer.mailSameAsResidence"
                                 // },
                                 "ContactInformation.mailingMobilePhone": {
-                                    "condition": "!model.customer.mailSameAsResidence"
+                                    "condition": "!model.customer.mailSameAsResidence",
                                 },
                                 "ContactInformation.mailingPostoffice": {
                                     "condition": "!model.customer.mailSameAsResidence"
@@ -1074,6 +1088,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly":true
                                 },
                                 "PhysicalAssets.physicalAssets":{
+                                    "title": "FIXED_ASSET",
                                     "readonly":true
                                 }
                             }
@@ -1264,11 +1279,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             ],
                             "overrides": {
                                 "PhysicalAssets.physicalAssets":{
-                                    "title":"FIXED_ASSET"
+                                  "title":"FIXED_ASSET",
+                                    "titleExpr": "model.customer.physicalAssets[arrayIndex].titleExpr",
                                 },
                                 "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
                                     "enumCode": "fixed_asset_type",
                                     "title":"FIXED_ASSET"
+                                },
+                                "EnterpriseFinancials.currentAsset":{
+                                    "titleExpr":"model.customer.currentAssets[arrayIndex].titleExpr",
                                 },
                                 "KYC": {
                                     "readonly": true
@@ -1336,6 +1355,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "BankAccounts.customerBankAccounts": {
                                     "readonly": true
+                                },
+                                "IndividualFinancials.expenditures":{
+                                    "readonly": true
                                 }
                             }
                         },
@@ -1348,11 +1370,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             ],
                             "overrides": {
                                 "PhysicalAssets.physicalAssets":{
-                                    "title":"FIXED_ASSET"
+                                   "title":"FIXED_ASSET",
+                                    "titleExpr": "model.customer.physicalAssets[arrayIndex].titleExpr",
                                 },
                                 "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
                                     "enumCode": "fixed_asset_type",
                                     "title":"FIXED_ASSET"
+                                },
+                                "EnterpriseFinancials.currentAsset":{
+                                    "titleExpr":"model.customer.currentAssets[arrayIndex].titleExpr",
                                 },
                                 "KYC.addressProofFieldSet":{
                                     "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
@@ -1912,6 +1938,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "orderNo":23,
                         "enumCode": "no_of_payments" 
                     },
+                    "EnterpriseFinancials.currentAsset":{
+                        "titleExpr":"model.customer.currentAssets[arrayIndex].titleExpr",
+                    },
                     // "FamilyDetails.familyMembers.dateOfBirth":{
                     //     "onChange": function (modelValue, form, model, formCtrl, event) {
                     //         if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
@@ -1997,6 +2026,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "orderNo":400
                     },
                     "PhysicalAssets":{
+                        "title":"FIXED_ASSET"
+                    },
+                    "PhysicalAssets.physicalAssets":{
+                        "titleExpr": "model.customer.physicalAssets[arrayIndex].titleExpr",
                         "title":"FIXED_ASSET"
                     },
                     "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
@@ -2321,7 +2354,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "FamilyDetails.familyMembers.incomes.incomeEarned": {
                         "title": "INCOME_EARNED",
                         "key": "customer.familyMembers[].incomes[].incomeEarned",
-                        "type": "amount"
+                        "type": "amount",
+                        "orderNo": 30
                     },
                     "PhysicalAssets.physicalAssets.vehicleModel": {
                         "condition": "model.customer.physicalAssets[arrayIndex].nameOfOwnedAsset=='Two wheeler' || model.customer.physicalAssets[arrayIndex].nameOfOwnedAsset=='Four Wheeler'"
@@ -2692,6 +2726,26 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         });
                     }
                     model.customer.addressPfSameAsIdProof="NO";
+
+                    if(model.customer.currentAssets!== undefined){
+                        if(model.customer.currentAssets.length > 0){
+                            for(var i=0;i<model.customer.currentAssets.length;i++){
+                                model.customer.currentAssets[i].titleExpr = model.customer.currentAssets[i].assetType;
+                            }
+                           
+                        }
+                    }
+                  
+                     if(model.customer.physicalAssets!== undefined){
+                    if(model.customer.physicalAssets.length > 0)
+                    {
+                        for(var i=0;i<model.customer.physicalAssets.length;i++){
+                            model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
+                        }
+                    } 
+                    }  
+                       
+                    
                     /* Form rendering starts */
                     var self = this;
                     var formRequest = {
@@ -2741,7 +2795,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "mailingMobileNo":{
                                             "key":"ContactInformation.mailingMobileNo",
                                             "title":"DESTINATION_PHONE_NO",
-                                            "type":"number",
+                                            "type":"text",
+                                            "schema":{
+                                                "pattern": "^[0-9]{10,10}$"
+                                            },
                                             "condition": "!model.customer.mailSameAsResidence"
                                         }
                                     }
@@ -3118,6 +3175,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     "orderNo": 11,
                                                     key: "customer.familyMembers[].incomes",
                                                     type: "array",
+                                                    readonly: true,
                                                     startEmpty: true,
                                                     items: {
                                                         "workSector":{
@@ -3126,20 +3184,23 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "type":"select",
                                                             "enumCode":"work_sector",
                                                             "required": true,
-                                                            "orderNo": 1
+                                                            "orderNo": 50
                                                         },
                                                         "incomeSource": {
                                                             key: "customer.familyMembers[].incomes[].incomeSource",
                                                             type: "select",
                                                             title:"OCCUPATION",
                                                             required: false,
+                                                            // filter:{"parentCode": "work_sector"},
+                                                            // "enumCode": "occupation",
                                                             "parentEnumCode": "work_sector",
-                                                            "parentValueExpr": "model.customer.familyMembers[context.arrayIndex].incomes[context.arrayIndex].workSector",
-                                                            "orderNo": 2
+                                                            "parentValueExpr":"model.customer.familyMembers[context.arrayIndex].incomes[context.arrayIndex].workSector",
+                                                            "orderNo": 60
                                                         },
                                                         "incomeEarned": {
                                                             key: "customer.familyMembers[].incomes[].incomeEarned",
-                                                            title:"INCOME_AMOUNT"
+                                                            title:"INCOME_AMOUNT",
+                                                            "orderNo": 30
                                                         },
                                                         "incomeType": {
                                                             "key": "customer.familyMembers[].incomes[].incomeType",
@@ -3148,14 +3209,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                         "frequency": {
                                                             key: "customer.familyMembers[].incomes[].frequency",
                                                             type: "select",
-                                                            "enumCode":"income_frequency"
+                                                            "enumCode":"income_frequency",
+                                                            "orderNo": 40
                                                         },
                                                         "occupationType":{
                                                             "key":"customer.familyMembers[].incomes[].occupationType",
                                                             "title":"OCCUPATION_TYPE",
                                                             "type":"select",
                                                             "enumCode":"occupation_type",
-                                                            "required":true
+                                                            "required":true,
+                                                            "orderNo":20
                                                             
                                                         },
                                                         "skillLevel":{
@@ -3167,7 +3230,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                                 "unskilled":"UNSKILLED",
                                                                 "semi_skilled":"SEMI_SKILLED"
                                                             },
-                                                            "required":true
+                                                            "required":true,
+                                                            "orderNo":70
                                                             
                                                         },
                                                         "avarageTimeSpend":{
@@ -3175,11 +3239,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "title":"AVERAGE_TIME_SPENT",
                                                             "type":"text",
                                                             "required":true,
+                                                            "orderNo":80,
                                                             "schema": {
-                                                                // "pattern": "^0\.[0-9]{2}$",
-                                                                // "pattern": "(^0\.0?[1-9]\d*|^[1-9]{1,3}\.\d+)",
-                                                                "pattern": "^(0\.[0-9]{1,3}|[1-9]\.[0-9]{1,3}|[1-9][0-9]\.[0-9]{1,3}|[1-9][0-9][0-9]\.[0-9]{1,3})$",
-                                                                // "type": ["decimal,integer"]
+                                                                "pattern": "(^[0-9]{0,3}$)|(^(0\.[0-9]{1,3}|[1-9]\.[0-9]{1,3}|[1-9][0-9]\.[0-9]{1,3}|[1-9][0-9][0-9]\.[0-9]{1,3})$)",
+                                                                //"pattern": "^\d{0,2}(\.\d{1,2})?$",                        
+                                                                "type": ["string"]
                                                             }
                                                         },
                                                         "avarageReturn":{
@@ -3187,7 +3251,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "title":"AVERAGE_RETURN",
                                                             "type":"select",
                                                             "required":true,
-                                                            "enumCode":"average_return"
+                                                            "enumCode":"average_return",
+                                                            "orderNo":90
 
                                                             
                                                         },
@@ -3196,13 +3261,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "title":"INCOME_TYPE",
                                                             "type":"select",
                                                             "required":true,
-                                                            "enumCode":"income_type" 
+                                                            "enumCode":"income_type",
+                                                             "orderNo":10 
                                                         },
                                                         "noOfDaysWorkedInMonth":{
                                                             "key":"customer.familyMembers[].incomes[].noOfDaysWorkedInMonth",
                                                             "title":"NO_OF_DAYS_WORKED_IN_MONTH",
                                                             "type":"number",
-                                                            "required":true
+                                                            "required":true,
+                                                            "orderNo":100
                                                         },
                                                     }
 
@@ -3595,6 +3662,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 },
                 eventListeners: {
                     "lead-loaded": function (bundleModel, model, obj) {
+                        debugger;
                         return $q.when()
                             .then(function () {
                                 if (obj.applicantCustomerId) {
@@ -3617,7 +3685,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                                 model.customer.mobilePhone = obj.mobileNo;
                                 model.customer.gender = obj.gender;
-                                model.customer.firstName = obj.leadName;
+                                model.customer.firstName = obj.leadName+' '+obj.lastName;
                                 model.customer.maritalStatus = obj.maritalStatus;
                                 model.customer.customerBranchId = obj.branchId;
                                 model.customer.centreId = obj.centreId;
@@ -3669,6 +3737,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                             }
                         }
+
+                        /*Fixed asset */
+                        if(model.customer.currentAssets!== undefined){
+                            if(model.customer.currentAssets.length > 0){
+                                for(var i=0;i<model.customer.currentAssets.length;i++){
+                                    model.customer.currentAssets[i].titleExpr = model.customer.currentAssets[i].assetType;
+                                }
+                               
+                            }
+                        }
+                      
+                         if(model.customer.physicalAssets!== undefined){
+                        if(model.customer.physicalAssets.length > 0)
+                        {
+                            for(var i=0;i<model.customer.physicalAssets.length;i++){
+                                model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
+                            }
+                        } 
+                    }  
+
+
                     },
                     "new-co-applicant": function(bundleModel,model,obj){
                         if(model.customer.familyMembers){
@@ -3677,6 +3766,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                             }
                         }
+                        /* fixed Asset */
+
+                        if(model.customer.currentAssets!== undefined){
+                            if(model.customer.currentAssets.length > 0){
+                                for(var i=0;i<model.customer.currentAssets.length;i++){
+                                    model.customer.currentAssets[i].titleExpr = model.customer.currentAssets[i].assetType;
+                                }
+                               
+                            }
+                        }
+                      
+                         if(model.customer.physicalAssets!== undefined){
+                        if(model.customer.physicalAssets.length > 0)
+                        {
+                            for(var i=0;i<model.customer.physicalAssets.length;i++){
+                                model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
+                            }
+                        } 
+                        }  
                     },
                     "new-guarantor": function(bundleModel,model,obj){
                         if(model.customer.familyMembers){
@@ -3685,6 +3793,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                             }
                         }
+                        /*fixed Asset */
+                        if(model.customer.currentAssets!== undefined){
+                            if(model.customer.currentAssets.length > 0){
+                                for(var i=0;i<model.customer.currentAssets.length;i++){
+                                    model.customer.currentAssets[i].titleExpr = model.customer.currentAssets[i].assetType;
+                                }
+                               
+                            }
+                        }
+                      
+                         if(model.customer.physicalAssets!== undefined){
+                        if(model.customer.physicalAssets.length > 0)
+                        {
+                            for(var i=0;i<model.customer.physicalAssets.length;i++){
+                                model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
+                            }
+                        } 
+                        }  
                     }
                 },
                 offline: false,

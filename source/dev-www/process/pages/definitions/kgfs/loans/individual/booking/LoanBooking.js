@@ -60,9 +60,21 @@ define([], function () {
                 }
             }
             var policyBasedOnLoanType = function(loanType,model){
+                var totalMarketValueInPaisa = 0;
+
+                for (var i = model.loanAccount.ornamentsAppraisals.length - 1; i >= 0; i--) {
+                    totalMarketValueInPaisa +=(model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa || 0);
+                }
+
                 if (loanType == "JEWEL"){
-                    if(model.loanAccount.loanAmountRequested >= (parseInt(model.loanAccount.ornamentsAppraisals[0].marketValueInPaisa/100))*75){
-                        var errMsg = 'Loan amount should be less then ' + ((parseInt(model.loanAccount.ornamentsAppraisals[0].marketValueInPaisa/100))*75);
+                     if(model.loanAccount.loanAmountRequested >= ((totalMarketValueInPaisa/100))*75){
+                        var errMsg = 'Loan amount should be less then ' + parseFloat((totalMarketValueInPaisa/100)*75).toFixed(2);
+                        PageHelper.showErrors({data:{error:errMsg}});
+                        return false;
+                    }
+
+                    if(model.loanAccount.loanAmount >= ((totalMarketValueInPaisa/100))*75){
+                        var errMsg = 'SanctionedLoan amount should be less then ' + parseFloat((totalMarketValueInPaisa/100)*75).toFixed(2);
                         PageHelper.showErrors({data:{error:errMsg}});
                         return false;
                     }
@@ -177,7 +189,7 @@ define([], function () {
                         model.customer = resp;
                     })
                 }
-            
+
                 if (model.loanAccount && model.loanAccount.id) {
                     PageHelper.showLoader();
                     IndividualLoan.loanRemarksSummary({
@@ -268,9 +280,17 @@ define([], function () {
                 }
             }
 
+            var mapNomineeAddress = function(model){
+                /** Here guardianTitle column is used as flag to capture AddressSameasBorrower due to no other column exists in nominee_details table*/
+                if (model.loanAccount.nominees[0].isnomineeAddressSameasBorrower)
+                    model.loanAccount.nominees[0].guardianTitle = "YES";
+                else
+                    model.loanAccount.nominees[0].guardianTitle = "NO";   
+                }
+
             // View Functions
             var getIncludes = function (model) {
-                return [
+                return [ 
                     "LoanDetails",
                     "LoanDetails.centreName",
                     "LoanDetails.productCategory",
@@ -690,18 +710,23 @@ define([], function () {
                         searchHelper: formHelper,
                         search: function (inputModel, form, model, context) {
                             var out = [];
-                            if (!model.customer.familyMembers) {
+                            var applicantCustomer = [];
+                            if (typeof model.loanProcess == "undefined" || typeof model.loanProcess.applicantEnrolmentProcess == "undefined" || typeof model.loanProcess.applicantEnrolmentProcess.customer == "undefined") {
+                                return out;
+                            }
+                            applicantCustomer = model.loanProcess.applicantEnrolmentProcess.customer;
+                            if (!applicantCustomer) {
                                 return out;
                             }
 
-                            for (var i = 0; i < model.customer.familyMembers.length; i++) {
-                                if(!(model.customer.urnNo == model.customer.familyMembers[i].enrolledUrnNo)){
-                                out.push({
-                                    name: model.customer.familyMembers[i].familyMemberFirstName,
-                                    dob: model.customer.familyMembers[i].dateOfBirth,
-                                    relationship: model.customer.familyMembers[i].relationShip
-                                })
-                            }
+                            for (var i = 0; i < applicantCustomer.familyMembers.length; i++) {
+                                if(!(applicantCustomer.urnNo == applicantCustomer.familyMembers[i].enrolledUrnNo)){
+                                    out.push({
+                                        name: applicantCustomer.familyMembers[i].familyMemberFirstName,
+                                        dob: applicantCustomer.familyMembers[i].dateOfBirth,
+                                        relationship: applicantCustomer.familyMembers[i].relationShip
+                                    })
+                                }
                             }
                             return $q.resolve({
                                 headers: {
@@ -738,13 +763,17 @@ define([], function () {
                         "orderNo": 2,
                         "condition": "model.loanAccount.loanType == 'JEWEL'"
                     },
-                    "JewelDetails.ornamentDetails.netWeight":{
+                    "JewelDetails.ornamentDetails.netWeight":{ 
                         onChange:function(valueObj,context,model){
                             var carat = model.loanAccount.ornamentsAppraisals[context.arrayIndex].qualityInCarats;
                             if(carat){
                                 setGoldRate(valueObj,carat,model,context.arrayIndex);
                             }
                         }
+                    },
+                    "JewelDetails.jewelPouchNo":{
+                        readonly : true,
+                        "condition": "model.loanAccount.currentStage == 'LoanInitiation'"
                     },
                     "JewelDetails.ornamentDetails.carat":{
                         "type":"select",
@@ -782,17 +811,22 @@ define([], function () {
                         searchHelper: formHelper,
                         search: function (inputModel, form, model, context) {
                             var out = [];
-                            if (!model.customer.familyMembers) {
+                            var applicantCustomer = [];
+                            if (typeof model.loanProcess == "undefined" || typeof model.loanProcess.applicantEnrolmentProcess == "undefined" || typeof model.loanProcess.applicantEnrolmentProcess.customer == "undefined") {
+                                return out;
+                            }
+                            applicantCustomer = model.loanProcess.applicantEnrolmentProcess.customer;
+                            if (!applicantCustomer) {
                                 return out;
                             }
 
-                            for (var i = 0; i < model.customer.familyMembers.length; i++) {
-                                if(!(model.customer.urnNo == model.customer.familyMembers[i].enrolledUrnNo)){
+                            for (var i = 0; i < applicantCustomer.familyMembers.length; i++) {
+                                if(!(applicantCustomer.urnNo == applicantCustomer.familyMembers[i].enrolledUrnNo)){
                                     out.push({
-                                        name: model.customer.familyMembers[i].familyMemberFirstName,
-                                        dob: model.customer.familyMembers[i].dateOfBirth,
-                                        relationship: model.customer.familyMembers[i].relationShip,
-                                        gender: model.customer.familyMembers[i].gender
+                                        name: applicantCustomer.familyMembers[i].familyMemberFirstName,
+                                        dob: applicantCustomer.familyMembers[i].dateOfBirth,
+                                        relationship: applicantCustomer.familyMembers[i].relationShip,
+                                        gender: applicantCustomer.familyMembers[i].gender
                                     })
                                 }
                             }
@@ -882,17 +916,24 @@ define([], function () {
                         searchHelper: formHelper,
                         search: function (inputModel, form, model, context) {
                             var out = [];
-                            if (!model.customer.familyMembers) {
+                            var applicantCustomer = [];
+                            if (typeof model.loanProcess == "undefined" || typeof model.loanProcess.applicantEnrolmentProcess == "undefined" || typeof model.loanProcess.applicantEnrolmentProcess.customer == "undefined") {
+                                return out;
+                            }
+                            applicantCustomer = model.loanProcess.applicantEnrolmentProcess.customer;
+                            if (!applicantCustomer) {
                                 return out;
                             }
 
-                            for (var i = 0; i < model.customer.familyMembers.length; i++) {
-                                out.push({
-                                    name: model.customer.familyMembers[i].familyMemberFirstName,
-                                    dob : model.customer.familyMembers[i].dateOfBirth,
-                                    relationship: model.customer.familyMembers[i].relationShip,
-                                    gender: model.customer.familyMembers[i].gender
-                                })
+                            for (var i = 0; i < applicantCustomer.familyMembers.length; i++) {
+                                if(!(applicantCustomer.urnNo == applicantCustomer.familyMembers[i].enrolledUrnNo)){
+                                    out.push({
+                                        name: applicantCustomer.familyMembers[i].familyMemberFirstName,
+                                        dob: applicantCustomer.familyMembers[i].dateOfBirth,
+                                        relationship: applicantCustomer.familyMembers[i].relationShip,
+                                        gender: applicantCustomer.familyMembers[i].gender
+                                    })
+                                }
                             }
                             return $q.resolve({
                                 headers: {
@@ -907,9 +948,9 @@ define([], function () {
                                 model.loanAccount.nominees[context.arrayIndex] = [];
                             }
                             model.loanAccount.nominees[context.arrayIndex].guardianFirstName = valueObj.name;
-                            model.loanAccount.nominees[context.arrayIndex].guardianRelationWithMinor = valueObj.relationship;
+                            model.loanAccount.nominees[context.arrayIndex].guardianRelationship = valueObj.relationship;
                             model.loanAccount.nominees[context.arrayIndex].guardianGender = valueObj.gender;
-                            model.loanAccount.nominees[context.arrayIndex].nomineeDOB = valueObj.dob
+                            model.loanAccount.nominees[context.arrayIndex].guardianDOB = valueObj.dob
                         },
 
                         getListDisplayItem: function (item, index) {
@@ -1098,7 +1139,18 @@ define([], function () {
                     model.customer = {};
                     model.loanAccount = model.loanProcess.loanAccount;
                     defaultConfiguration(model,true);
+                    if(model.loanAccount.loanType == 'JEWEL' && model.loanAccount.currentStage == 'LoanInitiation'){
+                        getGoldRate(model);
+                    }
                     
+                     /** Here guardianTitle column is used as flag to capture AddressSameasBorrower due to no other column exists in nominee_details table*/
+                if (_.hasIn(model, "loanAccount.nominees[0]")) {
+                    if (model.loanAccount.nominees[0].guardianTitle && model.loanAccount.nominees[0].guardianTitle == "YES")
+                        model.loanAccount.nominees[0].isnomineeAddressSameasBorrower = true;
+                    else
+                        model.loanAccount.nominees[0].isnomineeAddressSameasBorrower = false;                    
+                }
+
                     self = this;
                     model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays = 0;
                    // "LoanSanction.disbursementSchedules.moratoriumPeriodInDays",
@@ -1252,7 +1304,7 @@ define([], function () {
                                                 "nominees": {
                                                     "items": {
                                                         "nomineeAddressSameasBorrower": {
-                                                            "key": "loanAccount.nominees[].nomineeAddressSameAsCustomer",                        
+                                                            "key": "loanAccount.nominees[].isnomineeAddressSameasBorrower",                        
                                                             "type": "checkbox",
                                                             "title": "ADDRESS_SAME_AS_BORROWER",
                                                             "schema": {
@@ -1675,6 +1727,7 @@ define([], function () {
                         if(!(policyBasedOnLoanType(model.loanAccount.loanType,model))){
                             PageHelper.showProgress('loan-process','Oops Some Error',2000);
                             return false;}
+                        mapNomineeAddress(model);    
                         model.loanProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
@@ -1755,7 +1808,9 @@ define([], function () {
                         
                         if(!(policyBasedOnLoanType(model.loanAccount.loanType,model)))
                             return false;
-
+                        
+                        mapNomineeAddress(model);    
+                        
                         var toStage=model.loanProcess.stage||null;
                         model.loanProcess.proceed(toStage)
                             .finally(function () {

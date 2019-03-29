@@ -1,8 +1,8 @@
 define({
         pageUID: "shramsarathi.dashboard.loans.individual.screening.detail.IndividualEnrollmentView",
         pageType: "Engine",
-        dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "Model_ELEM_FC", "CreditBureau", "irfElementsConfig", "$filter"],
-        $pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, Model_ELEM_FC, CreditBureau, irfElementsConfig, $filter) {
+        dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "Model_ELEM_FC", "CreditBureau", "irfElementsConfig", "$filter","BundleManager"],
+        $pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, Model_ELEM_FC, CreditBureau, irfElementsConfig, $filter,BundleManager) {
             return {
                 "type": "schema-form",
                 "title": "INDIVIDUAL_ENROLLMENT",
@@ -27,7 +27,8 @@ define({
                         'bankAccount': [],
                         'cibil': {},
                         'highmark': {},
-                        'customer_address': {}
+                        'customer_address': {},
+                        'current_assets': []
                     };                
                     Enrollment.getCustomerById({
                         id: model.customerId
@@ -49,7 +50,12 @@ define({
                        
                         model.UIUDF.bankAccount=res.customerBankAccounts;
                         model.UIUDF.liabilities=res.liabilities;
-                        model.household=model.expenditures;
+                        model.UIUDF.expenditures=res.expenditures;
+                        model.UIUDF.income=res.familyMembers;
+                        model.UIUDF.current_assets = res.currentAssets;
+                        
+
+                        BundleManager.broadcastEvent('Individual_Enrollment', res);
                         //debugger;
                         var centres = formHelper.enum("centre").data;
                         for (var i=0;i<centres.length;i++){
@@ -65,7 +71,16 @@ define({
                         //     res.district,
                         //     res.state
                         // ].join(', ') + ' - ' + res.pincode;
-    
+                        if(model.UIUDF.income[0].incomes[0]!=undefined){
+                            
+                            model.netincome=model.UIUDF.income[0].incomes[0].incomeEarned - model.UIUDF.expenditures[0].annualExpenses;
+                        }
+                        else
+                        {
+                            //model.UIUDF.income[0].incomes[0].incomeEarned=0;
+                            model.netincome= 0 - model.UIUDF.expenditures[0].annualExpenses;
+                        }
+                       // debugger;
                         /*Family fields*/
                         model.UIUDF.family_fields.family_member_count = model.customer.familyMembers.length;
                         model.UIUDF.family_fields.dependent_family_member = 0;/*
@@ -74,8 +89,10 @@ define({
                             if (member.incomes.length == 0)
                                 model.UIUDF.family_fields.dependent_family_member++;
                         });
+
                         /*Household Assets field*/
-                        model.UIUDF.household_fields.total_Assets = model.customer.physicalAssets.length; /* what assets i need to take*/
+                        model.UIUDF.household_fields.total_Assets = model.customer.physicalAssets.length;
+                        /* what assets i need to take*/
                         model.UIUDF.household_fields.total_Value = 0;
                         _.each(model.customer.physicalAssets, function(Assets) {
                             model.UIUDF.household_fields.total_Value += parseInt(Assets.ownedAssetValue);
@@ -83,6 +100,13 @@ define({
     
                         /*Cibil/highmark fields*/
                         
+                        /* Current Assets */
+                        model.UIUDF.current_assets.assets = model.customer.currentAssets.length;
+                        model.UIUDF.current_assets.total = 0;
+                        _.each(model.customer.currentAssets,function(Asset){
+                            model.UIUDF.current_assets.total += parseInt(Asset.assetValue);
+                        });
+
                         /*Reference Check fields*/
                         model.UIUDF.REFERENCE_CHECK_RESPONSE = 'NA';
                         var ref_flag = "true";
@@ -106,8 +130,6 @@ define({
 
                         /* Outstanding Debt */
 
-                        var monthly_installment = 0;
-                        var outstanding_bal = 0;
                         var liability ;
                         _.each(liability, function(liability) {
                             if (liability.summary['Customer ID'] == model.customer.id) {
@@ -118,8 +140,6 @@ define({
                             }
                         })
                         model.UIUDF.liability_fields.active_accounts = model.UIUDF.liabilities.length;
-                        model.UIUDF.liability_fields.monthly_installment = monthly_installment;
-                        model.UIUDF.liability_fields.outstanding_bal = outstanding_bal;
 
                         /*Household fields */
     
@@ -160,7 +180,7 @@ define({
                                     "type": "grid",
                                     "orientation": "vertical",
                                     "items": [{
-                                        "key": "UIUDF.family_fields.total_household_income",
+                                        "key": "UIUDF.income[0].incomes[0].incomeEarned",
                                         "type": "amount",
                                         "title": "Total Household income"
                                     }, {
@@ -411,9 +431,11 @@ define({
                                 "items": [{
                                     "key": "customer.urnNo",
                                     "title": "URN"
-                                }, {
-                                    "key": "customer.religion"
-                                }, {
+                                }, 
+                                // {
+                                //     "key": "customer.religion"
+                                // }, 
+                                {
                                     "key": "customer.caste",
                                     "title": "CASTE"
                                 }, {
@@ -475,7 +497,8 @@ define({
                                 }]
                             }]
                         }]
-                    }, {
+                    }, 
+                    {
                         "type": "box",
                         "readonly": true,
                         "colClass": "col-sm-12",
@@ -519,7 +542,7 @@ define({
                                 }]
                             }]
                         }]
-                    }, {
+                    },{
                         "type": "box",
                         "readonly": true,
                         "colClass": "col-sm-12",
@@ -533,15 +556,15 @@ define({
                                 "type": "grid",
                                 "orientation": "vertical",
                                 "items": [{
-                                    "key": "BankAvgDep",
+                                    "key": "avarage_deposit",
                                     "title": "Average Monthly Deposit",
                                     "type": "amount"
                                 }, {
-                                    "key": "BankAvgWithdrawl",
+                                    "key": "avarage_withdrawal",
                                     "title": "Average Monthly Withdrawls",
                                     "type": "amount"
                                 }, {
-                                    "key": "BankAvgBal",
+                                    "key": "avarage_balance",
                                     "title": "Average Monthly Balances",
                                     "type": "amount"
                                 }]
@@ -549,15 +572,15 @@ define({
                                 "type": "grid",
                                 "orientation": "vertical",
                                 "items": [{
-                                    "key": "totalAccount",
+                                    "key": "UIUDF.bankAccount.length",
                                     "title": "Total no of Account",
                                     "type": "number"
                                 }, {
-                                    "key": "checkBounced",
+                                    "key": "UIUDF.bankAccount[0].bankStatements[0].noOfChequeBounced",
                                     "title": "Total no of Cheque Bounce",
                                     "type": "number"
                                 }, {
-                                    "key": "emiBounce",
+                                    "key": "UIUDF.bankAccount[0].bankStatements[0].noOfEmiChequeBounced",
                                     "title": "Total no EMI Bounce",
                                     "type": "number"
                                 }]
@@ -603,19 +626,22 @@ define({
                                         render: function(data, type, full, meta) {
                                             return full['accountNumber']
                                         }
-                                    }, {
-                                        "title": "Average Bank Balance",
-                                        "data": "averageBankBalance",
+                                    }, 
+                                    {
+                                        "title": "Bank Balance",
+                                        "data": "bankStatements[0].balanceAsOn15th",
                                         render: function(data, type, full, meta) {
-                                            return irfCurrencyFilter(full['BankAvgBal'])
+                                            return irfCurrencyFilter(full.bankStatements[0].balanceAsOn15th)
+                                            //return irfCurrencyFilter(full.incomes[0].incomeEarned);
                                         }
                                     }, {
-                                        "title": "Average Bank Deposit",
+                                        "title": "Bank Deposit",
                                         "data": "BankAvgDep",
                                         render: function(data, type, full, meta) {
-                                            return irfCurrencyFilter(full['BankAvgDep'])
+                                            return irfCurrencyFilter(full.bankStatements[0].totalDeposits)
                                         }
-                                    }, {
+                                    },
+                                     {
                                         "title": "Account Name",
                                         "data": "customerNameAsInBank",
                                         render: function(data, type, full, meta) {
@@ -640,35 +666,37 @@ define({
                                         render: function(data, type, full, meta) {
                                             return full['netBankingAvailable']
                                         }
-                                    }, {
-                                        "title": "Limit",
-                                        "data": "limit",
-                                        render: function(data, type, full, meta) {
-                                            return full['limit']
-                                        }
-                                    }, {
-                                        "title": "Bank Statement's",
-                                        "data": "",
-                                        render: function(data, type, full, meta) {
-                                            var title = [];
-                                            var url = [];
-                                            for (i = 0; i < full.BankStatements.length; i++) {
-                                                url.push(Model_ELEM_FC.fileStreamUrl + "/" + full.BankStatements[i]['Bank Statement File ID']);
-                                                title.push(moment(full.BankStatements[i].Month).format('MMMM YYYY'));
-                                            }
-                                            //return '<div  ng-repeat = "i in ' + url + '"  ><p ng-repeat="j in'+title+'"><a  href={{i}} style="cursor:pointer">{{j}}</a></p></div>'
-                                            /*return data?'<a ng-href="'+Model_ELEM_FC.fileStreamUrl+'/'+data+'" style="cursor:pointer"></a>':'';*/
+                                    }
+                                    // {
+                                    //     "title": "Limit",
+                                    //     "data": "limit",
+                                    //     render: function(data, type, full, meta) {
+                                    //         return full['limit']
+                                    //     }
+                                    // }, {
+                                    //     "title": "Bank Statement's",
+                                    //     "data": "",
+                                    //     render: function(data, type, full, meta) {
+                                    //         var title = [];
+                                    //         var url = [];
+                                    //         for (i = 0; i < full.BankStatements.length; i++) {
+                                    //             url.push(Model_ELEM_FC.fileStreamUrl + "/" + full.BankStatements[i]['Bank Statement File ID']);
+                                    //             title.push(moment(full.BankStatements[i].Month).format('MMMM YYYY'));
+                                    //         }
+                                    //         //return '<div  ng-repeat = "i in ' + url + '"  ><p ng-repeat="j in'+title+'"><a  href={{i}} style="cursor:pointer">{{j}}</a></p></div>'
+                                    //         /*return data?'<a ng-href="'+Model_ELEM_FC.fileStreamUrl+'/'+data+'" style="cursor:pointer"></a>':'';*/
     
-                                            return '<div >' +
-                                                '<a  href="' + url[0] + '">' + title[0] + '</a><br>' +
-                                                '<a  href="' + url[1] + '">' + title[1] + '</a><br>' +
-                                                '<a  href="' + url[2] + '">' + title[2] + '</a><br>' +
-                                                '<a  href="' + url[3] + '">' + title[3] + '</a><br>' +
-                                                '<a  href="' + url[4] + '">' + title[4] + '</a><br>' +
-                                                '<a  href="' + url[5] + '">' + title[5] + '</a><br>' +
-                                                '</div>'
-                                        }
-                                    }];
+                                    //         return '<div >' +
+                                    //             '<a  href="' + url[0] + '">' + title[0] + '</a><br>' +
+                                    //             '<a  href="' + url[1] + '">' + title[1] + '</a><br>' +
+                                    //             '<a  href="' + url[2] + '">' + title[2] + '</a><br>' +
+                                    //             '<a  href="' + url[3] + '">' + title[3] + '</a><br>' +
+                                    //             '<a  href="' + url[4] + '">' + title[4] + '</a><br>' +
+                                    //             '<a  href="' + url[5] + '">' + title[5] + '</a><br>' +
+                                    //             '</div>'
+                                    //     }
+                                    // }
+                                ];
                                 },
                                 getActions: function() {
                                     return [];
@@ -693,11 +721,11 @@ define({
                                     "title": "No of Active Loans",
                                     "type": "number"
                                 }, {
-                                    "key": "UIUDF.liability_fields.monthly_installment",
+                                    "key": "UIUDF.liabilities[0].installmentAmountInPaisa",
                                     "title": "Total Monthly Instalments",
                                     "type": "amount"
                                 }, {
-                                    "key": "UIUDF.liability_fields.outstanding_bal",
+                                    "key": "UIUDF.liabilities[0].outstandingAmountInPaisa",
                                     "title": "OUTSTANDING_AMOUNT",
                                     "type": "amount"
                                 }]
@@ -770,7 +798,8 @@ define({
                                         "title": "NO_OF_INSTALLMENT_PAID",
                                         "data": "noOfInstalmentPaid",
                                         render: function(data, type, full, meta) {
-                                            return full['noOfInstalmentPaid']
+                                            if (data) return data;
+                                            return full['noOfInstalmentPaid'].toString();
                                         }
     
                                     }, {
@@ -798,12 +827,12 @@ define({
                                 }
                             }]
                         }]
-                    }, {
+                    },{
                         "type": "box",
                         "readonly": true,
                         "colClass": "col-sm-12",
                         "overrideType": "default-view",
-                        "title": "Household Assets",
+                        "title": "Fixed Assets",
                         "condition": "model.UIUDF.household_fields.total_Assets !=0",
                         "items": [{
                             "type": "grid",
@@ -843,11 +872,13 @@ define({
                                     return [{
                                         "title": "ASSET_TYPE",
                                         "data": "nameOfOwnedAsset"
-                                    }, {
-                                        "title": "REGISTERED_OWNER",
-                                        "data": "registeredOwner"
+                                    }, 
+                                    // {
+                                    //     "title": "REGISTERED_OWNER",
+                                    //     "data": "registeredOwner"
     
-                                    }, {
+                                    // }, 
+                                    {
                                         "title": "Asset Value",
                                         "data": "ownedAssetValue",
                                         render: function(data, type, full, meta) {
@@ -855,17 +886,80 @@ define({
                                                 return irfCurrencyFilter(data)
                                             else return "NA"
                                         }
-                                    }, {
-                                        "title": "AREA_UNITS_OF_ASSETS",
-                                        "data": "unit"
-                                    }];
+                                    }, 
+                                    // {
+                                    //     "title": "AREA_UNITS_OF_ASSETS",
+                                    //     "data": "unit"
+                                    // }
+                                ];
                                 },
                                 getActions: function() {
                                     return [];
                                 }
                             }]
                         }]
-                    }, {
+                    },
+                    {
+                        "type": "box",
+                        "readonly": true,
+                        "colClass": "col-sm-12",
+                        "overrideType": "default-view",
+                        "title": "Current Assets",
+                        "condition": "model.UIUDF.current_assets.assets !=0",
+                        "items": [{
+                            "type": "grid",
+                            "orientation": "horizontal",
+                            "items": [{
+                                "type": "grid",
+                                "orientation": "vertical",
+                                "items": [{
+                                    "key": "UIUDF.current_assets.assets",
+                                    "title": "Total Assets",
+                                    "type": "number"
+                                }]
+                            }, {
+                                "type": "grid",
+                                "orientation": "vertical",
+                                "items": [{
+                                    "key": "UIUDF.current_assets.total",
+                                    "title": "Total Value",
+                                    "type": "amount"
+                                }]
+                            }]
+                        }, {
+                            "type": "expandablesection",
+                            "items": [{
+                                "type": "tableview",
+                                "key": "customer.currentAssets",
+                                "title": "",
+                                "transpose": true,
+                                "selectable": false,
+                                "editable": false,
+                                "tableConfig": {
+                                    "searching": false,
+                                    "paginate": false,
+                                    "pageLength": 10,
+                                },
+                                getColumns: function() {
+                                    return [{
+                                        "title": "ASSET_TYPE",
+                                        "data": "assetType"
+                                    },{
+                                        "title": "Asset Value",
+                                        "data": "assetValue",
+                                        render: function(data, type, full, meta) {
+                                            if (data)
+                                                return irfCurrencyFilter(data)
+                                            else return "NA"
+                                        }
+                                    }];
+                                },
+                                getActions: function() {
+                                    return [];
+                                }
+                            }]
+                        }]  
+                },{
                         "type": "box",
                         "colClass": "col-sm-12",
                         "overrideType": "default-view",
@@ -934,7 +1028,7 @@ define({
                         "type": "box",
                         "colClass": "col-sm-12",
                         "readonly": true,
-                        "title": "Household P&L",
+                        "title": "INCOME_AND_EXPENSE",
                         "condition": "model.bundlePageObj.pageClass !='guarantor'",
                         "overrideType": "default-view",
                         "items": [{
@@ -944,16 +1038,16 @@ define({
                                 "type": "grid",
                                 "orientation": "vertical",
                                 "items": [{
-                                    "key": "model.customer.expenditures[0].annualExpenses",
+                                    "key": "UIUDF.income[0].incomes[0].incomeEarned",
                                     "title": "Income",
                                     "type": "amount"
                                 }, {
-                                    "key": "decHouseExpanse",
+                                    "key": "UIUDF.expenditures[0].annualExpenses",
                                     "title": "Expenses",
                                     "type": "amount"
                                 }, {
-                                    "key": "household_new.netHouseholdIncome",
-                                    "title": "Net Household Income",
+                                    "key": "netincome",
+                                    "title": "Net House Hold Income",
                                     "type": "amount"
     
                                 }]
@@ -963,20 +1057,20 @@ define({
                             "items": [{
                                 "type": "section",
                                 "colClass": "col-sm-12",
-                                "html": '<div ng-init="household = model.household_new">' +
+                                "html": '<div>' +
                                     '<table class="table">' +
                                     '<colgroup>' +
                                     '<col width="30%"> <col width="40%"> <col width="30%">' +
                                     '</colgroup>' +
                                     '<tbody>' +
-                                    '<tr class="table-sub-header"> <th>{{"INCOME" | translate}}</th> <th></th> <th>{{household.income | irfCurrency}}</th> </tr>' +
-                                    '<tr> <td></td> <td>{{"SALARY_FROM_BUSINESS" | translate}}</td> <td>{{household.salaryFromBusiness | irfCurrency}}</td> </tr>' +
-                                    '<tr> <td></td> <td>{{"OTHER_INCOME_SALARIES" | translate}}</td> <td>{{household.otherIncomeSalaries | irfCurrency}}</td> </tr>' +
-                                    '<tr> <td></td> <td>{{"FAMILY_MEMBER_INCOMES" | translate}}</td> <td>{{household.familyMemberIncomes | irfCurrency}}</td> </tr>' +
-                                    '<tr class="table-sub-header"> <th>{{"EXPENSES" | translate}}</th> <th></th> <th>{{household.Expenses | irfCurrency}}</th> </tr>' +
-                                    '<tr> <td></td> <td>{{"DECLARED_EDUCATIONAL_EXPENSE" | translate}}</td> <td>{{household.declaredEducationExpense | irfCurrency}}</td> </tr>' +
-                                    '<tr> <td></td> <td>{{"EMI_HOUSEHOLD_LIABILITIES" | translate}}</td> <td>{{household.emiHouseholdLiabilities | irfCurrency}}</td> </tr>' +
-                                    '<tr class="table-bottom-summary"> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td></td> <td>{{household.netHouseholdIncome | irfCurrency}}</td> </tr>' +
+                                    '<tr class="table-sub-header"> <th>{{"INCOME" | translate}}</th> <th></th> <th>{{model.UIUDF.income[0].incomes[0].incomeEarned | irfCurrency}}</th> </tr>' +
+                                    //'<tr> <td></td> <td>{{"SALARY_FROM_BUSINESS" | translate}}</td> <td>{{household.salaryFromBusiness | irfCurrency}}</td> </tr>' +
+                                    //'<tr> <td></td> <td>{{"OTHER_INCOME_SALARIES" | translate}}</td> <td>{{household.otherIncomeSalaries | irfCurrency}}</td> </tr>' +
+                                    '<tr> <td></td> <td>{{"FAMILY_MEMBER_INCOMES" | translate}}</td> <td>{{model.UIUDF.income[0].incomes[0].incomeEarned | irfCurrency}}</td> </tr>' +
+                                    '<tr class="table-sub-header"> <th>{{"EXPENSES" | translate}}</th> <th></th> <th>{{model.UIUDF.expenditures[0].annualExpenses | irfCurrency}}</th> </tr>' +
+                                    //'<tr> <td></td> <td>{{"DECLARED_EDUCATIONAL_EXPENSE" | translate}}</td> <td>{{household.declaredEducationExpense | irfCurrency}}</td> </tr>' +
+                                    //'<tr> <td></td> <td>{{"EMI_HOUSEHOLD_LIABILITIES" | translate}}</td> <td>{{household.emiHouseholdLiabilities | irfCurrency}}</td> </tr>' +
+                                    '<tr class="table-bottom-summary"> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td></td> <td>{{ model.UIUDF.income[0].incomes[0].incomeEarned - model.UIUDF.expenditures[0].annualExpenses| irfCurrency}}</td> </tr>' +
                                     '</tbody>' +
                                     '</table>' + '</div>'
                             }]
@@ -1226,6 +1320,14 @@ define({
                                 value: model.business.centreId
                             })[0].name;
                         }
+                    },
+                    "Financial-Summary":function(bundleModel,model,params){
+                        console.log("Financial-Summary event listener",params);
+                        model.avarage_balance=params.avarage_balance;
+                        model.avarage_deposit=params.avarage_deposit;
+                        model.avarage_withdrawal=params.avarage_withdrawal;
+                        model.UIUDF.bankAccount.BankAvgBal=params.avarage_balance;
+                        model.UIUDF.bankAccount.BankAvgDep=params.avarage_deposit;
                     }
                 },
                 actions: {}

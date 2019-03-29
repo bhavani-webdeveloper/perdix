@@ -1048,10 +1048,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                     "EDF.condition",
                     "actionbox",
                     "actionbox.submit",
+                    "actionbox.save",
                     "actionbox1",
                     "actionbox1.saveBasicDetails",
-                    "actionbox2",
-                    "actionbox2.save"
                     ];
 
                 }
@@ -1147,6 +1146,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                                     },
                                                 }
                                               }
+                                        }
+                                    },
+                                    "actionbox": {
+                                        "type": "actionbox",
+                                        "items": {
+                                            "save": {
+                                                "type": "save",
+                                                "title": "Offline Save"
+                                            },
+                                            "submit": {
+                                                "type": "submit",
+                                                "title": "Submit"
+                                            }
                                         }
                                     },
                                     

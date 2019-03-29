@@ -1060,29 +1060,30 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             {
                                 key:"loanAccount.commercialCibilCharge",
                                 type:"amount",
-                                required:false,
-                                "condition" : "model.siteCode != 'IREPDhan' && model.siteCode != 'pahal' && model.siteCode != 'witfin'&& model.siteCode != 'shramsarathi'",                            onChange:function(value,form,model){
+                                required:true,
+                                "condition" : "model.siteCode != 'IREPDhan' && model.siteCode != 'pahal' && model.siteCode != 'witfin' && !model.additional.config.loanAccount_commercialCibilCharge",                            
+                                onChange:function(value,form,model){
                                     getSanctionedAmount(model);
                                 }
                             },
                             {
                                 key:"loanAccount.securityEmiRequired",
                                 type:"select",
-                                required: false,
+                                required: true,
                                 enumCode: "decisionmaker",
-                                "condition" : "model.siteCode != 'IREPDhan' && model.siteCode != 'shramsarathi'"
+                                "condition" : "model.siteCode != 'IREPDhan' && !model.additional.config.loanAccount_securityEmiRequired"
                             },
                             {
                                 key:"loanAccount.processingFeePercentage",
                                 type:"number",
+                                condition:"!model.additional.config.loanAccount_processingFeePercentage",
                                 "readonly" : nonEditable['loanAccount.processingFeePercentage'],
                                 "title":"PROCESSING_FEES_IN_PERCENTAGE",
-                                "condition" : "model.siteCode != 'shramsarathi'"
                             },
                             {
                                 key:"loanAccount.otherFee",
                                 type:"amount",
-                                "condition" : "model.siteCode != 'IREPDhan' && model.siteCode!='pahal' && model.siteCode != 'shramsarathi'"
+                                "condition" : "model.siteCode != 'IREPDhan' && model.siteCode!='pahal' && !model.additional.config.loanAccount_otherFee"
                             },
                             {
                                 key:"loanAccount.fee5",
@@ -2237,6 +2238,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     {
                         "type":"fieldset",
                         "title":"INSURANCE_POLICY",
+                        condition:"!model.additional.config.isInsurancePolicy",
                         "items":[
                             {
                                 "key":"additional.portfolioUrnSelector",

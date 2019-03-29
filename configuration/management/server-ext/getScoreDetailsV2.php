@@ -92,8 +92,8 @@ if (isset($_GET)) {
             WHERE m.ScoreName = c.ScoreName
             AND m.status = 'ACTIVE'
             AND c.status = 'ACTIVE'
-            AND m.Stage = '$currentStage'
-            AND LOWER(m.partner_or_self) = LOWER('$partnerCode')
+            AND m.Stage = '$currentStage' OR m.Stage = 'All'
+            AND LOWER(m.partner_or_self) = LOWER('$partnerCode') OR m.partner_or_self = 'All'
             ORDER by m.Order ASC";
 
     $scoreToCriteriaDetails = $defaultDb->select($scoreCriteriaDetails);

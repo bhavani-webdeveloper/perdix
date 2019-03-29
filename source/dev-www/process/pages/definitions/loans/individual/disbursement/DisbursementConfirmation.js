@@ -173,7 +173,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                             "key": "loanAccountDisbursementSchedule.udf5",
                             "title": "FINANCE_TEAM_REJECTION_REASON",
                             "type": "select",
-                            "condition": "model.loanAccountDisbursementSchedule.udf1=='Rejected'"
+                            "condition": "model.loanAccountDisbursementSchedule.udf1=='Rejected'",
+                            "required": true
                         },
                         {
                             "key": "loanAccountDisbursementSchedule.udf4",

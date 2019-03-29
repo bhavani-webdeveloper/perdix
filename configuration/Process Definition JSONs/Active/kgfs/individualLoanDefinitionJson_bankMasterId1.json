@@ -3,6 +3,7 @@
     "customerMaxGenericAge":60,
     "customerMaxAgeBcProduct":58,
     "customerAgeLimitForSingleFemale":35,
+    "productValidationFromStage":"Screening",
     "stages":[
        {
           "order":1,
@@ -1168,6 +1169,13 @@
                        "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
                    ]
                 },
+                "dscOverrideRemarks": {
+                   "title": "dscOverrideRemarks",
+                   "type": "string",
+                   "captureStages": [
+                       "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
+                   ]
+                },
                 "partnerApprovalStatus":{
                    "title":"partnerApprovalStatus",
                    "type":"string",
@@ -1969,7 +1977,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
                    ]
                 },
                 "jewelPouchLocationId":{
@@ -1978,7 +1986,7 @@
                    "minimum":1,
                    "maximum":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
                    ]
                 },
                 "jewelPouchNo":{
@@ -1987,7 +1995,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
                    ]
                 },
                 "jewelPouchMovementId":{
@@ -1996,21 +2004,21 @@
                    "minimum":1,
                    "maximum":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
                    ]
                 },
                 "transitRequest":{
                    "title":"Transit Request",
                    "type":"boolean",
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
                    ]
                 },
                 "encoreClosed":{
                    "title":"Encore Closed",
                    "type":"boolean",
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
                    ]
                 }
              }

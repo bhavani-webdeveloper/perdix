@@ -115,6 +115,24 @@ irf.models.factory('Queries', [
             }, deferred.reject);
             return deferred.promise;
         };
+        resource.getLoanProduct = function( productCode) {
+            var deferred = $q.defer();
+            var request = {
+                "productCode" : productCode
+            };
+            resource.getResult("productCode.type", request).then(function(records) {
+                if (records && records.results) {
+                    var result = {
+                        headers: {
+                            "x-total-count": records.results.length
+                        },
+                        body: records.results
+                    };
+                    deferred.resolve(result);
+                }
+            }, deferred.reject);
+            return deferred.promise;
+        };
         resource.searchMachineWorkProcess = function( machineName, machineType) {
             var deferred = $q.defer();
             var request = {

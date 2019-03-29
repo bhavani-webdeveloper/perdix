@@ -334,9 +334,9 @@ define([],function(){
                                 "PreliminaryInformation.collectionPaymentType": {
                                     "required": true
                                 },
-                                "PreliminaryInformation.expectedPortfolioInsurancePremium": {
-                                    "readonly": true
-                                },
+                                // "PreliminaryInformation.expectedPortfolioInsurancePremium": {
+                                //     "readonly": true
+                                // },
                                 "LoanCustomerRelations.loanCustomerRelations": {
                                     "add": null,
                                     "remove": null,
@@ -368,7 +368,7 @@ define([],function(){
                                     "orderNo": 41,
                                 },
                                 "NomineeDetails.nominees.nomineeDoorNo": {
-                                   "required":true
+                                   "required":false
                                 },
                                 "NomineeDetails.nominees.nomineePincode": {
                                    "required": true,
@@ -822,9 +822,9 @@ define([],function(){
                                     "orderNo": 7,
                                     "readonly": false
                                 },
-                                "PreliminaryInformation.expectedPortfolioInsurancePremium": {
-                                    "readonly": true
-                                },
+                                // "PreliminaryInformation.expectedPortfolioInsurancePremium": {
+                                //     "readonly": true
+                                // },
                                 "NomineeDetails.nominees.nomineeRelationship": {
                                     "enumCode":"relationship"
                                 },
@@ -1009,7 +1009,7 @@ define([],function(){
                                     "required":true
                                 },
                                 "NomineeDetails.nominees.nomineeDoorNo":{
-                                    "required":true
+                                    "required":false
                                 },
                                 "NomineeDetails.nominees.nomineeRelationship":{
                                     "required":true
@@ -1677,7 +1677,7 @@ define([],function(){
                     "PreliminaryInformation.emiRequested",
                     //"PreliminaryInformation.emiPaymentDateRequested",
                     "PreliminaryInformation.collectionPaymentType",
-                    "PreliminaryInformation.expectedPortfolioInsurancePremium",
+                    // "PreliminaryInformation.expectedPortfolioInsurancePremium",
                     "PreliminaryInformation.BusinessSaveWarning",
                     "PreliminaryInformation.MedicalTestWarning",
                     //"PreliminaryInformation.actualAmountRequired",
@@ -2082,7 +2082,7 @@ define([],function(){
                                             "key":"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf11",
                                             "title":"POTENTIAL_RISK",
                                             "type":"select",
-                                            "required":true,
+                                            "required":false,
                                             "titleMap":{"yes":"yes","no":"no"}
                                         },
                                         "loanDisbursementSchedule":{
@@ -2123,12 +2123,12 @@ define([],function(){
                                             }
                                         }
                                         ,
-                                        // "date":{
-                                        //     "key":"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf12",
-                                        //     "title":"DATE",
-                                        //     "type":"date",
-                                        //     "required":true
-                                        // }
+                                        "date":{
+                                            "key":"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf12",
+                                            "title":"DATE",
+                                            "type":"date",
+                                            "required":false
+                                        }
                                     
                                         }
  
@@ -2511,9 +2511,11 @@ define([],function(){
                             model.loanAccount.isRestructure = false;
                             model.loanAccount.documentTracking = "PENDING";
                             model.loanAccount.psychometricCompleted = "NO";
- 
                         }
                         model.loanAccount.status = "HOLD";
+                        Utils.confirm("Are You Sure?")
+                        .then(
+                            function() {
                         PageHelper.showProgress('loan-process', 'Updating Loan');
                         model.loanProcess.hold()
                             .finally(function () {
@@ -2529,6 +2531,8 @@ define([],function(){
                                
                                 PageHelper.hideLoader();
                             });
+                        
+                        });
  
                     },
                     sendBack: function(model, formCtrl, form, $event){  
@@ -2545,7 +2549,10 @@ define([],function(){
                         else if (model.loanProcess.remarks==null || model.review.remarks =="" || model.review.targetStage1==null || model.review.targetStage1==""){
                             PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
                             return false;
-                        }                    
+                        }          
+                        Utils.confirm("Are You Sure?")
+                        .then(
+                            function() {          
                        PageHelper.showLoader();
                        model.loanProcess.sendBack()
                             .finally(function () {
@@ -2561,6 +2568,7 @@ define([],function(){
                                
                                 PageHelper.hideLoader();
                             });
+                         });
                     },
                     proceed: function(model, formCtrl, form, $event){
                         if (model.loanProcess.remarks==null || model.loanProcess.remarks ==""){
@@ -2595,6 +2603,9 @@ define([],function(){
                         //     }
                         
                         // }
+                        Utils.confirm("Are You Sure?")
+                        .then(
+                            function() {
                         PageHelper.showProgress('enrolment', 'Updating Loan');
                         model.loanProcess.proceed()
                             .finally(function () {
@@ -2614,10 +2625,10 @@ define([],function(){
 
                             }, function (err) {
                                 PageHelper.showErrors(err);
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                               
+                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);                           
                                 PageHelper.hideLoader();
                             });
+                        });
                     },
                     reject: function(model, formCtrl, form, $event){
                         // if(PageHelper.isFormInvalid(formCtrl)) {
@@ -2629,21 +2640,26 @@ define([],function(){
                             PageHelper.showProgress("update-loan", "Reject Reason / Remarks is mandatory", 3000);
                             return false;
                         }  
-                        PageHelper.showLoader();
-                         model.loanProcess.reject()
-                            .finally(function () {
-                                PageHelper.hideLoader();
-                            })
-                            .subscribe(function (value) {
-                                Utils.removeNulls(value, true);
-                                PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                irfNavigator.goBack();
-                            }, function (err) {
-                                PageHelper.showErrors(err);
-                                PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
-                               
-                                PageHelper.hideLoader();
+                        Utils.confirm("Are You Sure?")
+                        .then(
+                            function() {
+                                PageHelper.showLoader();
+                                model.loanProcess.reject()
+                                   .finally(function () {
+                                       PageHelper.hideLoader();
+                                   })
+                                   .subscribe(function (value) {
+                                       Utils.removeNulls(value, true);
+                                       PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                       irfNavigator.goBack();
+                                   }, function (err) {
+                                       PageHelper.showErrors(err);
+                                       PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
+                                      
+                                       PageHelper.hideLoader();
+                                   });
                             });
+                     
                     },
                     nomineeAddress: function(model, formCtrl, form, $event){
                         PageHelper.showLoader();

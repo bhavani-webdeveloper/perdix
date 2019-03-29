@@ -114,7 +114,7 @@ define({
                             "{{'URN_NO'|translate}} : " + item.urn,
                             "{{'LOAN_ACCOUNT_NO'|translate}} : " + item.accountNumber,
                             "{{'LOAN_AMOUNT_SANCTIONED'|translate}} : " + item.loanAmount,
-                            "{{'DCOUEMT_UPLOADED_TIME'|translate}} : " + item.applicationDate,
+                            "{{'DOCUMENT_UPLOADED_TIME'|translate}} : " + item.applicationDate,
                             "{{'PRODUCT_TYPE'|translate}} : " + item.loanType,
 
                         ]
@@ -147,7 +147,7 @@ define({
                                 title: 'LOAN_AMOUNT_SANCTIONED',
                                 data: 'loanAmount'
                             },{
-                                title: 'DCOUEMT_UPLOADED_TIME',
+                                title: 'DOCUMENT_UPLOADED_TIME',
                                 data: 'applicationDate'
                             },{
                                 title: 'PRODUCT_TYPE',

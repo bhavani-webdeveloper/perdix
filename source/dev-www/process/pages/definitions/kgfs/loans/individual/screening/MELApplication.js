@@ -237,8 +237,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "readonly": false,
 
                                             "onClick": function(model, form, schemaForm, event) {
-                                                var fileId = irf.BI_BASE_URL + "/upload_template/" + model.master.templateFile;
-                                                Utils.downloadFile(fileId);
+                                                Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + "applicant_details" + "&record_id=" + model.loanAccount.id+ "&display=content")
+                                                // var fileId = irf.BI_BASE_URL + "/upload_template/" + model.master.templateFile;
+                                                // Utils.downloadFile(fileId);
                                                 //Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/forms/AllFormsDownload.php?record_id=" + model.loanAccount.id);
                                             }
                                         }
@@ -255,6 +256,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         },
                                         "uploadMELApplicationForm":{
                                         "key": "loanAccount.documents[].documentId",
+                                        "required":true,
                                         "notitle": true,
                                         "type": "file",
                                         "category": "ACH",

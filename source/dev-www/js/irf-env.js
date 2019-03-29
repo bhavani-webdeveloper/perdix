@@ -262,3 +262,11 @@ irf.FWR_BASE_URL = 'http://perdix.kgfs.co.in/fwr_dev';
 // irf.FORM_DOWNLOAD_URL = 'http://sit.perdix.co.in:8080/sit_shramsarathi_forms/formPrint.jsp';
 // irf.BI_BASE_URL = "http://sit.perdix.co.in:8081/sit_shramsarathi_bi";
 // irf.PSYCHOMETRIC_BASE_URL = "http://sit.perdix.co.in:8080/sit_shramsarathi_psychometric";
+
+//--------------------------------shramsarathi uat-------------------------------------------
+// var irf = irf || {};
+// irf.BASE_URL = 'http://13.127.169.8:8080/uat_shramsarathi_perdix-server';
+// irf.MANAGEMENT_BASE_URL = 'http://13.127.169.8:8081/uat_shramsarathi_management';
+// irf.FORM_DOWNLOAD_URL = 'http://13.127.169.8:8080/uat_shramsarathi_forms/formPrint.jsp';
+// irf.BI_BASE_URL = "http://13.127.169.8:8081/uat_shramsarathi_bi";
+// irf.PSYCHOMETRIC_BASE_URL = "http://13.127.169.8:8080/uat_shramsarathi_psychometric";

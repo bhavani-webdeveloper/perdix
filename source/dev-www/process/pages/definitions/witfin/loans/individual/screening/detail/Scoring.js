@@ -1,3 +1,63 @@
+irf.pageCollection.directive("irfScoringDisplay", function(){
+
+    return {
+        restrict: 'E',
+        scope: {  scoringData : '=irfScoringData'},
+        templateUrl: 'process/pages/templates/irf-scoring-display.html',
+        controller: 'irfScoringDisplayController'
+    }
+}).controller("irfScoringDisplayController", ["$scope", function($scope){
+    var _tData = {
+        "IndividualScores": [],
+        "OtherScores": [],
+        "OverAllScore":{}
+    };
+    var sd = $scope.scoringData.SubscoreDetails;
+    var ss = $scope.scoringData.SubscoreScores;
+    _tData.OverAllScore = $scope.scoringData.ScoreCalculationDetails;
+    _.forOwn(sd, function(v,k){
+        var _vsd = {};
+        _vsd['name'] = k;
+        _vsd['isIndividualScore'] = false;
+        _vsd['Score'] = ss[k];
+        if ( _.has(v, '__isIndividualScore') && v['__isIndividualScore'] == 'YES') {
+            _vsd['isIndividualScore'] = true;
+        }
+        // Data handling for non individual scores
+        if (_vsd['isIndividualScore'] == false){
+            _vsd['parameterData'] = v;
+            _tData.OtherScores.push(_vsd);
+        } else if (_vsd['isIndividualScore'] == true){
+            _vsd['customerParameterMapping'] = {};
+            _vsd['parameters'] = [];
+
+            var cids = v['CustomerIds'];
+
+            for (var i=0;i<cids.length; i++){
+                var _id = cids[i];
+                if (!_id)
+                    continue;
+                _vsd['customerParameterMapping'][_id] = {
+                    'Details' : v[_id].CustomerDetails,
+                    'Parameters': {}
+                };
+
+                _.forEach(v[_id].data, function(pData){
+                    _vsd['customerParameterMapping'][_id]['Parameters'][pData['Parameter']] = pData;
+                    if (_vsd['parameters'].indexOf(pData['Parameter'])<0){
+                        _vsd['parameters'].push(pData['Parameter']);
+                    }
+                })
+            }
+            _vsd['customerParameterMapping'] = _.sortBy(_vsd['customerParameterMapping'], [function(o) { return o.Details.Relation; }]);
+            _tData.IndividualScores.push(_vsd);
+        }
+        
+    })
+
+    $scope.scoringTableData = _tData;
+}]);
+
 define({
     pageUID: "witfin.loans.individual.screening.detail.Scoring",
     pageType: "Engine",
@@ -25,6 +85,7 @@ define({
             model.business = {};
             model.business.kgfsName =  res[7].data[0]['Branch'];
             model.business.centreName = res[7].data[0]['Spoke'];
+            model.fullScoringDetails = res[12].data;
 
 
             var managementScore = model.scoreDetails[0];
@@ -67,61 +128,20 @@ define({
                     `
             });
 
-            form.push({
-                type: "box",
-                colClass: "col-sm-12",
-                title: "SCORES",
-                items: [{
-                        type: "section",
-                        htmlClass: "row",
-                        items: [{
-                                type: "section",
-                                htmlClass: "col-sm-12",
-                                title: model.scoreDetails[0].title,
-                                html: '<div ng-init="_score=model.scoreDetails[0]">' +
-                                    '<h3 ng-if="model.currentStage!=\'ScreeningReview\'">{{_score.title}} ({{model.totalScores.data[0][_score.title]}})</h3>' +
-                                    '<table class="table">' +
-                                    '<colgroup>' +
-                                    '<col width="25%">' +
-                                    '<col width="{{_score.colorPct}}%" ng-repeat-start="i in _score.values">' +
-                                    '<col width="{{_score.valuePct}}%" ng-repeat-end>' +
-                                    '</colgroup>' +
-                                    '<tbody>' +
-                                    '<tr>' +
-                                    '<th>Parameter Name</th>' +
-                                    '<th colspan="2" ng-repeat="j in _score.values">{{_score.sections[j].relation_detail}}</th>' +
-                                    '</tr>' +
-                                    '<tr ng-repeat="data in _score.sections[0].data" ng-init="parameterIndex=$index">' +
-                                    '<td >{{data.Parameter}}</td>' +
-                                    '<td ng-repeat-start="k in _score.values"> <span class="square-color-box" style="background:{{_score.sections[k].data[parameterIndex].color_hexadecimal}}"> </span></td>' +
-                                    '<td ng-repeat-end>{{_score.sections[k].data[parameterIndex].Applicant}}</td></tr>' +
-                                    '</tbody>' +
-                                    '</table>' +
-                                    '</div>'
-                            }
-                        ]
-                    },
-                    {
-                        type: "section",
-                        htmlClass: "row",
-                        items: [
-                            {
-                                type: "section",
-                                htmlClass: "col-sm-6",
-                                title: model.scoreDetails[1].title,
-                                html: '<h3>{{ model.scoreDetails[1].title }} ({{ model.totalScores.data[0][model.scoreDetails[1].title] }})</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.scoreDetails[1].data"><td>{{ data.Parameter }}</td><td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td><td>{{ data["Actual Value"] }}</td></tr></tbody></table>'
-                            },
-                            {
-                                type: "section",
-                                htmlClass: "col-sm-6",
-                                title: model.scoreDetails[2].title,
-                                html: '<h3>{{ model.scoreDetails[2].title }} ({{ model.totalScores.data[0][model.scoreDetails[2].title] }})</h3><table class="table"><colgroup><col width="50%"><col width="10%"><col width="40%"></colgroup><tbody><tr><th>Parameter</th><th></th><th>Actual Value</th></tr><tr ng-repeat="data in model.scoreDetails[2].data"><td>{{ data.Parameter }}</td><td> <span class="square-color-box" style="background: {{ data.color_hexadecimal }}"> </span></td><td>{{ data["Actual Value"] }}</td></tr></tbody></table>'
-                            }
-                        ]
-                    }
-                ]
-            });
-
+            if (model.fullScoringDetails){
+                form.push({
+                    type: "box",
+                    colClass: "col-sm-12 table-box",
+                    title: "SCORES - "+ model.fullScoringDetails.ScoreCalculationDetails.ScoreName,
+                    items: [
+                        {
+                            "type": "section",
+                            "htmlClass": "row",
+                            "html":"<irf-scoring-display irf-scoring-data='model.fullScoringDetails' />"
+                        }
+                    ]
+                })
+            }
              form.push({
                 type: "box",
                 colClass: "col-sm-12 table-box",

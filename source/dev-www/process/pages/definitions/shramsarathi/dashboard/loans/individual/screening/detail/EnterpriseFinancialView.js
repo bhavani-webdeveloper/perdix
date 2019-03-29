@@ -1,8 +1,8 @@
 define({
 	pageUID: "shramsarathi.dashboard.loans.individual.screening.detail.EnterpriseFinancialView",
 	pageType: "Engine",
-	dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "irfElementsConfig", "Model_ELEM_FC","Misc"],
-	$pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, irfElementsConfig, Model_ELEM_FC,Misc) {
+	dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "irfElementsConfig", "Model_ELEM_FC","Misc","BundleManager"],
+	$pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, irfElementsConfig, Model_ELEM_FC,Misc,BundleManager) {
 		var randomColor = function() {
 			return (function(m,s,c){return (c ? arguments.callee(m,s,c-1) : '#') + s[m.floor(m.random() * s.length)]})(Math,'0123456789ABCDEF',5);
 		}
@@ -39,7 +39,7 @@ define({
 				model.assetsLiabilites={};
 				model.assetsLiabilites.totalCurrentAssets= resp.total_current_assets;
 				model.assetsLiabilites.totalFixedAsstes = resp.total_fixed_assets;
-				model.assetsLiabilites.totalLiabilites = resp.total_current_assets + resp.total_fixed_assets;
+				//model.assetsLiabilites.totalLiabilites = model.liability;
 				model.familyInfo={};
 				model.familyInfo.totalMembers = resp.total_members;
 				model.familyInfo.earningMembers = resp.earning_members;
@@ -48,6 +48,8 @@ define({
 				model.familyInfo.noOfSchoolGoing = resp.no_of_school_going;
 				model.familyInfo.noOfCollegeGoing = resp.no_of_college_going;
 				model.proposedAmount = 0;
+
+				BundleManager.broadcastEvent('Financial-Summary', resp);
 				})
 				
 			},
@@ -92,7 +94,7 @@ define({
 						'<tbody>' +
 						'<tr><td>{{"Total Current assets" | translate}}</td><td>{{model.assetsLiabilites.totalCurrentAssets }}</td></tr>'+
 						'<tr><td>{{"Total Fixed assets" | translate}}</td><td>{{model.assetsLiabilites.totalFixedAsstes }}</td></tr>'+
-						'<tr><td>{{"Total Liabilites" | translate}}</td><td>{{model.assetsLiabilites.totalLiabilites }}</td></tr>'+
+						'<tr><td>{{"Total Liabilites" | translate}}</td><td>{{ model.liability }}</td></tr>'+
 						
 						'</tbody>' +
 						'</table>'
@@ -134,7 +136,11 @@ define({
 				return Enrollment.getSchema().$promise;
 			},
 			eventListeners: {
-				
+				"Individual_Enrollment":function(bundleModel,model,params){
+					console.log("Individual_Enrollment",params);
+					model.liability=params.liabilities.length;
+					//debugger;
+				}
 			},
 			actions: {}
 		}

@@ -32,7 +32,7 @@ define({
                             "key": "DisbursementReverse.accountNumber",
                             "title": "ACCOUNT_NUMBER",
                             "type": "lov",
-                            "autolov": true,
+                            "autolov": false,
                             "inputMap": {
                                 "accountNumber":{
                                     "key":"DisbursementReverse.accountNumber",
@@ -55,15 +55,14 @@ define({
                                 var deferred = $q.defer();
                                 IndividualLoan.searchDisbursement({
                                     'currentStage': 'Completed',
-                                    'accountNumber':  (inputModel.accountNumber || model.DisbursementReverse.accountNumber)
-                                    
+                                    'accountNumber':  inputModel.accountNumber
                                 }).$promise
                                   .then(function(resp){
                                       deferred.resolve({
                                           "headers": {
                                               "x-total-count": 1
                                           },
-                                          body: [resp.body[0]]
+                                          body: resp.body.slice(0,10)
                                       });
                                   },deferred.reject);
                                 return deferred.promise;
@@ -71,13 +70,13 @@ define({
                             getListDisplayItem: function(item, index) {
                                 $log.info(item);
                                 return [
-                                    item.body[0].accountNumber,
-                                    item.body[0].branchName,
-                                    item.body[0].customerName,
-                                    item.body[0].transactionId,
-                                    item.body[0].transactionName,
-                                    item.body[0].actualDisbursementDate,
-                                    item.body[0].disbursedAmount
+                                    item.accountNumber,
+                                    item.branchName,
+                                    item.customerName,
+                                    item.transactionId,
+                                    item.transactionName,
+                                    item.actualDisbursementDate,
+                                    item.disbursedAmount
                                 ];
                             },
                             onSelect: function(result, model, context) {

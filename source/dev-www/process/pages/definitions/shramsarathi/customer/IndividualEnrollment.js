@@ -16,6 +16,26 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
             /* var pageParams = {
                  readonly: true
              };*/
+             
+
+             var getFixedByCode= function(code){
+                var temp = formHelper.enum('fixed_asset_type').data;
+                console.log("enum",temp);
+                for (var i=0;i<temp.length;i++){
+                    if (temp[i].code == code)
+                        return temp[i].name;
+                }
+                return temp[i].name;
+            }
+            var getCurrentByCode= function(code){
+                var temp = formHelper.enum('current_asset_type').data;
+                console.log("enum",temp);
+                for (var i=0;i<temp.length;i++){
+                    if (temp[i].code == code)
+                        return temp[i].name;
+                }
+                return temp[i].name;
+            }
 
             var preSaveOrProceed = function (reqData) {
                 if (_.hasIn(reqData, 'customer.familyMembers') && _.isArray(reqData.customer.familyMembers)) {
@@ -52,13 +72,34 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 
 
                             ], "overrides": {
-                                "PhysicalAssets":{
-                                    "title":"FIXED_ASSET"
+                                "IndividualInformation.dateOfBirth":{ 
+                                    "onChange": function (modelValue, form, model) {
+                                    if (model.customer.dateOfBirth) {
+                                        model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                    }
+                               }
+                            },
+                               "PhysicalAssets.physicalAssets":{
+                                    //"title":"FIXED_ASSET",
+                                    "titleExpr": "model.customer.physicalAssets[arrayIndex].titleExpr",
+
                                 },
                                 "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
-                                    "title": "ASSET_TYPE",
-                                    "type": "select",
-                                    "enumCode": "fixed_asset_type"
+                                    "enumCode": "fixed_asset_type",
+                                    onChange: function(valueObj,context,model){
+                                        model.customer.physicalAssets[context.arrayIndex].titleExpr = getFixedByCode(valueObj.toString());
+                                     }
+                                },
+                                "EnterpriseFinancials.currentAsset":{
+                                    "titleExpr":"model.customer.currentAssets[arrayIndex].titleExpr",
+                                },
+                                "EnterpriseFinancials.currentAsset.assetType":{
+                                    onChange: function(valueObj,context,model){
+                                        model.customer.currentAssets[context.arrayIndex].titleExpr = getCurrentByCode(valueObj.toString());
+                                     }
+                                },
+                                "IndividualInformation.customerId":{
+                                    "readonly": true,
                                 },
                                 "IndividualInformation.centreId": {
                                     "required": true,
@@ -75,6 +116,39 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     "title":"HAMLET_FALA",
                                     "required": false,
                                 },
+                                "KYC.addressProofFieldSet":{
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProof": {
+                                    "readonly": false,
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofImageId": {
+                                    "required": true,
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofNo": {
+                                    "required": true,
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofIssueDate":{
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.addressProofValidUptoDate":{
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                },
+                                "KYC.identityProof": {
+                                    "required": true,
+                                    onChange: function(value, form, model) {
+                                       if(model.customer.identityProof=='Aadhaar Card'){
+                                        model.customer.addressPfSameAsIdProof='YES'
+                                       }else{
+                                        model.customer.addressPfSameAsIdProof='NO'
+                                       }
+                                       
+                                    }
+                                 
+                                }
 
                             }
                         },
@@ -219,7 +293,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     if (model.customer.dateOfBirth) {
                                         model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                                     }
-                                }
+                               }
                             }
                         ,
                                 "KYC": {
@@ -250,11 +324,23 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 "KYC.customerId": {
                                     "resolver": "IndividualCustomerIDLOVConfiguration"
                                 },
-                                "KYC.identityProof": {
-                                    "required": true
-                                },
+                                // "KYC.identityProof": {
+                                //     "required": true
+                                // },
                                 "KYC.identityProofImageId": {
                                     "required": true
+                                },
+                                "KYC.identityProof": {
+                                    "required": true,
+                                    onChange: function(value, form, model) {
+                                       if(model.customer.identityProof=='Aadhaar Card'){
+                                        model.customer.addressPfSameAsIdProof='YES'
+                                       }else{
+                                        model.customer.addressPfSameAsIdProof='NO'
+                                       }
+                                       
+                                    }
+                                 
                                 },
                                 "KYC.identityProofNo": {
                                     "required": true,
@@ -318,7 +404,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     "title":"DESTINATION_ADDRESS"
                                 },
                                 "IndividualInformation.customerId": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    
                                 },
                                 "IndividualInformation.urnNo": {
                                     "readonly": true
@@ -1775,7 +1862,10 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                         "required":false
                     },
                    "Liabilities.liabilities.noOfInstalmentPaid":{
-                        "orderNo":23
+                    "key": "customer.liabilities[].noOfInstalmentPaid",
+                    "type" : "select",
+                     "orderNo":23,
+                     "enumCode": "no_of_payments" 
                     },
                     // "FamilyDetails.familyMembers.dateOfBirth":{
                     //     "onChange": function (modelValue, form, model, formCtrl, event) {
@@ -1784,6 +1874,10 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     //         }
                     //     }
                     // },
+                    
+                    "IndividualFinancials":{
+                        "title":"EXPENSE"
+                    },
                     "IndividualFinancials.expenditures.annualExpenses":{
                         "required":true,
                         "title":"EXPENSE_AMOUNT"
@@ -1858,7 +1952,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                         "orderNo":400
                     },
                     "PhysicalAssets":{
-                        "title":"FINANCIAL_ASSET"
+                        "title":"FIXED_ASSET"
                     },
                     "IndividualInformation.customerBranchId": {
                         "required": true,
@@ -2031,13 +2125,14 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     "BankAccounts.customerBankAccounts.ifscCode": {
                         "required": true,
                         "resolver": "IFSCCodeLOVConfiguration"
-                    },
+                    }, 
                     "PhysicalAssets":{
                         "title":"FIXED_ASSET"
                     },
 
                     "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
-                        "enumCode": "fixed_asset_type"
+                        "enumCode": "fixed_asset_type",
+                        "title":"FIXED_ASSET"
                     },
                     // "FamilyDetails.familyMembers.relationShip": {
                     //     "condition":"(model.customer.familyMembers[arrayIndex].relationShip).toUpperCase() =='SELF'",
@@ -2193,7 +2288,9 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                         "condition": "model.customer.physicalAssets[arrayIndex].nameOfOwnedAsset=='Two wheeler' || model.customer.physicalAssets[arrayIndex].nameOfOwnedAsset=='Four Wheeler'"
                     },
                     "IndividualFinancials.expenditures.expenditureSource": {
-                        "required": true
+                        "required": true,
+                        //"type":"select",
+                        "enumCode":"expense_type"
                     },
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth": {
                         "required": false
@@ -2330,7 +2427,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     "IndividualFinancials.expenditures.expenditureSource",
                     "IndividualFinancials.expenditures.annualExpenses",
                     "IndividualFinancials.expenditures.frequency",
-                    "IndividualFinancials.expenditures.from",
+                   // "IndividualFinancials.expenditures.from",
 
                     "FamilyDetails",
                     "FamilyDetails.familyMembers",
@@ -2423,6 +2520,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     "BankAccounts.customerBankAccounts.isDisbersementAccount",
                     //
                     "PhysicalAssets",
+                    "PhysicalAssets.physicalAssets",
                     "PhysicalAssets.physicalAssets.nameOfOwnedAsset",
                     "PhysicalAssets.physicalAssets.ownedAssetValue",
                     // "PhysicalAssets.financialAssets",
@@ -2548,6 +2646,10 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     else if (branchId && !model.customer.customerBranchId) {
                         model.customer.customerBranchId = branchId;
                     };
+                    /*initialize Self */
+                    if ( model.customer.familyMembers.length > 0)
+                    if(model.customer.familyMembers[0].relationShip == 'self')
+                        model.customer.familyMembers[0].relationShip = 'Self';
 
                     /* End of setting data for the form */
                     model.UIUDF.family_fields.dependent_family_member = 0;
@@ -2770,6 +2872,14 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                                             model.customer.addressProofIssueDate=model.customer.idProofIssueDate,
                                                             model.customer.addressProofValidUptoDate=model.customer.idProofValidUptoDate
                                                         }
+                                                        else{
+                                                            model.customer.addressProof = null;
+                                                            model.customer.addressProofNo=null;
+                                                            model.customer.addressProofImageId=null;
+                                                            model.customer.addressProofReverseImageId=null;
+                                                            model.customer.addressProofIssueDate=null;
+                                                            model.customer.addressProofValidUptoDate=null;
+                                                        }
                                                     }    
                                         },
                                         "addressProofBackside":{
@@ -2983,6 +3093,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                                             key: "customer.familyMembers[].incomes[].incomeSource",
                                                             type: "select",
                                                             title:"OCCUPATION",
+                                                            "parentEnumCode": "work_sector",
+                                                            "parentValueExpr": "model.customer.familyMembers[context.arrayIndex].incomes[context.arrayIndex].workSector",
                                                             required: false
                                                         },
                                                         "incomeEarned": {
@@ -3003,7 +3115,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                                             "title":"WORK_SECTOR",
                                                             "type":"select",
                                                             "enumCode":"work_sector",
-                                                            "required":true
+                                                            "required":true,
+                                                            "orderNo": 1
                                                         },
                                                         "occupationType":{
                                                             "key":"customer.familyMembers[].incomes[].occupationType",
@@ -3517,6 +3630,26 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                             }
                         }
+
+                         /*Fixed asset */
+                         if(model.customer.currentAssets!== undefined){
+                            if(model.customer.currentAssets.length > 0){
+                                for(var i=0;i<model.customer.currentAssets.length;i++){
+                                    model.customer.currentAssets[i].titleExpr = model.customer.currentAssets[i].assetType;
+                                }
+                               
+                            }
+                        }
+                      
+                         if(model.customer.physicalAssets!== undefined){
+                        if(model.customer.physicalAssets.length > 0)
+                        {
+                            for(var i=0;i<model.customer.physicalAssets.length;i++){
+                                model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
+                            }
+                        } 
+                    }  
+
                     },
                     "new-co-applicant": function(bundleModel,model,obj){
                         if(model.customer.familyMembers){
@@ -3525,6 +3658,25 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                             }
                         }
+                         /* fixed Asset */
+
+                         if(model.customer.currentAssets!== undefined){
+                            if(model.customer.currentAssets.length > 0){
+                                for(var i=0;i<model.customer.currentAssets.length;i++){
+                                    model.customer.currentAssets[i].titleExpr = model.customer.currentAssets[i].assetType;
+                                }
+                               
+                            }
+                        }
+                      
+                         if(model.customer.physicalAssets!== undefined){
+                        if(model.customer.physicalAssets.length > 0)
+                        {
+                            for(var i=0;i<model.customer.physicalAssets.length;i++){
+                                model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
+                            }
+                        } 
+                        }  
                     },
                     "new-guarantor": function(bundleModel,model,obj){
                         if(model.customer.familyMembers){
@@ -3533,7 +3685,28 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                             }
                         }
+                         /*fixed Asset */
+                         if(model.customer.currentAssets!== undefined){
+                            if(model.customer.currentAssets.length > 0){
+                                for(var i=0;i<model.customer.currentAssets.length;i++){
+                                    model.customer.currentAssets[i].titleExpr = model.customer.currentAssets[i].assetType;
+                                }
+                               
+                            }
+                        }
+                      
+                         if(model.customer.physicalAssets!== undefined){
+                        if(model.customer.physicalAssets.length > 0)
+                        {
+                            for(var i=0;i<model.customer.physicalAssets.length;i++){
+                                model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
+                            }
+                        } 
+                        }  
+                        
                     }
+                    
+                    
                 },
                 offline: false,
                 getOfflineDisplayItem: function (item, index) {
@@ -3560,6 +3733,16 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                             PageHelper.showProgress("enrolment", "Your form have errors. Please fix them.", 5000);
                             return false;
                         }
+
+                        if((model.customer.addressPfSameAsIdProof==='YES') && (model.customer.identityProof=='Aadhaar Card')){
+                            model.customer.addressProof=model.customer.identityProof;
+                            model.customer.addressProofNo=model.customer.identityProofNo;
+                            model.customer.addressProofImageId=model.customer.identityProofImageId;
+                            model.customer.addressProofReverseImageId=model.customer.identityProofReverseImageId;
+                            model.customer.addressProofIssueDate=model.customer.idProofIssueDate;
+                            model.customer.addressProofValidUptoDate=model.customer.idProofValidUptoDate;
+                        }
+                        
 
                         // $q.all start
                         model.enrolmentProcess.save()
@@ -3611,6 +3794,16 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                         if (PageHelper.isFormInvalid(form)) {
                             return false;
                         }
+
+                        if((model.customer.addressPfSameAsIdProof==='YES') && (model.customer.identityProof=='Aadhaar Card')){
+                            model.customer.addressProof=model.customer.identityProof;
+                            model.customer.addressProofNo=model.customer.identityProofNo;
+                            model.customer.addressProofImageId=model.customer.identityProofImageId;
+                            model.customer.addressProofReverseImageId=model.customer.identityProofReverseImageId;
+                            model.customer.addressProofIssueDate=model.customer.idProofIssueDate;
+                            model.customer.addressProofValidUptoDate=model.customer.idProofValidUptoDate;
+                        }
+
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
                         model.enrolmentProcess.save()

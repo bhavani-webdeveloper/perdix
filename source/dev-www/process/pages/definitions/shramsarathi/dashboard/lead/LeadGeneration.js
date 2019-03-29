@@ -71,7 +71,7 @@ function(LeadProcess, AngularResourceService) {
                     },
                     "leadProfile.individualDetails.existingApplicant":{
                         // "condition":"(model.lead.centreName!==NULL)",
-                    bindMap: {
+                    bindMap: { 
                         "ZoneName": "lead.centreName",
                         "LeadType": "lead.customerTypeString"
                     }
@@ -232,12 +232,13 @@ function(LeadProcess, AngularResourceService) {
                             "region": "lead.cityTownVillage",
                             "pincode": "lead.pincode",
                             "district": "lead.district",
-                            "state": "lead.state"
+                            "state": "lead.state",
+                            "taluk":"lead.taluk"
 
                         },
                         searchHelper: formHelper,
                         search: function (inputModel, form, model) {
-                            return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state);
+                            return Queries.searchPincodes(inputModel.pincode, inputModel.district, inputModel.state, inputModel.division);
                         },
                         getListDisplayItem: function (item, index) {
                             return [
@@ -445,6 +446,7 @@ function(LeadProcess, AngularResourceService) {
                                                     {
                                                         "name":"no",
                                                         "value":"false"
+                                                        
                                                     }
                                                 ],
                                                 schema:{
