@@ -1484,6 +1484,10 @@ define({
                     PageHelper.clearErrors();
                     var nextStage = null;
                     var dedupeCustomerIdArray = [];
+                    if((model.loanAccount.currentStage =='Televerification') && (model.loanAccount.telecallingDetails.length == 0)){
+                        PageHelper.showErrors({"data": {"error":"Tele Verification should be Mandatory"}});
+                        return false;
+                    }
                     if (!validateForm(formCtrl)){
                         return;
                     }
