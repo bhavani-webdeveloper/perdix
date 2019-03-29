@@ -3175,7 +3175,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     "orderNo": 11,
                                                     key: "customer.familyMembers[].incomes",
                                                     type: "array",
-                                                    readonly: true,
+                                                    // readonly: true,
                                                     startEmpty: true,
                                                     items: {
                                                         "workSector":{
@@ -3184,18 +3184,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "type":"select",
                                                             "enumCode":"work_sector",
                                                             "required": true,
-                                                            "orderNo": 50
+                                                            "orderNo": 10
                                                         },
                                                         "incomeSource": {
                                                             key: "customer.familyMembers[].incomes[].incomeSource",
                                                             type: "select",
                                                             title:"OCCUPATION",
                                                             required: false,
-                                                            // filter:{"parentCode": "work_sector"},
-                                                            // "enumCode": "occupation",
+                                                            filter:{"parentCode": "work_sector"},
+                                                            "enumCode": "occupation",
                                                             "parentEnumCode": "work_sector",
                                                             "parentValueExpr":"model.customer.familyMembers[context.arrayIndex].incomes[context.arrayIndex].workSector",
-                                                            "orderNo": 60
+                                                            "orderNo": 20
                                                         },
                                                         "incomeEarned": {
                                                             key: "customer.familyMembers[].incomes[].incomeEarned",
@@ -3205,12 +3205,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                         "incomeType": {
                                                             "key": "customer.familyMembers[].incomes[].incomeType",
                                                             "title": "INCOME_TYPE",
+                                                            "orderNo": 40
                                                         },
                                                         "frequency": {
                                                             key: "customer.familyMembers[].incomes[].frequency",
                                                             type: "select",
                                                             "enumCode":"income_frequency",
-                                                            "orderNo": 40
+                                                            "orderNo": 50
                                                         },
                                                         "occupationType":{
                                                             "key":"customer.familyMembers[].incomes[].occupationType",
@@ -3218,7 +3219,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "type":"select",
                                                             "enumCode":"occupation_type",
                                                             "required":true,
-                                                            "orderNo":20
+                                                            "orderNo":60
                                                             
                                                         },
                                                         "skillLevel":{
@@ -3252,9 +3253,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "type":"select",
                                                             "required":true,
                                                             "enumCode":"average_return",
-                                                            "orderNo":90
-
-                                                            
+                                                            "orderNo":90   
                                                         },
                                                         "incomeFrom":{
                                                             "key":"customer.familyMembers[].incomes[].incomeType",
@@ -3262,14 +3261,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "type":"select",
                                                             "required":true,
                                                             "enumCode":"income_type",
-                                                             "orderNo":10 
+                                                             "orderNo":100
                                                         },
                                                         "noOfDaysWorkedInMonth":{
                                                             "key":"customer.familyMembers[].incomes[].noOfDaysWorkedInMonth",
                                                             "title":"NO_OF_DAYS_WORKED_IN_MONTH",
                                                             "type":"number",
                                                             "required":true,
-                                                            "orderNo":100
+                                                            "orderNo":110
                                                         },
                                                     }
 

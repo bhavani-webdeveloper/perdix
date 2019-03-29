@@ -893,7 +893,8 @@ define([],function(){
                                     "orderNo": 4
                                 },
                                 "LoanDocuments": {
-                                    "orderNo": 5
+                                    "orderNo": 5,
+                                    "readonly": true
                                 },
                                 "AdditionalLoanInformation": {
                                     "orderNo": 6,
@@ -959,7 +960,8 @@ define([],function(){
                                     "orderNo": 4
                                 },
                                 "LoanDocuments": {
-                                    "orderNo": 5
+                                    "orderNo": 5,
+                                    "readonly":true
                                 },
                                 "AdditionalLoanInformation": {
                                     "orderNo": 6,
