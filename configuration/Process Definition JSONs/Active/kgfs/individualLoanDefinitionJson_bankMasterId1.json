@@ -3,6 +3,7 @@
     "customerMaxGenericAge":60,
     "customerMaxAgeBcProduct":58,
     "customerAgeLimitForSingleFemale":35,
+    "productValidationFromStage":"Screening",
     "stages":[
        {
           "order":1,
