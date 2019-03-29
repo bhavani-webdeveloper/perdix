@@ -124,7 +124,7 @@ define({
 					return IndividualLoan.search({
 	                    'stage': 'Application',
 	                    'centreCode':searchOptions.centreCode,
-	                    'branchId':branch,
+	                    'branchName':branch,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'status':searchOptions.status,
