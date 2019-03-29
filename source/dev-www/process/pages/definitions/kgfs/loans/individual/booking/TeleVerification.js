@@ -112,13 +112,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                                 "subCategory": "PHOTO",
                                                                 "fileType": "image/*",
                                                                 "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "applicant.customer.customerCategory",
-                                                                "title": "CUSTOMER_CATEGORY",
-                                                                "type": "select",
-                                                                "enumCode": "lead_category",
-                                                                "readonly":true
                                                             }
                                                         ]                                                    
                                                     },
@@ -332,7 +325,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             {
                                                                 "key": "applicant.followupCallRequired",
                                                                 "type": "date",
-                                                                "title": "FOLLOWUP_ON"
+                                                                "title": "FOLLOWUP_ON",
+                                                                "condition": "model.applicant.telecallingResponse !='Reachable'",
+                                                                "required":true
+
+                                                            },
+                                                            {
+                                                                "key": "applicant.followupCallRequired",
+                                                                "type": "date",
+                                                                "title": "FOLLOWUP_ON",
+                                                                "condition": "model.applicant.telecallingResponse =='Reachable'"
+                                                                
+                                                            },
+                                                            {
+                                                                "key": "applicant.udf29",
+                                                                "type": "date",
+                                                                "title": "CUSTOMER_CALLED",
                                                             },
                                                             {
                                                                 "key": "applicant.telecallingRemarks",
@@ -376,7 +384,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     // Setting necessary parties to child arrays.
                     model.applicant.customer = model.loanProcess.applicantEnrolmentProcess.customer;
                     model.loanCustomer.customer = model.loanProcess.loanCustomerEnrolmentProcess.customer;
-
                     // applicant telecalling details
                     model.telecalling.applicant = _.filter(model.loanAccount.telecallingDetails, {"partyType": "applicant"});
                   
