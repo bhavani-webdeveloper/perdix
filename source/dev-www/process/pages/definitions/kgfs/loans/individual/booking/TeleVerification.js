@@ -318,24 +318,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                         "title": "CALLING_ATTEMPTS",
                                                         "items": [
                                                             {
-                                                                "key": "applicant.telecallingResponse",
+                                                                "key": "telecalling.applicant.telecallingResponse",
                                                                 "type": "select",
                                                                 "title": "TELECALLING_RESPONSE",
                                                                 "enumCode": "telecalling_response",
                                                                 "required" : true
                                                             },
                                                             {
-                                                                "key": "applicant.noOfCallAttempts",
+                                                                "key": "telecalling.applicant.noOfCallAttempts",
                                                                 "type": "number",
                                                                 "title": "NO_OF_CALLATTEMPTS"
                                                             },
                                                             {
-                                                                "key": "applicant.followupCallRequired",
+                                                                "key": "telecalling.applicant.followupCallRequired",
                                                                 "type": "date",
                                                                 "title": "FOLLOWUP_ON"
                                                             },
                                                             {
-                                                                "key": "applicant.telecallingRemarks",
+                                                                "key": "telecalling.applicant.telecallingRemarks",
                                                                 "type": "textarea",
                                                                 "title": "TELECALLING_REMARKS"
                                                             }
@@ -378,8 +378,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.loanCustomer.customer = model.loanProcess.loanCustomerEnrolmentProcess.customer;
 
                     // applicant telecalling details
-                    model.telecalling.applicant = _.filter(model.loanAccount.telecallingDetails, {"partyType": "applicant"});
-                  
+                    var telecallingApplicant= _.filter(model.loanAccount.telecallingDetails, {"partyType": "applicant"}); 
+                    if(telecallingApplicant.length != 0) {
+                        model.telecalling.applicant = telecallingApplicant[telecallingApplicant.length -1];
+                    }
+                    
                     model.telecalling.loanCustomer = _.filter(model.loanAccount.telecallingDetails, {"partyType": "loanCustomer"});
                     if (_.hasIn(model, 'loanProcess.applicantEnrolmentProcess') && model.loanProcess.applicantEnrolmentProcess !=null){
                         model.applicantEnrolmentProcessDetails = {}; 
@@ -439,6 +442,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         model.applicant.customerId = model.applicant.customer.id;
                         model.applicant.partyType = "applicant";
                         model.applicant.customerCalledAt = new Date();
+                        model.applicant.telecallingResponse = model.telecalling.applicant.telecallingResponse;
+                        model.applicant.noOfCallAttempts = model.telecalling.applicant.noOfCallAttempts;
+                        model.applicant.followupCallRequired = model.telecalling.applicant.followupCallRequired;
+                        model.applicant.telecallingRemarks = model.telecalling.applicant.telecallingRemarks;
                         model.loanAccount.telecallingDetails.push(model.applicant);
 
                         model.loanCustomer.customerId = model.loanCustomer.customer.id;
