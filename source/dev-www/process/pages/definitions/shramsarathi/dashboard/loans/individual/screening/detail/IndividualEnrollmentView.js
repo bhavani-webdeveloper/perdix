@@ -800,8 +800,14 @@ define({
                                         "title": "NO_OF_INSTALLMENT_PAID",
                                         "data": "noOfInstalmentPaid",
                                         render: function(data, type, full, meta) {
-                                            if (data) return data;
-                                            return full['noOfInstalmentPaid'].toString();
+                                            if (data==0) {
+                                                return "Installment";
+                                            }
+                                            else{
+                                                return "Lumpsum";
+                                            }
+                                            
+                                            //return full['noOfInstalmentPaid'].toString();
                                         }
     
                                     }, {
