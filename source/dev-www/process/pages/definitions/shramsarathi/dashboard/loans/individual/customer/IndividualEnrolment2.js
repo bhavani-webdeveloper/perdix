@@ -2740,12 +2740,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     }
                   
                      if(model.customer.physicalAssets!== undefined){
-                    if(model.customer.physicalAssets.length > 0)
-                    {
-                        for(var i=0;i<model.customer.physicalAssets.length;i++){
-                            model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
-                        }
-                    } 
+                        if(model.customer.physicalAssets.length > 0)
+                        {
+                            for(var i=0;i<model.customer.physicalAssets.length;i++){
+                                model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
+                            }
+                        } 
                     }  
                        
                     
@@ -3719,6 +3719,24 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         model.customer.familyMembers[i].age= moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                                     }
                                 }
+
+                                if(model.customer.currentAssets!== undefined){
+                                    if(model.customer.currentAssets.length > 0){
+                                        for(var i=0;i<model.customer.currentAssets.length;i++){
+                                            model.customer.currentAssets[i].titleExpr = model.customer.currentAssets[i].assetType;
+                                        }
+                                       
+                                    }
+                                }
+                              
+                                 if(model.customer.physicalAssets!== undefined){
+                                    if(model.customer.physicalAssets.length > 0)
+                                    {
+                                        for(var i=0;i<model.customer.physicalAssets.length;i++){
+                                            model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
+                                        }
+                                    } 
+                                }  
                             })
 
 
@@ -3841,6 +3859,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             return false;
                         }
 
+                        
+
                         if((model.customer.addressPfSameAsIdProof==='YES') && (model.customer.identityProof=='Aadhaar Card')){
                             model.customer.addressProof=model.customer.identityProof;
                             model.customer.addressProofNo=model.customer.identityProofNo;
@@ -3899,6 +3919,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         if (PageHelper.isFormInvalid(form)) {
                             return false;
                         }
+
+                        /* assets*/
+
+                        if(model.customer.currentAssets!== undefined){
+                            if(model.customer.currentAssets.length > 0){
+                                for(var i=0;i<model.customer.currentAssets.length;i++){
+                                    model.customer.currentAssets[i].titleExpr = model.customer.currentAssets[i].assetType;
+                                }
+                               
+                            }
+                        }
+                      
+                         if(model.customer.physicalAssets!== undefined){
+                        if(model.customer.physicalAssets.length > 0)
+                        {
+                            for(var i=0;i<model.customer.physicalAssets.length;i++){
+                                model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
+                            }
+                        } 
+                        }  
+
                         if((model.customer.addressPfSameAsIdProof==='YES') && (model.customer.identityProof=='Aadhaar Card')){
                             model.customer.addressProof=model.customer.identityProof;
                             model.customer.addressProofNo=model.customer.identityProofNo;
