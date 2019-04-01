@@ -1,12 +1,9 @@
-define({
-    pageUID: "pahal.lead.LeadAssignmentPendingQueue",
-    pageType: "Engine",
-    dependencies:["$log", "formHelper","PageHelper", "Lead", "$state", "$q", "SessionStore", "Utils", "entityManager"],
-
-    $pageFn: function($log, formHelper,PageHelper, Lead, $state, $q, SessionStore, Utils, entityManager) {
-
+irf.pageCollection.factory(irf.page("kgfs.lead.leadAssignmentPendingQueue"),
+ ["$log", "formHelper","PageHelper", "Lead", "$q", "SessionStore","LeadHelper","irfNavigator",
+	function($log, formHelper,PageHelper, Lead,$q, SessionStore, LeadHelper,irfNavigator) {
 		var branch = SessionStore.getBranch();
-
+		var siteCode = SessionStore.getGlobalSetting("siteCode");
+		
 		return {
 			"type": "search-list",
 			"title": "LEAD_ASSIGNMENT_PENDING",
@@ -27,7 +24,7 @@ define({
 					"properties": {
 						"branch": {
 							"title": "HUB_NAME",
-							"type": "string",
+							"type": ["string","null"],
 							"enumCode": "branch",
 							"x-schema-form": {
 								"type": "select",
@@ -102,7 +99,9 @@ define({
 							item.branchName,
 							item.addressLine1,
 							item.cityTownVillage,
-							item.pincode
+							item.pincode,
+							item.transactionType,
+							item.mobileNo
 						]
 					},
 					getTableConfig: function() {
@@ -126,7 +125,7 @@ define({
 							title: 'Address Line1',
 							data: 'addressLine1'
 						}, {
-							title: 'City/Town Village',
+							title: 'City/Town/Village',
 							data: 'cityTownVillage'
 						}, {
 							title: 'Area',
@@ -134,6 +133,12 @@ define({
 						}, {
 							title: 'Pincode',
 							data: 'pincode'
+						}, {
+							title: 'Type',
+							data: 'transactionType'
+						}, {
+							title: 'Mobile No',
+							data: 'mobileNo'
 						}]
 					},
 					getActions: function() {
@@ -165,18 +170,39 @@ define({
 									PageHelper.showProgress("bulk-create", "Atleast one loan should be selected for Batch creation", 5000);
 									return false;
 								}
-								$state.go("Page.Engine", {
-									pageName: "pahal.lead.LeadReassign",
-									pageData: items
+						/* 1)conditional check that all items selected from this queue should contains same transaction type 
+						    and if no transaction type found then defaulting to new loan
+						*/
+						    let validateSameTransactionType = items[0]['transactionType']?items[0]['transactionType']:"New Loan"
+						        _.each(items, function (item) {
+						            if (_.isNull(item['transactionType']))
+						                item['transactionType'] = "New Loan";
+						            if (item['transactionType'] != validateSameTransactionType) {
+						                PageHelper.showProgress("bulk-create", "Transaction Type of selected items should be same", 5000);
+						                validateSameTransactionType=false;
+						            }
 								});
-							},
-							isApplicable: function(items) {
-								return true;
-							}
+							
+						/*  1)see irfpages for implementation : passing bacparam as second argument which is state
+						      of the page to which the next page will go back 
+						*/  
+								if (validateSameTransactionType != false) {
+									irfNavigator.go({
+										'state': 'Page.Engine',
+										'pageName': 'lead.LeadReassign',
+										'pageData': items
+									}, {
+										'state': 'Page.LeadDashboard'
+									});
+								}
+						    },
+						    isApplicable: function (items) {
+						        return true;
+						    }
 						}];
 					}
 				}
 			}
 		};
 	}
-})
+]);
