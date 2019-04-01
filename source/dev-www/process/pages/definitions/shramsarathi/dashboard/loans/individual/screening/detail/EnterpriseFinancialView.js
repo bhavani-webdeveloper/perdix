@@ -140,6 +140,11 @@ define({
 					console.log("Individual_Enrollment",params);
 					model.liability=params.liabilities.length;
 					//debugger;
+				},
+				"Enrollment2":function(bundleModel,model,params){
+					console.log("Enrollment2",params);
+					model.liability=params.enrolmentProcess.customer.liabilities.length;
+					debugger;
 				}
 			},
 			actions: {}

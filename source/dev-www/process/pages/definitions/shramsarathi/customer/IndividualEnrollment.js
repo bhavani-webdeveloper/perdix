@@ -2310,7 +2310,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     "PhysicalAssets.physicalAssets.vehicleModel": {
                         "condition": "model.customer.physicalAssets[arrayIndex].nameOfOwnedAsset=='Two wheeler' || model.customer.physicalAssets[arrayIndex].nameOfOwnedAsset=='Four Wheeler'"
                     },
-                    "IndividualFinancials.expenditures.expenditureSource": {
+                    "IndividualFinancials.expenditures.expenditureSource" : {
                         "required": true,
                         "key":"customer.expenditures[].expenseType",
                         "enumCode":"expense_from"

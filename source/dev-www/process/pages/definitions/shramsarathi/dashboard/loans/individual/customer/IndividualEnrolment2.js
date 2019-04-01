@@ -2691,11 +2691,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                       
                   
                     // }else{
-
+                        BundleManager.broadcastEvent('Enrollment2', model);
                     model.enrolmentProcess.currentStage = model.currentStage;
                     model.customer = model.enrolmentProcess.customer;
                     model.customer.addressPfSameAsIdProof="NO";
-                    
                     if ( model.customer.familyMembers.length > 0)
                         if(model.customer.familyMembers[0].relationShip == 'self')
                             model.customer.familyMembers[0].relationShip = 'Self';
