@@ -3560,6 +3560,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             getPersonalExpenses('value', model, 'row');
                             getOtherBusinessIncomeDet('', model, '') ;
                         }
+
+                        if(model.customer.enterprise.employeeSalary && model.customer.enterprise.employeeSalary>0){
+                            model.customer.isCreditAppraisal = true
+                            BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer});
+                        }
                     }
                     
 
@@ -3850,9 +3855,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 
                                 model.customer.isCaptured = true
                                 BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer});
-                                if(model.currentStage == 'CreditAppraisal'){    
+                                if(model.currentStage == 'CreditAppraisal'){   
                                     model.customer.isCreditAppraisal = true
-                                    BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer});                                    
+                                    BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer});
+                                    $state.reload();
                                 }
 
                                 BundleManager.pushEvent(model._bundlePageObj.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
