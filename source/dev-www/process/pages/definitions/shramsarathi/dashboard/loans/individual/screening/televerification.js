@@ -657,7 +657,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         model.loanCustomer.customerCalledAt = new Date();
                         model.loanAccount.telecallingDetails.push(model.loanCustomer);
 
-                        BundleManager.broadcastEvent("telecall",{telecallingDetails: model.loanAccount.telecallingDetails}); 
 
 
                         //  _.forEach(model.coApplicants, function(val) {
@@ -687,6 +686,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             })
                             .subscribe(function(value) {
                                 PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
+                                BundleManager.broadcastEvent("telecall",{telecallingDetails: model.loanAccount.telecallingDetails}); 
                             }, function(err) {
                                 PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);
