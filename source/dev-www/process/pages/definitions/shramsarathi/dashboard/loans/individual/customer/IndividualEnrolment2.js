@@ -280,7 +280,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "orderNo": 7
                                 },
                                 "KYC.customerId": {
-                                    "resolver": "IndividualCustomerIDLOVConfiguration"
+                                    "resolver": "IndividualCustomerIDLOVConfigurationShramsarathi"
                                 },
                                 "KYC.identityProof": {
                                     "required": true,
@@ -2688,7 +2688,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.pageClass = bundlePageObj.pageClass;
                     model.currentStage = bundleModel.currentStage;
                     // if( model.currentStage=="FieldAppraisal"){
-
+                      
+                  
                     // }else{
 
                     model.enrolmentProcess.currentStage = model.currentStage;
@@ -2748,8 +2749,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             }
                         } 
                     }  
+
+                    if(model.customer.pincode!=undefined || model.customer.pincode!=null){
+                        Queries.searchPincodes(model.customer.pincode).then(function(res){
+                            model.customer.taluk=res.body[0].taluk;
+                        })
+                    }
                        
-                    
                     /* Form rendering starts */
                     var self = this;
                     var formRequest = {
@@ -3189,7 +3195,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "type":"select",
                                                             "enumCode":"work_sector",
                                                             "required": true,
-                                                            "orderNo": 50
+                                                            "orderNo": 10
                                                         },
                                                         "incomeSource": {
                                                             key: "customer.familyMembers[].incomes[].incomeSource",
@@ -3200,7 +3206,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "enumCode": "occupation",
                                                             "parentEnumCode": "work_sector",
                                                             "parentValueExpr":"model.customer.familyMembers[context.arrayIndex].incomes[context.arrayIndex].workSector",
-                                                            "orderNo": 60
+                                                            "orderNo": 20
                                                         },
                                                         "incomeEarned": {
                                                             key: "customer.familyMembers[].incomes[].incomeEarned",
@@ -3216,7 +3222,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             key: "customer.familyMembers[].incomes[].frequency",
                                                             type: "select",
                                                             "enumCode":"income_frequency",
-                                                            "orderNo": 40
+                                                            "orderNo": 50
                                                         },
                                                         "occupationType":{
                                                             "key":"customer.familyMembers[].incomes[].occupationType",
@@ -3224,7 +3230,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "type":"select",
                                                             "enumCode":"occupation_type",
                                                             "required":true,
-                                                            "orderNo":20
+                                                            "orderNo":60
                                                             
                                                         },
                                                         "skillLevel":{
@@ -3266,14 +3272,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "type":"select",
                                                             "required":true,
                                                             "enumCode":"income_type",
-                                                             "orderNo":10
+                                                             "orderNo":100
                                                         },
                                                         "noOfDaysWorkedInMonth":{
                                                             "key":"customer.familyMembers[].incomes[].noOfDaysWorkedInMonth",
                                                             "title":"NO_OF_DAYS_WORKED_IN_MONTH",
                                                             "type":"number",
                                                             "required":true,
-                                                            "orderNo":100
+                                                            "orderNo":110
                                                         },
                                                     }
 
@@ -3666,7 +3672,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 },
                 eventListeners: {
                     "lead-loaded": function (bundleModel, model, obj) {
-                            
                         return $q.when()
                             .then(function () {
                                 if (obj.applicantCustomerId) {
@@ -3701,7 +3706,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 model.customer.state = obj.state;
                                 model.customer.locality = obj.area;
                                 model.customer.villageName = obj.cityTownVillage;
-                                model.customer.taluk = obj.taluk;
+                                // model.customer.taluk = obj.taluk;
                                 model.customer.landLineNo = obj.alternateMobileNo;
                                 model.customer.dateOfBirth = obj.dob;
                                 model.customer.age = moment().diff(moment(obj.dob, SessionStore.getSystemDateFormat()), 'years');

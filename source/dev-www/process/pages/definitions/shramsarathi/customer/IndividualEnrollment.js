@@ -97,7 +97,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 "readonly": true
                             },
                                "PhysicalAssets.physicalAssets":{
-                                    //"title":"FIXED_ASSET",
+                                    "title":"FIXED_ASSET",
                                     "titleExpr": "model.customer.physicalAssets[arrayIndex].titleExpr",
 
                                 },
@@ -874,7 +874,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 },
                                 "ContactInformation.mailingPincode": {
                                     "condition": "!model.customer.mailSameAsResidence",
-                                    "resolver": "MailingPincodeLOVConfiguration"
+                                    "resolver": "MailingPincodeLOVConfigurationShramsarathi",
+                                    "autolov": false
                                 },
                                 "ContactInformation.mailingLandmark": {
                                     "condition": "!model.customer.mailSameAsResidence",
@@ -1653,7 +1654,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 },
                                 "ContactInformation.mailingPincode": {
                                     "condition": "!model.customer.mailSameAsResidence",
-                                    "resolver": "MailingPincodeLOVConfiguration",
+                                    "resolver": "MailingPincodeLOVConfigurationShramsarathi",
+                                    "autolov": false
                                 },
                                 "ContactInformation.mailingLocality": {
                                     "condition": "!model.customer.mailSameAsResidence",
@@ -2072,13 +2074,15 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                         "condition": "!model.customer.mailSameAsResidence"
                     },
                     "ContactInformation.pincode": {
-                        "resolver": "PincodeLOVConfiguration",
-                        "searchHelper": formHelper
+                        "resolver": "PincodeLOVConfigurationShramsarathi",
+                        "searchHelper": formHelper,
+                        "autolov": false
 
                     },
                     "ContactInformation.mailingPincode": {
                         "condition": "!model.customer.mailSameAsResidence",
-                        "resolver": "MailingPincodeLOVConfiguration"
+                        "resolver": "MailingPincodeLOVConfigurationShramsarathi",
+                        "autolov": false
                     },
                     "FamilyDetails.familyMembers.relationShip":{
                         "title":"RELATIONSHIP_WITH_MIGRANT",
@@ -2276,7 +2280,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     },
                     "ContactInformation.mailingPincode": {
                         "condition": "!model.customer.mailSameAsResidence",
-                        "resolver": "MailingPincodeLOVConfiguration"
+                        "resolver": "MailingPincodeLOVConfigurationShramsarathi",
+                        "autolov": false
                     },
                     "ContactInformation.mailingLocality": {
                         "condition": "!model.customer.mailSameAsResidence",
