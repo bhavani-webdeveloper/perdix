@@ -681,12 +681,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         PageHelper.showLoader();
                         PageHelper.showProgress('loan-process', 'Updating Loan');
                         model.loanProcess.save()
-                            .finally(function() {
+                            .finally(function(data) {
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function(value) {
                                 PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
-                                BundleManager.broadcastEvent("telecall",{telecallingDetails: model.loanAccount.telecallingDetails}); 
+                                BundleManager.broadcastEvent("telecall",{telecallingDetails: model.loanAccount.telecallingDetails,version:model.loanAccount.version});
                             }, function(err) {
                                 PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);

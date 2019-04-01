@@ -1194,6 +1194,11 @@ define({
                     _.forEach(prepareFinancialData['tableData'], function(histData){
                         model.customerHistoryFinancials['tableData'].push(histData);
                         });
+                },
+                "telecall": function(bundleModel, model, obj){
+                    $log.info("Telecall",obj);
+                    model.loanAccount.telecallingDetails = obj.telecallingDetails;
+                    model.loanAccount.version = obj.version;   
                 }
             },
             actions: {
