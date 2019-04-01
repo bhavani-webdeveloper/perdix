@@ -223,7 +223,8 @@ define({
                     item.loanMonitoringDetails.customerName
                 ]
             },
-            form: [{
+            form: [
+                {
                 "type": "box",
                 "title": "LUC",
                 "items": [{
@@ -282,7 +283,8 @@ define({
                     key: "loanMonitoringDetails.disbursementDate",
                     type: "date",
                     "readonly": true
-                }, {
+                }, 
+                {
                     type: "fieldset",
                     title: "",
                     condition: "model.loanMonitoringDetails.loanPurposeCategory == 'Asset Purchase'",
@@ -315,7 +317,8 @@ define({
                         enumCode: "decisionmaker1",
                         readonly: tempData.lucNonEditable
                     }]
-                }, {
+                }, 
+                {
                     key: "loanMonitoringDetails.machineDetails",
                     condition: "model.loanMonitoringDetails.loanPurposeCategory == 'Asset Purchase'",
                     type: "array",
@@ -744,7 +747,7 @@ define({
                 }, {
                     type: "fieldset",
                     title: "",
-                    condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
+                    condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija' || model.siteCode == 'shramsarathi'",
                     items: [{
                         key: "loanMonitoringDetails.loanAmountUsed",
                         type: "amount",
