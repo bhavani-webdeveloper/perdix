@@ -1190,6 +1190,10 @@ define({
                     _.forEach(prepareFinancialData['tableData'], function(histData){
                         model.customerHistoryFinancials['tableData'].push(histData);
                         });
+                },
+                "telecall": function(bundleModel, model, obj){
+                    $log.info("Telecall",obj);
+                    model.loanAccount.telecallingDetails = obj.telecallingDetails;   
                 }
             },
             actions: {
@@ -1484,6 +1488,10 @@ define({
                     PageHelper.clearErrors();
                     var nextStage = null;
                     var dedupeCustomerIdArray = [];
+                    if((model.loanAccount.currentStage =='Televerification') && (model.loanAccount.telecallingDetails.length == 0)){
+                        PageHelper.showErrors({"data": {"error":"Tele Verification should be Mandatory"}});
+                        return false;
+                    }
                     if (!validateForm(formCtrl)){
                         return;
                     }

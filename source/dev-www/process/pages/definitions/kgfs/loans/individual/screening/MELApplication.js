@@ -255,22 +255,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "title":"UPLOAD_MEL_APPLICATION_FORM",
                                         },
                                         "uploadMELApplicationForm":{
-                                        "key": "loanAccount.documents[].documentId",
-                                        "required":true,
-                                        "notitle": true,
-                                        "type": "file",
-                                        "category": "ACH",
-                                        "subCategory": "cat2",
-                                        "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                                        customHandle: function(file, progress, modelValue, form, model) {
-                                            Maintenance.masterDataUpload(file, progress, {
-                                                fileType: model.master.uploadNameValue
-                                            }).then(function(resp) {
-                                                $log.info(resp.data.stats);
-                                                model.master.value = true;
-                                                model.uploadres = resp.data.stats;
-                                            });
-                                        }
+                                            "key": "loanAccount.documents[].documentId",
+                                            type: "file",
+                                            fileType: "application/pdf",
+                                            category: "Loan",
+                                            subCategory: "DOC1",
+                                            "notitle": true,
+                                            using: "scanner",
+                                            required: true
                                         }
                                     }                                    
                                 },

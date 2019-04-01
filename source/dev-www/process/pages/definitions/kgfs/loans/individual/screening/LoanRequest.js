@@ -1457,7 +1457,50 @@ define([],function(){
                                 }
                             })
                         }
-                    }
+                    },
+                    "new-guarantor": function(bundleModel, model, params){
+                        $log.info("Insdie guarantor of LoanRequest");
+                        // model.loanAccount.coApplicant = params.customer.id;
+                        var addToRelation = true;
+                        for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                            if (model.loanAccount.loanCustomerRelations[i].customerId == params.customer.id) {
+                                addToRelation = false;
+                                if (params.customer.urnNo)
+                                    model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
+                                    model.loanAccount.loanCustomerRelations[i].name =params.customer.firstName;
+                                break;
+                            }
+                        }
+        
+                        if (addToRelation) {
+                            model.loanAccount.loanCustomerRelations.push({
+                                'customerId': params.customer.id,
+                                'relation': "Guarantor",
+                                'urn': params.customer.urnNo,
+                                'name':params.customer.firstName
+                            })
+                        };
+        
+                        model.loanAccount.guarantors = model.loanAccount.guarantors || [];
+        
+                        var existingGuarantorIndex = _.findIndex(model.loanAccount.guarantors, function(g){
+                            if (g.guaUrnNo == params.customer.urnNo || g.guaCustomerId == params.customer.id)
+                                return true;
+                        })
+        
+                        if (existingGuarantorIndex<0){
+                            model.loanAccount.guarantors.push({
+                                'guaCustomerId': params.customer.id,
+                                'guaUrnNo': params.customer.urnNo
+                            });
+                        } else {
+                            if (!model.loanAccount.guarantors[existingGuarantorIndex].guaUrnNo){
+                                model.loanAccount.guarantors[existingGuarantorIndex].guaUrnNo = params.customer.urnNo;
+                            }
+                        }
+        
+        
+                    },
                 },
                 form: [],
                 schema: function() {
@@ -1674,9 +1717,6 @@ define([],function(){
                             });
                     },
                     reject: function(model, formCtrl, form, $event){
-                        if(PageHelper.isFormInvalid(formCtrl)) {
-                            return false;
-                        }
                         PageHelper.showLoader();
                          model.loanProcess.reject()
                             .finally(function () {
