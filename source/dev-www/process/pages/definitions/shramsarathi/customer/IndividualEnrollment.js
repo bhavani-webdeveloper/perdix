@@ -2307,8 +2307,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     },
                     "IndividualFinancials.expenditures.expenditureSource": {
                         "required": true,
-                        //"type":"select",
-                        "enumCode":"expense_type"
+                        "key":"customer.expenditures[].expenseType",
+                        "enumCode":"expense_from"
                     },
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth": {
                         "required": false
@@ -2445,7 +2445,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     "IndividualFinancials.expenditures.expenditureSource",
                     "IndividualFinancials.expenditures.annualExpenses",
                     "IndividualFinancials.expenditures.frequency",
-                   // "IndividualFinancials.expenditures.from",
+                     "IndividualFinancials.expenditures.from",
 
                     "FamilyDetails",
                     "FamilyDetails.familyMembers",
@@ -2844,10 +2844,11 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                         "expenditures":{
                                             "items":{
                                                 "from":{
-                                                    "key":"customer.expenditures[].expenseType",
+                                                    "key":"customer.expenditures[].expenditureSource",
                                                     "title":"EXPENSE_FROM",
                                                     "type":"select",
-                                                    "enumCode":"expense_type"
+                                                    "enumCode":"expense_type",
+                                                    "required":true
                                                 },
                                             }
                                         },
@@ -3337,7 +3338,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     "type": "box",
                                     "title": "REFERENCES",
                                     "orderNo": 100,
-                                    "condition": "model.currentStage=='Application'||model.currentStage=='Initiation' || model.currentStage=='FieldAppraisal'",
+                                    "condition": "model.currentStage=='Application'|| model.currentStage=='Initiation' || model.currentStage=='FieldAppraisal'",
                                     "items": {
                                         "verifications": {
                                             key: "customer.verifications",

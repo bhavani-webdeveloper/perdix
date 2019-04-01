@@ -92,7 +92,7 @@ define({////shramsarathi.dashboard.loans.individual.screening.FieldAppraisal
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'villageName':searchOptions.villageName,	
-	                    'branchName': searchOptions.branchName,
+	                    'branchId': searchOptions.branch,
 	                    'status':searchOptions.status,
 	                    'centreCode': searchOptions.centre,
 	                    'customerName': searchOptions.businessName,

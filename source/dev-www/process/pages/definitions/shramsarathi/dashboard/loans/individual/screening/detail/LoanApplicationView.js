@@ -1161,6 +1161,10 @@ define({
                     model.customerHistoryFinancials['tableData'].push(prepareFinancialData);
                     
                 },
+                "telecall": function(bundleModel, model, obj){
+                    $log.info("Telecall",obj);
+                    model.loanAccount.telecallingDetails = obj.telecallingDetails;   
+                },
                 "customer-history-fin-snap": function(bundleModel, model, params){
                     let prepareFinancialData={
                         'tableData':[],
@@ -1190,10 +1194,6 @@ define({
                     _.forEach(prepareFinancialData['tableData'], function(histData){
                         model.customerHistoryFinancials['tableData'].push(histData);
                         });
-                },
-                "telecall": function(bundleModel, model, obj){
-                    $log.info("Telecall",obj);
-                    model.loanAccount.telecallingDetails = obj.telecallingDetails;   
                 }
             },
             actions: {

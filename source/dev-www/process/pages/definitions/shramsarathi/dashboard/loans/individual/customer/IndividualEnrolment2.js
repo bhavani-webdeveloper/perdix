@@ -912,7 +912,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualFinancials.expenditures.expenditureSource": {
                                     "required": true,
                                     //"type":"select",
-                                    "enumCode":"expense_type"
+                                    "enumCode":"expense_from"
                                 },
                                 // "FamilyDetails.familyMembers.familyMemberFirstName": {
                                 //     "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
@@ -1753,7 +1753,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualFinancials.expenditures.expenditureSource": {
                                     "required": true,
                                     //"type":"select",
-                                    "enumCode":"expense_type"
+                                    "enumCode":"EXPENSE_TYPE"
                                 },
                                 // "FamilyDetails.familyMembers.familyMemberFirstName": {
                                 //     "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
@@ -2365,9 +2365,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "IndividualFinancials.expenditures.expenditureSource": {
                         "required": true,
-                        //"type":"select",
-                        "enumCode":"expense_type"
+                        "key":"customer.expenditures[].expenseType",
+                        "enumCode":"expense_from"
                     },
+                    
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth": {
                         "required": false
                     },
@@ -2913,20 +2914,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         }
                                     }
                                 },
-                                // "IndividualFinancials":{
-                                //     "items":{
-                                //         "expenditures":{
-                                //             "items":{
-                                //                 "from":{
-                                //                     "key":"customer.expenditures[].expenseType",
-                                //                     "title":"EXPENSE_FROM",
-                                //                     "type":"select",
-                                //                     "enumCode":"expense_type"
-                                //                 },
-                                //             }
-                                //         },
-                                //     }
-                                // },
+                                "IndividualFinancials":{
+                                    "items":{
+                                        "expenditures":{
+                                            "items":{
+                                                "from":{
+                                                    "key":"customer.expenditures[].expenditureSource",
+                                                    "title":"EXPENSE_FROM",
+                                                    "type":"select",
+                                                    "enumCode":"expense_type",
+                                                    "required":true
+                                                },
+                                            }
+                                        },
+                                    }
+                                },
                                 "KYC": {
                                     "items": {
                                         "firstName": {
@@ -3720,7 +3722,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     }
                                 }
 
-                                if(model.customer.currentAssets!== undefined){
+                                if(model.customer.currentAssets!== undefined || model.customer.currentAssets == null){
                                     if(model.customer.currentAssets.length > 0){
                                         for(var i=0;i<model.customer.currentAssets.length;i++){
                                             model.customer.currentAssets[i].titleExpr = model.customer.currentAssets[i].assetType;
@@ -3729,7 +3731,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     }
                                 }
                               
-                                 if(model.customer.physicalAssets!== undefined){
+                                 if(model.customer.physicalAssets!== undefined || model.customer.currentAssets == null){
                                     if(model.customer.physicalAssets.length > 0)
                                     {
                                         for(var i=0;i<model.customer.physicalAssets.length;i++){
@@ -3962,9 +3964,35 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
                                 BundleManager.pushEvent('new-enrolment', model._bundlePageObj, { customer: model.customer });
 
+                               
+
+
                                 model.enrolmentProcess.proceed()
                                     .subscribe(function (enrolmentProcess) {
                                         PageHelper.showProgress('enrolment', 'Done.', 5000);
+
+                                                    /* assets*/
+
+                                    if(model.customer.currentAssets!== undefined){
+                                        if(model.customer.currentAssets.length > 0){
+                                            for(var i=0;i<model.customer.currentAssets.length;i++){
+                                                model.customer.currentAssets[i].titleExpr = model.customer.currentAssets[i].assetType;
+                                            }
+                                        
+                                        }
+                                    }
+                                
+                                    if(model.customer.physicalAssets!== undefined){
+                                    if(model.customer.physicalAssets.length > 0)
+                                    {
+                                        for(var i=0;i<model.customer.physicalAssets.length;i++){
+                                            model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
+                                        }
+                                    } 
+                                    }  
+
+
+
                                     }, function (err) {
                                         PageHelper.showErrors(err);
                                         PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
