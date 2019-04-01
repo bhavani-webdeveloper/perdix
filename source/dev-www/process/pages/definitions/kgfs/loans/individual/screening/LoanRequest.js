@@ -1430,6 +1430,18 @@ define([],function(){
                     "dsc-response": function(bundleModel,model,obj){
                         model.loanAccount.loanCustomerRelations = obj;
                     },
+                    "cb-check-update": function(bundleModel, model, params){
+                    $log.info("Inside cb-check-update of LoanRequest");
+                    for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                            if (model.loanAccount.loanCustomerRelations[i].customerId == params.customerId) {
+                                model.loanAccount.loanCustomerRelations[i].cbCheckCompleted=false;
+                                if(params.cbType == 'BASE')
+                                    model.loanAccount.loanCustomerRelations[i].highmarkCompleted = true;
+                                else if(params.cbType == 'INDIVIDUAL')
+                                    model.loanAccount.loanCustomerRelations[i].cbCheckCompleted = true;
+                            }
+                        }
+                    },
                     "load-deviation":function(bundleModel, model, params){
                         $log.info("Inside Deviation List");
                         model.deviations = {};
@@ -1501,7 +1513,7 @@ define([],function(){
                 },
                 actions: {
                     
-                    submit: function(model, formCtrl, form){                        
+                    submit: function(model, formCtrl, form){  
                         if(model.loanAccount.productCategory  != 'MEL'){
                             model.loanAccount.customerId=model.loanAccount.loanCustomerRelations[0].customerId;
                             model.loanAccount.urnNo=model.loanAccount.loanCustomerRelations[0].urn; 
@@ -1643,6 +1655,16 @@ define([],function(){
                                 return false;
                             }
                         
+                        }
+                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == 'Screening' && model.loanAccount.loanType != 'JEWEL'){
+                            for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                                if (model.loanAccount.loanCustomerRelations[i].customerId) {
+                                    if(!model.loanAccount.loanCustomerRelations[i].cbCheckCompleted){
+                                        PageHelper.showProgress("loan-create","CB Check pending. Please do a CB check and then proceed",5000);
+                                        return false;
+                                    }                            
+                                }
+                            }
                         }
                         if (model.loanAccount.id && model.loanAccount.currentStage == 'DSCApproval'){
                             if(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length > 0){
