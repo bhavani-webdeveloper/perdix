@@ -2683,6 +2683,30 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                         });
                     }
                     model.customer.addressPfSameAsIdProof="NO";
+
+                    var initialFixedCurrent=function(){
+                        model.customer.currentAssets=[];
+                        model.customer.physicalAssets=[];
+                        var fixed = formHelper.enum('fixed_asset_type').data;
+                        var current = formHelper.enum('current_asset_type').data;
+                        for(var i=0;i<current.length;i++){
+                            var obj={};
+                            obj.assetType=current[i].name;
+                            obj.titleExpr=current[i].name;
+                            model.customer.currentAssets.push(obj);  
+                        }
+                        for(var i=0;i<fixed.length;i++){
+                            var obj={};
+                            obj.nameOfOwnedAsset=fixed[i].name;
+                            obj.titleExpr=fixed[i].name; 
+                            model.customer.physicalAssets.push(obj);
+                        }
+                    }
+
+                   if((model.customer.currentAssets==undefined || model.customer.currentAssets.length==0) &&
+                    (model.customer.physicalAssets==undefined || model.customer.physicalAssets.length==0 )){
+                        initialFixedCurrent();
+                   } 
                     /* Form rendering starts */
                     var self = this;
                     var formRequest = {
