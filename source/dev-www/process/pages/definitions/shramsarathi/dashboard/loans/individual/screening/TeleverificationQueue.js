@@ -8,9 +8,9 @@ define({
 			"type": "search-list",
 			"title": "TELEVERIFICATION_QUEUE",
 			"subTitle": "",
-			initialize: function(model, form, formCtrl) {
-				//model.branch = SessionStore.getCurrentBranch().branchName;
-				//model.branchId = SessionStore.getCurrentBranch().branchId;
+			initialize: function(model, form, formCtrl) {	
+				model.branch = SessionStore.getCurrentBranch().branchId;
+				//model.branch = SessionStore.getCurrentBranch().branchName;	
 				$log.info("search-list sample got initialized"); 
 			},
 			definition: {

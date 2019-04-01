@@ -14,7 +14,7 @@ define({
             "title": "REJECTED_QUEUE",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
-                model.branch = branch;
+                model.branch = SessionStore.getCurrentBranch().branchId;
                 console.log("r :: shramsarathi.dashboard.loans.individual.screening.RejectedQueue")
                 $log.info("search-list sample got initialized");
             },
@@ -107,7 +107,7 @@ define({
                     return IndividualLoan.search({
                         'stage': 'Rejected',
                         'centreCode':centreId[0],
-                        'branchName':branch,
+                        'branchId':searchOptions.branch,
                         'screeningDate':searchOptions.screeningDate,
                         'applicantName':searchOptions.applicantName,
                         'area':searchOptions.area,
