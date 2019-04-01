@@ -40,6 +40,7 @@ export class IndividualCustomerIDLOVConfigurationShramsarathi extends LOVElement
     onSelect: Function = function(valueObj, model, context){
         let PageHelper = AngularResourceService.getInstance().getNGService("PageHelper");
         let BundleManager = AngularResourceService.getInstance().getNGService("BundleManager");
+        let Queries = AngularResourceService.getInstance().getNGService("Queries");
         let Enrollment = AngularResourceService.getInstance().getNGService("Enrollment");
         let Utils = AngularResourceService.getInstance().getNGService("Utils");
         PageHelper.showProgress('customer-load', 'Loading customer...');
@@ -78,7 +79,7 @@ export class IndividualCustomerIDLOVConfigurationShramsarathi extends LOVElement
             })
             .subscribe(function(enrolmentProcess){
                 /* Updating the loan process */
-                let Queries = AngularResourceService.getInstance().getNGService("Queries");
+                // let Queries = AngularResourceService.getInstance().getNGService("Queries");
                 model.loanProcess.removeRelatedEnrolmentProcess(model.enrolmentProcess, model.loanCustomerRelationType);
                 model.loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, model.loanCustomerRelationType);
 

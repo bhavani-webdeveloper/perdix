@@ -2688,7 +2688,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.pageClass = bundlePageObj.pageClass;
                     model.currentStage = bundleModel.currentStage;
                     // if( model.currentStage=="FieldAppraisal"){
-
+                      
+                  
                     // }else{
 
                     model.enrolmentProcess.currentStage = model.currentStage;
@@ -2748,8 +2749,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             }
                         } 
                     }  
+
+                    if(model.customer.pincode!=undefined || model.customer.pincode!=null){
+                        Queries.searchPincodes(model.customer.pincode).then(function(res){
+                            model.customer.taluk=res.body[0].taluk;
+                        })
+                    }
                        
-                    
                     /* Form rendering starts */
                     var self = this;
                     var formRequest = {
@@ -3700,7 +3706,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 model.customer.state = obj.state;
                                 model.customer.locality = obj.area;
                                 model.customer.villageName = obj.cityTownVillage;
-                                model.customer.taluk = obj.taluk;
+                                // model.customer.taluk = obj.taluk;
                                 model.customer.landLineNo = obj.alternateMobileNo;
                                 model.customer.dateOfBirth = obj.dob;
                                 model.customer.age = moment().diff(moment(obj.dob, SessionStore.getSystemDateFormat()), 'years');
