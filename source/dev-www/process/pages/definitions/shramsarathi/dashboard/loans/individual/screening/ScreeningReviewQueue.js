@@ -17,6 +17,7 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.scr
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				// model.branch = branch;
+				model.branch = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized");
 
 			},

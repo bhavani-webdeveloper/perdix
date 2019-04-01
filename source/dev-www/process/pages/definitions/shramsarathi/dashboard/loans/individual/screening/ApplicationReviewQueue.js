@@ -16,8 +16,8 @@ define({
 			"title": "APPLICATION_REVIEW_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				model.branch = SessionStore.getCurrentBranch().branchName;
-				model.branchId = SessionStore.getCurrentBranch().branchId;
+				//  model.branch = SessionStore.getCurrentBranch().branchName;
+				 model.branch = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized");
 			},
 			definition: {
@@ -93,7 +93,7 @@ define({
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-	                    'stage': 'ApplicationReview',
+						'stage': 'ApplicationReview',
 	                    'branchId':searchOptions.branch,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,

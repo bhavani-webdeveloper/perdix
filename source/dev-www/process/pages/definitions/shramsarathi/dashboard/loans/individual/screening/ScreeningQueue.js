@@ -16,7 +16,7 @@ define({
             "title": "SCREENING_QUEUE",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
-                model.branch = branch;
+                model.branch = SessionStore.getCurrentBranch().branchId;
                 $log.info("search-list sample got initialized");
                 var centres = SessionStore.getCentres();
                 if (_.isArray(centres) && centres.length > 0) {
@@ -127,7 +127,7 @@ define({
                     }
                     return IndividualLoan.search({
                         'stage': 'Screening',
-                        'branchName': branch,
+                        'branchId': searchOptions.branch,
                         'enterprisePincode': searchOptions.pincode,
                         'applicantName': searchOptions.applicantName,
                         'area': searchOptions.area,
