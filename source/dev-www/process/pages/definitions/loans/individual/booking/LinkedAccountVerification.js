@@ -1154,6 +1154,9 @@ define({
                     })
                 },
                 holdButton: function(model, formCtrl, form, $event){
+                    if (PageHelper.isFormInvalid(formCtrl)){
+                        return false;
+                    }
                     $log.info("Inside save()");
                     Utils.confirm("Are You Sure?")
                         .then(
@@ -1187,6 +1190,9 @@ define({
                         );
                 },
                 sendBack: function(model, formCtrl, form, $event){
+                    if (PageHelper.isFormInvalid(formCtrl)){
+                        return false;
+                    }
                     $log.info("Inside sendBack()");
                     if(_.isEmpty(model.review.remarks) || _.isEmpty(model.review.targetStage)) {
                         PageHelper.showProgress("update-loan", "Please Enter Remarks and Stage.", 3000);
