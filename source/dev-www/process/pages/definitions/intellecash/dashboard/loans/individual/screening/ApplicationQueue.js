@@ -1,24 +1,28 @@
 define({
-	pageUID: "shramsarathi.dashboard.loans.individual.screening.ApplicationReviewQueue",
+	pageUID: "intellecash.dashboard.loans.individual.screening.ApplicationQueue",
     pageType: "Engine",
     dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
     	var branch = SessionStore.getBranch();
 		var centres = SessionStore.getCentres();
 		var centreId=[];
-	    if (centres && centres.length) {
+		if (centres && centres.length) {
 		    for (var i = 0; i < centres.length; i++) {
 			    centreId.push(centres[i].centreId);
 		    }
 	    }
 		return {
 			"type": "search-list",
-			"title": "APPLICATION_REVIEW_QUEUE",
+			"title": "APPLICATION_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				//  model.branch = SessionStore.getCurrentBranch().branchName;
-				 model.branch = SessionStore.getCurrentBranch().branchId;
+				model.branch = branch;
 				$log.info("search-list sample got initialized");
+				var centres = SessionStore.getCentres();
+				if (_.isArray(centres) && centres.length > 0){
+					model.centre = centres[0].centreName;
+					model.centreCode = centres[0].centreCode;
+				}
 			},
 			definition: {
 				title: "SEARCH_LOAN",
@@ -30,39 +34,64 @@ define({
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
-						'branch': {
-	                    	'title': "BRANCH",
-	                    	"type": ["string", "null"],
-							"x-schema-form": {
-								"type":"userbranch",
-								"screenFilter": true
-							}
-	                    },
 						"centre": {
-							"title": "ZONE_NAME",
-							"type": ["integer", "null"],
+							"title": "CENTRE",
+							"type": "string",
+							"required": true,
 							"x-schema-form": {
-								"type": "select",
-								"enumCode": "centre",
-								"parentEnumCode": "branch_id",
-								"parentValueExpr": "model.branch",
-								"screenFilter": true
+								type: "lov",
+	                            autolov: true,
+	                            bindMap: {},
+	                            searchHelper: formHelper,
+	                            lovonly: true,
+	                            search: function(inputModel, form, model, context) {
+	                                var centres = SessionStore.getCentres();
+	                                var centreCode = formHelper.enum('centre').data;
+	                                var out = [];
+	                                if (centres && centres.length) {
+	                                    for (var i = 0; i < centreCode.length; i++) {
+	                                        for (var j = 0; j < centres.length; j++) {
+	                                            if (centreCode[i].value == centres[j].id) {
+	                                                out.push({
+	                                                    name: centreCode[i].name,
+	                                                    value:centreCode[i].code
+	                                                })
+	                                            }
+	                                        }
+	                                    }
+	                                }
+	                                return $q.resolve({
+	                                    headers: {
+	                                        "x-total-count": out.length
+	                                    },
+	                                    body: out
+	                                });
+	                            },
+	                            onSelect: function(valueObj, model, context) {
+	                                model.centre = valueObj.name;
+	                                model.centreCode = valueObj.value;
+	                            },
+	                            getListDisplayItem: function(item, index) {
+	                                return [
+	                                    item.name
+	                                ];
+	                            }
 							}
 						},
 						"applicantName": {
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
 	                    },
-	                    // "businessName": {
-	                    //     "title": "BUSINESS_NAME",
-	                    //     "type": "string"
-	                    // },
+	                    "businessName": {
+	                        "title": "BUSINESS_NAME",
+	                        "type": "string"
+	                    },
 	                    "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"
 	                    },
 	                    "area": {
-	                        "title": "PANCHAYAT",
+	                        "title": "AREA",
 	                        "type": "string"
 						},
 						"pincode": {
@@ -93,8 +122,9 @@ define({
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-						'stage': 'ApplicationReview',
-	                    'branchId':searchOptions.branch,
+	                    'stage': 'Application',
+	                    'centreCode':searchOptions.centreCode,
+	                    'branchName':branch,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'status':searchOptions.status,
@@ -102,7 +132,6 @@ define({
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
-	                    'centreCode':  searchOptions.centre
 	                }).$promise;
 				},
 				paginationOptions: {
@@ -126,7 +155,6 @@ define({
 					},
 					getListItem: function(item) {
 						return [
-							item.screeningDate,
 							item.applicantName,
 							item.customerName,
 							item.area,
@@ -138,7 +166,6 @@ define({
 						return {
 							"serverPaginate": true,
 							"paginate": true,
-							"searching": true,
 							"pageLength": 10
 						};
 					},
@@ -154,14 +181,16 @@ define({
 						{
 							title: 'SCREENING_DATE',
 							data: 'screeningDate'
-						},{
+						},
+						{
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
 						},
-						// {
-						// 	title: 'BUSINESS_NAME',
-						// 	data: 'customerName'
-						// },
+						{
+							title: 'BUSINESS_NAME',
+							data: 'customerName'
+						},
+						
 						{
 							title: 'Loan Amount',
 							data: 'loanAmount'
@@ -175,20 +204,19 @@ define({
 							title: 'PIN_CODE',
 							data: 'enterprisePincode'
 						}
-
 					]
 					},
 					getActions: function() {
 						return [{
-							name: "APPLICATION_REVIEW",
+							name: "APPLICATION",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('shramsarathi.dashboard.loans.individual.screening.ApplicationReview', {
+								entityManager.setModel('intellecash.dashboard.loans.individual.screening.Application', {
 									_request: item
 								});
 								$state.go("Page.Bundle", {
-									pageName: "shramsarathi.dashboard.loans.individual.screening.ApplicationReview",
+									pageName: "intellecash.dashboard.loans.individual.screening.Application",
 									pageId: item.loanId
 								});
 							},

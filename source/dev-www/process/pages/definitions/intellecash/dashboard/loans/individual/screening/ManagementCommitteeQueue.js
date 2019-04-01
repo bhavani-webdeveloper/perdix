@@ -1,11 +1,11 @@
 define({
-    pageUID: "shramsarathi.dashboard.loans.individual.screening.ScreeningQueue",
+    pageUID: "intellecash.dashboard.loans.individual.screening.ManagementCommitteeQueue",
     pageType: "Engine",
-    dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager", "IndividualLoan", "LoanBookingCommons"],
+    dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
         var branch = SessionStore.getBranch();
         var centres = SessionStore.getCentres();
-        var centreId = [];
+        var centreId=[];
         if (centres && centres.length) {
             for (var i = 0; i < centres.length; i++) {
                 centreId.push(centres[i].centreId);
@@ -13,13 +13,13 @@ define({
         }
         return {
             "type": "search-list",
-            "title": "SCREENING_QUEUE",
+            "title": "MANAGEMENT_COMMITTEE_QUEUE",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
-                model.branch = SessionStore.getCurrentBranch().branchId;
+                model.branch = branch;
                 $log.info("search-list sample got initialized");
                 var centres = SessionStore.getCentres();
-                if (_.isArray(centres) && centres.length > 0) {
+                if (_.isArray(centres) && centres.length > 0){
                     model.centre = centres[0].centreName;
                     model.centreCode = centres[0].centreCode;
                 }
@@ -29,15 +29,15 @@ define({
                 searchForm: [
                     "*"
                 ],
-                // autoSearch: true,
+                autoSearch: true,
                 searchSchema: {
                     "type": 'object',
                     "title": 'SEARCH_OPTIONS',
                     "properties": {
                         "centre": {
-                            "title": "ZONE_NAME",
+                            "title": "CENTRE",
                             "type": "string",
-                            "required": false,
+                            "required": true,
                             "x-schema-form": {
                                 type: "lov",
                                 autolov: true,
@@ -54,7 +54,7 @@ define({
                                                 if (centreCode[i].value == centres[j].id) {
                                                     out.push({
                                                         name: centreCode[i].name,
-                                                        value: centreCode[i].code
+                                                        value:centreCode[i].code
                                                     })
                                                 }
                                             }
@@ -78,24 +78,20 @@ define({
                                 }
                             }
                         },
-                       "applicantName": {
+                        "applicantName": {
                             "title": "APPLICANT_NAME",
                             "type": "string"
                         },
-                        // "businessName": {
-                        //     "title": "BUSINESS_NAME",
-                        //     "type": "string"
-                        // },
+                        "businessName": {
+                            "title": "BUSINESS_NAME",
+                            "type": "string"
+                        },
                         "customerId": {
                             "title": "CUSTOMER_ID",
                             "type": "string"
                         },
-                        "urn": {
-                            "title": "URN",
-                            "type": "string"
-                        },
                         "area": {
-                            "title": "PANCHAYAT",
+                            "title": "AREA",
                             "type": "string"
                         },
                         "cityTownVillage": {
@@ -103,17 +99,9 @@ define({
                             "type": "string"
                         },
                         "pincode": {
-                            "title": "PIN_CODE",
-                            "type": "string"
-                        },
-                        "status":
-	                    {
-                            "type":"string",
-                            "title":"STATUS",
-                            "enumCode": "origination_status",
-                            "x-schema-form": {
-                            	"type": "select"
-                            }
+                            "title": "PINCODE",
+                            "type": "string",
+
                         }
                     },
                     "required": []
@@ -122,23 +110,21 @@ define({
                     return formHelper;
                 },
                 getResultsPromise: function(searchOptions, pageOpts) {
-                    if (_.hasIn(searchOptions, 'centreCode')) {
-                        searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centre, formHelper);
+                    if (_.hasIn(searchOptions, 'centreCode')){
+                        searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
                     }
                     return IndividualLoan.search({
-                        'stage': 'Screening',
-                        'branchId': searchOptions.branch,
-                        'enterprisePincode': searchOptions.pincode,
-                        'applicantName': searchOptions.applicantName,
-                        'area': searchOptions.area,
-                        'status': searchOptions.status,
-                        'villageName': searchOptions.cityTownVillage,
+                        'stage': 'ManagementCommittee',
+                        'centreCode':searchOptions.centreCode,
+                        'branchName':branch,
+                        'enterprisePincode':searchOptions.pincode,
+                        'applicantName':searchOptions.applicantName,
+                        'area':searchOptions.area,
+                        'status':searchOptions.status,
+                        'villageName':searchOptions.villageName,
                         'customerName': searchOptions.businessName,
                         'page': pageOpts.pageNo,
                         'per_page': pageOpts.itemsPerPage,
-                        'centreCode': searchOptions.centreCode,
-                        'urn': searchOptions.urn
-
                     }).$promise;
                 },
                 paginationOptions: {
@@ -162,12 +148,12 @@ define({
                     },
                     getListItem: function(item) {
                         return [
-                            item.screeningDate,
                             item.applicantName,
                             item.customerName,
+                            item.loanAmount,
                             item.area,
                             item.villageName,
-                            item.enterprisePincode,
+                            item.enterprisePincode
                         ]
                     },
                     getTableConfig: function() {
@@ -181,34 +167,34 @@ define({
                         return [{
                             title: 'ID',
                             data: 'loanId'
+                        },{
+                            title: 'URN',
+                            data: 'urn'
                         }, {
-                            title: 'SCREENING_DATE',
-                            data: 'screeningDate'
+                            title: 'BRANCH_NAME',
+                            data: 'branchName'
+                        }, {
+                            title: 'SPOKE_NAME',
+                            data: 'centreName'
                         }, {
                             title: 'APPLICANT_NAME',
-                            data: 'customerName'
-                        },  {
-                            title: 'AREA',
-                            data: 'area'
-                        }, {
-                            title: 'CITY_TOWN_VILLAGE',
-                            data: 'villageName'
+                            data: 'applicantName'
                         },{
-                            title: 'PIN_CODE',
-                            data: 'enterprisePincode'
+                            title: 'BUSINESS_NAME',
+                            data: 'customerName'
                         }]
                     },
                     getActions: function() {
                         return [{
-                            name: "SCREENING",
+                            name: "MANAGEMENT_COMMITTEE",
                             desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
-                                entityManager.setModel('shramsarathi.dashboard.loans.individual.screening.ScreeningInput', {
+                                entityManager.setModel('witfin.loans.individual.screening.ManagementCommitteeCrAppraisal', {
                                     _request: item
                                 });
                                 $state.go("Page.Bundle", {
-                                    pageName: "shramsarathi.dashboard.loans.individual.screening.ScreeningInput",
+                                    pageName: "witfin.loans.individual.screening.ManagementCommitteeCrAppraisal",
                                     pageId: item.loanId
                                 });
                             },
@@ -222,4 +208,4 @@ define({
             }
         };
     }
-});
+})

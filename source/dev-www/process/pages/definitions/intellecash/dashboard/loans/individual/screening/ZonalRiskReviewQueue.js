@@ -1,24 +1,14 @@
-define({
-	pageUID: "shramsarathi.dashboard.loans.individual.screening.ApplicationReviewQueue",
-    pageType: "Engine",
-    dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
-    $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
-    	var branch = SessionStore.getBranch();
-		var centres = SessionStore.getCentres();
-		var centreId=[];
-	    if (centres && centres.length) {
-		    for (var i = 0; i < centres.length; i++) {
-			    centreId.push(centres[i].centreId);
-		    }
-	    }
+irf.pageCollection.factory(irf.page("intellecash.dashboard.loans.individual.screening.ZonalRiskReviewQueue"),
+	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
+	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
+		
 		return {
 			"type": "search-list",
-			"title": "APPLICATION_REVIEW_QUEUE",
+			"title": "ZONAL_RISK_REVIEW_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				//  model.branch = SessionStore.getCurrentBranch().branchName;
-				 model.branch = SessionStore.getCurrentBranch().branchId;
-				$log.info("search-list sample got initialized");
+				model.branch = SessionStore.getCurrentBranch().branchId;
+				$log.info("search-list sample got initialized"); 
 			},
 			definition: {
 				title: "SEARCH_LOAN",
@@ -38,13 +28,13 @@ define({
 								"screenFilter": true
 							}
 	                    },
-						"centre": {
-							"title": "ZONE_NAME",
+                        "centre": {
+							"title": "CENTRE",
 							"type": ["integer", "null"],
 							"x-schema-form": {
 								"type": "select",
 								"enumCode": "centre",
-								"parentEnumCode": "branch_id",
+								"parentEnumCode": "branch",
 								"parentValueExpr": "model.branch",
 								"screenFilter": true
 							}
@@ -53,27 +43,27 @@ define({
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
 	                    },
-	                    // "businessName": {
-	                    //     "title": "BUSINESS_NAME",
-	                    //     "type": "string"
-	                    // },
+	                    "businessName": {
+	                        "title": "BUSINESS_NAME",
+	                        "type": "string"
+	                    },
 	                    "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"
 	                    },
 	                    "area": {
-	                        "title": "PANCHAYAT",
-	                        "type": "string"
-						},
-						"pincode": {
-	                        "title": "PIN_CODE",
+	                        "title": "AREA",
 	                        "type": "string"
 	                    },
 	                    "cityTownVillage": {
 	                        "title": "CITY_TOWN_VILLAGE",
 	                        "type": "string"
-						},
-						"status":
+	                    },
+	                     "pincode": {
+	                        "title": "PIN_CODE",
+	                        "type": "string"
+	                    },
+	                     "status": 
 	                    {
                             "type":"string",
                             "title":"STATUS",
@@ -82,6 +72,7 @@ define({
                             	"type": "select"
                             }
                         }
+
 					},
 					"required": []
 				},
@@ -89,20 +80,29 @@ define({
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
+					var branch = SessionStore.getCurrentBranch();
+		            var centres = SessionStore.getCentres();
+		            var centreId=[];
+				    if (centres && centres.length) {
+					    for (var i = 0; i < centres.length; i++) {
+						    centreId.push(centres[i].centreId);
+					    }
+				    }
 					if (_.hasIn(searchOptions, 'centreCode')){
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-						'stage': 'ApplicationReview',
+	                    'stage': 'ZonalRiskReview',
+	                    'centreCode':  searchOptions.centre,
 	                    'branchId':searchOptions.branch,
+	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'status':searchOptions.status,
-	                    'villageName':searchOptions.villageName,
+	                    'villageName':searchOptions.villageName,	                    
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
-	                    'centreCode':  searchOptions.centre
 	                }).$promise;
 				},
 				paginationOptions: {
@@ -138,31 +138,26 @@ define({
 						return {
 							"serverPaginate": true,
 							"paginate": true,
-							"searching": true,
 							"pageLength": 10
 						};
 					},
 					getColumns: function() {
 						return [{
-                            title: 'ID',
-                            data: 'loanId'
-						},
-						{
+							title: 'ID',
+							data: 'id'
+						}, {
 							title: 'HUB_NAME',
 							data: 'branchName'
-						},
-						{
+						}, {
 							title: 'SCREENING_DATE',
 							data: 'screeningDate'
-						},{
+						}, {
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
-						},
-						// {
-						// 	title: 'BUSINESS_NAME',
-						// 	data: 'customerName'
-						// },
-						{
+						},{
+							title: 'BUSINESS_NAME',
+							data: 'customerName'
+						},{
 							title: 'Loan Amount',
 							data: 'loanAmount'
 						}, {
@@ -174,21 +169,19 @@ define({
 						}, {
 							title: 'PIN_CODE',
 							data: 'enterprisePincode'
-						}
-
-					]
+						}]
 					},
 					getActions: function() {
 						return [{
-							name: "APPLICATION_REVIEW",
+							name: "ZONAL_RISK_REVIEW",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('shramsarathi.dashboard.loans.individual.screening.ApplicationReview', {
+								entityManager.setModel('intellecash.dashboard.loans.individual.screening.ZonalRiskReview', {
 									_request: item
 								});
 								$state.go("Page.Bundle", {
-									pageName: "shramsarathi.dashboard.loans.individual.screening.ApplicationReview",
+									pageName: "intellecash.dashboard.loans.individual.screening.ZonalRiskReview",
 									pageId: item.loanId
 								});
 							},
@@ -201,5 +194,5 @@ define({
 				}
 			}
 		};
-    }
-})
+	}
+]);

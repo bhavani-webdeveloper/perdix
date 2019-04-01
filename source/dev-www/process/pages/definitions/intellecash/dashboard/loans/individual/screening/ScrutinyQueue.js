@@ -1,5 +1,5 @@
 define({
-	pageUID: "shramsarathi.dashboard.loans.individual.screening.ApplicationReviewQueue",
+	pageUID: "intellecash.dashboard.loans.individual.screening.ScrutinyQueue",
     pageType: "Engine",
     dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
@@ -13,11 +13,11 @@ define({
 	    }
 		return {
 			"type": "search-list",
-			"title": "APPLICATION_REVIEW_QUEUE",
+			"title": "SCRUTINY_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				//  model.branch = SessionStore.getCurrentBranch().branchName;
-				 model.branch = SessionStore.getCurrentBranch().branchId;
+				model.branch = SessionStore.getCurrentBranch().branchName;
+				model.branchId = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized");
 			},
 			definition: {
@@ -39,7 +39,7 @@ define({
 							}
 	                    },
 						"centre": {
-							"title": "ZONE_NAME",
+							"title": "CENTRE",
 							"type": ["integer", "null"],
 							"x-schema-form": {
 								"type": "select",
@@ -53,16 +53,16 @@ define({
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
 	                    },
-	                    // "businessName": {
-	                    //     "title": "BUSINESS_NAME",
-	                    //     "type": "string"
-	                    // },
+	                    "businessName": {
+	                        "title": "BUSINESS_NAME",
+	                        "type": "string"
+	                    },
 	                    "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"
 	                    },
 	                    "area": {
-	                        "title": "PANCHAYAT",
+	                        "title": "AREA",
 	                        "type": "string"
 						},
 						"pincode": {
@@ -93,8 +93,8 @@ define({
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-						'stage': 'ApplicationReview',
-	                    'branchId':searchOptions.branch,
+                        'stage': 'Scrutiny',
+	                    'branchName':searchOptions.branch,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'status':searchOptions.status,
@@ -157,11 +157,10 @@ define({
 						},{
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
+						},{
+							title: 'BUSINESS_NAME',
+							data: 'customerName'
 						},
-						// {
-						// 	title: 'BUSINESS_NAME',
-						// 	data: 'customerName'
-						// },
 						{
 							title: 'Loan Amount',
 							data: 'loanAmount'
@@ -180,15 +179,15 @@ define({
 					},
 					getActions: function() {
 						return [{
-							name: "APPLICATION_REVIEW",
+							name: "SCRUTINY_QUEUE",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('shramsarathi.dashboard.loans.individual.screening.ApplicationReview', {
+								entityManager.setModel('intellecash.dashboard.loans.individual.screening.Scrutiny', {
 									_request: item
 								});
 								$state.go("Page.Bundle", {
-									pageName: "shramsarathi.dashboard.loans.individual.screening.ApplicationReview",
+									pageName: "intellecash.dashboard.loans.individual.screening.Scrutiny",
 									pageId: item.loanId
 								});
 							},

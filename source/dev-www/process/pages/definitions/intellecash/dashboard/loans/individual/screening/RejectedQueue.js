@@ -1,5 +1,5 @@
 define({
-    pageUID: "shramsarathi.dashboard.loans.individual.screening.RejectedQueue",
+    pageUID: "intellecash.dashboard.loans.individual.screening.RejectedQueue",
     pageType: "Engine",
     dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
@@ -14,8 +14,8 @@ define({
             "title": "REJECTED_QUEUE",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
-                model.branch = SessionStore.getCurrentBranch().branchId;
-                console.log("r :: shramsarathi.dashboard.loans.individual.screening.RejectedQueue")
+                model.branch = branch;
+                console.log("r :: intellecash.dashboard.loans.individual.screening.RejectedQueue")
                 $log.info("search-list sample got initialized");
             },
             definition: {
@@ -36,8 +36,7 @@ define({
 							}
 	                    },
 						"centre": {
-                            "title": "ZONE_NAME",
-                            "required":false,
+							"title": "CENTRE",
 							"type": ["integer", "null"],
 							"x-schema-form": {
 								"type": "select",
@@ -51,10 +50,10 @@ define({
                             "title": "APPLICANT_NAME",
                             "type": "string"
                         },
-                        // "businessName": {
-                        //     "title": "BUSINESS_NAME",
-                        //     "type": "string"
-                        // },
+                        "businessName": {
+                            "title": "BUSINESS_NAME",
+                            "type": "string"
+                        },
                         "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"
@@ -64,7 +63,7 @@ define({
                         //     "type": "string"
                         // },
                         "area": {
-                            "title": "PANCHAYAT",
+                            "title": "AREA",
                             "type": "string"
                         },
                         "cityTownVillage": {
@@ -77,7 +76,7 @@ define({
                         //     "type": "string",
                         //     "x-schema-form": {
                         //         "type": "date"
-                        //     } 
+                        //     }
                         // },
                         "pincode": {
 	                        "title": "PIN_CODE",
@@ -107,7 +106,7 @@ define({
                     return IndividualLoan.search({
                         'stage': 'Rejected',
                         'centreCode':centreId[0],
-                        'branchId':searchOptions.branch,
+                        'branchName':branch,
                         'screeningDate':searchOptions.screeningDate,
                         'applicantName':searchOptions.applicantName,
                         'area':searchOptions.area,
@@ -182,7 +181,7 @@ define({
                                     _request: item
                                 });
                                 $state.go("Page.Bundle", {
-                                    pageName: "shramsarathi.dashboard.loans.individual.screening.Rejected",
+                                    pageName: "intellecash.dashboard.loans.individual.screening.Rejected",
                                     pageId: item.id
                                 });
                             },

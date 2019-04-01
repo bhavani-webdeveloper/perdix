@@ -1,5 +1,5 @@
 define({
-    pageUID: "shramsarathi.dashboard.loans.individual.screening.ScreeningQueue",
+    pageUID: "intellecash.dashboard.loans.individual.screening.ScreeningQueue",
     pageType: "Engine",
     dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager", "IndividualLoan", "LoanBookingCommons"],
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
@@ -16,7 +16,7 @@ define({
             "title": "SCREENING_QUEUE",
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
-                model.branch = SessionStore.getCurrentBranch().branchId;
+                model.branch = branch;
                 $log.info("search-list sample got initialized");
                 var centres = SessionStore.getCentres();
                 if (_.isArray(centres) && centres.length > 0) {
@@ -35,9 +35,9 @@ define({
                     "title": 'SEARCH_OPTIONS',
                     "properties": {
                         "centre": {
-                            "title": "ZONE_NAME",
+                            "title": "CENTRE",
                             "type": "string",
-                            "required": false,
+                            "required": true,
                             "x-schema-form": {
                                 type: "lov",
                                 autolov: true,
@@ -82,10 +82,10 @@ define({
                             "title": "APPLICANT_NAME",
                             "type": "string"
                         },
-                        // "businessName": {
-                        //     "title": "BUSINESS_NAME",
-                        //     "type": "string"
-                        // },
+                        "businessName": {
+                            "title": "BUSINESS_NAME",
+                            "type": "string"
+                        },
                         "customerId": {
                             "title": "CUSTOMER_ID",
                             "type": "string"
@@ -95,7 +95,7 @@ define({
                             "type": "string"
                         },
                         "area": {
-                            "title": "PANCHAYAT",
+                            "title": "AREA",
                             "type": "string"
                         },
                         "cityTownVillage": {
@@ -127,7 +127,7 @@ define({
                     }
                     return IndividualLoan.search({
                         'stage': 'Screening',
-                        'branchId': searchOptions.branch,
+                        'branchName': branch,
                         'enterprisePincode': searchOptions.pincode,
                         'applicantName': searchOptions.applicantName,
                         'area': searchOptions.area,
@@ -186,8 +186,11 @@ define({
                             data: 'screeningDate'
                         }, {
                             title: 'APPLICANT_NAME',
+                            data: 'applicantName'
+                        }, {
+                            title: 'BUSINESS_NAME',
                             data: 'customerName'
-                        },  {
+                        }, {
                             title: 'AREA',
                             data: 'area'
                         }, {
@@ -204,11 +207,11 @@ define({
                             desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
-                                entityManager.setModel('shramsarathi.dashboard.loans.individual.screening.ScreeningInput', {
+                                entityManager.setModel('intellecash.dashboard.loans.individual.screening.ScreeningInput', {
                                     _request: item
                                 });
                                 $state.go("Page.Bundle", {
-                                    pageName: "shramsarathi.dashboard.loans.individual.screening.ScreeningInput",
+                                    pageName: "intellecash.dashboard.loans.individual.screening.ScreeningInput",
                                     pageId: item.loanId
                                 });
                             },

@@ -1,23 +1,14 @@
 define({
-	pageUID: "shramsarathi.dashboard.loans.individual.screening.ApplicationReviewQueue",
+	pageUID: "intellecash.dashboard.loans.individual.screening.FieldAppraisalQueue",
     pageType: "Engine",
     dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
-    	var branch = SessionStore.getBranch();
-		var centres = SessionStore.getCentres();
-		var centreId=[];
-	    if (centres && centres.length) {
-		    for (var i = 0; i < centres.length; i++) {
-			    centreId.push(centres[i].centreId);
-		    }
-	    }
-		return {
+    	return {
 			"type": "search-list",
-			"title": "APPLICATION_REVIEW_QUEUE",
+			"title": "FIELD_APPRAISAL_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				//  model.branch = SessionStore.getCurrentBranch().branchName;
-				 model.branch = SessionStore.getCurrentBranch().branchId;
+
 				$log.info("search-list sample got initialized");
 			},
 			definition: {
@@ -39,7 +30,7 @@ define({
 							}
 	                    },
 						"centre": {
-							"title": "ZONE_NAME",
+							"title": "CENTRE",
 							"type": ["integer", "null"],
 							"x-schema-form": {
 								"type": "select",
@@ -53,24 +44,24 @@ define({
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
 	                    },
-	                    // "businessName": {
-	                    //     "title": "BUSINESS_NAME",
-	                    //     "type": "string"
-	                    // },
+	                    "businessName": {
+	                        "title": "BUSINESS_NAME",
+	                        "type": "string"
+	                    },
 	                    "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"
 	                    },
 	                    "area": {
-	                        "title": "PANCHAYAT",
-	                        "type": "string"
-						},
-						"pincode": {
-	                        "title": "PIN_CODE",
+	                        "title": "AREA",
 	                        "type": "string"
 	                    },
 	                    "cityTownVillage": {
 	                        "title": "CITY_TOWN_VILLAGE",
+	                        "type": "string"
+	                    },
+	                     "pincode": {
+	                        "title": "PIN_CODE",
 	                        "type": "string"
 						},
 						"status":
@@ -82,6 +73,8 @@ define({
                             	"type": "select"
                             }
                         }
+
+
 					},
 					"required": []
 				},
@@ -89,12 +82,22 @@ define({
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
+					var branch = SessionStore.getCurrentBranch();
+		            var centres = SessionStore.getCentres();
+		            var centreId=[];
+		            if (centres && centres.length) {
+					    for (var i = 0; i < centres.length; i++) {
+						    centreId.push(centres[i].centreId);
+					    }
+				    }
 					if (_.hasIn(searchOptions, 'centreCode')){
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-						'stage': 'ApplicationReview',
-	                    'branchId':searchOptions.branch,
+	                    'stage': 'FieldAppraisal',
+	                    'centreCode':centreId[0],
+	                    'branchName':branch.branchName,
+	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'status':searchOptions.status,
@@ -102,7 +105,6 @@ define({
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
-	                    'centreCode':  searchOptions.centre
 	                }).$promise;
 				},
 				paginationOptions: {
@@ -138,7 +140,6 @@ define({
 						return {
 							"serverPaginate": true,
 							"paginate": true,
-							"searching": true,
 							"pageLength": 10
 						};
 					},
@@ -146,23 +147,16 @@ define({
 						return [{
                             title: 'ID',
                             data: 'loanId'
-						},
-						{
-							title: 'HUB_NAME',
-							data: 'branchName'
-						},
-						{
+                        },{
 							title: 'SCREENING_DATE',
 							data: 'screeningDate'
-						},{
+						}, {
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
-						},
-						// {
-						// 	title: 'BUSINESS_NAME',
-						// 	data: 'customerName'
-						// },
-						{
+						},{
+							title: 'BUSINESS_NAME',
+							data: 'customerName'
+						},{
 							title: 'Loan Amount',
 							data: 'loanAmount'
 						}, {
@@ -174,21 +168,19 @@ define({
 						}, {
 							title: 'PIN_CODE',
 							data: 'enterprisePincode'
-						}
-
-					]
+						}]
 					},
 					getActions: function() {
 						return [{
-							name: "APPLICATION_REVIEW",
+							name: "FIELD_APPRAISAL",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('shramsarathi.dashboard.loans.individual.screening.ApplicationReview', {
+								entityManager.setModel('intellecash.dashboard.loans.individual.screening.FieldAppraisal', {
 									_request: item
 								});
 								$state.go("Page.Bundle", {
-									pageName: "shramsarathi.dashboard.loans.individual.screening.ApplicationReview",
+									pageName: "intellecash.dashboard.loans.individual.screening.FieldAppraisal",
 									pageId: item.loanId
 								});
 							},

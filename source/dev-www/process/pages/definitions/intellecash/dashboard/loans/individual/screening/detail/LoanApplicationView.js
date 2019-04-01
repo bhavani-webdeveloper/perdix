@@ -1,11 +1,11 @@
 define({
-    pageUID: "shramsarathi.dashboard.loans.individual.screening.detail.LoanApplicationView",
+    pageUID: "intellecash.dashboard.loans.individual.screening.detail.LoanApplicationView",
     pageType: "Engine",
     dependencies: ["$log", "$state","LoanAccount", "Enrollment", "IndividualLoan", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "$stateParams", "$state",
-        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "SchemaResource", "LoanProcess", "irfCurrencyFilter", "irfElementsConfig","irfNavigator"
+        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "SchemaResource", "LoanProcess", "irfCurrencyFilter", "irfElementsConfig"
     ],
     $pageFn: function($log, $state,LoanAccount, Enrollment, IndividualLoan, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, $stateParams, $state,
-        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, SchemaResource, LoanProcess, irfCurrencyFilter, irfElementsConfig,irfNavigator) {
+        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, SchemaResource, LoanProcess, irfCurrencyFilter, irfElementsConfig) {
         var strongRender = function(data, type, full, meta) {
             return '<strong>'+data+'</strong>';
         }
@@ -26,62 +26,62 @@ define({
 
                     if (model.currentStage == 'Screening')
                         $state.go('Page.Engine', {
-                            pageName: 'shramsarathi.dashboard.loans.individual.screening.ScreeningQueue',
+                            pageName: 'intellecash.dashboard.loans.individual.screening.ScreeningQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'Dedupe')
                         $state.go('Page.Engine', {
-                            pageName: 'shramsarathi.dashboard.loans.individual.screening.DedupeQueue',
+                            pageName: 'intellecash.dashboard.loans.individual.screening.DedupeQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'ScreeningReview')
                         $state.go('Page.Engine', {
-                            pageName: 'shramsarathi.dashboard.loans.individual.screening.ScreeningReviewQueue',
+                            pageName: 'intellecash.dashboard.loans.individual.screening.ScreeningReviewQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'Application')
                         $state.go('Page.Engine', {
-                            pageName: 'shramsarathi.dashboard.loans.individual.screening.ApplicationQueue',
+                            pageName: 'intellecash.dashboard.loans.individual.screening.ApplicationQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'ApplicationReview')
                         $state.go('Page.Engine', {
-                            pageName: 'shramsarathi.dashboard.loans.individual.screening.ApplicationReviewQueue',
+                            pageName: 'intellecash.dashboard.loans.individual.screening.ApplicationReviewQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'Scrutiny')
                         $state.go('Page.Engine', {
-                            pageName: 'shramsarathi.dashboard.loans.individual.screening.ScrutinyQueue',
-                            pageId: null
+                            pageName: 'intellecash.dashboard.loans.individual.screening.ScrutinyQueue',
+                            pageId: null,
                         });
                     if (model.currentStage == 'FieldAppraisal')
                         $state.go('Page.Engine', {
-                            pageName: 'shramsarathi.dashboard.loans.individual.screening.FieldAppraisalQueue',
+                            pageName: 'intellecash.dashboard.loans.individual.screening.FieldAppraisalQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'FieldAppraisalReview')
                         $state.go('Page.Engine', {
-                            pageName: 'shramsarathi.dashboard.loans.individual.screening.FieldAppraisalReviewQueue',
+                            pageName: 'intellecash.dashboard.loans.individual.screening.FieldAppraisalReviewQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'CreditCommitteeReview')
                         $state.go('Page.Engine', {
-                            pageName: 'shramsarathi.dashboard.loans.individual.screening.CreditCommitteeReviewQueue',
+                            pageName: 'intellecash.dashboard.loans.individual.screening.CreditCommitteeReviewQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'CentralRiskReview')
                         $state.go('Page.Engine', {
-                            pageName: 'shramsarathi.dashboard.loans.individual.screening.CentralRiskReviewQueue',
+                            pageName: 'intellecash.dashboard.loans.individual.screening.CentralRiskReviewQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'ZonalRiskReview')
                         $state.go('Page.Engine', {
-                            pageName: 'shramsarathi.dashboard.loans.individual.screening.ZonalRiskReviewQueue',
+                            pageName: 'intellecash.dashboard.loans.individual.screening.ZonalRiskReviewQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'Sanction')
                         $state.go('Page.Engine', {
-                            pageName: 'shramsarathi.dashboard.loans.individual.screening.LoanSanctionQueue',
+                            pageName: 'intellecash.dashboard.loans.individual.screening.LoanSanctionQueue',
                             pageId: null
                         });
                     if (model.currentStage == 'Rejected')
@@ -276,9 +276,6 @@ define({
                 model.loanMitigants= model.loanAccount.loanMitigants;
                 model.expectedTurnoverObj = {};
                 documentArrayFormation(model);
-                //debugger;
-
-                model.loanAccount.fullAddress = model.loanAccount.nominees[0].nomineeDoorNo + ',' + model.loanAccount.nominees[0].nomineeStreet + ',' + model.loanAccount.nominees[0].nomineeLocality + ',' +  model.loanAccount.nominees[0].nomineeDistrict + ',' + model.loanAccount.nominees[0].nomineeState + '-' + model.loanAccount.nominees[0].nomineePincode  ;
             /*Asset details*/
                 if (model.loanAccount.collateral.length != 0) {
                     model.asset_details = [];
@@ -326,47 +323,45 @@ define({
              }
 
         },
-        form: [
-            // {
-            //     "type": "section",
-            //     "html": '<div class="col-xs-12">' +
-            //         '<div class="box no-border">' +
-            //         '<div class="box-body" style="padding-right: 0">' +
-            //         '<sf-decorator ng-repeat="item in form.items" form="item" class="ng-scope"></sf-decorator></div></div></div>',
-            //     "items": [{
-            //         "type": "grid",
-            //         "orientation": "horizontal",
-            //         "items": [{
-            //             key: "loanAccount.linkedAccountNumber",
-            //             title: "LINKED_ACCOUNT_NUMBER",
-            //             type: "lov",
-            //             autolov: true,
-            //             readonly:true,
-            //             searchHelper: formHelper,
-            //             search: function(inputModel, form, model, context) {
-            //                 return LoanProcess.viewLoanaccount({
-            //                     urn: model.customer.urnNo
-            //                 }).$promise;
-            //             },
-            //             getListDisplayItem: function(item, index) {
-            //                 return [
-            //                     item.accountId,
-            //                     item.glSubHead,
-            //                     item.amount,
-            //                     item.npa
-            //                 ];
-            //             },
-            //             onSelect: function(valueObj, model, context) {
-            //                 model.loanAccount.npa = valueObj.npa;
-            //                 model.loanAccount.linkedAccountNumber = valueObj.accountId;
-            //             }
-            //         }, {
-            //             key: "loanAccount.npa",
-            //             title: "IS_NPA"
-            //         }]
-            //     }]
-            // }, 
-            {
+        form: [{
+                "type": "section",
+                "html": '<div class="col-xs-12">' +
+                    '<div class="box no-border">' +
+                    '<div class="box-body" style="padding-right: 0">' +
+                    '<sf-decorator ng-repeat="item in form.items" form="item" class="ng-scope"></sf-decorator></div></div></div>',
+                "items": [{
+                    "type": "grid",
+                    "orientation": "horizontal",
+                    "items": [{
+                        key: "loanAccount.linkedAccountNumber",
+                        title: "LINKED_ACCOUNT_NUMBER",
+                        type: "lov",
+                        autolov: true,
+                        readonly:true,
+                        searchHelper: formHelper,
+                        search: function(inputModel, form, model, context) {
+                            return LoanProcess.viewLoanaccount({
+                                urn: model.customer.urnNo
+                            }).$promise;
+                        },
+                        getListDisplayItem: function(item, index) {
+                            return [
+                                item.accountId,
+                                item.glSubHead,
+                                item.amount,
+                                item.npa
+                            ];
+                        },
+                        onSelect: function(valueObj, model, context) {
+                            model.loanAccount.npa = valueObj.npa;
+                            model.loanAccount.linkedAccountNumber = valueObj.accountId;
+                        }
+                    }, {
+                        key: "loanAccount.npa",
+                        title: "IS_NPA"
+                    }]
+                }]
+            }, {
                 "type": "box",
                 "readonly": true,
                 "colClass": "col-sm-12",
@@ -403,18 +398,14 @@ define({
                             "key": "loanAccount.loanAmountRequested",
                             "title": "Loan Amount Requested",
                             "type": "amount"
-
-                        }, 
-                        //{
-                        //     "key": "loanAccount.emiPaymentDateRequested",
-                        //     "title": "Requested EMI Payment Date"
-                        // },
-                        //  {
-                        //     "key": "loanAccount.expectedPortfolioInsurancePremium",
-                        //     "title": "Expected Portfolio Insurance Premium",
-                        //     "type": "amount"
-                        // }
-                    ]
+                        }, {
+                            "key": "loanAccount.emiPaymentDateRequested",
+                            "title": "Requested EMI Payment Date"
+                        }, {
+                            "key": "loanAccount.expectedPortfolioInsurancePremium",
+                            "title": "Expected Portfolio Insurance Premium",
+                            "type": "amount"
+                        }]
                     }, {
                         "type": "grid",
                         "orientation": "vertical",
@@ -430,7 +421,7 @@ define({
                             "title": "Expected Interest Rate",
                         }, {
                             "key": "loanAccount.estimatedEmi",
-                            "title": "EXPECTED_SHRAMSARATHI_EMI",
+                            "title": "EXPECTED_MAITREYA_EMI",
                             "type": "amount"
                         }, {
                             "key": "loanAccount.emiRequested",
@@ -439,81 +430,78 @@ define({
                         }]
                     }]
                 }]
-            },
-            //  {
-            //     "type": "box",
-            //     "readonly": true,
-            //     "colClass": "col-sm-12",
-            //     "overrideType": "default-view",
-            //     "title": "Additional Loan Information",
-            //     "items": [{
-            //         "type": "grid",
-            //         "orientation": "horizontal",
-            //         "items": [{
-            //             "type": "grid",
-            //             "orientation": "vertical",
-            //             "items": [{
-            //                 "key": "loanAccount.estimatedDateOfCompletion",
-            //                 "title": "Estimated Date Of Completion"
-            //             }, {
-            //                 "key": "loanAccount.productCategory",
-            //                 "title": "Product Type"
-            //             }, {
-            //                 "key": "loanAccount.customerSignDateExpected",
-            //                 "title": "Expected customer sign date"
-            //             }]
-            //         }, {
-            //             "type": "grid",
-            //             "orientation": "vertical",
-            //             "items": [{
-            //                 "key": "loanAccount.proposedHires",
-            //                 "title": "Proposed Hires",
-            //                 "type": "number"
-            //             }, {
-            //                 "key": "loanAccount.percentageIncreasedIncome",
-            //                 "title": "% of Increased Income",
-            //                 "type": "number"
-            //             }, {
-            //                 "key": "loanAccount.percentageInterestSaved",
-            //                 "title": "% of Interest Saved",
-            //                 "type": "number"
-            //             }]
-            //         }]
-            //     }]
-            // }, 
-            // {
-            //     "type": "box",
-            //     "readonly": true,
-            //     "colClass": "col-sm-12",
-            //     "overrideType": "default-view",
-            //     "title": "Deductions From Loan Amount",
-            //     "items": [{
-            //         "type": "grid",
-            //         "orientation": "horizontal",
-            //         "items": [{
-            //             "type": "grid",
-            //             "orientation": "vertical",
-            //             "items": [{
-            //                 "key": "loanAccount.expectedProcessingFeePercentage",
-            //                 "title": "Expected Processing Fee(in%)",
-            //                 "type": "number"
-            //             }, {
-            //                 "key": "loanAccount.expectedCommercialCibilCharge",
-            //                 "title": "Expected CIBIL Charges",
-            //                 "type": "amount"
-            //             }]
-            //         }, {
-            //             "type": "grid",
-            //             "orientation": "vertical",
-            //             "items": [{
-            //                 "key": "loanAccount.estimatedEmi",
-            //                 "title": "Expected Security EMI(in Rs.)",
-            //                 "type": "amount"
-            //             }]
-            //         }]
-            //     }]
-            // },
-             {
+            }, {
+                "type": "box",
+                "readonly": true,
+                "colClass": "col-sm-12",
+                "overrideType": "default-view",
+                "title": "Additional Loan Information",
+                "items": [{
+                    "type": "grid",
+                    "orientation": "horizontal",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [{
+                            "key": "loanAccount.estimatedDateOfCompletion",
+                            "title": "Estimated Date Of Completion"
+                        }, {
+                            "key": "loanAccount.productCategory",
+                            "title": "Product Type"
+                        }, {
+                            "key": "loanAccount.customerSignDateExpected",
+                            "title": "Expected customer sign date"
+                        }]
+                    }, {
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [{
+                            "key": "loanAccount.proposedHires",
+                            "title": "Proposed Hires",
+                            "type": "number"
+                        }, {
+                            "key": "loanAccount.percentageIncreasedIncome",
+                            "title": "% of Increased Income",
+                            "type": "number"
+                        }, {
+                            "key": "loanAccount.percentageInterestSaved",
+                            "title": "% of Interest Saved",
+                            "type": "number"
+                        }]
+                    }]
+                }]
+            }, {
+                "type": "box",
+                "readonly": true,
+                "colClass": "col-sm-12",
+                "overrideType": "default-view",
+                "title": "Deductions From Loan Amount",
+                "items": [{
+                    "type": "grid",
+                    "orientation": "horizontal",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [{
+                            "key": "loanAccount.expectedProcessingFeePercentage",
+                            "title": "Expected Processing Fee(in%)",
+                            "type": "number"
+                        }, {
+                            "key": "loanAccount.expectedCommercialCibilCharge",
+                            "title": "Expected CIBIL Charges",
+                            "type": "amount"
+                        }]
+                    }, {
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [{
+                            "key": "loanAccount.estimatedEmi",
+                            "title": "Expected Security EMI(in Rs.)",
+                            "type": "amount"
+                        }]
+                    }]
+                }]
+            }, {
                 "type": "box",
                 "readonly": true,
                 "colClass": "col-sm-12",
@@ -574,8 +562,7 @@ define({
                         }
                     }
                 ]
-            },
-             {
+            }, {
                 "type": "box",
                 "readonly": true,
                 "colClass": "col-sm-12",
@@ -603,37 +590,51 @@ define({
                         "items": [{
                             "key": "loanAccount.nominees[0].nomineeRelationship",
                             "title": "Relationship To Insured"
-                        }, {
-                            "key": "loanAccount.fullAddress",
-                            "title": "Address"
-                        },{
-                            // "key": "loanAccount.nominees[0].nomineeDistrict"
+                        }, {  
+                            "type": "section",                                
+                            "htmlClass": "row",
+                            "items": [
+                                {
+                                    "type": "section",
+                                    "htmlClass": "col-sm-4",
+                                    "html": '<h5>' + "Address" + '</h5>'
+                                },
+                                {
+                                    "type": "section",
+                                    "htmlClass": "col-sm-8",
+                                    "html": '<p style = "font-size: 14px; color: #555;"><strong>{{model.loanAccount.nominees[0].nomineeDoorNo}} <br />\
+                                    {{model.loanAccount.nominees[0].nomineeLocality}} <br />\
+                                    {{model.loanAccount.nominees[0].nomineeDistrict}} <br />\
+                                    {{model.loanAccount.nominees[0].nomineeState}} <br /> \
+                                    {{model.loanAccount.nominees[0].nomineePincode}} <br /> \
+                                    <br /><strong></p>\
+                                    '
+                                }]
+                                   
                         }]
                     }]
                 }]
-            }, 
-            // {
-            //     "type": "box",
-            //     "colClass": "col-sm-12",
-            //     "title": "DEVIATION_AND_MITIGATIONS",
-            //     "condition": "model.currentStage != 'ScreeningReview'",
-            //     "items": [{
-            //         "type": "section",
-            //         "colClass": "col-sm-12",
-            //         "html": '<table class="table"><colgroup><col width="20%"><col width="5%"><col width="20%"></colgroup><thead><tr><th>Parameter Name</th><th></th><th>Actual Value</th><th>Mitigant</th></tr></thead><tbody>' +
-            //             '<tr ng-repeat="item in model.deviationDetails">' +
-            //             '<td>{{ item["parameter"] }}</td>' +
-            //             '<td> <span class="square-color-box" style="background: {{ item.color_hexadecimal }}"> </span></td>' +
-            //             '<td>{{ item["deviation"] }}</td>' +
-            //             '<td><ul class="list-unstyled">' +
-            //             '<li ng-repeat="m in item.mitigants " id="{{m.mitigant}}">' +
-            //             '<input type="checkbox"  ng-model="m.selected" ng-checked="m.selected"> {{ m.mitigant }}' +
-            //             // '<input type="checkbox"  ng-model="m.selected" ng-change="model.updateChosenMitigant(m.selected,m)"> {{ m.mitigant }}' +
-            //             '</li></ul></td></tr></tbody></table>'
+            }, {
+                "type": "box",
+                "colClass": "col-sm-12",
+                "title": "DEVIATION_AND_MITIGATIONS",
+                "condition": "model.currentStage != 'ScreeningReview'",
+                "items": [{
+                    "type": "section",
+                    "colClass": "col-sm-12",
+                    "html": '<table class="table"><colgroup><col width="20%"><col width="5%"><col width="20%"></colgroup><thead><tr><th>Parameter Name</th><th></th><th>Actual Value</th><th>Mitigant</th></tr></thead><tbody>' +
+                        '<tr ng-repeat="item in model.deviationDetails">' +
+                        '<td>{{ item["parameter"] }}</td>' +
+                        '<td> <span class="square-color-box" style="background: {{ item.color_hexadecimal }}"> </span></td>' +
+                        '<td>{{ item["deviation"] }}</td>' +
+                        '<td><ul class="list-unstyled">' +
+                        '<li ng-repeat="m in item.mitigants " id="{{m.mitigant}}">' +
+                        '<input type="checkbox"  ng-model="m.selected" ng-checked="m.selected"> {{ m.mitigant }}' +
+                        // '<input type="checkbox"  ng-model="m.selected" ng-change="model.updateChosenMitigant(m.selected,m)"> {{ m.mitigant }}' +
+                        '</li></ul></td></tr></tbody></table>'
 
-            //     }]
-            // }, 
-            {
+                }]
+            }, {
             "type": "box",
             "colClass": "col-sm-12",
             "title": "LOAN_DOCUMENTS",
@@ -644,7 +645,6 @@ define({
                     "key": "loanAccount.loanDocuments",
                     "view": "fixed",
                     "startEmpty": true,
-                    "readonly":true,
                     "title": "LOAN_DOCUMENT",
                     "titleExpr": "model.loanAccount.loanDocuments[arrayIndex].document",
                     "items": [
@@ -673,12 +673,9 @@ define({
                 },
             ]
 
-            }, 
-            {
+        }, {
                 "type": "box",
                 "colClass": "col-sm-12",
-                "readonly":false,
-              
                 "title": "Loan Recommendation",
                 "items": [{
                     "type": "grid",
@@ -687,81 +684,50 @@ define({
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
+                            "key": "",
+                            "title": "Current Exposure",
+                            "type": "amount"
+                        }, {
                             "key": "loanAccount.loanAmount",
-                            "title": "LOAN_AMOUNT",
-                            "required":false
-                           // "type": "amount",                      
-                        }, 
-                        {
-                            title:"DURATION_IN_MONTHS",
-                            "key": "loanAccount.tenure", 
-                            "required":false,   
-                            "schema": {  
-                                "type": ["integer", "string"],
-                                "pattern": "^([6-9]|[1-5][0-9]|60)$"
-                            },       
+                            "title": "Loan Amount Recommended",
+                            "type": "amount",
                             onChange:function(value,form,model){
                                 computeEMI(model);
                             }
-                        }, 
-                        {
-                            "key": "loanAccount.estimatedEmi",
-                            "title": "ESTIMATED_KINARA_EMI",
-                            "required":false
-                           //"type": "amount",
-                        }, 
-                        {
-                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf10",
-                            "title": "REMARK_OF_IN_FAVOUR_LOAN",
-                            "required":false
-                           // "type": "string",       
-                        }, 
-                        {
-                            "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf11",
-                            "title": "POTENTIAL_RISK",
-                          // "type": "number",
+                        }, {
+                            "key": "loanAccount.tenure",
+                            "title": "Duration(months)"/*,
+                            "type": "number"*/
+                            ,
                             onChange:function(value,form,model){
                                 computeEMI(model);
-                            },
-                            "required":false
+                            }
+                        }, {
+                            "key": "loanAccount.interestRate",
+                            "title": "Interest Rate",
+                            "type": "number",
+                            onChange:function(value,form,model){
+                                computeEMI(model);
+                            }
                         }]
-                    },
-                     {
+                    }, {
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
-                           "type":"select",
-                            "key":"loanAccount.disbursementSchedules[0].modeOfDisbursement",
-                            "title":"MODE_OF_DISBURSEMENT",
-                            "enumCode":"mode_of_disbursement",
-                            "required":false
-                        }, 
-                        {
-                            "key":"loanAccount.firstRepaymentDate",
-                            "title":"COLLECTION_DATE",
-                            "type":"date",
-                            "required":false
-                         
-                        },
-                         {
-                            "key":"loanAccount.disbursementSchedules[0].actualDisbursementDate",
-                            "title":"DISBURSEMENT_DATE",
-                            "type":"date",
-                            "required":false
-                          
-                        },
-                        {
-                            "key":"loanAccount.disbursementSchedules[0].moratoriumPeriodInDays",
-                            "title":"GRACE_PERIOD",
-                            "required":false
-                        },
-                        {
-                            "key":"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf12",
-                            "title":"DATE",
-                            "type":"date",
-                            "required":false
-                        },
-                    ]
+                            "key": "loanAccount.estimatedEmi",
+                            "title": "ESTIMATED_KINARA_EMI",
+                            "type": "amount"
+                        }, {
+                            "key": "loanAccount.processingFeePercentage",
+                            "title": "Processing Fee(in%)"
+                        }, {
+                            "key": "loanAccount.estimatedEmi",
+                            "title": "Expected Security EMI"
+                        }, {
+                            "key": "loanAccount.commercialCibilCharge",
+                            "title": "CIBIL Charges",
+                            "type": "amount"
+                        }]
                     }]
                 }]
             }, 
@@ -827,54 +793,53 @@ define({
                                 return [];
                             }                            
                         }]
-            },
-        //     {
-        //         "type": "box",
-        //         "title": "Expected Turnover",
-        //         "readOnly": true,
-        //         "colClass": "col-sm-12",
-        //         "items":[{
-        //                 "type": "tableview",
-        //                 "key": "customerHistoryFinancials.tableData1",
-        //                 "transpose" : true,
-        //                 "title": "",
-        //                 "selectable": "false",
-        //                 "editable": "false",
-        //                 "tableConfig":{
-        //                     "searching": false,
-        //                     "paginate": false,
-        //                     "pageLength": 10,
-        //                 },
-        //                 getColumns: function() {
-        //                     return [{
-        //                         "title": "Parameter",
-        //                         "data": "actualValue",
-        //                         "render": self.strongRender
-        //                     },{
-        //                         "title": "Total Outstanding Of All Existing Loan",
-        //                         "data": "totalOutstandingAmount",
-        //                         "render": currencyRightRender
-        //                     },{
-        //                         "title": "Current Recommended Loan Amount",
-        //                         "data": "loanAmountRecommended",
-        //                         "render": currencyRightRender
-        //                     },
-        //                     {
-        //                         "title": "Annual Turnover",
-        //                         "data": "annualTurnover",
-        //                         "render": currencyRightRender
-        //                     },
-        //                     {
-        //                         "title": "Exposure To Annual Turnover",
-        //                         "data": "kinaraExposureToAnnualTurover"
-        //                     }
-        //                 ];
-        //                 },
-        //                 getActions: function() {
-        //                     return [];
-        //                 }                            
-        //             }]
-        // },
+            },{
+                "type": "box",
+                "title": "Expected Turnover",
+                "readOnly": true,
+                "colClass": "col-sm-12",
+                "items":[{
+                        "type": "tableview",
+                        "key": "customerHistoryFinancials.tableData1",
+                        "transpose" : true,
+                        "title": "",
+                        "selectable": "false",
+                        "editable": "false",
+                        "tableConfig":{
+                            "searching": false,
+                            "paginate": false,
+                            "pageLength": 10,
+                        },
+                        getColumns: function() {
+                            return [{
+                                "title": "Parameter",
+                                "data": "actualValue",
+                                "render": self.strongRender
+                            },{
+                                "title": "Total Outstanding Of All Existing Loan",
+                                "data": "totalOutstandingAmount",
+                                "render": currencyRightRender
+                            },{
+                                "title": "Current Recommended Loan Amount",
+                                "data": "loanAmountRecommended",
+                                "render": currencyRightRender
+                            },
+                            {
+                                "title": "Annual Turnover",
+                                "data": "annualTurnover",
+                                "render": currencyRightRender
+                            },
+                            {
+                                "title": "Exposure To Annual Turnover",
+                                "data": "kinaraExposureToAnnualTurover"
+                            }
+                        ];
+                        },
+                        getActions: function() {
+                            return [];
+                        }                            
+                    }]
+        },
         {
 
             "type": "box",		
@@ -1161,10 +1126,6 @@ define({
                     model.customerHistoryFinancials['tableData'].push(prepareFinancialData);
                     
                 },
-                "telecall": function(bundleModel, model, obj){
-                    $log.info("Telecall",obj);
-                    model.loanAccount.telecallingDetails = obj.telecallingDetails;   
-                },
                 "customer-history-fin-snap": function(bundleModel, model, params){
                     let prepareFinancialData={
                         'tableData':[],
@@ -1194,11 +1155,6 @@ define({
                     _.forEach(prepareFinancialData['tableData'], function(histData){
                         model.customerHistoryFinancials['tableData'].push(histData);
                         });
-                },
-                "telecall": function(bundleModel, model, obj){
-                    $log.info("Telecall",obj);
-                    model.loanAccount.telecallingDetails = obj.telecallingDetails;
-                    model.loanAccount.version = obj.version;   
                 }
             },
             actions: {
@@ -1212,13 +1168,8 @@ define({
                     })
                 },*/
                 save: function(model, formCtrl, form, $event) {
-                    
                     $log.info("Inside save()");
                     PageHelper.clearErrors();
-                    if (PageHelper.isFormInvalid(formCtrl)) {
-                        return false;
-                    }
-                    formCtrl.scope.$broadcast('schemaFormValidate');
 
                     /*DEVIATION AND MITIGATION - SAVING SELECTED MITIGANTS*/
                     
@@ -1415,6 +1366,9 @@ define({
                             model.loanAccount.loanDocuments.push(model.loanAccount.documents[k]);
                         }
                     }
+                    if (_.hasIn(model.loanAccount, 'noOfGuarantersRequired')) {
+                        model.loanAccount.noOfGuarantersRequired = -1;
+                    } 
                     Utils.confirm("Are You Sure?").then(function() {
 
                         var reqData = {
@@ -1493,10 +1447,6 @@ define({
                     PageHelper.clearErrors();
                     var nextStage = null;
                     var dedupeCustomerIdArray = [];
-                    if((model.loanAccount.currentStage =='Televerification') && (model.loanAccount.telecallingDetails.length == 0)){
-                        PageHelper.showErrors({"data": {"error":"Tele Verification should be Mandatory"}});
-                        return false;
-                    }
                     if (!validateForm(formCtrl)){
                         return;
                     }
@@ -1557,7 +1507,7 @@ define({
                             reqData.stage = 'LoanInitiation';
                         }                    
                         PageHelper.showProgress("update-loan", "Working...");
-
+                        PageHelper.showLoader();
                         if (reqData.loanAccount.currentStage == 'Screening') {
                             
                             // Dedupe call
@@ -1622,8 +1572,9 @@ define({
                                             }
 
                                             PageHelper.showProgress("update-loan", "Done.", 3000);
-                                            irfNavigator.goBack();
+                                            return navigateToQueue(model);
                                         }, function(httpRes) {
+                                            PageHelper.hideLoader();
                                             PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
                                             PageHelper.showErrors(httpRes);
                                         })
