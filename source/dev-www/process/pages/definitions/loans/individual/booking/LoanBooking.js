@@ -381,7 +381,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     {
                         "key": "loanAccount.scheduleStartDate",
                         "title": "SCHEDULE_START_DATE",
-                        "condition": "model.siteCode == 'IREPDhan'&& model.allowPreEmiInterest",
+                        "condition": "(model.siteCode == 'IREPDhan' || model.siteCode == 'shramsarathi') && model.allowPreEmiInterest",
                         "type": "date",
                         "required": true,
                         "onChange": function(value ,form ,model, event){
