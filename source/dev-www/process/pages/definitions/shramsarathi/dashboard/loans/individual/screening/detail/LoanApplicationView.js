@@ -2,10 +2,10 @@ define({
     pageUID: "shramsarathi.dashboard.loans.individual.screening.detail.LoanApplicationView",
     pageType: "Engine",
     dependencies: ["$log", "$state","LoanAccount", "Enrollment", "IndividualLoan", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "$stateParams", "$state",
-        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "SchemaResource", "LoanProcess", "irfCurrencyFilter", "irfElementsConfig"
+        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "SchemaResource", "LoanProcess", "irfCurrencyFilter", "irfElementsConfig","irfNavigator"
     ],
     $pageFn: function($log, $state,LoanAccount, Enrollment, IndividualLoan, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, $stateParams, $state,
-        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, SchemaResource, LoanProcess, irfCurrencyFilter, irfElementsConfig) {
+        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, SchemaResource, LoanProcess, irfCurrencyFilter, irfElementsConfig,irfNavigator) {
         var strongRender = function(data, type, full, meta) {
             return '<strong>'+data+'</strong>';
         }
@@ -1622,7 +1622,7 @@ define({
                                             }
 
                                             PageHelper.showProgress("update-loan", "Done.", 3000);
-                                            return navigateToQueue(model);
+                                            irfNavigator.goBack();
                                         }, function(httpRes) {
                                             PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
                                             PageHelper.showErrors(httpRes);
