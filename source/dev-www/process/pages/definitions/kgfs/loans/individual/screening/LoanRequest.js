@@ -951,19 +951,26 @@ define([],function(){
                     if (_.hasIn(model, 'loanAccount.loanPurpose2') && model.loanAccount.loanPurpose2 !=null && model.loanAccount.loanPurpose2.length > 0)
                     model.loanAccount.loanPurpose3=model.loanAccount.loanPurpose2;
                     model.loanAccount.interestRateEstimatedEMI={};
-                    var postReviewActionArray = {};
-                    if(model.loanAccount.currentStage == 'BusinessTeamReview' || model.loanAccount.currentStage == 'CreditOfficerReview' || model.loanAccount.currentStage == 'CreditManagerReview' || model.loanAccount.currentStage == 'CBOCreditHeadReview' || model.loanAccount.currentStage == 'CEOMDReview') {
-                        postReviewActionArray = {
-                            "SEND_BACK": "SEND_BACK",
-                            "PROCEED": "PROCEED"
-                        }
-                    } else {
-                        postReviewActionArray = {
-                            "REJECT": "REJECT",
-                            "SEND_BACK": "SEND_BACK",
-                            "PROCEED": "PROCEED"
-                        }
+                    
+                    var postReviewActionArray = {
+                        "REJECT": "REJECT",
+                        "SEND_BACK": "SEND_BACK",
+                        "PROCEED": "PROCEED"
                     }
+                    
+                    //var postReviewActionArray = {};
+                    // if(model.loanAccount.currentStage == 'BusinessTeamReview' || model.loanAccount.currentStage == 'CreditOfficerReview' || model.loanAccount.currentStage == 'CreditManagerReview' || model.loanAccount.currentStage == 'CBOCreditHeadReview' || model.loanAccount.currentStage == 'CEOMDReview') {
+                    //     postReviewActionArray = {
+                    //         "SEND_BACK": "SEND_BACK",
+                    //         "PROCEED": "PROCEED"
+                    //     }
+                    // } else {
+                    //     postReviewActionArray = {
+                    //         "REJECT": "REJECT",
+                    //         "SEND_BACK": "SEND_BACK",
+                    //         "PROCEED": "PROCEED"
+                    //     }
+                    // }
                     
                     defaultConfiguration(model,true);
 
