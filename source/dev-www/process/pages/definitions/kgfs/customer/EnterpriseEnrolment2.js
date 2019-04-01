@@ -3465,11 +3465,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     if(model.currentStage != 'Screening' && model.currentStage != 'Application'){
                         model.customer.enterprise.initialEstimateMonthlySale = (model.customer.enterprise.monthlyBusinessExpenses) ? Number(model.customer.enterprise.monthlyBusinessExpenses * 4):0;
                         if(model.customer.enterprise){
-                            model.customer.enterprise.serviceTaxNumber = model.customer.enterprise.serviceTaxNumber? Number(model.customer.enterprise.serviceTaxNumber):0;
+                            model.customer.enterprise.serviceTaxNumber = model.customer.enterprise.serviceTaxNumber? model.customer.enterprise.serviceTaxNumber:0;
                             model.customer.enterprise.monthlyBusinessExpenses = model.customer.enterprise.monthlyBusinessExpenses? Number(model.customer.enterprise.monthlyBusinessExpenses):0;
                             model.customer.enterprise.insurancePremiumAmount = model.customer.enterprise.insurancePremiumAmount? Number(model.customer.enterprise.insurancePremiumAmount):0;
                             model.customer.enterprise.coOwnerSalary = model.customer.enterprise.coOwnerSalary? Number(model.customer.enterprise.coOwnerSalary):0;
-                            model.customer.enterprise.serviceTaxNumber = model.customer.enterprise.serviceTaxNumber? Number(model.customer.enterprise.serviceTaxNumber):0;
                         }
                         if (model.customer.expenditures.length != 0) {
                             _.forEach(model.customer.expenditures, function (expenditure, index) {
