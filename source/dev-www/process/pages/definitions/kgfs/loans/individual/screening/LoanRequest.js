@@ -944,10 +944,13 @@ define([],function(){
                     model.loanAccount = model.loanProcess.loanAccount;
                     if(model.loanAccount.loanType == 'JEWEL' && model.loanAccount.currentStage == 'Screening'){
                         getGoldRate(model);
-                        model.loanAccount.jewelLoanDetails = {};
+                        //model.loanAccount.jewelLoanDetails = {};
                         model.loanAccount.jewelLoanDetails.encoreClosed = false;
                         model.loanAccount.jewelLoanDetails.jewelPouchLocationType = "BRANCH";
                     }
+                    if(model.loanAccount.loanType == 'JEWEL')
+                        model.loanAccount.jewelLoanDetails.jewelPouchNo=Number(model.loanAccount.jewelLoanDetails.jewelPouchNo);
+
                     if (_.hasIn(model, 'loanAccount.loanPurpose2') && model.loanAccount.loanPurpose2 !=null && model.loanAccount.loanPurpose2.length > 0)
                     model.loanAccount.loanPurpose3=model.loanAccount.loanPurpose2;
                     model.loanAccount.interestRateEstimatedEMI={};
@@ -957,6 +960,8 @@ define([],function(){
                         "SEND_BACK": "SEND_BACK",
                         "PROCEED": "PROCEED"
                     }
+
+
                     
                     //var postReviewActionArray = {};
                     // if(model.loanAccount.currentStage == 'BusinessTeamReview' || model.loanAccount.currentStage == 'CreditOfficerReview' || model.loanAccount.currentStage == 'CreditManagerReview' || model.loanAccount.currentStage == 'CBOCreditHeadReview' || model.loanAccount.currentStage == 'CEOMDReview') {
