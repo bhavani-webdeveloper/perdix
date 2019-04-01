@@ -3210,7 +3210,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                         "incomeType": {
                                                             "key": "customer.familyMembers[].incomes[].incomeType",
                                                             "title": "INCOME_TYPE",
-                                                            "orderNo": 40
+                                                            "orderNo": 10
                                                         },
                                                         "frequency": {
                                                             key: "customer.familyMembers[].incomes[].frequency",
