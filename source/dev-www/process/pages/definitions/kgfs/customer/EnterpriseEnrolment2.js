@@ -3851,11 +3851,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 
                                 model.customer.isCaptured = true
                                 BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer});
-                                
                                 if(model.currentStage == 'CreditAppraisal'){    
                                     model.customer.isCreditAppraisal = true
-                                    BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer});
-                                    $state.reload();
+                                    BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer});                                    
                                 }
 
                                 BundleManager.pushEvent(model._bundlePageObj.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
