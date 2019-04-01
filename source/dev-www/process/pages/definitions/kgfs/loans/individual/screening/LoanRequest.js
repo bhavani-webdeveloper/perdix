@@ -334,7 +334,7 @@ define([],function(){
                                         {
                                             model.review.preStage = model.loanAccount.remarksHistory[i].preStage;
                                             model.review.targetStage = model.loanAccount.remarksHistory[i].preStage;
-                                            model.loanProcess.stage = model.loanAccount.remarksHistory[i].preStage;
+                                            //model.loanProcess.stage = model.loanAccount.remarksHistory[i].preStage;
                                         }
                                     }
                                 }
@@ -1614,6 +1614,11 @@ define([],function(){
                             PageHelper.showLoader();
                        if (model.loanProcess.remarks==null || model.loanProcess.remarks =="" || model.review.targetStage ==null || model.review.targetStage ==""){
                                PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
+                               PageHelper.hideLoader();
+                               return false;
+                        }
+                         if (model.loanProcess.stage==null || model.loanProcess.stage ==""){
+                               PageHelper.showProgress("update-loan", "Send to Stage is mandatory", 3000);
                                PageHelper.hideLoader();
                                return false;
                         }
