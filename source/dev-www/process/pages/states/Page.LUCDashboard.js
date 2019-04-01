@@ -23,7 +23,7 @@ irf.pages.controller("LUCDashboardCtrl", ['$log', '$scope', 'PagesDefinition', '
 		        
 		        if (centres && centres.length) {
 						for (var i = 0; i < centres.length; i++) {
-							centreId.push(centres[i].centreId);
+							centreId.push(centres[i].id);
 						}
 					}
 
