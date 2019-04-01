@@ -94,7 +94,7 @@ define({
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'ApplicationReview',
-	                    'branchId':searchOptions.branchName,
+	                    'branchId':searchOptions.branch,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'status':searchOptions.status,

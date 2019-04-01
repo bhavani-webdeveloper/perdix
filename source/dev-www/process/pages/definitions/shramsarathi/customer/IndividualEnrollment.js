@@ -2307,8 +2307,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     },
                     "IndividualFinancials.expenditures.expenditureSource": {
                         "required": true,
-                        //"type":"select",
-                        "enumCode":"EXPENSE_TYPE"
+                        "key":"customer.expenditures[].expenseType",
+                        "enumCode":"expense_from"
                     },
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth": {
                         "required": false
@@ -2844,7 +2844,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                         "expenditures":{
                                             "items":{
                                                 "from":{
-                                                    "key":"customer.expenditures[].expenseType",
+                                                    "key":"customer.expenditures[].expenditureSource",
                                                     "title":"EXPENSE_FROM",
                                                     "type":"select",
                                                     "enumCode":"expense_type",

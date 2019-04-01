@@ -912,7 +912,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualFinancials.expenditures.expenditureSource": {
                                     "required": true,
                                     //"type":"select",
-                                    "enumCode":"expense_type"
+                                    "enumCode":"expense_from"
                                 },
                                 // "FamilyDetails.familyMembers.familyMemberFirstName": {
                                 //     "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
@@ -1753,7 +1753,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualFinancials.expenditures.expenditureSource": {
                                     "required": true,
                                     //"type":"select",
-                                    "enumCode":"expense_type"
+                                    "enumCode":"EXPENSE_TYPE"
                                 },
                                 // "FamilyDetails.familyMembers.familyMemberFirstName": {
                                 //     "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
@@ -2365,9 +2365,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "IndividualFinancials.expenditures.expenditureSource": {
                         "required": true,
-                        //"type":"select",
-                        "enumCode":"expense_type"
+                        "key":"customer.expenditures[].expenseType",
+                        "enumCode":"expense_from"
                     },
+                    
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth": {
                         "required": false
                     },
@@ -2913,20 +2914,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         }
                                     }
                                 },
-                                // "IndividualFinancials":{
-                                //     "items":{
-                                //         "expenditures":{
-                                //             "items":{
-                                //                 "from":{
-                                //                     "key":"customer.expenditures[].expenseType",
-                                //                     "title":"EXPENSE_FROM",
-                                //                     "type":"select",
-                                //                     "enumCode":"expense_type"
-                                //                 },
-                                //             }
-                                //         },
-                                //     }
-                                // },
+                                "IndividualFinancials":{
+                                    "items":{
+                                        "expenditures":{
+                                            "items":{
+                                                "from":{
+                                                    "key":"customer.expenditures[].expenditureSource",
+                                                    "title":"EXPENSE_FROM",
+                                                    "type":"select",
+                                                    "enumCode":"expense_type",
+                                                    "required":true
+                                                },
+                                            }
+                                        },
+                                    }
+                                },
                                 "KYC": {
                                     "items": {
                                         "firstName": {

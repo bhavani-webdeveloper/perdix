@@ -97,9 +97,9 @@ define({
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-	                    'stage': 'Televerification',
+						'stage': 'Televerification',
+						'branchId':searchOptions.branch,
 	                    'centreCode':  searchOptions.centre,
-	                    'branchName':searchOptions.branchName,
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
