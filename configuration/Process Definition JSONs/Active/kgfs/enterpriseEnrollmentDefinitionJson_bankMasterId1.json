@@ -2269,7 +2269,7 @@
                         "type": "number",
                         "minimum": 0,
                         "maximum": 10000000,
-                        "captureStages": ["Stage01", "Stage02", "EDF", "Completed"]
+                        "captureStages": ["BasicEnrolment", "Completed"]
                     },
                     "monthlyBusinessExpenses": {
                         "title": "WEEKLY_SALES",
