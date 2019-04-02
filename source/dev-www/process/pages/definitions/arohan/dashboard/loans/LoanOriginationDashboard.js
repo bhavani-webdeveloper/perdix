@@ -15,20 +15,20 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             "Page/Engine/arohan.dashboard.loans.individual.screening.ScreeningReviewQueue",
             "Page/Engine/arohan.dashboard.loans.individual.screening.ApplicationQueue",  
             "Page/Engine/arohan.dashboard.loans.individual.screening.ApplicationReviewQueue", 
-            "Page/Engine/arohan.dashboard.loans.individual.screening.ScrutinyQueue",  
-            "Page/Engine/arohan.dashboard.loans.individual.screening.FieldAppraisalQueue",
-            "Page/Engine/arohan.dashboard.loans.individual.screening.RcuQueue",  
-            "Page/Engine/arohan.dashboard.loans.individual.screening.FieldAppraisalReviewQueue",
-            "Page/Engine/arohan.dashboard.loans.individual.screening.ZonalRiskReviewQueue",
-            "Page/Engine/arohan.dashboard.loans.individual.screening.CentralRiskReviewQueue",
+            //"Page/Engine/arohan.dashboard.loans.individual.screening.ScrutinyQueue",  
+            //"Page/Engine/arohan.dashboard.loans.individual.screening.FieldAppraisalQueue",
+            //"Page/Engine/arohan.dashboard.loans.individual.screening.RcuQueue",  
+            //"Page/Engine/arohan.dashboard.loans.individual.screening.FieldAppraisalReviewQueue",
+            //"Page/Engine/arohan.dashboard.loans.individual.screening.ZonalRiskReviewQueue",
+            //"Page/Engine/arohan.dashboard.loans.individual.screening.CentralRiskReviewQueue",
             // "Page/Engine/arohan.dashboard.loans.individual.screening.FieldAppraisalReview",
             "Page/Engine/arohan.dashboard.loans.individual.screening.CreditCommitteeReviewQueue",
             "Page/Engine/arohan.dashboard.loans.individual.screening.LoanSanctionQueue",
             "Page/Engine/arohan.dashboard.loans.individual.screening.RejectedQueue",
-            "Page/Engine/arohan.dashboard.loans.individual.screening.BranchNewConversationQueue",
-            "Page/Engine/arohan.dashboard.loans.individual.screening.BranchRepliedConversationQueue",
-            "Page/Engine/arohan.dashboard.loans.individual.screening.SpokeNewConversationQueue", // sql done
-            "Page/Engine/arohan.dashboard.loans.individual.screening.SpokeRepliedConversationQueue",
+            //"Page/Engine/arohan.dashboard.loans.individual.screening.BranchNewConversationQueue",
+            //"Page/Engine/arohan.dashboard.loans.individual.screening.BranchRepliedConversationQueue",
+            //"Page/Engine/arohan.dashboard.loans.individual.screening.SpokeNewConversationQueue", // sql done
+            //"Page/Engine/arohan.dashboard.loans.individual.screening.SpokeRepliedConversationQueue",
            ]
     };
 
