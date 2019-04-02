@@ -14,7 +14,13 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             "Page/Engine/arohan.dashboard.loans.individual.screening.ScreeningQueue",
             "Page/Engine/arohan.dashboard.loans.individual.screening.ScreeningReviewQueue",
             "Page/Engine/arohan.dashboard.loans.individual.screening.ApplicationQueue",  
-            "Page/Engine/arohan.dashboard.loans.individual.screening.ApplicationReviewQueue", 
+            "Page/Engine/arohan.dashboard.loans.individual.screening.CmRecommendationReviewQueue",
+            "Page/Engine/arohan.dashboard.loans.individual.screening.AcmRecommendationReviewQueue",
+            "Page/Engine/arohan.dashboard.loans.individual.screening.AcmApprovalReviewQueue",
+            "Page/Engine/arohan.dashboard.loans.individual.screening.NcmApprovalReviewQueue",
+            "Page/Engine/arohan.dashboard.loans.individual.screening.BhApprovalReviewQueue",
+            "Page/Engine/arohan.dashboard.loans.individual.screening.HorApprovalReviewQueue",
+            //"page/Engine/arohan.dashboard.loans.individual.screening.AcmApprovalReviewQueue",
             //"Page/Engine/arohan.dashboard.loans.individual.screening.ScrutinyQueue",  
             //"Page/Engine/arohan.dashboard.loans.individual.screening.FieldAppraisalQueue",
             //"Page/Engine/arohan.dashboard.loans.individual.screening.RcuQueue",  
@@ -23,7 +29,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             //"Page/Engine/arohan.dashboard.loans.individual.screening.CentralRiskReviewQueue",
             // "Page/Engine/arohan.dashboard.loans.individual.screening.FieldAppraisalReview",
             "Page/Engine/arohan.dashboard.loans.individual.screening.CreditCommitteeReviewQueue",
-            "Page/Engine/arohan.dashboard.loans.individual.screening.LoanSanctionQueue",
+            //"Page/Engine/arohan.dashboard.loans.individual.screening.LoanSanctionQueue",
             "Page/Engine/arohan.dashboard.loans.individual.screening.RejectedQueue",
             //"Page/Engine/arohan.dashboard.loans.individual.screening.BranchNewConversationQueue",
             //"Page/Engine/arohan.dashboard.loans.individual.screening.BranchRepliedConversationQueue",
@@ -71,6 +77,74 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
                 zrrqMenu.data = Number(response.headers['x-total-count']);
             }, function() {
                 zrrqMenu.data = '-';
+            });
+        }
+        var acmMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard.loans.individual.screening.AcmApprovalReviewQueue"];
+        if (acmMenu) {
+            IndividualLoan.search({
+                'stage': 'AcmApprovalReviewQueue',
+                'enterprisePincode': '',
+                'applicantName': '',
+                'area': '',
+                'villageName': '',
+                'customerName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response, headerGetter) {
+                acmMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                acmMenu.data = '-';
+            });
+        }
+        var ncmMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard.loans.individual.screening.NcmApprovalReviewQueue"];
+        if (ncmMenu) {
+            IndividualLoan.search({
+                'stage': 'NcmApprovalReviewQueue',
+                'enterprisePincode': '',
+                'applicantName': '',
+                'area': '',
+                'villageName': '',
+                'customerName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response, headerGetter) {
+                ncmMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                ncmMenu.data = '-';
+            });
+        }
+        var bhMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard.loans.individual.screening.BhApprovalReviewQueue"];
+        if (bhMenu) {
+            IndividualLoan.search({
+                'stage': 'BhApprovalReviewQueue',
+                'enterprisePincode': '',
+                'applicantName': '',
+                'area': '',
+                'villageName': '',
+                'customerName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response, headerGetter) {
+                bhMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                bhMenu.data = '-';
+            });
+        }
+        var horMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard.loans.individual.screening.HorApprovalReviewQueue"];
+        if (horMenu) {
+            IndividualLoan.search({
+                'stage': 'HorApprovalReviewQueue',
+                'enterprisePincode': '',
+                'applicantName': '',
+                'area': '',
+                'villageName': '',
+                'customerName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response, headerGetter) {
+                horMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                horMenu.data = '-';
             });
         }
         var ccrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard.loans.individual.screening.CreditCommitteeReviewQueue"];
@@ -277,10 +351,10 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard
                 });
             }
 //
-        var arqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard.loans.individual.screening.ApplicationReviewQueue"];
+        var arqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard.loans.individual.screening.CmRecommendationReviewQueue"];
         if (arqMenu) {
             IndividualLoan.search({
-                'stage': 'ApplicationReview',
+                'stage': 'CmRecommendationReviewQueue',
                 'enterprisePincode': '',
                 'applicantName': '',
                 'area': '',
@@ -292,6 +366,24 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard
                 arqMenu.data = Number(response.headers['x-total-count']);
             }, function() {
                 arqMenu.data = '-';
+            });
+        }
+
+        var acmrMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard.loans.individual.screening.AcmRecommendationReviewQueue"];
+        if (acmrMenu) {
+            IndividualLoan.search({
+                'stage': 'AcmRecommendationReviewQueue',
+                'enterprisePincode': '',
+                'applicantName': '',
+                'area': '',
+                'villageName': '',
+                'customerName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response, headerGetter) {
+                acmrMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                acmrMenu.data = '-';
             });
         }
 
