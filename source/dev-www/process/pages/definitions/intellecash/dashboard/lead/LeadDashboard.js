@@ -13,9 +13,10 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             "Page/Engine/intellecash.dashboard.lead.IncompleteLeadQueue",
             "Page/Engine/intellecash.dashboard.lead.LeadFollowUpQueue",
             "Page/Engine/intellecash.dashboard.lead.ReadyForScreeningQueue",
+            "Page/Engine/intellecash.dashboard.lead.LeadRejectedQueue",
             "Page/Engine/intellecash.dashboard.lead.LeadBulkUpload",
             "Page/Engine/intellecash.dashboard.lead.LeadAssignmentPendingQueue",
-            "Page/Engine/intellecash.dashboard.lead.LeadRejectedQueue",
+            
 
         ]
        
