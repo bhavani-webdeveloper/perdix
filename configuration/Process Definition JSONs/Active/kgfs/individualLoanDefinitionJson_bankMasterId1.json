@@ -4035,7 +4035,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "DocumentVerification","LoanBooking", "Completed","DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation"
+                         "DocumentVerification","LoanBooking", "Completed","DocumentUpload", "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation"
                       ]
                    },
                    "document":{
@@ -4044,7 +4044,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "DocumentVerification", "LoanBooking","Completed","DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation"
+                         "DocumentVerification", "LoanBooking","Completed","DocumentUpload", "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation"
                       ]
                    },
                    "remarks":{
@@ -4053,7 +4053,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","DocumentVerification","LoanBooking","Completed","LinkedAccountVerification"
+                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","DocumentVerification","LoanBooking","Completed","LinkedAccountVerification","LoanInitiation"
                       ]
                    },
                    "documentStatus":{
@@ -4062,7 +4062,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanBooking","LinkedAccountVerification"
+                        "LoanBooking","LinkedAccountVerification","Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","LoanInitiation"
                      ]
                    },
                    "rejectReason":{
@@ -4071,7 +4071,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","LoanBooking","LinkedAccountVerification"
+                        "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","LoanBooking","LinkedAccountVerification","LoanInitiation"
                      ]
                    }
                 }
