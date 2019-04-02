@@ -81,6 +81,10 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 "readonly": true,
                                 "title":"VILLAGE"
                             },
+                            "FamilyDetails.familyMembers":{
+                                title: "MIGRANT_DETAILS"
+                            },
+                          
                             "ContactInformation.district": {
                                 "readonly": true
                             },
