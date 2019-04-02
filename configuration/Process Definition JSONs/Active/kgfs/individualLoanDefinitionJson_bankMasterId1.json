@@ -3895,7 +3895,7 @@
                       "title":"mitigatedStatus",
                       "type":"boolean",
                       "captureStages":[
-                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction"
+                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","BusinessTeamReview","CreditOfficerReview","CreditManagerReview","CBOCreditHeadReview","CEOMDReview"
                       ]
                    },
                    "riskScore":{
@@ -3969,6 +3969,13 @@
                    "captureStages": [
                       "Screening", "LoanInitiation", "PendingForPartner"
                    ]
+                },
+                "udf10": {
+                  "title": "Boom Box Ref Number",
+                  "type": "string",
+                  "captureStages": [
+                     "Screening", "LoanInitiation", "PendingForPartner"
+                  ]
                 }
                }
           },

@@ -285,20 +285,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             //     "readonly": true
                                                             // }
                                                         ]                                                    
-                                                    },{
-                                                        "type": "fieldset",
-                                                        "title": "Remarks",
-                                                        "items":[
-                                                            {
-                                                                "title":"REMARKS",
-                                                                "type":"text"
-                                                            },
-                                                            {
-                                                                "title":"FEEDBACK",
-                                                                "type":"textarea"
-                                                            }
-                                                        ]
-                                                    }
+                                                    },
+                                                    // {
+                                                    //     "type": "fieldset",
+                                                    //     "title": "Remarks",
+                                                    //     "items":[
+                                                    //         {
+                                                    //             "title":"REMARKS",
+                                                    //             "type":"text"
+                                                    //         },
+                                                    //         {
+                                                    //             "title":"FEEDBACK",
+                                                    //             "type":"textarea"
+                                                    //         }
+                                                    //     ]
+                                                    // }
                                                 ]
                                             },
                                             {
