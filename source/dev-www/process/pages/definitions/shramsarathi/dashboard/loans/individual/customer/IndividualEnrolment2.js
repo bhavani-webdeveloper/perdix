@@ -2719,7 +2719,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                       
                   
                     // }else{
-                        BundleManager.broadcastEvent('Enrollment2', model);
+                        //BundleManager.broadcastEvent('Enrollment2', model);
                     model.enrolmentProcess.currentStage = model.currentStage;
                     model.customer = model.enrolmentProcess.customer;
                     model.customer.addressPfSameAsIdProof="NO";
