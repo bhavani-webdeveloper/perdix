@@ -1176,7 +1176,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                                 if ( model.siteCode == 'kinara' && (postData.loanCollection.instrumentType == 'CASH' || postData.loanCollection.instrumentType=='CHQ')) {
                                                     postData.stage = "BranchDeposit";
                                                 } else if (model.siteCode != 'kinara' && postData.loanCollection.instrumentType == 'CASH') {
-                                                    postData.stage = "Deposit";
+                                                    resp.stage = "Deposit";
                                                 } else if (postData.loanCollection.instrumentType == 'ACH') {
                                                     // resp.loanCollection.instrumentType = "NEFT";
                                                     resp.loanCollection.scheduleDemandAmount = resp.loanCollection.repaymentAmount;

@@ -171,11 +171,13 @@ define({
                                         "key": "UIUDF.family_fields.family_member_count",
                                         "title": "No. of Family Members",
                                         "type": "number"
-                                    }, {
-                                        "key": "UIUDF.family_fields.dependent_family_member",
-                                        "title": "No. of Dependent Family Members",
-                                        "type": "number"
-                                    }]
+                                    },
+                                    //  {
+                                    //     "key": "UIUDF.family_fields.dependent_family_member",
+                                    //     "title": "No. of Dependent Family Members",
+                                    //     "type": "number"
+                                    // }
+                                ]
                                 }, {
                                     "type": "grid",
                                     "orientation": "vertical",
@@ -798,8 +800,14 @@ define({
                                         "title": "NO_OF_INSTALLMENT_PAID",
                                         "data": "noOfInstalmentPaid",
                                         render: function(data, type, full, meta) {
-                                            if (data) return data;
-                                            return full['noOfInstalmentPaid'].toString();
+                                            if (data==0) {
+                                                return "Installment";
+                                            }
+                                            else{
+                                                return "Lumpsum";
+                                            }
+                                            
+                                            //return full['noOfInstalmentPaid'].toString();
                                         }
     
                                     }, {
@@ -1052,29 +1060,31 @@ define({
     
                                 }]
                             }]
-                        }, {
-                            "type": "expandablesection",
-                            "items": [{
-                                "type": "section",
-                                "colClass": "col-sm-12",
-                                "html": '<div>' +
-                                    '<table class="table">' +
-                                    '<colgroup>' +
-                                    '<col width="30%"> <col width="40%"> <col width="30%">' +
-                                    '</colgroup>' +
-                                    '<tbody>' +
-                                    '<tr class="table-sub-header"> <th>{{"INCOME" | translate}}</th> <th></th> <th>{{model.UIUDF.income[0].incomes[0].incomeEarned | irfCurrency}}</th> </tr>' +
-                                    //'<tr> <td></td> <td>{{"SALARY_FROM_BUSINESS" | translate}}</td> <td>{{household.salaryFromBusiness | irfCurrency}}</td> </tr>' +
-                                    //'<tr> <td></td> <td>{{"OTHER_INCOME_SALARIES" | translate}}</td> <td>{{household.otherIncomeSalaries | irfCurrency}}</td> </tr>' +
-                                    '<tr> <td></td> <td>{{"FAMILY_MEMBER_INCOMES" | translate}}</td> <td>{{model.UIUDF.income[0].incomes[0].incomeEarned | irfCurrency}}</td> </tr>' +
-                                    '<tr class="table-sub-header"> <th>{{"EXPENSES" | translate}}</th> <th></th> <th>{{model.UIUDF.expenditures[0].annualExpenses | irfCurrency}}</th> </tr>' +
-                                    //'<tr> <td></td> <td>{{"DECLARED_EDUCATIONAL_EXPENSE" | translate}}</td> <td>{{household.declaredEducationExpense | irfCurrency}}</td> </tr>' +
-                                    //'<tr> <td></td> <td>{{"EMI_HOUSEHOLD_LIABILITIES" | translate}}</td> <td>{{household.emiHouseholdLiabilities | irfCurrency}}</td> </tr>' +
-                                    '<tr class="table-bottom-summary"> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td></td> <td>{{ model.UIUDF.income[0].incomes[0].incomeEarned - model.UIUDF.expenditures[0].annualExpenses| irfCurrency}}</td> </tr>' +
-                                    '</tbody>' +
-                                    '</table>' + '</div>'
-                            }]
-                        }]
+                        }, 
+                        // {
+                        //     "type": "expandablesection",
+                        //     "items": [{
+                        //         "type": "section",
+                        //         "colClass": "col-sm-12",
+                        //         "html": '<div>' +
+                        //             '<table class="table">' +
+                        //             '<colgroup>' +
+                        //             '<col width="30%"> <col width="40%"> <col width="30%">' +
+                        //             '</colgroup>' +
+                        //             '<tbody>' +
+                        //             '<tr class="table-sub-header"> <th>{{"INCOME" | translate}}</th> <th></th> <th>{{model.UIUDF.income[0].incomes[0].incomeEarned | irfCurrency}}</th> </tr>' +
+                        //             //'<tr> <td></td> <td>{{"SALARY_FROM_BUSINESS" | translate}}</td> <td>{{household.salaryFromBusiness | irfCurrency}}</td> </tr>' +
+                        //             //'<tr> <td></td> <td>{{"OTHER_INCOME_SALARIES" | translate}}</td> <td>{{household.otherIncomeSalaries | irfCurrency}}</td> </tr>' +
+                        //             '<tr> <td></td> <td>{{"FAMILY_MEMBER_INCOMES" | translate}}</td> <td>{{model.UIUDF.income[0].incomes[0].incomeEarned | irfCurrency}}</td> </tr>' +
+                        //             '<tr class="table-sub-header"> <th>{{"EXPENSES" | translate}}</th> <th></th> <th>{{model.UIUDF.expenditures[0].annualExpenses | irfCurrency}}</th> </tr>' +
+                        //             //'<tr> <td></td> <td>{{"DECLARED_EDUCATIONAL_EXPENSE" | translate}}</td> <td>{{household.declaredEducationExpense | irfCurrency}}</td> </tr>' +
+                        //             //'<tr> <td></td> <td>{{"EMI_HOUSEHOLD_LIABILITIES" | translate}}</td> <td>{{household.emiHouseholdLiabilities | irfCurrency}}</td> </tr>' +
+                        //             '<tr class="table-bottom-summary"> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td></td> <td>{{ model.UIUDF.income[0].incomes[0].incomeEarned - model.UIUDF.expenditures[0].annualExpenses| irfCurrency}}</td> </tr>' +
+                        //             '</tbody>' +
+                        //             '</table>' + '</div>'
+                        //     }]
+                        // }
+                    ]
                     }, {
                         "type": "box",
                         "colClass": "col-sm-12",

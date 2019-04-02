@@ -9,7 +9,7 @@ define({
 			"title": "SANCTION_QUEUE", 
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				// model.branch = branch;
+				model.branch = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized");
 			},
 			definition: {
@@ -81,8 +81,8 @@ define({
 						'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
-	                    'villageName':searchOptions.villageName,
-	                    'branchName': searchOptions.branchName,
+						'villageName':searchOptions.villageName,
+	                    'branchId': searchOptions.branch,
 	                    'centreCode': searchOptions.centre,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,

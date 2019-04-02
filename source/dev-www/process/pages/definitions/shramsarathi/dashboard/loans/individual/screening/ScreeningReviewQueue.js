@@ -17,6 +17,7 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.scr
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				// model.branch = branch;
+				model.branch = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized");
 
 			},
@@ -94,7 +95,7 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.scr
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-	                    'branchName':searchOptions.branchName,
+	                    'branchId':searchOptions.branch,
 	                    'stage': 'ScreeningReview',
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,

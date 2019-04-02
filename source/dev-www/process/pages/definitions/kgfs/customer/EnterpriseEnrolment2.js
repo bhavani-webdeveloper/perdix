@@ -244,7 +244,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "orderNo": 100,
                         "required": false
                     },
-                    "EnterpriseInformation.monthlyTurnover": {
+                    "EnterpriseInformation.serviceTaxNumber": {
                         "orderNo": 110
                     },
                     "EnterpriseInformation.noOfPartners": {
@@ -583,8 +583,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 "title": "BRANCH_NAME",
                                 "required":true
                             },
-                            "monthlyTurnover": {
-                                "key": "customer.enterprise.monthlyTurnover",
+                            "serviceTaxNumber": {
+                                "key": "customer.enterprise.serviceTaxNumber",
                                 "type": "text",
                                 "title": "GST_NUMBER",
                                 "required":true,
@@ -2151,7 +2151,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "EnterpriseInformation.distanceFromBranch",
                     "EnterpriseInformation.ownership",
                     "EnterpriseInformation.businessConstitution",
-                    "EnterpriseInformation.monthlyTurnover",
+                    "EnterpriseInformation.serviceTaxNumber",
                     "EnterpriseInformation.noOfPartners",
                     "EnterpriseInformation.companyRegistered",
                     "EnterpriseInformation.enterpriseRegistrations",
@@ -3465,11 +3465,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     if(model.currentStage != 'Screening' && model.currentStage != 'Application'){
                         model.customer.enterprise.initialEstimateMonthlySale = (model.customer.enterprise.monthlyBusinessExpenses) ? Number(model.customer.enterprise.monthlyBusinessExpenses * 4):0;
                         if(model.customer.enterprise){
-                            model.customer.enterprise.monthlyTurnover = model.customer.enterprise.monthlyTurnover? Number(model.customer.enterprise.monthlyTurnover):0;
+                            model.customer.enterprise.serviceTaxNumber = model.customer.enterprise.serviceTaxNumber? model.customer.enterprise.serviceTaxNumber:0;
                             model.customer.enterprise.monthlyBusinessExpenses = model.customer.enterprise.monthlyBusinessExpenses? Number(model.customer.enterprise.monthlyBusinessExpenses):0;
                             model.customer.enterprise.insurancePremiumAmount = model.customer.enterprise.insurancePremiumAmount? Number(model.customer.enterprise.insurancePremiumAmount):0;
                             model.customer.enterprise.coOwnerSalary = model.customer.enterprise.coOwnerSalary? Number(model.customer.enterprise.coOwnerSalary):0;
-                            model.customer.enterprise.monthlyTurnover = model.customer.enterprise.monthlyTurnover? Number(model.customer.enterprise.monthlyTurnover):0;
                         }
                         if (model.customer.expenditures.length != 0) {
                             _.forEach(model.customer.expenditures, function (expenditure, index) {
@@ -3560,6 +3559,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             getBusinessExpenseData('value', model, 'row');
                             getPersonalExpenses('value', model, 'row');
                             getOtherBusinessIncomeDet('', model, '') ;
+                        }
+
+                        if(model.customer.enterprise.employeeSalary && model.customer.enterprise.employeeSalary>0){
+                            model.customer.isCreditAppraisal = true
+                            BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer});
                         }
                     }
                     
@@ -3851,8 +3855,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 
                                 model.customer.isCaptured = true
                                 BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer});
-                                
-                                if(model.currentStage == 'CreditAppraisal'){    
+                                if(model.currentStage == 'CreditAppraisal'){   
                                     model.customer.isCreditAppraisal = true
                                     BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer});
                                     $state.reload();

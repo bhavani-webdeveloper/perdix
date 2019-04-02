@@ -2264,6 +2264,13 @@
                         "maximum": 10000000,
                         "captureStages": ["BasicEnrolment", "Completed"]
                     },
+                    "serviceTaxNumber": {
+                        "title": "serviceTaxNumber",
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 10000000,
+                        "captureStages": ["BasicEnrolment", "Completed"]
+                    },
                     "monthlyBusinessExpenses": {
                         "title": "WEEKLY_SALES",
                         "type": "number",

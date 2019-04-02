@@ -9,7 +9,7 @@ define({////shramsarathi.dashboard.loans.individual.screening.FieldAppraisal
 			"title": "CREDIT_COMMITTEE_REVIEW", 
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				
+				model.branch = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized");
 			},
 			definition: {
@@ -91,8 +91,8 @@ define({////shramsarathi.dashboard.loans.individual.screening.FieldAppraisal
 						'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
-	                    'villageName':searchOptions.villageName,	
-	                    'branchName': searchOptions.branchName,
+						'villageName':searchOptions.villageName,
+	                    'branchId': searchOptions.branch,
 	                    'status':searchOptions.status,
 	                    'centreCode': searchOptions.centre,
 	                    'customerName': searchOptions.businessName,

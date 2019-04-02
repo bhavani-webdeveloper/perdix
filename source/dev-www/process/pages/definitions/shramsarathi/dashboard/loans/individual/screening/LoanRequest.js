@@ -334,9 +334,9 @@ define([],function(){
                                 "PreliminaryInformation.collectionPaymentType": {
                                     "required": true
                                 },
-                                "PreliminaryInformation.expectedPortfolioInsurancePremium": {
-                                    "readonly": true
-                                },
+                                // "PreliminaryInformation.expectedPortfolioInsurancePremium": {
+                                //     "readonly": true
+                                // },
                                 "LoanCustomerRelations.loanCustomerRelations": {
                                     "add": null,
                                     "remove": null,
@@ -822,9 +822,9 @@ define([],function(){
                                     "orderNo": 7,
                                     "readonly": false
                                 },
-                                "PreliminaryInformation.expectedPortfolioInsurancePremium": {
-                                    "readonly": true
-                                },
+                                // "PreliminaryInformation.expectedPortfolioInsurancePremium": {
+                                //     "readonly": true
+                                // },
                                 "NomineeDetails.nominees.nomineeRelationship": {
                                     "enumCode":"relationship"
                                 },
@@ -893,7 +893,8 @@ define([],function(){
                                     "orderNo": 4
                                 },
                                 "LoanDocuments": {
-                                    "orderNo": 5
+                                    "orderNo": 5,
+                                    "readonly": true
                                 },
                                 "AdditionalLoanInformation": {
                                     "orderNo": 6,
@@ -959,7 +960,8 @@ define([],function(){
                                     "orderNo": 4
                                 },
                                 "LoanDocuments": {
-                                    "orderNo": 5
+                                    "orderNo": 5,
+                                    "readonly":true
                                 },
                                 "AdditionalLoanInformation": {
                                     "orderNo": 6,
@@ -1339,6 +1341,7 @@ define([],function(){
                         "NomineeDetails.nominees.nomineeRelationship": {
                             "enumCode":"relationship"
                         },
+                   
                   
                     // "PostReview.reject.rejectReason":{
                     //     "enumCode":"loan_rejection_reason"
@@ -1557,7 +1560,7 @@ define([],function(){
                         "NomineeDetails.nominees.nomineePincode": {
                             "resolver": "NomineePincodeLOVConfigurationShramsarathi",
                             // "resolver": "PincodeLOVConfigurationShramsarathi",
-                            "orderNo":70,
+                            "orderNo":60,
                             "required":true,
                             "autolov": false
                         },
@@ -1569,15 +1572,19 @@ define([],function(){
                         // "NomineeDetails.nominees.nomineeStreet":{
                         //     "orderNo": 60
                         // },
+                        
                         "NomineeDetails.nominees.nomineeLocality": {
-                            "orderNo":50,
-                            "title":"PANCHAYAT"
+                            "orderNo":70,
+                            "title":"PANCHAYAT",
+                            "readonly":true
                         },
                         "NomineeDetails.nominees.nomineeDistrict":{
-                            "orderNo":80
+                            "orderNo":80,
+                            "readonly":true
                         },
                         "NomineeDetails.nominees.nomineeState":{
-                            "orderNo":90
+                            "orderNo":90,
+                            "readonly":true
                         },
                         "CollateralDetails":{
                             "condition": "model.loanAccount.loanPurpose1=='Asset Purchase'"
@@ -1677,7 +1684,7 @@ define([],function(){
                     "PreliminaryInformation.emiRequested",
                     //"PreliminaryInformation.emiPaymentDateRequested",
                     "PreliminaryInformation.collectionPaymentType",
-                    "PreliminaryInformation.expectedPortfolioInsurancePremium",
+                    // "PreliminaryInformation.expectedPortfolioInsurancePremium",
                     "PreliminaryInformation.BusinessSaveWarning",
                     "PreliminaryInformation.MedicalTestWarning",
                     //"PreliminaryInformation.actualAmountRequired",
@@ -2082,7 +2089,7 @@ define([],function(){
                                             "key":"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf11",
                                             "title":"POTENTIAL_RISK",
                                             "type":"select",
-                                            "required":true,
+                                            "required":false,
                                             "titleMap":{"yes":"yes","no":"no"}
                                         },
                                         "loanDisbursementSchedule":{
@@ -2452,8 +2459,6 @@ define([],function(){
                     },
                     "telecall": function(bundleModel, model, obj){
                         $log.info("Telecall",obj);
-                        console.log(obj);
-                        debugger;
                         model.loanAccount.telecallingDetails = obj.telecallingDetails;   
                     }
                 },
@@ -2576,9 +2581,9 @@ define([],function(){
                             return false;
                         }
                         if((model.loanAccount.currentStage =='Televerification') && (model.loanAccount.telecallingDetails.length == 0)){
-                            PageHelper.showErrors({"data": {"error":"Tele Verification should be done"}});
+                            PageHelper.showErrors({"data": {"error":"Tele Verification should be Mandatory"}});
                             return false;
-                        }
+                        } 
                         if (!validateForm(formCtrl)){
                             return;
                         }

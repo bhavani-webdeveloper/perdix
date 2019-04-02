@@ -52,7 +52,9 @@
         "Page/Adhoc/kgfs.loans.LoanBookingDashboard",
         "Page/Adhoc/base.dashboard.lead.LeadDashboard",
         "Page/Adhoc/base.dashboard.loans.LoanOriginationDashboard",
-       
+        "Page/Adhoc/arohan.dashboard.loans.LoanOriginationDashboard",
+        "Page/Adhoc/arohan.dashboard.lead.LeadDashboard",
+        
         "Page/DocumentTrackingDashboard", {
             "title": "INDIVIDUAL_LOANS",
             "iconClass": "fa fa-female",

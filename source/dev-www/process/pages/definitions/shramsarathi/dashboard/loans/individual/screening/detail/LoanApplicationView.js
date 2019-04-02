@@ -2,10 +2,10 @@ define({
     pageUID: "shramsarathi.dashboard.loans.individual.screening.detail.LoanApplicationView",
     pageType: "Engine",
     dependencies: ["$log", "$state","LoanAccount", "Enrollment", "IndividualLoan", "EnrollmentHelper", "SessionStore", "formHelper", "$q", "irfProgressMessage", "$stateParams", "$state",
-        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "SchemaResource", "LoanProcess", "irfCurrencyFilter", "irfElementsConfig"
+        "PageHelper", "Utils", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "Dedupe", "$resource", "$httpParamSerializer", "BASE_URL", "searchResource", "SchemaResource", "LoanProcess", "irfCurrencyFilter", "irfElementsConfig","irfNavigator"
     ],
     $pageFn: function($log, $state,LoanAccount, Enrollment, IndividualLoan, EnrollmentHelper, SessionStore, formHelper, $q, irfProgressMessage, $stateParams, $state,
-        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, SchemaResource, LoanProcess, irfCurrencyFilter, irfElementsConfig) {
+        PageHelper, Utils, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, Dedupe, $resource, $httpParamSerializer, BASE_URL, searchResource, SchemaResource, LoanProcess, irfCurrencyFilter, irfElementsConfig,irfNavigator) {
         var strongRender = function(data, type, full, meta) {
             return '<strong>'+data+'</strong>';
         }
@@ -409,11 +409,12 @@ define({
                         //     "key": "loanAccount.emiPaymentDateRequested",
                         //     "title": "Requested EMI Payment Date"
                         // },
-                         {
-                            "key": "loanAccount.expectedPortfolioInsurancePremium",
-                            "title": "Expected Portfolio Insurance Premium",
-                            "type": "amount"
-                        }]
+                        //  {
+                        //     "key": "loanAccount.expectedPortfolioInsurancePremium",
+                        //     "title": "Expected Portfolio Insurance Premium",
+                        //     "type": "amount"
+                        // }
+                    ]
                     }, {
                         "type": "grid",
                         "orientation": "vertical",
@@ -1160,6 +1161,10 @@ define({
                     model.customerHistoryFinancials['tableData'].push(prepareFinancialData);
                     
                 },
+                "telecall": function(bundleModel, model, obj){
+                    $log.info("Telecall",obj);
+                    model.loanAccount.telecallingDetails = obj.telecallingDetails;   
+                },
                 "customer-history-fin-snap": function(bundleModel, model, params){
                     let prepareFinancialData={
                         'tableData':[],
@@ -1189,6 +1194,11 @@ define({
                     _.forEach(prepareFinancialData['tableData'], function(histData){
                         model.customerHistoryFinancials['tableData'].push(histData);
                         });
+                },
+                "telecall": function(bundleModel, model, obj){
+                    $log.info("Telecall",obj);
+                    model.loanAccount.telecallingDetails = obj.telecallingDetails;
+                    model.loanAccount.version = obj.version;   
                 }
             },
             actions: {
@@ -1483,6 +1493,10 @@ define({
                     PageHelper.clearErrors();
                     var nextStage = null;
                     var dedupeCustomerIdArray = [];
+                    if((model.loanAccount.currentStage =='Televerification') && (model.loanAccount.telecallingDetails.length == 0)){
+                        PageHelper.showErrors({"data": {"error":"Tele Verification should be Mandatory"}});
+                        return false;
+                    }
                     if (!validateForm(formCtrl)){
                         return;
                     }
@@ -1608,7 +1622,7 @@ define({
                                             }
 
                                             PageHelper.showProgress("update-loan", "Done.", 3000);
-                                            return navigateToQueue(model);
+                                            irfNavigator.goBack();
                                         }, function(httpRes) {
                                             PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
                                             PageHelper.showErrors(httpRes);

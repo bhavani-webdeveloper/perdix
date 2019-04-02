@@ -69,8 +69,6 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.place",
                                 "HouseVerification.date"
-                                
-
                             ], "overrides": {
                                 "IndividualInformation.dateOfBirth":{ 
                                     "onChange": function (modelValue, form, model) {
@@ -79,8 +77,27 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     }
                                }
                             },
+                            "ContactInformation.villageName": {
+                                "readonly": true,
+                                "title":"VILLAGE"
+                            },
+                            "ContactInformation.district": {
+                                "readonly": true
+                            },
+                            "ContactInformation.state": {
+                                "readonly": true
+                            },
+                            "ContactInformation.mailingLocality": {
+                                "readonly": true
+                            },
+                            "ContactInformation.mailingDistrict": {
+                                "readonly": true
+                            },
+                            "ContactInformation.mailingState": {
+                                "readonly": true
+                            },
                                "PhysicalAssets.physicalAssets":{
-                                    //"title":"FIXED_ASSET",
+                                    "title":"FIXED_ASSET",
                                     "titleExpr": "model.customer.physicalAssets[arrayIndex].titleExpr",
 
                                 },
@@ -97,6 +114,9 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     onChange: function(valueObj,context,model){
                                         model.customer.currentAssets[context.arrayIndex].titleExpr = getCurrentByCode(valueObj.toString());
                                      }
+                                },
+                                "IndividualInformation.customerId":{
+                                    "readonly": true,
                                 },
                                 "IndividualInformation.centreId": {
                                     "required": true,
@@ -401,7 +421,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     "title":"DESTINATION_ADDRESS"
                                 },
                                 "IndividualInformation.customerId": {
-                                    "readonly": true
+                                    "readonly": true,
+                                    
                                 },
                                 "IndividualInformation.urnNo": {
                                     "readonly": true
@@ -853,7 +874,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 },
                                 "ContactInformation.mailingPincode": {
                                     "condition": "!model.customer.mailSameAsResidence",
-                                    "resolver": "MailingPincodeLOVConfiguration"
+                                    "resolver": "MailingPincodeLOVConfigurationShramsarathi",
+                                    "autolov": false
                                 },
                                 "ContactInformation.mailingLandmark": {
                                     "condition": "!model.customer.mailSameAsResidence",
@@ -1632,7 +1654,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 },
                                 "ContactInformation.mailingPincode": {
                                     "condition": "!model.customer.mailSameAsResidence",
-                                    "resolver": "MailingPincodeLOVConfiguration",
+                                    "resolver": "MailingPincodeLOVConfigurationShramsarathi",
+                                    "autolov": false
                                 },
                                 "ContactInformation.mailingLocality": {
                                     "condition": "!model.customer.mailSameAsResidence",
@@ -2051,13 +2074,15 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                         "condition": "!model.customer.mailSameAsResidence"
                     },
                     "ContactInformation.pincode": {
-                        "resolver": "PincodeLOVConfiguration",
-                        "searchHelper": formHelper
+                        "resolver": "PincodeLOVConfigurationShramsarathi",
+                        "searchHelper": formHelper,
+                        "autolov": false
 
                     },
                     "ContactInformation.mailingPincode": {
                         "condition": "!model.customer.mailSameAsResidence",
-                        "resolver": "MailingPincodeLOVConfiguration"
+                        "resolver": "MailingPincodeLOVConfigurationShramsarathi",
+                        "autolov": false
                     },
                     "FamilyDetails.familyMembers.relationShip":{
                         "title":"RELATIONSHIP_WITH_MIGRANT",
@@ -2255,7 +2280,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     },
                     "ContactInformation.mailingPincode": {
                         "condition": "!model.customer.mailSameAsResidence",
-                        "resolver": "MailingPincodeLOVConfiguration"
+                        "resolver": "MailingPincodeLOVConfigurationShramsarathi",
+                        "autolov": false
                     },
                     "ContactInformation.mailingLocality": {
                         "condition": "!model.customer.mailSameAsResidence",
@@ -2273,7 +2299,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     "FamilyDetails.familyMembers.incomes.incomeEarned": {
                         "title": "INCOME_EARNED",
                         "key": "customer.familyMembers[].incomes[].incomeEarned",
-                        "type": "amount"
+                        "type": "amount",
+                        "orderNo":30
                     },
                     "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
                         "title": "ASSET_TYPE",
@@ -2283,10 +2310,10 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     "PhysicalAssets.physicalAssets.vehicleModel": {
                         "condition": "model.customer.physicalAssets[arrayIndex].nameOfOwnedAsset=='Two wheeler' || model.customer.physicalAssets[arrayIndex].nameOfOwnedAsset=='Four Wheeler'"
                     },
-                    "IndividualFinancials.expenditures.expenditureSource": {
+                    "IndividualFinancials.expenditures.expenditureSource" : {
                         "required": true,
-                        //"type":"select",
-                        "enumCode":"expense_type"
+                        "key":"customer.expenditures[].expenseType",
+                        "enumCode":"expense_from"
                     },
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth": {
                         "required": false
@@ -2423,7 +2450,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     "IndividualFinancials.expenditures.expenditureSource",
                     "IndividualFinancials.expenditures.annualExpenses",
                     "IndividualFinancials.expenditures.frequency",
-                   // "IndividualFinancials.expenditures.from",
+                     "IndividualFinancials.expenditures.from",
 
                     "FamilyDetails",
                     "FamilyDetails.familyMembers",
@@ -2656,6 +2683,30 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                         });
                     }
                     model.customer.addressPfSameAsIdProof="NO";
+
+                    var initialFixedCurrent=function(){
+                        model.customer.currentAssets=[];
+                        model.customer.physicalAssets=[];
+                        var fixed = formHelper.enum('fixed_asset_type').data;
+                        var current = formHelper.enum('current_asset_type').data;
+                        for(var i=0;i<current.length;i++){
+                            var obj={};
+                            obj.assetType=current[i].name;
+                            obj.titleExpr=current[i].name;
+                            model.customer.currentAssets.push(obj);  
+                        }
+                        for(var i=0;i<fixed.length;i++){
+                            var obj={};
+                            obj.nameOfOwnedAsset=fixed[i].name;
+                            obj.titleExpr=fixed[i].name; 
+                            model.customer.physicalAssets.push(obj);
+                        }
+                    }
+
+                   if((model.customer.currentAssets==undefined || model.customer.currentAssets.length==0) &&
+                    (model.customer.physicalAssets==undefined || model.customer.physicalAssets.length==0 )){
+                        initialFixedCurrent();
+                   } 
                     /* Form rendering starts */
                     var self = this;
                     var formRequest = {
@@ -2822,10 +2873,11 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                         "expenditures":{
                                             "items":{
                                                 "from":{
-                                                    "key":"customer.expenditures[].expenseType",
+                                                    "key":"customer.expenditures[].expenditureSource",
                                                     "title":"EXPENSE_FROM",
                                                     "type":"select",
-                                                    "enumCode":"expense_type"
+                                                    "enumCode":"expense_type",
+                                                    "required":true
                                                 },
                                             }
                                         },
@@ -3091,20 +3143,24 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                                             title:"OCCUPATION",
                                                             "parentEnumCode": "work_sector",
                                                             "parentValueExpr": "model.customer.familyMembers[context.arrayIndex].incomes[context.arrayIndex].workSector",
-                                                            required: false
+                                                            required: false,
+                                                            orderNo:60
                                                         },
                                                         "incomeEarned": {
                                                             key: "customer.familyMembers[].incomes[].incomeEarned",
-                                                            title:"INCOME_AMOUNT"
+                                                            title:"INCOME_AMOUNT",
+                                                            "orderNo":30
                                                         },
                                                         "incomeType": {
                                                             "key": "customer.familyMembers[].incomes[].incomeType",
                                                             "title": "INCOME_TYPE",
+                                                            "orderNo":10
                                                         },
                                                         "frequency": {
                                                             key: "customer.familyMembers[].incomes[].frequency",
                                                             type: "select",
-                                                            "enumCode":"income_frequency"
+                                                            "enumCode":"income_frequency",
+                                                            "orderNo":40
                                                         },
                                                         "workSector":{
                                                             "key":"customer.familyMembers[].incomes[].workSector",
@@ -3112,14 +3168,15 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                                             "type":"select",
                                                             "enumCode":"work_sector",
                                                             "required":true,
-                                                            "orderNo": 1
+                                                            "orderNo": 50
                                                         },
                                                         "occupationType":{
                                                             "key":"customer.familyMembers[].incomes[].occupationType",
                                                             "title":"OCCUPATION_TYPE",
                                                             "type":"select",
                                                             "enumCode":"occupation_type",
-                                                            "required":true
+                                                            "required":true,
+                                                            "orderNo":20
                                                             
                                                         },
                                                         "skillLevel":{
@@ -3131,7 +3188,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                                                 "unskilled":"UNSKILLED",
                                                                 "semi_skilled":"SEMI_SKILLED"
                                                             },
-                                                            "required":true
+                                                            "required":true,
+                                                            orderNo:70
                                                             
                                                         },
                                                         "avarageTimeSpend":{
@@ -3142,14 +3200,16 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                                             "schema": {
                                                                 "pattern": "^[0-9]*$",
                                                                 "type": ["integer", "string"]
-                                                            }
+                                                            },
+                                                            orderNo:80
                                                         },
                                                         "avarageReturn":{
                                                             "key":"customer.familyMembers[].incomes[].averageReturn",
                                                             "title":"AVERAGE_RETURN",
                                                             "type":"select",
                                                             "required":true,
-                                                            "enumCode":"average_return"
+                                                            "enumCode":"average_return",
+                                                            "orderNo":90
 
                                                             
                                                         },
@@ -3158,13 +3218,15 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                                             "title":"INCOME_TYPE",
                                                             "type":"select",
                                                             "required":true,
-                                                            "enumCode":"income_type" 
+                                                            "enumCode":"income_type",
+                                                            "orderNo":10
                                                         },
                                                         "noOfDaysWorkedInMonth":{
                                                             "key":"customer.familyMembers[].incomes[].noOfDaysWorkedInMonth",
                                                             "title":"NO_OF_DAYS_WORKED_IN_MONTH",
                                                             "type":"number",
-                                                            "required":true
+                                                            "required":true,
+                                                            orderNo:100
                                                         },
                                                     }
 
@@ -3305,7 +3367,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     "type": "box",
                                     "title": "REFERENCES",
                                     "orderNo": 100,
-                                    "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
+                                    "condition": "model.currentStage=='Application'|| model.currentStage=='Initiation' || model.currentStage=='FieldAppraisal'",
                                     "items": {
                                         "verifications": {
                                             key: "customer.verifications",

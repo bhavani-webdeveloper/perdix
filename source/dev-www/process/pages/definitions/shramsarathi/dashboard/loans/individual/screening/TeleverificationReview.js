@@ -265,7 +265,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     pageClass: 'televerification',
                                     model: {
                                         enrolmentProcess:loanProcessts.loanCustomerEnrolmentProcess,
-                                        loanProcess: loanProcessts
+                                        loanProcess: loanProcessts,
+                                        loanAccount:res
                                     }
                                 });
 

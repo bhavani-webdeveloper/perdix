@@ -64,7 +64,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'cbview',
                             minimum: 1,
                             maximum: 1,
-                            order:9
+                            order:70
                         },
                         {
                             pageName: 'kgfs.loans.individual.screening.Summary',

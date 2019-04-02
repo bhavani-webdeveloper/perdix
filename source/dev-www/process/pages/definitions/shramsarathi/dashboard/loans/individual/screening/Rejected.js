@@ -31,7 +31,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageName: 'shramsarathi.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'CO_APPLICANT',
                                 pageClass: 'co-applicant',
-                                minimum: 0,
+                                minimum: 1,
                                 maximum: 1,
                                 order:20
                             },
@@ -39,7 +39,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageName: 'shramsarathi.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'GUARANTOR',
                                 pageClass: 'guarantor',
-                                minimum: 0,
+                                minimum: 1,
                                 maximum: 1,
                                 order:30
                             },
@@ -84,6 +84,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             //     order:60
                             // },
                             {
+                                pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.EnterpriseFinancialView',
+                                title: 'FINANCIAL_INFORMATION_SUMMARY',
+                                pageClass: 'business-finance',
+                                minimum: 1,
+                                maximum: 1,
+                                order: 70
+                            }, 
+                            {
                                 pageName: 'loans.individual.screening.CreditBureauView',
                                 title: 'CREDIT_BUREAU',
                                 pageClass: 'cbview',
@@ -123,7 +131,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             } else if (page.pageClass == "business"){
                                 out[1] = page.model.customer.firstName;
                             }
-                        }
+                        } 
                         return out;
                     },
 
@@ -238,7 +246,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-
+                                $this.bundlePages.push({
+                                    pageClass: 'business-finance',
+                                    model: {
+                                        customerId: loanProcess.loanAccount.customerId,
+                                        enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                        loanProcess: loanProcess
+                                    }
+                                });
 
                                  $this.bundlePages.push({
                                     pageClass: 'cbview',

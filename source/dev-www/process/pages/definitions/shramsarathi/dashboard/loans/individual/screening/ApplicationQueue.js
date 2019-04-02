@@ -7,7 +7,7 @@ define({
 		var centres = SessionStore.getCentres();
 		var centreId=[];
 		if (centres && centres.length) {
-		    for (var i = 0; i < centres.length; i++) {
+		    for (var i = 0; i < centres.length; i++) {  
 			    centreId.push(centres[i].centreId);
 		    }
 	    }
@@ -16,7 +16,8 @@ define({
 			"title": "APPLICATION_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				model.branch = branch;
+				// model.branch = branch;
+				model.branch = SessionStore.getCurrentBranch().branchId;
 				$log.info("search-list sample got initialized");
 				var centres = SessionStore.getCentres();
 				if (_.isArray(centres) && centres.length > 0){
@@ -124,7 +125,7 @@ define({
 					return IndividualLoan.search({
 	                    'stage': 'Application',
 	                    'centreCode':searchOptions.centreCode,
-	                    'branchName':branch,
+	                    'branchId':searchOptions.branch,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'status':searchOptions.status,
