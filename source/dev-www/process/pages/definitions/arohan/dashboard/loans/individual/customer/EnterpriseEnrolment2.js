@@ -12,6 +12,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
         AngularResourceService.getInstance().setInjector($injector);
             var overridesFields = function(bundlePageObj){
                return {
+                "EnterpriseInformation.referredName":{
+                    "title":"DSA_CODE"
+                },
                     "ContactInformation.pincode": {
                          "title": "pincode",
                         "required": true,
@@ -982,6 +985,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.distanceFromBranch",
                     "ContactInformation.businessInPresentAreaSince",
                     "ContactInformation.businessInCurrentAddressSince",
+                    "ContactInformation.prefferedModeOfCommunication",
+                    "ContactInformation.registeredOfficeAddress",
 
                     "BankAccounts",
                     "BankAccounts.customerBankAccounts",
@@ -2571,6 +2576,29 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "includes": getIncludes(model),
                 "excludes": [],
                 "options": {
+                    "repositoryAdditions":{
+                        "ContactInformation":{
+                            "items":{
+                                "prefferedModeOfCommunication":{
+                                    "key":"",
+                                    "title":"PREFERRED_MODE_OF_COMMUNICATION",
+                                    "type":"radios",
+                                    "titleMap":{
+                                        "call":"CALL",
+                                        "sms":"SMS",
+                                        "email":"EMAIL",
+                                        "letter":"LETTER"
+                                    }
+                                },
+                                "registeredOfficeAddress":{
+                                    "key":"",
+                                    "title":"REGISTER_OFFICE",
+                                    "type":"",
+
+                                }
+                            }
+                        }
+                    },
                     "additions": [
                         {
                             "type": "actionbox",

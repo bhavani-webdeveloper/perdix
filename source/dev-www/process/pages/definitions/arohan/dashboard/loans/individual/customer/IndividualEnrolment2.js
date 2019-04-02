@@ -107,7 +107,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification.date",
                                 "PhysicalAssets",
                                 "IndividualReferences",
-                                "References",
+                                //"References",
                                 "KYC.firstName",
                             ],
                             "overrides": {
@@ -179,7 +179,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "IndividualInformation.existingLoan": {
-                                    "required": true
+                                    "required": true,
+                                    "title":"HAVE_YOU_EVER_TAKEN_A_LOAN_FROM_AROHAN?"
                                 },
                                 "IndividualInformation.dateOfBirth": {
                                     "required": true
@@ -318,7 +319,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "IndividualInformation.existingLoan": {
-                                    "required": true
+                                    "required": true,
+                                    "title":"HAVE_YOU_EVER_TAKEN_A_LOAN_FROM_AROHAN?"
                                 },
                                 "IndividualInformation.dateOfBirth": {
                                     "required": true
@@ -516,7 +518,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "IndividualInformation.existingLoan": {
-                                    "required": true
+                                    "required": true,
+                                    "title":"HAVE_YOU_EVER_TAKEN_A_LOAN_FROM_AROHAN?"
                                 },
                                 "IndividualInformation.dateOfBirth": {
                                     "required": true
@@ -1138,7 +1141,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                                 "IndividualInformation.existingLoan": {
-                                    "required": true
+                                    "required": true,
+                                    "title":"HAVE_YOU_EVER_TAKEN_A_LOAN_FROM_AROHAN?"
                                 },
                                 "IndividualInformation.dateOfBirth": {
                                     "required": true
@@ -1887,6 +1891,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "References.verifications.businessName",
                     "References.verifications.referenceFirstName",
                     "References.verifications.mobileNo",
+                    "References.verifications.email",
                     "References.verifications.occupation",
                     "References.verifications.address",
                     "References.verifications.ReferenceCheck",
@@ -2232,7 +2237,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "type": "box",
                             "title": "REFERENCES",
                             "orderNo":100,
-                            "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
+                            "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal' || model.currentStage=='Screening'",
                             "items": {
                                 "verifications" : {
                                     key:"customer.verifications",
@@ -2267,7 +2272,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "schema": {
                                                  "pattern": "^[0-9]{10}$"
                                             }
-                                        }/*,
+                                        },
+                                        "email" : {
+                                            key:"customer.verifications[].mobileNo",
+                                            title:"EMAIL_ID",
+                                            type:"string",
+                                            required:"true",
+                                            inputmode: "text"
+                                            // "schema": {
+                                            //      "pattern": "^[0-9]{10}$"
+                                            // }
+                                        },
+                                        /*,
                                         {
                                             key:"customer.verifications[].businessSector",
                                             title:"BUSINESS_SECTOR",
@@ -2285,7 +2301,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             key:"customer.verifications[].selfReportedIncome",
                                             title:"SELF_REPORTED_INCOME",
                                             type:"number"
-                                        }*/,
+                                        }*/
                                         "occupation":{
                                             key:"customer.verifications[].occupation",
                                             title:"OCCUPATION",
