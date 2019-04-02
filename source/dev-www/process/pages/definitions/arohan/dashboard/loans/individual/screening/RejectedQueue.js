@@ -27,6 +27,15 @@ define({
                     "type": 'object',
                     "title": 'SEARCH_OPTIONS',
                     "properties": {
+                       
+                        "applicantName": {
+                            "title": "APPLICANT_NAME",
+                            "type": "string"
+                        },
+                        "businessName": {
+                            "title": "BUSINESS_NAME",
+                            "type": "string"
+                        },
                         'branch': {
 	                    	'title': "BRANCH",
 	                    	"type": ["string", "null"],
@@ -46,14 +55,6 @@ define({
 								"screenFilter": true
 							}
 						},
-                        "applicantName": {
-                            "title": "APPLICANT_NAME",
-                            "type": "string"
-                        },
-                        "businessName": {
-                            "title": "BUSINESS_NAME",
-                            "type": "string"
-                        },
                         "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"
@@ -139,6 +140,8 @@ define({
                     },
                     getListItem: function(item) {
                         return [
+                            item.branchName,
+							item.centreName,
                             item.screeningDate,
                             item.applicantName,
                             item.area,

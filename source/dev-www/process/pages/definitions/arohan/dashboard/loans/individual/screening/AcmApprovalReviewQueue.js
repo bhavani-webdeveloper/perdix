@@ -6,7 +6,7 @@ define({////arohan.dashboard.loans.individual.screening.FieldAppraisal
 		var branch = SessionStore.getBranch();
 		return {
 			"type": "search-list",
-			"title": "CREDIT_COMMITTEE_REVIEW", 
+			"title": "ACM_APPROVAL_QUEUE", 
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				
@@ -22,6 +22,16 @@ define({////arohan.dashboard.loans.individual.screening.FieldAppraisal
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
+					
+	                    "applicantName":
+						{
+	                        "title": "APPLICANT_NAME",
+	                        "type": "string"
+	                    },
+	                    "businessName": {
+	                        "title": "BUSINESS_NAME",
+	                        "type": "string"
+						},
 						'branch': {
 	                    	'title': "BRANCH",
 	                    	"type": ["string", "null"],
@@ -41,15 +51,6 @@ define({////arohan.dashboard.loans.individual.screening.FieldAppraisal
 								"screenFilter": true
 							}
 						},
-	                    "applicantName":
-						{
-	                        "title": "APPLICANT_NAME",
-	                        "type": "string"
-	                    },
-	                    "businessName": {
-	                        "title": "BUSINESS_NAME",
-	                        "type": "string"
-	                    },
 	                    "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"

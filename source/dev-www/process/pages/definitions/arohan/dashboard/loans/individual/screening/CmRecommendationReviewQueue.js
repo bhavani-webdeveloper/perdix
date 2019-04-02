@@ -30,6 +30,15 @@ define({
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
+					
+						"applicantName": {
+	                        "title": "APPLICANT_NAME",
+	                        "type": "string"
+	                    },
+	                    "businessName": {
+	                        "title": "BUSINESS_NAME",
+	                        "type": "string"
+						},
 						'branch': {
 	                    	'title': "BRANCH",
 	                    	"type": ["string", "null"],
@@ -49,14 +58,6 @@ define({
 								"screenFilter": true
 							}
 						},
-						"applicantName": {
-	                        "title": "APPLICANT_NAME",
-	                        "type": "string"
-	                    },
-	                    "businessName": {
-	                        "title": "BUSINESS_NAME",
-	                        "type": "string"
-	                    },
 	                    "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"
@@ -64,15 +65,15 @@ define({
 	                    "area": {
 	                        "title": "AREA",
 	                        "type": "string"
+						},					
+	                    "cityTownVillage": {
+	                        "title": "CITY_TOWN_VILLAGE",
+	                        "type": "string"
 						},
 						"pincode": {
 	                        "title": "PIN_CODE",
 	                        "type": "string"
 	                    },
-	                    "cityTownVillage": {
-	                        "title": "CITY_TOWN_VILLAGE",
-	                        "type": "string"
-						},
 						"status":
 	                    {
                             "type":"string",
@@ -94,7 +95,8 @@ define({
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'ApplicationReview',
-	                    'branchName':searchOptions.branch,
+						'branchName':searchOptions.branch,
+						'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'status':searchOptions.status,

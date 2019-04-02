@@ -13,7 +13,7 @@ define({
 	    }
 		return {
 			"type": "search-list",
-			"title": "APPLICATION_REVIEW_QUEUE",
+			"title": "ACM_RECOMMENDATION_REVIEW_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.branch = SessionStore.getCurrentBranch().branchName;
@@ -30,6 +30,15 @@ define({
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
+						
+						"applicantName": {
+	                        "title": "APPLICANT_NAME",
+	                        "type": "string"
+	                    },
+	                    "businessName": {
+	                        "title": "BUSINESS_NAME",
+	                        "type": "string"
+						},
 						'branch': {
 	                    	'title': "BRANCH",
 	                    	"type": ["string", "null"],
@@ -49,14 +58,6 @@ define({
 								"screenFilter": true
 							}
 						},
-						"applicantName": {
-	                        "title": "APPLICANT_NAME",
-	                        "type": "string"
-	                    },
-	                    "businessName": {
-	                        "title": "BUSINESS_NAME",
-	                        "type": "string"
-	                    },
 	                    "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"
@@ -65,14 +66,15 @@ define({
 	                        "title": "AREA",
 	                        "type": "string"
 						},
-						"pincode": {
-	                        "title": "PIN_CODE",
-	                        "type": "string"
-	                    },
+						
 	                    "cityTownVillage": {
 	                        "title": "CITY_TOWN_VILLAGE",
 	                        "type": "string"
 						},
+						"pincode": {
+	                        "title": "PIN_CODE",
+	                        "type": "string"
+	                    },
 						"status":
 	                    {
                             "type":"string",
@@ -94,7 +96,8 @@ define({
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'ApplicationReview',
-	                    'branchName':searchOptions.branch,
+						'branchName':searchOptions.branch,
+						'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'status':searchOptions.status,

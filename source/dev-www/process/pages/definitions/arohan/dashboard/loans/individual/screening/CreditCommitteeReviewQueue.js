@@ -22,6 +22,16 @@ define({////arohan.dashboard.loans.individual.screening.FieldAppraisal
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
+						
+	                    "applicantName":
+						{
+	                        "title": "APPLICANT_NAME",
+	                        "type": "string"
+	                    },
+	                    "businessName": {
+	                        "title": "BUSINESS_NAME",
+	                        "type": "string"
+						},
 						'branch': {
 	                    	'title': "BRANCH",
 	                    	"type": ["string", "null"],
@@ -41,15 +51,6 @@ define({////arohan.dashboard.loans.individual.screening.FieldAppraisal
 								"screenFilter": true
 							}
 						},
-	                    "applicantName":
-						{
-	                        "title": "APPLICANT_NAME",
-	                        "type": "string"
-	                    },
-	                    "businessName": {
-	                        "title": "BUSINESS_NAME",
-	                        "type": "string"
-	                    },
 	                    "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"
