@@ -40,6 +40,22 @@ define([],function(){
                         }
                     /* End of Deviations and Mitigations grouping */
             }
+            var setLoanMitigantsGroup = function(model) {
+                if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
+                    var loanMitigantsGrouped = {};
+                    for (var i=0; i<model.loanAccount.loanMitigants.length; i++){
+                        var item = model.loanAccount.loanMitigants[i];
+                        if (!_.hasIn(loanMitigantsGrouped, item.parameter)){
+                            loanMitigantsGrouped[item.parameter] = [];
+                        }
+                        loanMitigantsGrouped[item.parameter].push(item);
+                    }
+                    model.loanMitigantsGrouped=loanMitigantsGrouped;
+                    model.deviationMitigants  = model.loanAccount.loanMitigants;
+                    model.loanAccount.loanMitigants = [];                        
+
+                }
+            }
             var getGoldRate = function(model){
                 var value = Queries.getGoldRate();
                 value.then(function(resp){
@@ -1577,25 +1593,13 @@ define([],function(){
                                         }
                                     }
                                 /* Collateral */
-                                if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
-                                    var loanMitigantsGrouped = {};
-                                    for (var i=0; i<model.loanAccount.loanMitigants.length; i++){
-                                        var item = model.loanAccount.loanMitigants[i];
-                                        if (!_.hasIn(loanMitigantsGrouped, item.parameter)){
-                                            loanMitigantsGrouped[item.parameter] = [];
-                                        }
-                                        loanMitigantsGrouped[item.parameter].push(item);
-                                    }
-                                    model.loanMitigantsGrouped=loanMitigantsGrouped;
-                                    model.deviationMitigants  = model.loanAccount.loanMitigants;
-                                    model.loanAccount.loanMitigants = [];                        
-            
-                                }
+                                setLoanMitigantsGroup(model);
                                 BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount});                                    
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);                                
 
                             }, function (err) {
+                                setLoanMitigantsGroup(model);
                                 PageHelper.showErrors(err);
                                 PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);                                
                                 PageHelper.hideLoader();
