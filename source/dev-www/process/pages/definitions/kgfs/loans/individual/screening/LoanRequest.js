@@ -1636,12 +1636,12 @@ define([],function(){
                         if(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5){
                             model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = "false"
                         }
-                            PageHelper.showLoader();
                        if (model.loanProcess.remarks==null || model.loanProcess.remarks =="" || model.review.targetStage ==null || model.review.targetStage ==""){
                                PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
                                PageHelper.hideLoader();
                                return false;
                         }
+                        PageHelper.showLoader();
                          if (model.loanProcess.stage==null || model.loanProcess.stage ==""){
                                PageHelper.showProgress("update-loan", "Send to Stage is mandatory", 3000);
                                PageHelper.hideLoader();
@@ -1781,6 +1781,10 @@ define([],function(){
                             });
                     },
                     reject: function(model, formCtrl, form, $event){
+                        if ( model.loanProcess.remarks==null ||  model.loanProcess.remarks =="" ||  model.loanAccount.rejectReason==null ||  model.loanAccount.rejectReason==""){
+                            PageHelper.showProgress("update-loan", "Reject Reason / Remarks is mandatory");
+                            return false;
+                        }
                         PageHelper.showLoader();
                          model.loanProcess.reject()
                             .finally(function () {
