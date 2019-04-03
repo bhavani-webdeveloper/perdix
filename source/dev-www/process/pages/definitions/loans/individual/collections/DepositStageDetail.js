@@ -327,6 +327,7 @@ define({
                                         })
                                 }, function (httpres) {
                                     PageHelper.showProgress("Deposit-Stage", "Error in updating the deposit data", 5000);
+                                    PageHelper.showErrors(httpres);
                                     PageHelper.hideLoader();
                                 })
                         }else if(model.depositDetails && (model.depositDetails.instrumentType.toLowerCase()=='chq' || model.depositDetails.instrumentType.toLowerCase() == 'cheque')){

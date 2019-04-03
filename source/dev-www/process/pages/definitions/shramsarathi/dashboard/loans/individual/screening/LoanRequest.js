@@ -2459,8 +2459,6 @@ define([],function(){
                     },
                     "telecall": function(bundleModel, model, obj){
                         $log.info("Telecall",obj);
-                        console.log(obj);
-                        debugger;
                         model.loanAccount.telecallingDetails = obj.telecallingDetails;   
                     }
                 },

@@ -160,7 +160,7 @@ define({
                             "readonly": true,
                             "colClass": "col-sm-12",
                             "overrideType": "default-view",
-                            "title": "Family",
+                            "title": "Migrant",
                             "items": [{
                                 "type": "grid",
                                 "orientation": "horizontal",

@@ -332,8 +332,12 @@ function($log,SessionStore,$state,$stateParams,irfElementsConfig,Queries,formHel
                 $log.info(reqData);
                 LoanCollection.processCashDeposite(reqData, function(response){
                     PageHelper.hideLoader();
-                    $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
-
+                    if(model.siteCode == 'shramsarathi'){
+                        $state.go('Page.LoansCollectionsDashboard', {pageName: 'LoansCollectionsDashboard', pageId: null});
+                    }
+                    else{
+                        $state.go('Page.Engine', {pageName: 'loans.individual.collections.BounceQueue', pageId: null});
+                    }
                 }, function(errorResponse){
                     PageHelper.hideLoader();
                     PageHelper.showErrors(errorResponse);
