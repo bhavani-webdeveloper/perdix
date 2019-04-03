@@ -966,7 +966,9 @@ define([],function(){
                     }
                     if(model.loanAccount.loanType == 'JEWEL' && model.loanAccount.currentStage == 'Screening'){
                         getGoldRate(model);
-                        //model.loanAccount.jewelLoanDetails = {};
+                        if (model.loanAccount.jewelLoanDetails ==undefined)
+                            model.loanAccount.jewelLoanDetails = {};
+
                         if(model.loanAccount.jewelLoanDetails) {
                             model.loanAccount.jewelLoanDetails.encoreClosed = false;
                             model.loanAccount.jewelLoanDetails.jewelPouchLocationType = "BRANCH";
