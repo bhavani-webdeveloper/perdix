@@ -332,14 +332,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                                                             },
                                                             {
-                                                                "key": "applicant.followupCallRequired",
+                                                                "key": "telecalling.applicant.followupCallRequired",
                                                                 "type": "date",
                                                                 "title": "FOLLOWUP_ON",
                                                                 "condition": "model.applicant.telecallingResponse =='Reachable'"
                                                                 
                                                             },
                                                             {
-                                                                "key": "applicant.customerCalled",
+                                                                "key": "telecalling.applicant.customerCalledDate",
                                                                 "type": "date",
                                                                 "title": "CUSTOMER_CALLED",
                                                                 "readonly":true
@@ -391,9 +391,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     if(telecallingApplicant.length != 0) {
                         model.telecalling.applicant = telecallingApplicant[telecallingApplicant.length -1];
                     }
+
+                    if(model.loanAccount.telecallingDetails && model.loanAccount.telecallingDetails.length == 0){
+                        model.telecalling.applicant ={}
+                        model.telecalling.applicant.customerCalledDate=moment().format(SessionStore.getSystemDateFormat());
+                    }
                     
-                    if (_.hasIn(model, 'telecalling.applicant.customerCalled'))
-                    model.applicant.customerCalled=moment().format(SessionStore.getSystemDateFormat());
+                    //if (_.hasIn(model, 'telecalling.applicant.customerCalled'))
+                    
 
                     model.telecalling.loanCustomer = _.filter(model.loanAccount.telecallingDetails, {"partyType": "loanCustomer"});
                     if (_.hasIn(model, 'loanProcess.applicantEnrolmentProcess') && model.loanProcess.applicantEnrolmentProcess !=null){
@@ -458,6 +463,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         model.applicant.noOfCallAttempts = model.telecalling.applicant.noOfCallAttempts;
                         model.applicant.followupCallRequired = model.telecalling.applicant.followupCallRequired;
                         model.applicant.telecallingRemarks = model.telecalling.applicant.telecallingRemarks;
+                        model.applicant.customerCalledDate = (model.telecalling.applicant.customerCalledDate == moment().format(SessionStore.getSystemDateFormat())) ? model.telecalling.applicant.customerCalledDate : moment().format(SessionStore.getSystemDateFormat());
                         model.loanAccount.telecallingDetails.push(model.applicant);
 
                         model.loanCustomer.customerId = model.loanCustomer.customer.id;
