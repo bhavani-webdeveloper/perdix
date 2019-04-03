@@ -3888,7 +3888,22 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 // model.customer=enrolmentProcess.customer;
                                 BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
                                 BundleManager.pushEvent('new-enrolment', model._bundlePageObj, { customer: model.customer });
-
+                                if(model.customer.currentAssets!== undefined){
+                                    if(model.customer.currentAssets.length > 0){
+                                        for(var i=0;i<model.customer.currentAssets.length;i++){
+                                            model.customer.currentAssets[i].titleExpr = model.customer.currentAssets[i].assetType;
+                                        }
+                                       
+                                    }
+                                }
+                                 if(model.customer.physicalAssets!== undefined){
+                                if(model.customer.physicalAssets.length > 0)
+                                {
+                                    for(var i=0;i<model.customer.physicalAssets.length;i++){
+                                        model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
+                                    }
+                                } 
+                                }  
                             }, function (err) {
                                 PageHelper.showErrors(err);
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
