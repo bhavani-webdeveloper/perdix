@@ -105,7 +105,7 @@ define({
                             "readonly": true,
                             "colClass": "col-sm-12",
                             "overrideType": "default-view",
-                            "title": "Family",
+                            "title": "CONTACT_INFORMATION",
                             "items": [{
                                 "type": "grid",
                                 "orientation": "horizontal",
@@ -205,7 +205,7 @@ define({
                                 }]
                             }]
                         };
-                        self.form.splice(2, 0, family);
+                        //self.form.splice(2, 0, family);
                         //self.form.splice(4, 0, bankAccountDetail);
     
                         if (self.formSource[self.formSource.length - 1].title != "View Uploads") {                    
@@ -304,12 +304,49 @@ define({
     <div class="col-sm-3">{{'BRANCH'|translate}}: <strong>{{model.business.kgfsName}}</strong></div>
     <div class="col-sm-3">{{'CENTRE'|translate}}: <strong>{{model.business.centreName}}</strong></div>
     `
-                    }, {
+                    },
+                    {
+                        "type": "box",
+                        "colClass": "col-sm-12",
+                        "overrideType": "default-view",
+                        "title": "KYC",
+                        "readonly": true,
+                        "orderNo":1,
+                        "items": [{
+                            "type": "grid",
+                            "orientation": "horizontal",
+                            "items": [{
+                                "type": "grid",
+                                "orientation": "vertical",
+                                "items": [{
+                                        "key": "customer.identityProof",
+                                        "title": "Id Proof Type"
+                                    }, {
+                                        "key": "customer.identityProofNo",
+                                        "title": "Id Proof Number"
+                                    }, {
+                                        "key": "customer.addressProof",
+                                        "title": "Address Proof Type"
+                                    }, {
+                                        "key": "customer.addressProofNo",
+                                        "title": "Address proof number",
+                                       
+                                    },
+                                    
+                                ]
+                            }, 
+                           
+                        ]
+                        }]
+                    },
+                    
+                    {
                         "type": "box",
                         "readonly": true,
                         "colClass": "col-sm-12",
                         "title": "Personal Details",
                         "overrideType": "default-view",
+                        "orderNo":2,
                         "items": [{
                             "type": "grid",
                             "orientation": "horizontal",
@@ -319,25 +356,17 @@ define({
                                 "items": [{
                                     "key": "customer.id",
                                     "title": "CUSTOMER_ID"
-                                }, {
+                                },{
+                                    "key": "customer.title",
+                                    "title": "TITLE"
+                                },
+                                {
                                     "key": "customer.firstName",
-                                    "title": "FULL_NAME"
+                                    "title": "APPLICANT_NAME/FULL_NAME"
                                 }, {
                                     "key": "customer.gender"
                                 }, {
                                     "key": "customer.dateOfBirth"
-                                }, {
-                                    "key": "customer.identityProofNo",
-                                    "title": "ID Proof N0."
-                                }, {
-                                    "key": "customer.identityProof",
-                                    "title": "ID Proof Type"
-                                }, {
-                                    "key": "customer.addressProofNo",
-                                    "title": "Address Proof No."
-                                }, {
-                                    "key": "customer.addressProof",
-                                    "title":"Address Proof Type"
                                 }, {
                                     "key": "customer.language",
                                     "title": "PREFERRED_LANGUAGE"
@@ -410,7 +439,103 @@ define({
     
                             }]
                         }]
-                    }, {
+                    }, 
+                    {
+                        "type": "box",
+                        "readonly": true,
+                        "colClass": "col-sm-12",
+                        "overrideType": "default-view",
+                        "title": "CONTACT_INFORMATION",
+                        //"condition": "model.enterpriseRelationship",
+                        "items": [{
+                            "type": "grid",
+                            "orientation": "horizontal",
+                            "items": [{
+                                "type": "grid",
+                                "orientation": "vertical",
+                                "items": [{
+                                   
+                                    "key": "customer.mobilePhone",
+                                }, {
+                                    
+                                    "key": "customer.landLineNo",
+    
+                                }, {
+                                    
+                                    "key": "customer.email",
+                                }, ]
+                            },
+                            {
+
+                                "type": "grid",
+                                "orientation": "vertical",
+                                "key":"customer.residentialAddressFieldSet",
+                                "title":"CUSTOMER_RESIDENCIAL_ADDRESS",
+                                "items": [
+                                    {
+                                    "key": "customer.careOf"
+                                }, {
+                                    "key": "customer.doorNo",
+                                }, {
+                                    "key": "customer.street",
+                                }, {
+                                    "key": "customer.postOffice",
+                                },{
+                                    "key": "customer.landmark"
+                                },{
+                                    "key": "customer.pincode"
+                                },{
+                                    "key": "customer.locality"
+                                },{
+                                    "key": "customer.villageName"
+                                },{
+                                    "key": "customer.district"
+                                },{
+                                    "key": "customer.state"
+                                }
+
+                            ]
+                            },
+                        ]
+                        }]
+                    },
+                    {
+                        "type": "box",
+                        "readonly": true,
+                        "colClass": "col-sm-12",
+                        "overrideType": "default-view",
+                        "title": "REFERENCES",
+                        //"condition": "model.enterpriseRelationship",
+                        "items": [{
+                            "type": "grid",
+                            "orientation": "horizontal",
+                            "items": [{
+                                "type": "grid",
+                                "orientation": "vertical",
+                                "items": [{
+                                   
+                                    "key": "customer.verifications[].relationship",
+                                }, {
+                                    
+                                    "key": "customer.verifications[].businessName",
+    
+                                }, {
+                                    
+                                    "key": "customer.verifications[].referenceFirstName",
+                                },{
+                                    "key": "customer.verifications[].mobileNo"
+                                },{
+                                    "key": "customer.verifications[].address"
+                                },{
+                                    "key":"",
+                                    "title":"EMAIL_ID"
+                                }
+                            ]
+                            },
+                        ]
+                        }]
+                    },
+                    {
                         "type": "box",
                         "readonly": true,
                         "colClass": "col-sm-12",
@@ -444,7 +569,7 @@ define({
                         "readonly": true,
                         "colClass": "col-sm-12",
                         "overrideType": "default-view",
-                        "title": "HOUSE_DETAILS",
+                        "title": "HOUSE_VERIFICATION",
                         "items": [{
                             "type": "grid",
                             "orientation": "horizontal",
@@ -453,9 +578,12 @@ define({
                                 "orientation": "vertical",
                                 "items": [{
                                     "key": "customer.ownership",
-                                    "title": "PREMISES_OWNERSHIP",
+                                   // "title": "PREMISES_OWNERSHIP",
                                     "type": "string"
                                 },{
+                                    "key": "customer.inCurrentAddressSince"
+                                },
+                                {
                                     "key": "customer.place"
                                 }]
                             }, {
@@ -472,7 +600,8 @@ define({
                                 }]
                             }]
                         }]
-                    }, {
+                    }, 
+                    {
                         "type": "box",
                         "readonly": true,
                         "colClass": "col-sm-12",
@@ -628,7 +757,8 @@ define({
                                 }
                             }]
                         }]
-                    }, {
+                    }, 
+                    {
                         "type": "box",
                         "readonly": true,
                         "colClass": "col-sm-12",
@@ -815,7 +945,8 @@ define({
                                 }
                             }]
                         }]
-                    }, {
+                    }, 
+                    {
                         "type": "box",
                         "colClass": "col-sm-12",
                         "overrideType": "default-view",
@@ -880,7 +1011,8 @@ define({
                                 ]
                             }]
                         }]
-                    }, {
+                    },
+                     {
                         "type": "box",
                         "colClass": "col-sm-12",
                         "readonly": true,

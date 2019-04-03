@@ -869,6 +869,8 @@ define([],function(){
                             "excludes": [
                                 "LoanMitigants.deviationParameter",
                                 "LoanSanction",
+                                "PreliminaryInformation",
+                                 "DeductionsFromLoan",
                                 "LoanSanction.sanctionDate",
                                 "LoanSanction.numberOfDisbursements",
                                 "LoanSanction.disbursementSchedules",
