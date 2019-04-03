@@ -961,6 +961,9 @@ define([],function(){
                     model.customer = {};
                     model.review = model.review|| {};
                     model.loanAccount = model.loanProcess.loanAccount;
+                    if(model.loanAccount.currentStage == 'Screening' && !_.hasIn(model.loanAccount, 'id')){
+                        model.loanAccount.isBusinessCaptured = false;
+                    }
                     if(model.loanAccount.loanType == 'JEWEL' && model.loanAccount.currentStage == 'Screening'){
                         getGoldRate(model);
                         //model.loanAccount.jewelLoanDetails = {};
@@ -1558,12 +1561,7 @@ define([],function(){
                             model.loanAccount.urnNo=model.loanAccount.loanCustomerRelations[0].urn; 
                         }
 
-                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == "Screening" && model.loanAccount.productCategory == 'MEL' && !model.loanAccount.isBusinessCaptured && model.loanAccount.urnNo == null){
-                            PageHelper.showProgress("loan-enrolment","Business Details are not captured",5000);
-                                return false;
-                        }
-
-                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == "CreditAppraisal" && model.loanAccount.productCategory == 'MEL' && model.customer.enterprise.employeeSalary <=0){
+                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == "Screening" && model.loanAccount.productCategory == 'MEL' && !model.loanAccount.isBusinessCaptured){
                             PageHelper.showProgress("loan-enrolment","Business Details are not captured",5000);
                                 return false;
                         }
@@ -1640,12 +1638,12 @@ define([],function(){
                         if(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5){
                             model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = "false"
                         }
-                            PageHelper.showLoader();
                        if (model.loanProcess.remarks==null || model.loanProcess.remarks =="" || model.review.targetStage ==null || model.review.targetStage ==""){
                                PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
                                PageHelper.hideLoader();
                                return false;
                         }
+                        PageHelper.showLoader();
                          if (model.loanProcess.stage==null || model.loanProcess.stage ==""){
                                PageHelper.showProgress("update-loan", "Send to Stage is mandatory", 3000);
                                PageHelper.hideLoader();
@@ -1672,8 +1670,10 @@ define([],function(){
                         model.review.targetStage='';
                         model.loanProcess.stage='';
                     } 
-                    if(_.isNull(model.loanAccount.loanMitigants) || (!model.loanAccount.loanMitigants))
-                        model.loanAccount.loanMitigants=[];
+                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == "CreditAppraisal" && model.loanAccount.productCategory == 'MEL' && model.customer.enterprise.employeeSalary <=0){
+                            PageHelper.showProgress("loan-enrolment","Business Details are not captured",5000);
+                                return false;
+                        } 
                         setDeviation(model);
                         validateDeviationForm(model);
                         if(_.isArray(validateDeviation) && validateDeviation.length > 0) {
@@ -1785,6 +1785,10 @@ define([],function(){
                             });
                     },
                     reject: function(model, formCtrl, form, $event){
+                        if ( model.loanProcess.remarks==null ||  model.loanProcess.remarks =="" ||  model.loanAccount.rejectReason==null ||  model.loanAccount.rejectReason==""){
+                            PageHelper.showProgress("update-loan", "Reject Reason / Remarks is mandatory");
+                            return false;
+                        }
                         PageHelper.showLoader();
                          model.loanProcess.reject()
                             .finally(function () {

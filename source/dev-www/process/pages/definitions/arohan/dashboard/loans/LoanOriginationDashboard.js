@@ -29,6 +29,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             //"Page/Engine/arohan.dashboard.loans.individual.screening.CentralRiskReviewQueue",
             // "Page/Engine/arohan.dashboard.loans.individual.screening.FieldAppraisalReview",
             "Page/Engine/arohan.dashboard.loans.individual.screening.CreditCommitteeReviewQueue",
+            "Pages/Engine/arohan.dashboard.loans.individual.screening.DocumentUploadQueue",
             //"Page/Engine/arohan.dashboard.loans.individual.screening.LoanSanctionQueue",
             "Page/Engine/arohan.dashboard.loans.individual.screening.RejectedQueue",
             //"Page/Engine/arohan.dashboard.loans.individual.screening.BranchNewConversationQueue",
@@ -164,6 +165,25 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
                 ccrqMenu.data = '-';
             });
         }
+
+        var  duq= $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard.loans.individual.screening.CreditCommitteeReviewQueue"];
+        if (duq) {
+            IndividualLoan.search({
+                'stage': 'CreditCommitteeReview',
+                'enterprisePincode': '',
+                'applicantName': '',
+                'area': '',
+                'villageName': '',
+                'customerName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response, headerGetter) {
+                duq.data = Number(response.headers['x-total-count']);
+            }, function() {
+                duq.data = '-';
+            });
+        }
+
 
         var lsqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard.loans.individual.screening.LoanSanctionQueue"];
         if (lsqMenu) {
