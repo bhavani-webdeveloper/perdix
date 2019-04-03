@@ -1435,11 +1435,7 @@ define([],function(){
                       //  clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
                         model.loanAccount.customerId = model.customer.id;
                         model.loanAccount.urnNo = model.customer.urnNo;
-                        if(model.loanAccount.accountUserDefinedFields && model.loanAccount.accountUserDefinedFields.userDefinedFieldValues && (_.isEmpty(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues) == false)) {
-                            defaultConfiguration(model,true);
-                        } else {
-                            defaultConfiguration(model,false);
-                        }
+                        defaultConfiguration(model,false);
                         model.loanAccount.loanCentre.centreId = obj.customer.centreId;
                     },
                     "lead-loaded": function(bundleModel, model, obj) {
