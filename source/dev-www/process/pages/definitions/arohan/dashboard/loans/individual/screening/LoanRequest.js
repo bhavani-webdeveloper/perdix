@@ -745,6 +745,19 @@ define([],function(){
                                 "CollateralDetails"               
                             ],
                             "overrides": {
+                                "LoanDocuments": {
+                                    "readonly":true
+                                },
+                                "LoanDocuments.loanDocuments":{
+                                    "readonly":true
+                                },
+                                "LoanDocuments.loanDocuments.document":{
+                                    "readonly":true
+                                },
+                                "LoanDocuments.loanDocuments.documentId":{
+                                    "readyonly":true
+                                },
+ 
                                 "PreliminaryInformation": {
                                     "orderNo": 1,
                                     "readonly": true
@@ -1459,6 +1472,7 @@ define([],function(){
                 return [
                     "PreliminaryInformation",
                     "PreliminaryInformation.transactionType",
+                    "PreliminaryInformation.productCategory",
                     "PreliminaryInformation.transactionType2",
                     "PreliminaryInformation.linkedAccountNumber",
                     "PreliminaryInformation.linkedAccountNumber1",
@@ -1635,6 +1649,11 @@ define([],function(){
                                             model.loanAccount.linkedAccountNumber = null;
                                         }
                                     }
+                                },
+                                "productCategory":{
+                                    "key":"",
+                                    "title":"PODUCT_CATEGORY",
+                                    "type":"select"
                                 },
                                 "expectedEmi": {
                                     "key": "loanAccount.expectedEmi",
