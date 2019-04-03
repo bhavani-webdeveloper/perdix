@@ -327,16 +327,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                                 "key": "telecalling.applicant.followupCallRequired",
                                                                 "type": "date",
                                                                 "title": "FOLLOWUP_ON",
-                                                                "condition": "model.applicant.telecallingResponse !='Reachable'",
+                                                                "condition": "model.telecalling.applicant.telecallingResponse !='Reachable'",
                                                                 "required":true
-
-                                                            },
-                                                            {
-                                                                "key": "telecalling.applicant.followupCallRequired",
-                                                                "type": "date",
-                                                                "title": "FOLLOWUP_ON",
-                                                                "condition": "model.applicant.telecallingResponse =='Reachable'"
-                                                                
                                                             },
                                                             {
                                                                 "key": "telecalling.applicant.customerCalledDate",
