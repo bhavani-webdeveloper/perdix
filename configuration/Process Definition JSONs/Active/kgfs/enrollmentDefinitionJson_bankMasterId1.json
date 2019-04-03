@@ -906,6 +906,11 @@
                         "maxLength": 12,
                         "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
+                    "fcuStatus": {
+                        "title": "fcuStatus",
+                        "type": "string",
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
+                    },
                     "addressProof": {
                         "title": "Address Proof",
                         "type": "string",
