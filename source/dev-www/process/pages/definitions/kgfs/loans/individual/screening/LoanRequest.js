@@ -1664,6 +1664,8 @@ define([],function(){
                         model.review.targetStage='';
                         model.loanProcess.stage='';
                     } 
+                    if(_.isNull(model.loanAccount.loanMitigants) || (!model.loanAccount.loanMitigants))
+                        model.loanAccount.loanMitigants=[];
                         setDeviation(model);
                         validateDeviationForm(model);
                         if(_.isArray(validateDeviation) && validateDeviation.length > 0) {
