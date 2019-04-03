@@ -117,7 +117,6 @@ gulp.task('html', function(){
                 "transform-es2015-template-literals"
             ]
         }))))
-        .pipe()
         .pipe($.print())
         .pipe(gulp.dest(buildDirectory))
 })
