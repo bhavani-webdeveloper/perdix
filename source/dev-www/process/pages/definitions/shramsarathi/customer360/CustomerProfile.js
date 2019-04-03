@@ -6,10 +6,10 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
         pageUID: "shramsarathi.customer360.CustomerProfile",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
-            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository"],
+            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","irfNavigator"],
 
         $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
-            PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository) {
+            PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,irfNavigator) {
 
             AngularResourceService.getInstance().setInjector($injector);
             var branch = SessionStore.getBranch();
@@ -61,8 +61,9 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
             var configFile = function () {
                 return {
                     "loanProcess.loanAccount.currentStage": {
-                        "Initiation": {
+                        "Completed": {
                             "excludes": [
+                                "KYC.firstName",
                                 "ContactInformation.careOf",
                                 "ContactInformation.postOffice",
                                 "ContactInformation.mailingPostoffice",
@@ -76,6 +77,11 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                         model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                                     }
                                }
+                            },
+                            "IndividualFinancials.expenditures.expenditureSource" : {
+                                "required": true,
+                                "key":"customer.expenditures[].expenseType",
+                                "enumCode":"expense_from"
                             },
                             "ContactInformation.villageName": {
                                 "readonly": true,
@@ -116,15 +122,18 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                      }
                                 },
                                 "IndividualInformation.customerId":{
-                                    "readonly": true,
+                                    "readonly": true
                                 },
                                 "IndividualInformation.centreId": {
-                                    "required": true,
-                                    "readonly": false,
+                                    "readonly": true,
                                     "title": "ZONE_ID"
                                 },
+                                "IndividualInformation.customerBranchId":{
+                                    "readonly":true
+                                },
                                 "IndividualInformation.centreId1": {
-                                    "title": "ZONE_NAME"
+                                    "title": "ZONE_NAME",
+                                    "readonly":true
                                 },
                                 "HouseVerification.inCurrentAreaSince": {
                                     "required": false,
@@ -2616,7 +2625,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
 
             return {
                 "type": "schema-form",
-                "title": "INDIVIDUAL_ENROLLMENT",
+                "title": "PROFILE",
                 "subTitle": "",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                     // $log.info("Inside initialize of IndividualEnrolment2 -SPK " + formCtrl.$name);
@@ -2631,7 +2640,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     LoanProcess.createNewProcess().subscribe(function(loanProcess) {
                         model.loanProcess=loanProcess;
                     });
-                    model.loanProcess.loanAccount.currentStage="Initiation";
+                   
+                    model.loanProcess.loanAccount.currentStage="Completed";
                     EnrolmentProcess.createNewProcess()
                     .subscribe(function(enrolmentProcess) {
                         // loanProcess.setRelatedCustomerWithRelation(enrolmentProcess, LoanCustomerRelationTypes.APPLICANT);
@@ -2642,24 +2652,69 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                         //  model.pageClass = bundlePageObj.pageClass;
                         model.pageClass = "applicant";
                         // model.currentStage = bundleModel.currentStage;
-                        model.currentStage = "Initiation";
-                        // model.enrolmentProcess.currentStage = model.currentStage;
-           
-            // model.enrolmentProcess.currentStage = model.currentStage;
+                        model.currentStage = "Completed";
+                      
               model.customer = model.enrolmentProcess.customer;
+
+
+              var initialFixedCurrent=function(){
+                model.customer.currentAssets=[];
+                model.customer.physicalAssets=[];
+                var fixed = formHelper.enum('fixed_asset_type').data;
+                var current = formHelper.enum('current_asset_type').data;
+                for(var i=0;i<current.length;i++){
+                    var obj={};
+                    obj.assetType=current[i].name;
+                    obj.titleExpr=current[i].name;
+                    model.customer.currentAssets.push(obj);  
+                }
+                for(var i=0;i<fixed.length;i++){
+                    var obj={};
+                    obj.nameOfOwnedAsset=fixed[i].name;
+                    obj.titleExpr=fixed[i].name; 
+                    model.customer.physicalAssets.push(obj);
+                }
+            }
+
+
+              if($stateParams.pageId != null || $stateParams.pageId != undefined)
+              {
+                  PageHelper.showLoader();
+              Enrollment.getCustomerById({id:$stateParams.pageId},function(resp,header){
+                  model.customer=resp;
+                  if((model.customer.currentAssets.length==0) && (model.customer.physicalAssets.length==0 )){
+                        initialFixedCurrent();
+                   } 
+                   if (_.hasIn(model.customer, 'familyMembers') && _.isArray(model.customer.familyMembers)) {
+                    if (model.customer.familyMembers.length != 0) {
+                        for (var i = 0; i < model.customer.familyMembers.length; i++) {
+                            if (model.customer.familyMembers[i].dateOfBirth != null) {
+                                model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                            }
+                        }
+                    }
+                }
+                if(model.customer.dateOfBirth !=null || model.customer.dateOfBirth != undefined){
+                    model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                }
+               
+                  PageHelper.hideLoader();
+              },function(resp){
+                  PageHelper.hideLoader();
+                  irfProgressMessage.pop("enrollment-save","An Error Occurred. Failed to fetch Data",5000);
+              });
+          }else{
+            irfNavigator.go({
+                'state': 'Page.Engine',
+                'pageName': 'CustomerSearch',
+                'pageId': null
+            })
+          }
              model.customer.addressPfSameAsIdProof = "NO";
                     // }
                     /* End of setting data recieved from Bundle */
                     // set Age from DateOfBirth
-                    if (_.hasIn(model.customer, 'familyMembers') && _.isArray(model.customer.familyMembers)) {
-                        if (model.customer.familyMembers.length != 0) {
-                            for (var i = 0; i < model.customer.familyMembers.length; i++) {
-                                if (model.customer.familyMembers[i].dateOfBirth != null) {
-                                    model.customer.familyMembers[i].age = moment().diff(moment(model.customer.familyMembers[i].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                                }
-                            }
-                        }
-                    }
+                  
                     /* Setting data for the form */
                     var branchId = SessionStore.getBranchId();
                     if (!model.customer) {
@@ -2670,9 +2725,13 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                         model.customer.customerBranchId = branchId;
                     };
                     /*initialize Self */
-                    if ( model.customer.familyMembers.length > 0)
-                    if(model.customer.familyMembers[0].relationShip == 'self')
-                        model.customer.familyMembers[0].relationShip = 'Self';
+                    if ( model.customer.familyMembers.length > 0){
+                        if(model.customer.familyMembers[0].relationShip == 'self'){
+                            model.customer.familyMembers[0].relationShip = 'Self';
+                        }
+                       
+                    }
+                    
 
                     /* End of setting data for the form */
                     model.UIUDF.family_fields.dependent_family_member = 0;
@@ -2684,29 +2743,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     }
                     model.customer.addressPfSameAsIdProof="NO";
 
-                    var initialFixedCurrent=function(){
-                        model.customer.currentAssets=[];
-                        model.customer.physicalAssets=[];
-                        var fixed = formHelper.enum('fixed_asset_type').data;
-                        var current = formHelper.enum('current_asset_type').data;
-                        for(var i=0;i<current.length;i++){
-                            var obj={};
-                            obj.assetType=current[i].name;
-                            obj.titleExpr=current[i].name;
-                            model.customer.currentAssets.push(obj);  
-                        }
-                        for(var i=0;i<fixed.length;i++){
-                            var obj={};
-                            obj.nameOfOwnedAsset=fixed[i].name;
-                            obj.titleExpr=fixed[i].name; 
-                            model.customer.physicalAssets.push(obj);
-                        }
-                    }
-
-                   if((model.customer.currentAssets==undefined || model.customer.currentAssets.length==0) &&
-                    (model.customer.physicalAssets==undefined || model.customer.physicalAssets.length==0 )){
-                        initialFixedCurrent();
-                   } 
+               
+                   
                     /* Form rendering starts */
                     var self = this;
                     var formRequest = {
@@ -3827,8 +3865,17 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                         if (PageHelper.isFormInvalid(form)) {
                             return false;
                         }
+                        if((model.customer.addressPfSameAsIdProof==='YES') && (model.customer.identityProof=='Aadhaar Card')){
+                            model.customer.addressProof=model.customer.identityProof;
+                            model.customer.addressProofNo=model.customer.identityProofNo;
+                            model.customer.addressProofImageId=model.customer.identityProofImageId;
+                            model.customer.addressProofReverseImageId=model.customer.identityProofReverseImageId;
+                            model.customer.addressProofIssueDate=model.customer.idProofIssueDate;
+                            model.customer.addressProofValidUptoDate=model.customer.idProofValidUptoDate;
+                        }
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
+                        model.enrolmentProcess.customer=model.customer;
                         model.enrolmentProcess.proceed()
                             .finally(function () {
                                 console.log("Inside hideLoader call");
@@ -3838,6 +3885,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 formHelper.resetFormValidityState(form);
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
+                                // model.customer=enrolmentProcess.customer;
                                 BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
                                 BundleManager.pushEvent('new-enrolment', model._bundlePageObj, { customer: model.customer });
 
