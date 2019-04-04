@@ -253,7 +253,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "EnterpriseInformation.companyRegistered": {
                         "required": true,
                         "orderNo": 130,
-                        "type": "radios"
+                        "type": "radios",
+                        "enumCode": "decisionmakers"
                     },
                     "EnterpriseInformation.enterpriseRegistrations": {
                         "required": true,
@@ -3422,7 +3423,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     model.customer = model.enrolmentProcess.customer;
                     model.customer.isCaptured = false ;
                     model.customer.isCreditAppraisal = false;
-                    model.customer.customerType = "Enterprise";
+                    model.customer.customerType = "Enterprise";         
                     computeEstimatedEmi(model);
                     model.customer.customerBranchId = SessionStore.getCurrentBranch().branchId;
                     model.customer.branchName = SessionStore.getCurrentBranch().branchName;

@@ -61,12 +61,11 @@ define([], function () {
             }
             var policyBasedOnLoanType = function(loanType,model){
                 var totalMarketValueInPaisa = 0;
-
-
-                if (loanType == "JEWEL"){                    
+                if (loanType == "JEWEL"){
                     for (var i = model.loanAccount.ornamentsAppraisals.length - 1; i >= 0; i--) {
                         totalMarketValueInPaisa +=(model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa || 0);
-                    }
+                    }  
+                
                      if(model.loanAccount.loanAmountRequested >= ((totalMarketValueInPaisa/100))*75){
                         var errMsg = 'Loan amount should be less then ' + parseFloat((totalMarketValueInPaisa/100)*75).toFixed(2);
                         PageHelper.showErrors({data:{error:errMsg}});
@@ -285,8 +284,9 @@ define([], function () {
                 if (model.loanAccount.nominees[0].isnomineeAddressSameasBorrower)
                     model.loanAccount.nominees[0].guardianTitle = "YES";
                 else
-                    model.loanAccount.nominees[0].guardianTitle = "NO";   
-                }
+                    model.loanAccount.nominees[0].guardianTitle = "NO";     
+                }  
+                
 
             // View Functions
             var getIncludes = function (model) {
@@ -1697,7 +1697,7 @@ define([], function () {
                         if(!(policyBasedOnLoanType(model.loanAccount.loanType,model))){
                             PageHelper.showProgress('loan-process','Oops Some Error',2000);
                             return false;}
-                        mapNomineeAddress(model);    
+                        mapNomineeAddress(model);  
                         model.loanProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
@@ -1711,6 +1711,10 @@ define([], function () {
                                         }
                                     }
                                 /* Collateral */
+                                if (_.hasIn(value, "loanAccount.nominees[0]")) {
+                                    if (value.loanAccount.nominees[0].guardianTitle && value.loanAccount.nominees[0].guardianTitle == "YES")
+                                        value.loanAccount.nominees[0].isnomineeAddressSameasBorrower = true;                   
+                                }
                                 BundleManager.pushEvent('new-loan', model._bundlePageObj, {
                                     loanAccount: model.loanAccount
                                 });
@@ -1795,6 +1799,10 @@ define([], function () {
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
+                                if (_.hasIn(value, "loanAccount.nominees[0]")) {
+                                    if (value.loanAccount.nominees[0].guardianTitle && value.loanAccount.nominees[0].guardianTitle == "YES")
+                                        value.loanAccount.nominees[0].isnomineeAddressSameasBorrower = true;                   
+                                }
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 irfNavigator.goBack();
