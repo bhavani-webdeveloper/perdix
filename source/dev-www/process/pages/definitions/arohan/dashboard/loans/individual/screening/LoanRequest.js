@@ -1792,10 +1792,10 @@ define([],function(){
                                     "type": "radios",
                                     "condition": "model.currentStage !== 'Screening'",
                                     "titleMap": {
-                                        "REJECT": "REJECT",
+                                        //"REJECT": "REJECT",
                                         "SEND_BACK": "SEND_BACK",
                                         "PROCEED": "PROCEED",
-                                        "HOLD": "HOLD"
+                                        //"HOLD": "HOLD"
                                     }
                                 },
                                 "action1": {
@@ -1806,6 +1806,16 @@ define([],function(){
                                         "REJECT": "REJECT",
                                         "PROCEED": "PROCEED",
                                         "HOLD": "HOLD"
+                                    }
+                                },
+                                "action2": {
+                                    "key": "review.action",
+                                    "type": "radios",
+                                    "condition": "model.currentStage == 'Pricing'",
+                                    "titleMap": {
+                                        //"REJECT": "REJECT",
+                                        "PROCEED": "PROCEED",
+                                        //"HOLD": "HOLD"
                                     }
                                 },
                                 "proceed": {
