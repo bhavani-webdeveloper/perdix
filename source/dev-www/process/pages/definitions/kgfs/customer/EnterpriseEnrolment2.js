@@ -3452,7 +3452,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         
                     // }
         
-                    if (_.hasIn(model, 'loanProcess.applicantEnrolmentProcess') && model.loanProcess.applicantEnrolmentProcess !=null){
+                    if (model.loanAccount.currentStage == 'Screening' && _.hasIn(model, 'loanProcess.applicantEnrolmentProcess') && model.loanProcess.applicantEnrolmentProcess !=null){
                         model.applicantEnrolmentProcessDetails = {}; 
                         model.applicantEnrolmentProcessDetails=model.loanProcess.applicantEnrolmentProcess.customer;
                         model.customer.customerBankAccounts=model.applicantEnrolmentProcessDetails.customerBankAccounts;
@@ -3561,7 +3561,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             getPersonalExpenses('value', model, 'row');
                             getOtherBusinessIncomeDet('', model, '') ;
                         }
-
+                        monthlySurpluse(model)
                         if(model.customer.enterprise.employeeSalary && model.customer.enterprise.employeeSalary>0){
                             model.customer.isCreditAppraisal = true
                             BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer});
