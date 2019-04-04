@@ -156,8 +156,10 @@ define(["perdix/domain/model/loan/LoanProcess",
                             .subscribe(function(loanProcess){
                             bundleModel.loanProcess = loanProcess;
                                var loanAccount = loanProcess;
+
                                Enrollment.getCustomerById({id:$stateParams.pageId},function(resp,header){
-                                loanProcess.applicantEnrolmentProcess=resp;
+                                var enrollmentRes={"enrolmentProcess":{}};
+                                enrollmentRes.enrolmentProcess.customer=resp;
                            
                                 // loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.loanAccount.customerId;
                                 if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
@@ -174,7 +176,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 $this.bundlePages.push({
                                     pageClass: 'applicant',
                                     model: {
-                                        enrolmentProcess: loanProcess.applicantEnrolmentProcess,
+                                        enrolmentProcess: enrollmentRes.enrolmentProcess,
                                         loanProcess: loanProcess
                                     }
                                 });

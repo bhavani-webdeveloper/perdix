@@ -3292,7 +3292,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                      "orderNo":0,
                                                     "titleMap":
                                                             {
-                                                            "LCM":"LCM",
+                                                            "LDM":"LDM",
                                                             "SDM":"SDM",
                                                             "CM":"CM",
                                                             "RETURNEE":"RETURNEE",

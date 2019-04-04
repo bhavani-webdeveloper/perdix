@@ -313,7 +313,8 @@ define({
                             "title": "Has anyone else been a partner of your present business ?"
                         }]
 
-                    }]
+                    }
+                ]
                 }]
             }, {
                 "type": "box",
@@ -364,9 +365,124 @@ define({
                                 "longitude": "customer.longitude"
                             }]
                         }]
-                    }]
+                    },
+                    {
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [{
+                            "title":"OFFICE_ADDRESS"
+                        },
+                            {
+                            "key": "",
+                            "title": "Mobile Phone"
+                        }, {
+                            "key": "",
+                            "title": "Phone 2"
+                        }, {
+                            "key": "",
+                            "title": "DOOR_NO"
+                        }, {
+                            "key": "",
+                            "title": "STREET"
+                        }, {
+                            "key": "",
+                            "title": "LANDMARK"
+                        }, {
+                            "key": "",
+                            "title": "PINCODE"
+                        }, {
+                            "title": "AREA",
+                            "key": ""
+
+                        },{
+                            "title": "VILLAGE",
+                            "key": ""
+
+                        },{
+                            "title": "DISTRICT",
+                            "key": ""
+
+                        },
+                        {
+                            "title": "STATE",
+                            "key": ""
+
+                        }]
+                    },
+                ]
                 }]
-            }, {
+            },
+            {
+                "type": "box",
+                "readonly": true,
+                "colClass": "col-sm-12",
+                "overrideType": "default-view",
+                "title": "BANK_ACCOUNT_DETAILS",
+                //"condition": "model.enterpriseRelationship",
+                "items": [{
+                    "type": "grid",
+                    "orientation": "horizontal",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [{
+                            "title":"IFSC_CODE",
+                            "key": "",
+                        }, {
+                            "title":"BANK_NAME",
+                            "key": "",
+
+                        }, {
+                            "title":"ACCOUNT_HOLDER_NAME",
+                            "key": "",
+                        },{
+                            "title":"ACCOUNT_NUMBER",
+                            "key": ""
+                        },{
+                            "title":"ACCOUNT_TYPE",
+                            "key": ""
+                        },{
+                            "key":"",
+                            "title":"LIMIT"
+                        }
+                    ]
+                    },
+                ]
+                }]
+            },
+            {
+                "type": "box",
+                "readonly": true,
+                "colClass": "col-sm-12",
+                "overrideType": "default-view",
+                "title": "BUSINESS_FINANCE",
+                //"condition": "model.enterpriseRelationship",
+                "items": [{
+                    "type": "grid",
+                    "orientation": "horizontal",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [{
+                            "title":"MONTHLY_TURNOVER",
+                            "key": "",
+                        }, {
+                            "title":"MONTHLY_TURNOVER_CARD",
+                            "key": "",
+
+                        }, {
+                            "title":"MONTHLY_BUSINESS_EXPENSES",
+                            "key": "",
+                        },{
+                            "title":"AVARAGE_MONTHLY",
+                            "key": ""
+                        }
+                    ]
+                    },
+                ]
+                }]
+            },
+            {
                 "type": "box",
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
@@ -552,7 +668,15 @@ define({
                                 render: function(data, type, full, meta) {
                                     return full['Rate of Interest']
                                 }
-                            }];
+                            },
+                            {
+                                "data": "interestRate",
+                                "title": "TENURE",
+                                render: function(data, type, full, meta) {
+                                    return full['']
+                                }
+                            },
+                        ];
                         },
                         getActions: function() {
                             return [];
