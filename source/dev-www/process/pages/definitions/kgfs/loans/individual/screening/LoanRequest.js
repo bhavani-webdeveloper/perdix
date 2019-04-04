@@ -1665,6 +1665,9 @@ define([],function(){
                             PageHelper.showProgress("loan-enrolment","Business Details are not captured",5000);
                                 return false;
                         } 
+                        if(_.isNull(model.loanAccount.loanMitigants) || (model.loanAccount.loanMitigants == undefined))   {
+                            model.loanAccount.loanMitigants = [];
+                        }
                         setDeviation(model);
                         validateDeviationForm(model);
                         if(_.isArray(validateDeviation) && validateDeviation.length > 0) {
