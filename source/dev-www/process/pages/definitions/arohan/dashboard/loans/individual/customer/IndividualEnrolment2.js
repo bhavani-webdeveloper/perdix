@@ -1824,6 +1824,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.mailingLocality",
                     "ContactInformation.mailingDistrict",
                     "ContactInformation.mailingState",
+                    "ContactInformation.officeAddressFieldSet",
+                    "ContactInformation.officemailingDoorNo",
+                    "ContactInformation.officemailingStreet",
+                    "ContactInformation.officemailingPostoffice",
+                    //"ContactInformation.mailingMandal",
+                    "ContactInformation.officemailingPincode",
+                    "ContactInformation.officemailingLocality",
+                    "ContactInformation.officemailingDistrict",
+                    "ContactInformation.officemailingState",
 
                     "IndividualFinancials",
                     "IndividualFinancials.expenditures",
@@ -1986,6 +1995,40 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title": "MANDAL_TAHSIL",
                                     "type": "string",
                                     "orderNo": 181
+                                },
+                                "officeAddressFieldSet":{
+                                    "type":"fieldset",
+                                    "title":"OFFICE_ADDRESS"
+                                },
+                                "officemailingDoorNo":{
+                                    "type":"number",
+                                    "title":"DOOR_NO"
+                                },
+                                "officemailingStreet":{
+                                    "type":"text",
+                                    "title":"STREET"
+                                },
+                                "officemailingPostoffice":{
+                                    "type":"text",
+                                    "title":"POST_OFFICE"
+                                },
+                                "officemailingPincode":{
+                                    "type":"lov",
+                                    "title":"PINCODE",
+                                    "resolver": "PincodeLOVConfiguration",
+                                    "searchHelper": formHelper
+                                },
+                                "officemailingLocality":{
+                                    "type":"text",
+                                    "title":"LOCALITY"
+                                },
+                                "officemailingDistrict":{
+                                    "type":"text",
+                                    "title":"DISTRICT"
+                                },
+                                "officemailingState":{
+                                    "type":"text",
+                                    "title":"STATE"
                                 }
                             }
                         },
