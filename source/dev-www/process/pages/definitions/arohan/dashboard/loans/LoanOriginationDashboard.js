@@ -166,10 +166,10 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             });
         }
 
-        var  duq= $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard.loans.individual.screening.CreditCommitteeReviewQueue"];
+        var  duq= $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard.loans.individual.screening.DocumentUploadQueue"];
         if (duq) {
             IndividualLoan.search({
-                'stage': 'CreditCommitteeReview',
+                'stage': 'DocumentUploadQueue',
                 'enterprisePincode': '',
                 'applicantName': '',
                 'area': '',
