@@ -81,10 +81,54 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "FamilyDetails.familyMembers.relationShip",
                                 "FamilyDetails.familyMembers.healthStatus",
                                 "HouseVerification.inCurrentAreaSince",
+                                
                             ],
                             "overrides":{
+                                "HouseVerification.ownership":{
+                                    "readonly": true
+                                },
+                                "HouseVerification.inCurrentAddressSince":{
+                                    "readonly": true
+                                },
+                                "FamilyDetails.familyMembers.educationStatus":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.careOf":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.doorNo":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.street":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.postOffice":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.landmark":{
+                                    "readonly": true
+                                },
+                               
+                                "ContactInformation.pincode":{
+                                    "readonly": true
+                                },
+
+                            "ContactInformation.mobilePhone":{
+                                "readonly": true
+                            },
+                            "ContactInformation.landLineNo":{
+                                "readonly": true
+                            },
+                            "IndividualInformation.dateOfBirth":{
+                                "readonly": true
+                            },
+                            "IndividualInformation.title":{
+                                "readonly": true
+                            },
+                                
                             "IndividualInformation.firstName":{
-                                "title":"APPLICANT_NAME/FULL_NAME"
+                                "title":"APPLICANT_NAME/FULL_NAME",
+                                "readonly": true
                             },
                             "ContactInformation.locality":{
                                 "readonly": true
