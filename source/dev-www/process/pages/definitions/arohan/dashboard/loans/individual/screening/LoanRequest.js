@@ -1659,7 +1659,7 @@ define([],function(){
                                 },
                                 "expectedEmi": {
                                     "key": "loanAccount.expectedEmi",
-                                    "title": "ESTIMATED_KINARA_EMI",
+                                    "title": "ESTIMATED_AROHAN_EMI",
                                     "orderNo": 91,
                                     type: "amount",
                                     "readonly": true
