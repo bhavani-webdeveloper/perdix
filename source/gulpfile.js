@@ -105,7 +105,7 @@ gulp.task('html', function(){
         .pipe($.if('*.js', $.rev()))
         .pipe($.if('*.css', $.rev()))
         .pipe($.revReplace())
-        .pipe($.if(argv.siteCode == 'kgfs', $.if('*.js', babel({
+        .pipe($.if(argv.siteCode == 'onholdfortemporary', $.if('*.js', babel({
             "sourceType": "script",
             "presets": [
                 ["@babel/preset-env", {
@@ -117,7 +117,6 @@ gulp.task('html', function(){
                 "transform-es2015-template-literals"
             ]
         }))))
-        .pipe()
         .pipe($.print())
         .pipe(gulp.dest(buildDirectory))
 })

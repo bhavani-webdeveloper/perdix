@@ -134,8 +134,9 @@ define({
                                         "readonly": false,
                                         "key": "loanAccount.loanDocs[].documentId",
                                         "onClick": function(model, form, schemaForm, event) {
-                                            var fileId = model.loanAccount.loanDocuments[schemaForm.arrayIndex].documentId;
-                                            Utils.downloadFile(Files.getFileDownloadURL(fileId));
+                                            //var fileId = model.loanAccount.loanDocuments[schemaForm.arrayIndex].documentId;
+                                            //Utils.downloadFile(Files.getFileDownloadURL(fileId));
+                                            Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + "applicant_details" + "&record_id=" + model.loanAccount.id+ "&display=content")
                                         }
                                     }]
                                 }, {

@@ -559,11 +559,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                     },
                     sendBack: function(model, formCtrl, form, $event){                       
+                        if ( model.loanProcess.remarks==null ||  model.loanProcess.remarks =="" ||  model.loanProcess.stage==null ||  model.loanProcess.stage==""){
+                            PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory");
+                            return false;
+                        }
                         PageHelper.showLoader();
-                        // if ( model.loanAccount.review.remarks==null ||  model.loanAccount.review.remarks =="" ||  model.loanAccount.review.targetStage==null ||  model.loanAccount.review.targetStage==""){
-                        //     PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory");
-                        //     return false;
-                        // }
                         model.loanProcess.sendBack()
                             .finally(function () {
                                 PageHelper.hideLoader();
@@ -610,7 +610,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             });
                     },
                     reject: function(model, formCtrl, form, $event){
-                        if(PageHelper.isFormInvalid(formCtrl)) {
+                        // if(PageHelper.isFormInvalid(formCtrl)) {
+                        //     return false;
+                        // }
+                        if ( model.loanProcess.remarks==null ||  model.loanProcess.remarks =="" ||  model.loanAccount.rejectReason==null ||  model.loanAccount.rejectReason==""){
+                            PageHelper.showProgress("update-loan", "Reject Reason / Remarks is mandatory");
                             return false;
                         }
                         PageHelper.showLoader();

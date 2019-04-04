@@ -17,19 +17,20 @@ define([],function(){
 
             var setDeviation = function(model){
                       /* Deviations and Mitigations grouping */
-                        var checkMitigants = true;
-                        if(_.isArray(model.loanAccount.loanMitigants) && model.loanAccount.loanMitigants)
-                        {
-                            if(_.hasIn(model.loanAccount.loanMitigants[0], 'id'))
-                                checkMitigants=false;                            
-                        }
-                        if (model.deviationMitigants && model.loanAccount.loanMitigants && _.isArray(model.loanAccount.loanMitigants) && checkMitigants){
+                        // var checkMitigants = true;
+                        // if(_.isArray(model.loanAccount.loanMitigants) && model.loanAccount.loanMitigants)
+                        // {
+                        //     if(_.hasIn(model.deviationMitigants[0], 'id'))
+                        //         checkMitigants=false;                            
+                        // }
+                        if (model.deviationMitigants && model.loanAccount.loanMitigants && _.isArray(model.loanAccount.loanMitigants)){
                             for (var i=0; i<model.deviationMitigants.length; i++){
                                 model.loanAccount.loanMitigants.push(model.deviationMitigants[i]);
                             }
                         }
                         else
                         {
+                            if(_.isNull(model.loanAccount.loanMitigants))
                             model.loanAccount.loanMitigants=[];
                             if (model.deviationMitigants){
                                 for (var i=0; i<model.deviationMitigants.length; i++){
@@ -39,11 +40,29 @@ define([],function(){
                         }
                     /* End of Deviations and Mitigations grouping */
             }
+            var setLoanMitigantsGroup = function(model) {
+                if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
+                    var loanMitigantsGrouped = {};
+                    for (var i=0; i<model.loanAccount.loanMitigants.length; i++){
+                        var item = model.loanAccount.loanMitigants[i];
+                        if (!_.hasIn(loanMitigantsGrouped, item.parameter)){
+                            loanMitigantsGrouped[item.parameter] = [];
+                        }
+                        loanMitigantsGrouped[item.parameter].push(item);
+                    }
+                    model.loanMitigantsGrouped=loanMitigantsGrouped;
+                    model.deviationMitigants  = model.loanAccount.loanMitigants;
+                    model.loanAccount.loanMitigants = [];                        
+
+                }
+            }
             var getGoldRate = function(model){
                 var value = Queries.getGoldRate();
                 value.then(function(resp){
-                    model.additions.goldRate = resp;
-                    model.additions.goldRatePerCarat = resp/22;
+                    if(model.additions) {
+                        model.additions.goldRate = resp;
+                        model.additions.goldRatePerCarat = resp/22;
+                    }
                 })
                 
             };
@@ -85,7 +104,7 @@ define([],function(){
                 validateDeviation=[];
                 if (_.hasIn(model, 'loanAccount.loanMitigants') && _.isArray(model.loanAccount.loanMitigants) && model.loanAccount.loanMitigants !=null) {
                     _.forEach(model.loanAccount.loanMitigants, function(mitigantStatus,item){
-                        if(mitigantStatus.mitigatedStatus)
+                        if(mitigantStatus.mitigatedStatus || (!_.hasIn(mitigantStatus, 'id')))
                             delete  validateDeviation[item];
                         else
                             validateDeviation[item]=mitigantStatus.mitigatedStatus;
@@ -287,19 +306,12 @@ define([],function(){
                 model.additions.noOfGuarantorCoApplicantHtml = "<p stye=\"font-size:10px !important\"><font color=#FF6347>Number of Co-Applicants : {{model.additions.co_borrower_required}} Number of Guarantors :{{model.additions.number_of_guarantors}}</font><p>";
                 model.loanAccount.bcAccount = {};
                 model.loanAccount.processType = "1";
-                
-        
+               
                 if (typeof model.loanAccount.accountUserDefinedFields == "undefined") {
                     model.loanAccount.accountUserDefinedFields = {};
                     model.loanAccount.accountUserDefinedFields.userDefinedFieldValues = {};
                 }
-                else {
-                   if(!initFlag)
-                    {
-                    model.loanAccount.accountUserDefinedFields = {};
-                    model.loanAccount.accountUserDefinedFields.userDefinedFieldValues = {};
-                    }
-                }
+                
                 if (typeof model.loanAccount.loanCentre == "undefined" || model.loanAccount.loanCentre == null){
                     model.loanAccount.loanCentre = {};
                 }
@@ -942,16 +954,23 @@ define([],function(){
                     model.customer = {};
                     model.review = model.review|| {};
                     model.loanAccount = model.loanProcess.loanAccount;
+                    if(model.loanAccount.currentStage == 'Screening' && !_.hasIn(model.loanAccount, 'id')){
+                        model.loanAccount.isBusinessCaptured = false;
+                    }
                     if(model.loanAccount.loanType == 'JEWEL' && model.loanAccount.currentStage == 'Screening'){
                         getGoldRate(model);
                         if (model.loanAccount.jewelLoanDetails ==undefined)
-                        model.loanAccount.jewelLoanDetails = {};
+                            model.loanAccount.jewelLoanDetails = {};
 
-                        model.loanAccount.jewelLoanDetails.encoreClosed = false;
-                        model.loanAccount.jewelLoanDetails.jewelPouchLocationType = "BRANCH";
+                        if(model.loanAccount.jewelLoanDetails) {
+                            model.loanAccount.jewelLoanDetails.encoreClosed = false;
+                            model.loanAccount.jewelLoanDetails.jewelPouchLocationType = "BRANCH";
+                        }
                     }
                     if(model.loanAccount.loanType == 'JEWEL')
-                        model.loanAccount.jewelLoanDetails.jewelPouchNo=Number(model.loanAccount.jewelLoanDetails.jewelPouchNo);
+                        if(model.loanAccount.jewelLoanDetails) {
+                            model.loanAccount.jewelLoanDetails.jewelPouchNo=Number(model.loanAccount.jewelLoanDetails.jewelPouchNo);
+                        }
 
                     if (_.hasIn(model, 'loanAccount.loanPurpose2') && model.loanAccount.loanPurpose2 !=null && model.loanAccount.loanPurpose2.length > 0)
                     model.loanAccount.loanPurpose3=model.loanAccount.loanPurpose2;
@@ -1533,12 +1552,7 @@ define([],function(){
                             model.loanAccount.urnNo=model.loanAccount.loanCustomerRelations[0].urn; 
                         }
 
-                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == "Screening" && model.loanAccount.productCategory == 'MEL' && !model.loanAccount.isBusinessCaptured && model.loanAccount.urnNo == null){
-                            PageHelper.showProgress("loan-enrolment","Business Details are not captured",5000);
-                                return false;
-                        }
-
-                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == "CreditAppraisal" && model.loanAccount.productCategory == 'MEL' && model.customer.enterprise.employeeSalary <=0){
+                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == "Screening" && model.loanAccount.productCategory == 'MEL' && !model.loanAccount.isBusinessCaptured){
                             PageHelper.showProgress("loan-enrolment","Business Details are not captured",5000);
                                 return false;
                         }
@@ -1572,11 +1586,13 @@ define([],function(){
                                         }
                                     }
                                 /* Collateral */
+                                setLoanMitigantsGroup(model);
                                 BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount});                                    
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);                                
 
                             }, function (err) {
+                                setLoanMitigantsGroup(model);
                                 PageHelper.showErrors(err);
                                 PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);                                
                                 PageHelper.hideLoader();
@@ -1613,12 +1629,12 @@ define([],function(){
                         if(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5){
                             model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = "false"
                         }
-                            PageHelper.showLoader();
                        if (model.loanProcess.remarks==null || model.loanProcess.remarks =="" || model.review.targetStage ==null || model.review.targetStage ==""){
                                PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
                                PageHelper.hideLoader();
                                return false;
                         }
+                        PageHelper.showLoader();
                          if (model.loanProcess.stage==null || model.loanProcess.stage ==""){
                                PageHelper.showProgress("update-loan", "Send to Stage is mandatory", 3000);
                                PageHelper.hideLoader();
@@ -1645,9 +1661,17 @@ define([],function(){
                         model.review.targetStage='';
                         model.loanProcess.stage='';
                     } 
+                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == "CreditAppraisal" && model.loanAccount.productCategory == 'MEL' && model.customer.enterprise.employeeSalary <=0){
+                            PageHelper.showProgress("loan-enrolment","Business Details are not captured",5000);
+                                return false;
+                        } 
+                        if(_.isNull(model.loanAccount.loanMitigants) || (model.loanAccount.loanMitigants == undefined))   {
+                            model.loanAccount.loanMitigants = [];
+                        }
                         setDeviation(model);
                         validateDeviationForm(model);
                         if(_.isArray(validateDeviation) && validateDeviation.length > 0) {
+                            model.loanAccount.loanMitigants=[];
                             PageHelper.showErrors({data:{error:"Mitigation checkbox, Please check this box if you want to proceed"}});
                             return false;
                         }
@@ -1708,6 +1732,7 @@ define([],function(){
                             if(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length > 0){
                                 for(i = 0; i< model.loanAccount.loanCustomerRelations.length;i++){
                                     if((typeof model.loanAccount.loanCustomerRelations[i].dscStatus == "undefined" || model.loanAccount.loanCustomerRelations[i].dscStatus == null) && model.loanAccount.loanCustomerRelations[i].relation == "Applicant"){
+                                        model.loanAccount.loanMitigants=[];
                                         PageHelper.showErrors({data:{error:"DSC Tab, Please click DSC Request button if you want to proceed"}});
                                         return false;
                                     }
@@ -1718,6 +1743,7 @@ define([],function(){
                             if(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length > 0){
                                 for(i = 0; i< model.loanAccount.loanCustomerRelations.length;i++){
                                     if(typeof model.loanAccount.loanCustomerRelations[i].dscStatus != "undefined" && model.loanAccount.loanCustomerRelations[i].relation == "Applicant" && model.loanAccount.loanCustomerRelations[i].dscStatus == "DSC_OVERRIDE_REQUIRED"){
+                                        model.loanAccount.loanMitigants=[];
                                         PageHelper.showErrors({data:{error:"DSC Tab, Please click DSC Override button if you want to proceed"}});
                                         return false;
                                     }
@@ -1725,6 +1751,7 @@ define([],function(){
                             }
                         }
                         if((model.loanAccount.currentStage == 'DSCApproval') && (typeof model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 =="undefined" || model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 == null)){
+                            model.loanAccount.loanMitigants=[];
                             PageHelper.showErrors({data:{error:"DSC STATUS IS REQUIRED...."}});
                                 PageHelper.showProgress('enrolment','Oops. Some error.', 5000);
                                 PageHelper.hideLoader();
@@ -1744,6 +1771,7 @@ define([],function(){
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 irfNavigator.goBack();
                             }, function (err) {
+                                model.loanAccount.loanMitigants=[];
                                 PageHelper.showErrors(err);
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 
@@ -1751,6 +1779,10 @@ define([],function(){
                             });
                     },
                     reject: function(model, formCtrl, form, $event){
+                        if ( model.loanProcess.remarks==null ||  model.loanProcess.remarks =="" ||  model.loanAccount.rejectReason==null ||  model.loanAccount.rejectReason==""){
+                            PageHelper.showProgress("update-loan", "Reject Reason / Remarks is mandatory");
+                            return false;
+                        }
                         PageHelper.showLoader();
                          model.loanProcess.reject()
                             .finally(function () {

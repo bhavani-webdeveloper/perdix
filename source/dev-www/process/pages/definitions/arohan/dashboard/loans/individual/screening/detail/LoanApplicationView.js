@@ -472,7 +472,7 @@ define({
                 }]
             }, {
                 "type": "box",
-                "readonly": true,
+                "readonly": false,
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
                 "title": "Deductions From Loan Amount",
@@ -485,11 +485,13 @@ define({
                         "items": [{
                             "key": "loanAccount.expectedProcessingFeePercentage",
                             "title": "Expected Processing Fee(in%)",
-                            "type": "number"
+                            "type": "number",
+                            "readonly": false,
                         }, {
                             "key": "loanAccount.expectedCommercialCibilCharge",
                             "title": "Expected CIBIL Charges",
-                            "type": "amount"
+                            "type": "amount",
+                            "readonly": false,
                         }]
                     }, {
                         "type": "grid",
@@ -497,7 +499,8 @@ define({
                         "items": [{
                             "key": "loanAccount.estimatedEmi",
                             "title": "Expected Security EMI(in Rs.)",
-                            "type": "amount"
+                            "type": "amount",
+                            "readonly": false,
                         }]
                     }]
                 }]
@@ -687,6 +690,8 @@ define({
                             "key": "",
                             "title": "Current Exposure",
                             "type": "amount"
+                        },{
+                            
                         }, {
                             "key": "loanAccount.loanAmount",
                             "title": "Loan Amount Recommended",

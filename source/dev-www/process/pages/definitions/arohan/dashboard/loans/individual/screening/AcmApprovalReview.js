@@ -91,7 +91,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 };
                 return {
                     "type": "page-bundle",
-                    "title": "CREDIT_COMMITTEE_REVIEW",
+                    "title": "ACM_APPROVAL",
                     "subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
                     "subTitle": "",
                     "readonly": true,

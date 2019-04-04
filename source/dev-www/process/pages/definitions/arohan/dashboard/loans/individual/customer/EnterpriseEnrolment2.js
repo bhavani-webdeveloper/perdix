@@ -1033,9 +1033,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Liabilities.liabilities.interestOnly",
                     "Liabilities.liabilities.interestRate",
                     "Liabilities.liabilities.proofDocuments",
+                    "Liabilities.liabilities.tenure",
+                    "Liabilities.liabilities.securityOffered",
                     
                     "EnterpriseFinancials",
                     "EnterpriseFinancials.monthlyTurnover",
+                    "EnterpriseFinancials.monthlyTurnoverCard",
                     "EnterpriseFinancials.monthlyBusinessExpenses",
                     "EnterpriseFinancials.avgMonthlyNetIncome",
                     "EnterpriseFinancials.otherBusinessIncomes",
@@ -2597,7 +2600,34 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                                 }
                             }
+                        },
+                    "Liabilities":{
+                        "items":{
+                            "liabilities":{
+                                "items":{
+                                    "tenure":{
+                                        "key":"",
+                                        "title":"TENURE",
+                                        "type":"number"
+                                    },
+                                    "securityOffered":{
+                                        "key":"",
+                                        "title":"SECURITY_OFFER",
+                                        "type":"text"
+                                    }
+                                }
+                            }
                         }
+                    },
+                    "EnterpriseFinancials":{
+                        "items":{
+                            "monthlyTurnoverCard":{
+                                "key":"",
+                                "title":"MONTHLY_TURNOVER_CARD",
+                                "type":"number"
+                            }
+                        }
+                    }
                     },
                     "additions": [
                         {
@@ -2638,7 +2668,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         //     ]
                         // }
                     ],
-                    "repositoryAdditions":repositoryAdditions(model)
+                    //"repositoryAdditions":repositoryAdditions(model)
                 }
             
             }

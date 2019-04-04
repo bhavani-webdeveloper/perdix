@@ -71,15 +71,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 // "References",   
                             ],
                             "overrides": {
+                                
+                                "KYC.addressProofFieldSet":{
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
+                                },
                                 "KYC.identityProofNo": {
                                     "required": true,
                                     "schema": {
                                         "pattern": "(^\\d{4}\\d{4}\\d{4}$)|(^[A-Z]{2}[0-9]{13}$)|(^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$)|(^[a-zA-Z]{6}[0-9]{5}$)",
                                         "type": ["integer", "string"]
                                     }
-                                },
-                                "KYC.addressProofFieldSet":{
-                                    "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
                                 },
                                 "KYC.addressProof": {
                                     "readonly": false,
@@ -104,6 +105,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "titleExpr": "model.customer.physicalAssets[arrayIndex].titleExpr",
 
                                 },
+                                "FamilyDetails.familyMembers":{
+                                    title: "MIGRANT_DETAILS"
+                                },
+                              
                                 "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
                                     "enumCode": "fixed_asset_type",
                                     onChange: function(valueObj,context,model){
@@ -189,6 +194,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"ALTERNATIVE_MOBILE_NO",
                                    
                                 },
+                                "FamilyDetails.familyMembers":{
+                                    title: "MIGRANT_DETAILS"
+                                },
+                              
                                 "ContactInformation.residentialAddressFieldSet":{
                                     "title":"SOURCE_ADDRESS"
                                 },
@@ -244,6 +253,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title": "VALUE_OF_THE_ASSET",
                                     "type":"amount"
                                 },
+                                "FamilyDetails.familyMembers":{
+                                    title: "MIGRANT_DETAILS"
+                                },
+                              
 
                                 "IndividualInformation.centreId": {
                                     "required": true,
@@ -358,6 +371,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"ALTERNATIVE_MOBILE_NO",
                                    
                                 },
+                                "FamilyDetails.familyMembers":{
+                                    title: "MIGRANT_DETAILS"
+                                },
+                              
                                 "ContactInformation.residentialAddressFieldSet":{
                                     "title":"SOURCE_ADDRESS"
                                 },
@@ -490,6 +507,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.identityProof": {
                                     "required": true
                                 },
+                                "FamilyDetails.familyMembers":{
+                                    title: "MIGRANT_DETAILS"
+                                },
+                              
                                 "KYC.identityProofImageId": {
                                     "required": true
                                 },
@@ -640,6 +661,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ContactInformation.state": {
                                     "readonly": true
                                 },
+                                "FamilyDetails.familyMembers":{
+                                    title: "MIGRANT_DETAILS"
+                                },
+                              
                                 "ContactInformation": {
                                     "readonly": true
                                 },
@@ -859,6 +884,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"HAMLET_FALA",
                                     "required":false
                                 },
+                                "FamilyDetails.familyMembers":{
+                                    title: "MIGRANT_DETAILS"
+                                },
+                              
                                 // "FamilyDetails.familyMembers.relationShip": {
                                 //     "readonly": true
                                 // },
@@ -965,7 +994,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "TrackDetails": {
                                     "readonly": true
                                 },
-                                
+                                "FamilyDetails.familyMembers":{
+                                    title: "MIGRANT_DETAILS"
+                                },
+                              
                                 "ContactInformation.villageName": {
                                     "readonly": true,
                                     "title":"VILLAGE"
@@ -1034,7 +1066,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualInformation": {
                                     "readonly": true
                                 },
-                                
+                                "FamilyDetails.familyMembers":{
+                                    title: "MIGRANT_DETAILS"
+                                },
+                              
                                 "IndividualFinancials": {
                                     "readonly": true
                                 },
@@ -1122,7 +1157,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualFinancials": {
                                     "readonly": true
                                 },
-                               
+                                "FamilyDetails.familyMembers":{
+                                    title: "MIGRANT_DETAILS"
+                                },
+                              
                                 "ContactInformation.villageName": {
                                     "readonly": true,
                                     "title":"VILLAGE"
@@ -1206,6 +1244,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title": "ZONE_NAME",
                                     "readonly":true
                                 },
+                                "FamilyDetails.familyMembers":{
+                                    title: "MIGRANT_DETAILS"
+                                },
                                 "ContactInformation.villageName": {
                                     "readonly": true,
                                     "title":"VILLAGE"
@@ -1245,6 +1286,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ContactInformation": {
                                     "readonly": true
                                 },
+                                "FamilyDetails.familyMembers":{
+                                    title: "MIGRANT_DETAILS"
+                                },
+                              
                                 "FamilyDetails": {
                                     "readonly": true,
                                     "title": "HOUSEHOLD_DETAILS"
@@ -1327,6 +1372,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title": "ZONE_NAME",
                                     "readonly":true
                                 },
+                                "FamilyDetails.familyMembers":{
+                                    title: "MIGRANT_DETAILS"
+                                },
                               
                                 "FamilyDetails.familyMembers.noOfDependents": {
                                     "readonly": true
@@ -1342,7 +1390,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "FAMILY_DETAILS"
+                                    "title": "MIGRANT_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -1549,6 +1597,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "orderNo": 3,
                                     "readonly": true
                                 },
+                                "FamilyDetails.familyMembers":{
+                                    title: "MIGRANT_DETAILS"
+                                },
+                              
                                 "IndividualFinancials": {
                                     "orderNo": 4,
                                     "readonly": true

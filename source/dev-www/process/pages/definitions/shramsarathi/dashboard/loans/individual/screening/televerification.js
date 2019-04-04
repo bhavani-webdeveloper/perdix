@@ -69,9 +69,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ApplicantInformation.amountRequested",
                     "ApplicantInformation.frequency",
                     "ApplicantInformation.tenure",
-                    "ApplicantInformation.remarksFieldSet",
-                    "ApplicantInformation.remarks",
-                    "ApplicantInformation.feedback",
+                    // "ApplicantInformation.remarksFieldSet",
+                    // "ApplicantInformation.remarks",
+                    // "ApplicantInformation.feedback",
 
 
                     "ApplicantTeleverification",
