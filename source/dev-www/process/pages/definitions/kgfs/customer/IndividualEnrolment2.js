@@ -767,13 +767,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             }
                         },
                         "ContactInformation.residentialAddressAlsoBusinessAddress":{
-                            "onChange": function (modelValue, form, model) {
-                                if(model.customer.fcuStatu){
-                                    model.customer.fcuStatus = "1";  
-                                }
-                                else{
-                                    model.customer.fcuStatus = "0"; 
-                                }
+                            "onChange": function (modelValue, form, model) {                               
                                 BundleManager.pushEvent('load-address', model._bundlePageObj,{customer: model.customer});
                             }
                         },
@@ -1289,13 +1283,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             model.UIUDF.family_fields.dependent_family_member++;
                     });
 
-                    if(model.customer.fcuStatus == "1"){
-                        model.customer.fcuStatu = true  
-                    }
-                    else{
-                        model.customer.fcuStatu = false
-                    }
-
+                    
                     /* Form rendering starts */
                     var self = this;
                     var formRequest = {
@@ -1347,7 +1335,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             }
                                         },
                                         "residentialAddressAlsoBusinessAddress":{
-                                            "key":"customer.fcuStatu",
+                                            "key":"customer.fcuStatus",
                                             title:"RESIDENTIAL_ADDRESS_ALSO_BUSINESS_ADDRESS",
                                             type:"checkbox",
                                             orderNo:149,

@@ -3673,7 +3673,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         model.enrolmentProcess.refreshEnterpriseCustomerRelations(model.loanProcess);
                     },
                     "load-address-business": function (bundleModel, model, params) {
-                        if(params.customer.fcuStatu){
+                        if(params.customer.fcuStatus){
                             model.customer.mobilePhone = params.customer.mobilePhone;
                             model.customer.landLineNo = params.customer.landLineNo;
                             model.customer.doorNo = params.customer.doorNo;
