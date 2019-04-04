@@ -540,7 +540,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction' || model.currentStage == 'BusinessTeamReview' || model.currentStage == 'CreditOfficerReview' || model.currentStage == 'CreditManagerReview' || model.currentStage == 'CBOCreditHeadReview' || model.currentStage == 'CEOMDReview'",
                     },
                     "BuyerDetails.buyerDetails.paymentFrequency": {
-                        "type": "text"
+                        "type": "select",
+                        "enumCode": "payment_frequency"
+                    },
+                    "SuppliersDeatils.supplierDetails.paymentFrequency" : {
+                        "type": "select",
+                        "enumCode": "payment_frequency"
                     },
                     "SuppliersDeatils": {
                         "orderNo": 535,
