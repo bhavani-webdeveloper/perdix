@@ -555,6 +555,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "BuyerDetails.buyerDetails.receivablesOutstanding":{
                         "title":"AMOUNT_TRANSACTION_PER_FREQUENCY"
                     },
+                    "BuyerDetails.buyerDetails.contactNumber":{
+                        "type":"string",
+                        "inputmode": "number",
+                        "numberType": "tel"
+                    },
+                    "SuppliersDeatils.supplierDetails.contactNumber":{
+                        "type":"string",
+                        "inputmode": "number",
+                        "numberType": "tel"
+                    }
                     // "ContactInformation.locality":{
                     //     title:"LOCALITY"
                     // },
@@ -2403,7 +2413,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 "ReviewLiabilityRepayment"
                             ],
                             "overrides":{
-
                             }
                         },
                         "DSCApproval": {
