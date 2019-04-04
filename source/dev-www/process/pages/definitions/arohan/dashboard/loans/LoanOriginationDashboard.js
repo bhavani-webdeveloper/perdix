@@ -29,6 +29,8 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             //"Page/Engine/arohan.dashboard.loans.individual.screening.CentralRiskReviewQueue",
             // "Page/Engine/arohan.dashboard.loans.individual.screening.FieldAppraisalReview",
             "Page/Engine/arohan.dashboard.loans.individual.screening.CreditCommitteeReviewQueue",
+            "Page/Engine/arohan.dashboard.loans.individual.screening.PricingQueue",
+            "Page/Engine/arohan.dashboard.loans.individual.screening.PricingApprovalQueue",
             "Pages/Engine/arohan.dashboard.loans.individual.screening.DocumentUploadQueue",
             //"Page/Engine/arohan.dashboard.loans.individual.screening.LoanSanctionQueue",
             "Page/Engine/arohan.dashboard.loans.individual.screening.RejectedQueue",
@@ -166,7 +168,44 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             });
         }
 
-        var  duq= $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard.loans.individual.screening.DocumentUploadQueue"];
+        var prqv = $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard.loans.individual.screening.PricingQueue"];
+        if (prqv) {
+            IndividualLoan.search({
+                'stage': 'Pricing',
+                'enterprisePincode': '',
+                'applicantName': '',
+                'area': '',
+                'villageName': '',
+                'customerName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response, headerGetter) {
+                prqv.data = Number(response.headers['x-total-count']);
+            }, function() {
+                prqv.data = '-';
+            });
+        }
+
+        var praqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard.loans.individual.screening.PricingApprovalQueue"];
+        if (praqMenu) {
+            IndividualLoan.search({
+                'stage': 'PricingApproval',
+                'enterprisePincode': '',
+                'applicantName': '',
+                'area': '',
+                'villageName': '',
+                'customerName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response, headerGetter) {
+                praqMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                praqMenu.data = '-';
+            });
+        }
+
+
+        var  duq= $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard.loans.individual.screening.CreditCommitteeReviewQueue"];
         if (duq) {
             IndividualLoan.search({
                 'stage': 'DocumentUploadQueue',

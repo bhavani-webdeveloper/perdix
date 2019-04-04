@@ -1691,6 +1691,34 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "Liabilities",
                                 ],
                                 "overrides": {
+                                    "ContactInformation.doorNo":{
+                                        "readonly":true
+                                    },
+                                    "ContactInformation.street":{
+                                        "readonly":true
+                                    },
+                                    
+                                    "ContactInformation.landmark":{
+                                        "readonly":true
+                                    },
+                                    "ContactInformation.pincode":{
+                                        "readonly":true
+                                    },
+                                    "EnterpriseInformation.businessSector":{
+                                        "readonly":true
+                                    },
+                                    "EnterpriseInformation.enterpriseRegistrations.registeredDate":{
+                                        "readonly":true
+                                    },
+                                    "EnterpriseInformation.ownership":{
+                                        "readonly":true
+                                    },                    
+                                    "EnterpriseInformation.businessConstitution":{
+                                        "readonly":true
+                                    },
+                                    "EnterpriseInformation.firstName":{
+                                        "readonly":true
+                                    },
                                     "EnterpriseInformation":{
                                         "orderNo":10
                                     },

@@ -81,10 +81,54 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "FamilyDetails.familyMembers.relationShip",
                                 "FamilyDetails.familyMembers.healthStatus",
                                 "HouseVerification.inCurrentAreaSince",
+                                
                             ],
                             "overrides":{
+                                "HouseVerification.ownership":{
+                                    "readonly": true
+                                },
+                                "HouseVerification.inCurrentAddressSince":{
+                                    "readonly": true
+                                },
+                                "FamilyDetails.familyMembers.educationStatus":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.careOf":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.doorNo":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.street":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.postOffice":{
+                                    "readonly": true
+                                },
+                                "ContactInformation.landmark":{
+                                    "readonly": true
+                                },
+                               
+                                "ContactInformation.pincode":{
+                                    "readonly": true
+                                },
+
+                            "ContactInformation.mobilePhone":{
+                                "readonly": true
+                            },
+                            "ContactInformation.landLineNo":{
+                                "readonly": true
+                            },
+                            "IndividualInformation.dateOfBirth":{
+                                "readonly": true
+                            },
+                            "IndividualInformation.title":{
+                                "readonly": true
+                            },
+                                
                             "IndividualInformation.firstName":{
-                                "title":"APPLICANT_NAME/FULL_NAME"
+                                "title":"APPLICANT_NAME/FULL_NAME",
+                                "readonly": true
                             },
                             "ContactInformation.locality":{
                                 "readonly": true
@@ -1339,6 +1383,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true
                                 },
                             }
+                        },
+                        "CmRecommendationReview":{
+                            "excludes": [
+                                "KYC.idProofIssueDate",
+                                "KYC.idProofValidUptoDate",
+                                "KYC.identityProofImageId",
+                                "KYC.addressProofIssueDate",
+                                "KYC.addressProofValidUptoDate",
+                                "KYC.addressProofImageId",
+                            ],
+                            "overrides": {
+                                "KYC":{
+                                    "readonly":true
+                                }
+                            }
                         }
                     },
                     "pageClass" : {
@@ -1747,7 +1806,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth":{
                         "required" : false
-                    }
+                    },
+                    "KYC.idProofIssueDate":{
+                        "orderNo":51
+                    },
+                    "KYC.idProofValidUptoDate":{
+                        "orderNo":52
+                    },
+                    "KYC.addressProofIssueDate":{
+                        "orderNo":91,
+                        "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
+                    },
+                    "KYC.addressProofValidUptoDate":{
+                        "orderNo":92,
+                        "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
+                    },
 
                 }
             }
@@ -1761,11 +1834,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "KYC.identityProof",
                     "KYC.identityProofImageId",
                     "KYC.identityProofNo",
+                    "KYC.idProofIssueDate",
+                    "KYC.idProofValidUptoDate",
                     "KYC.addressProofSameAsIdProof",
                     "KYC.addressProofFieldSet",
                     "KYC.addressProof",
                     "KYC.addressProofImageId",
                     "KYC.addressProofNo",
+                    "KYC.addressProofIssueDate",
+                    "KYC.addressProofValidUptoDate",
                     "KYC.additionalKYCs",
                     "KYC.additionalKYCs.kyc1ProofType",
                     "KYC.additionalKYCs.kyc1ImagePath",
@@ -1824,15 +1901,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.mailingLocality",
                     "ContactInformation.mailingDistrict",
                     "ContactInformation.mailingState",
-                    "ContactInformation.officeAddressFieldSet",
-                    "ContactInformation.officemailingDoorNo",
-                    "ContactInformation.officemailingStreet",
-                    "ContactInformation.officemailingPostoffice",
-                    //"ContactInformation.mailingMandal",
-                    "ContactInformation.officemailingPincode",
-                    "ContactInformation.officemailingLocality",
-                    "ContactInformation.officemailingDistrict",
-                    "ContactInformation.officemailingState",
+                    
 
                     "IndividualFinancials",
                     "IndividualFinancials.expenditures",
@@ -1995,41 +2064,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title": "MANDAL_TAHSIL",
                                     "type": "string",
                                     "orderNo": 181
-                                },
-                                "officeAddressFieldSet":{
-                                    "type":"fieldset",
-                                    "title":"OFFICE_ADDRESS"
-                                },
-                                "officemailingDoorNo":{
-                                    "type":"number",
-                                    "title":"DOOR_NO"
-                                },
-                                "officemailingStreet":{
-                                    "type":"text",
-                                    "title":"STREET"
-                                },
-                                "officemailingPostoffice":{
-                                    "type":"text",
-                                    "title":"POST_OFFICE"
-                                },
-                                "officemailingPincode":{
-                                    "type":"lov",
-                                    "title":"PINCODE",
-                                    "resolver": "PincodeLOVConfiguration",
-                                    "searchHelper": formHelper
-                                },
-                                "officemailingLocality":{
-                                    "type":"text",
-                                    "title":"LOCALITY"
-                                },
-                                "officemailingDistrict":{
-                                    "type":"text",
-                                    "title":"DISTRICT"
-                                },
-                                "officemailingState":{
-                                    "type":"text",
-                                    "title":"STATE"
                                 }
+                                
                             }
                         },
                         "KYC":{
@@ -2553,7 +2589,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.UIUDF = {
                         'family_fields': {}
                     };
-
                     /* Setting data recieved from Bundle */
                     model.loanCustomerRelationType =getLoanCustomerRelation(bundlePageObj.pageClass);
                     model.pageClass = bundlePageObj.pageClass;

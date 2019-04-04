@@ -987,6 +987,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.businessInCurrentAddressSince",
                     "ContactInformation.prefferedModeOfCommunication",
                     "ContactInformation.registeredOfficeAddress",
+                    "ContactInformation.officeAddressFieldSet",
+                    "ContactInformation.officemailingDoorNo",
+                    "ContactInformation.officemailingStreet",
+                    "ContactInformation.officemailingLandmark",
+                    //"ContactInformation.mailingMandal",
+                    "ContactInformation.officemailingPincode",
+                    "ContactInformation.officemailingLocality",
+                    "ContactInformation.officemailingDistrict",
+                    "ContactInformation.officemailingState",
 
                     "BankAccounts",
                     "BankAccounts.customerBankAccounts",
@@ -2598,6 +2607,40 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"REGISTER_OFFICE",
                                     "type":"",
 
+                                },
+                                "officeAddressFieldSet":{
+                                    "type":"fieldset",
+                                    "title":"OFFICE_ADDRESS"
+                                },
+                                "officemailingDoorNo":{
+                                    "type":"number",
+                                    "title":"DOOR_NO"
+                                },
+                                "officemailingStreet":{
+                                    "type":"text",
+                                    "title":"STREET"
+                                },
+                                "officemailingLandmark":{
+                                    "type":"text",
+                                    "title":"LANDMARK"
+                                },
+                                "officemailingPincode":{
+                                    "type":"lov",
+                                    "title":"PINCODE",
+                                    "resolver": "PincodeLOVConfiguration",
+                                    "searchHelper": formHelper
+                                },
+                                "officemailingLocality":{
+                                    "type":"text",
+                                    "title":"LOCALITY"
+                                },
+                                "officemailingDistrict":{
+                                    "type":"text",
+                                    "title":"DISTRICT"
+                                },
+                                "officemailingState":{
+                                    "type":"text",
+                                    "title":"STATE"
                                 }
                             }
                         },
@@ -2624,7 +2667,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "monthlyTurnoverCard":{
                                 "key":"",
                                 "title":"MONTHLY_TURNOVER_CARD",
-                                "type":"number"
+                                "type":"number",
+                                "orderNo":30
                             }
                         }
                     }

@@ -378,6 +378,10 @@ define({
                             "title": "TRANSACTION_TYPE"
                         },
                         {
+                            "key": "",
+                            "title": "PRODUCT_TYPE"
+                        },
+                        {
                             "key": "loanAccount.linkedAccountNumber",
                             "title": "LINKED_ACCOUNT_NUMBER",
                             "condition": "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
@@ -391,14 +395,17 @@ define({
                         {
                             "key": "loanAccount.loanPurpose1",
                             "title": "Loan Purpose"
-                        }, {
-                            "key": "loanAccount.loanPurpose2",
-                            "title": "Loan SubPurpose"
-                        }, {
-                            "key": "loanAccount.loanAmountRequested",
-                            "title": "Loan Amount Requested",
-                            "type": "amount"
-                        }, {
+                        }, 
+                        // {
+                        //     "key": "loanAccount.loanPurpose2",
+                        //     "title": "Loan SubPurpose"
+                        // },
+                        //  {
+                        //     "key": "loanAccount.loanAmountRequested",
+                        //     "title": "Loan Amount Requested",
+                        //     "type": "amount"
+                        // }, 
+                        {
                             "key": "loanAccount.emiPaymentDateRequested",
                             "title": "Requested EMI Payment Date"
                         }, {
@@ -421,7 +428,7 @@ define({
                             "title": "Expected Interest Rate",
                         }, {
                             "key": "loanAccount.estimatedEmi",
-                            "title": "EXPECTED_MAITREYA_EMI",
+                            "title": "EXPECTED_AROHAN_EMI",
                             "type": "amount"
                         }, {
                             "key": "loanAccount.emiRequested",
@@ -688,18 +695,36 @@ define({
                         "orientation": "vertical",
                         "items": [{
                             "key": "",
+                            "title": "START_DATE",
+                            "type": "date"
+                        }, {
+                            "key": "",
+                            "title": "FREQUENCY",
+                            "type": "select"
+                        },{
+                            "key": "",
+                            "title": "END_DATE",
+                            "type": "date"
+                        }, 
+                            {
+                            "key": "",
                             "title": "Current Exposure",
                             "type": "amount"
-                        },{
-                            
-                        }, {
+                        },
+                        {
+                            "key": "",
+                            "title": "LOAN_PRODUCT",
+                            "type": "select"
+                        },
+                        {
                             "key": "loanAccount.loanAmount",
                             "title": "Loan Amount Recommended",
                             "type": "amount",
                             onChange:function(value,form,model){
                                 computeEMI(model);
                             }
-                        }, {
+                        }, 
+                        {
                             "key": "loanAccount.tenure",
                             "title": "Duration(months)"/*,
                             "type": "number"*/
@@ -713,26 +738,65 @@ define({
                             "type": "number",
                             onChange:function(value,form,model){
                                 computeEMI(model);
-                            }
-                        }]
+                            },
+                           
+                        },
+                    ]
                     }, {
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
                             "key": "loanAccount.estimatedEmi",
-                            "title": "ESTIMATED_KINARA_EMI",
+                            "title": "ESTIMATED_AROHAN_EMI",
                             "type": "amount"
-                        }, {
+                        },{
+                            "key": "",
+                            "title": "INTEREST_AMOUNT",
+                            "type": "number",
+                            },{
+                                "key": "",
+                                "title": "TOTAL_REPAYMENT",
+                                "type": "number",
+                                },{
                             "key": "loanAccount.processingFeePercentage",
                             "title": "Processing Fee(in%)"
-                        }, {
+                        },{
+                            "key": "",
+                            "title": "GST",
+                            "type": "number",
+                            },{
+                                "key": "",
+                                "title": "PROCESSING_FEE",
+                                "type": "number",
+                                },{
                             "key": "loanAccount.estimatedEmi",
                             "title": "Expected Security EMI"
                         }, {
                             "key": "loanAccount.commercialCibilCharge",
                             "title": "CIBIL Charges",
                             "type": "amount"
-                        }]
+                        },{
+                            "key": "",
+                            "title": "NO_OF_INSTALLMENT",
+                            "type": "number",
+                            },{
+                                "key": "",
+                                "title": "NET_DISBURSAL",
+                                "type": "number",
+                                },{
+                                    "key": "",
+                                    "title": "IRR_WITH_PF",
+                                    "type": "number",
+                                    },{
+                                        "key": "",
+                                        "title": "IRR_WITHOUT_PF",
+                                        "type": "number",
+                                        },{
+                                            "key": "",
+                                            "title": "CALCULATE_IRR",
+                                            "type": "number",
+                                            }
+                                ]
                     }]
                 }]
             }, 
