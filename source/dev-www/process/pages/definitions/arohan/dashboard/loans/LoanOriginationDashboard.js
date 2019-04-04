@@ -168,7 +168,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             });
         }
 
-        var prqv = $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard.loans.individual.screening.PriceQueue"];
+        var prqv = $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard.loans.individual.screening.PricingQueue"];
         if (prqv) {
             IndividualLoan.search({
                 'stage': 'Pricing',
@@ -186,8 +186,8 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             });
         }
 
-        var ccrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard.loans.individual.screening.PriceApprovalQueue"];
-        if (ccrqMenu) {
+        var praqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard.loans.individual.screening.PricingApprovalQueue"];
+        if (praqMenu) {
             IndividualLoan.search({
                 'stage': 'PricingApproval',
                 'enterprisePincode': '',
@@ -198,9 +198,9 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
                 'page': 1,
                 'per_page': 1
             }).$promise.then(function(response, headerGetter) {
-                ccrqMenu.data = Number(response.headers['x-total-count']);
+                praqMenu.data = Number(response.headers['x-total-count']);
             }, function() {
-                ccrqMenu.data = '-';
+                praqMenu.data = '-';
             });
         }
 
