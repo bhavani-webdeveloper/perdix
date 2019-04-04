@@ -620,6 +620,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         /* Setting on the current page */
                                         model.enrolmentProcess = enrolmentProcess;
                                         model.customer = enrolmentProcess.customer;
+                                        if (_.hasIn(model, 'customer.landLineNo') && model.customer.landLineNo == '')
+                                            model.customer.landLineNo=null;
+
                                         BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                                         BundleManager.pushEvent('load-bank-details', model._bundlePageObj, {customer: model.customer});
                                         BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer});
