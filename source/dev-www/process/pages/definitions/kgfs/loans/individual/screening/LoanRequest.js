@@ -306,19 +306,12 @@ define([],function(){
                 model.additions.noOfGuarantorCoApplicantHtml = "<p stye=\"font-size:10px !important\"><font color=#FF6347>Number of Co-Applicants : {{model.additions.co_borrower_required}} Number of Guarantors :{{model.additions.number_of_guarantors}}</font><p>";
                 model.loanAccount.bcAccount = {};
                 model.loanAccount.processType = "1";
-                
-        
+               
                 if (typeof model.loanAccount.accountUserDefinedFields == "undefined") {
                     model.loanAccount.accountUserDefinedFields = {};
                     model.loanAccount.accountUserDefinedFields.userDefinedFieldValues = {};
                 }
-                else {
-                   if(!initFlag)
-                    {
-                    model.loanAccount.accountUserDefinedFields = {};
-                    model.loanAccount.accountUserDefinedFields.userDefinedFieldValues = {};
-                    }
-                }
+                
                 if (typeof model.loanAccount.loanCentre == "undefined" || model.loanAccount.loanCentre == null){
                     model.loanAccount.loanCentre = {};
                 }
