@@ -100,6 +100,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:70
                             },
                             {
+                                pageName: 'arohan.dashboard.loans.individual.screening.Verification',
+                                title: 'VERIFICATION',
+                                pageClass: 'varification',
+                                minimum: 1,
+                                maximum: 1,
+                                order:71
+                            },
+                            {
                                 pageName: 'arohan.dashboard.loans.individual.screening.Review',
                                 title: 'REVIEW',
                                 pageClass: 'loan-review',
@@ -257,6 +265,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     pageClass: 'cbview',
                                     model: {
                                         loanAccount: loanProcess.loanAccount
+                                    }
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'varification',
+                                    model: {
+                                        loanProcess: loanProcess
                                     }
                                 });
 
