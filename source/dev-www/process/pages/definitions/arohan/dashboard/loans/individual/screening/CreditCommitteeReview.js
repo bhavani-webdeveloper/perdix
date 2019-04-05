@@ -56,6 +56,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                         maximum: 1,
                         order: 70
                     }, {
+                        pageName: 'arohan.dashboard.loans.individual.screening.Verification',
+                        title: 'VERIFICATION',
+                        pageClass: 'varification',
+                        minimum: 1,
+                        maximum: 1,
+                        order:75
+                    },
+                     {
                         pageName: 'loans.individual.screening.CreditBureauView',
                         title: 'CREDIT_BUREAU',
                         pageClass: 'cbview',
@@ -256,6 +264,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 });
 
                                 $this.bundlePages.push({
+                                    pageClass: 'varification',
+                                    model: {
+                                        //enrolmentProcess: loanAccount.guarantorsEnrolmentProcesses[i],
+                                        loanProcess: loanProcess
+                                    }
+                                });
+
+                                $this.bundlePages.push({
                                     pageClass: 'loan-review',
                                     model: {
                                         loanAccount: loanAccount
@@ -275,7 +291,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     model: {
                                         loanAccount: loanAccount
                                     }
-                                });      
+                                });  
+                                    
 
                                 deferred.resolve();                          
                             });

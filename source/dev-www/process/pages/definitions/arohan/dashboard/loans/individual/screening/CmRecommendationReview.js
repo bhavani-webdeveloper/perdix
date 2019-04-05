@@ -3,7 +3,7 @@ define(["perdix/domain/model/loan/LoanProcess",
     'perdix/domain/model/customer/EnrolmentProcess',
     "perdix/domain/model/loan/LoanCustomerRelation",
     ], function (LoanProcess, LoanFactory, EnrolmentProcess, LoanCustomerRelation) {
-        var LoanProcessts = LoanProcess["LoanProcess"];
+        var LoanProcess = LoanProcess["LoanProcess"];
         var EnrolmentProcess = EnrolmentProcess["EnrolmentProcess"];
         var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
         return {
@@ -90,6 +90,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 minimum: 1,
                                 maximum: 1,
                                 order:90
+                            },
+                            {
+                                pageName: 'arohan.dashboard.loans.individual.screening.Verification',
+                                title: 'VERIFICATION',
+                                pageClass: 'verification',
+                                minimum: 1,
+                                maximum: 1,
+                                order:95
                             },
                             {
                                 pageName: 'arohan.dashboard.loans.individual.screening.Review',
@@ -205,6 +213,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 .$promise
                                 .then(
                                     function(res) {
+                                        LoanProcess.get(bundleModel.loanId)
+                                        .subscribe(function(loanProcessts){
                                         bundleModel.loanAccount = res;
 
                                         bundleModel.applicant = {};
@@ -356,7 +366,15 @@ define(["perdix/domain/model/loan/LoanProcess",
                                                 loanAccount: res
                                             }
                                         });
-
+                                       
+                                        $this.bundlePages.push({
+                                            pageClass: 'verification',
+                                            model: {
+                                                enrolmentProcess:loanProcessts.loanCustomerEnrolmentProcess,
+                                                loanProcess: loanProcessts,
+                                                //loanAccount:res 
+                                            }
+                                        });
                                         // $this.bundlePages.push({
                                         //     pageClass: 'portfolio-analytics',
                                         //     model: {
@@ -367,6 +385,8 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                                         deferred.resolve();
 
+                                        
+                                    });
                                     },
                                     function(httpRes) {
                                         deferred.reject();

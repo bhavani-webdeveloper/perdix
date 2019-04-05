@@ -3418,7 +3418,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                 }
             }
 
-            return {
+            var getthisObject = function (model, form, formCtrl, bundlePageObj, bundleModel) {
+                object.initialize(model, form, formCtrl, bundlePageObj, bundleModel);
+            }
+
+
+            var object = {
                 "type": "schema-form",
                 "title": "ENTITY_ENROLLMENT",
                 "subTitle": "BUSINESS",
@@ -3428,7 +3433,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     }
                     /* Setting data recieved from Bundle */
                     model.loanCustomerRelationType = "Customer";
-                    model.currentStage = bundleModel.currentStage;  
+                    model.currentStage = (bundleModel) ?  bundleModel.currentStage : model.currentStage ;  
                     // model.currentStage =  'KYCCheck';
                     /* End of setting data recieved from Bundle */
 
@@ -3797,7 +3802,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             });
 
                     },
-                    proceed: function (model, form) {
+                    proceed: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                         PageHelper.clearErrors();
                         if (PageHelper.isFormInvalid(form)) {
                             return false;
@@ -3873,7 +3878,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 if(model.currentStage == 'CreditAppraisal'){   
                                     model.customer.isCreditAppraisal = true
                                     BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer});
-                                    $state.reload();
+                                    getthisObject(model, form, formCtrl, bundlePageObj, bundleModel);
                                 }
 
                                 BundleManager.pushEvent(model._bundlePageObj.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
@@ -3885,7 +3890,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     }
 
                 }
-            };
+            }
+
+            return object;
         }
     }
 });
