@@ -257,7 +257,7 @@ define({
                 "type": "box",
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
-                "title": "Basic Business Information",
+                "title": " Business Information",
                 "readonly": true,
                 "items": [{
                     "type": "grid",
