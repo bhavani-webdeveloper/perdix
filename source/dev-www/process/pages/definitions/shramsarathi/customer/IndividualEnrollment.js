@@ -70,6 +70,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 "HouseVerification.place",
                                 "HouseVerification.date"
                             ], "overrides": {
+                               
                                 "IndividualInformation.dateOfBirth":{ 
                                     "onChange": function (modelValue, form, model) {
                                     if (model.customer.dateOfBirth) {
@@ -170,6 +171,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     }
                                  
                                 }
+                                
 
                             }
                         },

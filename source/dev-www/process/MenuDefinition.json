@@ -54,6 +54,7 @@
         "Page/Adhoc/base.dashboard.loans.LoanOriginationDashboard",
         "Page/Adhoc/arohan.dashboard.loans.LoanOriginationDashboard",
         "Page/Adhoc/arohan.dashboard.lead.LeadDashboard",
+        "Page/Adhoc/arohan.dashboard.CPV.CPVDashboard",
         
         "Page/DocumentTrackingDashboard", {
             "title": "INDIVIDUAL_LOANS",
@@ -147,6 +148,8 @@
         "Page/ReportsDashboard",
         "Page/ScoreDashboard",
         "Page/Adhoc/audit.AuditDashboard",
-        "Page/Engine/excelUpload.ExcelUpload"
+        "Page/Engine/excelUpload.ExcelUpload",
+        "Page/Engine/arohan.dashboard.CPV.CPVQueue"
+
     ]
 }

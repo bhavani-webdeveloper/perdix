@@ -92,7 +92,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:90
                             },
                             {
-                                pageName: 'arohan.dashboard.loans.individual.screening.Verification',
+                                pageName: 'arohan.dashboard.CPV.Verification',
                                 title: 'VERIFICATION',
                                 pageClass: 'verification',
                                 minimum: 1,
