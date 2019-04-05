@@ -92,7 +92,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "KYC.addressProofNo": {
                                     "required": true,
-                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'",
+                                    "schema": {
+                                        "pattern": "(^\\d{4}\\d{4}\\d{4}$)|(^[A-Z]{2}[0-9]{13}$)|(^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$)|(^[a-zA-Z]{6}[0-9]{5}$)",
+                                        "type": ["integer", "string"]
+                                    }
                                 },
                                 "KYC.addressProofIssueDate":{
                                     "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
@@ -117,6 +121,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "EnterpriseFinancials.currentAsset":{
                                     "titleExpr":"model.customer.currentAssets[arrayIndex].titleExpr",
+                                    "title":"CURRENT_ASSET"
                                 },
                                 "EnterpriseFinancials.currentAsset.assetType":{
                                     onChange: function(valueObj,context,model){
@@ -237,6 +242,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "EnterpriseFinancials.currentAsset":{
                                     "titleExpr":"model.customer.currentAssets[arrayIndex].titleExpr",
+                                    "title": "CURRENT_ASSET"
                                 },
                                 "EnterpriseFinancials.currentAsset.assetType":{
                                     onChange: function(valueObj,context,model){
@@ -340,7 +346,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "KYC.addressProofNo": {
                                     "required": true,
-                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'",
+                                    "schema": {
+                                        "pattern": "(^\\d{4}\\d{4}\\d{4}$)|(^[A-Z]{2}[0-9]{13}$)|(^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$)|(^[a-zA-Z]{6}[0-9]{5}$)",
+                                        "type": ["integer", "string"]
+                                    }
                                 },
                                 "KYC.addressProofIssueDate":{
                                     "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
@@ -2872,7 +2882,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     }
                    }
                    
-                       
+                //    var pattern = /^[A-Z]{2}[0-9]{13}$/;
+                //    var pat = function(){
+                //        if(model.)
+                //    }
                     /* Form rendering starts */
                     var self = this;
                     var formRequest = {
@@ -3852,8 +3865,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                        
                                     }
                                 }
-                              
-                                 if(model.customer.physicalAssets!== undefined || model.customer.currentAssets == null){
+                                
+                                if(model.customer.pincode!=undefined || model.customer.pincode!=null){
+                                    Queries.searchPincodes(model.customer.pincode).then(function(res){
+                                        model.customer.taluk=res.body[0].taluk;
+                                    })
+                                }
+
+                                if(model.customer.physicalAssets!== undefined || model.customer.currentAssets == null){
                                     if(model.customer.physicalAssets.length > 0)
                                     {
                                         for(var i=0;i<model.customer.physicalAssets.length;i++){
