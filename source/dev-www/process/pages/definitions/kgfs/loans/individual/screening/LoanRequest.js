@@ -1677,6 +1677,7 @@ define([],function(){
                         }
                       
                          if (model.loanProcess.remarks==null || model.loanProcess.remarks ==""){
+                               model.loanAccount.loanMitigants=[];
                                PageHelper.showProgress("update-loan", "Remarks is mandatory", 3000);
                                PageHelper.hideLoader();
                                return false;
@@ -1689,11 +1690,13 @@ define([],function(){
                                 trancheTotalAmount+=(model.loanAccount.disbursementSchedules[i].disbursementAmount || 0);
                             }
                             if (trancheTotalAmount > model.loanAccount.loanAmount){
+                                model.loanAccount.loanMitigants=[];
                                 PageHelper.showProgress("loan-create","Total tranche amount is more than the Loan amount",5000);
                                 return false;
                               }  
                             
                             if (trancheTotalAmount < model.loanAccount.loanAmount){
+                                model.loanAccount.loanMitigants=[];
                                 PageHelper.showProgress("loan-create","Total tranche amount should match with the Loan amount",5000);
                                 return false;
                             }
@@ -1703,6 +1706,7 @@ define([],function(){
                             for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
                                 if (model.loanAccount.loanCustomerRelations[i].customerId) {
                                     if(!model.loanAccount.loanCustomerRelations[i].cbCheckCompleted){
+                                        model.loanAccount.loanMitigants=[];
                                         PageHelper.showProgress("loan-create","CB Check pending. Please do a CB check and then proceed",5000);
                                         return false;
                                     }                            

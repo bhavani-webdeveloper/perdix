@@ -378,6 +378,10 @@ define({
                             "title": "TRANSACTION_TYPE"
                         },
                         {
+                            "key": "",
+                            "title": "PRODUCT_TYPE"
+                        },
+                        {
                             "key": "loanAccount.linkedAccountNumber",
                             "title": "LINKED_ACCOUNT_NUMBER",
                             "condition": "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
@@ -391,14 +395,17 @@ define({
                         {
                             "key": "loanAccount.loanPurpose1",
                             "title": "Loan Purpose"
-                        }, {
-                            "key": "loanAccount.loanPurpose2",
-                            "title": "Loan SubPurpose"
-                        }, {
-                            "key": "loanAccount.loanAmountRequested",
-                            "title": "Loan Amount Requested",
-                            "type": "amount"
-                        }, {
+                        }, 
+                        // {
+                        //     "key": "loanAccount.loanPurpose2",
+                        //     "title": "Loan SubPurpose"
+                        // },
+                        //  {
+                        //     "key": "loanAccount.loanAmountRequested",
+                        //     "title": "Loan Amount Requested",
+                        //     "type": "amount"
+                        // }, 
+                        {
                             "key": "loanAccount.emiPaymentDateRequested",
                             "title": "Requested EMI Payment Date"
                         }, {
@@ -421,8 +428,9 @@ define({
                             "title": "Expected Interest Rate",
                         }, {
                             "key": "loanAccount.estimatedEmi",
-                            "title": "EXPECTED_MAITREYA_EMI",
-                            "type": "amount"
+                            "title": "EXPECTED_AROHAN_EMI",
+                            "type": "amount",
+                            "readonly":false
                         }, {
                             "key": "loanAccount.emiRequested",
                             "title": "Requested EMI",
@@ -430,47 +438,49 @@ define({
                         }]
                     }]
                 }]
-            }, {
-                "type": "box",
-                "readonly": true,
-                "colClass": "col-sm-12",
-                "overrideType": "default-view",
-                "title": "Additional Loan Information",
-                "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "loanAccount.estimatedDateOfCompletion",
-                            "title": "Estimated Date Of Completion"
-                        }, {
-                            "key": "loanAccount.productCategory",
-                            "title": "Product Type"
-                        }, {
-                            "key": "loanAccount.customerSignDateExpected",
-                            "title": "Expected customer sign date"
-                        }]
-                    }, {
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "loanAccount.proposedHires",
-                            "title": "Proposed Hires",
-                            "type": "number"
-                        }, {
-                            "key": "loanAccount.percentageIncreasedIncome",
-                            "title": "% of Increased Income",
-                            "type": "number"
-                        }, {
-                            "key": "loanAccount.percentageInterestSaved",
-                            "title": "% of Interest Saved",
-                            "type": "number"
-                        }]
-                    }]
-                }]
-            }, {
+            },
+            //  {
+            //     "type": "box",
+            //     "readonly": true,
+            //     "colClass": "col-sm-12",
+            //     "overrideType": "default-view",
+            //     "title": "Additional Loan Information",
+            //     "items": [{
+            //         "type": "grid",
+            //         "orientation": "horizontal",
+            //         "items": [{
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [{
+            //                 "key": "loanAccount.estimatedDateOfCompletion",
+            //                 "title": "Estimated Date Of Completion"
+            //             }, {
+            //                 "key": "loanAccount.productCategory",
+            //                 "title": "Product Type"
+            //             }, {
+            //                 "key": "loanAccount.customerSignDateExpected",
+            //                 "title": "Expected customer sign date"
+            //             }]
+            //         }, {
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [{
+            //                 "key": "loanAccount.proposedHires",
+            //                 "title": "Proposed Hires",
+            //                 "type": "number"
+            //             }, {
+            //                 "key": "loanAccount.percentageIncreasedIncome",
+            //                 "title": "% of Increased Income",
+            //                 "type": "number"
+            //             }, {
+            //                 "key": "loanAccount.percentageInterestSaved",
+            //                 "title": "% of Interest Saved",
+            //                 "type": "number"
+            //             }]
+            //         }]
+            //     }]
+            // },
+             {
                 "type": "box",
                 "readonly": false,
                 "colClass": "col-sm-12",
@@ -504,7 +514,50 @@ define({
                         }]
                     }]
                 }]
-            }, {
+            }, 
+            {
+                "type": "box",
+                "readonly": false,
+                "colClass": "col-sm-12",
+                "overrideType": "default-view",
+                "title": "References",
+                "items": [{
+                    "type": "grid",
+                    "orientation": "horizontal",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [
+                        {
+                            "key": "References.verifications.relationship",
+                            "title": "Reference Type",
+                            
+                        }, 
+                        {
+                            "key": "References.verifications.businessName",
+                            "title": "Business Name",
+                          
+                        },
+                        {
+                            "key":   "References.verifications.referenceFirstName",
+                            "title": "Contact Person Name",
+                            
+                        },
+                        {
+                            "key": "References.verifications.mobileNo",
+                            "title": "Contact No",
+                            
+                        },
+                        {
+                            "key":  "References.verifications.email",
+                            "title": "Email ID",
+                            
+                        }
+                    ]
+                    },]
+                }]
+            }, 
+            {
                 "type": "box",
                 "readonly": true,
                 "colClass": "col-sm-12",
@@ -565,286 +618,348 @@ define({
                         }
                     }
                 ]
-            }, {
-                "type": "box",
-                "readonly": true,
-                "colClass": "col-sm-12",
-                "overrideType": "default-view",
-                "title": "Nominee Details",
-                "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "loanAccount.nominees[0].nomineeFirstName",
-                            "title": "Name"
-                        }, {
-                            "key": "loanAccount.nominees[0].nomineeGender",
-                            "title": "Gender"
-                        }, {
-                            "key": "loanAccount.nominees[0].nomineeDOB",
-                            "title": "Date Of Birth"
-                        }]
-                    }, {
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "loanAccount.nominees[0].nomineeRelationship",
-                            "title": "Relationship To Insured"
-                        }, {  
-                            "type": "section",                                
-                            "htmlClass": "row",
-                            "items": [
-                                {
-                                    "type": "section",
-                                    "htmlClass": "col-sm-4",
-                                    "html": '<h5>' + "Address" + '</h5>'
-                                },
-                                {
-                                    "type": "section",
-                                    "htmlClass": "col-sm-8",
-                                    "html": '<p style = "font-size: 14px; color: #555;"><strong>{{model.loanAccount.nominees[0].nomineeDoorNo}} <br />\
-                                    {{model.loanAccount.nominees[0].nomineeLocality}} <br />\
-                                    {{model.loanAccount.nominees[0].nomineeDistrict}} <br />\
-                                    {{model.loanAccount.nominees[0].nomineeState}} <br /> \
-                                    {{model.loanAccount.nominees[0].nomineePincode}} <br /> \
-                                    <br /><strong></p>\
-                                    '
-                                }]
+            },
+            //  {
+            //     "type": "box",
+            //     "readonly": true,
+            //     "colClass": "col-sm-12",
+            //     "overrideType": "default-view",
+            //     "title": "Nominee Details",
+            //     "items": [{
+            //         "type": "grid",
+            //         "orientation": "horizontal",
+            //         "items": [{
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [{
+            //                 "key": "loanAccount.nominees[0].nomineeFirstName",
+            //                 "title": "Name"
+            //             }, {
+            //                 "key": "loanAccount.nominees[0].nomineeGender",
+            //                 "title": "Gender"
+            //             }, {
+            //                 "key": "loanAccount.nominees[0].nomineeDOB",
+            //                 "title": "Date Of Birth"
+            //             }]
+            //         }, {
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [{
+            //                 "key": "loanAccount.nominees[0].nomineeRelationship",
+            //                 "title": "Relationship To Insured"
+            //             }, {  
+            //                 "type": "section",                                
+            //                 "htmlClass": "row",
+            //                 "items": [
+            //                     {
+            //                         "type": "section",
+            //                         "htmlClass": "col-sm-4",
+            //                         "html": '<h5>' + "Address" + '</h5>'
+            //                     },
+            //                     {
+            //                         "type": "section",
+            //                         "htmlClass": "col-sm-8",
+            //                         "html": '<p style = "font-size: 14px; color: #555;"><strong>{{model.loanAccount.nominees[0].nomineeDoorNo}} <br />\
+            //                         {{model.loanAccount.nominees[0].nomineeLocality}} <br />\
+            //                         {{model.loanAccount.nominees[0].nomineeDistrict}} <br />\
+            //                         {{model.loanAccount.nominees[0].nomineeState}} <br /> \
+            //                         {{model.loanAccount.nominees[0].nomineePincode}} <br /> \
+            //                         <br /><strong></p>\
+            //                         '
+            //                     }]
                                    
-                        }]
-                    }]
-                }]
-            }, {
-                "type": "box",
-                "colClass": "col-sm-12",
-                "title": "DEVIATION_AND_MITIGATIONS",
-                "condition": "model.currentStage != 'ScreeningReview'",
-                "items": [{
-                    "type": "section",
-                    "colClass": "col-sm-12",
-                    "html": '<table class="table"><colgroup><col width="20%"><col width="5%"><col width="20%"></colgroup><thead><tr><th>Parameter Name</th><th></th><th>Actual Value</th><th>Mitigant</th></tr></thead><tbody>' +
-                        '<tr ng-repeat="item in model.deviationDetails">' +
-                        '<td>{{ item["parameter"] }}</td>' +
-                        '<td> <span class="square-color-box" style="background: {{ item.color_hexadecimal }}"> </span></td>' +
-                        '<td>{{ item["deviation"] }}</td>' +
-                        '<td><ul class="list-unstyled">' +
-                        '<li ng-repeat="m in item.mitigants " id="{{m.mitigant}}">' +
-                        '<input type="checkbox"  ng-model="m.selected" ng-checked="m.selected"> {{ m.mitigant }}' +
-                        // '<input type="checkbox"  ng-model="m.selected" ng-change="model.updateChosenMitigant(m.selected,m)"> {{ m.mitigant }}' +
-                        '</li></ul></td></tr></tbody></table>'
+            //             }]
+            //         }]
+            //     }]
+            // },
+            //  {
+            //     "type": "box",
+            //     "colClass": "col-sm-12",
+            //     "title": "DEVIATION_AND_MITIGATIONS",
+            //     "condition": "model.currentStage != 'ScreeningReview'",
+            //     "items": [{
+            //         "type": "section",
+            //         "colClass": "col-sm-12",
+            //         "html": '<table class="table"><colgroup><col width="20%"><col width="5%"><col width="20%"></colgroup><thead><tr><th>Parameter Name</th><th></th><th>Actual Value</th><th>Mitigant</th></tr></thead><tbody>' +
+            //             '<tr ng-repeat="item in model.deviationDetails">' +
+            //             '<td>{{ item["parameter"] }}</td>' +
+            //             '<td> <span class="square-color-box" style="background: {{ item.color_hexadecimal }}"> </span></td>' +
+            //             '<td>{{ item["deviation"] }}</td>' +
+            //             '<td><ul class="list-unstyled">' +
+            //             '<li ng-repeat="m in item.mitigants " id="{{m.mitigant}}">' +
+            //             '<input type="checkbox"  ng-model="m.selected" ng-checked="m.selected"> {{ m.mitigant }}' +
+            //             // '<input type="checkbox"  ng-model="m.selected" ng-change="model.updateChosenMitigant(m.selected,m)"> {{ m.mitigant }}' +
+            //             '</li></ul></td></tr></tbody></table>'
 
-                }]
-            }, {
-            "type": "box",
-            "colClass": "col-sm-12",
-            "title": "LOAN_DOCUMENTS",
-            "condition":"model.currentStage !== 'loanView'" ,
-            "items": [
-                {
-                    "type": "array",
-                    "key": "loanAccount.loanDocuments",
-                    "view": "fixed",
-                    "startEmpty": true,
-                    "title": "LOAN_DOCUMENT",
-                    "titleExpr": "model.loanAccount.loanDocuments[arrayIndex].document",
-                    "items": [
-                        {
-                            "key": "loanAccount.loanDocuments[].document",
-                            "title": "DOCUMENT_NAME",
-                            "type": "string",
-                            "required": true
-                        },
-                        {
-                            title: "Upload",
-                            key: "loanAccount.loanDocuments[].documentId",
-                            "required": true,
-                            type: "file",
-                            fileType: "application/pdf",
-                            category: "Loan",
-                            subCategory: "DOC1",
-                            using: "scanner"
-                        }
-                        // ,
-                        // {
-                        //     "key": "loanDocuments.newLoanDocuments[].documentStatus",
-                        //     "type": "string"
-                        // }
-                    ]
-                },
-            ]
+            //     }]
+            // }, 
+            // {
+            // "type": "box",
+            // "colClass": "col-sm-12",
+            // "title": "LOAN_DOCUMENTS",
+            // "condition":"model.currentStage !== 'loanView'" ,
+            // "items": [
+            //     {
+            //         "type": "array",
+            //         "key": "loanAccount.loanDocuments",
+            //         "view": "fixed",
+            //         "startEmpty": true,
+            //         "title": "LOAN_DOCUMENT",
+            //         "titleExpr": "model.loanAccount.loanDocuments[arrayIndex].document",
+            //         "items": [
+            //             {
+            //                 "key": "loanAccount.loanDocuments[].document",
+            //                 "title": "DOCUMENT_NAME",
+            //                 "type": "string",
+            //                 "required": true
+            //             },
+            //             {
+            //                 title: "Upload",
+            //                 key: "loanAccount.loanDocuments[].documentId",
+            //                 "required": true,
+            //                 type: "file",
+            //                 fileType: "application/pdf",
+            //                 category: "Loan",
+            //                 subCategory: "DOC1",
+            //                 using: "scanner"
+            //             }
+            //             // ,
+            //             // {
+            //             //     "key": "loanDocuments.newLoanDocuments[].documentStatus",
+            //             //     "type": "string"
+            //             // }
+            //         ]
+            //     },
+            // ]
 
-        }, {
-                "type": "box",
-                "colClass": "col-sm-12",
-                "title": "Loan Recommendation",
-                "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "",
-                            "title": "Current Exposure",
-                            "type": "amount"
-                        },{
-                            
-                        }, {
-                            "key": "loanAccount.loanAmount",
-                            "title": "Loan Amount Recommended",
-                            "type": "amount",
-                            onChange:function(value,form,model){
-                                computeEMI(model);
-                            }
-                        }, {
-                            "key": "loanAccount.tenure",
-                            "title": "Duration(months)"/*,
-                            "type": "number"*/
-                            ,
-                            onChange:function(value,form,model){
-                                computeEMI(model);
-                            }
-                        }, {
-                            "key": "loanAccount.interestRate",
-                            "title": "Interest Rate",
-                            "type": "number",
-                            onChange:function(value,form,model){
-                                computeEMI(model);
-                            }
-                        }]
-                    }, {
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "loanAccount.estimatedEmi",
-                            "title": "ESTIMATED_KINARA_EMI",
-                            "type": "amount"
-                        }, {
-                            "key": "loanAccount.processingFeePercentage",
-                            "title": "Processing Fee(in%)"
-                        }, {
-                            "key": "loanAccount.estimatedEmi",
-                            "title": "Expected Security EMI"
-                        }, {
-                            "key": "loanAccount.commercialCibilCharge",
-                            "title": "CIBIL Charges",
-                            "type": "amount"
-                        }]
-                    }]
-                }]
-            }, 
-            {
-                    "type": "box",
-                    "title": "CUSTOMER_LOAN_HISTORY",
-                    "readOnly": true,
-                    "colClass": "col-sm-12",
-                    "items":[{
-                            "type": "tableview",
-                            "key": "customerHistoryFinancials.tableData",
-                            "transpose" : true,
-                            "title": "",
-                            "selectable": "false",
-                            "editable": "false",
-                            "tableConfig":{
-                                "searching": false,
-                                "paginate": false,
-                                "pageLength": 10,
-                            },
-                            getColumns: function() {
-                                return [{
-                                    "title": "CATEGORY",
-                                    "data": "Category",
-                                    "render": self.strongRender
-                                },{
-                                    "title": "OUTSTANDING",
-                                    "data": "Outstanding",
-                                    "render": currencyRightRender
-                                },
-                                {
-                                    "title": "DISBURSEMENT_AMOUNT",
-                                    "data": "disbursement_amount",
-                                    "render": currencyRightRender
-                                },
-                                {
-                                    "title": "LOAN_PRODUCT",
-                                    "data": "loan_product",
-                                    "render": self.strongRender
-                                },
-                                {
-                                    "title": "LOAN_STATUS",
-                                    "data": "loan_status",
-                                    "render": self.strongRender
-                                },
-                                {
-                                    "title": "TENURE",
-                                    "data": "tenure",
-                                    "render": self.strongRender
-                                },
-                                {
-                                    "title": "# of EMI Paid",
-                                    "data": "no_of_emi_paid"
-                                },
-                                {
-                                    "title": "Total Exposure of Turnover",
-                                    "data": "exposer",
-                                    "render": currencyRightRender
-                                }
-                            ];
-                            },
-                            getActions: function() {
-                                return [];
-                            }                            
-                        }]
-            },{
-                "type": "box",
-                "title": "Expected Turnover",
-                "readOnly": true,
-                "colClass": "col-sm-12",
-                "items":[{
-                        "type": "tableview",
-                        "key": "customerHistoryFinancials.tableData1",
-                        "transpose" : true,
-                        "title": "",
-                        "selectable": "false",
-                        "editable": "false",
-                        "tableConfig":{
-                            "searching": false,
-                            "paginate": false,
-                            "pageLength": 10,
-                        },
-                        getColumns: function() {
-                            return [{
-                                "title": "Parameter",
-                                "data": "actualValue",
-                                "render": self.strongRender
-                            },{
-                                "title": "Total Outstanding Of All Existing Loan",
-                                "data": "totalOutstandingAmount",
-                                "render": currencyRightRender
-                            },{
-                                "title": "Current Recommended Loan Amount",
-                                "data": "loanAmountRecommended",
-                                "render": currencyRightRender
-                            },
-                            {
-                                "title": "Annual Turnover",
-                                "data": "annualTurnover",
-                                "render": currencyRightRender
-                            },
-                            {
-                                "title": "Exposure To Annual Turnover",
-                                "data": "kinaraExposureToAnnualTurover"
-                            }
-                        ];
-                        },
-                        getActions: function() {
-                            return [];
-                        }                            
-                    }]
-        },
+            // }, 
+        // {
+        //         "type": "box",
+        //         "colClass": "col-sm-12",
+        //         "title": "Loan Recommendation",
+        //         "items": [{
+        //             "type": "grid",
+        //             "orientation": "horizontal",
+        //             "items": [{
+        //                 "type": "grid",
+        //                 "orientation": "vertical",
+        //                 "items": [{
+        //                     "key": "",
+        //                     "title": "START_DATE",
+        //                     "type": "date"
+        //                 }, {
+        //                     "key": "",
+        //                     "title": "FREQUENCY",
+        //                     "type": "select"
+        //                 },{
+        //                     "key": "",
+        //                     "title": "END_DATE",
+        //                     "type": "date"
+        //                 }, 
+        //                     {
+        //                     "key": "",
+        //                     "title": "Current Exposure",
+        //                     "type": "amount"
+        //                 },
+        //                 {
+        //                     "key": "",
+        //                     "title": "LOAN_PRODUCT",
+        //                     "type": "select"
+        //                 },
+        //                 {
+        //                     "key": "loanAccount.loanAmount",
+        //                     "title": "Loan Amount Recommended",
+        //                     "type": "amount",
+        //                     onChange:function(value,form,model){
+        //                         computeEMI(model);
+        //                     }
+        //                 }, 
+        //                 {
+        //                     "key": "loanAccount.tenure",
+        //                     "title": "Duration(months)"/*,
+        //                     "type": "number"*/
+        //                     ,
+        //                     onChange:function(value,form,model){
+        //                         computeEMI(model);
+        //                     }
+        //                 }, {
+        //                     "key": "loanAccount.interestRate",
+        //                     "title": "Interest Rate",
+        //                     "type": "number",
+        //                     onChange:function(value,form,model){
+        //                         computeEMI(model);
+        //                     },
+                           
+        //                 },
+        //             ]
+        //             }, {
+        //                 "type": "grid",
+        //                 "orientation": "vertical",
+        //                 "items": [{
+        //                     "key": "loanAccount.estimatedEmi",
+        //                     "title": "ESTIMATED_AROHAN_EMI",
+        //                     "type": "amount",
+        //                     "readonly":false
+        //                 },{
+        //                     "key": "",
+        //                     "title": "INTEREST_AMOUNT",
+        //                     "type": "number",
+        //                     },{
+        //                         "key": "",
+        //                         "title": "TOTAL_REPAYMENT",
+        //                         "type": "number",
+        //                         },{
+        //                     "key": "loanAccount.processingFeePercentage",
+        //                     "title": "Processing Fee(in%)"
+        //                 },{
+        //                     "key": "",
+        //                     "title": "GST",
+        //                     "type": "number",
+        //                     },{
+        //                         "key": "",
+        //                         "title": "PROCESSING_FEE",
+        //                         "type": "number",
+        //                         },{
+        //                     "key": "loanAccount.estimatedEmi",
+        //                     "title": "Expected Security EMI"
+        //                 }, {
+        //                     "key": "loanAccount.commercialCibilCharge",
+        //                     "title": "CIBIL Charges",
+        //                     "type": "amount"
+        //                 },{
+        //                     "key": "",
+        //                     "title": "NO_OF_INSTALLMENT",
+        //                     "type": "number",
+        //                     },{
+        //                         "key": "",
+        //                         "title": "NET_DISBURSAL",
+        //                         "type": "number",
+        //                         },{
+        //                             "key": "",
+        //                             "title": "IRR_WITH_PF",
+        //                             "type": "number",
+        //                             },{
+        //                                 "key": "",
+        //                                 "title": "IRR_WITHOUT_PF",
+        //                                 "type": "number",
+        //                                 },{
+        //                                     "key": "",
+        //                                     "title": "CALCULATE_IRR",
+        //                                     "type": "number",
+        //                                     }
+        //                         ]
+        //             }]
+        //         }]
+        //     }, 
+        //     {
+        //             "type": "box",
+        //             "title": "CUSTOMER_LOAN_HISTORY",
+        //             "readOnly": true,
+        //             "colClass": "col-sm-12",
+        //             "items":[{
+        //                     "type": "tableview",
+        //                     "key": "customerHistoryFinancials.tableData",
+        //                     "transpose" : true,
+        //                     "title": "",
+        //                     "selectable": "false",
+        //                     "editable": "false",
+        //                     "tableConfig":{
+        //                         "searching": false,
+        //                         "paginate": false,
+        //                         "pageLength": 10,
+        //                     },
+        //                     getColumns: function() {
+        //                         return [{
+        //                             "title": "CATEGORY",
+        //                             "data": "Category",
+        //                             "render": self.strongRender
+        //                         },{
+        //                             "title": "OUTSTANDING",
+        //                             "data": "Outstanding",
+        //                             "render": currencyRightRender
+        //                         },
+        //                         {
+        //                             "title": "DISBURSEMENT_AMOUNT",
+        //                             "data": "disbursement_amount",
+        //                             "render": currencyRightRender
+        //                         },
+        //                         {
+        //                             "title": "LOAN_PRODUCT",
+        //                             "data": "loan_product",
+        //                             "render": self.strongRender
+        //                         },
+        //                         {
+        //                             "title": "LOAN_STATUS",
+        //                             "data": "loan_status",
+        //                             "render": self.strongRender
+        //                         },
+        //                         {
+        //                             "title": "TENURE",
+        //                             "data": "tenure",
+        //                             "render": self.strongRender
+        //                         },
+        //                         {
+        //                             "title": "# of EMI Paid",
+        //                             "data": "no_of_emi_paid"
+        //                         },
+        //                         {
+        //                             "title": "Total Exposure of Turnover",
+        //                             "data": "exposer",
+        //                             "render": currencyRightRender
+        //                         }
+        //                     ];
+        //                     },
+        //                     getActions: function() {
+        //                         return [];
+        //                     }                            
+        //                 }]
+        //     },{
+        //         "type": "box",
+        //         "title": "Expected Turnover",
+        //         "readOnly": true,
+        //         "colClass": "col-sm-12",
+        //         "items":[{
+        //                 "type": "tableview",
+        //                 "key": "customerHistoryFinancials.tableData1",
+        //                 "transpose" : true,
+        //                 "title": "",
+        //                 "selectable": "false",
+        //                 "editable": "false",
+        //                 "tableConfig":{
+        //                     "searching": false,
+        //                     "paginate": false,
+        //                     "pageLength": 10,
+        //                 },
+        //                 getColumns: function() {
+        //                     return [{
+        //                         "title": "Parameter",
+        //                         "data": "actualValue",
+        //                         "render": self.strongRender
+        //                     },{
+        //                         "title": "Total Outstanding Of All Existing Loan",
+        //                         "data": "totalOutstandingAmount",
+        //                         "render": currencyRightRender
+        //                     },{
+        //                         "title": "Current Recommended Loan Amount",
+        //                         "data": "loanAmountRecommended",
+        //                         "render": currencyRightRender
+        //                     },
+        //                     {
+        //                         "title": "Annual Turnover",
+        //                         "data": "annualTurnover",
+        //                         "render": currencyRightRender
+        //                     },
+        //                     {
+        //                         "title": "Exposure To Annual Turnover",
+        //                         "data": "kinaraExposureToAnnualTurover"
+        //                     }
+        //                 ];
+        //                 },
+        //                 getActions: function() {
+        //                     return [];
+        //                 }                            
+        //             }]
+        // },
         {
 
             "type": "box",		

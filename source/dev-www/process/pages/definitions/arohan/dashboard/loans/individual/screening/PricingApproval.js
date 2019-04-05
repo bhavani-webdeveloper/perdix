@@ -7,7 +7,7 @@ define(["perdix/domain/model/loan/LoanProcess",
         var EnrolmentProcess = EnrolmentProcess["EnrolmentProcess"];
         var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
         return {
-            pageUID: "arohan.dashboard.loans.individual.screening.Application",
+            pageUID: "arohan.dashboard.loans.individual.screening.PricingApproval",
             pageType: "Bundle",
             dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
         ,"IndividualLoan", "Lead", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
@@ -15,7 +15,7 @@ define(["perdix/domain/model/loan/LoanProcess",
             $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment,IndividualLoan, Lead, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch,Queries, Utils, IndividualLoan, BundleManager, Message) {
                 return {
                     "type": "page-bundle",
-                    "title": "APPLICATION",
+                    "title": "PRICING_APPROVAL",
                     "subTitle": "",
                     "bundleDefinitionPromise": function() {
                         return $q.resolve([
@@ -91,22 +91,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                             //     maximum: 1,
                             //     order:50
                             // },
-                            // {
-                            //     pageName: 'loans.individual.screening.CreditBureauView',
-                            //     title: 'CREDIT_BUREAU',
-                            //     pageClass: 'cbview',
-                            //     minimum: 1,
-                            //     maximum: 1,
-                            //     order:70
-                            // },
-                            // {
-                            //     pageName: 'arohan.dashboard.loans.individual.screening.Verification',
-                            //     title: 'VERIFICATION',
-                            //     pageClass: 'varification',
-                            //     minimum: 1,
-                            //     maximum: 1,
-                            //     order:71
-                            // },
+                            {
+                                pageName: 'loans.individual.screening.CreditBureauView',
+                                title: 'CREDIT_BUREAU',
+                                pageClass: 'cbview',
+                                minimum: 1,
+                                maximum: 1,
+                                order:70
+                            },
                             {
                                 pageName: 'arohan.dashboard.loans.individual.screening.Review',
                                 title: 'REVIEW',
@@ -178,7 +170,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     },
                     "pre_pages_initialize": function(bundleModel){
                         $log.info("Inside pre_page_initialize");
-                        bundleModel.currentStage = "Application";
+                        bundleModel.currentStage = "PricingApproval";
                         var deferred = $q.defer();
 
                         var $this = this;
@@ -261,19 +253,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 });
 
 
-                                //  $this.bundlePages.push({
-                                //     pageClass: 'cbview',
-                                //     model: {
-                                //         loanAccount: loanProcess.loanAccount
-                                //     }
-                                // });
-
-                            //     $this.bundlePages.push({
-                            //         pageClass: 'varification',
-                            //         model: {
-                            //             loanProcess: loanProcess
-                            //         }
-                            //     });
+                                 $this.bundlePages.push({
+                                    pageClass: 'cbview',
+                                    model: {
+                                        loanAccount: loanProcess.loanAccount
+                                    }
+                                });
 
                                $this.bundlePages.push({
                                         pageClass: 'loan-review',
@@ -283,7 +268,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     });
 
                                 deferred.resolve();
-                                    PageHelper.hideLoader();
+
                             });
 
                         }
@@ -291,7 +276,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     },
                     "post_pages_initialize": function(bundleModel){
                         $log.info("Inside post_page_initialize");
-                        BundleManager.broadcastEvent('origination-stage', 'Application');
+                        BundleManager.broadcastEvent('origination-stage', 'PricingApproval');
                         // Queries.getVehiclePrice()
                         // .then(function (response) {
                         //     BundleManager.broadcastEvent("get-vehicle-price", response);

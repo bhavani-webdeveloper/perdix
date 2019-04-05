@@ -540,7 +540,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "condition":"model.currentStage == 'CreditAppraisal' || model.currentStage == 'DSCApproval' || model.currentStage == 'DSCOverride' || model.currentStage == 'KYCCheck'  || model.currentStage == 'RiskReviewAndLoanSanction' || model.currentStage == 'BusinessTeamReview' || model.currentStage == 'CreditOfficerReview' || model.currentStage == 'CreditManagerReview' || model.currentStage == 'CBOCreditHeadReview' || model.currentStage == 'CEOMDReview'",
                     },
                     "BuyerDetails.buyerDetails.paymentFrequency": {
-                        "type": "text"
+                        "type": "select",
+                        "enumCode": "payment_frequency"
+                    },
+                    "SuppliersDeatils.supplierDetails.paymentFrequency" : {
+                        "type": "select",
+                        "enumCode": "payment_frequency"
                     },
                     "SuppliersDeatils": {
                         "orderNo": 535,
@@ -555,6 +560,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "BuyerDetails.buyerDetails.receivablesOutstanding":{
                         "title":"AMOUNT_TRANSACTION_PER_FREQUENCY"
                     },
+                    "BuyerDetails.buyerDetails.contactNumber":{
+                        "type":"string",
+                        "inputmode": "number",
+                        "numberType": "tel"
+                    },
+                    "SuppliersDeatils.supplierDetails.contactNumber":{
+                        "type":"string",
+                        "inputmode": "number",
+                        "numberType": "tel"
+                    }
                     // "ContactInformation.locality":{
                     //     title:"LOCALITY"
                     // },
@@ -2403,7 +2418,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 "ReviewLiabilityRepayment"
                             ],
                             "overrides":{
-
                             }
                         },
                         "DSCApproval": {
@@ -3404,7 +3418,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                 }
             }
 
-            return {
+            var getthisObject = function (model, form, formCtrl, bundlePageObj, bundleModel) {
+                object.initialize(model, form, formCtrl, bundlePageObj, bundleModel);
+            }
+
+
+            var object = {
                 "type": "schema-form",
                 "title": "ENTITY_ENROLLMENT",
                 "subTitle": "BUSINESS",
@@ -3414,7 +3433,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     }
                     /* Setting data recieved from Bundle */
                     model.loanCustomerRelationType = "Customer";
-                    model.currentStage = bundleModel.currentStage;  
+                    model.currentStage = (bundleModel) ?  bundleModel.currentStage : model.currentStage ;  
                     // model.currentStage =  'KYCCheck';
                     /* End of setting data recieved from Bundle */
 
@@ -3452,7 +3471,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         
                     // }
         
-                    if (_.hasIn(model, 'loanProcess.applicantEnrolmentProcess') && model.loanProcess.applicantEnrolmentProcess !=null){
+                    if (model.loanAccount.currentStage == 'Screening' && _.hasIn(model, 'loanProcess.applicantEnrolmentProcess') && model.loanProcess.applicantEnrolmentProcess !=null){
                         model.applicantEnrolmentProcessDetails = {}; 
                         model.applicantEnrolmentProcessDetails=model.loanProcess.applicantEnrolmentProcess.customer;
                         model.customer.customerBankAccounts=model.applicantEnrolmentProcessDetails.customerBankAccounts;
@@ -3561,7 +3580,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             getPersonalExpenses('value', model, 'row');
                             getOtherBusinessIncomeDet('', model, '') ;
                         }
-
+                        monthlySurpluse(model)
                         if(model.customer.enterprise.employeeSalary && model.customer.enterprise.employeeSalary>0){
                             model.customer.isCreditAppraisal = true
                             BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer});
@@ -3673,7 +3692,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         model.enrolmentProcess.refreshEnterpriseCustomerRelations(model.loanProcess);
                     },
                     "load-address-business": function (bundleModel, model, params) {
-                        if(params.customer.fcuStatu){
+                        if(params.customer.fcuStatus){
                             model.customer.mobilePhone = params.customer.mobilePhone;
                             model.customer.landLineNo = params.customer.landLineNo;
                             model.customer.doorNo = params.customer.doorNo;
@@ -3783,7 +3802,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             });
 
                     },
-                    proceed: function (model, form) {
+                    proceed: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                         PageHelper.clearErrors();
                         if (PageHelper.isFormInvalid(form)) {
                             return false;
@@ -3793,7 +3812,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         model.customer.expenditures = [];
                         model.customer.enterpriseMonthlySales = []
 
-                        if (model.currentStage && model.currentStage == "CreditAppraisal" && model.customer.productCategory == 'MEL' && model.customer.enterprise.employeeSalary<=0){
+                        if (model.currentStage && model.currentStage == "CreditAppraisal" && model.loanAccount.productCategory == 'MEL' && model.customer.enterprise.employeeSalary<=0){
                             PageHelper.showProgress("loan-enrolment","Loan Amount Eligible for customer should be more than zero amount",5000);
                                 return false;    
                         }
@@ -3859,7 +3878,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 if(model.currentStage == 'CreditAppraisal'){   
                                     model.customer.isCreditAppraisal = true
                                     BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer});
-                                    $state.reload();
+                                    getthisObject(model, form, formCtrl, bundlePageObj, bundleModel);
                                 }
 
                                 BundleManager.pushEvent(model._bundlePageObj.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
@@ -3871,7 +3890,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     }
 
                 }
-            };
+            }
+
+            return object;
         }
     }
 });

@@ -1667,9 +1667,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "BankAccounts.customerBankAccounts",
                                     "EnterpriseFinancials",
                                     "EmployeeDetails",
+                                    "CommercialCBCheck",
+                                    "BuyerDetails",
+                                    "SuppliersDeatils",
+                                    "EnterpriseAssets",
+                                    "Machinery",
+                                    "CurrentAssets",
+                                    "References",
+                                    "EnterpriseInformation.customerId",
+                                    "EnterpriseInformation.customerBranchId",
+                                    "EnterpriseInformation.entityId",
+                                    "EnterpriseInformation.urnNo",
+                                    "EnterpriseInformation.centreId",
+                                    "EnterpriseInformation.SpokeID",
+                                    "EnterpriseInformation.SpokeID2",
+                                    "EnterpriseInformation.oldCustomerId",
                                     "EnterpriseInformation.referredBy",
                                     "EnterpriseInformation.companyOperatingSince",
                                     "EnterpriseInformation.companyEmailId",
+                                    "EnterpriseInformation.latitude",
                                     "EnterpriseInformation.photoImageId",
                                     "EnterpriseInformation.businessHistory",
                                     "EnterpriseInformation.anyPartnerOfPresentBusiness",
@@ -1682,6 +1698,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "EnterpriseInformation.businessType",
                                     "EnterpriseInformation.businessActivity",
                                     "EnterpriseInformation.businessSubsector",
+                                    "EnterpriseInformation.itrAvailable",
                                     "EnterpriseInformation.enterpriseCustomerRelations",
                                     "ContactInformation.mobilePhone",
                                     "ContactInformation.landLineNo",
@@ -1691,6 +1708,34 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "Liabilities",
                                 ],
                                 "overrides": {
+                                    "ContactInformation.doorNo":{
+                                        "readonly":true
+                                    },
+                                    "ContactInformation.street":{
+                                        "readonly":true
+                                    },
+                                    
+                                    "ContactInformation.landmark":{
+                                        "readonly":true
+                                    },
+                                    "ContactInformation.pincode":{
+                                        "readonly":true
+                                    },
+                                    "EnterpriseInformation.businessSector":{
+                                        "readonly":true
+                                    },
+                                    "EnterpriseInformation.enterpriseRegistrations.registeredDate":{
+                                        "readonly":true
+                                    },
+                                    "EnterpriseInformation.ownership":{
+                                        "readonly":true
+                                    },                    
+                                    "EnterpriseInformation.businessConstitution":{
+                                        "readonly":true
+                                    },
+                                    "EnterpriseInformation.firstName":{
+                                        "readonly":true
+                                    },
                                     "EnterpriseInformation":{
                                         "orderNo":10
                                     },

@@ -45,7 +45,7 @@ define({
                                 "customerName":"DisbursementReverse.customerName",
                                 "transactionId":"DisbursementReverse.transactionId",
                                 "transactionName":"DisbursementReverse.transactionName",
-                                "actualDisbursementDate":"DisbursementReverse.actualDisbursementDate",
+                                "scheduledDisbursementDate":"DisbursementReverse.scheduledDisbursementDate",
                                 "disbursedAmount":"DisbursementReverse.disbursedAmount"
                             },
                             "searchHelper": formHelper,
@@ -75,12 +75,12 @@ define({
                                     item.customerName,
                                     item.transactionId,
                                     item.transactionName,
-                                    item.actualDisbursementDate,
+                                    item.scheduledDisbursementDate,
                                     item.disbursedAmount
                                 ];
                             },
                             onSelect: function(result, model, context) {
-    
+                                
                             }
                         },
                         {
@@ -101,7 +101,7 @@ define({
                             "readonly": true
                         },
                         {
-                            "key": "DisbursementReverse.actualDisbursementDate",
+                            "key": "DisbursementReverse.scheduledDisbursementDate",
                             "title": "DISBURSEMENT_DATE",
                             "readonly": true,
                             "type": "date"

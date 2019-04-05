@@ -871,6 +871,13 @@ define([],function(){
                                 "LoanSanction",
                                 "PreliminaryInformation",
                                  "DeductionsFromLoan",
+                                 "LoanCustomerRelations",
+                                 "DeductionsFromLoan",
+                                  "References",
+                                  "NomineeDetails", 
+                                  "CollateralDetails",
+                                  "AdditionalLoanInformation",
+                                  "LoanMitigants",     
                                 "LoanSanction.sanctionDate",
                                 "LoanSanction.numberOfDisbursements",
                                 "LoanSanction.disbursementSchedules",
@@ -1611,8 +1618,22 @@ define([],function(){
                     "revertReject.remarks",
                     "revertReject.rejectReason",
                     "revertReject.targetStage",
-                    "revertReject.sendBackButton"
-
+                    "revertReject.sendBackButton",
+                    
+                    "References",
+                    "References.verifications",
+                    "References.verifications.relationship",
+                    "References.verifications.businessName",
+                    "References.verifications.referenceFirstName",
+                    "References.verifications.mobileNo",
+                    "References.verifications.email",
+                    "References.verifications.occupation",
+                    "References.verifications.address",
+                    "References.verifications.ReferenceCheck",
+                    "References.verifications.ReferenceCheck.relationship",
+                    "References.verifications.ReferenceCheck.opinion",
+                    "References.verifications.ReferenceCheck.financialStatus",
+                    "References.verifications.ReferenceCheck.knownSince",
  
                     // "ProposedUtilizationPlan",
                     // "ProposedUtilizationPlan.loanUtilisationDetail",
@@ -1659,7 +1680,7 @@ define([],function(){
                                 },
                                 "expectedEmi": {
                                     "key": "loanAccount.expectedEmi",
-                                    "title": "ESTIMATED_KINARA_EMI",
+                                    "title": "ESTIMATED_AROHAN_EMI",
                                     "orderNo": 91,
                                     type: "amount",
                                     "readonly": true
@@ -1792,10 +1813,10 @@ define([],function(){
                                     "type": "radios",
                                     "condition": "model.currentStage !== 'Screening'",
                                     "titleMap": {
-                                        "REJECT": "REJECT",
+                                        //"REJECT": "REJECT",
                                         "SEND_BACK": "SEND_BACK",
                                         "PROCEED": "PROCEED",
-                                        "HOLD": "HOLD"
+                                        //"HOLD": "HOLD"
                                     }
                                 },
                                 "action1": {
@@ -1806,6 +1827,16 @@ define([],function(){
                                         "REJECT": "REJECT",
                                         "PROCEED": "PROCEED",
                                         "HOLD": "HOLD"
+                                    }
+                                },
+                                "action2": {
+                                    "key": "review.action",
+                                    "type": "radios",
+                                    "condition": "model.currentStage == 'Pricing'",
+                                    "titleMap": {
+                                        //"REJECT": "REJECT",
+                                        "PROCEED": "PROCEED",
+                                        //"HOLD": "HOLD"
                                     }
                                 },
                                 "proceed": {
@@ -1962,7 +1993,162 @@ define([],function(){
                                 }
                             }
 
-                        }
+                        },
+                        "References":{
+                            "type": "box",
+                            "title": "REFERENCES",
+                            "orderNo":100,
+                            //"condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal' || model.currentStage=='Screening' || model.currentStage=='ScreeningReview'",
+                            "items": {
+                                "verifications" : {
+                                    key:"customer.verifications",
+                                    title:"REFERENCES",
+                                    type: "array",
+                                    items:{
+                                        // "relationship" : {
+                                        //     key:"customer.verifications[].relationship",
+                                        //     title:"REFERENCE_TYPE",
+                                        //     type:"select",
+                                        //     required:"true",
+                                        //     enumCode: "business_reference_type"
+                                        // },
+                                        // "businessName" : {
+                                        //     key:"customer.verifications[].businessName",
+                                        //     title:"BUSINESS_NAME",
+                                        //     type:"string"
+                                        // },
+                                        "referenceFirstName" : {
+                                            key:"customer.verifications[].referenceFirstName",
+                                            title:"CONTACT_PERSON_NAME",
+                                            required:"true",
+                                            type:"string"
+                                        },
+                                        "mobileNo" : {
+                                            key:"customer.verifications[].mobileNo",
+                                            title:"CONTACT_NUMBER",
+                                            type:"string",
+                                            required:"true",
+                                            inputmode: "number",
+                                            numberType: "tel",
+                                            "schema": {
+                                                 "pattern": "^[0-9]{10}$"
+                                            }
+                                        },
+                                        "email" : {
+                                            key:"customer.verifications[].mobileNo",
+                                            title:"EMAIL_ID",
+                                            type:"string",
+                                            required:"true",
+                                            inputmode: "text"
+                                            // "schema": {
+                                            //      "pattern": "^[0-9]{10}$"
+                                            // }
+                                        },
+                                        /*,
+                                        {
+                                            key:"customer.verifications[].businessSector",
+                                            title:"BUSINESS_SECTOR",
+                                            type:"select",
+                                            enumCode: "businessSector"
+                                        },
+                                        {
+                                            key:"customer.verifications[].businessSubSector",
+                                            title:"BUSINESS_SUBSECTOR",
+                                            type:"select",
+                                            enumCode: "businessSubSector",
+                                            parentEnumCode: "businessSector"
+                                        },
+                                        {
+                                            key:"customer.verifications[].selfReportedIncome",
+                                            title:"SELF_REPORTED_INCOME",
+                                            type:"number"
+                                        }*/
+                                        "occupation":{
+                                            key:"customer.verifications[].occupation",
+                                            title:"OCCUPATION",
+                                            type:"select",
+                                            "enumCode": "occupation",
+                                        },
+                                        "address" : {
+                                            key:"customer.verifications[].address",
+                                            type:"textarea"
+                                        },
+                                        "ReferenceCheck" : {
+                                        type: "fieldset",
+                                        title: "REFERENCE_CHECK",
+                                        //"condition": "model.currentStage=='FieldAppraisal'",
+                                        items: {
+                                            /*,
+                                            {
+                                                key:"customer.verifications[].remarks",
+                                                title:"REMARKS",
+                                            },*/
+                                            "knownSince" : {
+                                                key:"customer.verifications[].knownSince",
+                                                required:true
+                                            },
+                                            "relationship":{
+                                                key:"customer.verifications[].relationship",
+                                                title:"REFERENCE_TYPE1",
+                                                type:"select",
+                                                required:true,
+                                                titleMap: {
+                                                    "Neighbour": "Neighbour",
+                                                    "Relative/friend": "Relative/friend"
+                                                }
+                                            },
+                                            "opinion":{
+                                                key:"customer.verifications[].opinion"
+                                            },
+                                            "financialStatus":{
+                                                key:"customer.verifications[].financialStatus"
+                                            },
+                                            // "goodsSold" : {
+                                            //     key:"customer.verifications[].goodsSold",
+                                            //     "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
+                                            // },
+                                            // "goodsBought" : {
+                                            //     key:"customer.verifications[].goodsBought",
+                                            //     "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
+                                            // },
+                                            // "paymentTerms" : {
+                                            //     key:"customer.verifications[].paymentTerms",
+                                            //     type:"select",
+                                            //     "title":"payment_tarms",
+                                            //     enumCode: "payment_terms"
+                                            // },
+                                            // "modeOfPayment" : {
+                                            //     key:"customer.verifications[].modeOfPayment",
+                                            //     type:"select",
+                                            //     enumCode: "payment_mode"
+                                            // },
+                                            // "outstandingPayable" : {
+                                            //     key:"customer.verifications[].outstandingPayable",
+                                            //     "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
+                                            // },
+                                            // "outstandingReceivable" : {
+                                            //     key:"customer.verifications[].outstandingReceivable",
+                                            //     "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
+                                            // },
+                                            "customerResponse" : {
+                                                key:"customer.verifications[].customerResponse",
+                                                title:"CUSTOMER_RESPONSE",
+                                                type:"select",
+                                                required:true,
+                                                titleMap: [{
+                                                                value: "positive",
+                                                                name: "positive"
+                                                            },{
+                                                                value: "Negative",
+                                                                name: "Negative"
+                                                            }]
+                                            }
+                                        }
+                                        }
+                                    }
+                                },
+                            }
+                        },
                        
 
                     },
