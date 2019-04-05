@@ -283,31 +283,8 @@ define({
                         }, {
                             "key": "customer.enterprise.businessSubsector",
                             "title": "Business Subsector"
-                        }, //{
-                        //     "key": "customer.enterpriseRegistrations[].registrationType", 
-                        //     "title": "REGISTRATION_TYPE",
-                        // },
-                        // {
-                        //     "key": "customer.enterpriseRegistrations[].registrationNumber",
-                        //     "title": "REGISTRATION_NUMBER",
-                        // },
-                        // {
-                        //     "key": "customer.enterpriseRegistrations[].registeredDate",
-                        //     "title": "REGISTRATION_DATE",
-                        // },
-                        // {
-                        //     "key": "customer.enterpriseRegistrations[].expiryDate",
-                        //     "title": "VALID_UPTO",
-                        // },
-                        // {
-                        //     "key": "customer.enterpriseRegistrations[].documentId",
-                        //     "title": "REGISTRATION_DOCUMENT",
-                        // }
-                    ]
-                    }, {
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
+                        }, 
+                        {
                             "key": "customer.urnNo",
                             "title": "URN"
                         }, {
@@ -322,7 +299,57 @@ define({
                         }, {
                             "key": "customer.enterprise.anyPartnerOfPresentBusiness",
                             "title": "Has anyone else been a partner of your present business ?"
-                        }]
+                        }
+                    ]
+                    }, {
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [
+                            {
+                                "type": "tableview",
+                                "key": "customer.enterpriseRegistrations",
+                                "title": "",
+                                "transpose": true,
+                                "selectable": false,
+                                "editable": false,
+                                "tableConfig": {
+                                    "searching": false,
+                                    "paginate": false,
+                                    "pageLength": 10,
+                                },
+                                getColumns: function() {
+                                    return [{
+                                        "title": "Registration Type",
+                                        "data": "registrationType"
+                                    }, {
+                                        "title": "Registration Number",
+                                        "data": "registrationNumber"
+            
+                                    }, {
+                                        "title": "Registered Date",
+                                        "data": "registeredDate"
+                                    }, {
+                                        "title": "Registration Validity",
+                                        "data": "expiryDate",
+                                    }, {
+                                        "title": "Registration Document",
+                                        "data": "documentId",
+            
+                                        render: function(data, type, full, meta) {
+                                            var url = Model_ELEM_FC.fileStreamUrl + "/" + full.documentId;
+                                            return '<a href="' + url + '">Download</a>'
+                                        }
+            
+            
+            
+                                    }];
+                                },
+                                getActions: function() {
+                                    return [];
+                                }
+                            }
+
+                        ]
 
                     }
                 ]
@@ -512,61 +539,63 @@ define({
                 ]
                 }]
             },
+            // {
+            //     "type": "box",
+            //     "colClass": "col-sm-12",
+            //     "overrideType": "default-view",
+            //     "title": "Registration Details",
+            //     "readonly": true,
+            //     "items": [
+            //         {
+            //         "type": "tableview",
+            //         "key": "customer.enterpriseRegistrations",
+            //         "title": "",
+            //         "transpose": true,
+            //         "selectable": false,
+            //         "editable": false,
+            //         "tableConfig": {
+            //             "searching": false,
+            //             "paginate": false,
+            //             "pageLength": 10,
+            //         },
+            //         getColumns: function() {
+            //             return [{
+            //                 "title": "Registration Type",
+            //                 "data": "registrationType"
+            //             }, {
+            //                 "title": "Registration Number",
+            //                 "data": "registrationNumber"
+
+            //             }, {
+            //                 "title": "Registered Date",
+            //                 "data": "registeredDate"
+            //             }, {
+            //                 "title": "Registration Validity",
+            //                 "data": "expiryDate",
+            //             }, {
+            //                 "title": "Registration Document",
+            //                 "data": "documentId",
+
+            //                 render: function(data, type, full, meta) {
+            //                     var url = Model_ELEM_FC.fileStreamUrl + "/" + full.documentId;
+            //                     return '<a href="' + url + '">Download</a>'
+            //                 }
+
+
+
+            //             }];
+            //         },
+            //         getActions: function() {
+            //             return [];
+            //         }
+            //     }]
+            // }, 
             {
                 "type": "box",
-                "colClass": "col-sm-12",
-                "overrideType": "default-view",
-                "title": "Registration Details",
-                "readonly": true,
-                "items": [{
-                    "type": "tableview",
-                    "key": "customer.enterpriseRegistrations",
-                    "title": "",
-                    "transpose": true,
-                    "selectable": false,
-                    "editable": false,
-                    "tableConfig": {
-                        "searching": false,
-                        "paginate": false,
-                        "pageLength": 10,
-                    },
-                    getColumns: function() {
-                        return [{
-                            "title": "Registration Type",
-                            "data": "registrationType"
-                        }, {
-                            "title": "Registration Number",
-                            "data": "registrationNumber"
-
-                        }, {
-                            "title": "Registered Date",
-                            "data": "registeredDate"
-                        }, {
-                            "title": "Registration Validity",
-                            "data": "expiryDate",
-                        }, {
-                            "title": "Registration Document",
-                            "data": "documentId",
-
-                            render: function(data, type, full, meta) {
-                                var url = Model_ELEM_FC.fileStreamUrl + "/" + full.documentId;
-                                return '<a href="' + url + '">Download</a>'
-                            }
-
-
-
-                        }];
-                    },
-                    getActions: function() {
-                        return [];
-                    }
-                }]
-            }, {
-                "type": "box",
                 "readonly": true,
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
-                "title": "HOUSEHOLD_LIABILITIES",
+                "title": "BUSINESS_LIABILITIES",
                 "condition": "model.customer.liabilities.length !=0",
                 "items": [{
                     "type": "grid",
@@ -574,57 +603,8 @@ define({
                     "items": [{
                         "type": "grid",
                         "orientation": "vertical",
-                        "items": [{
-                            "key": "active_accounts",
-                            "title": "No of Active Loans",
-                            "type": "number"
-                        }, {
-                            "key": "monthly_installment",
-                            "title": "Total Monthly Instalments",
-                            "type": "amount"
-                        }, {
-                            "key": "outstanding_bal",
-                            "title": "OUTSTANDING_AMOUNT",
-                            "type": "amount"
-                        }]
-
-                    }, {
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "",
-                            "title": "Total loan amount from Banks",
-                            "type": "amount"
-
-                        }, {
-                            "key": "",
-                            "title": "Total loan amount from MFI/NBFC",
-                            "type": "amount"
-
-                        }, {
-                            "key": "",
-                            "title": "Total loan amount from others",
-                            "type": "amount"
-
-                        }]
-
-                    }]
-                }, {
-                    "type": "expandablesection",
-                    "items": [{
-                        "type": "tableview",
-                        "key": "liabilities",
-                        "notitle": true,
-                        "transpose": true,
-                        "selectable": false,
-                        "editable": false,
-                        "tableConfig": {
-                            "searching": false,
-                            "paginate": false,
-                            "pageLength": 10,
-                        },
-                        getColumns: function() {
-                            return [{
+                        "items": [
+                            {
                                 "title": "loan type",
                                 "data": "loan type",
                                 render: function(data, type, full, meta) {
@@ -648,7 +628,8 @@ define({
                                 render: function(data, type, full, meta) {
                                     return irfCurrencyFilter(full['Installment Amount'])
                                 }
-                            }, {
+                            }, 
+                            {
                                 "data": "outstandingAmountInPaisa",
                                 "title": "OUTSTANDING_AMOUNT",
                                 render: function(data, type, full, meta) {
@@ -661,7 +642,14 @@ define({
                                     return full['Purpose']
                                 }
 
-                            }, {
+                            }, 
+                    ]
+
+                    }, {
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [
+                            {
                                 "title": "START_DATE",
                                 "data": "startDate",
                                 render: function(data, type, full, meta) {
@@ -706,13 +694,116 @@ define({
                                     return full['']
                                 }
                             },
-                        ];
-                        },
-                        getActions: function() {
-                            return [];
-                        }
+                    ]
+
                     }]
-                }]
+                }, 
+                // {
+                //     "type": "expandablesection",
+                //     "items": [{
+                //         "type": "tableview",
+                //         "key": "liabilities",
+                //         "notitle": true,
+                //         "transpose": true,
+                //         "selectable": false,
+                //         "editable": false,
+                //         "tableConfig": {
+                //             "searching": false,
+                //             "paginate": false,
+                //             "pageLength": 10,
+                //         },
+                //         getColumns: function() {
+                //             return [
+                //                 {
+                //                 "title": "loan type",
+                //                 "data": "loan type",
+                //                 render: function(data, type, full, meta) {
+                //                     return full['Loan Type']
+                //                 }
+                //             }, {
+                //                 "title": "loan source",
+                //                 "data": "loanSource",
+                //                 render: function(data, type, full, meta) {
+                //                     return full['Loan Source']
+                //                 }
+                //             }, {
+                //                 "title": "loan Amount",
+                //                 "data": "loanAmount",
+                //                 render: function(data, type, full, meta) {
+                //                     return irfCurrencyFilter(full['Loan Amount'])
+                //                 }
+                //             }, {
+                //                 "title": "Installment Amount",
+                //                 "data": "installmentAmountInPaisa",
+                //                 render: function(data, type, full, meta) {
+                //                     return irfCurrencyFilter(full['Installment Amount'])
+                //                 }
+                //             }, {
+                //                 "data": "outstandingAmountInPaisa",
+                //                 "title": "OUTSTANDING_AMOUNT",
+                //                 render: function(data, type, full, meta) {
+                //                     return irfCurrencyFilter(full['Outstanding Amount'])
+                //                 }
+                //             }, {
+                //                 "title": "Loan Purpose",
+                //                 "data": "Purpose",
+                //                 render: function(data, type, full, meta) {
+                //                     return full['Purpose']
+                //                 }
+
+                //             }, {
+                //                 "title": "START_DATE",
+                //                 "data": "startDate",
+                //                 render: function(data, type, full, meta) {
+                //                     return full['Start Date']
+                //                 }
+                //             }, {
+                //                 "title": "MATURITY_DATE",
+                //                 "data": "maturityDate",
+                //                 render: function(data, type, full, meta) {
+                //                     return full['Maturity Date']
+                //                 }
+                //             }, {
+                //                 "title": "NO_OF_INSTALLMENT_PAID",
+                //                 "data": "noOfInstalmentPaid",
+                //                 render: function(data, type, full, meta) {
+                //                     return full['No of Installment Paid']
+                //                 }
+
+                //             }, {
+                //                 "title": "Frequency of Installments",
+                //                 "data": "Frequency",
+                //                 render: function(data, type, full, meta) {
+                //                     return full['Frequency']
+                //                 }
+                //             }, {
+                //                 "data": "",
+                //                 "title": "INTEREST_ONLY",
+                //                 render: function(data, type, full, meta) {
+                //                     return full['Interest Only']
+                //                 }
+                //             }, {
+                //                 "data": "interestRate",
+                //                 "title": "RATE_OF_INTEREST",
+                //                 render: function(data, type, full, meta) {
+                //                     return full['Rate of Interest']
+                //                 }
+                //             },
+                //             {
+                //                 "data": "interestRate",
+                //                 "title": "TENURE",
+                //                 render: function(data, type, full, meta) {
+                //                     return full['']
+                //                 }
+                //             },
+                //         ];
+                //         },
+                //         getActions: function() {
+                //             return [];
+                //         }
+                //     }]
+                // }
+            ]
             }, {
                 "type": "box",
                 "colClass": "col-sm-12",
@@ -754,484 +845,486 @@ define({
                         }]
                     }]
                 }]
-            }, {
-                "type": "box",
-                "colClass": "col-sm-12",
-                "overrideType": "default-view",
-                "readonly": true,
-               // "title": "Machinery/Stocks/Non-Machinery Asset Details",
-                "title": "Machinery",
-                "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "machine_count",
-                            "title": "Total no. of machinery",
-                            "type": "number"
-                        }, {
-                            "key": "totalValue",
-                            "title": "Total value of machinery",
-                            "type": "amount"
-                        }]
-                    }, {
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "hypothecatedToKinara",
-                            "title": "NO_OF_MACHINERY_HYPOTHECATED_TO",
-                            "type": "number"
-                        }, {
-                            "key": "totalHypothecatedValue",
-                            "title": "VALUE_OF_MACHINERY_HYPOTHECATED_TO",
-                            "type": "amount"
-                        }]
-                    }]
-                }, {
-                    "type": "expandablesection",
-                    "items": [{
-                        "type": "tableview",
-                        "key": "customer.fixedAssetsMachinaries",
-                        "selectable": false,
-                        "editable": false,
-                        "transpose": true,
-                        "tableConfig": {
-                            "searching": false,
-                            "paginate": false,
-                            "pageLength": 10
-                        },
-                        getColumns: function() {
-                            return [{
-                                "title": "Machine Type",
-                                "data": "machineType"
-                            }, {
-                                "title": "Manufacturer",
-                                "data": "manufacturerName"
-                            }, {
-                                "title": "Model No.",
-                                "data": "machineModel",
-                            },
-                            {
-                                "title": "Description",
-                                "data": "machineDescription",
-                            },
-                            {
-                                "title": "Serial Number",
-                                "data": "serialNumber",
-                            },
-                            {
-                                "title": "Permanently Fixed To Building",
-                                "data": "machinePermanentlyFixedToBuilding",
-                            },
+            }, 
+            // {
+            //     "type": "box",
+            //     "colClass": "col-sm-12",
+            //     "overrideType": "default-view",
+            //     "readonly": true,
+            //    // "title": "Machinery/Stocks/Non-Machinery Asset Details",
+            //     "title": "Machinery",
+            //     "items": [{
+            //         "type": "grid",
+            //         "orientation": "horizontal",
+            //         "items": [{
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [{
+            //                 "key": "machine_count",
+            //                 "title": "Total no. of machinery",
+            //                 "type": "number"
+            //             }, {
+            //                 "key": "totalValue",
+            //                 "title": "Total value of machinery",
+            //                 "type": "amount"
+            //             }]
+            //         }, {
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [{
+            //                 "key": "hypothecatedToKinara",
+            //                 "title": "NO_OF_MACHINERY_HYPOTHECATED_TO",
+            //                 "type": "number"
+            //             }, {
+            //                 "key": "totalHypothecatedValue",
+            //                 "title": "VALUE_OF_MACHINERY_HYPOTHECATED_TO",
+            //                 "type": "amount"
+            //             }]
+            //         }]
+            //     }, {
+            //         "type": "expandablesection",
+            //         "items": [{
+            //             "type": "tableview",
+            //             "key": "customer.fixedAssetsMachinaries",
+            //             "selectable": false,
+            //             "editable": false,
+            //             "transpose": true,
+            //             "tableConfig": {
+            //                 "searching": false,
+            //                 "paginate": false,
+            //                 "pageLength": 10
+            //             },
+            //             getColumns: function() {
+            //                 return [{
+            //                     "title": "Machine Type",
+            //                     "data": "machineType"
+            //                 }, {
+            //                     "title": "Manufacturer",
+            //                     "data": "manufacturerName"
+            //                 }, {
+            //                     "title": "Model No.",
+            //                     "data": "machineModel",
+            //                 },
+            //                 {
+            //                     "title": "Description",
+            //                     "data": "machineDescription",
+            //                 },
+            //                 {
+            //                     "title": "Serial Number",
+            //                     "data": "serialNumber",
+            //                 },
+            //                 {
+            //                     "title": "Permanently Fixed To Building",
+            //                     "data": "machinePermanentlyFixedToBuilding",
+            //                 },
 
-                            // {
-                            //     "title": "Depreciation%",
-                            //     "data": "depreciationPercentage",
-                            // }, 
-                            {
-                                "title": "Purchase Year",
-                                "data": "machinePurchasedYear"
-                            }, {
-                                "title": "New/Old",
-                                "data": "isTheMachineNew",
-                                render: function(data, type, full, meta) {
-                                    if (full.isTheMachineNew == 'YES')
-                                        return 'NEW';
-                                    return 'OLD'
-                                }
-                            }, {
-                                "title": "Purchase Price",
-                                "data": "purchasePrice",
-                                render: function(data, type, full, meta) {
-                                    return irfCurrencyFilter(data);
-                                }
+            //                 // {
+            //                 //     "title": "Depreciation%",
+            //                 //     "data": "depreciationPercentage",
+            //                 // }, 
+            //                 {
+            //                     "title": "Purchase Year",
+            //                     "data": "machinePurchasedYear"
+            //                 }, {
+            //                     "title": "New/Old",
+            //                     "data": "isTheMachineNew",
+            //                     render: function(data, type, full, meta) {
+            //                         if (full.isTheMachineNew == 'YES')
+            //                             return 'NEW';
+            //                         return 'OLD'
+            //                     }
+            //                 }, {
+            //                     "title": "Purchase Price",
+            //                     "data": "purchasePrice",
+            //                     render: function(data, type, full, meta) {
+            //                         return irfCurrencyFilter(data);
+            //                     }
 
-                            }, {
-                                "title": "Present Value",
-                                "data": "presentValue",
-                                render: function(data, type, full, meta) {
-                                    return irfCurrencyFilter(data);
-                                }
-                            },
-                            // {
-                            //     "title": "Market Price",
-                            //     "data": "marketPrice",
-                            //     render: function(data, type, full, meta) {
-                            //         return irfCurrencyFilter(data);
-                            //     }
-                            // },
-                            // {
-                            //     "title": "Fixed Price",
-                            //     "data": "finalPrice",
-                            //     render: function(data, type, full, meta) {
-                            //         return irfCurrencyFilter(data);
-                            //     }
-                            // }, 
-                            {
-                                 "title": "Source",
-                                "data": "fundingSource"
-                            }, {
-                                "title": "Hypothecated to",
-                                "data": "hypothecatedTo",
-                                render: function(data, type, full, meta) {
-                                    return full.hypothecatedToUs == "YES" ? ("Kinara") : (full.hypothecatedTo);
-                                }
-                            }];
-                        },
-                        getActions: function() {
-                            return [];
-                        }
-                    }]
-                }]
-            },
+            //                 }, {
+            //                     "title": "Present Value",
+            //                     "data": "presentValue",
+            //                     render: function(data, type, full, meta) {
+            //                         return irfCurrencyFilter(data);
+            //                     }
+            //                 },
+            //                 // {
+            //                 //     "title": "Market Price",
+            //                 //     "data": "marketPrice",
+            //                 //     render: function(data, type, full, meta) {
+            //                 //         return irfCurrencyFilter(data);
+            //                 //     }
+            //                 // },
+            //                 // {
+            //                 //     "title": "Fixed Price",
+            //                 //     "data": "finalPrice",
+            //                 //     render: function(data, type, full, meta) {
+            //                 //         return irfCurrencyFilter(data);
+            //                 //     }
+            //                 // }, 
+            //                 {
+            //                      "title": "Source",
+            //                     "data": "fundingSource"
+            //                 }, {
+            //                     "title": "Hypothecated to",
+            //                     "data": "hypothecatedTo",
+            //                     render: function(data, type, full, meta) {
+            //                         return full.hypothecatedToUs == "YES" ? ("Kinara") : (full.hypothecatedTo);
+            //                     }
+            //                 }];
+            //             },
+            //             getActions: function() {
+            //                 return [];
+            //             }
+            //         }]
+            //     }]
+            // },
+            // {
+            //     "type": "box",
+            //     "colClass": "col-sm-12",
+            //     "overrideType": "default-view",
+            //     "readonly": true,
+            //     "title": "Stocks",
+            //     "items": [{
+            //         "type": "grid",
+            //         "orientation": "horizontal",
+            //         "items": [{
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [{
+            //                 "key": "stock_count",
+            //                 "title": "Total no. of stocks",
+            //                 "type": "number"
+            //             }, {
+            //                 "key": "totalstockValue",
+            //                 "title": "Total value of stocks",
+            //                 "type": "amount"
+            //             }]
+            //         }, {
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [{
+            //                 "key": "hypothecatedStockToKinara",
+            //                 "title": "NO_OF_STOCKS_HYPOTHECATED_TO",
+            //                 "type": "number"
+            //             }, {
+            //                 "key": "totalHypothecatedStockValue",
+            //                 "title": "VALUE_OF_STOCKS_HYPOTHECATED_TO",
+            //                 "type": "amount"
+            //             }]
+            //         }]
+            //     }, {
+            //         "type": "expandablesection",
+            //         "items": [{
+            //             "type": "tableview",
+            //             "key": "currentAssets",
+            //             "selectable": false,
+            //             "editable": false,
+            //             "tableConfig": {
+            //                 "searching": false,
+            //                 "paginate": false,
+            //                 "pageLength": 10
+            //             },
+            //             getColumns: function() {
+            //                 return [{
+            //                     "title": "Stock Type",
+            //                     "data": "Stock Type"
+            //                 }, {
+            //                     "title": "Stock Description",
+            //                     "data": "Stock Description"
+            //                 }, {
+            //                     "title": "Stock Value.",
+            //                     "data": "Stock Value",
+            //                 }, {
+            //                     "title": "% of Loan Amount",
+            //                     "data": "Percn Of Loan Amount"
+            //                 },{
+            //                     "title": "Hypothecated to",
+            //                     "data": "Hypothecated to"
+            //                 }];
+            //             },
+            //             getActions: function() {
+            //                 return [];
+            //             }
+            //         }]
+            //     }]
+            // },{
+            //     "type": "box",
+            //     "colClass": "col-sm-12",
+            //     "overrideType": "default-view",
+            //     "readonly": true,
+            //     "title": "NON_MACHINERY_ASSET",
+            //     "items": [{
+            //         "type": "grid",
+            //         "orientation": "horizontal",
+            //         "items": [{
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [{
+            //                 "key": "non_machinery_asset",
+            //                 "title": "TOTAL_NO_OF_NON_MACHINERY_ASSET",
+            //                 "type": "number"
+            //             }, {
+            //                 "key": "totalEnterpriseAssetValue",
+            //                 "title": "TOTAL_VALUE_NON_MACHINERY_ASSET",
+            //                 "type": "amount"
+            //             }]
+            //         }, {
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [{
+            //                 "key": "hypothecatedEnterpriseAssetToKinara",
+            //                 "title": "NO_OF_NON_MACHINERY_ASSET_HYPOTHECATED_TO_KINARA",
+            //                 "type": "number"
+            //             }, {
+            //                 "key": "totalHypothecatedEnterpriseAssetValue",
+            //                 "title": "VALUE_OF_NON_MACHINERY_ASSET_HYPOTHECATED_TO_KINARA",
+            //                 "type": "amount"
+            //             }]
+            //         }]
+            //     }, {
+            //         "type": "expandablesection",
+            //         "items": [{
+            //             "type": "tableview",
+            //             "key": "enterpriseAssets",
+            //             "selectable": false,
+            //             "editable": false,
+            //             "tableConfig": {
+            //                 "searching": false,
+            //                 "paginate": false,
+            //                 "pageLength": 10
+            //             },
+            //             getColumns: function() {
+            //                 return [{
+            //                     "title": "Asset Type",
+            //                     "data": "Asset Type"
+            //                 }, {
+            //                     "title": "Asset Description",
+            //                     "data": "Asset Description"
+            //                 }, {
+            //                     "title": "Total Asset Value.",
+            //                     "data": "Total Asset Value",
+            //                 }, {
+            //                     "title": "% of Loan Amount",
+            //                     "data": "Percn Of Loan Amount"
+            //                 },{
+            //                     "title": "Hypothecated to",
+            //                     "data": "Hypothecated to"
+            //                 }];
+            //             },
+            //             getActions: function() {
+            //                 return [];
+            //             }
+            //         }]
+            //     }]
+            // } ,
+            // {
+            //     "type": "box",
+            //     "colClass": "col-sm-12",
+            //     "overrideType": "default-view",
+            //     "readonly": true,
+            //     "title": "OVER_ALL_HYPOTHECATION_VALUE",
+            //     "items": [{
+            //         "type": "grid",
+            //         "orientation": "horizontal",
+            //         "items": [{
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [{
+            //                 "key": "overAllHypoValue['Hypothecation Type']",
+            //                 "title": "HYPOTHECATION_TYPE",
+            //                 "type": "number"
+            //             }, {
+            //                 "key": "overAllHypoValue['Stock And Declared Value']",
+            //                 "title": "STOCK_AND_DECLARED_VALUE",
+            //                 "type": "amount"
+            //             }]
+            //         }, {
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [{
+            //                 "key": "overAllHypoValue['% Of loan_amount']",
+            //                 "title": "%_TO_LOAN_AMOUNT",
+            //                 "type": "number"
+            //             },
+            //             {
+            //                 type: "section",
+            //                 htmlClass: "col-sm-6 ",
+            //                 "key": "overAllHypoValue['color_hexadecimal']",
+            //                 //condition: "model.currentStage!='ScreeningReview'",
+            //                 "title": "Status",
+            //                 html: '<span class="col-sm-6">Status</span> <span class="col-sm-6 pull-right"><span class="square-color-box" style="background: {{model.overAllHypoValue.color_hexadecimal}}"> </span></span>' 
+            //             }]
+            //             // {
+            //             //     type: "section",
+            //             //     htmlClass: "col-sm-6 pull-right",
+            //             //     //condition: "model.currentStage!='ScreeningReview'",
+            //             //     "title": "Status",
+            //             //     html: '<span class="square-color-box" style="background: {{model.overAllHypoValue.color_hexadecimal}}"> </span>' 
+            //             // }]
+            //             // {
+            //             //     "key": "overAllHypoValue['color_hexadecimal']",
+            //             //     "title": "Status",
+            //             //      html: '<span class="square-color-box" style="background: {{overAllHypoValue.color_hexadecimal}}"> </span>' 
+            //             // }]
+            //         }]
+            //     }]
+            // },{
+            //     "type": "box",
+            //     "colClass": "col-sm-12",
+            //     "overrideType": "default-view",
+            //     "readonly": true,
+            //     "title": "COMMERCIAL CIBIL",
+            //     "items": [{
+            //         "type": "grid",
+            //         "orientation": "horizontal",
+            //         "items": [{
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [{
+            //                 "key": "CB_REPORT_DATA.bureau",
+            //                 "title": "Bureau"
+            //             }, {
+            //                 "key": "CB_REPORT_DATA.doubtful",
+            //                 "title": "Doubtful Account",
+            //                 "type": "number"
+            //             }, {
+            //                 "key": "CB_REPORT_DATA.loss",
+            //                 "title": "Loss Accounts",
+            //                 "type": "number"
+            //             }, {
+            //                 "type": "section",
+            //                 "html": '<div ng-repeat="item in form.items" >{{item.title}}<div style="margin-top:-25px; padding-left:100px;"><sf-decorator  form="item"></sf-decorator><div></div>',
+            //                 "items": [{
+            //                     "key": "CB_REPORT_DATA.fileId",
+            //                     "notitle": true,
+            //                     "title": "CB Report",
+            //                     "category": "Loan",
+            //                     "subCategory": "DOC1",
+            //                     "type": "file",
+            //                     "fileType": "application/pdf",
+            //                     "using": "scanner"
+            //                 }]
+            //             }]
+            //         }, {
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [{
+            //                 "key": "CB_REPORT_DATA.specialMentionAccount",
+            //                 "title": "Special Mention Accounts",
+            //                 "type": "number"
+            //             }, {
+            //                 "key": "CB_REPORT_DATA.standard",
+            //                 "title": "Standard Accounts",
+            //                 "type": "number"
+            //             }, {
+            //                 "key": "CB_REPORT_DATA.subStandard",
+            //                 "title": "Sub-Standard Accounts",
+            //                 "type": "number"
+            //             }]
+            //         }]
+            //     }]
+            // }, {
+            //     "type": "box",
+            //     "colClass": "col-sm-12",
+            //     "overrideType": "default-view",
+            //     "readonly": true,
+            //     "title": "Proxy Indicators",
+            //     "items": [{
+            //         "type": "section",
+            //         "htmlClass": "col-sm-12",
+            //         "html": '<div style="display: table;"><div style="font-weight: bold; display: table-cell;">Proxy Indicator Score</div><div style="display: table-cell; padding-left: 40px;">{{(model.proxyScore==null || model.proxyScore==undefined) ?"-Proxy Waiting For Summary-": model.proxyScore["Actual Value"].concat("/",model.proxyScore["ParameterScore"])}}</p></div>'
+            //     }, {
+            //         "type": "expandablesection",
+            //         "items": [{
+            //             "type": "grid",
+            //             "orientation": "horizontal",
+            //             "items": [{
+            //                 "type": "grid",
+            //                 "orientation": "vertical",
+            //                 "items": [/*{
+            //                 "type": "section",
+            //                 "html": '<div ng-repeat="item in form.items" >{{item.title}}<div style="margin-top:-25px; padding-left:100px;"><sf-decorator  form="item"></sf-decorator><div></div>',
+            //                 "items": [{
+            //                     "key": "customer.businessSignboardImage",
+            //                     "notitle": true,
+            //                     "title": "SignBoard Image",
+            //                     "category": "Loan",
+            //                     "subCategory": "DOC1",
+            //                     "type": "file",
+            //                     "fileType": "application/pdf",
+            //                     "using": "scanner"
+            //                 }]
+            //             },*/{
+            //                     "key": "customer.properAndMatchingSignboard",
+            //                     "title": "Proper Matching SignBoard"
+            //                 }, {
+            //                     "key": "customer.bribeOffered",
+            //                     "title": "Bribe Offered"
+            //                 }, {
+            //                     "key": "customer.shopOrganized",
+            //                     "title": "Shop Shed Organized"
+            //                 }, {
+            //                     "key": "customer.isIndustrialArea",
+            //                     "title": "In Industrial Area"
+            //                 }, {
+            //                     "key": "customer.customerAttitudeToKinara",
+            //                     "title": "CUSTOMER_ATTITUDE_TO_KINARA"
+            //                 }, {
+            //                     "key": "customer.bookKeepingQuality",
+            //                     "title": "Book Keeping Quality"
+            //                 }, {
+            //                     "key": "customer.challengingChequeBounce",
+            //                     "title": "Challenging Cheque Bounce/Fess Charge/Policies"
+            //                 }, {
+            //                     "key": "customer.allMachinesAreOperational",
+            //                     "title": "All Machines Operational"
+            //                 }, {
+            //                     "key": "customer.employeeSatisfaction",
+            //                     "title": "Employee Satisfaction"
+            //                 }, {
+            //                     "key": "customer.politicalOrPoliceConnections",
+            //                     "title": "Political Police Connections"
+            //                 }]
+            //             }, {
+            //                 "type": "grid",
+            //                 "orientation": "vertical",
+            //                 "items": [{
+            //                     "key": "customer.multipleProducts",
+            //                     "title": "Multiple Products (more than 3)"
+            //                 }, {
+            //                     "key": "customer.multipleBuyers",
+            //                     "title": "Multiple Buyers (more than 3)"
+            //                 }, {
+            //                     "key": "customer.seasonalBusiness",
+            //                     "title": "Seasonal Business"
+            //                 }, {
+            //                     "key": "customer.incomeStability",
+            //                     "title": "Income Stability"
+            //                 }, {
+            //                     "key": "customer.utilisationOfBusinessPremises",
+            //                     "title": "Utilization Of Business Premises"
+            //                 }, {
+            //                     "key": "customer.approachForTheBusinessPremises",
+            //                     "title": "Approach For The Business Premises"
+            //                 }, {
+            //                     "key": "customer.safetyMeasuresForEmployees",
+            //                     "title": "Safety Measures For Employees"
+            //                 }, {
+            //                     "key": "customer.childLabours",
+            //                     "title": "Child Labourers"
+            //                 }, {
+            //                     "key": "customer.isBusinessEffectingTheEnvironment",
+            //                     "title": "Is the Business Effecting Environment"
+            //                 }, {
+            //                     "key": "customer.stockMaterialManagement",
+            //                     "title": "Stock Material Management"
+            //                 }]
+            //             }]
+            //         }]
+            //     }]
+
+            // }, 
             {
-                "type": "box",
-                "colClass": "col-sm-12",
-                "overrideType": "default-view",
-                "readonly": true,
-                "title": "Stocks",
-                "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "stock_count",
-                            "title": "Total no. of stocks",
-                            "type": "number"
-                        }, {
-                            "key": "totalstockValue",
-                            "title": "Total value of stocks",
-                            "type": "amount"
-                        }]
-                    }, {
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "hypothecatedStockToKinara",
-                            "title": "NO_OF_STOCKS_HYPOTHECATED_TO",
-                            "type": "number"
-                        }, {
-                            "key": "totalHypothecatedStockValue",
-                            "title": "VALUE_OF_STOCKS_HYPOTHECATED_TO",
-                            "type": "amount"
-                        }]
-                    }]
-                }, {
-                    "type": "expandablesection",
-                    "items": [{
-                        "type": "tableview",
-                        "key": "currentAssets",
-                        "selectable": false,
-                        "editable": false,
-                        "tableConfig": {
-                            "searching": false,
-                            "paginate": false,
-                            "pageLength": 10
-                        },
-                        getColumns: function() {
-                            return [{
-                                "title": "Stock Type",
-                                "data": "Stock Type"
-                            }, {
-                                "title": "Stock Description",
-                                "data": "Stock Description"
-                            }, {
-                                "title": "Stock Value.",
-                                "data": "Stock Value",
-                            }, {
-                                "title": "% of Loan Amount",
-                                "data": "Percn Of Loan Amount"
-                            },{
-                                "title": "Hypothecated to",
-                                "data": "Hypothecated to"
-                            }];
-                        },
-                        getActions: function() {
-                            return [];
-                        }
-                    }]
-                }]
-            },{
-                "type": "box",
-                "colClass": "col-sm-12",
-                "overrideType": "default-view",
-                "readonly": true,
-                "title": "NON_MACHINERY_ASSET",
-                "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "non_machinery_asset",
-                            "title": "TOTAL_NO_OF_NON_MACHINERY_ASSET",
-                            "type": "number"
-                        }, {
-                            "key": "totalEnterpriseAssetValue",
-                            "title": "TOTAL_VALUE_NON_MACHINERY_ASSET",
-                            "type": "amount"
-                        }]
-                    }, {
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "hypothecatedEnterpriseAssetToKinara",
-                            "title": "NO_OF_NON_MACHINERY_ASSET_HYPOTHECATED_TO_KINARA",
-                            "type": "number"
-                        }, {
-                            "key": "totalHypothecatedEnterpriseAssetValue",
-                            "title": "VALUE_OF_NON_MACHINERY_ASSET_HYPOTHECATED_TO_KINARA",
-                            "type": "amount"
-                        }]
-                    }]
-                }, {
-                    "type": "expandablesection",
-                    "items": [{
-                        "type": "tableview",
-                        "key": "enterpriseAssets",
-                        "selectable": false,
-                        "editable": false,
-                        "tableConfig": {
-                            "searching": false,
-                            "paginate": false,
-                            "pageLength": 10
-                        },
-                        getColumns: function() {
-                            return [{
-                                "title": "Asset Type",
-                                "data": "Asset Type"
-                            }, {
-                                "title": "Asset Description",
-                                "data": "Asset Description"
-                            }, {
-                                "title": "Total Asset Value.",
-                                "data": "Total Asset Value",
-                            }, {
-                                "title": "% of Loan Amount",
-                                "data": "Percn Of Loan Amount"
-                            },{
-                                "title": "Hypothecated to",
-                                "data": "Hypothecated to"
-                            }];
-                        },
-                        getActions: function() {
-                            return [];
-                        }
-                    }]
-                }]
-            } ,
-            {
-                "type": "box",
-                "colClass": "col-sm-12",
-                "overrideType": "default-view",
-                "readonly": true,
-                "title": "OVER_ALL_HYPOTHECATION_VALUE",
-                "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "overAllHypoValue['Hypothecation Type']",
-                            "title": "HYPOTHECATION_TYPE",
-                            "type": "number"
-                        }, {
-                            "key": "overAllHypoValue['Stock And Declared Value']",
-                            "title": "STOCK_AND_DECLARED_VALUE",
-                            "type": "amount"
-                        }]
-                    }, {
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "overAllHypoValue['% Of loan_amount']",
-                            "title": "%_TO_LOAN_AMOUNT",
-                            "type": "number"
-                        },
-                        {
-                            type: "section",
-                            htmlClass: "col-sm-6 ",
-                            "key": "overAllHypoValue['color_hexadecimal']",
-                            //condition: "model.currentStage!='ScreeningReview'",
-                            "title": "Status",
-                            html: '<span class="col-sm-6">Status</span> <span class="col-sm-6 pull-right"><span class="square-color-box" style="background: {{model.overAllHypoValue.color_hexadecimal}}"> </span></span>' 
-                        }]
-                        // {
-                        //     type: "section",
-                        //     htmlClass: "col-sm-6 pull-right",
-                        //     //condition: "model.currentStage!='ScreeningReview'",
-                        //     "title": "Status",
-                        //     html: '<span class="square-color-box" style="background: {{model.overAllHypoValue.color_hexadecimal}}"> </span>' 
-                        // }]
-                        // {
-                        //     "key": "overAllHypoValue['color_hexadecimal']",
-                        //     "title": "Status",
-                        //      html: '<span class="square-color-box" style="background: {{overAllHypoValue.color_hexadecimal}}"> </span>' 
-                        // }]
-                    }]
-                }]
-            },{
-                "type": "box",
-                "colClass": "col-sm-12",
-                "overrideType": "default-view",
-                "readonly": true,
-                "title": "COMMERCIAL CIBIL",
-                "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "CB_REPORT_DATA.bureau",
-                            "title": "Bureau"
-                        }, {
-                            "key": "CB_REPORT_DATA.doubtful",
-                            "title": "Doubtful Account",
-                            "type": "number"
-                        }, {
-                            "key": "CB_REPORT_DATA.loss",
-                            "title": "Loss Accounts",
-                            "type": "number"
-                        }, {
-                            "type": "section",
-                            "html": '<div ng-repeat="item in form.items" >{{item.title}}<div style="margin-top:-25px; padding-left:100px;"><sf-decorator  form="item"></sf-decorator><div></div>',
-                            "items": [{
-                                "key": "CB_REPORT_DATA.fileId",
-                                "notitle": true,
-                                "title": "CB Report",
-                                "category": "Loan",
-                                "subCategory": "DOC1",
-                                "type": "file",
-                                "fileType": "application/pdf",
-                                "using": "scanner"
-                            }]
-                        }]
-                    }, {
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [{
-                            "key": "CB_REPORT_DATA.specialMentionAccount",
-                            "title": "Special Mention Accounts",
-                            "type": "number"
-                        }, {
-                            "key": "CB_REPORT_DATA.standard",
-                            "title": "Standard Accounts",
-                            "type": "number"
-                        }, {
-                            "key": "CB_REPORT_DATA.subStandard",
-                            "title": "Sub-Standard Accounts",
-                            "type": "number"
-                        }]
-                    }]
-                }]
-            }, {
-                "type": "box",
-                "colClass": "col-sm-12",
-                "overrideType": "default-view",
-                "readonly": true,
-                "title": "Proxy Indicators",
-                "items": [{
-                    "type": "section",
-                    "htmlClass": "col-sm-12",
-                    "html": '<div style="display: table;"><div style="font-weight: bold; display: table-cell;">Proxy Indicator Score</div><div style="display: table-cell; padding-left: 40px;">{{(model.proxyScore==null || model.proxyScore==undefined) ?"-Proxy Waiting For Summary-": model.proxyScore["Actual Value"].concat("/",model.proxyScore["ParameterScore"])}}</p></div>'
-                }, {
-                    "type": "expandablesection",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "horizontal",
-                        "items": [{
-                            "type": "grid",
-                            "orientation": "vertical",
-                            "items": [/*{
-                            "type": "section",
-                            "html": '<div ng-repeat="item in form.items" >{{item.title}}<div style="margin-top:-25px; padding-left:100px;"><sf-decorator  form="item"></sf-decorator><div></div>',
-                            "items": [{
-                                "key": "customer.businessSignboardImage",
-                                "notitle": true,
-                                "title": "SignBoard Image",
-                                "category": "Loan",
-                                "subCategory": "DOC1",
-                                "type": "file",
-                                "fileType": "application/pdf",
-                                "using": "scanner"
-                            }]
-                        },*/{
-                                "key": "customer.properAndMatchingSignboard",
-                                "title": "Proper Matching SignBoard"
-                            }, {
-                                "key": "customer.bribeOffered",
-                                "title": "Bribe Offered"
-                            }, {
-                                "key": "customer.shopOrganized",
-                                "title": "Shop Shed Organized"
-                            }, {
-                                "key": "customer.isIndustrialArea",
-                                "title": "In Industrial Area"
-                            }, {
-                                "key": "customer.customerAttitudeToKinara",
-                                "title": "CUSTOMER_ATTITUDE_TO_KINARA"
-                            }, {
-                                "key": "customer.bookKeepingQuality",
-                                "title": "Book Keeping Quality"
-                            }, {
-                                "key": "customer.challengingChequeBounce",
-                                "title": "Challenging Cheque Bounce/Fess Charge/Policies"
-                            }, {
-                                "key": "customer.allMachinesAreOperational",
-                                "title": "All Machines Operational"
-                            }, {
-                                "key": "customer.employeeSatisfaction",
-                                "title": "Employee Satisfaction"
-                            }, {
-                                "key": "customer.politicalOrPoliceConnections",
-                                "title": "Political Police Connections"
-                            }]
-                        }, {
-                            "type": "grid",
-                            "orientation": "vertical",
-                            "items": [{
-                                "key": "customer.multipleProducts",
-                                "title": "Multiple Products (more than 3)"
-                            }, {
-                                "key": "customer.multipleBuyers",
-                                "title": "Multiple Buyers (more than 3)"
-                            }, {
-                                "key": "customer.seasonalBusiness",
-                                "title": "Seasonal Business"
-                            }, {
-                                "key": "customer.incomeStability",
-                                "title": "Income Stability"
-                            }, {
-                                "key": "customer.utilisationOfBusinessPremises",
-                                "title": "Utilization Of Business Premises"
-                            }, {
-                                "key": "customer.approachForTheBusinessPremises",
-                                "title": "Approach For The Business Premises"
-                            }, {
-                                "key": "customer.safetyMeasuresForEmployees",
-                                "title": "Safety Measures For Employees"
-                            }, {
-                                "key": "customer.childLabours",
-                                "title": "Child Labourers"
-                            }, {
-                                "key": "customer.isBusinessEffectingTheEnvironment",
-                                "title": "Is the Business Effecting Environment"
-                            }, {
-                                "key": "customer.stockMaterialManagement",
-                                "title": "Stock Material Management"
-                            }]
-                        }]
-                    }]
-                }]
-
-            }, {
                 "type": "box",
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",

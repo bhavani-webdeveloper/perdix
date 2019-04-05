@@ -569,7 +569,7 @@ define({
                         "readonly": true,
                         "colClass": "col-sm-12",
                         "overrideType": "default-view",
-                        "title": "HOUSE_VERIFICAATION",
+                        "title": "HOUSE_VERIFICATION",
                         "items": [{
                             "type": "grid",
                             "orientation": "horizontal",
