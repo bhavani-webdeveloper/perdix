@@ -763,8 +763,8 @@ define({
                         "readonly": true,
                         "colClass": "col-sm-12",
                         "overrideType": "default-view",
-                        "title": "HOUSEHOLD_LIABILITIES",
-                        "condition": "model.customer.liabilities.length !=0",
+                        "title": "LIABILITIES",
+                        //"condition": "model.customer.liabilities.length !=0",
                         "items": [{
                             "type": "grid",
                             "orientation": "horizontal",

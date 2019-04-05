@@ -41,14 +41,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                         minimum: 1,
                         maximum: 1,
                         order: 40
-                    }, {
-                        pageName: 'arohan.dashboard.loans.individual.screening.detail.EnterpriseFinancialView',
-                        title: 'Business Financials',
-                        pageClass: 'business-finance',
-                        minimum: 1,
-                        maximum: 1,
-                        order: 50
-                    }, {
+                    },
+                    //  {
+                    //     pageName: 'arohan.dashboard.loans.individual.screening.detail.EnterpriseFinancialView',
+                    //     title: 'Business Financials',
+                    //     pageClass: 'business-finance',
+                    //     minimum: 1,
+                    //     maximum: 1,
+                    //     order: 50
+                    // }, 
+                    {
                         pageName: 'arohan.dashboard.loans.individual.screening.detail.LoanApplicationView',
                         title: 'Loan Recommendation',
                         pageClass: 'loan-recommendation',
@@ -62,31 +64,34 @@ define(["perdix/domain/model/loan/LoanProcess",
                         minimum: 1,
                         maximum: 1,
                         order: 100
-                    }, {
-                        pageName: 'arohan.dashboard.loans.individual.screening.Review',
-                        title: 'REVIEW',
-                        pageClass: 'loan-review',
-                        minimum: 1,
-                        maximum: 1,
-                        order: 80
-                    }, {
-                        pageName: 'loans.individual.misc.BalanceSheetHistory',
-                        title: 'BALANCE_SHEET_HISTORY',
-                        pageClass: 'balance-sheet-history',
-                        minimum: 1,
-                        maximum: 1,
-                        order: 90
-                    }];
-                    if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'maitreya') {
-                        definition.push({
-                            pageName: 'arohan.dashboard.loans.individual.screening.detail.SummaryView',
-                            title: 'SummaryView',
-                            pageClass: 'summaryView',
-                            minimum: 1,
-                            maximum: 1,
-                            order: 5
-                        });
-                    } 
+                    }, 
+                    // {
+                    //     pageName: 'arohan.dashboard.loans.individual.screening.Review',
+                    //     title: 'REVIEW',
+                    //     pageClass: 'loan-review',
+                    //     minimum: 1,
+                    //     maximum: 1,
+                    //     order: 80
+                    // },
+                    //  {
+                    //     pageName: 'loans.individual.misc.BalanceSheetHistory',
+                    //     title: 'BALANCE_SHEET_HISTORY',
+                    //     pageClass: 'balance-sheet-history',
+                    //     minimum: 1,
+                    //     maximum: 1,
+                    //     order: 90
+                    // }
+                ];
+                    // if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'maitreya') {
+                    //     definition.push({
+                    //         pageName: 'arohan.dashboard.loans.individual.screening.detail.SummaryView',
+                    //         title: 'SummaryView',
+                    //         pageClass: 'summaryView',
+                    //         minimum: 1,
+                    //         maximum: 1,
+                    //         order: 5
+                    //     });
+                    // } 
                     return definition;
                 };
                 return {
@@ -216,19 +221,19 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     });
                                 }   
 
-                                if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan') {
-                                    $this.bundlePages.push({
-                                        pageClass: 'summaryView',
-                                        model: {
-                                            cbModel: {
-                                                customerId: loanAccount.customerId,
-                                                loanId: loanAccount.id,
-                                                scoreName: 'RiskScore3',
-                                                customerDetail: bundleModel.customer_detail
-                                            }
-                                        }
-                                    });
-                                }
+                                // if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan') {
+                                //     $this.bundlePages.push({
+                                //         pageClass: 'summaryView',
+                                //         model: {
+                                //             cbModel: {
+                                //                 customerId: loanAccount.customerId,
+                                //                 loanId: loanAccount.id,
+                                //                 scoreName: 'RiskScore3',
+                                //                 customerDetail: bundleModel.customer_detail
+                                //             }
+                                //         }
+                                //     });
+                                // }
 
                                 $this.bundlePages.push({
                                     pageClass: 'business',
@@ -239,13 +244,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-                                $this.bundlePages.push({
-                                    pageClass: 'business-finance',
-                                    model: {
-                                        customerId: loanAccount.customerId,
-                                        enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess
-                                    }
-                                });
+                                // $this.bundlePages.push({
+                                //     pageClass: 'business-finance',
+                                //     model: {
+                                //         customerId: loanAccount.customerId,
+                                //         enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess
+                                //     }
+                                // });
 
                                 $this.bundlePages.push({
                                     pageClass: 'loan-recommendation',
@@ -255,20 +260,20 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-                                $this.bundlePages.push({
-                                    pageClass: 'loan-review',
-                                    model: {
-                                        loanAccount: loanAccount
-                                    }
-                                });
+                                // $this.bundlePages.push({
+                                //     pageClass: 'loan-review',
+                                //     model: {
+                                //         loanAccount: loanAccount
+                                //     }
+                                // });
 
-                                $this.bundlePages.push({
-                                    pageClass: 'balance-sheet-history',
-                                    model: {
-                                        customerUrn: loanAccount.urnNo,
-                                        loanId: loanAccount.id
-                                    }
-                                });
+                                // $this.bundlePages.push({
+                                //     pageClass: 'balance-sheet-history',
+                                //     model: {
+                                //         customerUrn: loanAccount.urnNo,
+                                //         loanId: loanAccount.id
+                                //     }
+                                // });
 
                                  $this.bundlePages.push({
                                     pageClass: 'cbview',
