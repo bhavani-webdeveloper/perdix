@@ -505,6 +505,11 @@ define({
             actions: {
                 reject: function(model, formCtrl, form, $event){
                     $log.info("Inside reject()");
+                    if (model.review.remarks==null || model.review.remarks =="" || model.loanAccount.rejectReason ==null || model.loanAccount.rejectReason ==""){
+                               PageHelper.showProgress("update-loan", "Reject Reason / Remarks is mandatory", 3000);
+                               PageHelper.hideLoader();
+                               return false;
+                        }
                     Utils.confirm("Are You Sure?").then(function(){
                         var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                         reqData.loanAccount.status = '';
@@ -601,9 +606,10 @@ define({
                 },
                 sendBack: function(model, formCtrl, form, $event){
                     $log.info("Inside sendBack()");
-                    if(_.isEmpty(model.review.remarks) || _.isEmpty(model.review.targetStage)) {
-                        PageHelper.showProgress("update-loan", "Please Enter Remarks and Stage.", 3000);
-                        return false;
+                    if (model.review.remarks==null || model.review.remarks =="" || model.review.targetStage ==null || model.review.targetStage ==""){
+                               PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
+                               PageHelper.hideLoader();
+                               return false;
                     }
                     Utils.confirm("Are You Sure?").then(function(){
                         var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};

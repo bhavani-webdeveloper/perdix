@@ -1814,6 +1814,13 @@ define([], function () {
                             });
                     },
                     reject: function (model, formCtrl, form, $event) {
+
+                        if (model.review.remarks==null || model.review.remarks =="" || model.loanAccount.rejectReason ==null || model.loanAccount.rejectReason ==""){
+                               PageHelper.showProgress("update-loan", "Reject Reason / Remarks is mandatory", 3000);
+                               PageHelper.hideLoader();
+                               return false;
+                        }
+                        
                         PageHelper.showLoader();
                         model.loanProcess.reject()
                             .finally(function () {
