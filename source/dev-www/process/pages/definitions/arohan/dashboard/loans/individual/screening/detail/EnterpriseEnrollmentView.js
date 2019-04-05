@@ -270,7 +270,7 @@ define({
                             "title": "Entity ID"
                         }, {
                             "key": "customer.firstName",
-                            "title": "Company Name"
+                            "title": "Entity Name"
                         }, {
                             "key": "customer.enterprise.businessType",
                             "title": "Business Type"
@@ -283,13 +283,27 @@ define({
                         }, {
                             "key": "customer.enterprise.businessSubsector",
                             "title": "Business Subsector"
-                        }, {
-                            "key": "customer.enterprise.referredBy",
-                            "title": "Sourced by"
-                        }, {
-                            "key": "customer.enterprise.isGSTAvailable",
-                            "title": "GST Available"
-                        }]
+                        }, //{
+                        //     "key": "customer.enterpriseRegistrations[].registrationType", 
+                        //     "title": "REGISTRATION_TYPE",
+                        // },
+                        // {
+                        //     "key": "customer.enterpriseRegistrations[].registrationNumber",
+                        //     "title": "REGISTRATION_NUMBER",
+                        // },
+                        // {
+                        //     "key": "customer.enterpriseRegistrations[].registeredDate",
+                        //     "title": "REGISTRATION_DATE",
+                        // },
+                        // {
+                        //     "key": "customer.enterpriseRegistrations[].expiryDate",
+                        //     "title": "VALID_UPTO",
+                        // },
+                        // {
+                        //     "key": "customer.enterpriseRegistrations[].documentId",
+                        //     "title": "REGISTRATION_DOCUMENT",
+                        // }
+                    ]
                     }, {
                         "type": "grid",
                         "orientation": "vertical",
@@ -299,10 +313,7 @@ define({
                         }, {
                             "key": "customer.enterprise.businessConstitution",
                             "title": "Constitution"
-                        }, {
-                            "key": "customer.enterprise.businessHistory",
-                            "title": "Business History"
-                        }, {
+                        },{
                             "key": "customer.enterprise.ownership",
                             "title": "Premises Ownership"
                         }, {
@@ -334,23 +345,42 @@ define({
                         }, {
                             "key": "customer.landLineNo",
                             "title": "Phone 2"
-                        }, {
+                        },{
+                            "key": "customer.doorNo"
+                        },{
+                            "key": "customer.street",
+                        },{
+                            "key": "customer.postOffice"
+                        },
+                        {
+                            "key": "customer.landmark",
+                        },
+                        {
+                            "key": "customer.pincode",
+                        },
+                        {
+                            "key": "customer.locality",
+                        },
+                        {
+                            "key": "customer.villageName",
+                        },
+                        {
+                            "key": "customer.district",
+                        },
+                        {
+                            "key": "customer.state",
+                        },
+                        {
                             "key": "customer.distanceFromBranch",
-                            "title": "Distance From Hub"
-                        }, {
-                            "key": "customer.enterprise.businessInPresentAreaSince",
-                            "title": "YEARS_OF_BUSINESS_PRESENT_AREA"
+                            "title": "Distance From Branch To Office"
                         }, {
                             "key": "customer.enterprise.businessInCurrentAddressSince",
                             "title": "YEARS_OF_BUSINESS_PRESENT_ADDRESS"
                         }, {
                             "key": "customer.enterprise.companyEmailId",
                             "title": "Email ID"
-                        }, {
-                            "title": "Present Address",
-                            "key": "customer.presetAddress"
-
-                        }]
+                        },
+                    ]
                     }, {
                         "type": "grid",
                         "orientation": "vertical",
