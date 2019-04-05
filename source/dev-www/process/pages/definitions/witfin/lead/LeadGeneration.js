@@ -13,6 +13,37 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
             var branch = SessionStore.getBranch();
             AngularResourceService.getInstance().setInjector($injector);
             // var leadProcessTs = new LeadProcess();
+            var configFile = function(){
+                return {
+                    "lead.currentStage": {
+                        "Inprocess": {
+                            "overrides": {
+                                "leadProfile": {
+                                    "readonly": true
+                                }
+                            },
+                             "excludes": [
+                            //     "previousInteractions"
+                             ]
+                        },
+                        "BulkUpload": {
+                            "excludes": [
+                            "productDetails"
+                            ]
+                        },
+                    },
+                    "siteCode": {
+                        "sambandh": {
+                            "excludes": [
+                            "previousInteractions"
+                            ]
+                        }
+                    }
+    
+    
+                }
+
+            }
 
             var getOverrides = function (model) {
                 return {
@@ -245,9 +276,16 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                 deferred.resolve(Lead.getConfigFile())
 
                                 console.log(model.lead.getLead());
+                                if (model.lead.currentStage == 'Inprocess') {
+                                    model.lead.leadInteractions1 = model.lead.leadInteractions;
+                                    model.lead.leadInteractions = [{
+                                        "interactionDate": Utils.getCurrentDate(),
+                                        "loanOfficerId": SessionStore.getUsername() + ''
+                                    }];
+                                }
 
                                 promise.then(function(resp) {
-                                    self.form = IrfFormRequestProcessor.getFormDefinition('LeadGeneration', formRequest, resp, model);
+                                    self.form = IrfFormRequestProcessor.getFormDefinition('LeadGeneration', formRequest,configFile(), model);
                                     PageHelper.hideLoader();
                                 })
 
