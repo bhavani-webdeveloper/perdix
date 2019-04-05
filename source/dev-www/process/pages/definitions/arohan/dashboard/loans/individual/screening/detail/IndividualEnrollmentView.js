@@ -535,36 +535,37 @@ define({
                         ]
                         }]
                     },
-                    {
-                        "type": "box",
-                        "readonly": true,
-                        "colClass": "col-sm-12",
-                        "overrideType": "default-view",
-                        "title": "RELATIONSHIP_TO_BUSINESS",
-                        "condition": "model.enterpriseRelationship",
-                        "items": [{
-                            "type": "grid",
-                            "orientation": "horizontal",
-                            "items": [{
-                                "type": "grid",
-                                "orientation": "vertical",
-                                "items": [{
-                                    "title": "RELATIONSHIP_TO_BUSINESS",
-                                    "key": "enterpriseRelationship.relationshipType"
-                                }, {
-                                    "title": "EXPERIENCE_IN_BUSINESS",
-                                    "key": "enterpriseRelationship.experienceInBusiness"
+                    // {
+                    //     "type": "box",
+                    //     "readonly": true,
+                    //     "colClass": "col-sm-12",
+                    //     "overrideType": "default-view",
+                    //     "title": "RELATIONSHIP_TO_BUSINESS",
+                    //     "condition": "model.enterpriseRelationship",
+                    //     "items": [{
+                    //         "type": "grid",
+                    //         "orientation": "horizontal",
+                    //         "items": [{
+                    //             "type": "grid",
+                    //             "orientation": "vertical",
+                    //             "items": [{
+                    //                 "title": "RELATIONSHIP_TO_BUSINESS",
+                    //                 "key": "enterpriseRelationship.relationshipType"
+                    //             }, {
+                    //                 "title": "EXPERIENCE_IN_BUSINESS",
+                    //                 "key": "enterpriseRelationship.experienceInBusiness"
     
-                                }, {
-                                    "title": "BUSINESS_INVOLVEMENT",
-                                    "key": "enterpriseRelationship.businessInvolvement"
-                                }, {
-                                    "title": "PARTNER_OF_ANY_OTHER_COMPANY",
-                                    "key": "enterpriseRelationship.partnerOfAnyOtherCompany"
-                                }]
-                            }]
-                        }]
-                    }, {
+                    //             }, {
+                    //                 "title": "BUSINESS_INVOLVEMENT",
+                    //                 "key": "enterpriseRelationship.businessInvolvement"
+                    //             }, {
+                    //                 "title": "PARTNER_OF_ANY_OTHER_COMPANY",
+                    //                 "key": "enterpriseRelationship.partnerOfAnyOtherCompany"
+                    //             }]
+                    //         }]
+                    //     }]
+                    // },
+                     {
                         "type": "box",
                         "readonly": true,
                         "colClass": "col-sm-12",
@@ -946,72 +947,72 @@ define({
                             }]
                         }]
                     }, 
-                    {
-                        "type": "box",
-                        "colClass": "col-sm-12",
-                        "overrideType": "default-view",
-                        "title": "CIBIL/Equifax",
-                        "readonly": true,
-                        "condition": "model.cibil_equifax",
-                        "items": [{
-                            "type": "grid",
-                            "orientation": "horizontal",
-                            "items": [{
-                                "type": "grid",
-                                "orientation": "vertical",
-                                "items": [{
-                                        "key": "UIUDF.cibil.cibil_score",
-                                        "title": "CIBIL Score"
-                                    }, {
-                                        "key": "UIUDF.cibil.active_accounts",
-                                        "title": "Active Accounts"
-                                    }, {
-                                        "key": "UIUDF.cibil.overdue_accounts",
-                                        "title": "Overdue Accounts"
-                                    }, {
-                                        "key": "UIUDF.cibil.sanctioned_amount",
-                                        "title": "Sanctioned Amount",
-                                        "type": "amount"
-                                    }, {
-                                        "key": "UIUDF.cibil.current_balance",
-                                        "title": "Current Balance",
-                                        "type": "amount"
-                                    }, {
-                                        "key": "UIUDF.cibil.amount_overdue",
-                                        "title": "Overdue Balance",
-                                        "type": "amount"
-                                    }
-                                    /*, {
-                                                                    "key": "UIUDF.cibil.report",
-                                                                    "title": "Report",
-                                                                    "type": "html"
-                                                                }*/
-                                ]
-                            }, {
-                                "type": "grid",
-                                "orientation": "vertical",
-                                "items": [{
-                                        "key": "UIUDF.equifax.score",
-                                        "title": "Equifax Score"
-                                    }, {
-                                        "key": "UIUDF.equifax.active_accounts",
-                                        "title": "Active Accounts"
-                                    }, {
-                                        "key": "UIUDF.equifax.overdue_accounts",
-                                        "title": "Overdue Account"
-                                    }, {
-                                        "key": "UIUDF.equifax.current_balance",
-                                        "title": "Total Current Balance",
-                                        "type": "number"
-                                    }, {
-                                        "key": "UIUDF.equifax.disbursed_amount",
-                                        "title": "Amount Disbursed",
-                                        "type": "number"
-                                    }
-                                ]
-                            }]
-                        }]
-                    },
+                    // {
+                    //     "type": "box",
+                    //     "colClass": "col-sm-12",
+                    //     "overrideType": "default-view",
+                    //     "title": "CIBIL/Equifax",
+                    //     "readonly": true,
+                    //     "condition": "model.cibil_equifax",
+                    //     "items": [{
+                    //         "type": "grid",
+                    //         "orientation": "horizontal",
+                    //         "items": [{
+                    //             "type": "grid",
+                    //             "orientation": "vertical",
+                    //             "items": [{
+                    //                     "key": "UIUDF.cibil.cibil_score",
+                    //                     "title": "CIBIL Score"
+                    //                 }, {
+                    //                     "key": "UIUDF.cibil.active_accounts",
+                    //                     "title": "Active Accounts"
+                    //                 }, {
+                    //                     "key": "UIUDF.cibil.overdue_accounts",
+                    //                     "title": "Overdue Accounts"
+                    //                 }, {
+                    //                     "key": "UIUDF.cibil.sanctioned_amount",
+                    //                     "title": "Sanctioned Amount",
+                    //                     "type": "amount"
+                    //                 }, {
+                    //                     "key": "UIUDF.cibil.current_balance",
+                    //                     "title": "Current Balance",
+                    //                     "type": "amount"
+                    //                 }, {
+                    //                     "key": "UIUDF.cibil.amount_overdue",
+                    //                     "title": "Overdue Balance",
+                    //                     "type": "amount"
+                    //                 }
+                    //                 /*, {
+                    //                                                 "key": "UIUDF.cibil.report",
+                    //                                                 "title": "Report",
+                    //                                                 "type": "html"
+                    //                                             }*/
+                    //             ]
+                    //         }, {
+                    //             "type": "grid",
+                    //             "orientation": "vertical",
+                    //             "items": [{
+                    //                     "key": "UIUDF.equifax.score",
+                    //                     "title": "Equifax Score"
+                    //                 }, {
+                    //                     "key": "UIUDF.equifax.active_accounts",
+                    //                     "title": "Active Accounts"
+                    //                 }, {
+                    //                     "key": "UIUDF.equifax.overdue_accounts",
+                    //                     "title": "Overdue Account"
+                    //                 }, {
+                    //                     "key": "UIUDF.equifax.current_balance",
+                    //                     "title": "Total Current Balance",
+                    //                     "type": "number"
+                    //                 }, {
+                    //                     "key": "UIUDF.equifax.disbursed_amount",
+                    //                     "title": "Amount Disbursed",
+                    //                     "type": "number"
+                    //                 }
+                    //             ]
+                    //         }]
+                    //     }]
+                    // },
                      {
                         "type": "box",
                         "colClass": "col-sm-12",
@@ -1063,7 +1064,8 @@ define({
                                     '</table>' + '</div>'
                             }]
                         }]
-                    }, {
+                    }, 
+                    {
                         "type": "box",
                         "colClass": "col-sm-12",
                         "overrideType": "default-view",

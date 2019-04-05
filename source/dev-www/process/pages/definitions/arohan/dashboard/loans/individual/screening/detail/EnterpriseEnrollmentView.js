@@ -265,35 +265,41 @@ define({
                     "items": [{
                         "type": "grid",
                         "orientation": "vertical",
-                        "items": [{
-                            "key": "customer.id",
-                            "title": "Entity ID"
-                        }, {
+                        "items": [
+                        //     {
+                        //     "key": "customer.id",
+                        //     "title": "Entity ID"
+                        // }, 
+                        {
                             "key": "customer.firstName",
                             "title": "Entity Name"
-                        }, {
-                            "key": "customer.enterprise.businessType",
-                            "title": "Business Type"
-                        }, {
-                            "key": "customer.enterprise.businessActivity",
-                            "title": "Business Activity"
-                        }, {
-                            "key": "customer.enterprise.businessSector",
-                            "title": "Business Sector"
-                        }, {
-                            "key": "customer.enterprise.businessSubsector",
-                            "title": "Business Subsector"
-                        }, 
+                        },
+                        //  {
+                        //     "key": "customer.enterprise.businessType",
+                        //     "title": "Business Type"
+                        // }, {
+                        //     "key": "customer.enterprise.businessActivity",
+                        //     "title": "Business Activity"
+                        // }, {
+                        //     "key": "customer.enterprise.businessSector",
+                        //     "title": "Business Sector"
+                        // }, {
+                        //     "key": "customer.enterprise.businessSubsector",
+                        //     "title": "Business Subsector"
+                        // }, 
+                        // {
+                        //     "key": "customer.urnNo",
+                        //     "title": "URN"
+                        // }, 
                         {
-                            "key": "customer.urnNo",
-                            "title": "URN"
-                        }, {
                             "key": "customer.enterprise.businessConstitution",
                             "title": "Constitution"
-                        },{
+                        },
+                        {
                             "key": "customer.enterprise.ownership",
                             "title": "Premises Ownership"
-                        }, {
+                        },
+                         {
                             "key": "customer.enterprise.businessInPresentAreaSince",
                             "title": "Operating Since"
                         }, {
@@ -366,10 +372,12 @@ define({
                     "items": [{
                         "type": "grid",
                         "orientation": "vertical",
-                        "items": [{
-                            "key": "customer.mobilePhone",
-                            "title": "Mobile Phone"
-                        }, {
+                        "items": [
+                        //     {
+                        //     "key": "customer.mobilePhone",
+                        //     "title": "Mobile Phone"
+                        // }, 
+                        {
                             "key": "customer.landLineNo",
                             "title": "Phone 2"
                         },{
@@ -397,16 +405,18 @@ define({
                         {
                             "key": "customer.state",
                         },
+                        // {
+                        //     "key": "customer.distanceFromBranch",
+                        //     "title": "Distance From Branch To Office"
+                        // }, 
                         {
-                            "key": "customer.distanceFromBranch",
-                            "title": "Distance From Branch To Office"
-                        }, {
                             "key": "customer.enterprise.businessInCurrentAddressSince",
                             "title": "YEARS_OF_BUSINESS_PRESENT_ADDRESS"
-                        }, {
-                            "key": "customer.enterprise.companyEmailId",
-                            "title": "Email ID"
-                        },
+                        }, 
+                        // {
+                        //     "key": "customer.enterprise.companyEmailId",
+                        //     "title": "Email ID"
+                        // },
                     ]
                     }, {
                         "type": "grid",
@@ -429,10 +439,11 @@ define({
                         "items": [{
                             "title":"OFFICE_ADDRESS"
                         },
-                            {
-                            "key": "",
-                            "title": "Mobile Phone"
-                        }, {
+                        //     {
+                        //     "key": "",
+                        //     "title": "Mobile Phone"
+                        // }, 
+                        {
                             "key": "",
                             "title": "Phone 2"
                         }, {
