@@ -170,7 +170,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     },
                     "pre_pages_initialize": function(bundleModel){
                         $log.info("Inside pre_page_initialize");
-                        bundleModel.currentStage = "PricingApproval";
+                        bundleModel.currentStage = "Application";//PricingApproval
                         var deferred = $q.defer();
 
                         var $this = this;
