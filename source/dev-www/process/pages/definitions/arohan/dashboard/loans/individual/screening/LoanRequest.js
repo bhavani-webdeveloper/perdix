@@ -742,7 +742,8 @@ define([],function(){
                                 "NomineeDetails.nominees.nomineeButton"   ,
                                 //"LoanRecommendation.securityEmiRequired",
                                 "LoanMitigants.loanMitigantsByParameter",
-                                "CollateralDetails"               
+                                "CollateralDetails" ,
+                                "LoanRecommendation",              
                             ],
                             "overrides": {
                                 "LoanDocuments": {
@@ -1506,7 +1507,7 @@ define([],function(){
                     //"PreliminaryInformation.fundsFromDifferentSources",
                    
  
-                    "LoanCustomerRelations",
+                    //"LoanCustomerRelations",
                     "LoanCustomerRelations.loanCustomerRelations",
                     "LoanCustomerRelations.loanCustomerRelations.customerId",
                     "LoanCustomerRelations.loanCustomerRelations.urn",
@@ -1519,7 +1520,7 @@ define([],function(){
                      "DeductionsFromLoan.expectedCommercialCibilCharge",
                      "DeductionsFromLoan.estimatedEmi",
 
-                    "LoanMitigants",
+                    //"LoanMitigants",
                     "LoanMitigants.deviationParameter",
                     "LoanMitigants.deviationParameter.mitigants",
                     "LoanMitigants.deviationParameter.mitigants.mitigantsName",
@@ -1620,20 +1621,20 @@ define([],function(){
                     "revertReject.targetStage",
                     "revertReject.sendBackButton",
                     
-                    "References",
-                    "References.verifications",
-                    "References.verifications.relationship",
-                    "References.verifications.businessName",
-                    "References.verifications.referenceFirstName",
-                    "References.verifications.mobileNo",
-                    "References.verifications.email",
-                    "References.verifications.occupation",
-                    "References.verifications.address",
-                    "References.verifications.ReferenceCheck",
-                    "References.verifications.ReferenceCheck.relationship",
-                    "References.verifications.ReferenceCheck.opinion",
-                    "References.verifications.ReferenceCheck.financialStatus",
-                    "References.verifications.ReferenceCheck.knownSince",
+                    // "References",
+                    // "References.verifications",
+                    // "References.verifications.relationship",
+                    // "References.verifications.businessName",
+                    // "References.verifications.referenceFirstName",
+                    // "References.verifications.mobileNo",
+                    // "References.verifications.email",
+                    // "References.verifications.occupation",
+                    // "References.verifications.address",
+                    // "References.verifications.ReferenceCheck",
+                    // "References.verifications.ReferenceCheck.relationship",
+                    // "References.verifications.ReferenceCheck.opinion",
+                    // "References.verifications.ReferenceCheck.financialStatus",
+                    // "References.verifications.ReferenceCheck.knownSince",
  
                     // "ProposedUtilizationPlan",
                     // "ProposedUtilizationPlan.loanUtilisationDetail",

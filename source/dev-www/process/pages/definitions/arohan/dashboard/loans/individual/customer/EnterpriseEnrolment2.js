@@ -12,9 +12,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
         AngularResourceService.getInstance().setInjector($injector);
             var overridesFields = function(bundlePageObj){
                return {
-                "EnterpriseInformation.referredName":{
-                    "title":"DSA_CODE"
-                },
+                // "EnterpriseInformation.referredName":{
+                //     "title":"DSA_CODE"
+                // },
                     "ContactInformation.pincode": {
                          "title": "pincode",
                         "required": true,
@@ -56,6 +56,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "EnterpriseInformation.referredName":{
                         "condition": "model.customer.enterprise.referredBy == 'Channel Partner'||model.customer.enterprise.referredBy =='Peer Referral'||model.customer.enterprise.referredBy =='Known supply chain'",
+                        "title":"DSA_CODE"
                     },
                     "EnterpriseInformation.partnershipDissolvedDate":{
                         "condition": "model.customer.enterprise.anyPartnerOfPresentBusiness=='YES'",
@@ -613,7 +614,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "type": "box",
                         "title": "REFERENCES",
                         "orderNo":180,
-                        "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal'",
+                        //"condition": "model.currentStage=='Application' || model.currentStage=='Screening'",
                         "items": {
                             "verifications" : {
                                 key:"customer.verifications",
@@ -646,6 +647,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "schema": {
                                              "pattern": "^[0-9]{10}$"
                                         }
+                                    },
+                                    "email" : {
+                                        key:"customer.verifications[].mobileNo",
+                                        title:"EMAIL_ID",
+                                        type:"string",
+                                        required:"true",
+                                        inputmode: "text"
+                                        // "schema": {
+                                        //      "pattern": "^[0-9]{10}$"
+                                        // }
                                     }/*,
                                     {
                                         key:"customer.verifications[].businessSector",
@@ -918,14 +929,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             var getIncludes = function (model) {
                 return [
                     "EnterpriseInformation",
-                    "EnterpriseInformation.customerName",
-                    "EnterpriseInformation.customerId",
-                    "EnterpriseInformation.customerBranchId",
-                    "EnterpriseInformation.entityId",
-                    "EnterpriseInformation.urnNo",
-                    "EnterpriseInformation.centreId",
-                    "EnterpriseInformation.SpokeID",
-                    "EnterpriseInformation.SpokeID2",
+                    // "EnterpriseInformation.customerName",
+                    // "EnterpriseInformation.customerId",
+                    // "EnterpriseInformation.customerBranchId",
+                    // "EnterpriseInformation.entityId",
+                    // "EnterpriseInformation.urnNo",
+                    // "EnterpriseInformation.centreId",
+                    // "EnterpriseInformation.SpokeID",
+                    // "EnterpriseInformation.SpokeID2",
                     //"EnterpriseInformation.oldCustomerId",
                     "EnterpriseInformation.firstName",
                     "EnterpriseInformation.referredBy",
@@ -986,8 +997,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.businessInPresentAreaSince",
                     "ContactInformation.businessInCurrentAddressSince",
                     "ContactInformation.prefferedModeOfCommunication",
-                    "ContactInformation.registeredOfficeAddress",
+                    //"ContactInformation.registeredOfficeAddress",
                     "ContactInformation.officeAddressFieldSet",
+                    "ContactInformation.officemailingmobilePhone",
+                    "ContactInformation.officemailinglandLineNo",
                     "ContactInformation.officemailingDoorNo",
                     "ContactInformation.officemailingStreet",
                     "ContactInformation.officemailingLandmark",
@@ -1011,7 +1024,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "BankAccounts.customerBankAccounts.sanctionedAmount",
                     //"BankAccounts.customerBankAccounts.bankStatementDocId",
                     "BankAccounts.customerBankAccounts.limit",
-                    "BankAccounts.customerBankAccounts.bankStatements",
+                    //"BankAccounts.customerBankAccounts.bankStatements",
                     "BankAccounts.customerBankAccounts.bankStatements.startMonth",
                    // "BankAccounts.customerBankAccounts.bankStatements.openingBalance",
                     "BankAccounts.customerBankAccounts.bankStatements.closingBalance",
@@ -1181,6 +1194,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "EnterpriseReferences.verifications.referenceFirstName",
                     "EnterpriseReferences.verifications.mobileNo",
                     "EnterpriseReferences.verifications.address",
+                    "EnterpriseReferences.verifications.mail",
                    // "EnterpriseReferences.verifications.knownSince",
                     //"EnterpriseReferences.verifications.goodsSold",
                     //"EnterpriseReferences.verifications.goodsBought",
@@ -1190,22 +1204,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     //"EnterpriseReferences.verifications.outstandingReceivable",
                     //"EnterpriseReferences.verifications.customerResponse"
                     
-                    "References",
-                    "References.verifications",
-                    "References.verifications.relationship",
-                    "References.verifications.businessName",
-                    "References.verifications.referenceFirstName",
-                    "References.verifications.mobileNo",
-                    "References.verifications.address",
-                    "References.verifications.ReferenceCheck",
-                    "References.verifications.ReferenceCheck.knownSince",
-                    "References.verifications.ReferenceCheck.goodsSold",
-                    "References.verifications.ReferenceCheck.goodsBought",
-                    "References.verifications.ReferenceCheck.paymentTerms",
-                    "References.verifications.ReferenceCheck.modeOfPayment",
-                    "References.verifications.ReferenceCheck.outstandingPayable",
-                    "References.verifications.ReferenceCheck.outstandingReceivable",
-                    "References.verifications.ReferenceCheck.customerResponse",
+                    // "References",
+                    // "References.verifications",
+                    // "References.verifications.relationship",
+                    // "References.verifications.businessName",
+                    // "References.verifications.referenceFirstName",
+                    // "References.verifications.mobileNo",
+                    // "References.verifications.address",
+                    // "References.verifications.ReferenceCheck",
+                    // "References.verifications.ReferenceCheck.knownSince",
+                    // "References.verifications.ReferenceCheck.goodsSold",
+                    // "References.verifications.ReferenceCheck.goodsBought",
+                    // "References.verifications.ReferenceCheck.paymentTerms",
+                    // "References.verifications.ReferenceCheck.modeOfPayment",
+                    // "References.verifications.ReferenceCheck.outstandingPayable",
+                    // "References.verifications.ReferenceCheck.outstandingReceivable",
+                    // "References.verifications.ReferenceCheck.customerResponse",
                 ];
             }
             
@@ -1842,7 +1856,62 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "excludes": [
                                     "ProxyIndicators",
                                     "BankAccounts",
-                                    "EnterpriseFinancials"
+                                    "BankAccounts.customerBankAccounts",
+                                    "EnterpriseFinancials",
+                                    "EmployeeDetails",
+                                    "CommercialCBCheck",
+                                    "BuyerDetails",
+                                    "SuppliersDeatils",
+                                    "EnterpriseAssets",
+                                    "Machinery",
+                                    "CurrentAssets",
+                                    "References",
+                                    "EnterpriseInformation.customerId",
+                                    "EnterpriseInformation.customerBranchId",
+                                    "EnterpriseInformation.entityId",
+                                    "EnterpriseInformation.urnNo",
+                                    "EnterpriseInformation.centreId",
+                                    "EnterpriseInformation.SpokeID",
+                                    "EnterpriseInformation.SpokeID2",
+                                    "EnterpriseInformation.oldCustomerId",
+                                    "EnterpriseInformation.referredBy",
+                                    "EnterpriseInformation.companyOperatingSince",
+                                    "EnterpriseInformation.companyEmailId",
+                                    "EnterpriseInformation.latitude",
+                                    "EnterpriseInformation.photoImageId",
+                                    "EnterpriseInformation.businessHistory",
+                                    "EnterpriseInformation.anyPartnerOfPresentBusiness",
+                                    "EnterpriseInformation.companyRegistered",
+                                    "EnterpriseInformation.isGSTAvailable",
+                                    "EnterpriseInformation.enterpriseRegistrations.registrationType",
+                                    "EnterpriseInformation.enterpriseRegistrations.registrationNumber",
+                                    "EnterpriseInformation.enterpriseRegistrations.expiryDate",
+                                    "EnterpriseInformation.enterpriseRegistrations.documentId",
+                                    "EnterpriseInformation.businessType",
+                                    "EnterpriseInformation.businessActivity",
+                                    "EnterpriseInformation.businessSubsector",
+                                    "EnterpriseInformation.itrAvailable",
+                                    "EnterpriseInformation.enterpriseCustomerRelations",
+                                    "ContactInformation.mobilePhone",
+                                    "ContactInformation.landLineNo",
+                                    "ContactInformation.distanceFromBranch",
+                                    "ContactInformation.businessInPresentAreaSince",
+                                    "ContactInformation.businessInCurrentAddressSince",
+                                    "Liabilities",
+                                    "EnterpriseReferences",
+                                    "ContactInformation.officeAddressFieldSet",
+                                    "ContactInformation.officemailingmobilePhone",
+                                    "ContactInformation.officemailinglandLineNo",
+                                    "ContactInformation.officemailingDoorNo",
+                                    "ContactInformation.officemailingStreet",
+                                    "ContactInformation.officemailingLandmark",
+                                    //"ContactInformation.mailingMandal",
+                                    "ContactInformation.officemailingPincode",
+                                    "ContactInformation.officemailingLocality",
+                                    "ContactInformation.officemailingDistrict",
+                                    "ContactInformation.officemailingState",
+                                    "ContactInformation.prefferedModeOfCommunication",
+
                                 ],
                                 "overrides": {
                                     "EnterpriseReferences":{
@@ -1978,9 +2047,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "EnterpriseAssets",
                                     "SuppliersDeatils",
                                     "Machinery",
-                                    "EnterpriseReferences",
-                                    "EnterpriseReferences.verifications",
-                                    "References"
+                                    //"EnterpriseReferences",
+                                    //"EnterpriseReferences.verifications",
+                                    //"References"
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -2612,6 +2681,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "type":"fieldset",
                                     "title":"OFFICE_ADDRESS"
                                 },
+                                "officemailingmobilePhone":{
+                                    "type":"number",
+                                    "title":"MOBILE_NUMBER"
+                                },
+                                 "officemailinglandLineNo":{
+                                    "type":"number",
+                                    "title":"PHONE_2"
+                                 },
                                 "officemailingDoorNo":{
                                     "type":"number",
                                     "title":"DOOR_NO"
@@ -2669,6 +2746,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "title":"MONTHLY_TURNOVER_CARD",
                                 "type":"number",
                                 "orderNo":30
+                            }
+                        }
+                    },
+                    "EnterpriseReferences":{
+                        "items":{
+                            "verifications":{
+                                "items":{
+                                    "mail":{
+                                        "key":"",
+                                        "type":"text",
+                                        "title":"EMAIL_ID"
+                                    }
+                                }
                             }
                         }
                     }

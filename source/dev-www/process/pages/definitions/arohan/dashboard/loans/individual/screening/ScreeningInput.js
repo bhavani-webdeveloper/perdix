@@ -20,8 +20,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     return $q.resolve([
                         {
                            // pageName: 'arohan.dashboard.loans.individual.customer.IndividualEnrollment2',
-                            pageName: 'arohan.dashboard.loans.individual.customer.IndividualEnrolment2',
-                            title: 'APPLICANT',
+                            pageName: 'arohan.dashboard.loans.individual.customer.IndividualEnrolment2',                            title: 'APPLICANT',
                             pageClass: 'applicant',
                             minimum: 1,
                             maximum: 1,
@@ -61,6 +60,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                         },
                         // {
                         //     pageName: 'arohan.dashboard.loans.individual.screening.VehicleDetails',
+
+
                         //     title: 'VEHICLE_DETAILS',
                         //     pageClass: 'vehicle-details',
                         //     minimum: 1,
@@ -83,15 +84,15 @@ define(["perdix/domain/model/loan/LoanProcess",
                         //     maximum: 1,
                         //     order:80
                         // },
-                        {
-                            pageName: 'arohan.dashboard.loans.individual.screening.Review',
-                            title: 'REVIEW',
-                            pageClass: 'loan-review',
-                            minimum: 0,
-                            maximum: 0,
-                            order:90
+                        // {
+                        //     pageName: 'arohan.dashboard.loans.individual.screening.Review',
+                        //     title: 'REVIEW',
+                        //     pageClass: 'loan-review',
+                        //     minimum: 0,
+                        //     maximum: 0,
+                        //     order:90
                             
-                        }
+                        // }
                     ]);
                 },
                 "bundlePages": [],
@@ -234,12 +235,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 //     }
                                 // });
 
-                               $this.bundlePages.push({
-                                        pageClass: 'loan-review',
-                                        model: {
-                                            loanAccount: loanProcess.loanAccount,
-                                        }
-                                    });
+                            //    $this.bundlePages.push({
+                            //             pageClass: 'loan-review',
+                            //             model: {
+                            //                 loanAccount: loanProcess.loanAccount,
+                            //             }
+                            //         });
 
                             //    $this.bundlePages.push({
                             //         pageClass: 'cb-check',
@@ -286,6 +287,46 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 }
 
                                 // $this.bundlePages.push({
+                                //     pageClass: 'co-applicant',
+                                //     model: {
+                                //         enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                //         loanProcess: loanProcess
+                                //     }
+                                // });
+
+                                // $this.bundlePages.push({
+                                //     pageClass: 'guarantor',
+                                //     model: {
+                                //         enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                //         loanProcess: loanProcess
+                                //     }
+                                // });
+                                
+                                // if(_.hasIn(loanAccount, 'coApplicantsEnrolmentProcesses')) {
+                                //     for (var i=0;i<loanProcess.coApplicantsEnrolmentProcesses.length; i++){
+                                //         $this.bundlePages.push({
+                                //             pageClass: 'co-applicant',
+                                //             model: {
+                                //                 enrolmentProcess: loanProcess.coApplicantsEnrolmentProcesses[i],
+                                //                 loanProcess: loanProcess
+                                //             }
+                                //         });
+                                //     }
+                                // }
+
+                                // if(_.hasIn(loanAccount, 'guarantorsEnrolmentProcesses')) {
+                                //     for (var i=0;i<loanProcess.guarantorsEnrolmentProcesses.length; i++){
+                                //         $this.bundlePages.push({
+                                //             pageClass: 'guarantor',
+                                //             model: {
+                                //                 enrolmentProcess: loanProcess.guarantorsEnrolmentProcesses[i],
+                                //                 loanProcess: loanProcess
+                                //             }
+                                //         });
+                                //     }
+                                // }
+
+                                // $this.bundlePages.push({
                                 //     pageClass: 'vehicle-details',
                                 //     model: {
                                 //         loanProcess: loanProcess
@@ -299,25 +340,25 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-                                $this.bundlePages.push({
-                                    pageClass: 'loan-review',
-                                    model: {
-                                        loanAccount: loanProcess.loanAccount,
-                                    }
-                                });
-                                $this.bundlePages.push({
-                                    pageClass: 'cbview',
-                                    model: {
-                                        loanAccount: loanProcess.loanAccount
-                                    }
-                                });
+                                // $this.bundlePages.push({
+                                //     pageClass: 'loan-review',
+                                //     model: {
+                                //         loanAccount: loanProcess.loanAccount,
+                                //     }
+                                // });
+                                // $this.bundlePages.push({
+                                //     pageClass: 'cbview',
+                                //     model: {
+                                //         loanAccount: loanProcess.loanAccount
+                                //     }
+                                // });
 
-                                $this.bundlePages.push({
-                                    pageClass: 'cb-check',
-                                    model: {
-                                        loanProcess: loanProcess
-                                    }
-                                });
+                                // $this.bundlePages.push({
+                                //     pageClass: 'cb-check',
+                                //     model: {
+                                //         loanProcess: loanProcess
+                                //     }
+                                // });
 
                                 deferred.resolve();
                             });

@@ -192,6 +192,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.firstName",
                             ],
                             "overrides": {
+                                "IndividualInformation.religion":{
+                                    "required":false
+                                },
                                 "KYC": {
                                     "orderNo": 1
                                 },
@@ -230,10 +233,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.addressProofImageId": {
-                                    "required": true
+                                    "required": false
                                 },
                                 "KYC.addressProofNo": {
-                                    "required": true
+                                    "required": false
                                 },
                                 "KYC.additionalKYCs.kyc1ImagePath": {
                                     "required": true
@@ -271,10 +274,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "IndividualInformation.spouseFirstName": {
                                     "type":"string",
-                                    "condition": "model.customer.maritalStatus==='MARRIED'"
+                                    "condition": "model.customer.maritalStatus==='Married'"
                                 },
                                 "IndividualInformation.spouseDateOfBirth": {
-                                    "condition": "model.customer.maritalStatus==='MARRIED'"
+                                    "condition": "model.customer.maritalStatus==='Married'"
                                 },
                                 // "FamilyDetails.familyMembers.relationShip": {
                                 //     "readonly": true
@@ -411,10 +414,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "IndividualInformation.spouseFirstName": {
                                     "type":"string",
-                                    "condition": "model.customer.maritalStatus==='MARRIED'"
+                                    "condition": "model.customer.maritalStatus==='Married'"
                                 },
                                 "IndividualInformation.spouseDateOfBirth": {
-                                    "condition": "model.customer.maritalStatus==='MARRIED'"
+                                    "condition": "model.customer.maritalStatus==='Married'"
                                 },
                                 // "FamilyDetails.familyMembers.relationShip": {
                                 //     "readonly": true
@@ -499,10 +502,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "IndividualInformation.spouseFirstName": {
                                     "type":"string",
-                                    "condition": "model.customer.maritalStatus==='MARRIED'"
+                                    "condition": "model.customer.maritalStatus==='Married'"
                                 },
                                 "IndividualInformation.spouseDateOfBirth": {
-                                    "condition": "model.customer.maritalStatus==='MARRIED'"
+                                    "condition": "model.customer.maritalStatus==='Married'"
                                 }
                             },
                              "excludes": [
@@ -575,13 +578,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.addressProofImageId": {
-                                    "required": true
+                                    "required": false
                                 },
                                 "KYC.addressProofNo": {
-                                    "required": true
+                                    "required": false
                                 },
                                 "KYC.addressProof": {
-                                    "readonly": true
+                                    "readonly": false,
+                                    "required":true
                                 },
                                 "KYC.additionalKYCs.kyc1ImagePath": {
                                     "required": true
@@ -610,10 +614,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "IndividualInformation.spouseFirstName": {
                                     "type":"string",
-                                    "condition": "model.customer.maritalStatus==='MARRIED'"
+                                    "condition": "model.customer.maritalStatus==='Married'"
                                 },
                                 "IndividualInformation.spouseDateOfBirth": {
-                                    "condition": "model.customer.maritalStatus==='MARRIED'"
+                                    "condition": "model.customer.maritalStatus==='Married'"
                                 },
                                 "ContactInformation.mailingDoorNo": {
                                     "condition": "!model.customer.mailSameAsResidence"
@@ -1201,13 +1205,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true
                                 },
                                 "KYC.addressProofImageId": {
-                                    "required": true
+                                    "required": false
                                 },
                                 "KYC.addressProofNo": {
-                                    "required": true
+                                    "required": false
                                 },
                                 "KYC.addressProof": {
-                                    "readonly": true
+                                    "readonly": false,
+                                    "required":true
                                 },
                                 "KYC.additionalKYCs.kyc1ImagePath": {
                                     "required": true
@@ -1236,10 +1241,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "IndividualInformation.spouseFirstName": {
                                     "type":"string",
-                                    "condition": "model.customer.maritalStatus==='MARRIED'"
+                                    "condition": "model.customer.maritalStatus==='Married'"
                                 },
                                 "IndividualInformation.spouseDateOfBirth": {
-                                    "condition": "model.customer.maritalStatus==='MARRIED'"
+                                    "condition": "model.customer.maritalStatus==='Married'"
                                 },
                                 "ContactInformation.locality": {
                                     "readonly": true
@@ -1511,11 +1516,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "IndividualInformation.spouseFirstName":{
                         "type":"string",
-                        "condition": "model.customer.maritalStatus==='MARRIED'",
+                        "condition": "model.customer.maritalStatus==='Married'",
                         "required":true
                     },
                     "IndividualInformation.spouseDateOfBirth":{
-                        "condition": "model.customer.maritalStatus==='MARRIED'",
+                        "condition": "model.customer.maritalStatus==='Married'",
                         "required":true
                     },
                     "IndividualInformation.fatherFirstName": {
@@ -1544,7 +1549,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "KYC.addressProof": {
                         "orderNo": 70,
-                        "required" : false,
+                        "required" : true,
                         "readonly" : false,
                         "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
                     },
@@ -1862,11 +1867,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "KYC.additionalKYCs.kyc1ValidUptoDate",
 
                     "IndividualInformation",
-                    "IndividualInformation.customerBranchId",
-                    "IndividualInformation.centreId",
-                    "IndividualInformation.centreId1",
-                    "IndividualInformation.customerId",
-                    "IndividualInformation.urnNo",
+                    // "IndividualInformation.customerBranchId",
+                    // "IndividualInformation.centreId",
+                    // "IndividualInformation.centreId1",
+                    // "IndividualInformation.customerId",
+                    // "IndividualInformation.urnNo",
                     "IndividualInformation.photoImageId",
                     "IndividualInformation.existingLoan",
                     "IndividualInformation.title",
@@ -1914,7 +1919,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.mailingState",
                     
 
-                    "IndividualFinancials",
+                    //"IndividualFinancials",
                     "IndividualFinancials.expenditures",
                     "IndividualFinancials.expenditures.expenditureSource",
                     "IndividualFinancials.expenditures.annualExpenses",
@@ -2020,18 +2025,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "References.verifications.email",
                     "References.verifications.occupation",
                     "References.verifications.address",
-                    "References.verifications.ReferenceCheck",
-                    "References.verifications.ReferenceCheck.relationship",
-                    "References.verifications.ReferenceCheck.opinion",
-                    "References.verifications.ReferenceCheck.financialStatus",
-                    "References.verifications.ReferenceCheck.knownSince",
-                    //"References.verifications.ReferenceCheck.goodsSold",
-                    // "References.verifications.ReferenceCheck.goodsBought",
-                    // "References.verifications.ReferenceCheck.paymentTerms",
-                    // "References.verifications.ReferenceCheck.modeOfPayment",
-                    // "References.verifications.ReferenceCheck.outstandingPayable",
-                    // "References.verifications.ReferenceCheck.outstandingReceivable",
-                     "References.verifications.ReferenceCheck.customerResponse",
+                    // "References.verifications.ReferenceCheck",
+                    // "References.verifications.ReferenceCheck.relationship",
+                    // "References.verifications.ReferenceCheck.opinion",
+                    // "References.verifications.ReferenceCheck.financialStatus",
+                    // "References.verifications.ReferenceCheck.knownSince",
+                    // //"References.verifications.ReferenceCheck.goodsSold",
+                    // // "References.verifications.ReferenceCheck.goodsBought",
+                    // // "References.verifications.ReferenceCheck.paymentTerms",
+                    // // "References.verifications.ReferenceCheck.modeOfPayment",
+                    // // "References.verifications.ReferenceCheck.outstandingPayable",
+                    // // "References.verifications.ReferenceCheck.outstandingReceivable",
+                    //  "References.verifications.ReferenceCheck.customerResponse",
 
 
                 ];
@@ -2399,13 +2404,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     title:"REFERENCES",
                                     type: "array",
                                     items:{
-                                        // "relationship" : {
-                                        //     key:"customer.verifications[].relationship",
-                                        //     title:"REFERENCE_TYPE",
-                                        //     type:"select",
-                                        //     required:"true",
-                                        //     enumCode: "business_reference_type"
-                                        // },
+                                        "relationship" : {
+                                            key:"customer.verifications[].relationship",
+                                            title:"REFERENCE_TYPE",
+                                            type:"select",
+                                            required:"true",
+                                            enumCode: "business_reference_type"
+                                        },
                                         // "businessName" : {
                                         //     key:"customer.verifications[].businessName",
                                         //     title:"BUSINESS_NAME",
