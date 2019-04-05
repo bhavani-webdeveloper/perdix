@@ -618,6 +618,11 @@ define({
 
                 },
                 sendBack: function (model, formCtrl, form, $event) {
+                    if (model.review.remarks==null || model.review.remarks =="" || model.review.targetStage ==null || model.review.targetStage ==""){
+                               PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
+                               PageHelper.hideLoader();
+                               return false;
+                    }
                     PageHelper.showLoader();
                     model.loanProcess.sendBack()
                         .finally(function () {
@@ -666,6 +671,11 @@ define({
                         });
                 },
                 reject: function (model, formCtrl, form, $event) {
+                    if (model.review.remarks==null || model.review.remarks =="" || model.loanAccount.rejectReason ==null || model.loanAccount.rejectReason ==""){
+                               PageHelper.showProgress("update-loan", "Reject Reason / Remarks is mandatory", 3000);
+                               PageHelper.hideLoader();
+                               return false;
+                    }
                     PageHelper.showLoader();
                     model.loanProcess.reject()
                         .finally(function () {
