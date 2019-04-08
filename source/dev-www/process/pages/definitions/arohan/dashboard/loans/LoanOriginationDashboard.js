@@ -15,6 +15,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             "Page/Engine/arohan.dashboard.loans.individual.screening.ScreeningReviewQueue",
             "Page/Engine/arohan.dashboard.loans.individual.screening.ApplicationQueue",
             "Page/Engine/arohan.dashboard.loans.individual.screening.InternalPdQueue",  
+            "Page/Engine/arohan.dashboard.loans.individual.screening.ExternalPersonalDiscussionQueue",  
             "Page/Engine/arohan.dashboard.loans.individual.screening.CmRecommendationReviewQueue",
             "Page/Engine/arohan.dashboard.loans.individual.screening.AcmRecommendationReviewQueue",
             "Page/Engine/arohan.dashboard.loans.individual.screening.AcmApprovalReviewQueue",

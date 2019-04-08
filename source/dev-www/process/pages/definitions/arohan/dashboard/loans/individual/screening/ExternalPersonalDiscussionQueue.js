@@ -27,10 +27,31 @@ define({
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
 	                    },
-	                    // "businessName": {
-	                    //     "title": "BUSINESS_NAME",
-	                    //     "type": "string"
-	                    // },
+	                    "businessName": {
+	                        "title": "BUSINESS_NAME",
+	                        "type": "string"
+						},
+						'branch': {
+	                    	'title': "BRANCH",
+	                    	"type": ["string", "null"],
+							"x-schema-form": {
+								"type":"userbranch",
+								"screenFilter": true
+							}
+	                    },
+						"centre": {
+                            "title": "SPOKE",
+                            "required":false,
+							"type": ["integer", "null"],
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "centre",
+								"parentEnumCode": "branch_id",
+								"parentValueExpr": "model.branch",
+								"screenFilter": true
+							}
+						},
+
 	                    "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"
@@ -56,27 +77,8 @@ define({
                             	"type": "select"
                             }
                         },
-                        'branch': {
-	                    	'title': "BRANCH",
-	                    	"type": ["string", "null"],
-							"x-schema-form": {
-								"type":"userbranch",
-								"screenFilter": true
-							}
-	                    },
-						"centre": {
-                            "title": "ZONE_NAME",
-                            "required":false,
-							"type": ["integer", "null"],
-							"x-schema-form": {
-								"type": "select",
-								"enumCode": "centre",
-								"parentEnumCode": "branch_id",
-								"parentValueExpr": "model.branch",
-								"screenFilter": true
-							}
-						},
-
+                        
+						
 
 					},
 					"required": []
@@ -97,7 +99,8 @@ define({
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-						'stage': 'ExternalPersonalDiscussion',
+						//'stage': 'ExternalPersonalDiscussion',
+						'stage': 'Televerification',
 						'branchId':searchOptions.branch,
 	                    'centreCode':  searchOptions.centre,
 	                    'enterprisePincode':searchOptions.pincode,
@@ -136,7 +139,8 @@ define({
 							item.customerName,
 							item.area,
 							item.villageName,
-							item.enterprisePincode
+							item.enterprisePincode,
+							item.branch
 						]
 					},
 					getTableConfig: function() {
@@ -177,15 +181,16 @@ define({
 					},
 					getActions: function() {
 						return [{
-							name: "EXTERNAL_PERSONAL_DISCUSSION_QUEUE",
+							//name: "EXTERNAL_PERSONAL_DISCUSSION_QUEUE",
+							name:"TELEVERIFICATION_QUEUE",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('shramsarathi.dashboard.loans.individual.screening.ExternalPersonalDiscussionReview', {
+								entityManager.setModel('arohan.dashboard.loans.individual.screening.ExternalPersonalDiscussionReview', {
 									_request: item
 								});
 								$state.go("Page.Bundle", {
-									pageName: "shramsarathi.dashboard.loans.individual.screening.ExternalPersonalDiscussionReview",
+									pageName: "arohan.dashboard.loans.individual.screening.ExternalPersonalDiscussionReview",
 									pageId: item.loanId
 								});
 							},

@@ -7,7 +7,7 @@ define(["perdix/domain/model/loan/LoanProcess",
         var EnrolmentProcess = EnrolmentProcess["EnrolmentProcess"];
         var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
         return {
-             pageUID: "arohan.dashboard.loans.individual.screening.ExternalersonalDiscussionReview",
+             pageUID: "arohan.dashboard.loans.individual.screening.ExternalPersonalDiscussionReview",
             pageType: "Bundle",
             dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
     "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "Message", "irfNavigator"],
@@ -109,7 +109,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 };
                 return {
                     "type": "page-bundle",
-                    "title": "EXTERNAL_PERSONAL_DISCUSSION_REVIEW",
+                    "title": "TELEVERIFICATION_REVIEW",
                     "subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
                     "subTitle": "",
                     "readonly": true,
@@ -143,7 +143,7 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                     "pre_pages_initialize": function(bundleModel) {
                         $log.info("Inside pre_page_initialize");
-                        bundleModel.currentStage = "ExternalPersonalDiscussion";
+                        bundleModel.currentStage = "Televerification";
                         var deferred = $q.defer();
 
                         var $this = this;
@@ -180,7 +180,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         guarantors: []
                                     };
 
-                                    if (res.currentStage != 'ExternalPersonalDiscussion') {
+                                    if (res.currentStage != 'Televerification') {
                                         PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
                                         irfNavigator.goBack();
                                         return;
@@ -288,7 +288,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     },
                     "post_pages_initialize": function(bundleModel) {
                         $log.info("Inside post_page_initialize");
-                        BundleManager.broadcastEvent('origination-stage', 'ExternalPersonalDiscussion');
+                        BundleManager.broadcastEvent('origination-stage', 'Televerification');
 
                     },
                     eventListeners: {
@@ -297,7 +297,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 name: "SHAHAL AGAIN"
                             });
                         },
-                        "ExternalPersonalDiscussion": function(pageObj, bundleModel, params){
+                        "televerification": function(pageObj, bundleModel, params){
                         },
                         "new-enrolment": function(pageObj, bundleModel, params) {
                             switch (pageObj.pageClass) {

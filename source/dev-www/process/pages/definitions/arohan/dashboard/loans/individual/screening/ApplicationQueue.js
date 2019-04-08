@@ -110,7 +110,7 @@ define({
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,
-						'centreCode': searchOptions.centre
+						
 	                }).$promise;
 				},
 				paginationOptions: {
@@ -140,7 +140,7 @@ define({
 							item.villageName,
 							item.enterprisePincode,
 							item.branchName,
-							item.centreName
+							item.centreCode
 						]
 					},
 					getTableConfig: function() {

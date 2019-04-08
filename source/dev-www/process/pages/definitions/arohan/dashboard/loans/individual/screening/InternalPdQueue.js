@@ -27,10 +27,30 @@ define({
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
 	                    },
-	                    // "businessName": {
-	                    //     "title": "BUSINESS_NAME",
-	                    //     "type": "string"
-	                    // },
+	                    "businessName": {
+	                        "title": "BUSINESS_NAME",
+	                        "type": "string"
+						},
+						'branch': {
+	                    	'title': "BRANCH",
+	                    	"type": ["string", "null"],
+							"x-schema-form": {
+								"type":"userbranch",
+								"screenFilter": true
+							}
+						},
+						"centre": {
+                            "title": "SPOKE",
+                            "required":false,
+							"type": ["integer", "null"],
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "centre",
+								"parentEnumCode": "branch_id",
+								"parentValueExpr": "model.branch",
+								"screenFilter": true
+							}
+						},
 	                    "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"
@@ -56,26 +76,8 @@ define({
                             	"type": "select"
                             }
                         },
-                        'branch': {
-	                    	'title': "BRANCH",
-	                    	"type": ["string", "null"],
-							"x-schema-form": {
-								"type":"userbranch",
-								"screenFilter": true
-							}
-	                    },
-						"centre": {
-                            "title": "ZONE_NAME",
-                            "required":false,
-							"type": ["integer", "null"],
-							"x-schema-form": {
-								"type": "select",
-								"enumCode": "centre",
-								"parentEnumCode": "branch_id",
-								"parentValueExpr": "model.branch",
-								"screenFilter": true
-							}
-						},
+                        
+					
 
 
 					},
@@ -136,7 +138,8 @@ define({
 							item.customerName,
 							item.area,
 							item.villageName,
-							item.enterprisePincode
+							item.enterprisePincode,
+							item.branch
 						]
 					},
 					getTableConfig: function() {
@@ -157,10 +160,10 @@ define({
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
 						},
-						// {
-						// 	title: 'BUSINESS_NAME',
-						// 	data: 'customerName'
-						// },
+						{
+							title: 'BUSINESS_NAME',
+							data: 'customerName'
+						},
 						{
 							title: 'Loan Amount',
 							data: 'loanAmount'
