@@ -180,7 +180,7 @@ define({
 					},
 					getActions: function() {
 						return [{
-							name: "TELEVERIFICATION_QUEUE",
+							name: "INTERNAL_PERSONAL_DISCUSSION",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {

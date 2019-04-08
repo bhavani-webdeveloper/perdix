@@ -105,7 +105,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
          var ipd = $scope.dashboardDefinition.$menuMap["Page/Engine/Page/Engine/arohan.dashboard.loans.individual.screening.InternalPdQueue"];
         if (ipd) {
             IndividualLoan.search({
-                'stage': 'AcmApprovalReviewQueue',
+                'stage': 'InternalPdQueue',
                 'enterprisePincode': '',
                 'applicantName': '',
                 'area': '',

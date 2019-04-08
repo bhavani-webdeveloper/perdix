@@ -508,7 +508,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.telecalling.loanCustomer = _.filter(model.loanAccount.telecallingDetails, {"partyType": "loanCustomer"});
 
                     var self = this;
-                    Queries.questionnaireDetails('TELECALLING', 'Tele', 'televerification').then(
+                    Queries.questionnaireDetails('TELECALLING', 'personal', 'personaldiscussion').then(
                         function(res) { 
                             model.applicant.telecallingQuestionnaireList = _.filter(res, function(obj) {
                                 return obj.party_type == 'applicant';     

@@ -109,7 +109,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                 };
                 return {
                     "type": "page-bundle",
-                    "title": "TELEVERIFICATION_REVIEW",
+                    "title": "INTERNAL_DISCUSSION_REVIEW",
                     "subTitle": "LOAN_BOOKING_BUNDLE_SUB_TITLE",
                     "subTitle": "",
                     "readonly": true,
