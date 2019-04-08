@@ -733,124 +733,124 @@ define({
             // ]
 
             // }, 
-        // {
-        //         "type": "box",
-        //         "colClass": "col-sm-12",
-        //         "title": "Loan Recommendation",
-        //         "items": [{
-        //             "type": "grid",
-        //             "orientation": "horizontal",
-        //             "items": [{
-        //                 "type": "grid",
-        //                 "orientation": "vertical",
-        //                 "items": [{
-        //                     "key": "",
-        //                     "title": "START_DATE",
-        //                     "type": "date"
-        //                 }, {
-        //                     "key": "",
-        //                     "title": "FREQUENCY",
-        //                     "type": "select"
-        //                 },{
-        //                     "key": "",
-        //                     "title": "END_DATE",
-        //                     "type": "date"
-        //                 }, 
-        //                     {
-        //                     "key": "",
-        //                     "title": "Current Exposure",
-        //                     "type": "amount"
-        //                 },
-        //                 {
-        //                     "key": "",
-        //                     "title": "LOAN_PRODUCT",
-        //                     "type": "select"
-        //                 },
-        //                 {
-        //                     "key": "loanAccount.loanAmount",
-        //                     "title": "Loan Amount Recommended",
-        //                     "type": "amount",
-        //                     onChange:function(value,form,model){
-        //                         computeEMI(model);
-        //                     }
-        //                 }, 
-        //                 {
-        //                     "key": "loanAccount.tenure",
-        //                     "title": "Duration(months)"/*,
-        //                     "type": "number"*/
-        //                     ,
-        //                     onChange:function(value,form,model){
-        //                         computeEMI(model);
-        //                     }
-        //                 }, {
-        //                     "key": "loanAccount.interestRate",
-        //                     "title": "Interest Rate",
-        //                     "type": "number",
-        //                     onChange:function(value,form,model){
-        //                         computeEMI(model);
-        //                     },
+        {
+                "type": "box",
+                "colClass": "col-sm-12",
+                "title": "Loan Recommendation",
+                "items": [{
+                    "type": "grid",
+                    "orientation": "horizontal",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [{
+                            "key": "",
+                            "title": "START_DATE",
+                            "type": "date"
+                        }, {
+                            "key": "",
+                            "title": "FREQUENCY",
+                            "type": "select"
+                        },{
+                            "key": "",
+                            "title": "END_DATE",
+                            "type": "date"
+                        }, 
+                            {
+                            "key": "",
+                            "title": "Current Exposure",
+                            "type": "amount"
+                        },
+                        {
+                            "key": "",
+                            "title": "LOAN_PRODUCT",
+                            "type": "select"
+                        },
+                        {
+                            "key": "loanAccount.loanAmount",
+                            "title": "Loan Amount Recommended",
+                            "type": "amount",
+                            onChange:function(value,form,model){
+                                computeEMI(model);
+                            }
+                        }, 
+                        {
+                            "key": "loanAccount.tenure",
+                            "title": "Duration(months)"/*,
+                            "type": "number"*/
+                            ,
+                            onChange:function(value,form,model){
+                                computeEMI(model);
+                            }
+                        }, {
+                            "key": "loanAccount.interestRate",
+                            "title": "Interest Rate",
+                            "type": "number",
+                            onChange:function(value,form,model){
+                                computeEMI(model);
+                            },
                            
-        //                 },
-        //             ]
-        //             }, {
-        //                 "type": "grid",
-        //                 "orientation": "vertical",
-        //                 "items": [{
-        //                     "key": "loanAccount.estimatedEmi",
-        //                     "title": "ESTIMATED_AROHAN_EMI",
-        //                     "type": "amount",
-        //                     "readonly":false
-        //                 },{
-        //                     "key": "",
-        //                     "title": "INTEREST_AMOUNT",
-        //                     "type": "number",
-        //                     },{
-        //                         "key": "",
-        //                         "title": "TOTAL_REPAYMENT",
-        //                         "type": "number",
-        //                         },{
-        //                     "key": "loanAccount.processingFeePercentage",
-        //                     "title": "Processing Fee(in%)"
-        //                 },{
-        //                     "key": "",
-        //                     "title": "GST",
-        //                     "type": "number",
-        //                     },{
-        //                         "key": "",
-        //                         "title": "PROCESSING_FEE",
-        //                         "type": "number",
-        //                         },{
-        //                     "key": "loanAccount.estimatedEmi",
-        //                     "title": "Expected Security EMI"
-        //                 }, {
-        //                     "key": "loanAccount.commercialCibilCharge",
-        //                     "title": "CIBIL Charges",
-        //                     "type": "amount"
-        //                 },{
-        //                     "key": "",
-        //                     "title": "NO_OF_INSTALLMENT",
-        //                     "type": "number",
-        //                     },{
-        //                         "key": "",
-        //                         "title": "NET_DISBURSAL",
-        //                         "type": "number",
-        //                         },{
-        //                             "key": "",
-        //                             "title": "IRR_WITH_PF",
-        //                             "type": "number",
-        //                             },{
-        //                                 "key": "",
-        //                                 "title": "IRR_WITHOUT_PF",
-        //                                 "type": "number",
-        //                                 },{
-        //                                     "key": "",
-        //                                     "title": "CALCULATE_IRR",
-        //                                     "type": "number",
-        //                                     }
-        //                         ]
-        //             }]
-        //         }]
-        //     }, 
+                        },
+                    ]
+                    }, {
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [{
+                            "key": "loanAccount.estimatedEmi",
+                            "title": "ESTIMATED_AROHAN_EMI",
+                            "type": "amount",
+                            "readonly":false
+                        },{
+                            "key": "",
+                            "title": "INTEREST_AMOUNT",
+                            "type": "number",
+                            },{
+                                "key": "",
+                                "title": "TOTAL_REPAYMENT",
+                                "type": "number",
+                                },{
+                            "key": "loanAccount.processingFeePercentage",
+                            "title": "Processing Fee(in%)"
+                        },{
+                            "key": "",
+                            "title": "GST",
+                            "type": "number",
+                            },{
+                                "key": "",
+                                "title": "PROCESSING_FEE",
+                                "type": "number",
+                                },{
+                            "key": "loanAccount.estimatedEmi",
+                            "title": "Expected Security EMI"
+                        }, {
+                            "key": "loanAccount.commercialCibilCharge",
+                            "title": "CIBIL Charges",
+                            "type": "amount"
+                        },{
+                            "key": "",
+                            "title": "NO_OF_INSTALLMENT",
+                            "type": "number",
+                            },{
+                                "key": "",
+                                "title": "NET_DISBURSAL",
+                                "type": "number",
+                                },{
+                                    "key": "",
+                                    "title": "IRR_WITH_PF",
+                                    "type": "number",
+                                    },{
+                                        "key": "",
+                                        "title": "IRR_WITHOUT_PF",
+                                        "type": "number",
+                                        },{
+                                            "key": "",
+                                            "title": "CALCULATE_IRR",
+                                            "type": "number",
+                                            }
+                                ]
+                    }]
+                }]
+            }, 
         //     {
         //             "type": "box",
         //             "title": "CUSTOMER_LOAN_HISTORY",
