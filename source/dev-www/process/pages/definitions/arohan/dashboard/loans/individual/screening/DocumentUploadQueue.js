@@ -155,7 +155,7 @@ function($log, formHelper,$state, SessionStore, $q, IndividualLoan, entityManage
                             name: "View / Upload Documents",
                             desc: "",
                             fn: function(item, index){
-                                if (siteCode == 'pahal') {
+                                if (siteCode == 'intellecash') {
                                         irfNavigator.go({
                                         state: 'Page.Engine',
                                         pageName: 'pahal.loans.individual.booking.DocumentUpload',
