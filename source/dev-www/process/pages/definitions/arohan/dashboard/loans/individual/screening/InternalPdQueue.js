@@ -1,5 +1,5 @@
 define({
-	pageUID: "shramsarathi.dashboard.loans.individual.screening.TeleverificationQueue",
+	pageUID: "arohan.dashboard.loans.individual.screening.InternalPdQueue",
 	pageType: "Engine",
 	dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
 	$pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
@@ -181,11 +181,11 @@ define({
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('shramsarathi.dashboard.loans.individual.screening.TeleverificationReview', {
+								entityManager.setModel('arohan.dashboard.loans.individual.screening.TeleverificationReview', {
 									_request: item
 								});
 								$state.go("Page.Bundle", {
-									pageName: "shramsarathi.dashboard.loans.individual.screening.TeleverificationReview",
+									pageName: "arohan.dashboard.loans.individual.screening.TeleverificationReview",
 									pageId: item.loanId
 								});
 							},
