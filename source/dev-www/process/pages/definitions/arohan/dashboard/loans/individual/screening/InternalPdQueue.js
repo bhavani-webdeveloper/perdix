@@ -181,11 +181,11 @@ define({
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('arohan.dashboard.loans.individual.screening.TeleverificationReview', {
+								entityManager.setModel('arohan.dashboard.loans.individual.screening.InternalPersonalDiscussionReview', {
 									_request: item
 								});
 								$state.go("Page.Bundle", {
-									pageName: "arohan.dashboard.loans.individual.screening.TeleverificationReview",
+									pageName: "arohan.dashboard.loans.individual.screening.InternalPersonalDiscussionReview",
 									pageId: item.loanId
 								});
 							},
