@@ -1,10 +1,10 @@
-irf.pageCollection.factory(irf.page("arohan.dashboard.loans.individual.screening.DocumentUploadQueue"),
+irf.pageCollection.factory(irf.page("arohan.dashboard.loans.individual.screening.CustomerSignedDocumentUploadQueue"),
 ["$log", "formHelper","$state", "SessionStore", "$q", "IndividualLoan", "entityManager", "LoanBookingCommons", "irfNavigator","$filter",
 function($log, formHelper,$state, SessionStore, $q, IndividualLoan, entityManager, LoanBookingCommons, irfNavigator, $filter){
     var siteCode;
     return {
         "type": "search-list",
-        "title": "DOCUMENT_EXECUTION",
+        "title": "CUSTOMER_SIGNED_DOCUMENT_UPLOAD",
         "subTitle": "",
         "uri":"Loan Booking/Stage 3",
         initialize: function (model, form, formCtrl) {
@@ -152,7 +152,7 @@ function($log, formHelper,$state, SessionStore, $q, IndividualLoan, entityManage
                 getActions: function(){
                     return [
                         {
-                            name: "View / Generate Documents",
+                            name: "View / Upload Documents",
                             desc: "",
                             fn: function(item, index){
                                 if (siteCode == 'pahal') {
@@ -178,12 +178,12 @@ function($log, formHelper,$state, SessionStore, $q, IndividualLoan, entityManage
                                 } else {
                                     irfNavigator.go({
                                         state: 'Page.Bundle',
-                                        pageName: 'arohan.dashboard.loans.individual.screening.DocumentUploadReview',
+                                        pageName: 'arohan.dashboard.loans.individual.screening.CustomerSignedDocumentUploadReview',
                                         pageData: item,
                                         pageId: item.loanId
                                     }, {
                                         state: 'Page.Engine',
-                                        pageName: "arohan.dashboard.loans.individual.screening.DocumentUploadQueue"
+                                        pageName: "arohan.dashboard.loans.individual.screening.CustomerSignedDocumentUploadQueue"
                                     });
                                 }
 

@@ -34,6 +34,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             "Page/Engine/arohan.dashboard.loans.individual.screening.PricingQueue",
             "Page/Engine/arohan.dashboard.loans.individual.screening.PricingApprovalQueue",
             "Page/Engine/arohan.dashboard.loans.individual.screening.DocumentUploadQueue",
+            "Page/Engine/arohan.dashboard.loans.individual.screening.CustomerSignedDocumentUploadQueue",
             //"Page/Engine/arohan.dashboard.loans.individual.screening.LoanSanctionQueue",
             "Page/Engine/arohan.dashboard.loans.individual.screening.RejectedQueue",
             //"Page/Engine/arohan.dashboard.loans.individual.screening.BranchNewConversationQueue",

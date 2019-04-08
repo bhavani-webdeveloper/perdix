@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("arohan.dashboard.loans.individual.screening.DocumentUpload"), ["$log", "Enrollment", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', 'Utils', 'formHelper', "LoanProcess", "CustomerBankBranch", "SchemaResource", "LoanAccount", "Misc","irfNavigator", "PagesDefinition","$q",
+irf.pageCollection.factory(irf.page("arohan.dashboard.loans.individual.screening.CustomerSignedDocumentUpload"), ["$log", "Enrollment", "SessionStore", "$state", '$stateParams', 'PageHelper', 'IndividualLoan', 'Queries', 'Utils', 'formHelper', "LoanProcess", "CustomerBankBranch", "SchemaResource", "LoanAccount", "Misc","irfNavigator", "PagesDefinition","$q",
     function($log, Enrollment, SessionStore, $state, $stateParams, PageHelper, IndividualLoan, Queries, Utils, formHelper, LoanProcess, CustomerBankBranch, SchemaResource, LoanAccount,Misc, irfNavigator, PagesDefinition,$q) {
 
 
@@ -30,7 +30,7 @@ irf.pageCollection.factory(irf.page("arohan.dashboard.loans.individual.screening
                 if (!model._queue) {
                     $log.info("Screen directly launched hence redirecting to queue screen");
                     $state.go('Page.Engine', {
-                        pageName: 'arohan.dashboard.loans.individual.screening.DocumentUpload',
+                        pageName: 'arohan.dashboard.loans.individual.screening.CustomerSignedDocumentUpload',
                         pageId: null
                     });
                     return;
@@ -700,167 +700,168 @@ irf.pageCollection.factory(irf.page("arohan.dashboard.loans.individual.screening
                 "type": "box",
                 "colClass": "col-sm-12",
                 "title": "LOAN_DOCUMENT_UPLOAD_QUEUE",
-                "items": [{
-                        "key": "_queue.centreName",
-                        "title": "CENTRE",
-                        "readonly": true
-                    }, {
-                        "key": "_queue.customerName",
-                        "title": "ENTITY_NAME",
-                        "condition": "model.additional.isEntity",
-                        "readonly": true
-                    },
-                    {
-                        "key": "_queue.customerName",
-                        "title": "APPLICANT_NAME",
-                        "condition":"model.additional.isIndividual",
-                        "readonly": true
-                    }, 
-                    {
-                        "type": "button",
-                        "title": "DOWNLOAD_ALL_FORMS",
-                        "onClick": function(model, form, schemaForm, event) {
-                            Utils.downloadFile(Misc.allFormsDownload({recordId:model.loanAccount.id}));
-                        }
-                    }, 
-                     //all existing docs
+                "items": [
                     // {
-                    //     "type": "fieldset",
-                    //     "title": "LOAN_DOCUMENTS",
-                    //     "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
-                    //     "items": [{
-                    //         "type": "array",
-                    //         "notitle": true,
-                    //         "view": "fixed",
-                    //         "key": "allExistingDocs",
-                    //         "add": null,
-                    //         "remove": null,
-                    //         "items": [
-                    //             {
-                    //                 "type": "section",
-                    //                 "htmlClass": "row",
-                    //                 "condition": "model.allExistingDocs[arrayIndex].isHidden === false",
-                    //                 "items": [
-                    //                     {
-                    //                         "type": "section",
-                    //                         "htmlClass": "col-sm-3",
-                    //                         "items": [{
-                    //                             "key": "allExistingDocs[arrayIndex].$title",
-                    //                             "notitle": true,
-                    //                             "titleExpr": "model.allExistingDocs[arrayIndex].$title",
-                    //                             "type": "anchor",
-                    //                             "fieldHtmlClass": "text-bold",
-                    //                             "condition": "model.allExistingDocs[arrayIndex].$downloadRequired",
-                    //                             "onClick": function (model, form, schemaForm, event) {
-                    //                                 var doc = model.allExistingDocs[schemaForm.key[-1]];
-                    //                                 Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + doc.$formsKey + "&record_id=" + model.loanAccount.id)
-                    //                             }
-                    //                         },
-
-                    //                         {
-                    //                             "key": "allExistingDocs[].$title",
-                    //                             "notitle": true,
-                    //                             "title": " ",
-                    //                             "condition": "!model.allExistingDocs[arrayIndex].$downloadRequired",
-                    //                             "readonly": true
-                    //                         }]
-                    //                     },
-                    //                     {
-                    //                         "type": "section",
-                    //                         "htmlClass": "col-sm-2",
-                    //                         "key": "allExistingDocs[].documentStatus",
-                    //                         "items": [{
-                    //                             "notitle": true,
-                    //                             "key": "allExistingDocs[].documentStatus",
-                    //                             "readonly": true
-                    //                         }]
-                    //                     },
-                    //                     {
-                    //                         "type": "section",
-                    //                         "htmlClass": "col-sm-4",
-                    //                         "key": "allExistingDocs[].remarks",
-                    //                         "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'APPROVED'",
-                    //                         "items": [{
-                    //                             "notitle": true,
-                    //                             "key": "allExistingDocs[].remarks",
-                    //                             "readonly": true
-                    //                         }]
-                    //                     },
-                    //                     {
-                    //                         "type": "section",
-                    //                         "htmlClass": "col-sm-4",
-                    //                         "key": "allExistingDocs[].documentStatus",
-                    //                         "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'REJECTED' && !model.allExistingDocs[arrayIndex].remarks",
-                    //                         "items": [{
-                    //                             "notitle": true,
-                    //                             "key": "allExistingDocs[].rejectReason",
-                    //                             "readonly": true
-                    //                         }]
-                    //                     },
-                    //                     {
-                    //                         "type": "section",
-                    //                         "htmlClass": "col-sm-2",
-                    //                         "key": "allExistingDocs[].documentStatus",
-                    //                         "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'REJECTED' && model.allExistingDocs[arrayIndex].remarks",
-                    //                         "items": [{
-                    //                             "notitle": true,
-                    //                             "key": "model.allExistingDocs[].rejectReason",
-                    //                             "readonly": true
-                    //                         }]
-                    //                     }, {
-                    //                         "type": "section",
-                    //                         "htmlClass": "col-sm-2",
-                    //                         "key": "allExistingDocs[].documentStatus",
-                    //                         "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'REJECTED' && model.allExistingDocs[arrayIndex].remarks",
-                    //                         "items": [{
-                    //                             "notitle": true,
-                    //                             "key": "model.allExistingDocs[].remarks",
-                    //                             "readonly": true
-                    //                         }]
-                    //                     }, {
-                    //                         "type": "section",
-                    //                         "htmlClass": "col-sm-4",
-                    //                         "key": "allExistingDocs[].documentStatus",
-                    //                         "condition": "model.allExistingDocs[arrayIndex].documentStatus !== 'REJECTED' && model.allExistingDocs[arrayIndex].documentStatus !== 'APPROVED' "
-                    //                     },
-                    //                     {
-                    //                         "type": "section",
-                    //                         "condition": "model.allExistingDocs[arrayIndex].documentStatus !== 'APPROVED' && model.allExistingDocs[arrayIndex].documentStatus != null && model.allExistingDocs[arrayIndex].$mandatory == 'NO' ",
-                    //                         "htmlClass": "col-sm-3",
-                    //                         "items": [{
-                    //                             title: "Upload",
-                    //                             key: "allExistingDocs[].documentId",
-                    //                             type: "file",
-                    //                             fileType: "application/pdf",
-                    //                             category: "Loan",
-                    //                             subCategory: "DOC1",
-                    //                             "notitle": true,
-                    //                             using: "scanner",
-                    //                             required: false
-                    //                         }]
-                    //                     },
-                    //                     {
-                    //                         "type": "section",
-                    //                         "htmlClass": "col-sm-3",
-                    //                         "items": [{
-                    //                             title: "Upload",
-                    //                             key: "allExistingDocs[].documentId",
-                    //                             type: "file",
-                    //                             fileType: "application/pdf",
-                    //                             category: "Loan",
-                    //                             subCategory: "DOC1",
-                    //                             "notitle": true,
-                    //                             using: "scanner",
-                    //                             required:true
-                    //                         }]
-                    //                     },
-                    //             ]
-                    //         }] // END of array items
-                    //     }]
-                    // },// all existing docs ends
-                    //remaining docs 
+                    //     "key": "_queue.centreName",
+                    //     "title": "CENTRE",
+                    //     "readonly": true
+                    // }, {
+                    //     "key": "_queue.customerName",
+                    //     "title": "ENTITY_NAME",
+                    //     "condition": "model.additional.isEntity",
+                    //     "readonly": true
+                    // },
+                    // {
+                    //     "key": "_queue.customerName",
+                    //     "title": "APPLICANT_NAME",
+                    //     "condition":"model.additional.isIndividual",
+                    //     "readonly": true
+                    // }, 
+                    // {
+                    //     "type": "button",
+                    //     "title": "DOWNLOAD_ALL_FORMS",
+                    //     "onClick": function(model, form, schemaForm, event) {
+                    //         Utils.downloadFile(Misc.allFormsDownload({recordId:model.loanAccount.id}));
+                    //     }
+                    // }, 
+                     //all existing docs
                     {
                         "type": "fieldset",
+                        "title": "LOAN_DOCUMENTS",
+                        "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
+                        "items": [{
+                            "type": "array",
+                            "notitle": true,
+                            "view": "fixed",
+                            "key": "allExistingDocs",
+                            "add": null,
+                            "remove": null,
+                            "items": [
+                                {
+                                    "type": "section",
+                                    "htmlClass": "row",
+                                    "condition": "model.allExistingDocs[arrayIndex].isHidden === false",
+                                    "items": [
+                                        {
+                                            "type": "section",
+                                            "htmlClass": "col-sm-3",
+                                            "items": [{
+                                                "key": "allExistingDocs[arrayIndex].$title",
+                                                "notitle": true,
+                                                "titleExpr": "model.allExistingDocs[arrayIndex].$title",
+                                                "type": "anchor",
+                                                "fieldHtmlClass": "text-bold",
+                                                "condition": "model.allExistingDocs[arrayIndex].$downloadRequired",
+                                                "onClick": function (model, form, schemaForm, event) {
+                                                    var doc = model.allExistingDocs[schemaForm.key[-1]];
+                                                    Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + doc.$formsKey + "&record_id=" + model.loanAccount.id)
+                                                }
+                                            },
+
+                                            {
+                                                "key": "allExistingDocs[].$title",
+                                                "notitle": true,
+                                                "title": " ",
+                                                "condition": "!model.allExistingDocs[arrayIndex].$downloadRequired",
+                                                "readonly": true
+                                            }]
+                                        },
+                                        {
+                                            "type": "section",
+                                            "htmlClass": "col-sm-2",
+                                            "key": "allExistingDocs[].documentStatus",
+                                            "items": [{
+                                                "notitle": true,
+                                                "key": "allExistingDocs[].documentStatus",
+                                                "readonly": true
+                                            }]
+                                        },
+                                        {
+                                            "type": "section",
+                                            "htmlClass": "col-sm-4",
+                                            "key": "allExistingDocs[].remarks",
+                                            "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'APPROVED'",
+                                            "items": [{
+                                                "notitle": true,
+                                                "key": "allExistingDocs[].remarks",
+                                                "readonly": true
+                                            }]
+                                        },
+                                        {
+                                            "type": "section",
+                                            "htmlClass": "col-sm-4",
+                                            "key": "allExistingDocs[].documentStatus",
+                                            "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'REJECTED' && !model.allExistingDocs[arrayIndex].remarks",
+                                            "items": [{
+                                                "notitle": true,
+                                                "key": "allExistingDocs[].rejectReason",
+                                                "readonly": true
+                                            }]
+                                        },
+                                        {
+                                            "type": "section",
+                                            "htmlClass": "col-sm-2",
+                                            "key": "allExistingDocs[].documentStatus",
+                                            "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'REJECTED' && model.allExistingDocs[arrayIndex].remarks",
+                                            "items": [{
+                                                "notitle": true,
+                                                "key": "model.allExistingDocs[].rejectReason",
+                                                "readonly": true
+                                            }]
+                                        }, {
+                                            "type": "section",
+                                            "htmlClass": "col-sm-2",
+                                            "key": "allExistingDocs[].documentStatus",
+                                            "condition": "model.allExistingDocs[arrayIndex].documentStatus === 'REJECTED' && model.allExistingDocs[arrayIndex].remarks",
+                                            "items": [{
+                                                "notitle": true,
+                                                "key": "model.allExistingDocs[].remarks",
+                                                "readonly": true
+                                            }]
+                                        }, {
+                                            "type": "section",
+                                            "htmlClass": "col-sm-4",
+                                            "key": "allExistingDocs[].documentStatus",
+                                            "condition": "model.allExistingDocs[arrayIndex].documentStatus !== 'REJECTED' && model.allExistingDocs[arrayIndex].documentStatus !== 'APPROVED' "
+                                        },
+                                        {
+                                            "type": "section",
+                                            "condition": "model.allExistingDocs[arrayIndex].documentStatus !== 'APPROVED' && model.allExistingDocs[arrayIndex].documentStatus != null && model.allExistingDocs[arrayIndex].$mandatory == 'NO' ",
+                                            "htmlClass": "col-sm-3",
+                                            "items": [{
+                                                title: "Upload",
+                                                key: "allExistingDocs[].documentId",
+                                                type: "file",
+                                                fileType: "application/pdf",
+                                                category: "Loan",
+                                                subCategory: "DOC1",
+                                                "notitle": true,
+                                                using: "scanner",
+                                                required: false
+                                            }]
+                                        },
+                                        {
+                                            "type": "section",
+                                            "htmlClass": "col-sm-3",
+                                            "items": [{
+                                                title: "Upload",
+                                                key: "allExistingDocs[].documentId",
+                                                type: "file",
+                                                fileType: "application/pdf",
+                                                category: "Loan",
+                                                subCategory: "DOC1",
+                                                "notitle": true,
+                                                using: "scanner",
+                                                required:true
+                                            }]
+                                        },
+                                ]
+                            }] // END of array items
+                        }]
+                    },// all existing docs ends
+                    //remaining docs 
+                    {
+                        "type": "fieldset", 
                         "title": "Additional Documents",
                         "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
                         "readonly": true,
