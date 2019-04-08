@@ -617,6 +617,7 @@ define({
                         reqData.loanProcessAction = "PROCEED";
                         reqData.remarks = model.review.remarks;
                         reqData.stage = model.review.targetStage;
+                        reqData.loanAccount.version = model.loanProcess.loanAccount.version
                         reqData.remarks = model.review.remarks;
                         PageHelper.showLoader();
                         PageHelper.showProgress("update-loan", "Working...");
