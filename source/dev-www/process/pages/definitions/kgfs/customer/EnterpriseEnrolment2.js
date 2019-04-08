@@ -3440,7 +3440,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     /* Setting data for the form */
                     model.loanAccount = model.loanProcess.loanAccount;
                     model.customer = model.enrolmentProcess.customer;
-                    model.customer.isCaptured = false ;
+                  //  model.customer.isCaptured = false ;
                     model.customer.isCreditAppraisal = false;
                     model.customer.customerType = "Enterprise";         
                     computeEstimatedEmi(model);
@@ -3583,7 +3583,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         monthlySurpluse(model)
                         if(model.customer.enterprise.employeeSalary && model.customer.enterprise.employeeSalary>0){
                             model.customer.isCreditAppraisal = true
-                            BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer});
+                            // BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer});
                         }
                     }
                     
@@ -3808,7 +3808,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             return false;
                         }
                         PageHelper.showProgress('enrolment', 'Updating Customer',5000);
-                        PageHelper.showLoader();
                         model.customer.expenditures = [];
                         model.customer.enterpriseMonthlySales = []
 
@@ -3816,7 +3815,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             PageHelper.showProgress("loan-enrolment","Loan Amount Eligible for customer should be more than zero amount",5000);
                                 return false;    
                         }
-
+                        PageHelper.showLoader();
                         _.forEach(model.customer.monthlySale, function (monthlysale) {
                             for (const key of Object.keys(monthlysale)) {
                                 monthlysales = {}
@@ -3851,7 +3850,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         _.forEach(model.customer.personalExpenses, function (expenses) {
                                 model.customer.expenditures.push(expenses)
                         })
-                        var customerLiabilityRepayment = [];
+                        var customerLiabilityRepayment = []
                         _.forEach(model.customer.liabilityRepayment, function (liability) {
                             customerLiabilityRepayment.push(liability)
                         })

@@ -1661,7 +1661,7 @@ define([],function(){
                         model.review.targetStage='';
                         model.loanProcess.stage='';
                     } 
-                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == "CreditAppraisal" && model.loanAccount.productCategory == 'MEL' && model.customer.enterprise.employeeSalary <=0){
+                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == "CreditAppraisal" && model.loanAccount.productCategory == 'MEL' && !model.loanAccount.isBusinessCaptured){
                             PageHelper.showProgress("loan-enrolment","Business Details are not captured",5000);
                                 return false;
                         } 
