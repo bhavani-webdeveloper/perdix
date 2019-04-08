@@ -1,7 +1,7 @@
 define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/AngularResourceService'], function (EnrolmentProcess, AngularResourceService) {
     EnrolmentProcess = EnrolmentProcess['EnrolmentProcess'];
     return {
-        pageUID: "shramsarathi.dashboard.loans.individual.screening.televerification",
+        pageUID: "arohan.dashboard.loans.individual.screening.InternalPd",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
             "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository"],
