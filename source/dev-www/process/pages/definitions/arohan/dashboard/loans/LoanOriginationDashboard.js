@@ -13,7 +13,9 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
            // "Page/Engine/arohan.dashboard.lead.ReadyForScreeningQueue",
             "Page/Engine/arohan.dashboard.loans.individual.screening.ScreeningQueue",
             "Page/Engine/arohan.dashboard.loans.individual.screening.ScreeningReviewQueue",
-            "Page/Engine/arohan.dashboard.loans.individual.screening.ApplicationQueue",  
+            "Page/Engine/arohan.dashboard.loans.individual.screening.ApplicationQueue",
+            "Page/Engine/arohan.dashboard.loans.individual.screening.InternalPdQueue",  
+            "Page/Engine/arohan.dashboard.loans.individual.screening.ExternalPersonalDiscussionQueue",  
             "Page/Engine/arohan.dashboard.loans.individual.screening.CmRecommendationReviewQueue",
             "Page/Engine/arohan.dashboard.loans.individual.screening.AcmRecommendationReviewQueue",
             "Page/Engine/arohan.dashboard.loans.individual.screening.AcmApprovalReviewQueue",
@@ -97,6 +99,24 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
                 acmMenu.data = Number(response.headers['x-total-count']);
             }, function() {
                 acmMenu.data = '-';
+            });
+        }
+
+         var ipd = $scope.dashboardDefinition.$menuMap["Page/Engine/Page/Engine/arohan.dashboard.loans.individual.screening.InternalPdQueue"];
+        if (ipd) {
+            IndividualLoan.search({
+                'stage': 'InternalPdQueue',
+                'enterprisePincode': '',
+                'applicantName': '',
+                'area': '',
+                'villageName': '',
+                'customerName': '',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response, headerGetter) {
+                ipd.data = Number(response.headers['x-total-count']);
+            }, function() {
+                ipd.data = '-';
             });
         }
         var ncmMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard.loans.individual.screening.NcmApprovalReviewQueue"];

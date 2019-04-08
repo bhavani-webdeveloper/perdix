@@ -1,28 +1,17 @@
 define({
-	pageUID: "arohan.dashboard.loans.individual.screening.ApplicationQueue",
-    pageType: "Engine",
-    dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
-    $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
-    	var branch = SessionStore.getBranch();
-		var centres = SessionStore.getCentres();
-		var centreId=[];
-		if (centres && centres.length) {
-		    for (var i = 0; i < centres.length; i++) {
-			    centreId.push(centres[i].centreId);
-		    }
-	    }
+	pageUID: "arohan.dashboard.loans.individual.screening.ExternalPersonalDiscussionQueue",
+	pageType: "Engine",
+	dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
+	$pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
+		
 		return {
 			"type": "search-list",
-			"title": "APPLICATION_QUEUE",
+			"title": "EXTERNAL_PERSONAL_DISCUSSION_QUEUE",
 			"subTitle": "",
-			initialize: function(model, form, formCtrl) {
-				//model.branch = branch;
-				$log.info("search-list sample got initialized");
-				// var centres = SessionStore.getCentres();
-				// if (_.isArray(centres) && centres.length > 0){
-				// 	model.centre = centres[0].centreName;
-				// 	model.centreCode = centres[0].centreCode;
-				// }
+			initialize: function(model, form, formCtrl) {	
+				model.branch = SessionStore.getCurrentBranch().branchId;
+				//model.branch = SessionStore.getCurrentBranch().branchName;	
+				$log.info("search-list sample got initialized"); 
 			},
 			definition: {
 				title: "SEARCH_LOAN",
@@ -34,7 +23,6 @@ define({
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
-						
 						"applicantName": {
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
@@ -46,22 +34,24 @@ define({
 						'branch': {
 	                    	'title': "BRANCH",
 	                    	"type": ["string", "null"],
-	                    	"enumCode": "branch",
 							"x-schema-form": {
-								"type": "userbranch",
+								"type":"userbranch",
 								"screenFilter": true
 							}
 	                    },
 						"centre": {
-							"title": "CENTRE",
+                            "title": "SPOKE",
+                            "required":false,
 							"type": ["integer", "null"],
 							"x-schema-form": {
 								"type": "select",
 								"enumCode": "centre",
-								"parentEnumCode": "branch",
+								"parentEnumCode": "branch_id",
+								"parentValueExpr": "model.branch",
 								"screenFilter": true
 							}
 						},
+
 	                    "customerId": {
 	                        "title": "CUSTOMER_ID",
 	                        "type": "string"
@@ -69,17 +59,16 @@ define({
 	                    "area": {
 	                        "title": "AREA",
 	                        "type": "string"
-						},
-						"cityTownVillage": {
+	                    },
+	                    "cityTownVillage": {
 	                        "title": "CITY_TOWN_VILLAGE",
 	                        "type": "string"
-						},
-						"pincode": {
+	                    },
+	                     "pincode": {
 	                        "title": "PIN_CODE",
 	                        "type": "string"
 	                    },
-	                    
-						"status":
+	                     "status": 
 	                    {
                             "type":"string",
                             "title":"STATUS",
@@ -87,7 +76,10 @@ define({
                             "x-schema-form": {
                             	"type": "select"
                             }
-                        }
+                        },
+                        
+						
+
 					},
 					"required": []
 				},
@@ -95,22 +87,30 @@ define({
 					return formHelper;
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
+					var branch = SessionStore.getCurrentBranch();
+		            var centres = SessionStore.getCentres();
+		            var centreId=[];
+				    if (centres && centres.length) {
+					    for (var i = 0; i < centres.length; i++) {
+						    centreId.push(centres[i].centreId);
+					    }
+				    }
 					if (_.hasIn(searchOptions, 'centreCode')){
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-	                    'stage': 'Application',
-	                    'centreCode':searchOptions.centreCode,
-						'branchName':branch,
-						'enterprisePincode':searchOptions.pincode,
+						//'stage': 'ExternalPersonalDiscussion',
+						'stage': 'Televerification',
+						'branchId':searchOptions.branch,
+	                    'centreCode':  searchOptions.centre,
+	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'status':searchOptions.status,
-	                    'villageName':searchOptions.villageName,
+	                    'villageName':searchOptions.villageName,	                    
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
-						'per_page': pageOpts.itemsPerPage,
-						
+	                    'per_page': pageOpts.itemsPerPage,
 	                }).$promise;
 				},
 				paginationOptions: {
@@ -134,13 +134,13 @@ define({
 					},
 					getListItem: function(item) {
 						return [
+							item.screeningDate,
 							item.applicantName,
 							item.customerName,
 							item.area,
 							item.villageName,
 							item.enterprisePincode,
-							item.branchName,
-							item.centreCode
+							item.branch
 						]
 					},
 					getTableConfig: function() {
@@ -152,26 +152,19 @@ define({
 					},
 					getColumns: function() {
 						return [{
-                            title: 'ID',
-                            data: 'loanId'
-						},
-						{
-							title: 'HUB_NAME',
-							data: 'branchName'
-						},
-						{
+							title: 'ID',
+							data: 'id'
+						},{
 							title: 'SCREENING_DATE',
 							data: 'screeningDate'
-						},
-						{
+						}, {
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
 						},
-						{
-							title: 'BUSINESS_NAME',
-							data: 'customerName'
-						},
-						
+						// {
+						// 	title: 'BUSINESS_NAME',
+						// 	data: 'customerName'
+						// },
 						{
 							title: 'Loan Amount',
 							data: 'loanAmount'
@@ -184,20 +177,20 @@ define({
 						}, {
 							title: 'PIN_CODE',
 							data: 'enterprisePincode'
-						}
-					]
+						}]
 					},
 					getActions: function() {
 						return [{
-							name: "APPLICATION",
+							//name: "EXTERNAL_PERSONAL_DISCUSSION_QUEUE",
+							name:"TELEVERIFICATION_QUEUE",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('arohan.dashboard.loans.individual.screening.Application', {
+								entityManager.setModel('arohan.dashboard.loans.individual.screening.ExternalPersonalDiscussionReview', {
 									_request: item
 								});
 								$state.go("Page.Bundle", {
-									pageName: "arohan.dashboard.loans.individual.screening.Application",
+									pageName: "arohan.dashboard.loans.individual.screening.ExternalPersonalDiscussionReview",
 									pageId: item.loanId
 								});
 							},
@@ -210,5 +203,5 @@ define({
 				}
 			}
 		};
-    }
-})
+	}
+});

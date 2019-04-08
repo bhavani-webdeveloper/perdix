@@ -74,14 +74,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                         maximum: 1,
                         order: 100
                     }, 
-                    // {
-                    //     pageName: 'arohan.dashboard.loans.individual.screening.Review',
-                    //     title: 'REVIEW',
-                    //     pageClass: 'loan-review',
-                    //     minimum: 1,
-                    //     maximum: 1,
-                    //     order: 80
-                    // }, 
+                    {
+                        pageName: 'arohan.dashboard.loans.individual.screening.Review',
+                        title: 'REVIEW',
+                        pageClass: 'loan-review',
+                        minimum: 1,
+                        maximum: 1,
+                        order: 80
+                    }, 
                     // {
                     //     pageName: 'loans.individual.misc.BalanceSheetHistory',
                     //     title: 'BALANCE_SHEET_HISTORY',
@@ -277,12 +277,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 //     }
                                 // });
 
-                                // $this.bundlePages.push({
-                                //     pageClass: 'loan-review',
-                                //     model: {
-                                //         loanAccount: loanAccount
-                                //     }
-                                // });
+                                $this.bundlePages.push({
+                                    pageClass: 'loan-review',
+                                    model: {
+                                        loanAccount: loanAccount
+                                    }
+                                });
 
                                 // $this.bundlePages.push({
                                 //     pageClass: 'balance-sheet-history',

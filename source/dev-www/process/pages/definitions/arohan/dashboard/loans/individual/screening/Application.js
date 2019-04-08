@@ -274,13 +274,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                             //             loanProcess: loanProcess
                             //         }
                             //     });
-
-                               $this.bundlePages.push({
-                                        pageClass: 'loan-review',
-                                        model: {
-                                            loanAccount: loanProcess.loanAccount,
-                                        }
-                                    });
+                            $this.bundlePages.push({
+                                pageClass: 'loan-review',
+                                model: {
+                                    loanAccount: loanProcess.loanAccount,
+                                }
+                            });
 
                                 deferred.resolve();
                                     PageHelper.hideLoader();
