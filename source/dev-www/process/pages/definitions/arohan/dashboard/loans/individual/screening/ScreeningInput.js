@@ -88,8 +88,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageName: 'arohan.dashboard.loans.individual.screening.Review',
                             title: 'REVIEW',
                             pageClass: 'loan-review',
-                            minimum: 0,
-                            maximum: 0,
+                            minimum: 1,
+                            maximum: 1,
                             order:90
                             
                         }
@@ -238,6 +238,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                $this.bundlePages.push({
                                         pageClass: 'loan-review',
                                         model: {
+                                            loanProcess: loanProcess,
                                             loanAccount: loanProcess.loanAccount,
                                         }
                                     });
@@ -343,6 +344,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 $this.bundlePages.push({
                                     pageClass: 'loan-review',
                                     model: {
+                                        loanProcess: loanProcess,
                                         loanAccount: loanProcess.loanAccount,
                                     }
                                 });
