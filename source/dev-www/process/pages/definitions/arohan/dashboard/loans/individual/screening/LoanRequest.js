@@ -674,6 +674,9 @@ define([],function(){
                                 "CBCheck",               
                             ],
                             "overrides": {
+                                "DeductionsFromLoan.estimatedEmi":{
+                                    "readonly": false
+                                },
                                 "PreliminaryInformation": {
                                     "orderNo": 1,
                                     "readonly": false

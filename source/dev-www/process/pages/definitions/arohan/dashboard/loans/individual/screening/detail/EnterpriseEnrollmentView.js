@@ -266,10 +266,10 @@ define({
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [
-                        //     {
-                        //     "key": "customer.id",
-                        //     "title": "Entity ID"
-                        // }, 
+                            {
+                            "key": "customer.id",
+                            "title": "Entity ID"
+                        }, 
                         {
                             "key": "customer.firstName",
                             "title": "Entity Name"
@@ -287,10 +287,10 @@ define({
                         //     "key": "customer.enterprise.businessSubsector",
                         //     "title": "Business Subsector"
                         // }, 
-                        // {
-                        //     "key": "customer.urnNo",
-                        //     "title": "URN"
-                        // }, 
+                        {
+                            "key": "customer.urnNo",
+                            "title": "URN"
+                        }, 
                         {
                             "key": "customer.enterprise.businessConstitution",
                             "title": "Constitution"
