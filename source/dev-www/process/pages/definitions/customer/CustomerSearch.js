@@ -2,6 +2,14 @@ irf.pageCollection.factory(irf.page("CustomerSearch"),
 ["$log", "formHelper","filterFilter", "Enrollment","Queries","$q","$state", "SessionStore", "Utils", "PagesDefinition", "irfNavigator",
 function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionStore, Utils, PagesDefinition, irfNavigator){
 	var branch = SessionStore.getBranch();
+	var prepareConditionalConfig = function(config,model){
+		model.additional = model.additional || {}
+		model.additional.config = {}
+		for (var i=0;i< config.length;i++){
+			var key = config[i].toLowerCase().replace('-','_').replace('.','_');
+			model.additional.config[key] = true;
+		}
+	}
 	return {
 		"type": "search-list",
 		"title": "CUSTOMER_SEARCH",
@@ -26,6 +34,9 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 			}
 			PagesDefinition.getPageConfig('Page/Engine/CustomerSearch').then(function(data){
 				model.showBankFilter = data.showBankFilter ? data.showBankFilter : false;
+				if (typeof data.conditionConfig != 'undefined'){
+					prepareConditionalConfig(data.conditionConfig,model);
+				}
 				$log.info("search-list sample got initialized");
 			});
 		     model.dedupeEnabled = SessionStore.getGlobalSetting("DedupeEnabled");
@@ -56,11 +67,15 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 	                }, {
 	                    key: "branch",
 	                    "type":"userbranch",
-	                    condition: "model.siteCode =='kinara'"
+	                    condition: "model.siteCode =='kinara' || model.siteCode=='IREPDhan' || model.siteCode=='shramsarathi'"
 	                },{
 						key: "branch",
-						"type":"select",
-	                    condition: "(model.siteCode !='kinara'&& model.siteCode !='sambandh' && model.siteCode !='IREPDhan')"
+	                    "type":"userbranch",
+	                    condition: "model.additional.config.access_hierarchy && model.siteCode !='kinara'"
+					},{
+						key: "branch",
+						"type":"select", 
+	                    condition: "(model.siteCode !='kinara'&& model.siteCode !='sambandh' && model.siteCode !='IREPDhan' && model.siteCode != 'shramsarathi')"
 	                }, {
 	                    key: "branch",
 	                    enumCode: "userbranches",
@@ -148,7 +163,7 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 					 	branchName = branch.name;
 					 }
 				}
-                if(siteCode=='kinara'){
+                if(siteCode=='kinara' || siteCode =='IREPDhan' || siteCode == 'shramsarathi'){
 					var promise = Enrollment.search({
 						'bankId': searchOptions.bankId,
 						'branchId': searchOptions.branch,
