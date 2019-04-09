@@ -135,7 +135,6 @@ define({
 			schema: function() {
 				return Enrollment.getSchema().$promise;
 			},
-<<<<<<< Updated upstream
 			// eventListeners: {
 			// 	"Individual_Enrollment":function(bundleModel,model,params){
 			// 		console.log("Individual_Enrollment",params);
@@ -148,20 +147,6 @@ define({
 			// 		debugger;
 			// 	}
 			// },
-=======
-			eventListeners: {
-				"Individual_Enrollment":function(bundleModel,model,params){
-					console.log("Individual_Enrollment",params);
-					model.liability = params.liabilities.length;
-					//debugger;
-				},
-				"Enrollment2":function(bundleModel,model,params){
-					console.log("Enrollment2",params);
-					model.liability=params.enrolmentProcess.customer.liabilities.length;
-					debugger;
-				}
-			},
->>>>>>> Stashed changes
 			actions: {}
 		}
 	}
