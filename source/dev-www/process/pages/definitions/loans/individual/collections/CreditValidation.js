@@ -1,7 +1,7 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidation"), ["$log", "$q", 'Pages_ManagementHelper', 'LoanCollection', 'LoanAccount', 'PageHelper', 'formHelper', 'irfProgressMessage', "Locking",
-    'SessionStore', "$state", "$stateParams", "Masters", "authService", "Utils", "Queries","IndividualLoan","irfNavigator",
+    'SessionStore', "$state", "$stateParams", "Masters", "authService", "Utils", "Queries","IndividualLoan","irfNavigator", "PagesDefinition",
     function ($log, $q, ManagementHelper, LoanCollection, LoanAccount, PageHelper, formHelper, irfProgressMessage, Locking,
-        SessionStore, $state, $stateParams, Masters, authService, Utils, Queries,IndividualLoan,irfNavigator) {
+        SessionStore, $state, $stateParams, Masters, authService, Utils, Queries,IndividualLoan,irfNavigator, PagesDefinition) {
 
         return {
             "type": "schema-form",
@@ -19,6 +19,16 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                             Utils.alert(err.data.error).then(irfNavigator.goBack);
                         });
                     }
+                });
+
+                model.pageConfig = {
+                    repaymentDateIsReadonly: false
+                };
+                
+                PagesDefinition.getPageConfig("Page/Engine/loans.LoanRepay")
+                .then(function(data){  
+                    _.defaults(data, model.pageConfig);
+                    model.pageConfig = data;
                 });
 
                 if (!model._credit) {
@@ -170,6 +180,14 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.CreditValidati
                     },
                     {
                         key: "_credit.repaymentDate",
+                        condition: "model.pageConfig.repaymentDateIsReadonly == true",
+                        title: "REPAYMENT_DATE",
+                        type: "date",
+                        readonly: true
+                    },
+                    {
+                        key: "_credit.repaymentDate",
+                        condition: "model.pageConfig.repaymentDateIsReadonly == false",
                         title: "REPAYMENT_DATE",
                         type: "date"
                     },
