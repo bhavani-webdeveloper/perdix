@@ -312,6 +312,7 @@ define({
                         "title": "KYC",
                         "readonly": true,
                         "orderNo":1,
+                        "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
                         "items": [{
                             "type": "grid",
                             "orientation": "horizontal",
@@ -374,13 +375,16 @@ define({
                                     "key": "customer.mobilePhone",
                                     "title": "MOBILE_NO",
                                     "inputmode": "number",
-                                    "numberType": "tel"
+                                    "numberType": "tel",
+                                    "condition":"model.currentStage !='CustomerSignedDocumentUpload'",                      
                                 }, {
                                     "key": "customer.email",
-                                    "title": "EMAIL"
+                                    "title": "EMAIL",
+                                    "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
                                 }, {  
                                     "type": "section",                                
                                     "htmlClass": "row",
+                                    "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
                                     "items": [
                                         {
                                             "type": "section",
@@ -425,7 +429,8 @@ define({
                                     "condition": "model.customer.maritalStatus && model.customer.maritalStatus.toUpperCase() == 'MARRIED'"
                                 }, {
                                     "key": "customer.spouseDateOfBirth",
-                                    "condition": "model.customer.maritalStatus && model.customer.maritalStatus.toUpperCase() == 'MARRIED' "
+                                    "condition": "model.customer.maritalStatus && model.customer.maritalStatus.toUpperCase() == 'MARRIED' && model.currentStage !='CustomerSignedDocumentUpload'",
+                                    //"condition":"model.currentStage !='CustomerSignedDocumentUpload'",
                                 }]
                             }, {
                                 "type": "grid",
@@ -456,9 +461,11 @@ define({
                                 "items": [{
                                    
                                     "key": "customer.mobilePhone",
+                                    "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
                                 }, {
                                     
                                     "key": "customer.landLineNo",
+                                    "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
     
                                 }, {
                                     
@@ -471,6 +478,7 @@ define({
                                 "orientation": "vertical",
                                 "key":"customer.residentialAddressFieldSet",
                                 "title":"CUSTOMER_RESIDENCIAL_ADDRESS",
+                                "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
                                 "items": [
                                     {
                                     "key": "customer.careOf"
@@ -515,17 +523,21 @@ define({
                                 "items": [{
                                    
                                     "key": "customer.verifications[].relationship",
+                                    "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
                                 }, {
                                     
                                     "key": "customer.verifications[].businessName",
-    
+                                    "title":"Occupation"
                                 }, {
                                     
                                     "key": "customer.verifications[].referenceFirstName",
+                                    "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
                                 },{
-                                    "key": "customer.verifications[].mobileNo"
+                                    "key": "customer.verifications[].mobileNo",
+                                    "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
                                 },{
-                                    "key": "customer.verifications[].address"
+                                    "key": "customer.verifications[].address",
+                                    "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
                                 },{
                                     "key":"",
                                     "title":"EMAIL_ID"
@@ -571,6 +583,7 @@ define({
                         "colClass": "col-sm-12",
                         "overrideType": "default-view",
                         "title": "HOUSE_VERIFICATION",
+                        "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
                         "items": [{
                             "type": "grid",
                             "orientation": "horizontal",
@@ -608,7 +621,7 @@ define({
                         "colClass": "col-sm-12",
                         "overrideType": "default-view",
                         "title": "Bank Account Detail",
-                        "condition": "model.customer.customerBankAccounts.length != 0",
+                        "condition": "model.customer.customerBankAccounts.length != 0 && model.currentStage !='CustomerSignedDocumentUpload'" ,
                         "items": [{
                             "type": "grid",
                             "orientation": "horizontal",
@@ -765,14 +778,15 @@ define({
                         "colClass": "col-sm-12",
                         "overrideType": "default-view",
                         "title": "LIABILITIES",
-                        //"condition": "model.customer.liabilities.length !=0",
+                        "condition": "model.currentStage !='CustomerSignedDocumentUpload'",
                         "items": [{
                             "type": "grid",
                             "orientation": "horizontal",
                             "items": [{
                                 "type": "grid",
                                 "orientation": "vertical",
-                                "items": [{
+                                "items": [
+                                {
                                     "key": "UIUDF.liability_fields.active_accounts",
                                     "title": "No of Active Loans",
                                     "type": "number"
@@ -787,7 +801,8 @@ define({
                                 }]
     
                             }]
-                        }, {
+                        }, 
+                        {
                             "type": "expandablesection",
                             "items": [{
                                 "type": "tableview",
@@ -883,7 +898,8 @@ define({
                         "colClass": "col-sm-12",
                         "overrideType": "default-view",
                         "title": "Household Assets",
-                        "condition": "model.UIUDF.household_fields.total_Assets !=0",
+                        //"condition": "",
+                        "condition": "model.UIUDF.household_fields.total_Assets !=0 && model.currentStage !='CustomerSignedDocumentUpload'",
                         "items": [{
                             "type": "grid",
                             "orientation": "horizontal",
@@ -1018,7 +1034,7 @@ define({
                         "colClass": "col-sm-12",
                         "readonly": true,
                         "title": "Household P&L",
-                        "condition": "model.bundlePageObj.pageClass !='guarantor'",
+                        "condition": "model.bundlePageObj.pageClass !='guarantor' && model.currentStage !='CustomerSignedDocumentUpload'",
                         "overrideType": "default-view",
                         "items": [{
                             "type": "grid",

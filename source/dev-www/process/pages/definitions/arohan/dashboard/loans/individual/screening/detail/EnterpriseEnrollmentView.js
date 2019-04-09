@@ -268,25 +268,29 @@ define({
                         "items": [
                             {
                             "key": "customer.id",
-                            "title": "Entity ID"
+                            "title": "Entity ID",
                         }, 
                         {
                             "key": "customer.firstName",
                             "title": "Entity Name"
                         },
-                        //  {
-                        //     "key": "customer.enterprise.businessType",
-                        //     "title": "Business Type"
-                        // }, {
-                        //     "key": "customer.enterprise.businessActivity",
-                        //     "title": "Business Activity"
-                        // }, {
-                        //     "key": "customer.enterprise.businessSector",
-                        //     "title": "Business Sector"
-                        // }, {
-                        //     "key": "customer.enterprise.businessSubsector",
-                        //     "title": "Business Subsector"
-                        // }, 
+                         {
+                            "key": "customer.enterprise.businessType",
+                            "title": "Business Type",
+                            "condition":"model.currentStage ='CustomerSignedDocumentUpload'"
+                        }, {
+                            "key": "customer.enterprise.businessActivity",
+                            "title": "Business Activity",
+                            "condition":"model.currentStage ='CustomerSignedDocumentUpload'"
+                        }, {
+                            "key": "customer.enterprise.businessSector",
+                            "title": "Business Sector",
+                            "condition":"model.currentStage ='CustomerSignedDocumentUpload'"
+                        }, {
+                            "key": "customer.enterprise.businessSubsector",
+                            "title": "Business Subsector",
+                            "condition":"model.currentStage ='CustomerSignedDocumentUpload'"
+                        }, 
                         {
                             "key": "customer.urnNo",
                             "title": "URN"
@@ -297,19 +301,23 @@ define({
                         },
                         {
                             "key": "customer.enterprise.ownership",
-                            "title": "Premises Ownership"
+                            "title": "Premises Ownership",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                         },
                          {
                             "key": "customer.enterprise.businessInPresentAreaSince",
-                            "title": "Operating Since"
+                            "title": "Operating Since",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                         }, {
                             "key": "customer.enterprise.anyPartnerOfPresentBusiness",
-                            "title": "Has anyone else been a partner of your present business ?"
+                            "title": "Has anyone else been a partner of your present business ?",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                         }
                     ]
                     }, {
                         "type": "grid",
                         "orientation": "vertical",
+                        "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
                         "items": [
                             {
                                 "type": "tableview",
@@ -365,6 +373,7 @@ define({
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
                 "title": "Contact Information",
+                "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
                 "readonly": true,
                 "items": [{
                     "type": "grid",
@@ -486,6 +495,7 @@ define({
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
                 "title": "BANK_ACCOUNT_DETAILS",
+                "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
                 //"condition": "model.enterpriseRelationship",
                 "items": [{
                     "type": "grid",
@@ -524,6 +534,7 @@ define({
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
                 "title": "BUSINESS_FINANCE",
+                "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
                 //"condition": "model.enterpriseRelationship",
                 "items": [{
                     "type": "grid",
@@ -607,7 +618,7 @@ define({
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
                 "title": "BUSINESS_LIABILITIES",
-                "condition": "model.customer.liabilities.length !=0",
+                "condition": "model.customer.liabilities.length !=0 && model.currentStage !='CustomerSignedDocumentUpload'",
                 "items": [{
                     "type": "grid",
                     "orientation": "horizontal",
@@ -820,7 +831,7 @@ define({
                 "colClass": "col-sm-12",
                 "readonly": true,
                 "title": "Loan Customer Relationship",
-                "condition": "model.loanCustomerRel.length!=0",
+                "condition": "model.loanCustomerRel.length!=0 && model.currentStage !='CustomerSignedDocumentUpload'",
                 "items": [{
                     "type": "section",
                     "html": '<div ng-repeat="data in model.loanCustomerRel"><p >{{data.relation}}, <u>{{data.first_name}}</u> is the <u>{{data.relationship_with_applicant}}</u> of Applicant <u ng-bind-html="model.loanCustomerRelation.applicant.first_name"></u></p></div>'

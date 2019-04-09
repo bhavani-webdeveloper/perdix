@@ -860,70 +860,88 @@ irf.pageCollection.factory(irf.page("arohan.dashboard.loans.individual.screening
                         }]
                     },// all existing docs ends
                     //remaining docs 
-                    {
-                        "type": "fieldset",
-                        "title": "Additional Documents",
-                        //"condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
-                        //"readonly": true,
-                        "items": [{
-                            "type": "array",
-                            "notitle": true,
-                            "view": "fixed",
-                            //"key": "remainingDocsArray",
-                            //"remove": null,
-                                   // "type": "array",
-                                   // "htmlClass": "row",
-                                   // "key": "loanAccount.loanDocuments",
-                                    "startEmpty": true,
-                                    "title": "DOCUMENT_UPLOAD",
-                                    //"condition": "model.remainingDocsArray[arrayIndex].isHidden === false",
-                                    "items": [
-                                        {
-                                            "type": "section",
-                                            //"htmlClass": "col-sm-9",
-                                            "items": [{
-                                               // "key": "loanAccount.loanDocuments[].document",
-                                                "title": "DOCUMENT_NAME",
-                                                "type": "string"
-                                                //"key": "remainingDocsArray[].$title",
-                                                //"notitle": true,
-                                                //"titleExpr": "model.remainingDocsArray[arrayIndex].$title",
-                                                //"type": "html",
-                                                //"fieldHtmlClass": "text-bold",
-                                                //"condition": "!model.remainingDocsArray[arrayIndex].$downloadRequired",
-                                               // "onClick": function (model, form, schemaForm, event) {
+                    // {
+                    //     "type": "fieldset",
+                    //     "title": "Additional Documents",
+                    //     "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
+                    //     "readonly": true,
+                    //     "items": [{
+                    //         "type": "array",
+                    //         "notitle": true,
+                    //         "view": "fixed",
+                    //         "key": "remainingDocsArray",
+                    //         "remove": null,
+                    //         "items": [
+                    //             {
+                    //                 "type": "section",
+                    //                 "htmlClass": "row",
+                    //                 "condition": "model.remainingDocsArray[arrayIndex].isHidden === false",
+                    //                 "items": [
+                    //                     {
+                    //                         "type": "section",
+                    //                         "htmlClass": "col-sm-9",
+                    //                         "items": [{
+                    //                             "key": "remainingDocsArray[].$title",
+                    //                             "notitle": true,
+                    //                             "titleExpr": "model.remainingDocsArray[arrayIndex].$title",
+                    //                             "type": "html",
+                    //                             "fieldHtmlClass": "text-bold",
+                    //                             "condition": "!model.remainingDocsArray[arrayIndex].$downloadRequired",
+                    //                             "onClick": function (model, form, schemaForm, event) {
                                                    
-                                                //}
-                                            }]
-                                        },
-                                        {
-                                            "type": "section",
-                                            //"htmlClass": "col-sm-3",
-                                            "items": [{
-                                                // title: "Upload",
-                                                // key: "remainingDocsArray[].documentId",
-                                                // type: "file",
-                                                // fileType: "application/pdf",
-                                                // category: "Loan",
-                                                // subCategory: "DOC1",
-                                                // "notitle": true,
-                                                // using: "scanner"
-                                                "title": "UPLOAD_DOCUMENT",
-                                                "key": "loanAccount.loanDocuments[].documentId",
-                                                "type": "file",
-                                                "fileType": "application/pdf",
-                                                "category": "Loan",
-                                                "subCategory": "DOC1",
-                                                "using": "scanner"
-                                            }]
-                                        }
-                                    ]
-                                }] // END of array items
-                        
-                    }
+                    //                             }
+                    //                         }]
+                    //                     },
+                    //                     {
+                    //                         "type": "section",
+                    //                         "htmlClass": "col-sm-3",
+                    //                         "items": [{
+                    //                             title: "Upload",
+                    //                             key: "remainingDocsArray[].documentId",
+                    //                             type: "file",
+                    //                             fileType: "application/pdf",
+                    //                             category: "Loan",
+                    //                             subCategory: "DOC1",
+                    //                             "notitle": true,
+                    //                             using: "scanner"
+                    //                         }]
+                    //                     }
+                    //                 ]
+                    //             }] // END of array items
+                    //     }]
+                    // }
                 ] 
             },
-            
+            {
+                "type": "box",
+                "title": "ADDITIONAL_UPLOAD",
+                "items": [{
+
+                    "type": "array",
+                    //"key": "loanAccount.loanDocuments",
+                    "view": "fixed",
+                    "startEmpty": true,
+                    "title": "DOCUMENT_UPLOAD",
+                    "items":[
+                        {
+                            //"key": "loanAccount.loanDocuments[].document",
+                            "title": "DOCUMENT_NAME",
+                            "type": "string"
+                        },
+                        {
+                            "title": "UPLOAD_DOCUMENT",
+                            "key": "loanAccount.loanDocuments[].documentId",
+                            "type": "file",
+                            "fileType": "application/pdf",
+                            "category": "Loan",
+                            "subCategory": "DOC1",
+                            "using": "scanner"
+                        }
+                      ]
+                    },
+                
+                ]
+            },
 
             {
                 "type": "box",
@@ -1317,7 +1335,7 @@ irf.pageCollection.factory(irf.page("arohan.dashboard.loans.individual.screening
                         if(model.siteCode == 'shramsarathi'){
                             irfNavigator.go({
                                 state: "Page.Bundle",
-                                pageName: "shramsarathi.dashboard.loans.individual.screening.LoanView",
+                                pageName: "arohan.dashboard.loans.individual.screening.LoanView",
                                 pageId: model.loanAccount.id,
                                 pageData: null},
                                 {

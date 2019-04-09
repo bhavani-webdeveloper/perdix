@@ -375,7 +375,8 @@ define({
                         "orientation": "vertical",
                         "items": [{
                             "key": "loanAccount.transactionType",
-                            "title": "TRANSACTION_TYPE"
+                            "title": "TRANSACTION_TYPE",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                         },
                         {
                             "key": "",
@@ -384,17 +385,18 @@ define({
                         {
                             "key": "loanAccount.linkedAccountNumber",
                             "title": "LINKED_ACCOUNT_NUMBER",
-                            "condition": "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
+                            "condition": "model.loanAccount.transactionType.toLowerCase() == 'renewal' && model.currentStage !='CustomerSignedDocumentUpload'"
                         },
                         {
                             "key": "loanAccount.baseLoanAccount",
                             "title": "BASE_LOAN_ACCOUNT",
-                            "condition": "model.loanAccount.baseLoanAccount"
+                            "condition": "model.loanAccount.baseLoanAccount && model.currentStage !='CustomerSignedDocumentUpload'"
 
                         },
                         {
                             "key": "loanAccount.loanPurpose1",
-                            "title": "Loan Purpose"
+                            "title": "Loan Purpose",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                         }, 
                         // {
                         //     "key": "loanAccount.loanPurpose2",
@@ -407,11 +409,13 @@ define({
                         // }, 
                         {
                             "key": "loanAccount.emiPaymentDateRequested",
-                            "title": "Requested EMI Payment Date"
+                            "title": "Requested EMI Payment Date",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                         }, {
                             "key": "loanAccount.expectedPortfolioInsurancePremium",
                             "title": "Expected Portfolio Insurance Premium",
-                            "type": "amount"
+                            "type": "amount",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                         }]
                     }, {
                         "type": "grid",
@@ -419,22 +423,27 @@ define({
                         "items": [{
                             "key": "loanAccount.frequencyRequested",
                             "title": "Requested Frequency",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                         }, {
                             "key": "loanAccount.tenureRequested",
-                            "title": "Requested Tenure"/*,
+                            "title": "Requested Tenure",/*,
                             "type": "number"*/
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                         }, {
                             "key": "loanAccount.expectedInterestRate",
                             "title": "Expected Interest Rate",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                         }, {
                             "key": "loanAccount.estimatedEmi",
-                            "title": "EXPECTED_AROHAN_EMI",
+                            "title": "ESTIMATED_AROHAN_EMI",
                             "type": "amount",
-                            "readonly":false
+                            "readonly":false,
+                           
                         }, {
                             "key": "loanAccount.emiRequested",
                             "title": "Requested EMI",
-                            "type": "amount"
+                            "type": "amount",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                         }]
                     }]
                 }]
@@ -497,11 +506,13 @@ define({
                             "title": "Expected Processing Fee(in%)",
                             "type": "number",
                             "readonly": false,
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                         }, {
                             "key": "loanAccount.expectedCommercialCibilCharge",
                             "title": "Expected CIBIL Charges",
                             "type": "amount",
                             "readonly": false,
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                         }]
                     }, {
                         "type": "grid",
@@ -531,21 +542,25 @@ define({
                         {
                             "key": "References.verifications.relationship",
                             "title": "Reference Type",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                             
                         }, 
                         {
                             "key": "References.verifications.businessName",
                             "title": "Business Name",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                           
                         },
                         {
                             "key":   "References.verifications.referenceFirstName",
                             "title": "Contact Person Name",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                             
                         },
                         {
                             "key": "References.verifications.mobileNo",
                             "title": "Contact No",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                             
                         },
                         {
@@ -565,7 +580,7 @@ define({
                 "title": "Asset Purchase Details",
                 /*
                                     "condition":"model.loanAccount.loanPurpose1==model.asset_Details.Assetpurchase"*/
-                "condition": "model.loanAccount.collateral.length!=0",
+                "condition": "model.loanAccount.collateral.length!=0 && model.currentStage !='CustomerSignedDocumentUpload'",
                 "items": [
                     {
                         "type": "tableview",
@@ -746,30 +761,44 @@ define({
                         "items": [{
                             "key": "",
                             "title": "START_DATE",
-                            "type": "date"
+                            "type": "date",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                         }, {
                             "key": "",
                             "title": "FREQUENCY",
-                            "type": "select"
+                            "type": "select",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                         },{
                             "key": "",
                             "title": "END_DATE",
-                            "type": "date"
+                            "type": "date",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                         }, 
                             {
                             "key": "",
                             "title": "Current Exposure",
-                            "type": "amount"
+                            "type": "amount",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                         },
                         {
                             "key": "",
                             "title": "LOAN_PRODUCT",
-                            "type": "select"
+                            "type": "select",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                        },
+                        {
+                            "key": "",
+                            "title": "LOAN_PRODUCT",
+                            "type": "select",
+                            "readonly":true,
+                            
+                           
                         },
                         {
                             "key": "loanAccount.loanAmount",
                             "title": "Loan Amount Recommended",
                             "type": "amount",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
                             onChange:function(value,form,model){
                                 computeEMI(model);
                             }
@@ -777,18 +806,34 @@ define({
                         {
                             "key": "loanAccount.tenure",
                             "title": "Duration(months)"/*,
-                            "type": "number"*/
-                            ,
+                            "type": "number"*/,
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
                             onChange:function(value,form,model){
                                 computeEMI(model);
                             }
-                        }, {
+                        }, 
+                        {
+                            "key": "loanAccount.tenure",
+                            "title": "Duration(months)"/*,
+                            "type": "number"*/,
+                            "readonly":true,
+                            onChange:function(value,form,model){
+                                computeEMI(model);
+                            }
+                        }, 
+                        {
                             "key": "loanAccount.interestRate",
                             "title": "Interest Rate",
                             "type": "number",
                             onChange:function(value,form,model){
                                 computeEMI(model);
                             },
+                           
+                        },
+                        {
+                            "key": "loanAccount.sanctionDate",
+                            "title": "Sanction Date",
+                            "type": "date",
                            
                         },
                     ]
@@ -851,6 +896,150 @@ define({
                     }]
                 }]
             }, 
+
+            {
+                "type": "box",
+                "readonly": false,
+                "colClass": "col-sm-12",
+                "overrideType": "default-view",
+                "title": "PD_FEEDBACK",
+                "items": [{
+                    "type": "grid",
+                    "orientation": "horizontal",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [
+                        {
+                            "key": "",
+                            "title": "Promotor Background",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                            
+                        }, 
+                        {
+                            "key": "",
+                            "title": "Strength",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                          
+                        },
+                        {
+                            "key":   "",
+                            "title": "Weekness",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                            
+                        },
+                        {
+                            "key": "",
+                            "title": "Recommendation",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                            
+                        },
+                        {
+                            "key":  "",
+                            "title": "Remark1",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                        },
+                        {
+                            "key":  "",
+                            "title": "Remark2",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                        },
+                        {
+                            "key":  "",
+                            "title": "Remark3",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                        }
+
+                    ]
+                    },]
+                }]
+            }, 
+            {
+                "type": "box",
+                "readonly": false,
+                "colClass": "col-sm-12",
+                "overrideType": "default-view",
+                "title": "CPV_FEEDBACK",
+                "items": [{
+                    "type": "grid",
+                    "orientation": "horizontal",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [
+                        {
+                            "key": "",
+                            "title": "Recommendation",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                            
+                        }, 
+                        {
+                            "key": "",
+                            "title": "Case Status",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                          
+                        },
+                        {
+                            "key":   "",
+                            "title": "Verifier Remark",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                            
+                        },
+                        {
+                            "key": "",
+                            "title": "Supervisor Remarks",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                            
+                        },
+                       
+                    ]
+                    },]
+                }]
+            }, 
+            {
+                "type": "box",
+                "readonly": false,
+                "colClass": "col-sm-12",
+                "overrideType": "default-view",
+                "title": "DOCUMENT_FOR_FCU",
+                "items": [{
+                    "type": "grid",
+                    "orientation": "horizontal",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [
+                        {
+                            "key": "",
+                            "title": "Document name ",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                            
+                        }, 
+                        {
+                            "key": "",
+                            "title": "FCU Marking",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                          
+                        },
+                        {
+                            "key":   "",
+                            "title": "Document Download",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                            
+                        },
+                        {
+                            "key": "",
+                            "title": "FCU Remarks",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                            
+                        },
+                       
+                    ]
+                    },]
+                }]
+            }, 
+
+
         //     {
         //             "type": "box",
         //             "title": "CUSTOMER_LOAN_HISTORY",
@@ -1022,7 +1211,8 @@ define({
                     required: true,
                 }
             ]
-        }, {
+        },
+         {
 
                 "type": "box",
                 "title": "Post Review Decision",
