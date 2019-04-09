@@ -46,6 +46,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var getIncludes = function (model) {
                 return [
+                    "ApplicantInformation",
                     "ApplicantInformation.personalInformationFieldSet",
                     "ApplicantInformation.branchName",
                     "ApplicantInformation.zoneId",
@@ -93,41 +94,122 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "options": {
                         "repositoryAdditions": {
 
-                            // "CpvFeedback": {
-                            //     "type": "box",
-                            //     "orderNo": 1,
-                            //     "title": "CPV_FEEDBACK",
-                            //     "items": {
-                            //         "recommendation": {
-                            //             "key": "",
-                            //             "title": "RECOMMENDATION",
-                            //             "required":true,
-                            //             "type": "text",
-                            //             "readonly":false
-                            //         },
-                            //         "caseStatus": {
-                            //             "key": "",
-                            //             "type": "radios",
-                            //             "title": "CASE_STATUS",
-                            //             "enumCode": "",
-                            //             "readonly":false
-                            //         },
-                            //         "verifierRemarks": {
-                            //             "key": "",
-                            //             "title": "VERIFIER_REMARKS",
-                            //             "required":true,
-                            //             "type": "text",
-                            //             "readonly":false
-                            //         },
-                            //         "supervisorRemarks": {
-                            //             "key": "",
-                            //             "title": "SUPERVISOR_REMARKS",
-                            //             "required":true,
-                            //             "type": "text",
-                            //             "readonly":false
-                            //         },  
-                            //     }
-                            // },
+                            "ApplicantInformation": {
+                                "type": "box",
+                                "orderNo": 1,
+                                "title": "APPLICANT_INFORMATION",
+                                "items": {
+
+                                    "personalInformationFieldSet": {
+                                        "type": "fieldset",
+                                        "title": "PERSONAL_INFORMATION",
+                                        "items": []
+                                    },
+                                    "branchName": {
+
+                                        "key": "applicant.customer.customerBranchId",
+                                        "title": "BRANCH_NAME",
+                                        "type": "select",
+                                        "enumCode": "branch_id",
+                                        "readonly": true
+
+                                    },
+                                    "zoneId": {
+                                        "key": "applicant.customer.centreId",
+                                        "type": "lov",
+                                        "title": "ZONE_ID",
+                                        "filter": {
+                                            "parentCode": "branch_id"
+                                        },
+                                        "parentEnumCode": "branch_id",
+                                        "parentValueExpr": "model.applicant.customer.customerBranchId",
+                                        "readonly": true
+                                    },
+                                    "zoneName": {
+                                        "key": "applicant.customer.centreId",
+                                        "type": "select",
+                                        "enumCode": "centre",
+                                        "title": "ZONE_NAME",
+                                        "readonly": true
+                                    },
+                                    "urnNo": {
+                                        "key": "applicant.customer.urnNo",
+                                        "title": "URN_NO",
+                                        "readonly": true
+                                    },
+                                    "firstName": {
+                                        "key": "applicant.customer.firstName",
+                                        "title": "FULL_NAME",
+                                        "type": "string",
+                                        "readonly": true
+                                    },
+                                    "dob": {
+                                        "key": "applicant.customer.dateOfBirth",
+                                        "title": "DATE_OF_BIRTH",
+                                        "type": "date",
+                                        "readonly": true
+                                    },
+                                    "gender": {
+                                        "key": "applicant.customer.gender",
+                                        "type": "radios",
+                                        "title": "GENDER",
+                                        "enumCode": "gender",
+                                        "readonly": true
+                                    },
+                                    "fatherName": {
+                                        "key": "applicant.customer.fatherFirstName",
+                                        "title": "FATHER_FULL_NAME",
+                                        "readonly": true
+                                    },
+                                    "customerPhoto": {
+                                        "key": "applicant.customer.photoImageId",
+                                        "type": "file",
+                                        "title": "CUSTOMER_PHOTO",
+                                        "category": "CustomerEnrollment",
+                                        "subCategory": "PHOTO",
+                                        "fileType": "image/*",
+                                        "readonly": true
+                                    },
+                                    "kycFieldSet": {
+                                        "type": "fieldset",
+                                        "title": "KYC",
+                                        "items": []
+                                    },
+                                    "identityProofNo": {
+                                        "key": "applicant.customer.identityProofNo",
+                                        "title": "IDENTITY_PROOFNO",
+                                        "type": "barcode",
+                                        "readonly": true
+                                    },
+                                    "identityProof": {
+                                        "key": "applicant.customer.identityProofImageId",
+                                        "type": "file",
+                                        "fileType": "application/pdf",
+                                        "using": "scanner",
+                                        "title": "IDENTITY_PROOF_DOCUMENT",
+                                        "category": "CustomerEnrollment",
+                                        "subCategory": "IDENTITYPROOF",
+                                        "readonly": true
+                                    },
+                                    "addressProof": {
+                                        "key": "applicant.customer.addressProofNo",
+                                        "type": "qrcode",
+                                        "title": "ADDRESS_PROOF_NO",
+                                        "readonly": true
+                                    },
+                                    "addressProof": {
+                                        "key": "applicant.customer.addressProofImageId",
+                                        "type": "file",
+                                        "fileType": "application/pdf",
+                                        "using": "scanner",
+                                        "title": "ADDRESS_PROOF_IMAGE_ID",
+                                        "category": "CustomerEnrollment",
+                                        "subCategory": "ADDRESSPROOF",
+                                        "readonly": true
+                                    },
+                                   
+                            }
+                        },
                             "CpvFeedback": {
                                 "type": "box",
                                 "title": "CPV_QUESTIONS",
@@ -286,6 +368,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.coapplicant = {};
                     model.guarantor = {};
                     model.telecalling = [];
+                    model.applicant.customer=model._request;
+                    
+                    EnrolmentProcess.fromCustomerID($stateParams.pageId)
+                    .subscribe(function(resp){
+                      model.applicant.customer=resp.customer;
+                        },function(err){
+
+                        }
+                    )
                     //model.loanAccount = model.loanProcess.loanAccount;
                     // Setting necessary parties to child arrays.
                     // model.applicant.customer = model.loanProcess.applicantEnrolmentProcess.customer;
@@ -419,6 +510,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     
                 },
                 eventListeners: {
+                    // "cpv-response":function(bundleModel,model,params){
+                    //             debugger;
+                    //     		console.log("Individual_Enrollment",params);
+                    //     		//model.liability=params.liabilities.length;
+                    //             //debugger;
+                    // }
                 },
                 offlineInitialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                     model.loanProcess = bundleModel.loanProcess;

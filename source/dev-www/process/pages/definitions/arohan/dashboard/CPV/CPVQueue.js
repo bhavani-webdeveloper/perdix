@@ -140,9 +140,12 @@ define({
 							item.villageName,
 							item.enterprisePincode,
 							item.branchName,
-							item.centreName
+							item.centreName,
+							
 						]
+						
 					},
+					
 					getTableConfig: function() {
 						return {
 							"serverPaginate": true,
@@ -193,6 +196,7 @@ define({
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
+								
 								entityManager.setModel('arohan.dashboard.CPV.Verification', {
 									_request: item
 								});
@@ -200,6 +204,7 @@ define({
 									pageName: "arohan.dashboard.CPV.Verification",
 									pageId: item.loanId
 								});
+								//BundleManager.broadcastEvent('cpv-response', item);
 							},
 							isApplicable: function(item, index) {
 
