@@ -23,6 +23,9 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 			return "Page/Engine/witfin.customer360.CustomerProfile";
 		} else if(siteCode == 'pahal') {
 			return "Page/Engine/pahal.customer360.CustomerProfile";
+		}
+		else if(siteCode == 'shramsarathi'){
+			return "Page/Engine/shramsarathi.customer360.CustomerProfile";
 		}else {
 			return "Page/Engine/customer360.CustomerProfile";
 		}
