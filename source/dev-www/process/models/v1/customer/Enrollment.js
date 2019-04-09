@@ -630,9 +630,9 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
             aadhaarData['pc'] = Number(aadhaarData['pc']);
             var g = aadhaarData['gender'].toUpperCase();
             aadhaarData['gender'] = (g === 'M' || g === 'MALE') ? 'MALE' : ((g === 'F' || g === 'FEMALE') ? 'FEMALE' : 'OTHERS');
-            var value = aadhaarData['gender'] == 'MALE' ? 'S/O ' : 'D/O ';
+            var value = aadhaarData['gender'] == 'MALE' ? 'S/O: ' : 'D/O: ';
             if(_.includes(aadhaarData['co'], value))
-                aadhaarData[fatherName] = aadhaarData[co].replace(value);
+                aadhaarData['fatherName'] = aadhaarData['co'].replace(value,'');
         }
         return aadhaarData;
     };
