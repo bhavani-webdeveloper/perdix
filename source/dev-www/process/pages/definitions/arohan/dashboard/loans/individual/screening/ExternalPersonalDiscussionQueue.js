@@ -182,7 +182,7 @@ define({
 					getActions: function() {
 						return [{
 							//name: "EXTERNAL_PERSONAL_DISCUSSION_QUEUE",
-							name:"TELEVERIFICATION_QUEUE",
+							name:"EXTERNAL_PD_QUEUE",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {

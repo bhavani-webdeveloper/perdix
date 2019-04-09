@@ -189,7 +189,7 @@ define({
 					},
 					getActions: function() {
 						return [{
-							name: "Pricing",
+							name: "CPV_REVIEW",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {

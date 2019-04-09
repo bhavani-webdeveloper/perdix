@@ -46,18 +46,39 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var getIncludes = function (model) {
                 return [
-            
+                    "ApplicantInformation.personalInformationFieldSet",
+                    "ApplicantInformation.branchName",
+                    "ApplicantInformation.zoneId",
+                    "ApplicantInformation.urnNo",
+                    "ApplicantInformation.firstName",
+                    "ApplicantInformation.dob",
+                    "ApplicantInformation.gender",
+                    "ApplicantInformation.fatherName",
+                    "ApplicantInformation.customerPhoto",
+                    "ApplicantInformation.kycFieldSet",
+                    "ApplicantInformation.identityProofNo",
+                    "ApplicantInformation.identityProof",
+                    "ApplicantInformation.addressProof",
+
                     "CpvFeedback",
-                    "CpvFeedback.recommendation",
-                    "CpvFeedback.caseStatus",
-                    "CpvFeedback.verifierRemarks",
-                    "CpvFeedback.supervisorRemarks",
+                    // "CpvFeedback.recommendation",
+                    // "CpvFeedback.caseStatus",
+                    // "CpvFeedback.verifierRemarks",
+                    // "CpvFeedback.supervisorRemarks",
+                    "CpvFeedback.questions",
+                    "CpvFeedback.telecallingQuestionnaireList",
+                    "CpvFeedback.telecallingQuestionnaireList.question",
+                    "CpvFeedback.telecallingQuestionnaireList.answer1",
+                    "CpvFeedback.telecallingQuestionnaireList.answer2",
+                    "CpvFeedback.telecallingQuestionnaireList.answer3",
+                    "CpvFeedback.telecallingQuestionnaireList.answer4",
+                    "CpvFeedback.telecallingQuestionnaireList.answer5",
+                    "CpvFeedback.telecallingQuestionnaireList.answer6",
 
                     "LoanDocuments",
                     "LoanDocuments.loanDocuments",
                     "LoanDocuments.loanDocuments.document",
                     "LoanDocuments.loanDocuments.documentId",
-
 
 
                 ];
@@ -72,39 +93,134 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "options": {
                         "repositoryAdditions": {
 
+                            // "CpvFeedback": {
+                            //     "type": "box",
+                            //     "orderNo": 1,
+                            //     "title": "CPV_FEEDBACK",
+                            //     "items": {
+                            //         "recommendation": {
+                            //             "key": "",
+                            //             "title": "RECOMMENDATION",
+                            //             "required":true,
+                            //             "type": "text",
+                            //             "readonly":false
+                            //         },
+                            //         "caseStatus": {
+                            //             "key": "",
+                            //             "type": "radios",
+                            //             "title": "CASE_STATUS",
+                            //             "enumCode": "",
+                            //             "readonly":false
+                            //         },
+                            //         "verifierRemarks": {
+                            //             "key": "",
+                            //             "title": "VERIFIER_REMARKS",
+                            //             "required":true,
+                            //             "type": "text",
+                            //             "readonly":false
+                            //         },
+                            //         "supervisorRemarks": {
+                            //             "key": "",
+                            //             "title": "SUPERVISOR_REMARKS",
+                            //             "required":true,
+                            //             "type": "text",
+                            //             "readonly":false
+                            //         },  
+                            //     }
+                            // },
                             "CpvFeedback": {
                                 "type": "box",
-                                "orderNo": 1,
-                                "title": "CPV_FEEDBACK",
+                                "title": "CPV_QUESTIONS",
+                                "orderNo": 3,
                                 "items": {
-                                    "recommendation": {
-                                        "key": "",
-                                        "title": "RECOMMENDATION",
-                                        "required":true,
-                                        "type": "text",
-                                        "readonly":false
+                                    "questions": {
+                                        "type": "fieldset",
+                                        "title": "QUESTIONS",
+                                        "items": []
                                     },
-                                    "caseStatus": {
-                                        "key": "",
-                                        "type": "radios",
-                                        "title": "CASE_STATUS",
-                                        "enumCode": "",
-                                        "readonly":false
-                                    },
-                                    "verifierRemarks": {
-                                        "key": "",
-                                        "title": "VERIFIER_REMARKS",
-                                        "required":true,
-                                        "type": "text",
-                                        "readonly":false
-                                    },
-                                    "supervisorRemarks": {
-                                        "key": "",
-                                        "title": "SUPERVISOR_REMARKS",
-                                        "required":true,
-                                        "type": "text",
-                                        "readonly":false
-                                    },  
+                                    "telecallingQuestionnaireList": {
+                                        "key": "applicant.telecallingQuestionnaireList",
+                                        "type": "array",
+                                        "add": null,
+                                        "remove": null,
+                                        "view": "fixed",
+                                        "items": {
+                                            "question":{
+                                                "key": "applicant.telecallingQuestionnaireList[].question",
+                                                "type": "textarea",
+                                                "title": "QUESTION",
+                                                "readonly": true
+                                            },
+                                            "answer1":{
+                                                "key": "applicant.telecallingQuestionnaireList[].answer",
+                                                "type": "string",
+                                                "title": "ANSWER",
+                                                "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='string'"
+                                            },
+                                            "answer2":{
+                                                "key": "applicant.telecallingQuestionnaireList[].answer",
+                                                "type": "textarea",
+                                                "title": "ANSWER",
+                                                "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='textarea'"
+                                            },
+                                            "answer3":{
+                                                "key": "applicant.telecallingQuestionnaireList[].answer",
+                                                "type": "number",
+                                                "title": "ANSWER",
+                                                "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='number'"
+                                            },
+                                            "answer4":{
+                                                "key": "applicant.telecallingQuestionnaireList[].answer",
+                                                "title": "ANSWER",
+                                                "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='select'",
+                                                "type": "lov",
+                                                "autolov": true,
+                                                "lovonly": true,
+                                                "bindMap": {},
+                                                "searchHelper": formHelper,
+                                                "search": function (inputModel, form, model, context) {
+                                                    var list = {};
+                                                    list = model.applicant.telecallingQuestionnaireList[context.arrayIndex].select;
+
+                                                    var out = [];
+                                                    _.forEach(list, function (val) {
+                                                        out.push({ "name": val });
+                                                    });
+
+                                                    return $q.resolve({
+                                                        headers: {
+                                                            "x-total-count": out.length
+                                                        },
+                                                        body: out
+                                                    });
+                                                },
+                                                onSelect: function (valueObj, model, context) {
+                                                    model.applicant.telecallingQuestionnaireList[context.arrayIndex].answer = valueObj.name;
+                                                },
+                                                getListDisplayItem: function (item, index) {
+                                                    return [
+                                                        item.name
+                                                    ];
+                                                }
+                                            },
+                                            "answer5":{
+                                                "key": "applicant.telecallingQuestionnaireList[].answer",
+                                                "type": "date",
+                                                "title": "ANSWER",
+                                                "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='date'"
+                                            },
+                                            "answer6":{
+                                                "key": "applicant.telecallingQuestionnaireList[].answer",
+                                                "type": "radios",
+                                                "titleMap":{
+                                                    "positive":"Positive",
+                                                    "nagative":"Nagative"
+                                                },
+                                                "title": "ANSWER",
+                                                "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='radio'"
+                                            },
+                                        }
+                                    }
                                 }
                             },
                             "LoanDocuments": {
@@ -192,101 +308,101 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     // // business telecalling details
                     // model.telecalling.loanCustomer = _.filter(model.loanAccount.telecallingDetails, {"partyType": "loanCustomer"});
 
-                    // var self = this;
-                    // Queries.questionnaireDetails('TELECALLING', 'Tele', 'televerification').then(
-                    //     function(res) { 
-                    //         model.applicant.telecallingQuestionnaireList = _.filter(res, function(obj) {
-                    //             return obj.party_type == 'applicant';     
-                    //         });
-                    //         model.loanCustomer.telecallingQuestionnaireList = _.filter(res, function(obj) {
-                    //             return obj.party_type == 'loanCustomer';
-                    //         });
-                    //         model.coapplicantQuestions = _.filter(res, function(obj) {
-                    //             return obj.party_type == 'coApplicant';
-                    //         });
-                    //         model.guarantorQuestions = _.filter(res, function(obj) {
-                    //             return obj.party_type == 'guarantor';
-                    //         });
+                    var self = this;
+                    Queries.questionnaireDetails('TELECALLING', 'cpv', 'cpverification').then(
+                        function(res) { 
+                            model.applicant.telecallingQuestionnaireList = _.filter(res, function(obj) {
+                                return obj.party_type == 'applicant';     
+                            });
+                            model.loanCustomer.telecallingQuestionnaireList = _.filter(res, function(obj) {
+                                return obj.party_type == 'loanCustomer';
+                            });
+                            model.coapplicantQuestions = _.filter(res, function(obj) {
+                                return obj.party_type == 'coApplicant';
+                            });
+                            model.guarantorQuestions = _.filter(res, function(obj) {
+                                return obj.party_type == 'guarantor';
+                            });
 
-                    //         _.forEach(model.coApplicants, function(val, key) {
-                    //             model.coApplicants[key].telecallingQuestionnaireList = model.coapplicantQuestions;
-                    //             if(model.telecalling.coApplicant.length>0) {
-                    //                 var findKey = _.findLastIndex(model.telecalling.coApplicant, ["customerId", val.customer.id]);
-                    //                 if(findKey!=-1) {
-                    //                     model.coApplicants[key].telecallingResponse = model.telecalling.coApplicant[findKey].telecallingResponse;
-                    //                     model.coApplicants[key].noOfCallAttempts = model.telecalling.coApplicant[findKey].noOfCallAttempts;
-                    //                     model.coApplicants[key].followupCallRequired = model.telecalling.coApplicant[findKey].followupCallRequired;
-                    //                     model.coApplicants[key].telecallingRemarks = model.telecalling.coApplicant[findKey].telecallingRemarks;
-                    //                     _.forEach(model.coapplicantQuestions, function(qval, qkey) {
-                    //                         var callingDetails = _.find(model.telecalling.coApplicant[findKey].telecallingQuestionnaireList, {"question": qval.question});
-                    //                         if(!_.isNull(callingDetails)) {
-                    //                            model.coApplicants[key].telecallingQuestionnaireList[qkey].answer = callingDetails.answer;
-                    //                         }
-                    //                     });
-                    //                 }
-                    //             }
-                    //         });
+                            _.forEach(model.coApplicants, function(val, key) {
+                                model.coApplicants[key].telecallingQuestionnaireList = model.coapplicantQuestions;
+                                if(model.telecalling.coApplicant.length>0) {
+                                    var findKey = _.findLastIndex(model.telecalling.coApplicant, ["customerId", val.customer.id]);
+                                    if(findKey!=-1) {
+                                        model.coApplicants[key].telecallingResponse = model.telecalling.coApplicant[findKey].telecallingResponse;
+                                        model.coApplicants[key].noOfCallAttempts = model.telecalling.coApplicant[findKey].noOfCallAttempts;
+                                        model.coApplicants[key].followupCallRequired = model.telecalling.coApplicant[findKey].followupCallRequired;
+                                        model.coApplicants[key].telecallingRemarks = model.telecalling.coApplicant[findKey].telecallingRemarks;
+                                        _.forEach(model.coapplicantQuestions, function(qval, qkey) {
+                                            var callingDetails = _.find(model.telecalling.coApplicant[findKey].telecallingQuestionnaireList, {"question": qval.question});
+                                            if(!_.isNull(callingDetails)) {
+                                               model.coApplicants[key].telecallingQuestionnaireList[qkey].answer = callingDetails.answer;
+                                            }
+                                        });
+                                    }
+                                }
+                            });
 
-                    //         _.forEach(model.guarantors, function(val, key) {
-                    //             model.guarantors[key].telecallingQuestionnaireList = model.guarantorQuestions;
-                    //             if(model.telecalling.guarantor.length>0) {
-                    //                 var findKey = _.findLastIndex(model.telecalling.guarantor, ["customerId", val.customer.id]);
-                    //                 if(findKey!=-1) {
-                    //                     model.guarantors[key].telecallingResponse = model.telecalling.guarantor[findKey].telecallingResponse;
-                    //                     model.guarantors[key].noOfCallAttempts = model.telecalling.guarantor[findKey].noOfCallAttempts;
-                    //                     model.guarantors[key].followupCallRequired = model.telecalling.guarantor[findKey].followupCallRequired;
-                    //                     model.guarantors[key].telecallingRemarks = model.telecalling.guarantor[findKey].telecallingRemarks;
-                    //                     _.forEach(model.guarantorQuestions, function(qval, qkey) {
-                    //                         var callingDetails = _.find(model.telecalling.guarantor[findKey].telecallingQuestionnaireList, {"question": qval.question});
-                    //                         if(!_.isNull(callingDetails)) {
-                    //                            model.guarantors[key].telecallingQuestionnaireList[qkey].answer = callingDetails.answer;
-                    //                         }
-                    //                     });
-                    //                 }
-                    //             }
-                    //         });
+                            _.forEach(model.guarantors, function(val, key) {
+                                model.guarantors[key].telecallingQuestionnaireList = model.guarantorQuestions;
+                                if(model.telecalling.guarantor.length>0) {
+                                    var findKey = _.findLastIndex(model.telecalling.guarantor, ["customerId", val.customer.id]);
+                                    if(findKey!=-1) {
+                                        model.guarantors[key].telecallingResponse = model.telecalling.guarantor[findKey].telecallingResponse;
+                                        model.guarantors[key].noOfCallAttempts = model.telecalling.guarantor[findKey].noOfCallAttempts;
+                                        model.guarantors[key].followupCallRequired = model.telecalling.guarantor[findKey].followupCallRequired;
+                                        model.guarantors[key].telecallingRemarks = model.telecalling.guarantor[findKey].telecallingRemarks;
+                                        _.forEach(model.guarantorQuestions, function(qval, qkey) {
+                                            var callingDetails = _.find(model.telecalling.guarantor[findKey].telecallingQuestionnaireList, {"question": qval.question});
+                                            if(!_.isNull(callingDetails)) {
+                                               model.guarantors[key].telecallingQuestionnaireList[qkey].answer = callingDetails.answer;
+                                            }
+                                        });
+                                    }
+                                }
+                            });
 
-                    //         if(model.telecalling.applicant.length>0) {
-                    //             var findKey = model.telecalling.applicant.length-1;
-                    //             model.applicant.telecallingResponse = model.telecalling.applicant[findKey].telecallingResponse;
-                    //             model.applicant.noOfCallAttempts = model.telecalling.applicant[findKey].noOfCallAttempts;
-                    //             model.applicant.followupCallRequired = model.telecalling.applicant[findKey].followupCallRequired;
-                    //             model.applicant.telecallingRemarks = model.telecalling.applicant[findKey].telecallingRemarks;
-                    //             _.forEach(model.applicant.telecallingQuestionnaireList, function(val, key) {
-                    //                 var callingDetails = _.find(model.telecalling.applicant[findKey].telecallingQuestionnaireList, {"question": val.question});
-                    //                 if(!_.isNull(callingDetails)) {
-                    //                    model.applicant.telecallingQuestionnaireList[key].answer = callingDetails.answer;
-                    //                 }
-                    //             });
-                    //         }
+                            if(model.telecalling.applicant.length>0) {
+                                var findKey = model.telecalling.applicant.length-1;
+                                model.applicant.telecallingResponse = model.telecalling.applicant[findKey].telecallingResponse;
+                                model.applicant.noOfCallAttempts = model.telecalling.applicant[findKey].noOfCallAttempts;
+                                model.applicant.followupCallRequired = model.telecalling.applicant[findKey].followupCallRequired;
+                                model.applicant.telecallingRemarks = model.telecalling.applicant[findKey].telecallingRemarks;
+                                _.forEach(model.applicant.telecallingQuestionnaireList, function(val, key) {
+                                    var callingDetails = _.find(model.telecalling.applicant[findKey].telecallingQuestionnaireList, {"question": val.question});
+                                    if(!_.isNull(callingDetails)) {
+                                       model.applicant.telecallingQuestionnaireList[key].answer = callingDetails.answer;
+                                    }
+                                });
+                            }
 
 
-                    //         if(model.telecalling.loanCustomer.length>0) {                            
-                    //             var findKey = model.telecalling.loanCustomer.length-1;
-                    //             model.loanCustomer.telecallingResponse = model.telecalling.loanCustomer[findKey].telecallingResponse;
-                    //             model.loanCustomer.noOfCallAttempts = model.telecalling.loanCustomer[findKey].noOfCallAttempts;
-                    //             model.loanCustomer.followupCallRequired = model.telecalling.loanCustomer[findKey].followupCallRequired;
-                    //             model.loanCustomer.telecallingRemarks = model.telecalling.loanCustomer[findKey].telecallingRemarks;
-                    //             _.forEach(model.loanCustomer.telecallingQuestionnaireList, function(val, key) {
-                    //                 var callingDetails = _.find(model.telecalling.loanCustomer[findKey].telecallingQuestionnaireList, {"question": val.question});
-                    //                 if(!_.isNull(callingDetails)) {
-                    //                    model.loanCustomer.telecallingQuestionnaireList[key].answer = callingDetails.answer;
-                    //                 }
-                    //             });
-                    //         }
+                            if(model.telecalling.loanCustomer.length>0) {                            
+                                var findKey = model.telecalling.loanCustomer.length-1;
+                                model.loanCustomer.telecallingResponse = model.telecalling.loanCustomer[findKey].telecallingResponse;
+                                model.loanCustomer.noOfCallAttempts = model.telecalling.loanCustomer[findKey].noOfCallAttempts;
+                                model.loanCustomer.followupCallRequired = model.telecalling.loanCustomer[findKey].followupCallRequired;
+                                model.loanCustomer.telecallingRemarks = model.telecalling.loanCustomer[findKey].telecallingRemarks;
+                                _.forEach(model.loanCustomer.telecallingQuestionnaireList, function(val, key) {
+                                    var callingDetails = _.find(model.telecalling.loanCustomer[findKey].telecallingQuestionnaireList, {"question": val.question});
+                                    if(!_.isNull(callingDetails)) {
+                                       model.loanCustomer.telecallingQuestionnaireList[key].answer = callingDetails.answer;
+                                    }
+                                });
+                            }
 
-                    //        /* UIRepository.getEnrolmentProcessUIRepository().$promise
-                    //         .then(function(repo){
-                    //             return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest(model), configFile(), model)
-                    //         })
-                    //         .then(function(form){
-                    //             self.form = form;
-                    //         });*/
-                    //     },
-                    //     function(err) {
-                    //         console.log(err);
-                    //     }
-                    // )
+                           /* UIRepository.getEnrolmentProcessUIRepository().$promise
+                            .then(function(repo){
+                                return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest(model), configFile(), model)
+                            })
+                            .then(function(form){
+                                self.form = form;
+                            });*/
+                        },
+                        function(err) {
+                            console.log(err);
+                        }
+                    )
                    /* model.loanProcess = bundleModel.loanProcess;
                     if(_.hasIn(model.loanProcess, 'loanAccount')) {
                         model.loanAccount = model.loanProcess.loanAccount;

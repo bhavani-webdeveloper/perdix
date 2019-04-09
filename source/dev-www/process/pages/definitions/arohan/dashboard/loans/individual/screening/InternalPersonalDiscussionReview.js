@@ -48,14 +48,15 @@ define(["perdix/domain/model/loan/LoanProcess",
                     //     maximum: 1,
                     //     order: 40
                     // }, 
+                    // {
+                    //     pageName: 'arohan.dashboard.loans.individual.screening.detail.EnterpriseFinancialView',
+                    //     title: 'FINANCIAL_INFORMATION_SUMMARY',
+                    //     pageClass: 'business-finance',
+                    //     minimum: 1,
+                    //     maximum: 1,
+                    //     order: 51
+                    // }, 
                     {
-                        pageName: 'arohan.dashboard.loans.individual.screening.detail.EnterpriseFinancialView',
-                        title: 'FINANCIAL_INFORMATION_SUMMARY',
-                        pageClass: 'business-finance',
-                        minimum: 1,
-                        maximum: 1,
-                        order: 51
-                    }, {
                         // pageName: 'arohan.dashboard.loans.individual.screening.LoanRequest',
                         pageName: 'arohan.dashboard.loans.individual.screening.detail.LoanApplicationView',
                         title: 'Loan Recommendation',
@@ -232,12 +233,12 @@ define(["perdix/domain/model/loan/LoanProcess",
 
 
                               
-                                $this.bundlePages.push({
-                                    pageClass: 'business-finance',
-                                    model: {
-                                        customerId: res.customerId
-                                    }
-                                });
+                                // $this.bundlePages.push({
+                                //     pageClass: 'business-finance',
+                                //     model: {
+                                //         customerId: res.customerId
+                                //     }
+                                // });
 
                                 $this.bundlePages.push({
                                     pageClass: 'loan-recommendation',
