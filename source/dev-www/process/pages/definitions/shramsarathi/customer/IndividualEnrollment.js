@@ -70,7 +70,9 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 "HouseVerification.place",
                                 "HouseVerification.date"
                             ], "overrides": {
-                               
+                               "IndividualInformation.customerBranchId":{
+                                   "readonly":true
+                               },
                                 "IndividualInformation.dateOfBirth":{ 
                                     "onChange": function (modelValue, form, model) {
                                     if (model.customer.dateOfBirth) {
@@ -129,7 +131,46 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     "title": "ZONE_ID"
                                 },
                                 "IndividualInformation.centreId1": {
-                                    "title": "ZONE_NAME"
+                                    "title": "ZONE_NAME",
+                                    "key":"customer.centreName",
+                                    type: "lov",
+                                     lovonly:true,
+                                        autolov: true,
+                                        bindMap: {},
+                                        required: true,
+                                        searchHelper: formHelper,
+                                        search: function (inputModel, form, model, context) {
+                                            var centres = SessionStore.getCentres();
+                                            var centreCode = formHelper.enum('centre').data;
+                                            var out = [];
+                                            if (centres && centres.length) {
+                                                for (var i = 0; i < centreCode.length; i++) {
+                                                    for (var j = 0; j < centres.length; j++) {
+                                                        if (centreCode[i].value == centres[j].id) {
+                                                            out.push({
+                                                                name: centreCode[i].name,
+                                                                id: centreCode[i].value
+                                                            })
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            return $q.resolve({
+                                                headers: {
+                                                    "x-total-count": out.length
+                                                },
+                                                body: out
+                                            });
+                                        },
+                                        onSelect: function (valueObj, model, context) {
+                                            model.customer.centreName = valueObj.name;
+                                            model.customer.centreId = valueObj.id;
+                                        },
+                                        getListDisplayItem: function (item, index) {
+                                            return [
+                                                item.name
+                                            ];
+                                        }
                                 },
                                 "HouseVerification.inCurrentAreaSince": {
                                     "required": false,
