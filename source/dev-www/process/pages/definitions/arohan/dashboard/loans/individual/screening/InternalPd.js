@@ -37,7 +37,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var getIncludes = function (model) {
                 return [
-                    "ApplicantInformation",
+                    //"ApplicantInformation",
                     "ApplicantInformation.personalInformationFieldSet",
                     "ApplicantInformation.branchName",
                     "ApplicantInformation.zoneId",
@@ -75,11 +75,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
 
                     "ApplicantTeleverification",
-                    "ApplicantTeleverification.callingAttemptsFieldSet",
-                    "ApplicantTeleverification.telecallingResponse",
-                    "ApplicantTeleverification.noOfCallAttempts",
-                    "ApplicantTeleverification.followupCallRequired",
-                    "ApplicantTeleverification.telecallingRemarks",
+                    // "ApplicantTeleverification.callingAttemptsFieldSet",
+                    // "ApplicantTeleverification.telecallingResponse",
+                    // "ApplicantTeleverification.noOfCallAttempts",
+                    // "ApplicantTeleverification.followupCallRequired",
+                    // "ApplicantTeleverification.telecallingRemarks",
+                    "ApplicantTeleverification.externalDiscussion",
                     "ApplicantTeleverification.questions",
                     "ApplicantTeleverification.telecallingQuestionnaireList",
                     "ApplicantTeleverification.telecallingQuestionnaireList.question",
@@ -87,6 +88,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ApplicantTeleverification.telecallingQuestionnaireList.answer2",
                     "ApplicantTeleverification.telecallingQuestionnaireList.answer3",
                     "ApplicantTeleverification.telecallingQuestionnaireList.answer4",
+                    "ApplicantTeleverification.telecallingQuestionnaireList.answer5",
 
 
                 ];
@@ -348,7 +350,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "ApplicantTeleverification": {
                                 "type": "box",
                                 
-                                "title": "APPLICANT_TELE_VERIFICATION",
+                                "title": "PD_QUESTIONS",
                                 "orderNo": 3,
                                 "items": {
                                     "callingAttemptsFieldSet": {
@@ -377,6 +379,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "type": "textarea",
                                         "title": "TELECALLING_REMARKS"
                                     },
+                                    "externalDiscussion": {
+                                        //"key": "",
+                                        "key":"customer.addressPfSameAsIdProof",    
+                                        "type": "radios",
+                                        "title": "REQUEST_FOR_EXTERNAL_PERSONAL_DISCUSSION",
+                                        "titleMap":{
+                                            "yes":"Yes",
+                                            "no":"No"
+                                        }
+                                    },
                                     "questions": {
                                         "type": "fieldset",
                                         "title": "QUESTIONS",
@@ -388,6 +400,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "add": null,
                                         "remove": null,
                                         "view": "fixed",
+                                        "conditions":"model.customer.addressPfSameAsIdProof=='no'",
                                         "items": {
                                             "question":{
                                                 "key": "applicant.telecallingQuestionnaireList[].question",
@@ -446,7 +459,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                         item.name
                                                     ];
                                                 }
-                                            }
+                                            },
+                                            "answer5":{
+                                                "key": "applicant.telecallingQuestionnaireList[].answer",
+                                                "type": "date",
+                                                "title": "ANSWER",
+                                                "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='date'"
+                                            },
                                         }
                                     }
                                 }
