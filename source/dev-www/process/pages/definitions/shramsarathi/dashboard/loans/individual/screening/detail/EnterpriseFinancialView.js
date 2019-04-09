@@ -39,7 +39,7 @@ define({
 				model.assetsLiabilites={};
 				model.assetsLiabilites.totalCurrentAssets= resp.total_current_assets;
 				model.assetsLiabilites.totalFixedAsstes = resp.total_fixed_assets;
-				//model.assetsLiabilites.totalLiabilites = model.liability;
+				model.assetsLiabilites.totalLiabilites = resp.total_liability;
 				model.familyInfo={};
 				model.familyInfo.totalMembers = resp.total_members;
 				model.familyInfo.earningMembers = resp.earning_members;
@@ -94,7 +94,7 @@ define({
 						'<tbody>' +
 						'<tr><td>{{"Total Current assets" | translate}}</td><td>{{model.assetsLiabilites.totalCurrentAssets }}</td></tr>'+
 						'<tr><td>{{"Total Fixed assets" | translate}}</td><td>{{model.assetsLiabilites.totalFixedAsstes }}</td></tr>'+
-						'<tr><td>{{"Total Liabilites" | translate}}</td><td>{{ model.liability }}</td></tr>'+
+						'<tr><td>{{"Total Liabilites" | translate}}</td><td>{{ model.assetsLiabilites.totalLiabilites }}</td></tr>'+
 						
 						'</tbody>' +
 						'</table>'
@@ -135,10 +135,24 @@ define({
 			schema: function() {
 				return Enrollment.getSchema().$promise;
 			},
+<<<<<<< Updated upstream
+			// eventListeners: {
+			// 	"Individual_Enrollment":function(bundleModel,model,params){
+			// 		console.log("Individual_Enrollment",params);
+			// 		model.liability=params.liabilities.length;
+			// 		//debugger;
+			// 	},
+			// 	"Enrollment2":function(bundleModel,model,params){
+			// 		console.log("Enrollment2",params);
+			// 		model.liability=params.enrolmentProcess.customer.liabilities.length;
+			// 		debugger;
+			// 	}
+			// },
+=======
 			eventListeners: {
 				"Individual_Enrollment":function(bundleModel,model,params){
 					console.log("Individual_Enrollment",params);
-					model.liability=params.liabilities.length;
+					model.liability = params.liabilities.length;
 					//debugger;
 				},
 				"Enrollment2":function(bundleModel,model,params){
@@ -147,6 +161,7 @@ define({
 					debugger;
 				}
 			},
+>>>>>>> Stashed changes
 			actions: {}
 		}
 	}

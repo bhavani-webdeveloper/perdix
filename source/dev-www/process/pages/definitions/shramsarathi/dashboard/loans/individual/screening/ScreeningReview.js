@@ -7,7 +7,7 @@ define(["perdix/domain/model/loan/LoanProcess",
         var LoanProcessts = LoanProcess["LoanProcess"];
         var EnrolmentProcess = EnrolmentProcess["EnrolmentProcess"];
         var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
-        return {
+        return {  
             pageUID: "shramsarathi.dashboard.loans.individual.screening.ScreeningReview",
             pageType: "Bundle",
             dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
@@ -272,7 +272,7 @@ define(["perdix/domain/model/loan/LoanProcess",
 
                                $this.bundlePages.push({
                                     pageClass: 'loan-review',
-                                    model: {
+                                    model: { 
                                         loanAccount: loanProcess.loanAccount,
                                     }
                                 });

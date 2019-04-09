@@ -296,7 +296,7 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
 '</div>';*/
     var HIGHMARK_HTML =
 '<div>'+
-    '<h3 ng-show="CBDATA.highMark.highmarkScore" style="font-weight:bold;color:#ccc;">HIGHMARK REPORT</h3>'+
+    '<h3 ng-show="CBDATA.highMark.reportHtml" style="font-weight:bold;color:#ccc;">HIGHMARK REPORT</h3>'+
     '<iframe ng-show="CBDATA.highMark.reportHtml" id="{{CBDATA._highmarkId}}" style="border:0;width:100%;height:500px;"></iframe>'+
     '<div ng-hide="CBDATA.highMark.reportHtml">'+
         '<center><b style="color:tomato">{{CBDATA.customer.first_name||CBDATA.customerId}} - HighMark Scores NOT available</b></center>'+
@@ -744,7 +744,7 @@ var INDIVIDUAL_HTML =
             //model.CBType = JSON.parse(SessionStore.getGlobalSetting("CBCheckType").replace(/'/g, '"'));
             if (model.CBType && model.CBType.length) {
                 for (i in model.CBType) {
-                    (model.CBType[i] == "CIBIL" || model.CBType[i] == "CIBILCR")?model.CIBIL = true:(model.CBType[i] == "BASE"?model.BASE = true:(model.CBType[i] == "EQUIFAX"?model.EQUIFAX = true:(model.CBType[i] == "CHMHUB"?model.CHMHUB=true:(model.CBType[i] == "INDIVIDUAL"?model.INDIVIDUAL=true:false))));
+                    (model.CBType[i] == "CIBIL" || model.CBType[i] == "CIBILCR" )?model.CIBIL = true:(model.CBType[i] == "BASE"?model.BASE = true:(model.CBType[i] == "EQUIFAX"?model.EQUIFAX = true:(model.CBType[i] == "CHMHUB"?model.CHMHUB=true:(model.CBType[i] == "INDIVIDUAL"?model.INDIVIDUAL=true:false))));
                 }
             } else {
                 model.CIBIL = true;
@@ -775,34 +775,6 @@ var INDIVIDUAL_HTML =
                             refreshUI();
                         });
                     });
-                    // Files.stream('05c3d3f9-7b48-4aa9-a966-7c967b1d790c').then(fileData =>{
-                    //         var uint8Array = new Uint8Array(fileData.length);
-                    //         for (var i = 0; i < fileData.length; i++) {
-                    //           uint8Array[i] = fileData.charCodeAt(i);
-                    //         }
-                    //     pdfjsLib.getDocument('http://sit.perdix.co.in:8080/sit_kgfs_perdix-server/api/stream/05c3d3f9-7b48-4aa9-a966-7c967b1d790c').then(doc =>{
-                    //         var viewer = document.getElementById('higmark_pdf_view_port');
-                    //         while(viewer.firstChild)
-                    //             viewer.removeChild(viewer.firstChild);
-                    //         for (var i=1;i<=doc.numPages;i++){
-                    //             var mycanvas = document.createElement("canvas");
-                    //             mycanvas.className = 'pdf-page-canvas'; 
-                    //             viewer.appendChild(mycanvas);
-                    //             doc.getPage(i).then(page => {
-                    //                 var viewport = page.getViewport(1);
-                    //                 mycanvas.width = viewport.width;
-                    //                 mycanvas.height = viewport.height;
-                    //                 page.render({
-                    //                     canvasContext:mycanvas.getContext('2d'),
-                    //                     viewport:viewport
-                    //                 })
-                    //             })
-                    //         }
-                            
-                           
-                    //     })
-                    // })
-                    
                 }
             },
             {
@@ -818,7 +790,7 @@ var INDIVIDUAL_HTML =
                 "items": [
                     {
                         type: "section",
-                        html: '<div ng-init="CBDATA=model.applicant">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>'+'<div ng-show="model.CHMHUB">'+IDENCHECK_HTML+'</div>'+'<div ng-show="model.INDIVIDUAL">'+INDIVIDUAL_HTML+'</div>'+'</div>'
+                        html: '<div ng-init="CBDATA=model.applicant">' +'<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+CIBIL_HTML+'</div>'+'<div ng-show="model.EUQIFAX">'+EQUIFAX_HTML+'</div>'+'<div ng-show="model.INDIVIDUAL">'+INDIVIDUAL_HTML+'</div>'+'<div ng-show="model.CHMHUB">'+IDENCHECK_HTML+'</div></div>'
                     }
                 ]
             },

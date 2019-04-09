@@ -823,6 +823,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         "actionbox":{
                             "condition":"model.customer.udf.userDefinedFieldValues.udf40=='ACCEPT'"
                         },
+                        "actionbox3":{
+                            "condition":"model.customer.udf.userDefinedFieldValues.udf40 !='ACCEPT' && model.customer.udf.userDefinedFieldValues.udf40 !='REJECT'"
+                        },                        
                         "actionbox1":{
                             "condition":"model.customer.udf.userDefinedFieldValues.udf40=='REJECT'"
                         }
@@ -1049,6 +1052,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                     "actionbox",
                     "actionbox.submit",
                     "actionbox.save",
+                    "actionbox3",
+                    "actionbox3.save",
                     "actionbox1",
                     "actionbox1.saveBasicDetails",
                     ];
@@ -1161,7 +1166,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                             }
                                         }
                                     },
-                                    
+                                     "actionbox3": {
+                                        "type": "actionbox",
+                                        "items": {
+                                            "save": {
+                                                "type": "save",
+                                                "title": "Offline Save"
+                                            }
+                                        }
+                                    },                                    
                                 },
                                 "additions": [
                                 ]

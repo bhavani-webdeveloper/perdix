@@ -202,12 +202,18 @@ define(["perdix/domain/model/loan/LoanProcess",
                             .subscribe(function(loanProcess){
                                 loanProcess.loanAccount.currentStage = 'Screening';
                                 bundleModel.loanProcess = loanProcess;
+                                var productCategory = "";
                                 if($stateParams.pageData){
-                                    var productCategory = $stateParams.pageData.productCategory; 
-                                    loanProcess.loanAccount.loanType = $stateParams.pageData.loanType;
-                                    loanProcess.loanAccount.productCategory = productCategory;
+                                    localStorage.removeItem("productCategory");
+                                    localStorage.removeItem("loanType");
+                                    localStorage.setItem("productCategory", $stateParams.pageData.productCategory);
+                                    localStorage.setItem("loanType", $stateParams.pageData.loanType);
                                 }
-                                
+                                if(localStorage.getItem("productCategory") !== null && localStorage.getItem("loanType") !== null) {
+                                    productCategory = localStorage.getItem("productCategory");
+                                    loanProcess.loanAccount.loanType = localStorage.getItem("loanType");
+                                    loanProcess.loanAccount.productCategory = localStorage.getItem("productCategory");
+                                }               
                                  if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
 
                                     var _leadId = $stateParams.pageData['lead_id'];

@@ -134,8 +134,9 @@ define({
                                         "readonly": false,
                                         "key": "loanAccount.loanDocs[].documentId",
                                         "onClick": function(model, form, schemaForm, event) {
-                                            var fileId = model.loanAccount.loanDocuments[schemaForm.arrayIndex].documentId;
-                                            Utils.downloadFile(Files.getFileDownloadURL(fileId));
+                                            //var fileId = model.loanAccount.loanDocuments[schemaForm.arrayIndex].documentId;
+                                            //Utils.downloadFile(Files.getFileDownloadURL(fileId));
+                                            Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + "applicant_details" + "&record_id=" + model.loanAccount.id+ "&display=content")
                                         }
                                     }]
                                 }, {
@@ -504,6 +505,11 @@ define({
             actions: {
                 reject: function(model, formCtrl, form, $event){
                     $log.info("Inside reject()");
+                    if (model.review.remarks==null || model.review.remarks =="" || model.loanAccount.rejectReason ==null || model.loanAccount.rejectReason ==""){
+                               PageHelper.showProgress("update-loan", "Reject Reason / Remarks is mandatory", 3000);
+                               PageHelper.hideLoader();
+                               return false;
+                        }
                     Utils.confirm("Are You Sure?").then(function(){
                         var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                         reqData.loanAccount.status = '';
@@ -600,9 +606,10 @@ define({
                 },
                 sendBack: function(model, formCtrl, form, $event){
                     $log.info("Inside sendBack()");
-                    if(_.isEmpty(model.review.remarks) || _.isEmpty(model.review.targetStage)) {
-                        PageHelper.showProgress("update-loan", "Please Enter Remarks and Stage.", 3000);
-                        return false;
+                    if (model.review.remarks==null || model.review.remarks =="" || model.review.targetStage ==null || model.review.targetStage ==""){
+                               PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
+                               PageHelper.hideLoader();
+                               return false;
                     }
                     Utils.confirm("Are You Sure?").then(function(){
                         var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
@@ -610,6 +617,7 @@ define({
                         reqData.loanProcessAction = "PROCEED";
                         reqData.remarks = model.review.remarks;
                         reqData.stage = model.review.targetStage;
+                        reqData.loanAccount.version = model.loanProcess.loanAccount.version
                         reqData.remarks = model.review.remarks;
                         PageHelper.showLoader();
                         PageHelper.showProgress("update-loan", "Working...");

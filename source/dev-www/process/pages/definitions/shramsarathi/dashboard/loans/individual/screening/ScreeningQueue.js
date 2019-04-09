@@ -34,50 +34,62 @@ define({
                     "type": 'object',
                     "title": 'SEARCH_OPTIONS',
                     "properties": {
-                        "centre": {
+                        "centreCode": {
                             "title": "ZONE_NAME",
-                            "type": "string",
-                            "required": false,
-                            "x-schema-form": {
-                                type: "lov",
-                                autolov: true,
-                                bindMap: {},
-                                searchHelper: formHelper,
-                                lovonly: true,
-                                search: function(inputModel, form, model, context) {
-                                    var centres = SessionStore.getCentres();
-                                    var centreCode = formHelper.enum('centre').data;
-                                    var out = [];
-                                    if (centres && centres.length) {
-                                        for (var i = 0; i < centreCode.length; i++) {
-                                            for (var j = 0; j < centres.length; j++) {
-                                                if (centreCode[i].value == centres[j].id) {
-                                                    out.push({
-                                                        name: centreCode[i].name,
-                                                        value: centreCode[i].code
-                                                    })
-                                                }
-                                            }
-                                        }
-                                    }
-                                    return $q.resolve({
-                                        headers: {
-                                            "x-total-count": out.length
-                                        },
-                                        body: out
-                                    });
-                                },
-                                onSelect: function(valueObj, model, context) {
-                                    model.centre = valueObj.name;
-                                    model.centreCode = valueObj.value;
-                                },
-                                getListDisplayItem: function(item, index) {
-                                    return [
-                                        item.name
-                                    ];
-                                }
-                            }
-                        },
+                            "required":false,
+							"type": ["integer", "null"],
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "centre",
+								"parentEnumCode": "branch_id",
+								"parentValueExpr": "model.branch",
+								"screenFilter": true
+							}
+						},
+                        // "centre": {
+                        //     "title": "ZONE_NAME",
+                        //     "type": "string",
+                        //     "required": false,
+                        //     "x-schema-form": {
+                        //         type: "lov",
+                        //         autolov: true,
+                        //         bindMap: {},
+                        //         searchHelper: formHelper,
+                        //         lovonly: true,
+                        //         search: function(inputModel, form, model, context) {
+                        //             var centres = SessionStore.getCentres();
+                        //             var centreCode = formHelper.enum('centre').data;
+                        //             var out = [];
+                        //             if (centres && centres.length) {
+                        //                 for (var i = 0; i < centreCode.length; i++) {
+                        //                     for (var j = 0; j < centres.length; j++) {
+                        //                         if (centreCode[i].value == centres[j].id) {
+                        //                             out.push({
+                        //                                 name: centreCode[i].name,
+                        //                                 value: centreCode[i].code
+                        //                             })
+                        //                         }
+                        //                     }
+                        //                 }
+                        //             }
+                        //             return $q.resolve({
+                        //                 headers: {
+                        //                     "x-total-count": out.length
+                        //                 },
+                        //                 body: out
+                        //             });
+                        //         },
+                        //         onSelect: function(valueObj, model, context) {
+                        //             model.centre = valueObj.name;
+                        //             model.centreCode = valueObj.value;
+                        //         },
+                        //         getListDisplayItem: function(item, index) {
+                        //             return [
+                        //                 item.name
+                        //             ];
+                        //         }
+                        //     }
+                        // },
                        "applicantName": {
                             "title": "APPLICANT_NAME",
                             "type": "string"
