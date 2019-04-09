@@ -769,7 +769,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "ContactInformation.residentialAddressAlsoBusinessAddress":{
                             "onChange": function (modelValue, form, model) {                               
                                 BundleManager.pushEvent('load-address', model._bundlePageObj,{customer: model.customer});
-                            }
+                            },
+                            condition:"model.loanProcess.loanAccount.productCategory == 'MEL' && model.pageClass !='guarantor' && model.pageClass !='co-applicant'"
                         },
                         "ContactInformation.mailingDoorNo":{
                             title:"DOOR_BUILDING",
@@ -1341,8 +1342,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             orderNo:149,
                                             "schema":{  
                                                "default":false
-                                            },
-                                            condition:"model.loanProcess.loanAccount.productCategory == 'MEL'"
+                                            }
                                         },
                                         "mailinglandmark":{
                                             "key":"customer.previousRentDetails",
