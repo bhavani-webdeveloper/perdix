@@ -859,56 +859,56 @@ irf.pageCollection.factory(irf.page("arohan.dashboard.loans.individual.screening
                     //     }]
                     // },// all existing docs ends
                     //remaining docs 
-                    {
-                        "type": "fieldset",
-                        "title": "Additional Documents",
-                        "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
-                        "readonly": true,
-                        "items": [{
-                            "type": "array",
-                            "notitle": true,
-                            "view": "fixed",
-                            "key": "remainingDocsArray",
-                            "remove": null,
-                            "items": [
-                                {
-                                    "type": "section",
-                                    "htmlClass": "row",
-                                    "condition": "model.remainingDocsArray[arrayIndex].isHidden === false",
-                                    "items": [
-                                        {
-                                            "type": "section",
-                                            "htmlClass": "col-sm-9",
-                                            "items": [{
-                                                "key": "remainingDocsArray[].$title",
-                                                "notitle": true,
-                                                "titleExpr": "model.remainingDocsArray[arrayIndex].$title",
-                                                "type": "html",
-                                                "fieldHtmlClass": "text-bold",
-                                                "condition": "!model.remainingDocsArray[arrayIndex].$downloadRequired",
-                                                "onClick": function (model, form, schemaForm, event) {
+                    // {
+                    //     "type": "fieldset",
+                    //     "title": "Additional Documents",
+                    //     "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
+                    //     "readonly": true,
+                    //     "items": [{
+                    //         "type": "array",
+                    //         "notitle": true,
+                    //         "view": "fixed",
+                    //         "key": "remainingDocsArray",
+                    //         "remove": null,
+                    //         "items": [
+                    //             {
+                    //                 "type": "section",
+                    //                 "htmlClass": "row",
+                    //                 "condition": "model.remainingDocsArray[arrayIndex].isHidden === false",
+                    //                 "items": [
+                    //                     {
+                    //                         "type": "section",
+                    //                         "htmlClass": "col-sm-9",
+                    //                         "items": [{
+                    //                             "key": "remainingDocsArray[].$title",
+                    //                             "notitle": true,
+                    //                             "titleExpr": "model.remainingDocsArray[arrayIndex].$title",
+                    //                             "type": "html",
+                    //                             "fieldHtmlClass": "text-bold",
+                    //                             "condition": "!model.remainingDocsArray[arrayIndex].$downloadRequired",
+                    //                             "onClick": function (model, form, schemaForm, event) {
                                                    
-                                                }
-                                            }]
-                                        },
-                                        {
-                                            "type": "section",
-                                            "htmlClass": "col-sm-3",
-                                            "items": [{
-                                                title: "Upload",
-                                                key: "remainingDocsArray[].documentId",
-                                                type: "file",
-                                                fileType: "application/pdf",
-                                                category: "Loan",
-                                                subCategory: "DOC1",
-                                                "notitle": true,
-                                                using: "scanner"
-                                            }]
-                                        }
-                                    ]
-                                }] // END of array items
-                        }]
-                    }
+                    //                             }
+                    //                         }]
+                    //                     },
+                    //                     {
+                    //                         "type": "section",
+                    //                         "htmlClass": "col-sm-3",
+                    //                         "items": [{
+                    //                             title: "Upload",
+                    //                             key: "remainingDocsArray[].documentId",
+                    //                             type: "file",
+                    //                             fileType: "application/pdf",
+                    //                             category: "Loan",
+                    //                             subCategory: "DOC1",
+                    //                             "notitle": true,
+                    //                             using: "scanner"
+                    //                         }]
+                    //                     }
+                    //                 ]
+                    //             }] // END of array items
+                    //     }]
+                    // }
                 ] 
             },
             {
