@@ -227,7 +227,7 @@ function($log, $scope, $stateParams,Queries, $q, formHelper, SessionStore, Pages
 					"Page/Engine/customer360.RequestRecaptureGPS"
 				]
 			},
-			"Page/CustomerHistory"
+			"Page/Engine/customer360.CustomerHistorySummary"
 		]
 	};
 

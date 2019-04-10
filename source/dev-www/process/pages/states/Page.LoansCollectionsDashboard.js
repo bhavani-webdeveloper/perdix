@@ -34,6 +34,8 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
         $scope.dashboardDefinition = resp;
         var branchId = SessionStore.getBranchId();
         var branches = formHelper.enum('branch').data;
+        var assignedTo = SessionStore.getLoginname();
+        var siteCode = SessionStore.getGlobalSetting('siteCode');
         var branchName = null;
         for (var i = 0; i < branches.length; i++) {
             var branch = branches[i];
@@ -67,13 +69,13 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
                     rfqMenu.data = '-';
                 });
         }
-
+        if(siteCode=='witfin'){
         var bqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.BounceQueue"];
         if (bqMenu) {
             var centres = SessionStore.getCentres();
             bqMenu.data = 0;
             for (var i = 0; i < centres.length; i++) {
-                LoanProcess.bounceCollectionDemand({ 'branchId': branchId, 'centreId': centres[i].id }).$promise.then(function(response,headerGetter){
+                LoanProcess.bounceCollectionDemand({ 'branchId': branchId, 'assignedTo': assignedTo }).$promise.then(function(response,headerGetter){
                     bqMenu.data += response.body.length; // Number(headerGetter()['x-total-count']);
                 }, function() {
                     bqMenu.data = '-';
@@ -88,6 +90,31 @@ function($log, $scope, PagesDefinition,formHelper, SessionStore, LoanProcess,Rep
             }, function() {
                 bpqMenu.data = '-';
             });
+        }
+        }
+        else{
+            var bqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.BounceQueue"];
+            if (bqMenu) {
+                var centres = SessionStore.getCentres();
+                bqMenu.data = 0;
+                for (var i = 0; i < centres.length; i++) {
+                    LoanProcess.bounceCollectionDemand({ 'branchId': branchId, 'centreId': centres[i].id }).$promise.then(function(response,headerGetter){
+                        bqMenu.data += response.body.length; // Number(headerGetter()['x-total-count']);
+                    }, function() {
+                        bqMenu.data = '-';
+                    });
+                };
+            }
+    
+            var bpqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.BouncePromiseQueue"];
+            if (bpqMenu) {
+                LoanProcess.bounceCollectionDemand({ 'branchId': currentBranchId }).$promise.then(function(response,headerGetter){
+                    bpqMenu.data = response.body.length; // Number(headerGetter()['x-total-count']);
+                }, function() {
+                    bpqMenu.data = '-';
+                });
+            }
+
         }
 
         var brqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.collections.BounceRecoveryQueue"];
