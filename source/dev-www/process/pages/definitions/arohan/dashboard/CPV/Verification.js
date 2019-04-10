@@ -54,13 +54,40 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ApplicantInformation.firstName",
                     "ApplicantInformation.dob",
                     "ApplicantInformation.gender",
-                    "ApplicantInformation.fatherName",
-                    "ApplicantInformation.customerPhoto",
-                    "ApplicantInformation.kycFieldSet",
-                    "ApplicantInformation.identityProofNo",
-                    "ApplicantInformation.identityProof",
-                    "ApplicantInformation.addressProof",
-
+                    "ApplicantInformation.contactInformationFieldSet",
+                    "ApplicantInformation.careOf",
+                    "ApplicantInformation.mobileNo",
+                    "ApplicantInformation.doorNo",
+                    "ApplicantInformation.pincode",
+                    "ApplicantInformation.locality",
+                    "ApplicantInformation.villageName",
+                    "ApplicantInformation.district",
+                    "ApplicantInformation.state",
+                    "BusinessInformation",
+                    "BusinessInformation.businessInformationFieldset",
+                    "BusinessInformation.entityname",
+                    "BusinessInformation.premisesOwnership",
+                    "BusinessInformation.constitution",
+                    "BusinessInformation.registrationDate",
+                    "BusinessInformation.businessSector",
+                    "BusinessInformation.doorBuilding",
+                    "BusinessInformation.street",
+                    "BusinessInformation.landmark",
+                    "BusinessInformation.pincode",
+                    "BusinessInformation.area",
+                    "BusinessInformation.cityVillage",
+                    "BusinessInformation.district",
+                    "BusinessInformation.state",
+                    "BusinessInformation.officeAddressFieldSet",
+                    "BusinessInformation.officemailingmobilePhone",
+                    "BusinessInformation.officemailinglandLineNo",
+                    "BusinessInformation.officemailingDoorNo",
+                    "BusinessInformation.officemailingStreet",
+                    "BusinessInformation.officemailingLandmark",
+                    "BusinessInformation.officemailingPincode",
+                    "BusinessInformation.officemailingLocality",
+                    "BusinessInformation.officemailingDistrict",
+                    "BusinessInformation.officemailingState",
                     "CpvFeedback",
                     // "CpvFeedback.recommendation",
                     // "CpvFeedback.caseStatus",
@@ -207,9 +234,204 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "subCategory": "ADDRESSPROOF",
                                         "readonly": true
                                     },
-                                   
+                                    "contactInformationFieldSet": {
+                                        "type": "fieldset",
+                                        "title": "CONTACT_INFORMATION",
+                                        "items": []
+                                    },
+                                     "mobileNo": {
+                                        "key": "applicant.customer.mobilePhone",
+                                        "type": "text",
+                                        "title": "MOBILE_PHONE",
+                                        "inputmode": "number",
+                                        "numberType": "tel",
+                                        "readonly": true,
+                                    },
+                                    "mobileNo2": {
+                                        "key": "applicant.customer.mobileNumber2",
+                                        "type": "text",
+                                        "title": "MOBILE_PHONE_2",
+                                        "inputmode": "number",
+                                        "numberType": "tel",
+                                        "readonly": true,
+                                    },
+                                    "careOf": {
+                                        "key": "applicant.customer.careOf",
+                                        "title": "CARE_OF",
+                                        "readonly": true
+                                    },
+                                     "doorNo": {
+                                        "key": "applicant.customer.doorNo",
+                                        "title": "DOOR_NO",
+                                        "readonly": true
+                                    },
+                                    "pincode": {
+                                        "key": "applicant.customer.pincode",
+                                        "title": "PIN_CODE",
+                                        "type": "lov",
+                                        "fieldType": "number",
+                                        "autolov": true,
+                                        "readonly": true
+                                    },
+                                    "locality": {
+                                        "key": "applicant.customer.locality",
+                                        "title": "LOCALITY",
+                                        "readonly": true
+                                    },
+                                    "villageName": {
+                                        "key": "applicant.customer.villageName",
+                                        "title": "VILLAGE_NAME",
+                                        "enumCode": "village",
+                                        "readonly": true
+                                    },
+                                    "district": {
+                                        "key": "applicant.customer.district",
+                                        "title": "DISTRICT",
+                                        "enumCode": "district",
+                                        "readonly": true
+                                    },
+                                    "state": {
+                                        "key": "applicant.customer.state",
+                                        "title": "STATE",
+                                        "readonly": true
+                                    },
                             }
                         },
+                    "BusinessInformation":{
+                        "orderNo":4,
+                        "type":"box",
+                        "title":"BUSINESS_INFORMATION",
+                        "items":{
+                            "businessInformationFieldset":{
+                                        "type": "fieldset",
+                                        "title": "BUSINESS_INFORMATION",
+                                        "items": []
+                                    },
+                                    "entityname":{
+                                        "key": "applicant.customer.firstName",
+                                        "title": "ENTITY_NAME",
+                                        "type": "string",
+                                        "readonly": true
+                        },
+                                    "premisesOwnership":{
+                                        "key": "applicant.customer.enterprise.ownership",
+                                        "title": "PREMISES_OWNERSHIP",
+                                        "type": "string",
+                                        "readonly": true
+                        },          "constitution":{
+                                        "key": "applicant.customer.enterprise.businessConstitution",
+                                        "title": "CONSTITUTION",
+                                        "type": "string",
+                                        "readonly": true
+                        },          "registrationDate":{
+                                        "key": "applicant.customer.enterpriseRegistrations[].registeredDate",
+                                        "title": "REGISTRATION_DATE",
+                                        "type": "date",
+                                        "readonly": true
+                        },          "businessSector":{
+                                        "key": "applicant.customer.enterprise.businessSector",
+                                        "title": "BUSINESS_SECTOR",
+                                        "type": "string",
+                                        "readonly": true
+                        },
+                                        "doorBuilding": {
+                                            "key": "applicant.customer.doorNo",
+                                            "title": "DOOR_BUILDING",
+                                            "readonly": true
+                                        },
+                                        "street": {
+                                            "key": "applicant.customer.street",
+                                            "title": "STREET",
+                                            "readonly": true
+                                        },
+                                        "landmark": {
+                                            "key": "applicant.customer.landmark",
+                                            "title": "LANDMARK",
+                                            //"type": "lov",
+                                            "fieldType": "number",
+                                        },
+                                        "pincode": {
+                                            "key": "applicant.customer.pincode",
+                                            "title": "PINCODE",
+                                            "readonly": true
+                                        },
+                                        "area": {
+                                            "key": "applicant.customer.villageName",
+                                            "title": "AREA",
+                                            "enumCode": "village",
+                                            "readonly": true
+                                        },
+                                        "cityVillage": {
+                                            "key": "applicant.customer.villageName",
+                                            "title": "VILLAGE_NAME",
+                                            "enumCode": "village",
+                                            "readonly": true
+                                        },
+                                        "district": {
+                                            "key": "applicant.customer.district",
+                                            "title": "DISTRICT",
+                                            "enumCode": "district",
+                                            "readonly": true
+                                        },
+                                        "state": {
+                                            "key": "applicant.customer.state",
+                                            "title": "STATE",
+                                            "readonly": true
+                                        },
+                                        "officeAddressFieldSet":{
+                                            "type":"fieldset",
+                                            "title":"OFFICE_ADDRESS",
+                                            "readonly": true
+                                        },
+                                        "officemailingmobilePhone":{
+                                            "type":"number",
+                                            "title":"MOBILE_NUMBER",
+                                            "readonly": true
+                                        },
+                                         "officemailinglandLineNo":{
+                                            "type":"number",
+                                            "title":"PHONE_2",
+                                            "readonly": true
+                                         },
+                                        "officemailingDoorNo":{
+                                            "type":"number",
+                                            "title":"DOOR_NO",
+                                            "readonly": true
+                                        },
+                                        "officemailingStreet":{
+                                            "type":"text",
+                                            "title":"STREET",
+                                            "readonly": true
+                                        },
+                                        "officemailingLandmark":{
+                                            "type":"text",
+                                            "title":"LANDMARK",
+                                            "readonly": true
+                                        },
+                                        "officemailingPincode":{
+                                            "type":"lov",
+                                            "title":"PINCODE",
+                                            "resolver": "PincodeLOVConfiguration",
+                                            "searchHelper": formHelper,
+                                            "readonly": true
+                                        },
+                                        "officemailingLocality":{
+                                            "type":"text",
+                                            "title":"LOCALITY",
+                                            "readonly": true
+                                        },
+                                        "officemailingDistrict":{
+                                            "type":"text",
+                                            "title":"DISTRICT",
+                                            "readonly": true
+                                        },
+                                        "officemailingState":{
+                                            "type":"text",
+                                            "title":"STATE",
+                                            "readonly": true
+                                        }
+                                    }              
+                    },
                             "CpvFeedback": {
                                 "type": "box",
                                 "title": "CPV_QUESTIONS",
