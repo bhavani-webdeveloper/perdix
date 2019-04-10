@@ -1804,7 +1804,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "EnterpriseReferences",
                                     "EnterpriseReferences.verifications",
                                     //"EnterpriseInformation.customerId",
-                                    "References"
+                                    "References",
                                 ],
                                 "overrides": {
                                     "EnterpriseInformation": {
@@ -1848,6 +1848,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "EnterpriseInformation.customerId":{
                                         "key": "customer.firstName",
                                         "title":"CUSTOMER_NAME"
+                                    },
+                                    "EnterpriseFinancials":{
+                                        "readonly":true
+                                    },
+                                    "EmployeeDetails":{
+                                        "readonly":true
                                     }
                                     
                                 }
