@@ -302,27 +302,75 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "pageClass": {
                         "applicant": {
-                            "excludes": [
-                                "CoApplicantIndividualInformation"
-                            ],
+                            "excludes": [],
                             "overrides": {
                                
                             }
                         },
                         "guarantor": {
-                            "excludes": [
-                             "CoApplicantIndividualInformation"
-                            ],
+                            "excludes": [],
                             "overrides": {
 
                             }
                         },
                         "co-applicant": {
-                            "excludes": [
-                                "CoApplicantIndividualInformation"
-                            ],
+                            "excludes": [],
                             "overrides": {
-                              
+                                "KYC.customerId": {
+                                    key: "customer.id",
+                                    type: "lov",
+                                    title: "CUSTOMER_SEARCH",
+                                    autolov:false,
+                                    bindMap: {},
+                                    inputMap: {},
+                                    outputMap:{},
+                                    searchHelper: formHelper,
+                                    search: function (inputModel, form, model, context) {
+                                        var temp = model.loanProcess.applicantEnrolmentProcess.customer.familyMembers;
+                                        var temp2 = model.loanProcess.applicantEnrolmentProcess.customer;
+                                        var out = [];
+                                        if(temp){
+                                       for(i=0;i<temp.length;i++)
+                                        {
+                                           if(temp[i].enrolledUrnNo != null && temp[i].enrolledUrnNo != "" && temp[i].enrolledUrnNo != temp2.urnNo){
+                                               out.push(temp[i]);
+                                           }
+                                        } 
+                                        }  
+                                       return $q.resolve( {
+                                            headers: {
+                                                "x-total-count": out.length
+                                            },
+                                            body: out
+                                        })
+                                    },
+                                    onSelect: function (valueObj, model, context) {
+                                        PageHelper.showLoader()
+                                        Enrollment.search({"urnNo":valueObj.enrolledUrnNo}).$promise.then(function(resp){
+                                            Enrollment.getCustomerById({id:resp.body[0].id}).$promise.then(function(resp){
+                                                var temp = model.loanProcess.loanAccount.loanCustomerRelations;
+                                                for(i=0;i<temp.length;i++){
+                                                    if(temp[i].customerId == resp.id ){
+                                                        PageHelper.showProgress('enrollment','This customer is already selected',2000);
+                                                        PageHelper.hideLoader();
+                                                        return;
+                                                    }
+                                                }
+                                                model.customer = resp;
+                                                PageHelper.hideLoader();
+                                                model.enrolmentProcess.customer = resp;
+                                                    model.loanProcess.loanAccount.loanCustomerRelations.push({customerId:resp.id,name:resp.firstName,relation:"Co-Applicant",urn:resp.urnNo});
+                                                    BundleManager.pushEvent("new-enrolment",model._bundlePageObj,{customer:resp});
+
+                                            })
+                                        })
+                                    },
+                                    getListDisplayItem: function (item, index) {
+                                        return [
+                                            item.familyMemberFirstName
+                                        ];
+                                    }
+                                }
                             }
                         }
                     }
@@ -1248,14 +1296,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "IndividualReferences.verifications.mobileNo",
                 "IndividualReferences.verifications.address",
 
-                "CoApplicantIndividualInformation",
-                "CoApplicantIndividualInformation.familyMembers",
-                "CoApplicantIndividualInformation.familyMembers.familyMemberFirstName",
-                "CoApplicantIndividualInformation.familyMembers.Relationship",
-                "CoApplicantIndividualInformation.familyMembers.Income",
-                "CoApplicantIndividualInformation.familyMembers.Occupation",
-                "CoApplicantIndividualInformation.familyMembers.Education",
-                "CoApplicantIndividualInformation.familyMembers.IncomeDetails"
                 ];
             }
 
@@ -1426,103 +1466,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     "type":"string",
 
                                                 }
-                                            }
-                                        }
-                                    }
-                                },
-                                "CoApplicantIndividualInformation":{
-                                    "type": "box",
-                                    "title": "PERSONAL_INFORMATION",
-                                    "orderNo": 20,
-                                    "items":{
-
-                                        "familyMembers": {
-                                            "key": "customer.familyMembers",
-                                            "type": "array",
-                                            "startEmpty": false,
-                                            "add":null,
-                                            "remove":null,
-                                            "view": "fixed",
-                                            "items": {
-                                        "familyMemberFirstName":{
-                                            "key":"customer.familyMembers[].familyMemberFirstName",
-                                            "title":"FIRST_NAME",
-                                            "type":"lov",
-                                            autolov:false,
-                                            bindMap: {},
-                                            inputMap: {},
-                                            outputMap:{},
-                                            searchHelper: formHelper,
-                                            search: function (inputModel, form, model, context) {
-                                                var temp = model.loanProcess.applicantEnrolmentProcess.customer.familyMembers;
-                                                var temp2 = model.loanProcess.applicantEnrolmentProcess.customer;
-                                                var out = [];
-                                                if(temp){
-                                               for(i=0;i<temp.length;i++)
-                                                {
-                                                //    if(temp[i].enrolledUrnNo != null && temp[i].enrolledUrnNo != "" && temp[i].enrolledUrnNo != temp2.urnNo){
-                                                       out.push(temp[i]);
-                                                //    }
-                                                } 
-                                                }  
-                                               return $q.resolve( {
-                                                    headers: {
-                                                        "x-total-count": out.length
-                                                    },
-                                                    body: out
-                                                })
-                                            },
-                                            onSelect: function (valueObj, model, context) {
-                                                PageHelper.showLoader()
-                                                Enrollment.search({"urnNo":valueObj.enrolledUrnNo}).$promise.then(function(resp){
-                                                    Enrollment.getCustomerById({id:resp.body[0].id}).$promise.then(function(resp){
-                                                        var temp = model.loanProcess.loanAccount.loanCustomerRelations;
-                                                        for(i=0;i<temp.length;i++){
-                                                            if(temp[i].customerId == resp.id ){
-                                                                PageHelper.showProgress('enrollment','This customer is already selected',2000);
-                                                                PageHelper.hideLoader();
-                                                                return;
-                                                            }
-                                                        }
-                                                        model.customer = resp;
-                                                        PageHelper.hideLoader();
-                                                        model.enrolmentProcess.customer = resp;
-                                                            model.loanProcess.loanAccount.loanCustomerRelations.push({customerId:resp.id,name:resp.firstName,relation:"Co-Applicant",urn:resp.urnNo});
-                                                            BundleManager.pushEvent("new-enrolment",model._bundlePageObj,{customer:resp});
-    
-                                                    })
-                                                })
-                                            },
-                                            getListDisplayItem: function (item, index) {
-                                                return [
-                                                    item.familyMemberFirstName
-                                                ];
-                                            }
-                                        },
-                                        "Relationship":{
-                                            "key":"customer.familyMembers[].relationShip",
-                                            "title":"RELATIONSHIP",
-                                            "type":"select"
-                                        },
-                                        "Income":{
-                                            "key":"customer.familyMembers[].salary",
-                                            "type":"number",
-                                            "title":"INCOME"
-                                        },
-                                        "Occupation":{
-                                            "key":"customer.familyMembers[].udfId1",
-                                            "type":"text",
-                                            "title":"OCCUPATION"
-                                        },
-                                        "Education":{
-                                            "key":"customer.familyMembers[].educationStatus",
-                                            "title":"EDUCATION",
-                                            "type":"select"
-                                        },
-                                        "IncomeDetails":{
-                                            "key":"customer.familyMembers[].udfId2",
-                                            "title":"INCOME_DETAILS"
-                                        }
                                             }
                                         }
                                     }
