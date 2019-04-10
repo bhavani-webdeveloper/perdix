@@ -19,7 +19,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                 var policyOnSubmit = function(policyName,model){
                     if(policyName){
                         if(policyName == "minimumFamilyMembers"){
-                            if(model.customer.familyMembers.length<1){
+                            if(model.customer.familyMembers && model.customer.familyMembers.length<1){
                                 PageHelper.showErrors({
                                     "data":{
                                         "error":"Minimum One Familymember is required other than Self."
@@ -27,6 +27,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                 });
                                 PageHelper.hideLoader();
                                 return false;
+                            }
+                            else if (model.customer.familyMembers && model.customer.familyMembers.length>1){
+                                for (var i=0;i<model.customer.familyMembers.length;i++){
+                                    if (model.customer.familyMembers[i].relationShip == "Self")
+                                        error = false
+                                }
+                                if (error){
+                                    PageHelper.showErrors({
+                                        "data":{
+                                            "error":"Relation Self is necessary in Family Member."
+                                        }
+                                    });
+                                    PageHelper.hideLoader();
+                                    return false;
+                                }
                             }
                         }
                     }

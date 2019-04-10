@@ -69,7 +69,40 @@ irf.pageCollection.factory("Pages__CustomerRUD", ["$log", "$q", "Enrollment", "Q
                 }
             }
         }   
-        processSkelitonFormByRoleConfig
+        var policyOnSubmit = function(policyName,model){
+            if(policyName){
+                if(policyName == "minimumFamilyMembers"){
+                    if(model.customer.familyMembers && model.customer.familyMembers.length<1){
+                        PageHelper.showErrors({
+                            "data":{
+                                "error":"Minimum One Familymember is required other than Self."
+                            }
+                        });
+                        PageHelper.hideLoader();
+                        return false;
+                    }
+                    else if (model.customer.familyMembers && model.customer.familyMembers.length>1){
+                        for (var i=0;i<model.customer.familyMembers.length;i++){
+                            if (model.customer.familyMembers[i].relationShip == "Self")
+                                error = false
+                        }
+                        if (error){
+                            PageHelper.showErrors({
+                                "data":{
+                                    "error":"Relation Self is necessary in Family Member."
+                                }
+                            });
+                            PageHelper.hideLoader();
+                            return false;
+                        }
+                    }
+                }
+            }
+            else{
+                // allPolicies
+            }
+            return true;
+        }
 
         return {
             "id": "CustomerRUD",
@@ -1565,6 +1598,8 @@ irf.pageCollection.factory("Pages__CustomerRUD", ["$log", "$q", "Enrollment", "Q
                     if (window.confirm("Update - Are You Sure?")) {
                         PageHelper.showLoader();
                         irfProgressMessage.pop('cust-update', 'Working...');
+                        if(!policyOnSubmit("minimumFamilyMembers",model))
+                                return false;
                         model.customer.title = String(model.customer.addressProofSameAsIdProof);
                         $log.info(model);
                         if (!EnrollmentHelper.validateBankAccounts(model)) {
