@@ -489,11 +489,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 model.customerBranchId = parentModel.customer.customerBranchId;
                                 model.centreId = parentModel.customer.centreId;
                                 var centreCode = formHelper.enum('centre').data;
+                                var centres = SessionStore.getCentres();
     
                                 var centreName = $filter('filter')(centreCode, {value: parentModel.customer.centreId}, true);
                                 if(centreName && centreName.length > 0 && model.centreId !=undefined) {
                                     model.centreName = centreName[0].name;
                                 }
+
+                                if(centres && centres.length > 0 && centres !=undefined) {
+                                    if(centres.length == 1)
+                                    {
+                                        model.centreName=centres[0].centreName;
+                                        model.centreId=centres[0].centreCode;
+                                    }
+                                }
+
     
                             },
                             "inputMap": {
