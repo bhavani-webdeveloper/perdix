@@ -124,6 +124,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "LenderInformation.enterpriseRegistrations",
                     "LenderInformation.enterpriseRegistrations.registrationType",
                     "LenderInformation.enterpriseRegistrations.registrationNumber",
+                    "LenderInformation.enterpriseRegistrations.regexWarning",
                     "LenderInformation.enterpriseRegistrations.documentId",
 
                     "LenderContactDetails",
@@ -264,7 +265,28 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     "key": "customer.enterpriseRegistrations[].registrationNumber",
                                                     "title": "REGISTRATION_NUMBER",
                                                     "required": true,
-                                                    "orderNo": 230
+                                                    "orderNo": 230,
+                                                    "onChange": function(value,context,model,form){
+                                                        var type = model.customer.enterpriseRegistrations[context.arrayIndex].registrationType;
+                                                        var length = type == 'GST' ? 15 : 10;
+                                                        var regex = type =='GST' ? '^[a-zA-Z0-9]{'+length+'}$' : '^[a-zA-Z0-9]{'+length+'}$';
+                                                        regex = new RegExp(regex, "is");
+                                                        if(regex.test(model.customer.enterpriseRegistrations[context.arrayIndex].registrationNumber) == false){
+                                                            model.customer.enterpriseRegistrations[context.arrayIndex].warningHtml = '<p stye=\"font-size:10px !important\"><font color=#FF6347>'+type+' Number should be Alpha-Numeric & '+length+' Characters long'+'</font><p>'
+                                                        }
+                                                        else{
+                                                            if(model.customer.enterpriseRegistrations[context.arrayIndex].warningHtml)
+                                                                delete model.customer.enterpriseRegistrations[context.arrayIndex].warningHtml;
+                                                        }
+                                                    }
+                                                },
+                                                "regexWarning":{
+                                                    "type":'html',
+                                                    "notitle":true,
+                                                    "key":"customer.enterpriseRegistrations[].warningHtml",
+                                                    "condition":"model.customer.enterpriseRegistrations[arrayIndex].warningHtml",
+                                                    "orderNo": 230,
+
                                                 },
                                                 "documentId": {
                                                     "key": "customer.enterpriseRegistrations[].documentId",
