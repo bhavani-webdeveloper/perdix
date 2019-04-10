@@ -138,6 +138,7 @@
          "stageType":"CAPTURE",
          "sendSms":"Yes",
          "smsCategory":"Approval",
+         "authorizationCount":2,
          "isAccountOpening":false,
          "allowedRoles":[
             "WM"
