@@ -213,18 +213,19 @@ irf.pageCollection.factory(irf.page("arohan.dashboard.loans.individual.screening
                 "colClass": "col-sm-12",
                 "condition":"model.siteCode!='IREPDhan'",
                 "items": [
-                   {
-                            "type": "fieldset",
-                            "title": "View Loan Details",
-                            "condition":"model.loanAccount.id && model.siteCode != 'sambandh' && model.siteCode != 'saija'",
-                            "items": [{
-                                key: "loanAccount.ViewLoan",
-                                type: "button",
-                                title: "View Loan",
-                                required: true,
-                                onClick: "actions.viewLoan(model, formCtrl, form, $event)"
-                            }]
-                    },{
+                //    {
+                //             "type": "fieldset",
+                //             "title": "View Loan Details",
+                //             "condition":"model.loanAccount.id && model.siteCode != 'sambandh' && model.siteCode != 'saija'",
+                //             "items": [{
+                //                 key: "loanAccount.ViewLoan",
+                //                 type: "button",
+                //                 title: "View Loan",
+                //                 required: true,
+                //                 onClick: "actions.viewLoan(model, formCtrl, form, $event)"
+                //             }]
+                //     },
+                    {
                     "type": "fieldset",
                     "title": "DISBURSEMENT_ACCOUNT_DETAILS",
                     "items": [{
@@ -385,7 +386,8 @@ irf.pageCollection.factory(irf.page("arohan.dashboard.loans.individual.screening
                                 required: true,
                                 onClick: "actions.viewLoan(model, formCtrl, form, $event)"
                             }]
-                    },{
+                    },
+                    {
                     "type": "fieldset",
                     "title": "DISBURSEMENT_ACCOUNT_DETAILS",
                     "items": [{
