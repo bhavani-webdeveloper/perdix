@@ -1866,7 +1866,7 @@ define([], function() {
                             return;
                         }
 
-                        if(model.loanProcess.loanAccount.currentStage=='TeleVerification' && (model.loanProcess.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanProcess.loanAccount.loanPurpose1 == 'Refinance') && (!_.hasIn(model.loanProcess.loanAccount.vehicleLoanDetails, 'vehicleValuationDoneAt') || model.loanProcess.loanAccount.vehicleLoanDetails.vehicleValuationDoneAt === null)) {
+                        if(model.loanProcess.loanAccount.currentStage=='ScreeningReview' && (model.loanProcess.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanProcess.loanAccount.loanPurpose1 == 'Refinance') && (!_.hasIn(model.loanProcess.loanAccount.vehicleLoanDetails, 'vehicleValuationDoneAt') || model.loanProcess.loanAccount.vehicleLoanDetails.vehicleValuationDoneAt === null)) {
                             PageHelper.showErrors({"data": {"error":"Vehicle Valuation should be done"}});
                             return false;
                         }
