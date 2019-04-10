@@ -182,7 +182,7 @@ define({////arohan.dashboard.loans.individual.screening.FieldAppraisal
 					},
 					getActions: function() {
 						return [{
-							name: "CREDIT_COMMITTEE_REVIEW",
+							name: "BH_APPROVAL_REVIEW",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {

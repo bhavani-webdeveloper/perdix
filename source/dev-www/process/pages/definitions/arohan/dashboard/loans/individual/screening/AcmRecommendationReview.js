@@ -92,12 +92,20 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:73
                             },
                             {
+                            pageName: 'arohan.dashboard.loans.individual.screening.InternalPd',
+                            title: 'PD_FEEDBACK',
+                            pageClass: 'pd_feedback',
+                            minimum: 1,
+                            maximum: 1,
+                            order:110
+                            },
+                            {
                                 pageName: 'arohan.dashboard.CPV.Verification',
-                                title: 'VERIFICATION',
+                                title: 'CPV_FEEDBACK',
                                 pageClass: 'verification',
                                 minimum: 1,
                                 maximum: 1,
-                                order:75
+                                order:112
                             },
                             {
                                 pageName: 'arohan.dashboard.loans.individual.screening.Review',
@@ -105,7 +113,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'loan-review',
                                 minimum: 1,
                                 maximum: 1,
-                                order:80
+                                order:113
                             },
                             // {
                             //     pageName: 'arohan.dashboard.loans.individual.screening.detail.SummaryView',
@@ -365,6 +373,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             pageClass: 'cbview',
                                             model: {
                                                 loanAccount: res
+                                            }
+                                        });
+                                        $this.bundlePages.push({
+                                            pageClass: 'pd_feedback',
+                                            model: {
+                                                enrolmentProcess:loanProcessts.loanCustomerEnrolmentProcess,
+                                                loanProcess: loanProcessts,
+                                                loanAccount:res 
                                             }
                                         });
 

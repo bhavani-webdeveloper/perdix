@@ -100,12 +100,28 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:95
                             },
                             {
+                                pageName: 'arohan.dashboard.loans.individual.screening.InternalPd',
+                                title: 'PD_FEEDBACK',
+                                pageClass: 'pd_feedback',
+                                minimum: 1,
+                                maximum: 1,
+                                order:110
+                            },
+                            // {
+                            //     pageName: 'arohan.dashboard.loans.individual.screening.Review',
+                            //     title: 'CPV_FEEDBACK',
+                            //     pageClass: 'cpv-feedback',
+                            //     minimum: 1,
+                            //     maximum: 1,
+                            //     order:110
+                            // },
+                            {
                                 pageName: 'arohan.dashboard.loans.individual.screening.Review',
                                 title: 'REVIEW',
                                 pageClass: 'loan-review',
                                 minimum: 1,
                                 maximum: 1,
-                                order:80
+                                order:110
                             },
                             // {
                             //     pageName: 'arohan.dashboard.loans.individual.screening.detail.SummaryView',
@@ -375,6 +391,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                                                 //loanAccount:res 
                                             }
                                         });
+                                        
+                                        $this.bundlePages.push({
+                                            pageClass: 'pd_feedback',
+                                            model: {
+                                                enrolmentProcess:loanProcessts.loanCustomerEnrolmentProcess,
+                                                loanProcess: loanProcessts,
+                                                //loanAccount:res 
+                                            }
+                                        });
+                                       
                                         // $this.bundlePages.push({
                                         //     pageClass: 'portfolio-analytics',
                                         //     model: {

@@ -897,105 +897,105 @@ define({
                 }]
             }, 
 
-            {
-                "type": "box",
-                "readonly": false,
-                "colClass": "col-sm-12",
-                "overrideType": "default-view",
-                "title": "PD_FEEDBACK",
-                "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [
-                        {
-                            "key": "",
-                            "title": "Promotor Background",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+            // {
+            //     "type": "box",
+            //     "readonly": false,
+            //     "colClass": "col-sm-12",
+            //     "overrideType": "default-view",
+            //     "title": "PD_FEEDBACK",
+            //     "items": [{
+            //         "type": "grid",
+            //         "orientation": "horizontal",
+            //         "items": [{
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [
+            //             {
+            //                 "key": "",
+            //                 "title": "Promotor Background",
+            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                             
-                        }, 
-                        {
-                            "key": "",
-                            "title": "Strength",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+            //             }, 
+            //             {
+            //                 "key": "",
+            //                 "title": "Strength",
+            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                           
-                        },
-                        {
-                            "key":   "",
-                            "title": "Weekness",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+            //             },
+            //             {
+            //                 "key":   "",
+            //                 "title": "Weekness",
+            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                             
-                        },
-                        {
-                            "key": "",
-                            "title": "Recommendation",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+            //             },
+            //             {
+            //                 "key": "",
+            //                 "title": "Recommendation",
+            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                             
-                        },
-                        {
-                            "key":  "",
-                            "title": "Remark1",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                        },
-                        {
-                            "key":  "",
-                            "title": "Remark2",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                        },
-                        {
-                            "key":  "",
-                            "title": "Remark3",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                        }
+            //             },
+            //             {
+            //                 "key":  "",
+            //                 "title": "Remark1",
+            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+            //             },
+            //             {
+            //                 "key":  "",
+            //                 "title": "Remark2",
+            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+            //             },
+            //             {
+            //                 "key":  "",
+            //                 "title": "Remark3",
+            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+            //             }
 
-                    ]
-                    },]
-                }]
-            }, 
-            {
-                "type": "box",
-                "readonly": false,
-                "colClass": "col-sm-12",
-                "overrideType": "default-view",
-                "title": "CPV_FEEDBACK",
-                "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [
-                        {
-                            "key": "",
-                            "title": "Recommendation",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+            //         ]
+            //         },]
+            //     }]
+            // }, 
+            // {
+            //     "type": "box",
+            //     "readonly": false,
+            //     "colClass": "col-sm-12",
+            //     "overrideType": "default-view",
+            //     "title": "CPV_FEEDBACK",
+            //     "items": [{
+            //         "type": "grid",
+            //         "orientation": "horizontal",
+            //         "items": [{
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [
+            //             {
+            //                 "key": "",
+            //                 "title": "Recommendation",
+            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                             
-                        }, 
-                        {
-                            "key": "",
-                            "title": "Case Status",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+            //             }, 
+            //             {
+            //                 "key": "",
+            //                 "title": "Case Status",
+            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                           
-                        },
-                        {
-                            "key":   "",
-                            "title": "Verifier Remark",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+            //             },
+            //             {
+            //                 "key":   "",
+            //                 "title": "Verifier Remark",
+            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                             
-                        },
-                        {
-                            "key": "",
-                            "title": "Supervisor Remarks",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+            //             },
+            //             {
+            //                 "key": "",
+            //                 "title": "Supervisor Remarks",
+            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                             
-                        },
+            //             },
                        
-                    ]
-                    },]
-                }]
-            }, 
+            //         ]
+            //         },]
+            //     }]
+            // }, 
             {
                 "type": "box",
                 "readonly": false,
@@ -1010,9 +1010,10 @@ define({
                         "orientation": "vertical",
                         "items": [
                         {
-                            "key": "",
+                            "key": "loanAccount.loanDocuments[].document",
                             "title": "Document name ",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
+                            "type":"array"
                             
                         }, 
                         {

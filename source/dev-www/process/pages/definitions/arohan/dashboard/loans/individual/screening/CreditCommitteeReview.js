@@ -75,12 +75,28 @@ define(["perdix/domain/model/loan/LoanProcess",
                         order: 100
                     }, 
                     {
+                        pageName: 'arohan.dashboard.loans.individual.screening.InternalPd',
+                        title: 'PD_FEEDBACK',
+                        pageClass: 'pd_feedback',
+                        minimum: 1,
+                        maximum: 1,
+                        order:110
+                    },
+                    {
+                            pageName: 'arohan.dashboard.CPV.Verification',
+                            title: 'CPV_FEEDBACK',
+                            pageClass: 'verification',
+                            minimum: 1,
+                            maximum: 1,
+                            order:112
+                    },
+                    {
                         pageName: 'arohan.dashboard.loans.individual.screening.Review',
                         title: 'REVIEW',
                         pageClass: 'loan-review',
                         minimum: 1,
                         maximum: 1,
-                        order: 80
+                        order: 114
                     }, 
                     // {
                     //     pageName: 'loans.individual.misc.BalanceSheetHistory',
@@ -298,7 +314,25 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanAccount: loanAccount
                                     }
                                 });  
-                                    
+                                 
+                                  
+                                $this.bundlePages.push({
+                                    pageClass: 'pd_feedback',
+                                    model: {
+                                        enrolmentProcess:loanProcess.loanCustomerEnrolmentProcess,
+                                        loanProcess: loanProcess,
+                                        loanAccount:loanAccount
+                                    }
+                                });
+
+                                $this.bundlePages.push({
+                                    pageClass: 'verification',
+                                    model: {
+                                        enrolmentProcess:loanProcess.loanCustomerEnrolmentProcess,
+                                        loanProcess: loanProcess,
+                                        loanAccount:loanAccount
+                                    }
+                                });   
 
                                 deferred.resolve();                          
                             });
