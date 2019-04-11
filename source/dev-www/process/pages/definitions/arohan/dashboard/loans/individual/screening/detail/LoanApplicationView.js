@@ -258,8 +258,6 @@ define({
             }
         }
 
-        
-
 
         return {
             "type": "schema-form",
@@ -653,7 +651,6 @@ define({
                     $log.info("loan request Individual/find api failure" + err);
                 });
              }
-             
 
         },
         form: [
@@ -752,16 +749,8 @@ define({
                             "title": "Expected Portfolio Insurance Premium",
                             "type": "amount",
                             "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                        },
-                        {
-                            "key": "",
-                            "title": "PRODUCT_CATEGORY",
-                            //"type": "amount",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                        }
-                    ]
-                    }, 
-                    {
+                        }]
+                    }, {
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
@@ -789,8 +778,7 @@ define({
                             "type": "amount",
                             "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                         }]
-                    }
-                ]
+                    }]
                 }]
             },
             //  {
@@ -1159,7 +1147,7 @@ define({
                         }, 
                         {
                             "key": "loanAccount.tenure",
-                            "title": "Interest Rate(months)"/*,
+                            "title": "Duration(months)"/*,
                             "type": "number"*/,
                             "readonly":true,
                             onChange:function(value,form,model){
@@ -1179,10 +1167,8 @@ define({
                             "key": "loanAccount.sanctionDate",
                             "title": "Sanction Date",
                             "type": "date",
-                           // "condition":"model.currentStage =='PricingApproval'"
                            
                         },
-
                     ]
                     }, {
                         "type": "grid",
@@ -1222,77 +1208,36 @@ define({
                             "key": "",
                             "title": "NO_OF_INSTALLMENT",
                             "type": "number",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                            },
-                            {
+                            },{
                                 "key": "",
                                 "title": "NET_DISBURSAL",
                                 "type": "number",
-                                "condition":"model.currentStage =='Pricing'"
-                            },
-                            {
-                                "key": "",
-                                "title": "IRR_WITH_PF",
-                                "type": "number",
-                                "condition":"model.currentStage =='Pricing'"
-                            },
-                            {
-                                "key": "",
-                                "title": "IRR_WITHOUT_PF",
-                                "type": "number",
-                                "condition":"model.currentStage =='Pricing'"
-                            },
-                            {
+                                },{
                                     "key": "",
-                                    "title": "CALCULATE_IRR",
+                                    "title": "IRR_WITH_PF",
                                     "type": "number",
-                                    "condition":"model.currentStage =='Pricing'"
-                            },
-                            {
-                                "key": "",
-                                "title": "NET_DISBURSAL",
-                                "type": "number",
-                                "readonly":true,
-                                "condition":"model.currentStage =='PricingApproval'"
-                            },
-                            {
-                                "key": "",
-                                "title": "IRR_WITH_PF",
-                                "type": "number",
-                                "readonly":true,
-                                "condition":"model.currentStage =='PricingApproval'"
-                            },
-                            {
-                                "key": "",
-                                "title": "IRR_WITHOUT_PF",
-                                "type": "number",
-                                "readonly":true,
-                                "condition":"model.currentStage =='PricingApproval'"
-                            },
-                            {
-                                    "key": "",
-                                    "title": "CALCULATE_IRR",
-                                    "type": "number",
-                                    "readonly":true,
-                                    "condition":"model.currentStage =='PricingApproval'"
-                            }
-                        ]
+                                    },{
+                                        "key": "",
+                                        "title": "IRR_WITHOUT_PF",
+                                        "type": "number",
+                                        },{
+                                            "key": "",
+                                            "title": "CALCULATE_IRR",
+                                            "type": "number",
+                                            }
+                                ]
                     }]
                 }]
             }, 
 
 
-            //         ]
-            //         },]
-            //     }]
-            // }, 
-
+         
             {
                 "type": "box",
                 "readonly": false,
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
-                "title": "COMMERCIAL_BUREAU_CHECK",
+                "title": "DOCUMENT_FOR_FCU",
                 "items": [{
                     "type": "grid",
                     "orientation": "horizontal",
@@ -1301,90 +1246,36 @@ define({
                         "orientation": "vertical",
                         "items": [
                         {
-                            "key": "customer.enterpriseBureauDetails[].bureau",
-                            "title": "Bureau",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                            "key": "loanAccount.loanDocuments[].document",
+                            "title": "Document name ",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
+                            "type":"array"
                             
                         }, 
                         {
-                            "key": "customer.enterpriseBureauDetails[].fileId",
-                            "title": "File",
+                            "key": "",
+                            "title": "FCU Marking",
                             "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                           
                         },
                         {
-                            "key":   "customer.enterpriseBureauDetails[].doubtful",
-                            "title": "Doubtful Accounts",
+                            "key":   "",
+                            "title": "Document Download",
                             "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                             
                         },
                         {
-                            "key": "customer.enterpriseBureauDetails[].loss",
-                            "title": "Loss Account",
+                            "key": "",
+                            "title": "FCU Remarks",
                             "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                             
                         },
-                        {
-                            "key": "customer.enterpriseBureauDetails[].specialMentionAccount",
-                            "title": "Special Mentioned Accounts",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                        }, {
-                            "key": "customer.enterpriseBureauDetails[].standard",
-                            "title": "Standard Accounts", 
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                        }, {
-                            "key": "customer.enterpriseBureauDetails[].subStandard",
-                            "title": "Sub Standard Accounts",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                        }, 
                        
                     ]
                     },]
                 }]
-            }, 
-            // {
-            //     "type": "box",
-            //     "readonly": false,
-            //     "colClass": "col-sm-12",
-            //     "overrideType": "default-view",
-            //     "title": "DOCUMENT_FOR_FCU",
-            //     "items": [{
-            //         "type": "grid",
-            //         "orientation": "horizontal",
-            //         "items": [{
-            //             "type": "grid",
-            //             "orientation": "vertical",
-            //             "items": [
-            //             {
-            //                 "key": "loanAccount.loanDocuments[].document",
-            //                 "title": "Document name ",
-            //                // "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
-            //                 "type":"checkbox"
-                            
-            //             }, 
-            //             {
-            //                 "key": "",
-            //                 "title": "FCU Marking",
-            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                          
-            //             },
-            //             {
-            //                 "key":   "",
-            //                 "title": "Document Download",
-            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                            
-            //             },
-            //             {
-            //                 "key": "",
-            //                 "title": "FCU Remarks",
-            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                            
-            //             },
-                       
-            //         ]
-            //         },]
-            //     }]
-            // }, 
+            }
+        ],
 
 
         //     {
@@ -1496,268 +1387,7 @@ define({
         //                 }                            
         //             }]
         // },
-        {
-
-            "type": "box",		
-            "colClass": "col-sm-12",		
-            "readonly": true,		
-            "overrideType": "default-view",		
-            condition: "model.currentStage !== 'ApplicationReview' && model.currentStage !== 'Scrutiny' && model.loanAccount.documents.length != 0",		
-            "title": "RCU Documents",		
-            "items": [  {		
-                "key": "loanAccount.documents",		
-                "type": "array",		
-                "title": "Documents",	
-                //startEmpty: true,		
-                "items": [		
-                {		
-                    key:"loanAccount.documents[].document",		
-                    type:"text",		
-                    title:"Document Name",		
-                    required: true,		
-                },		
-                {		
-                    key:"loanAccount.documents[].documentId",		
-                    title : "Upload",		
-                    type:"file",		
-                    required: true,		
-                    category: "Loan",		
-                    subCategory: "DOC3",
-                }		
-                ]		
-                },]		
-        }, 
-        {
-            "type": "box",
-            "colClass": "col-sm-12",
-            condition: "model.currentStage == 'FieldAppraisalReview'",
-            "title": "Add Guarantor",
-            "items": [
-                {
-                    key: "loanAccount.isGuarantorRequired",
-                    type: "radios",
-                    title:"Guarantor required",
-                    titleMap: {
-                        "YES": "YES",
-                        "NO": "NO"
-                    },
-                    required: true,
-                },
-                {
-                    key:"loanAccount.noOfGuarantersRequired",
-                    title : "No.of Guarantors",
-                    type:"select",
-                    condition: "model.loanAccount.isGuarantorRequired == 'YES'",
-                    titleMap: [{
-                        value: 1,
-                        name: 1
-                    },{
-                        value: 2,
-                        name: 2
-                    }],
-                    required: true,
-                }
-            ]
-        },
-        {
-            "type": "box",
-            "orderNo": 2,
-            "title": "ADDITIONAL_DOCUMENT_UPLOAD",
-            //"condition":"model.currentStage =='CmRecommendationReview' && model.currentStage =='AcmRecommendationReview'",
-            "items": [
-                {   
-                    "type": "array",
-                    "key": "loanAccount.loanDocuments",
-                    "view": "fixed",
-                    "startEmpty": true,
-                    "title": "DOCUMENT_UPLOAD",
-                    "items": [
-                        {
-                            "key": "loanAccount.loanDocuments[].document",
-                            "title": "DOCUMENT_NAME",
-                            "type": "string"
-                        },
-                        {
-                            "title": "UPLOAD_DOCUMENT",
-                            "key": "loanAccount.loanDocuments[].documentId",
-                            "type": "file",
-                            "fileType": "application/pdf",
-                            "category": "Loan",
-                            "subCategory": "DOC1",
-                            "using": "scanner"
-                        }
-                    ]
-                
-            }]
-        },
-         {
-
-                "type": "box",
-                "title": "Post Review Decision",
-                "colClass": "col-sm-12",
-                "items": [{
-                    key: "review.action",
-                    type: "radios",
-                    titleMap: {
-                        "REJECT": "REJECT",
-                        "SEND_BACK": "SEND_BACK",
-                        "PROCEED": "PROCEED",
-                        "HOLD": "HOLD"
-                    }
-                }, {
-                    type: "section",
-                    htmlClass: "col-sm-8",
-                    condition: "model.review.action=='REJECT'",
-                    items: [{
-                        title: "REMARKS",
-                        key: "review.remarks",
-                        type: "textarea",
-                        required: true
-                    }, {
-                        key: "loanAccount.rejectReason",
-                        type: "lov",
-                        autolov: true,
-                        required: true,
-                        title: "REJECT_REASON",
-                        bindMap: {},
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model, context) {
-                            var stage1 = model.currentStage;
-
-                            if (model.currentStage == 'Application' || model.currentStage == 'ApplicationReview') {
-                                stage1 = "Application";
-                            }
-                            if (model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview') {
-                                stage1 = "FieldAppraisal";
-                            }
-
-                            var rejectReason = formHelper.enum('application_reject_reason').data;
-                            var out = [];
-                            for (var i = 0; i < rejectReason.length; i++) {
-                                var t = rejectReason[i];
-                                if (t.field1 == stage1) {
-                                    out.push({
-                                        name: t.name,
-                                    })
-                                }
-                            }
-                            return $q.resolve({
-                                headers: {
-                                    "x-total-count": out.length
-                                },
-                                body: out
-                            });
-                        },
-                        onSelect: function(valueObj, model, context) {
-                            model.loanAccount.rejectReason = valueObj.name;
-                        },
-                        getListDisplayItem: function(item, index) {
-                            return [
-                                item.name
-                            ];
-                        }
-                    }, {
-                        key: "review.rejectButton",
-                        type: "button",
-                        title: "REJECT",
-                        required: true,
-                        onClick: "actions.reject(model, formCtrl, form, $event)"
-                    }]
-                }, {
-                    type: "section",
-                    htmlClass: "col-sm-8",
-                    condition: "model.review.action=='HOLD'",
-                    items: [{
-                        title: "REMARKS",
-                        key: "review.remarks",
-                        type: "textarea",
-                        required: true
-                    }, {
-                        key: "review.holdButton",
-                        type: "button",
-                        title: "HOLD",
-                        required: true,
-                        onClick: "actions.hold(model, formCtrl, form, $event)"
-                    }]
-                }, {
-                    type: "section",
-                    htmlClass: "col-sm-8",
-                    condition: "model.review.action=='SEND_BACK'",
-                    items: [{
-                        title: "REMARKS",
-                        key: "review.remarks",
-                        type: "textarea",
-                        required: true
-                    }, {
-                        key: "review.targetStage1",
-                        type: "lov",
-                        autolov: true,
-                        lovonly:true,
-                        title: "SEND_BACK_TO_STAGE",
-                        bindMap: {},
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model, context) {
-                            var stage1 = model.currentStage;
-                            var targetstage = formHelper.enum('targetstage').data;
-                            var out = [];
-                            for (var i = 0; i < targetstage.length; i++) {
-                                var t = targetstage[i];
-                                if (t.field1 == stage1) {
-                                    out.push({
-                                        name: getStageNameByStageCode(t.name),
-                                        value:t.code
-                                    })
-                                }
-                            }
-                            return $q.resolve({
-                                headers: {
-                                    "x-total-count": out.length
-                                },
-                                body: out
-                            });
-                        },
-                        onSelect: function(valueObj, model, context) {
-                            model.review.targetStage1 = valueObj.name;
-                            model.review.targetStage = valueObj.value;
-
-                        },
-                        getListDisplayItem: function(item, index) {
-                            return [
-                                item.name
-                            ];
-                        }
-                    }, {
-                        key: "review.sendBackButton",
-                        type: "button",
-                        title: "SEND_BACK",
-                        onClick: "actions.sendBack(model, formCtrl, form, $event)"
-                    }]
-                }, {
-                    type: "section",
-                    htmlClass: "col-sm-8",
-                    condition: "model.review.action=='PROCEED'",
-                    items: [{
-                        title: "REMARKS",
-                        key: "review.remarks",
-                        type: "textarea",
-                        required: true
-                    }, {
-                        key: "review.proceedButton",
-                        type: "button",
-                        title: "PROCEED",
-                        onClick: "actions.proceed(model, formCtrl, form, $event)"
-                    }]
-                }]
-            }, {
-                "type": "actionbox",
-                "condition": "model.loanAccount.customerId && model.currentStage !== 'loanApplicationView'",
-                "items": [{
-                    "type": "button",
-                    "icon": "fa fa-circle-o",
-                    "title": "SAVE",
-                    "onClick": "actions.save(model, formCtrl, form, $event)"
-                }]
-            }],
+      
             schema: function() {
                 return SchemaResource.getLoanAccountSchema().$promise;
             },
