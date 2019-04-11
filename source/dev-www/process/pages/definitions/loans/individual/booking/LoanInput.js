@@ -248,6 +248,9 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
         var clearProduct = function(value, model) {
             model.loanAccount.productCode = '';
+            model.loanAccount.loanPurpose1 = '';
+            model.loanAccount.loanPurpose2 = '';
+            model.loanAccount.loanPurpose3 = '';
         }
 
         return {
