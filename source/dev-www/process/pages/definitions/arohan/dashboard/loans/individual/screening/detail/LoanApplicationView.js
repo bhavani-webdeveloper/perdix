@@ -453,6 +453,7 @@ define({
                         }
                     ]
                 },
+              
                  {
         
                         "type": "box",
@@ -1229,7 +1230,36 @@ define({
                     }]
                 }]
             }, 
+            {
+                "type": "box",
+                "title": "ADDITIONAL_DOCUMENT_UPLOAD",
+                "items": [{
 
+                    "type": "array",
+                    //"key": "loanAccount.loanDocuments",
+                    "view": "fixed",
+                    "startEmpty": true,
+                    "title": "DOCUMENT_UPLOAD",
+                    "items":[
+                        {
+                            "key": "loanAccount.loanDocuments[].document",
+                            "title": "DOCUMENT_NAME",
+                            "type": "string"
+                        },
+                        {
+                            "title": "UPLOAD_DOCUMENT",
+                            "key": "loanAccount.loanDocuments[].documentId",
+                            "type": "file",
+                            "fileType": "application/pdf",
+                            "category": "Loan",
+                            "subCategory": "DOC1",
+                            "using": "scanner"
+                        }
+                      ]
+                    },
+                
+                ]
+            },
 
         ],
 
