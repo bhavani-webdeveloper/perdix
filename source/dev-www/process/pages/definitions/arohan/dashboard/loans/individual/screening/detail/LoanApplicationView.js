@@ -623,7 +623,6 @@ define({
                         }]
                     }]
                self.form = self.form.concat(postForm)  ;
-                debugger;
                 console.log(self.form)
             }
 

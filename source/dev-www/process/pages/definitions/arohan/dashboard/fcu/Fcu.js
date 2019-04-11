@@ -1,7 +1,7 @@
 define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/AngularResourceService'], function (EnrolmentProcess, AngularResourceService) {
     EnrolmentProcess = EnrolmentProcess['EnrolmentProcess'];
     return {
-        pageUID: "arohan.dashboard.loans.individual.screening.FCU",
+        pageUID: "arohan.dashboard.fcu.Fcu",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
             "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository"],
@@ -121,317 +121,317 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "options": {
                         "repositoryAdditions": {
 
-                    //         "ApplicantInformation": {
-                    //             "type": "box",
-                    //             "orderNo": 1,
-                    //             "title": "APPLICANT_INFORMATION",
-                    //             "items": {
+                            "ApplicantInformation": {
+                                "type": "box",
+                                "orderNo": 1,
+                                "title": "APPLICANT_INFORMATION",
+                                "items": {
 
-                    //                 "personalInformationFieldSet": {
-                    //                     "type": "fieldset",
-                    //                     "title": "PERSONAL_INFORMATION",
-                    //                     "items": []
-                    //                 },
-                    //                 "branchName": {
+                                    "personalInformationFieldSet": {
+                                        "type": "fieldset",
+                                        "title": "PERSONAL_INFORMATION",
+                                        "items": []
+                                    },
+                                    "branchName": {
 
-                    //                     "key": "applicant.customer.customerBranchId",
-                    //                     "title": "BRANCH_NAME",
-                    //                     "type": "select",
-                    //                     "enumCode": "branch_id",
-                    //                     "readonly": true
+                                        "key": "applicant.customer.customerBranchId",
+                                        "title": "BRANCH_NAME",
+                                        "type": "select",
+                                        "enumCode": "branch_id",
+                                        "readonly": true
 
-                    //                 },
-                    //                 "zoneId": {
-                    //                     "key": "applicant.customer.centreId",
-                    //                     "type": "lov",
-                    //                     "title": "ZONE_ID",
-                    //                     "filter": {
-                    //                         "parentCode": "branch_id"
-                    //                     },
-                    //                     "parentEnumCode": "branch_id",
-                    //                     "parentValueExpr": "model.applicant.customer.customerBranchId",
-                    //                     "readonly": true
-                    //                 },
-                    //                 "zoneName": {
-                    //                     "key": "applicant.customer.centreId",
-                    //                     "type": "select",
-                    //                     "enumCode": "centre",
-                    //                     "title": "ZONE_NAME",
-                    //                     "readonly": true
-                    //                 },
-                    //                 "urnNo": {
-                    //                     "key": "applicant.customer.urnNo",
-                    //                     "title": "URN_NO",
-                    //                     "readonly": true
-                    //                 },
-                    //                 "firstName": {
-                    //                     "key": "applicant.customer.firstName",
-                    //                     "title": "FULL_NAME",
-                    //                     "type": "string",
-                    //                     "readonly": true
-                    //                 },
-                    //                 "dob": {
-                    //                     "key": "applicant.customer.dateOfBirth",
-                    //                     "title": "DATE_OF_BIRTH",
-                    //                     "type": "date",
-                    //                     "readonly": true
-                    //                 },
-                    //                 "gender": {
-                    //                     "key": "applicant.customer.gender",
-                    //                     "type": "radios",
-                    //                     "title": "GENDER",
-                    //                     "enumCode": "gender",
-                    //                     "readonly": true
-                    //                 },
-                    //                 "fatherName": {
-                    //                     "key": "applicant.customer.fatherFirstName",
-                    //                     "title": "FATHER_FULL_NAME",
-                    //                     "readonly": true
-                    //                 },
-                    //                 "customerPhoto": {
-                    //                     "key": "applicant.customer.photoImageId",
-                    //                     "type": "file",
-                    //                     "title": "CUSTOMER_PHOTO",
-                    //                     "category": "CustomerEnrollment",
-                    //                     "subCategory": "PHOTO",
-                    //                     "fileType": "image/*",
-                    //                     "readonly": true
-                    //                 },
-                    //                 "kycFieldSet": {
-                    //                     "type": "fieldset",
-                    //                     "title": "KYC",
-                    //                     "items": []
-                    //                 },
-                    //                 "identityProofNo": {
-                    //                     "key": "applicant.customer.identityProofNo",
-                    //                     "title": "IDENTITY_PROOFNO",
-                    //                     "type": "barcode",
-                    //                     "readonly": true
-                    //                 },
-                    //                 "identityProof": {
-                    //                     "key": "applicant.customer.identityProofImageId",
-                    //                     "type": "file",
-                    //                     "fileType": "application/pdf",
-                    //                     "using": "scanner",
-                    //                     "title": "IDENTITY_PROOF_DOCUMENT",
-                    //                     "category": "CustomerEnrollment",
-                    //                     "subCategory": "IDENTITYPROOF",
-                    //                     "readonly": true
-                    //                 },
-                    //                 "addressProof": {
-                    //                     "key": "applicant.customer.addressProofNo",
-                    //                     "type": "qrcode",
-                    //                     "title": "ADDRESS_PROOF_NO",
-                    //                     "readonly": true
-                    //                 },
-                    //                 "addressProof": {
-                    //                     "key": "applicant.customer.addressProofImageId",
-                    //                     "type": "file",
-                    //                     "fileType": "application/pdf",
-                    //                     "using": "scanner",
-                    //                     "title": "ADDRESS_PROOF_IMAGE_ID",
-                    //                     "category": "CustomerEnrollment",
-                    //                     "subCategory": "ADDRESSPROOF",
-                    //                     "readonly": true
-                    //                 },
-                    //                 "contactInformationFieldSet": {
-                    //                     "type": "fieldset",
-                    //                     "title": "CONTACT_INFORMATION",
-                    //                     "items": []
-                    //                 },
-                    //                  "mobileNo": {
-                    //                     "key": "applicant.customer.mobilePhone",
-                    //                     "type": "text",
-                    //                     "title": "MOBILE_PHONE",
-                    //                     "inputmode": "number",
-                    //                     "numberType": "tel",
-                    //                     "readonly": true,
-                    //                 },
-                    //                 "mobileNo2": {
-                    //                     "key": "applicant.customer.mobileNumber2",
-                    //                     "type": "text",
-                    //                     "title": "MOBILE_PHONE_2",
-                    //                     "inputmode": "number",
-                    //                     "numberType": "tel",
-                    //                     "readonly": true,
-                    //                 },
-                    //                 "careOf": {
-                    //                     "key": "applicant.customer.careOf",
-                    //                     "title": "CARE_OF",
-                    //                     "readonly": true
-                    //                 },
-                    //                  "doorNo": {
-                    //                     "key": "applicant.customer.doorNo",
-                    //                     "title": "DOOR_NO",
-                    //                     "readonly": true
-                    //                 },
-                    //                 "pincode": {
-                    //                     "key": "applicant.customer.pincode",
-                    //                     "title": "PIN_CODE",
-                    //                     "type": "lov",
-                    //                     "fieldType": "number",
-                    //                     "autolov": true,
-                    //                     "readonly": true
-                    //                 },
-                    //                 "locality": {
-                    //                     "key": "applicant.customer.locality",
-                    //                     "title": "LOCALITY",
-                    //                     "readonly": true
-                    //                 },
-                    //                 "villageName": {
-                    //                     "key": "applicant.customer.villageName",
-                    //                     "title": "VILLAGE_NAME",
-                    //                     "enumCode": "village",
-                    //                     "readonly": true
-                    //                 },
-                    //                 "district": {
-                    //                     "key": "applicant.customer.district",
-                    //                     "title": "DISTRICT",
-                    //                     "enumCode": "district",
-                    //                     "readonly": true
-                    //                 },
-                    //                 "state": {
-                    //                     "key": "applicant.customer.state",
-                    //                     "title": "STATE",
-                    //                     "readonly": true
-                    //                 },
-                    //         }
-                    //     },
-                    // "BusinessInformation":{
-                    //     "orderNo":4,
-                    //     "type":"box",
-                    //     "title":"BUSINESS_INFORMATION",
-                    //     "items":{
-                    //         "businessInformationFieldset":{
-                    //                     "type": "fieldset",
-                    //                     "title": "BUSINESS_INFORMATION",
-                    //                     "items": []
-                    //                 },
-                    //                 "entityname":{
-                    //                     "key": "applicant.customer.firstName",
-                    //                     "title": "ENTITY_NAME",
-                    //                     "type": "string",
-                    //                     "readonly": true
-                    //     },
-                    //                 "premisesOwnership":{
-                    //                     "key": "applicant.customer.enterprise.ownership",
-                    //                     "title": "PREMISES_OWNERSHIP",
-                    //                     "type": "string",
-                    //                     "readonly": true
-                    //     },          "constitution":{
-                    //                     "key": "applicant.customer.enterprise.businessConstitution",
-                    //                     "title": "CONSTITUTION",
-                    //                     "type": "string",
-                    //                     "readonly": true
-                    //     },          "registrationDate":{
-                    //                     "key": "applicant.customer.enterpriseRegistrations[].registeredDate",
-                    //                     "title": "REGISTRATION_DATE",
-                    //                     "type": "date",
-                    //                     "readonly": true
-                    //     },          "businessSector":{
-                    //                     "key": "applicant.customer.enterprise.businessSector",
-                    //                     "title": "BUSINESS_SECTOR",
-                    //                     "type": "string",
-                    //                     "readonly": true
-                    //     },
-                    //                     "doorBuilding": {
-                    //                         "key": "applicant.customer.doorNo",
-                    //                         "title": "DOOR_BUILDING",
-                    //                         "readonly": true
-                    //                     },
-                    //                     "street": {
-                    //                         "key": "applicant.customer.street",
-                    //                         "title": "STREET",
-                    //                         "readonly": true
-                    //                     },
-                    //                     "landmark": {
-                    //                         "key": "applicant.customer.landmark",
-                    //                         "title": "LANDMARK",
-                    //                         //"type": "lov",
-                    //                         "fieldType": "number",
-                    //                     },
-                    //                     "pincode": {
-                    //                         "key": "applicant.customer.pincode",
-                    //                         "title": "PINCODE",
-                    //                         "readonly": true
-                    //                     },
-                    //                     "area": {
-                    //                         "key": "applicant.customer.villageName",
-                    //                         "title": "AREA",
-                    //                         "enumCode": "village",
-                    //                         "readonly": true
-                    //                     },
-                    //                     "cityVillage": {
-                    //                         "key": "applicant.customer.villageName",
-                    //                         "title": "VILLAGE_NAME",
-                    //                         "enumCode": "village",
-                    //                         "readonly": true
-                    //                     },
-                    //                     "district": {
-                    //                         "key": "applicant.customer.district",
-                    //                         "title": "DISTRICT",
-                    //                         "enumCode": "district",
-                    //                         "readonly": true
-                    //                     },
-                    //                     "state": {
-                    //                         "key": "applicant.customer.state",
-                    //                         "title": "STATE",
-                    //                         "readonly": true
-                    //                     },
-                    //                     "officeAddressFieldSet":{
-                    //                         "type":"fieldset",
-                    //                         "title":"OFFICE_ADDRESS",
-                    //                         "readonly": true
-                    //                     },
-                    //                     "officemailingmobilePhone":{
-                    //                         "type":"number",
-                    //                         "title":"MOBILE_NUMBER",
-                    //                         "readonly": true
-                    //                     },
-                    //                      "officemailinglandLineNo":{
-                    //                         "type":"number",
-                    //                         "title":"PHONE_2",
-                    //                         "readonly": true
-                    //                      },
-                    //                     "officemailingDoorNo":{
-                    //                         "type":"number",
-                    //                         "title":"DOOR_NO",
-                    //                         "readonly": true
-                    //                     },
-                    //                     "officemailingStreet":{
-                    //                         "type":"text",
-                    //                         "title":"STREET",
-                    //                         "readonly": true
-                    //                     },
-                    //                     "officemailingLandmark":{
-                    //                         "type":"text",
-                    //                         "title":"LANDMARK",
-                    //                         "readonly": true
-                    //                     },
-                    //                     "officemailingPincode":{
-                    //                         "type":"lov",
-                    //                         "title":"PINCODE",
-                    //                         "resolver": "PincodeLOVConfiguration",
-                    //                         "searchHelper": formHelper,
-                    //                         "readonly": true
-                    //                     },
-                    //                     "officemailingLocality":{
-                    //                         "type":"text",
-                    //                         "title":"LOCALITY",
-                    //                         "readonly": true
-                    //                     },
-                    //                     "officemailingDistrict":{
-                    //                         "type":"text",
-                    //                         "title":"DISTRICT",
-                    //                         "readonly": true
-                    //                     },
-                    //                     "officemailingState":{
-                    //                         "type":"text",
-                    //                         "title":"STATE",
-                    //                         "readonly": true
-                    //                     }
-                    //                 }              
-                    // },
+                                    },
+                                    "zoneId": {
+                                        "key": "applicant.customer.centreId",
+                                        "type": "lov",
+                                        "title": "ZONE_ID",
+                                        "filter": {
+                                            "parentCode": "branch_id"
+                                        },
+                                        "parentEnumCode": "branch_id",
+                                        "parentValueExpr": "model.applicant.customer.customerBranchId",
+                                        "readonly": true
+                                    },
+                                    "zoneName": {
+                                        "key": "applicant.customer.centreId",
+                                        "type": "select",
+                                        "enumCode": "centre",
+                                        "title": "ZONE_NAME",
+                                        "readonly": true
+                                    },
+                                    "urnNo": {
+                                        "key": "applicant.customer.urnNo",
+                                        "title": "URN_NO",
+                                        "readonly": true
+                                    },
+                                    "firstName": {
+                                        "key": "applicant.customer.firstName",
+                                        "title": "FULL_NAME",
+                                        "type": "string",
+                                        "readonly": true
+                                    },
+                                    "dob": {
+                                        "key": "applicant.customer.dateOfBirth",
+                                        "title": "DATE_OF_BIRTH",
+                                        "type": "date",
+                                        "readonly": true
+                                    },
+                                    "gender": {
+                                        "key": "applicant.customer.gender",
+                                        "type": "radios",
+                                        "title": "GENDER",
+                                        "enumCode": "gender",
+                                        "readonly": true
+                                    },
+                                    "fatherName": {
+                                        "key": "applicant.customer.fatherFirstName",
+                                        "title": "FATHER_FULL_NAME",
+                                        "readonly": true
+                                    },
+                                    "customerPhoto": {
+                                        "key": "applicant.customer.photoImageId",
+                                        "type": "file",
+                                        "title": "CUSTOMER_PHOTO",
+                                        "category": "CustomerEnrollment",
+                                        "subCategory": "PHOTO",
+                                        "fileType": "image/*",
+                                        "readonly": true
+                                    },
+                                    "kycFieldSet": {
+                                        "type": "fieldset",
+                                        "title": "KYC",
+                                        "items": []
+                                    },
+                                    "identityProofNo": {
+                                        "key": "applicant.customer.identityProofNo",
+                                        "title": "IDENTITY_PROOFNO",
+                                        "type": "barcode",
+                                        "readonly": true
+                                    },
+                                    "identityProof": {
+                                        "key": "applicant.customer.identityProofImageId",
+                                        "type": "file",
+                                        "fileType": "application/pdf",
+                                        "using": "scanner",
+                                        "title": "IDENTITY_PROOF_DOCUMENT",
+                                        "category": "CustomerEnrollment",
+                                        "subCategory": "IDENTITYPROOF",
+                                        "readonly": true
+                                    },
+                                    "addressProof": {
+                                        "key": "applicant.customer.addressProofNo",
+                                        "type": "qrcode",
+                                        "title": "ADDRESS_PROOF_NO",
+                                        "readonly": true
+                                    },
+                                    "addressProof": {
+                                        "key": "applicant.customer.addressProofImageId",
+                                        "type": "file",
+                                        "fileType": "application/pdf",
+                                        "using": "scanner",
+                                        "title": "ADDRESS_PROOF_IMAGE_ID",
+                                        "category": "CustomerEnrollment",
+                                        "subCategory": "ADDRESSPROOF",
+                                        "readonly": true
+                                    },
+                                    "contactInformationFieldSet": {
+                                        "type": "fieldset",
+                                        "title": "CONTACT_INFORMATION",
+                                        "items": []
+                                    },
+                                     "mobileNo": {
+                                        "key": "applicant.customer.mobilePhone",
+                                        "type": "text",
+                                        "title": "MOBILE_PHONE",
+                                        "inputmode": "number",
+                                        "numberType": "tel",
+                                        "readonly": true,
+                                    },
+                                    "mobileNo2": {
+                                        "key": "applicant.customer.mobileNumber2",
+                                        "type": "text",
+                                        "title": "MOBILE_PHONE_2",
+                                        "inputmode": "number",
+                                        "numberType": "tel",
+                                        "readonly": true,
+                                    },
+                                    "careOf": {
+                                        "key": "applicant.customer.careOf",
+                                        "title": "CARE_OF",
+                                        "readonly": true
+                                    },
+                                     "doorNo": {
+                                        "key": "applicant.customer.doorNo",
+                                        "title": "DOOR_NO",
+                                        "readonly": true
+                                    },
+                                    "pincode": {
+                                        "key": "applicant.customer.pincode",
+                                        "title": "PIN_CODE",
+                                        "type": "lov",
+                                        "fieldType": "number",
+                                        "autolov": true,
+                                        "readonly": true
+                                    },
+                                    "locality": {
+                                        "key": "applicant.customer.locality",
+                                        "title": "LOCALITY",
+                                        "readonly": true
+                                    },
+                                    "villageName": {
+                                        "key": "applicant.customer.villageName",
+                                        "title": "VILLAGE_NAME",
+                                        "enumCode": "village",
+                                        "readonly": true
+                                    },
+                                    "district": {
+                                        "key": "applicant.customer.district",
+                                        "title": "DISTRICT",
+                                        "enumCode": "district",
+                                        "readonly": true
+                                    },
+                                    "state": {
+                                        "key": "applicant.customer.state",
+                                        "title": "STATE",
+                                        "readonly": true
+                                    },
+                            }
+                        },
+                    "BusinessInformation":{
+                        "orderNo":4,
+                        "type":"box",
+                        "title":"BUSINESS_INFORMATION",
+                        "items":{
+                            "businessInformationFieldset":{
+                                        "type": "fieldset",
+                                        "title": "BUSINESS_INFORMATION",
+                                        "items": []
+                                    },
+                                    "entityname":{
+                                        "key": "applicant.customer.firstName",
+                                        "title": "ENTITY_NAME",
+                                        "type": "string",
+                                        "readonly": true
+                        },
+                                    "premisesOwnership":{
+                                        "key": "applicant.customer.enterprise.ownership",
+                                        "title": "PREMISES_OWNERSHIP",
+                                        "type": "string",
+                                        "readonly": true
+                        },          "constitution":{
+                                        "key": "applicant.customer.enterprise.businessConstitution",
+                                        "title": "CONSTITUTION",
+                                        "type": "string",
+                                        "readonly": true
+                        },          "registrationDate":{
+                                        "key": "applicant.customer.enterpriseRegistrations[].registeredDate",
+                                        "title": "REGISTRATION_DATE",
+                                        "type": "date",
+                                        "readonly": true
+                        },          "businessSector":{
+                                        "key": "applicant.customer.enterprise.businessSector",
+                                        "title": "BUSINESS_SECTOR",
+                                        "type": "string",
+                                        "readonly": true
+                        },
+                                        "doorBuilding": {
+                                            "key": "applicant.customer.doorNo",
+                                            "title": "DOOR_BUILDING",
+                                            "readonly": true
+                                        },
+                                        "street": {
+                                            "key": "applicant.customer.street",
+                                            "title": "STREET",
+                                            "readonly": true
+                                        },
+                                        "landmark": {
+                                            "key": "applicant.customer.landmark",
+                                            "title": "LANDMARK",
+                                            //"type": "lov",
+                                            "fieldType": "number",
+                                        },
+                                        "pincode": {
+                                            "key": "applicant.customer.pincode",
+                                            "title": "PINCODE",
+                                            "readonly": true
+                                        },
+                                        "area": {
+                                            "key": "applicant.customer.villageName",
+                                            "title": "AREA",
+                                            "enumCode": "village",
+                                            "readonly": true
+                                        },
+                                        "cityVillage": {
+                                            "key": "applicant.customer.villageName",
+                                            "title": "VILLAGE_NAME",
+                                            "enumCode": "village",
+                                            "readonly": true
+                                        },
+                                        "district": {
+                                            "key": "applicant.customer.district",
+                                            "title": "DISTRICT",
+                                            "enumCode": "district",
+                                            "readonly": true
+                                        },
+                                        "state": {
+                                            "key": "applicant.customer.state",
+                                            "title": "STATE",
+                                            "readonly": true
+                                        },
+                                        "officeAddressFieldSet":{
+                                            "type":"fieldset",
+                                            "title":"OFFICE_ADDRESS",
+                                            "readonly": true
+                                        },
+                                        "officemailingmobilePhone":{
+                                            "type":"number",
+                                            "title":"MOBILE_NUMBER",
+                                            "readonly": true
+                                        },
+                                         "officemailinglandLineNo":{
+                                            "type":"number",
+                                            "title":"PHONE_2",
+                                            "readonly": true
+                                         },
+                                        "officemailingDoorNo":{
+                                            "type":"number",
+                                            "title":"DOOR_NO",
+                                            "readonly": true
+                                        },
+                                        "officemailingStreet":{
+                                            "type":"text",
+                                            "title":"STREET",
+                                            "readonly": true
+                                        },
+                                        "officemailingLandmark":{
+                                            "type":"text",
+                                            "title":"LANDMARK",
+                                            "readonly": true
+                                        },
+                                        "officemailingPincode":{
+                                            "type":"lov",
+                                            "title":"PINCODE",
+                                            "resolver": "PincodeLOVConfiguration",
+                                            "searchHelper": formHelper,
+                                            "readonly": true
+                                        },
+                                        "officemailingLocality":{
+                                            "type":"text",
+                                            "title":"LOCALITY",
+                                            "readonly": true
+                                        },
+                                        "officemailingDistrict":{
+                                            "type":"text",
+                                            "title":"DISTRICT",
+                                            "readonly": true
+                                        },
+                                        "officemailingState":{
+                                            "type":"text",
+                                            "title":"STATE",
+                                            "readonly": true
+                                        }
+                                    }              
+                    },
                             
                     "CpvFeedback": {
                                 "type": "box",
