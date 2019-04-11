@@ -105,16 +105,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'pd_feedback',
                                 minimum: 1,
                                 maximum: 1,
-                                order:110
+                                order:101
                             },
-                            // {
-                            //     pageName: 'arohan.dashboard.loans.individual.screening.Review',
-                            //     title: 'CPV_FEEDBACK',
-                            //     pageClass: 'cpv-feedback',
-                            //     minimum: 1,
-                            //     maximum: 1,
-                            //     order:110
-                            // },
+                            {
+                                pageName: 'arohan.dashboard.loans.individual.screening.FCU',
+                                title: 'FCU_MARKING',
+                                pageClass: 'fcu_marking',
+                                minimum: 1,
+                                maximum: 1,
+                                order:102
+                            },
                             {
                                 pageName: 'arohan.dashboard.loans.individual.screening.Review',
                                 title: 'REVIEW',
@@ -394,6 +394,15 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         
                                         $this.bundlePages.push({
                                             pageClass: 'pd_feedback',
+                                            model: {
+                                                enrolmentProcess:loanProcessts.loanCustomerEnrolmentProcess,
+                                                loanProcess: loanProcessts,
+                                                //loanAccount:res 
+                                            }
+                                        });
+
+                                        $this.bundlePages.push({
+                                            pageClass: 'fcu_marking',
                                             model: {
                                                 enrolmentProcess:loanProcessts.loanCustomerEnrolmentProcess,
                                                 loanProcess: loanProcessts,

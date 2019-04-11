@@ -1231,50 +1231,6 @@ define({
             }, 
 
 
-         
-            {
-                "type": "box",
-                "readonly": false,
-                "colClass": "col-sm-12",
-                "overrideType": "default-view",
-                "title": "DOCUMENT_FOR_FCU",
-                "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [
-                        {
-                            "key": "loanAccount.loanDocuments[].document",
-                            "title": "Document name ",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
-                            "type":"array"
-                            
-                        }, 
-                        {
-                            "key": "",
-                            "title": "FCU Marking",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                          
-                        },
-                        {
-                            "key":   "",
-                            "title": "Document Download",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                            
-                        },
-                        {
-                            "key": "",
-                            "title": "FCU Remarks",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                            
-                        },
-                       
-                    ]
-                    },]
-                }]
-            }
         ],
 
 
