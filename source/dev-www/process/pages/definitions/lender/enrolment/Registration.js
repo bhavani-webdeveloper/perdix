@@ -268,11 +268,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     "orderNo": 230,
                                                     "onChange": function(value,context,model,form){
                                                         var type = model.customer.enterpriseRegistrations[context.arrayIndex].registrationType;
-                                                        var length = type == 'GST' ? 15 : 10;
-                                                        var regex = type =='GST' ? '^[a-zA-Z0-9]{'+length+'}$' : '^[a-zA-Z0-9]{'+length+'}$';
-                                                        regex = new RegExp(regex, "is");
+                                                        var regex = type =='GST' ? /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[0-9]{1}[Z][0-9]{1}$/ : /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
                                                         if(regex.test(model.customer.enterpriseRegistrations[context.arrayIndex].registrationNumber) == false){
-                                                            model.customer.enterpriseRegistrations[context.arrayIndex].warningHtml = '<p stye=\"font-size:10px !important\"><font color=#FF6347>'+type+' Number should be Alpha-Numeric & '+length+' Characters long'+'</font><p>'
+                                                            model.customer.enterpriseRegistrations[context.arrayIndex].warningHtml = '<p style=\"font-size:13px !important\"><font color=#FF6347>'+type+' Number doesn\'t match the Patteren : '+regex+'</font><hp>'
                                                         }
                                                         else{
                                                             if(model.customer.enterpriseRegistrations[context.arrayIndex].warningHtml)
@@ -512,9 +510,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     && model.customer.enterpriseRegistrations[i].registrationNumber != null){
                                         var regex = "";
                                         if(model.customer.enterpriseRegistrations[i].registrationType === "GST"){
-                                            regex = /^[a-zA-Z0-9]{15}$/;
+                                            regex =  /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[0-9]{1}[Z][0-9]{1}$/;
                                         }else{
-                                            regex = /^[a-zA-Z0-9]{10}$/;
+                                            regex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
                                         }
                                         if(regex.test(model.customer.enterpriseRegistrations[i].registrationNumber) == false){
                                             PageHelper.showProgress("Registration","Please enter valid " + model.customer.enterpriseRegistrations[i].registrationType + " no",9000);
