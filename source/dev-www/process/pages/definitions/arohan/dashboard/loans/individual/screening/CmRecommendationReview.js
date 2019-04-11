@@ -108,7 +108,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:101
                             },
                             {
-                                pageName: 'arohan.dashboard.loans.individual.screening.FCU',
+                                pageName: 'arohan.dashboard.fcu.Fcu',
                                 title: 'FCU_MARKING',
                                 pageClass: 'fcu_marking',
                                 minimum: 1,

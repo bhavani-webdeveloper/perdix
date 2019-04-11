@@ -74,6 +74,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                         order:110
                         },
                         {
+                            pageName: 'arohan.dashboard.fcu.Fcu',
+                            title: 'FCU_MARKING',
+                            pageClass: 'fcu_marking',
+                            minimum: 1,
+                            maximum: 1,
+                            order:112
+                        },
+                        {
                             pageName: 'arohan.dashboard.CPV.Verification',
                             title: 'CPV_FEEDBACK',
                             pageClass: 'verification',
@@ -314,6 +322,17 @@ define(["perdix/domain/model/loan/LoanProcess",
                                                 loanAccount:loanAccount
                                             }
                                         });   
+
+                                        
+                                        $this.bundlePages.push({
+                                            pageClass: 'fcu_marking',
+                                            model: {
+                                                enrolmentProcess:loanProcess.loanCustomerEnrolmentProcess,
+                                                loanProcess: loanProcess,
+                                                loanAccount:loanAccount 
+                                            }
+                                        });
+
 
                                 deferred.resolve();                          
                             });

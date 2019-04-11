@@ -82,7 +82,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:112
                     },
                     {
-                        pageName: 'arohan.dashboard.loans.individual.screening.FCU',
+                        pageName: 'arohan.dashboard.fcu.Fcu',
                         title: 'FCU_MARKING',
                         pageClass: 'fcu_marking',
                         minimum: 1,
@@ -328,9 +328,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 $this.bundlePages.push({
                                     pageClass: 'fcu_marking',
                                     model: {
-                                        enrolmentProcess:loanProcessts.loanCustomerEnrolmentProcess,
-                                        loanProcess: loanProcessts,
-                                        //loanAccount:res 
+                                        enrolmentProcess:loanProcess.loanCustomerEnrolmentProcess,
+                                        loanProcess: loanProcess,
+                                        loanAccount:loanAccount
                                     }
                                 });
 
