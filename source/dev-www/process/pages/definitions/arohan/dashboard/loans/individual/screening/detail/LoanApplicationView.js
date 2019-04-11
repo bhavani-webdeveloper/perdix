@@ -846,7 +846,7 @@ define({
                             "key": "loanAccount.sanctionDate",
                             "title": "Sanction Date",
                             "type": "date",
-                            "condition":"model.currentStage =='PricingApproval'"
+                           // "condition":"model.currentStage =='PricingApproval'"
                            
                         },
 
@@ -1061,49 +1061,49 @@ define({
                     },]
                 }]
             }, 
-            {
-                "type": "box",
-                "readonly": false,
-                "colClass": "col-sm-12",
-                "overrideType": "default-view",
-                "title": "DOCUMENT_FOR_FCU",
-                "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [
-                        {
-                            "key": "loanAccount.loanDocuments[].document",
-                            "title": "Document name ",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
-                            "type":"array"
+            // {
+            //     "type": "box",
+            //     "readonly": false,
+            //     "colClass": "col-sm-12",
+            //     "overrideType": "default-view",
+            //     "title": "DOCUMENT_FOR_FCU",
+            //     "items": [{
+            //         "type": "grid",
+            //         "orientation": "horizontal",
+            //         "items": [{
+            //             "type": "grid",
+            //             "orientation": "vertical",
+            //             "items": [
+            //             {
+            //                 "key": "loanAccount.loanDocuments[].document",
+            //                 "title": "Document name ",
+            //                // "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
+            //                 "type":"checkbox"
                             
-                        }, 
-                        {
-                            "key": "",
-                            "title": "FCU Marking",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+            //             }, 
+            //             {
+            //                 "key": "",
+            //                 "title": "FCU Marking",
+            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                           
-                        },
-                        {
-                            "key":   "",
-                            "title": "Document Download",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+            //             },
+            //             {
+            //                 "key":   "",
+            //                 "title": "Document Download",
+            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                             
-                        },
-                        {
-                            "key": "",
-                            "title": "FCU Remarks",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+            //             },
+            //             {
+            //                 "key": "",
+            //                 "title": "FCU Remarks",
+            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                             
-                        },
+            //             },
                        
-                    ]
-                    },]
-                }]
-            }, 
+            //         ]
+            //         },]
+            //     }]
+            // }, 
 
 
         //     {
@@ -1281,14 +1281,15 @@ define({
         {
             "type": "box",
             "orderNo": 2,
-            "title": "DOCUMENT_UPLOAD",
+            "title": "ADDITIONAL_DOCUMENT_UPLOAD",
+            //"condition":"model.currentStage =='CmRecommendationReview' && model.currentStage =='AcmRecommendationReview'",
             "items": [
                 {   
                     "type": "array",
                     "key": "loanAccount.loanDocuments",
                     "view": "fixed",
                     "startEmpty": true,
-                    "title": "ADDITIONAL_DOCUMENT_UPLOAD",
+                    "title": "DOCUMENT_UPLOAD",
                     "items": [
                         {
                             "key": "loanAccount.loanDocuments[].document",
