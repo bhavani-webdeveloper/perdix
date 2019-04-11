@@ -258,6 +258,8 @@ define({
             }
         }
 
+        
+
 
         return {
             "type": "schema-form",
@@ -321,6 +323,7 @@ define({
                     $log.info("loan request Individual/find api failure" + err);
                 });
              }
+             
 
         },
         form: [{
@@ -416,8 +419,16 @@ define({
                             "title": "Expected Portfolio Insurance Premium",
                             "type": "amount",
                             "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                        }]
-                    }, {
+                        },
+                        {
+                            "key": "",
+                            "title": "PRODUCT_CATEGORY",
+                            //"type": "amount",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                        }
+                    ]
+                    }, 
+                    {
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
@@ -445,7 +456,8 @@ define({
                             "type": "amount",
                             "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                         }]
-                    }]
+                    }
+                ]
                 }]
             },
             //  {
@@ -814,7 +826,7 @@ define({
                         }, 
                         {
                             "key": "loanAccount.tenure",
-                            "title": "Duration(months)"/*,
+                            "title": "Interest Rate(months)"/*,
                             "type": "number"*/,
                             "readonly":true,
                             onChange:function(value,form,model){
@@ -834,8 +846,10 @@ define({
                             "key": "loanAccount.sanctionDate",
                             "title": "Sanction Date",
                             "type": "date",
+                            "condition":"model.currentStage =='PricingApproval'"
                            
                         },
+
                     ]
                     }, {
                         "type": "grid",
@@ -875,24 +889,61 @@ define({
                             "key": "",
                             "title": "NO_OF_INSTALLMENT",
                             "type": "number",
-                            },{
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                            },
+                            {
                                 "key": "",
                                 "title": "NET_DISBURSAL",
                                 "type": "number",
-                                },{
+                                "condition":"model.currentStage =='Pricing'"
+                            },
+                            {
+                                "key": "",
+                                "title": "IRR_WITH_PF",
+                                "type": "number",
+                                "condition":"model.currentStage =='Pricing'"
+                            },
+                            {
+                                "key": "",
+                                "title": "IRR_WITHOUT_PF",
+                                "type": "number",
+                                "condition":"model.currentStage =='Pricing'"
+                            },
+                            {
                                     "key": "",
-                                    "title": "IRR_WITH_PF",
+                                    "title": "CALCULATE_IRR",
                                     "type": "number",
-                                    },{
-                                        "key": "",
-                                        "title": "IRR_WITHOUT_PF",
-                                        "type": "number",
-                                        },{
-                                            "key": "",
-                                            "title": "CALCULATE_IRR",
-                                            "type": "number",
-                                            }
-                                ]
+                                    "condition":"model.currentStage =='Pricing'"
+                            },
+                            {
+                                "key": "",
+                                "title": "NET_DISBURSAL",
+                                "type": "number",
+                                "readonly":true,
+                                "condition":"model.currentStage =='PricingApproval'"
+                            },
+                            {
+                                "key": "",
+                                "title": "IRR_WITH_PF",
+                                "type": "number",
+                                "readonly":true,
+                                "condition":"model.currentStage =='PricingApproval'"
+                            },
+                            {
+                                "key": "",
+                                "title": "IRR_WITHOUT_PF",
+                                "type": "number",
+                                "readonly":true,
+                                "condition":"model.currentStage =='PricingApproval'"
+                            },
+                            {
+                                    "key": "",
+                                    "title": "CALCULATE_IRR",
+                                    "type": "number",
+                                    "readonly":true,
+                                    "condition":"model.currentStage =='PricingApproval'"
+                            }
+                        ]
                     }]
                 }]
             }, 
@@ -954,48 +1005,62 @@ define({
             //         },]
             //     }]
             // }, 
-            // {
-            //     "type": "box",
-            //     "readonly": false,
-            //     "colClass": "col-sm-12",
-            //     "overrideType": "default-view",
-            //     "title": "CPV_FEEDBACK",
-            //     "items": [{
-            //         "type": "grid",
-            //         "orientation": "horizontal",
-            //         "items": [{
-            //             "type": "grid",
-            //             "orientation": "vertical",
-            //             "items": [
-            //             {
-            //                 "key": "",
-            //                 "title": "Recommendation",
-            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+
+            {
+                "type": "box",
+                "readonly": false,
+                "colClass": "col-sm-12",
+                "overrideType": "default-view",
+                "title": "COMMERCIAL_BUREAU_CHECK",
+                "items": [{
+                    "type": "grid",
+                    "orientation": "horizontal",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [
+                        {
+                            "key": "customer.enterpriseBureauDetails[].bureau",
+                            "title": "Bureau",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                             
-            //             }, 
-            //             {
-            //                 "key": "",
-            //                 "title": "Case Status",
-            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                        }, 
+                        {
+                            "key": "customer.enterpriseBureauDetails[].fileId",
+                            "title": "File",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                           
-            //             },
-            //             {
-            //                 "key":   "",
-            //                 "title": "Verifier Remark",
-            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                        },
+                        {
+                            "key":   "customer.enterpriseBureauDetails[].doubtful",
+                            "title": "Doubtful Accounts",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                             
-            //             },
-            //             {
-            //                 "key": "",
-            //                 "title": "Supervisor Remarks",
-            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                        },
+                        {
+                            "key": "customer.enterpriseBureauDetails[].loss",
+                            "title": "Loss Account",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
                             
-            //             },
+                        },
+                        {
+                            "key": "customer.enterpriseBureauDetails[].specialMentionAccount",
+                            "title": "Special Mentioned Accounts",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                        }, {
+                            "key": "customer.enterpriseBureauDetails[].standard",
+                            "title": "Standard Accounts", 
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                        }, {
+                            "key": "customer.enterpriseBureauDetails[].subStandard",
+                            "title": "Sub Standard Accounts",
+                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                        }, 
                        
-            //         ]
-            //         },]
-            //     }]
-            // }, 
+                    ]
+                    },]
+                }]
+            }, 
             {
                 "type": "box",
                 "readonly": false,
@@ -1212,6 +1277,36 @@ define({
                     required: true,
                 }
             ]
+        },
+        {
+            "type": "box",
+            "orderNo": 2,
+            "title": "DOCUMENT_UPLOAD",
+            "items": [
+                {   
+                    "type": "array",
+                    "key": "loanAccount.loanDocuments",
+                    "view": "fixed",
+                    "startEmpty": true,
+                    "title": "ADDITIONAL_DOCUMENT_UPLOAD",
+                    "items": [
+                        {
+                            "key": "loanAccount.loanDocuments[].document",
+                            "title": "DOCUMENT_NAME",
+                            "type": "string"
+                        },
+                        {
+                            "title": "UPLOAD_DOCUMENT",
+                            "key": "loanAccount.loanDocuments[].documentId",
+                            "type": "file",
+                            "fileType": "application/pdf",
+                            "category": "Loan",
+                            "subCategory": "DOC1",
+                            "using": "scanner"
+                        }
+                    ]
+                
+            }]
         },
          {
 

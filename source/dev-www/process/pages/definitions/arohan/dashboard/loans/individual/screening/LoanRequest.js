@@ -1679,7 +1679,7 @@ define([],function(){
                                 },
                                 "productCategory":{
                                     "key":"",
-                                    "title":"PODUCT_CATEGORY",
+                                    "title":"PRODUCT_CATEGORY",
                                     "type":"select"
                                 },
                                 "expectedEmi": {

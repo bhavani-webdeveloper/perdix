@@ -93,7 +93,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             },
                             {
                                 pageName: 'arohan.dashboard.CPV.Verification',
-                                title: 'VERIFICATION',
+                                title: 'CPV_FEEDBACK',
                                 pageClass: 'verification',
                                 minimum: 1,
                                 maximum: 1,
