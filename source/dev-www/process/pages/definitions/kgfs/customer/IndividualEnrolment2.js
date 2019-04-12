@@ -39,33 +39,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             var configFile = function () {
                 return{
                     "loanProcess.loanAccount.currentStage":{
-                        "Screening":{
-                            "overrides":{
-                                "IndividualInformation":{
-                                    "readonly":true
-                                },
-                                "KYC":{
-                                    "readonly":true
-                                },
-                                "ContactInformation":{
-                                    "readonly":true
-                                },
-                                "loanInformation":{
-                                    "readonly":true
-                                },
-                                "FamilyDetails":{
-                                    "readonly":true
-                                },
-                                "IndividualFinancials":{
-                                    "readonly":true
-                                },
-                                "IndividualReferences":{
-                                    "readonly":true
-                                }
-
-                            }
-                        },
-                        "Application":{
+                         "Application":{
                             "overrides":{
                                 "IndividualInformation":{
                                     "readonly":true
