@@ -2232,27 +2232,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "Liabilities.liabilities.interestRate",
                     "Liabilities.liabilities.frequencyOfInstallment",
                     "Liabilities.liabilities.outstandingAmountInPaisa",
-                    "Liabilities.liabilities.noOfInstalmentPaid",
-
-                    "EnterpriseFinancials",
-                    "EnterpriseFinancials.incomeThroughSales",
-                    "EnterpriseFinancials.incomeThroughSales.incomeType",
-                    "EnterpriseFinancials.incomeThroughSales.amount",
-                    "EnterpriseFinancials.incomeThroughSales.frequency",
-                    "EnterpriseFinancials.incomeThroughSales.invoiceDocId",
-                    "EnterpriseFinancials.incomeThroughSales.buyerName",
-
-                    "EnterpriseFinancials",
-                    "EnterpriseFinancials.rawMaterialExpenses",
-                    "EnterpriseFinancials.rawMaterialExpenses.vendorName",
-                    "EnterpriseFinancials.rawMaterialExpenses.amount",
-                    "EnterpriseFinancials.rawMaterialExpenses.frequency",
-                    "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId",
-
-                    "EnterpriseFinancials",
-                    "EnterpriseFinancials.monthlySurplus",
-                    "EnterpriseFinancials.monthlySurplus.totalMonthlySurplus",
-                    "EnterpriseFinancials.monthlySurplus.debtServiceRatio",
+                    "Liabilities.liabilities.noOfInstalmentPaid",        
 
                     "BuyerDetails",
                     "BuyerDetails.buyerDetails",
