@@ -258,10 +258,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EnterpriseInformation.enterpriseRegistrations": {
                         "required": true,
-                        "orderNo": 140
+                        "orderNo": 140,
+                        "condition":"model.customer.enterprise.companyRegistered == 'YES'",
+                        "add": null,
+                        "remove": null,
+                        "view": "fixed",
+                        "startEmpty":false
                     },
                     "EnterpriseInformation.enterpriseDocuments": {
-                        "orderNo": 150
+                        "orderNo": 150,
+                        "startEmpty":false,
+                        "add": null,
+                        "remove": null,
+                        "view": "fixed",
                     },
                     "ContactInformation.mobilePhone": {
                         "required": true,
