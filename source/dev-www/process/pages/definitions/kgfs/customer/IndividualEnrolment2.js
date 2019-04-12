@@ -39,7 +39,30 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             var configFile = function () {
                 return{
                     "loanProcess.loanAccount.currentStage":{
-                         "Application":{
+                        "Screening":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },                             
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
+                        },
+                        "Application":{
                             "overrides":{
                                 "IndividualInformation":{
                                     "readonly":true
@@ -605,7 +628,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             }
                         },
                         "KYC.additionalKYCs":{
-                            title:"ADDRESS_PROOFS"
+                            title:"ADDRESS_PROOFS",
+                            "readonly":true
                         },
                         "KYC.customerId":{
                             orderNo:10,
@@ -766,50 +790,61 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             }
                         },
                         "KYC.identityProofFieldSet":{
-                            orderNo: 20
+                            orderNo: 20,
+                            "readonly":true
                         },
                         "KYC.identityProof": {
                             "key": "customer.identityProof",
                             orderNo: 30,
-                            "type": "select"
+                            "type": "select",
+                            "readonly":true
                         },
                         "KYC.identityProofImageId": {
-                            orderNo: 40
+                            orderNo: 40,
+                            "readonly":true
                         },
                         "KYC.identityProofNo": {
                             "key": "customer.identityProofNo",
                             orderNo: 50,
-                            "type": "barcode"
+                            "type": "barcode",
+                            "readonly":true
                         },
                         "KYC.idProofIssueDate": {
                             "key" : "customer.idProofIssueDate",
                             orderNo: 60,
-                            "type" : "date"
+                            "type" : "date",
+                            "readonly":true
                         },
                         "KYC.idProofValidUptoDate": {
                             "key" : "customer.idProofValidUptoDate",
                             orderNo: 70,
-                            "type" : "date"
+                            "type" : "date",
+                            "readonly":true
                         },
                         "KYC.addressProofFieldSet":{
                             orderNo: 90,
                             condition: "!model.customer.addressProofSameAsIdProof",
+                            "readonly":true
                         },
                         "KYC.addressProof": {
                             "key": "customer.addressProof",
                             orderNo: 100,
                             condition: "!model.customer.addressProofSameAsIdProof",
                             "type": "select",
-                            required:false
+                            required:false,
+                            "readonly":true
+
                         },
                         "KYC.addressProofImageId": {
                             orderNo: 110,
-                            required:false
+                            required:false,
+                            "readonly":true
                         },
                         "KYC.addressProofNo": {
                             "key": "customer.addressProofNo",
                             orderNo: 140,
                             "type": "qrcode",
+                            "readonly":true,
                             condition: "!model.customer.addressProofSameAsIdProof",
                             "onCapture": function (result, model, form) {
                                 $log.info(result);
@@ -822,6 +857,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             orderNo: 120,
                             condition: "!model.customer.addressProofSameAsIdProof",
                             "type": "date",
+                            "readonly":true,
                             onChange: function (value, form, model, event) {
                                 if(model.customer.addressProofIssueDate){
                                     var addressProof1IssueDate = moment(model.customer.addressProofIssueDate, SessionStore.getSystemDateFormat());
@@ -840,6 +876,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             orderNo: 130,
                             condition: "!model.customer.addressProofSameAsIdProof",
                             "type": "date",
+                            "readonly":true,
                             onChange: function (value, form, model, event) {
                                 if(model.customer.addressProofValidUptoDate){
                                     var addressProof1IssueDate = moment(model.customer.addressProofIssueDate, SessionStore.getSystemDateFormat());
@@ -1547,7 +1584,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 {
                                     "type": "actionbox",
-                                    "condition": "model.customer.currentStage && (model.currentStage=='Screening' || model.currentStage=='Appraisal' || model.currentStage=='Application' || model.currentStage=='CreditAppraisal' || (model.currentStage=='GuarantorAddition' && model.pageClass=='guarantor'))",
+                                    "condition": "model.customer.currentStage && (model.currentStage=='Screening' || (model.currentStage=='GuarantorAddition' && model.pageClass=='guarantor'))",
                                     "orderNo": 1200,
                                     "items": [
                                         {
