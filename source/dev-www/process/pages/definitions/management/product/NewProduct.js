@@ -235,18 +235,18 @@ define({
                         "value": "HI",
                     }]
                 },
-                // {
-                //     "title": "APPLICANT_MIN_AGE",
-                //     "key": "product.applicantMinAge",
-                //     "type": "number",
-                //     required:true
-                // },
-                // {
-                //     "title": "APLLICANT_MAX_AGE",
-                //     "key":"product.applicantMaxAge",
-                //     "type":"number",
-                //     required:true
-                // },
+                {
+                    "title": "APPLICANT_MIN_AGE",
+                    "key": "product.applicantMinAge",
+                    "type": "number",
+                    required:true
+                },
+                {
+                    "title": "APLLICANT_MAX_AGE",
+                    "key":"product.applicantMaxAge",
+                    "type":"number",
+                    required:true
+                },
                 // {
                 //     "title": "MATURITY_AGE",
                 //     "key":"product.maturityAge",
