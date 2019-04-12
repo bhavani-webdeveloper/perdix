@@ -1056,6 +1056,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                             "EnterpriseInformation.customerBranchId" :{
                                 "readonly": true
                             },
+                            "EnterpriseDocuments":{
+                                "title": "Enterprise Documents",
+                                "condition":"model.customer.enterprise.enterpriseType == 'Enterprise'"
+
+                            },
+                            "EnterpriseDocuments.enterpriseDocuments" :{
+                                "title": "Enterprise Documnets"
+
+                            },
                             "BankAccounts": {
                                 "condition" : "model.customer.enterprise.enterpriseType == 'Enterprise'"
                             },
