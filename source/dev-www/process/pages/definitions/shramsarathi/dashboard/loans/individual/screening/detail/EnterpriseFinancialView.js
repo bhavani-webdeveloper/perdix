@@ -72,8 +72,8 @@ define({
 						'<tr><td>{{"Destination Total Expenses" | translate}}</td><td>{{model.incomeExpense.destinationTotalExpenses }}</td></tr>'+
 						'<tr><td>{{"Source Total Expenses" | translate}}</td><td>{{model.incomeExpense.sourceTotalExpenses }}</td></tr>'+
 						'<tr><td>{{"Expenses Grand Total" | translate}}</td><td>{{model.incomeExpense.expensesGrandTotal }}</td></tr>'+
-						'<tr><td>{{"Destination Extra" | translate}}</td><td>{{model.incomeExpense.destinationExtra }}</td></tr>'+
-						'<tr><td>{{"Source Extra" | translate}}</td><td>{{model.incomeExpense.sourceExtra }}</td></tr>'+
+						'<tr><td>{{"Destination Surplus" | translate}}</td><td>{{model.incomeExpense.destinationExtra }}</td></tr>'+
+						'<tr><td>{{"Source Surplus" | translate}}</td><td>{{model.incomeExpense.sourceExtra }}</td></tr>'+
 						'<tr><td>{{"Total Extra" | translate}}</td><td>{{model.incomeExpense.totalExtra }}</td></tr>'+
 						'</tbody>' +
 						'</table>'

@@ -41,6 +41,10 @@ define({
                     id: model.customerId
                 }).$promise.then(function(res) {
                     model.customer = res;
+
+                    
+
+
                     BundleManager.pushEvent('business', model._bundlePageObj, model.customer);
 
                     model.customer.presetAddress = [
@@ -534,7 +538,7 @@ define({
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
                 "title": "BUSINESS_FINANCE",
-                "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
+                //"condition":"model.currentStage !='CustomerSignedDocumentUpload'",
                 //"condition": "model.enterpriseRelationship",
                 "items": [{
                     "type": "grid",
@@ -618,7 +622,7 @@ define({
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
                 "title": "BUSINESS_LIABILITIES",
-                "condition": "model.customer.liabilities.length !=0 && model.currentStage !='CustomerSignedDocumentUpload'",
+                //"condition": "model.customer.liabilities.length !=0 && model.currentStage !='CustomerSignedDocumentUpload'",
                 "items": [{
                     "type": "grid",
                     "orientation": "horizontal",

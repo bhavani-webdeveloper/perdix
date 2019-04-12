@@ -80,6 +80,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
                 minimum: 1,
                 maximum: 1,
                 order: 5
+            }, {
+                pageName: 'loans.individual.screening.detail.PortfolioAnalyticsView',
+                title: 'Portfolio Analytics',
+                pageClass: 'portfolio-analytics',
+                minimum: 1,
+                maximum: 1,
+                order: 90
             }
         ];
             return definition;
