@@ -1368,7 +1368,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "FamilyDetails": {
                                     "readonly": true,
-                                    "title": "MIGRANT_DETAILS"
                                 },
                                 "Liabilities": {
                                     "readonly": true
@@ -1575,9 +1574,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "orderNo": 3,
                                     "readonly": true
                                 },
-                                "FamilyDetails.familyMembers":{
-                                    title: "MIGRANT_DETAILS"
-                                },
+                                // "FamilyDetails.familyMembers":{
+                                //     title: "MIGRANT_DETAILS"
+                                // },
                               
                                 "IndividualFinancials": {
                                     "orderNo": 4,
