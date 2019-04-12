@@ -100,7 +100,7 @@
       },
       {
          "order":8,
-         "code":"ReadyForDisbursement",
+         "code":"Varam_ReadyForDisbursement",
          "name":"Ready For Disburse",
          "stageType":"DISBURSE",
          "sendSms":"Yes",
@@ -112,25 +112,12 @@
 
          ]
       },      
+      
       {
          "order":9,
-         "code":"RejectedDisbursement",
-         "name":"Rejected Disbursement",
-         "stageType":"CAPTURE",
-         "sendSms":"Yes",
-         "smsCategory":"RejectedDisbursement",
-         "allowedRoles":[
-            "WM"
-         ],
-         "notRequiredForTranches":[
-            
-         ]
-      },
-      {
-         "order":10,
-         "code":"DisbursementConfirmation",
+         "code":"Varam_DisbursementConfirmation",
          "name":"Disbursement Confirmation",
-         "stageType":"DISBURSEMENTCONFIRMATION",
+         "stageType":"Varam_DisbursementConfirmation",
          "sendSms":"Yes",
          "smsCategory":"Disbursed",
          "documentTrackingRequired":"Yes",
@@ -170,14 +157,14 @@
                      "title":"Scheduled Disbursement Date",
                      "type":"string",
                      "captureStages":[
-                        "MTBooking","LOCDisbursement","ReadyForDisbursement"
+                        "MTBooking","LOCDisbursement","Varam_ReadyForDisbursement"
                      ]
                   },
                   "actualDisbursementDate":{
                      "title":"Actual Disbursement Date",
                      "type":"string",
                      "captureStages":[
-                        "ReadyForDisbursement"
+                        "Varam_ReadyForDisbursement"
                      ]
                   },
                   "disbursementAmount":{
@@ -186,7 +173,7 @@
                      "minimum":0,
                      "maximum":100000000,
                      "captureStages":[
-                        "ReadyForDisbursement","LOCDisbursement"
+                        "Varam_ReadyForDisbursement","LOCDisbursement"
                      ]
                   },
                   "disbursedAmount":{
@@ -195,7 +182,7 @@
                      "minimum":0,
                      "maximum":100000000,
                      "captureStages":[
-                        "ReadyForDisbursement"
+                        "Varam_ReadyForDisbursement"
                      ]
                   },
                   "customerSignatureDate":{
@@ -211,7 +198,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "ReadyForDisbursement"
+                        "Varam_ReadyForDisbursement"
                      ]
                   },
                   "customerAccountNumber":{
@@ -230,7 +217,7 @@
                      "maxLength":100,
                      "captureStages":[
                         "MTDisbursementDataCapture",
-                        "DisbursementConfirmation",
+                        "Varam_DisbursementConfirmation",
                         "LOCDisbursement"
                      ]
                   },
@@ -239,7 +226,7 @@
                      "minLength":0,
                      "maxLength":100,
                      "captureStages":[
-                        "DisbursementConfirmation","ReadyForDisbursement"
+                        "Varam_DisbursementConfirmation","Varam_ReadyForDisbursement"
                      ]
                   },
                   "udf2":{
@@ -247,7 +234,7 @@
                      "minLength":0,
                      "maxLength":100,
                      "captureStages":[
-                        "DisbursementConfirmation"
+                        "Varam_DisbursementConfirmation"
                      ]
                   },
                   "udf3":{
@@ -255,7 +242,7 @@
                      "minLength":0,
                      "maxLength":100,
                      "captureStages":[
-                        "DisbursementConfirmation"
+                        "Varam_DisbursementConfirmation"
                      ]
                   },
                   "udf4":{
@@ -263,7 +250,7 @@
                      "minLength":0,
                      "maxLength":100,
                      "captureStages":[
-                        "DisbursementConfirmation"
+                        "Varam_DisbursementConfirmation"
                      ]
                   },
                   "udf5":{
@@ -271,14 +258,14 @@
                      "minLength":0,
                      "maxLength":100,
                      "captureStages":[
-                        "DisbursementConfirmation"
+                        "Varam_DisbursementConfirmation"
                      ]
                   },
                   "udfDate1":{
                      "title":"udfDate1",
                      "type":"date",
                      "captureStages":[
-                        "DisbursementConfirmation"
+                        "Varam_DisbursementConfirmation"
                      ]
                   },
                   "udfDate2":{
@@ -292,21 +279,21 @@
                      "title":"udfDate3",
                      "type":"date",
                      "captureStages":[
-                        "DisbursementConfirmation"
+                        "Varam_DisbursementConfirmation"
                      ]
                   },
                   "udfDate4":{
                      "title":"udfDate4",
                      "type":"date",
                      "captureStages":[
-                        "DisbursementConfirmation"
+                        "Varam_DisbursementConfirmation"
                      ]
                   },
                   "udfDate5":{
                      "title":"udfDate5",
                      "type":"date",
                      "captureStages":[
-                        "DisbursementConfirmation"
+                        "Varam_DisbursementConfirmation"
                      ]
                   },
                   "customerName":{
@@ -366,7 +353,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "ReadyForDisbursement"
+                        "Varam_ReadyForDisbursement"
                      ]
                   },
                   "latitude":{
@@ -402,7 +389,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "ReadyForDisbursement"
+                        "Varam_ReadyForDisbursement"
                      ]
                   },
                   "remarks1":{
@@ -429,7 +416,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "DisbursementConfirmation"
+                        "Varam_DisbursementConfirmation"
                      ]
                   },
                   "moratoriumPeriodInDays":{
@@ -438,7 +425,7 @@
                      "minimum":1,
                      "maximum":10000000,
                      "captureStages":[
-                        "ReadyForDisbursement"
+                        "Varam_ReadyForDisbursement"
                      ]
                   },
                   "principalDuePayment":{
@@ -447,7 +434,7 @@
                         "minimum":1,
                         "maximum":10000000,
                         "captureStages":[
-                           "ReadyForDisbursement"
+                           "Varam_ReadyForDisbursement"
                         ]
                   },
                   "normalInterestDuePayment":{
@@ -456,7 +443,7 @@
                         "minimum":1,
                         "maximum":10000000,
                         "captureStages":[
-                           "ReadyForDisbursement"
+                           "Varam_ReadyForDisbursement"
                         ]
                   },
                   "penalInterestDuePayment":{
@@ -465,7 +452,7 @@
                         "minimum":1,
                         "maximum":10000000,
                         "captureStages":[
-                           "ReadyForDisbursement"
+                           "Varam_ReadyForDisbursement"
                         ]
                   },
                   "bookedNotDueNormalInterestPaymentPayment":{
@@ -474,7 +461,7 @@
                         "minimum":1,
                         "maximum":10000000,
                         "captureStages":[
-                           "ReadyForDisbursement"
+                           "Varam_ReadyForDisbursement"
                         ]
                   },
                   "bookedNotDuePenalInterestPayment":{
@@ -483,7 +470,7 @@
                         "minimum":1,
                         "maximum":10000000,
                         "captureStages":[
-                           "ReadyForDisbursement"
+                           "Varam_ReadyForDisbursement"
                         ]
                   },
                   "feeAmountPayment":{
@@ -492,42 +479,42 @@
                         "minimum":1,
                         "maximum":10000000,
                         "captureStages":[
-                           "ReadyForDisbursement"
+                           "Varam_ReadyForDisbursement"
                         ]
                   },
 				  "fpVerified":{
                      "title":"fpVerified",
                      "type":"boolean",
                      "captureStages":[
-                        "ReadyForDisbursement"
+                        "Varam_ReadyForDisbursement"
                      ]
                   },
 				   "overrideRequested":{
                      "title":"overrideRequested",
                      "type":"boolean",
                      "captureStages":[
-                         "ReadyForDisbursement"
+                         "Varam_ReadyForDisbursement"
                      ]
                   },
 				   "overrideStatus":{
                      "title":"overrideStatus",
                      "type":"string",
                      "captureStages":[
-                        "ReadyForDisbursement"
+                        "Varam_ReadyForDisbursement"
                      ]
                   },
 				   "overrideRequestRemarks":{
                      "title":"overrideRequestRemarks",
                      "type":"string",
                      "captureStages":[
-                         "ReadyForDisbursement"
+                         "Varam_ReadyForDisbursement"
                      ]
                   },
 				   "overrideCheckerRemarks":{
                      "title":"overrideCheckerRemarks",
                      "type":"string",
                      "captureStages":[
-                        "ReadyForDisbursement"
+                        "Varam_ReadyForDisbursement"
                      ]
                   },
 				   
@@ -537,7 +524,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "DisbursementConfirmation"
+                        "Varam_DisbursementConfirmation"
                      ]
                   }, 
                   "overrideRequested":{
@@ -546,7 +533,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "ReadyForDisbursement"
+                        "Varam_ReadyForDisbursement"
                      ]
                   },
                   "overrideRequestRemarks":{
@@ -555,7 +542,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "ReadyForDisbursement"
+                        "Varam_ReadyForDisbursement"
                      ]
                   },
                   "fpVerified":{
@@ -564,7 +551,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "ReadyForDisbursement"
+                        "Varam_ReadyForDisbursement"
                      ]
                   }
                },

@@ -5,154 +5,20 @@
    "customerAgeLimitForSingleFemale": 35,
    "stages": [{
       "order": 1,
-      "code": "GroupCreation",
+      "code": "Varam_GroupCreation",
       "name": "Group Formation",
       "stageType": "CAPTURE",
-"isSchemaValidationRequired":true,
-      "isAccountOpening": false,
-      "allowedRoles": [
-         "A",
-         "ARM",
-         "RM"
-      ]
-   }, {
-      "order": 2,
-      "code": "DSC",
-      "name": "DSC",
-      "stageType": "DSC",
-      "isAccountOpening": false,
-      "allowedRoles": [
-         "A"
-      ]
-   }, {
-      "order": 3,
-      "code": "CGT1",
-      "name": "CGT 1",
-      "requiredIfLoanCycleLessThan": 100,
-      "isAccountOpening": false,
-      "stageType": "CGT",
-      "allowedRoles": [
-         "A",
-         "ARM",
-         "RM"
-      ]
-   }, {
-      "order": 4,
-      "code": "CGT2",
-      "name": "CGT 2",
-      "requiredIfLoanCycleLessThan": 2,
-      "isAccountOpening": false,
-      "stageType": "CGT",
-      "allowedRoles": [
-         "A",
-         "ARM",
-         "RM"
-      ]
-   }, {
-      "order": 5,
-      "code": "CGT3",
-      "name": "CGT 3",
-      "requiredIfLoanCycleLessThan": 2,
-      "isAccountOpening": false,
-      "stageType": "CGT",
-      "allowedRoles": [
-         "A",
-         "ARM",
-         "RM"
-      ]
-   },{
-      "order": 6,
-      "code": "LoanBooking",
-      "name": "Loan Booking",
+	"isSchemaValidationRequired":true,
       "isAccountOpening": true,
-      "stageType": "CAPTURE",
-      "allowedRoles": [
-         "A",
-         "ARM",
-         "RM"
-      ]
-   }, {
-      "order": 7,
-      "code": "GRT",
-      "name": "GRT Process",
-      "isAccountOpening": false,
-      "stageType": "GRT",
-      "allowedRoles": [
-         "A",
-         "ARM",
-         "RM"
-      ]
-   }, {
-      "order": 8,
-      "code": "ApplicationPending",
-      "name": "Applications Pending",
-      "isAccountOpening": false,
-      "stageType": "CAPTURE",
-      "allowedRoles": [
-         "A",
-         "ARM",
-         "RM"
-      ]
-   }, {
-      "order": 9,
-      "code": "Checker1",
-      "name": "Checker 1",
-      "isAccountOpening": false,
-      "stageType": "CHECKER",
-      "allowedRoles": []
-   }, {
-      "order": 10,
-      "code": "Checker2",
-      "name": "Checker 2",
-      "isAccountOpening": false,
-      "stageType": "CHECKER",
-      "allowedRoles": []
-   }, {
-      "order": 11,
-      "code": "AgreementUploadPending",
-      "name": "Agreement Upload Pending",
-      "isAccountOpening": false,
-      "stageType": "AGREEMENT",
-      "allowedRoles": []
-   }, {
-      "order": 12,
-      "code": "Checker3",
-      "name": "Checker 3",
-      "isAccountOpening": false,
-      "stageType": "CHECKER",
-      "allowedRoles": []
-   }, {
-      "order": 13,
-      "code": "Checker4",
-      "name": "Checker 4",
-      "isAccountOpening": false,
-      "stageType": "CHECKER",
-      "allowedRoles": []
-   }, {
-      "order": 14,
-      "code": "LoanDisbursement",
-      "name": "Loan Disbursement",
-      "isAccountOpening": false,
-      "stageType": "DISBURSE",
       "allowedRoles": [
          "A",
          "ARM",
          "RM"
       ]
    },{
-      "order": 15,
+      "order": 2,
       "code": "Completed",
       "name": "Completed",
-      "isAccountOpening": false,
-      "allowedRoles": [
-         "A",
-         "ARM",
-         "RM"
-      ]
-   },{
-      "order": 16,
-      "code": "Rejected",
-      "name": "Loan Disbursement",
       "isAccountOpening": false,
       "allowedRoles": [
          "A",
@@ -183,7 +49,7 @@
                   "minLength": 1,
                   "maxLength": 15,
                   "captureStages": [
-                     "GroupCreation"
+                     "Varam_GroupCreation"
                   ]
                },
                "centreCode": {
@@ -192,7 +58,7 @@
                   "minLength": 1,
                   "maxLength": 15,
                   "captureStages": [
-                     "GroupCreation"
+                     "Varam_GroupCreation"
                   ]
                },
                "groupCode": {
@@ -201,7 +67,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "GroupCreation"
+                     "Varam_GroupCreation"
                   ]
                },
                "productCode": {
@@ -210,21 +76,21 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "GroupCreation"
+                     "Varam_GroupCreation"
                   ]
                },
                "groupFormationDate": {
                   "title": "Group  Formation Date",
                   "type": "string",
                   "captureStages": [
-                     "GroupCreation"
+                     "Varam_GroupCreation"
                   ]
                },
                "groupStatus": {
                   "title": "Group  Status",
                   "type": "string",
                   "captureStages": [
-                     "GroupCreation","GRT","ApplicationPending","LoanDisbursement","CGT3","CGT2","CGT1","DSC","LoanBooking","Checker1",
+                     "Varam_GroupCreation","GRT","ApplicationPending","LoanDisbursement","CGT3","CGT2","CGT1","DSC","LoanBooking","Checker1",
                      "Checker2","Checker3","Checker4","AgreementUploadPending"
                   ]
                },
@@ -232,7 +98,7 @@
                   "title": "Start Time",
                   "type": "string",
                   "captureStages": [
-                     "GroupCreation","GRT","ApplicationPending","LoanDisbursement","CGT3","CGT2","CGT1","DSC","LoanBooking","Checker1",
+                     "Varam_GroupCreation","GRT","ApplicationPending","LoanDisbursement","CGT3","CGT2","CGT1","DSC","LoanBooking","Checker1",
                      "Checker2","Checker3","Checker4","AgreementUploadPending"
                   ]
                },
@@ -240,7 +106,7 @@
                   "title": "End Time",
                   "type": "string",
                   "captureStages": [
-                     "GroupCreation","GRT","ApplicationPending","LoanDisbursement","CGT3","CGT2","CGT1","DSC","LoanBooking","Checker1",
+                     "Varam_GroupCreation","GRT","ApplicationPending","LoanDisbursement","CGT3","CGT2","CGT1","DSC","LoanBooking","Checker1",
                      "Checker2","Checker3","Checker4","AgreementUploadPending"
                   ]
                },
@@ -248,7 +114,7 @@
                   "title": "Frequency",
                   "type": "string",
                   "captureStages": [
-                     "GroupCreation"
+                     "Varam_GroupCreation"
                   ]
                },
                "tenure": {
@@ -257,7 +123,7 @@
                   "minLength": 1,
                   "maxLength": 45,
                   "captureStages": [
-                     "GroupCreation"
+                     "Varam_GroupCreation"
                   ]
                },
                "tenureInYear": {
@@ -266,7 +132,7 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "GroupCreation"
+                     "Varam_GroupCreation"
                   ]
                },
                "groupName": {
@@ -275,7 +141,7 @@
                   "minLength": 1,
                   "maxLength": 45,
                   "captureStages": [
-                     "GroupCreation"
+                     "Varam_GroupCreation"
                   ]
                },
                "currentStage": {
@@ -284,14 +150,14 @@
                   "minLength": 1,
                   "maxLength": 100,
                   "captureStages": [
-                     "GroupCreation"
+                     "Varam_GroupCreation"
                   ]
                },
                "pendingApproval": {
                   "title": "GPending Approval",
                   "type": "string",
                   "captureStages": [
-                     "GroupCreation"
+                     "Varam_GroupCreation"
                   ]
                },
                "udf1": {
@@ -300,7 +166,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -310,7 +176,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -320,7 +186,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -330,7 +196,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -340,7 +206,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -350,7 +216,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -360,7 +226,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -370,7 +236,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -380,7 +246,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -390,7 +256,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -400,7 +266,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -410,7 +276,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -420,7 +286,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -430,7 +296,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -440,7 +306,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -450,7 +316,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -460,7 +326,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -470,7 +336,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -480,7 +346,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -490,7 +356,7 @@
                   "minLength": 1,
                   "maxLength": 50,
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -498,7 +364,7 @@
                   "title": "udf Date1",
                   "type": "string",
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -506,7 +372,7 @@
                   "title": "udf Date2",
                   "type": "string",
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -514,7 +380,7 @@
                   "title": "udf Date3",
                   "type": "string",
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -522,7 +388,7 @@
                   "title": "udf Date4",
                   "type": "string",
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -530,7 +396,7 @@
                   "title": "udf Date5",
                   "type": "string",
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                },
@@ -540,7 +406,7 @@
                   "minLength": 1,
                   "maxLength": 500,
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT",
                      "DSC","CGT1","CGT2","CGT3","LoanBooking","ApplicationPending","Checker1","Checker2","AgreementUploadPending","Checker3","Checker4","LoanDisbursement"
                   ]
@@ -551,7 +417,7 @@
                   "minLength": 1,
                   "maxLength": 200,
                   "captureStages": [
-                     "GroupCreation",
+                     "Varam_GroupCreation",
                      "GRT"
                   ]
                }
@@ -573,7 +439,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "GroupCreation"
+                        "Varam_GroupCreation"
                      ]
                   },
                   "loanAmount": {
@@ -582,7 +448,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "GroupCreation"
+                        "Varam_GroupCreation"
                      ]
                   },
                   "literateWitnessFirstName": {
@@ -591,7 +457,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "GroupCreation"
+                        "Varam_GroupCreation"
                      ]
                   },
                   "literateWitnessMiddleName": {
@@ -600,7 +466,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "GroupCreation"
+                        "Varam_GroupCreation"
                      ]
                   },
                   "literateWitnessLastName": {
@@ -609,14 +475,14 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "GroupCreation"
+                        "Varam_GroupCreation"
                      ]
                   },
                   "witnessRelationship": {
                      "title": "Witness Relationship",
                      "type": "string",
                      "captureStages": [
-                        "GroupCreation"
+                        "Varam_GroupCreation"
                      ]
                   },
                   "witnessFirstName": {
@@ -625,7 +491,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "GroupCreation"
+                        "Varam_GroupCreation"
                      ]
                   },
                   "witnessMiddleName": {
@@ -634,7 +500,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "GroupCreation"
+                        "Varam_GroupCreation"
                      ]
                   },
                   "witnessLastName": {
@@ -643,7 +509,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "GroupCreation"
+                        "Varam_GroupCreation"
                      ]
                   },
                   "spouseFirstName": {
@@ -652,7 +518,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "GroupCreation"
+                        "Varam_GroupCreation"
                      ]
                   },
                   "spouseMiddleName": {
@@ -661,7 +527,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "GroupCreation"
+                        "Varam_GroupCreation"
                      ]
                   },
                   "spouseLastName": {
@@ -670,14 +536,14 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "GroupCreation"
+                        "Varam_GroupCreation"
                      ]
                   },
                   "spouseDob": {
                      "title": "Spouse Date of birth",
                      "type": "string",
                      "captureStages": [
-                        "GroupCreation"
+                        "Varam_GroupCreation"
                      ]
                   },
                   "maritalStatus": {
@@ -686,14 +552,14 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "GroupCreation"
+                        "Varam_GroupCreation"
                      ]
                   },
                   "outstandingLoanAmount": {
                      "title": "Outstanding Loan Amount",
                      "type": "number",
                      "captureStages": [
-                        "GroupCreation"
+                        "Varam_GroupCreation"
                      ]
                   },
                   "husbandOrFatherFirstName": {
@@ -702,7 +568,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "GroupCreation"
+                        "Varam_GroupCreation"
                      ]
                   },
                   "husbandOrFatherMiddleName": {
@@ -711,7 +577,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "GroupCreation"
+                        "Varam_GroupCreation"
                      ]
                   },
                   "husbandOrFatherLastName": {
@@ -720,7 +586,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "GroupCreation"
+                        "Varam_GroupCreation"
                      ]
                   },
                   "relation": {
@@ -729,7 +595,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "GroupCreation"
+                        "Varam_GroupCreation"
                      ]
                   },
                   "centreCode": {
@@ -738,7 +604,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "GroupCreation"
+                        "Varam_GroupCreation"
                      ]
                   },
                   "urnNo": {
@@ -747,7 +613,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "GroupCreation"
+                        "Varam_GroupCreation"
                      ]
                   },
                   "latitude": {
@@ -756,7 +622,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "GroupCreation",
+                        "Varam_GroupCreation",
                         "GRT"
                      ]
                   },
@@ -766,7 +632,7 @@
                      "minLength": 1,
                      "maxLength": 100,
                      "captureStages": [
-                        "GroupCreation",
+                        "Varam_GroupCreation",
                         "GRT"
                      ]
                   },
@@ -774,7 +640,7 @@
                      "title": "photoImageId1",
                      "type": "string",
                      "captureStages": [
-                        "GroupCreation",
+                        "Varam_GroupCreation",
                         "GRT"
                      ]
                   },
@@ -782,7 +648,7 @@
                      "title": "photoImageId2",
                      "type": "string",
                      "captureStages": [
-                        "GroupCreation",
+                        "Varam_GroupCreation",
                         "GRT"
                      ]
                   },
@@ -790,7 +656,7 @@
                      "title": "photoImageId3",
                      "type": "string",
                      "captureStages": [
-                        "GroupCreation",
+                        "Varam_GroupCreation",
                         "GRT"
                      ]
                   },
@@ -799,7 +665,7 @@
                      "title": "photoImageId4",
                      "type": "string",
                      "captureStages": [
-                        "GroupCreation",
+                        "Varam_GroupCreation",
                         "GRT"
                      ]
                   },
@@ -807,7 +673,7 @@
                      "title": "photoImageId5",
                      "type": "string",
                      "captureStages": [
-                        "GroupCreation",
+                        "Varam_GroupCreation",
                         "GRT"
                      ]
                   },
@@ -815,7 +681,7 @@
                      "title": "isHouseVerificationDone",
                      "type": "boolean",
                      "captureStages": [
-                        "GroupCreation",
+                        "Varam_GroupCreation",
                         "GRT"
                      ]
                   },
@@ -843,7 +709,7 @@
                      "title": "modeOfDisbursement",
                      "type": "string",
                      "captureStages": [
-                        "GroupCreation",
+                        "Varam_GroupCreation",
                         "GRT",
                         "LoanDisbursement"
 
@@ -853,7 +719,7 @@
                      "title": "ifscCode",
                      "type": "string",
                      "captureStages": [
-                        "GroupCreation",
+                        "Varam_GroupCreation",
                         "GRT",
                         "LoanDisbursement"
                      ]
@@ -862,7 +728,7 @@
                      "title": "customerAccountNumber",
                      "type": "string",
                      "captureStages": [
-                        "GroupCreation",
+                        "Varam_GroupCreation",
                         "GRT",
                         "LoanDisbursement"
                      ]
@@ -871,7 +737,7 @@
                      "title": "customerBankName",
                      "type": "string",
                      "captureStages": [
-                        "GroupCreation",
+                        "Varam_GroupCreation",
                         "GRT",
                         "LoanDisbursement"
                      ]
@@ -880,7 +746,7 @@
                      "title": "customerbankBranchName",
                      "type": "string",
                      "captureStages": [
-                        "GroupCreation",
+                        "Varam_GroupCreation",
                         "GRT",
                         "LoanDisbursement"
                      ]
@@ -889,7 +755,7 @@
                      "title": "customerNameInBank",
                      "type": "string",
                      "captureStages": [
-                        "GroupCreation",
+                        "Varam_GroupCreation",
                         "GRT",
                         "LoanDisbursement"
                      ]
@@ -908,7 +774,7 @@
               "title": "applicationFileId",
               "type": "string",
               "captureStages": [
-               "GroupCreation",
+               "Varam_GroupCreation",
                "ApplicationPending",
                "AgreementUploadPending",
                "Checker1"
@@ -918,7 +784,7 @@
               "title": "applicationStatus",
               "type": "string",
               "captureStages": [
-			      "GroupCreation",
+			      "Varam_GroupCreation",
               
 			   "Completed"
               ]
@@ -927,7 +793,7 @@
               "title": "applicationStatusUpdatedBy",
               "type": "string",
               "captureStages": [
-               "GroupCreation",
+               "Varam_GroupCreation",
                "ApplicationPending",
                "AgreementUploadPending",
                "Checker1"
@@ -937,7 +803,7 @@
               "title": "applicationStatusUpdatedOn",
               "type": "date",
               "captureStages": [
-               "GroupCreation",
+               "Varam_GroupCreation",
                "ApplicationPending",
                "AgreementUploadPending",
                "Checker1"
@@ -947,7 +813,7 @@
               "title": "chk1FileUploadId",
               "type": "string",
               "captureStages": [
-               "GroupCreation",
+               "Varam_GroupCreation",
                "ApplicationPending",
                "AgreementUploadPending",
                "Checker1"
@@ -958,7 +824,7 @@
               "title": "agreementStatus",
               "type": "string",
               "captureStages": [
-               "GroupCreation",
+               "Varam_GroupCreation",
                "ApplicationPending",
                "AgreementUploadPending",
                "Checker1",
@@ -969,7 +835,7 @@
               "title": "agreementStatusUpdatedBy",
               "type": "string",
               "captureStages": [
-               "GroupCreation",
+               "Varam_GroupCreation",
                "ApplicationPending",
                "AgreementUploadPending",
                "Checker1"
@@ -979,7 +845,7 @@
               "title": "agreementStatusUpdatedOn",
               "type": "date",
               "captureStages": [
-               "GroupCreation",
+               "Varam_GroupCreation",
                "ApplicationPending",
                "AgreementUploadPending",
                "Checker1"
@@ -989,7 +855,7 @@
               "title": "agreementFileId",
               "type": "string",
               "captureStages": [
-               "GroupCreation",
+               "Varam_GroupCreation",
                "ApplicationPending",
                "AgreementUploadPending",
                "Checker1"

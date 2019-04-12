@@ -3,249 +3,21 @@
     "customerMaxGenericAge":60,
     "customerMaxAgeBcProduct":58,
     "customerAgeLimitForSingleFemale":35,
-    "productValidationFromStage":"Screening",
+    "productValidationFromStage":"Varam_LoanInitiation",
     "stages":[
-       {
-          "order":1,
-          "code":"Screening",
-          "name":"Screening",
-          "stageType":"CAPTURE",
-          "sendSms":"No",
-          "smsCategory":"LoanBooking",
-          "isAccountOpening": false,
-          "riskScoreName":"RiskScore1",
-          "allowedRoles":[
-             "WM"
-          ]
-       },
-       {
-          "order":2,
-          "code":"MELApplication",
-          "name":"MELApplication",
-          "stageType":"CAPTURE",
-          "sendSms":"No",
-          "smsCategory":"LoanBooking",
-          "isAccountOpening":false,
-          "allowedRoles":[
-             "WM"
-          ]
-       },
-       {
-          "order":3,
-          "code":"Application",
-          "name":"Application",
-          "stageType":"CAPTURE",
-          "sendSms":"No",
-          "smsCategory":"LoanBooking",
-          "isAccountOpening":false,
-          "allowedRoles":[
-             "WM"
-          ]
-       },
-       {
-          "order":4,
-          "code":"CreditAppraisal",
-          "name":"Credit Appraisal",
-          "stageType":"CAPTURE",
-          "sendSms":"No",
-          "smsCategory":"LoanBooking",
-          "isAccountOpening":false,
-          "riskScoreName":"RiskScore2",
-          "allowedRoles":[
-             "WM"
-          ]
-       },
-       {
-         "order":5,
-         "code":"BusinessTeamReview",
-         "name":"Business Team Review",
+      {
+         "order":1,
+         "code":"Varam_LoanInitiation",
+         "name":"Loan Input",
          "stageType":"CAPTURE",
-         "sendSms":"No",
-         "smsCategory":"LoanBooking",
-         "isAccountOpening":false,
-         "riskScoreName":"RiskScore2",
-         "allowedRoles":[
-            "WM"
-         ]
-       },
-       {
-         "order":6,
-         "code":"CreditOfficerReview",
-         "name":"Credit Officer Review",
-         "stageType":"CAPTURE",
-         "sendSms":"No",
-         "smsCategory":"LoanBooking",
-         "isAccountOpening":false,
-         "riskScoreName":"RiskScore2",
-         "allowedRoles":[
-            "WM"
-         ]
-       },
-       {
-         "order":7,
-         "code":"CreditManagerReview",
-         "name":"Credit Manager Review",
-         "stageType":"CAPTURE",
-         "sendSms":"No",
-         "smsCategory":"LoanBooking",
-         "isAccountOpening":false,
-         "riskScoreName":"RiskScore2",
-         "allowedRoles":[
-            "WM"
-         ]
-       },
-       {
-         "order":8,
-         "code":"CBOCreditHeadReview",
-         "name":"CBO & Credit Head Review",
-         "stageType":"CAPTURE",
-         "sendSms":"No",
-         "smsCategory":"LoanBooking",
-         "isAccountOpening":false,
-         "riskScoreName":"RiskScore2",
-         "allowedRoles":[
-            "WM"
-         ]
-       },
-       {
-         "order":9,
-         "code":"CEOMDReview",
-         "name":"CEO & MD Review",
-         "stageType":"CAPTURE",
-         "sendSms":"No",
-         "smsCategory":"LoanBooking",
-         "isAccountOpening":false,
-         "riskScoreName":"RiskScore2",
-         "allowedRoles":[
-            "WM"
-         ]
-       },
-
-       {
-          "order":10,
-          "code":"DSCApproval",
-          "name":"DSC Approval",
-          "stageType":"CAPTURE",
-          "sendSms":"No",
-          "smsCategory":"ApplicationReview",
-          "isAccountOpening":false,
-          "riskScoreName":"RiskScore3",
-          "allowedRoles":[
-             "WM"
-          ]
-       },
-        {
-          "order":11,
-          "code":"DSCOverride",
-          "name":"DSC Override",
-          "stageType":"CAPTURE",
-          "sendSms":"No",
-          "smsCategory":"LoanBooking",
-          "isAccountOpening":false,
-          "riskScoreName":"RiskScore3",
-          "allowedRoles":[
-            "WM"
-          ]
-      },
-       {
-          "order":12,
-          "code":"KYCCheck",
-          "name":"KYC Check",
-          "stageType":"CAPTURE",
-          "sendSms":"No",
-          "smsCategory":"LoanBooking",
-          "isAccountOpening":false,
-          "allowedRoles":[
-             "WM"
-          ]
-       },
-       {
-          "order":13,
-          "code":"RiskReviewAndLoanSanction",
-          "name":"Risk Review And Loan Sanction",
-          "stageType":"CAPTURE",
-          "sendSms":"No",
-          "smsCategory":"LoanBooking",
-          "isAccountOpening":false,
-          "allowedRoles":[
-             "WM"
-          ]
-       },
-       {
-         "order":14,
-         "code": "Rejected",
-         "name": "Rejected",
-         "stageType": "CAPTURE",
-         "sendSms": "Yes",
-         "smsCategory": "UponRejection",
-         "isAccountOpening": false,
-         "allowedRoles": [
-            "WM"
-         ]
-      },
-       {
-          "order":15,
-          "code":"LoanInitiation",
-          "name":"Loan Input",
-          "stageType":"CAPTURE",
-          "sendSms":"No",
-          "smsCategory":"Sanction",
-          "isAccountOpening":false,
-          "isPreAccountOpening":true,
-          "allowedRoles":[
-             "WM"
-          ]
-       },
-       {
-        "order":16,
-        "code":"DocumentUpload",
-        "name":"Document Download and Upload",
-        "stageType":"CAPTURE",
-        "sendSms":"No",
-        "smsCategory":"LoanBooking",
-        "isAccountOpening":true,
-        "multipleLoanNotAllowedForLoanType":true,
-        "allowedRoles":[
-           "WM"
-        ]
-     },
-     {
-        "order":17,
-        "code":"Checker1",
-        "name":"Checker1",
-        "stageType":"CAPTURE",
-        "sendSms":"No",
-        "smsCategory":"LoanBooking",
-        "isAccountOpening":false,
-        "allowedRoles":[
-           "WM"
-        ]
-     },
-     {
-       "order":18,
-       "code":"Checker2",
-       "name":"Checker2",
-       "stageType":"CAPTURE",
-       "sendSms":"No",
-       "smsCategory":"LoanBooking",
-       "isAccountOpening":false,
-       "allowedRoles":[
-          "WM"
-       ]
-    },
-       {
-         "order":19,
-         "code":"Completed",
-         "name":"Completed",
-         "stageType":"CAPTURE",
-         "sendSms":"No",
-         "smsCategory":"LoanBooking",
-         "isAccountOpening":false,
+         "sendSms":"Yes",
+         "smsCategory":"Sanction",
+         "isAccountOpening":true,
          "allowedRoles":[
             "WM"
          ]
       }
-    ],
+   ],
     "schema":{
        "$schema":"http://json-schema.org/draft-04/schema#",
        "type":"object",
@@ -273,7 +45,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "Varam_LoanInitiation"
                    ]
                 },
                 "processType":{
@@ -282,7 +54,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "tenureInYears":{
@@ -300,7 +72,7 @@
                    "minimum":1,
                    "maximum":12,
                    "captureStages":[
-                      "Screening","Application", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening","Application", "Sanction", "Varam_LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
                 "groupCode":{
@@ -309,7 +81,7 @@
                   "minimum":1,
                   "maximum":12,
                   "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                     "Screening", "Sanction", "Varam_LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                   ]
                },
                 "productType":{
@@ -318,7 +90,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "partnerCode":{
@@ -327,7 +99,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation", "PendingForPartner"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "Varam_LoanInitiation", "PendingForPartner"
                    ]
                 },
                 "productCode":{
@@ -336,7 +108,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation", "PendingForPartner"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "Varam_LoanInitiation", "PendingForPartner"
                    ]
                 },
                 "productCode":{
@@ -345,7 +117,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation", "PendingForPartner"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "Varam_LoanInitiation", "PendingForPartner"
                    ]
                 },
                 "loanAmount":{
@@ -354,7 +126,7 @@
                    "minimum":1,
                    "maximum":10000000,
                    "captureStages":[
-                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "Sanction", "Varam_LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
                 "doCustomerLoanAmount":{
@@ -363,7 +135,7 @@
                    "minimum":1,
                    "maximum":10000000,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
                 "partnerLoanAmount":{
@@ -372,7 +144,7 @@
                    "minimum":1,
                    "maximum":10000000,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
                 "doCustomerProcessingFee":{
@@ -381,7 +153,7 @@
                    "minimum":1,
                    "maximum":10000000,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
                 "partnerProcessingFee":{
@@ -390,7 +162,7 @@
                    "minimum":1,
                    "maximum":10000000,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
                 "linkedAccountNumber":{
@@ -399,7 +171,7 @@
                    "minimum":1,
                    "maximum":10000000,
                    "captureStages":[
-                      "Screening","LoanInitiation","Application", "FieldAppraisal","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal","Sanction"
+                      "Screening","Varam_LoanInitiation","Application", "FieldAppraisal","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal","Sanction"
                    ]
                 },
                  "leadId":{
@@ -408,7 +180,7 @@
                    "minimum":1,
                    "maximum":10000000,
                    "captureStages":[
-                     "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal" 
+                     "Screening", "Sanction", "Varam_LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal" 
                    ]
                 },
                 "loanPurpose":{
@@ -417,7 +189,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "LoanInitiation","Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","SanctionInput"
+                      "Varam_LoanInitiation","Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","SanctionInput"
                    ]
                 },
                 "loanPurpose1":{
@@ -426,7 +198,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "LoanInitiation","Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","SanctionInput"
+                      "Varam_LoanInitiation","Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","SanctionInput"
                    ]
                 },
                 "loanPurpose2":{
@@ -435,7 +207,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "LoanInitiation","Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","SanctionInput"
+                      "Varam_LoanInitiation","Screening", "ScreeningReview","Application","ApplicationReview","FieldAppraisal","SanctionInput"
                    ]
                 },
                 "fixedIntrestRate": {
@@ -444,35 +216,35 @@
                    "minimum": 1,
                    "maximum": 10000000,
                    "captureStages": [
-                      "LoanInitiation", "PendingForPartner"
+                      "Varam_LoanInitiation", "PendingForPartner"
                    ]
                 },
                 "loanApplicationDate":{
                    "title":"Loan Application Date",
                    "type":"string",
                    "captureStages":[
-                      "Screening", "LoanInitiation", "PendingForPartner"
+                      "Screening", "Varam_LoanInitiation", "PendingForPartner"
                    ]
                 },
                  "screeningDate":{
                    "title":"Screening Date",
                    "type":"string",
                    "captureStages":[
-                      "Screening", "LoanInitiation", "PendingForPartner"
+                      "Screening", "Varam_LoanInitiation", "PendingForPartner"
                    ]
                 },
                 "loanDisbursementDate":{
                    "title":"Loan Disbursement Date",
                    "type":"string",
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "relation":{
                    "title":"Relation",
                    "type":"string",
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ],
                    "refCodeCategory":"relationship"
                 },
@@ -482,7 +254,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "husbandOrFatherMiddleName":{
@@ -491,7 +263,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "husbandOrFatherLastName":{
@@ -500,14 +272,14 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "borrowerIlliterate":{
                    "title":"Borrower Illiterate",
                    "type":"boolean",
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "literateWitnessFirstName":{
@@ -516,7 +288,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "literateWitnessMiddleName":{
@@ -525,7 +297,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "literateWitnessLastName":{
@@ -534,14 +306,14 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "witnessRelationship":{
                    "title":"Witness Relationship",
                    "type":"string",
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ],
                    "refCodeCategory":"relation"
                 },
@@ -551,7 +323,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "witnessMiddleName":{
@@ -560,7 +332,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "witnessLastName":{
@@ -569,7 +341,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "loanAmountRequested":{
@@ -578,7 +350,7 @@
                    "minimum":1,
                    "maximum":10000000,
                    "captureStages":[
-                      "Screening", "Application", "FieldAppraisal", "LoanInitiation", "PendingForPartner"
+                      "Screening", "Application", "FieldAppraisal", "Varam_LoanInitiation", "PendingForPartner"
                    ]
                 },
                 "disbursedAmountInPaisa":{
@@ -587,7 +359,7 @@
                    "minimum":1,
                    "maximum":10000000,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "coBorrowerUrnNo":{
@@ -596,7 +368,7 @@
                    "minLength":16,
                    "maxLength":16,
                    "captureStages":[
-                      "Application", "LoanInitiation"
+                      "Application", "Varam_LoanInitiation"
                    ]
                 },
                 "applicationFileName":{
@@ -605,7 +377,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "numberOfDisbursements":{
@@ -614,7 +386,7 @@
                    "minimum":1,
                    "maximum":100,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation"
+                      "Screening", "Sanction", "Varam_LoanInitiation"
                    ]
                 },
                 "applicant":{
@@ -623,7 +395,7 @@
                    "minLength":16,
                    "maxLength":16,
                    "captureStages":[
-                      "Screening", "LoanInitiation", "LoanBooking", "PendingForPartner"
+                      "Screening", "Varam_LoanInitiation", "LoanBooking", "PendingForPartner"
                    ]
                 },
                 "coApplicant":{
@@ -632,7 +404,7 @@
                    "minLength":16,
                    "maxLength":16,
                    "captureStages":[
-                      "Screening", "LoanInitiation", "LoanBooking"
+                      "Screening", "Varam_LoanInitiation", "LoanBooking"
                    ]
                 },
                 "rejectReason":{
@@ -641,7 +413,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","Rejected","ApplicationReview","FieldAppraisal","Sanction", "LoanInitiation", 
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","Rejected","ApplicationReview","FieldAppraisal","Sanction", "Varam_LoanInitiation", 
                       "PendingForPartner",
                        "DocumentUpload",
                        "DocumentVerification"
@@ -652,7 +424,7 @@
                    "title":"Sanction Date",
                    "type":"date",
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation", "PendingForPartner", "LoanInitiation"
+                      "Screening", "Sanction", "Varam_LoanInitiation", "PendingForPartner", "Varam_LoanInitiation"
                    ]
                 },
                 "disbursementFromBankAccountNumber":{
@@ -661,7 +433,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "originalAccountNumber":{
@@ -670,7 +442,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "customerBankAccountNumber":{
@@ -679,7 +451,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening","DocumentUpload","Completed", "LoanInitiation"
+                      "Screening","DocumentUpload","Completed", "Varam_LoanInitiation"
                    ]
                 },
                 "customerBankIfscCode":{
@@ -688,7 +460,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening","DocumentUpload","Completed", "LoanInitiation"
+                      "Screening","DocumentUpload","Completed", "Varam_LoanInitiation"
                    ]
                 },
                 "customerBank":{
@@ -697,7 +469,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening","DocumentUpload","Completed", "LoanInitiation"
+                      "Screening","DocumentUpload","Completed", "Varam_LoanInitiation"
                    ]
                 },
                 "customerBranch":{
@@ -706,7 +478,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening","DocumentUpload","Completed", "LoanInitiation"
+                      "Screening","DocumentUpload","Completed", "Varam_LoanInitiation"
                    ]
                 },
                 "oldAccountNO":{
@@ -715,7 +487,7 @@
                    "minLength":1,
                    "maxLength":1000,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "insuranceFee":{
@@ -724,7 +496,7 @@
                    "minimum":0,
                    "maximum":10000000,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "commercialCibilCharge":{
@@ -733,7 +505,7 @@
                    "minimum":0,
                    "maximum":10000000,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "Varam_LoanInitiation", "FieldAppraisal"
                    ]
                 },
                 "fcuStatus":{
@@ -742,7 +514,7 @@
                   "minimum":0,
                   "maximum":10000000,
                   "captureStages":[
-                     "Screening", "Sanction", "Application","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation", "FieldAppraisal"
+                     "Screening", "Sanction", "Application","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "Varam_LoanInitiation", "FieldAppraisal"
                   ]
                 },
              "loanCycle":{
@@ -751,7 +523,7 @@
                    "minimum":1,
                    "maximum":1000,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
              "gstNumber":{
@@ -760,7 +532,7 @@
                    "minLength":1,
                    "maxLength":1000,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },"loanToValue":{
                    "title":"loanToValue",
@@ -768,7 +540,7 @@
                    "minimum":0,
                    "maximum":100000000,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },"dsaPayout":{
                    "title":"dsaPayout",
@@ -776,7 +548,7 @@
                    "minimum":0,
                    "maximum":100000000,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation", "Application","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation", "Application","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },"dealIrr":{
                    "title":"dealIrr",
@@ -784,7 +556,7 @@
                    "minimum":0,
                    "maximum":100000000,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation", "Application","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation", "Application","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },"actualAmountRequired":{
                    "title":"actualAmountRequired",
@@ -792,7 +564,7 @@
                    "minimum":0,
                    "maximum":100000000,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation", "Application","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation", "Application","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },"fundsFromDifferentSources":{
                    "title":"fundsFromDifferentSources",
@@ -800,7 +572,7 @@
                    "minimum":0,
                    "maximum":100000000,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation", "Application","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation", "Application","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },"valuator":{
                    "title":"valuator",
@@ -808,7 +580,7 @@
                    "minLength":1,
                    "maxLength":1000,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
              "verificationStatus":{
@@ -817,7 +589,7 @@
                    "minLength":1,
                    "maxLength":1000,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
                 "parentLoanAccount":{
@@ -826,7 +598,7 @@
                    "minLength":1,
                    "maxLength":1000,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
                 "baseLoanAccount":{
@@ -835,7 +607,7 @@
                  "minLength":1,
                  "maxLength":1000,
                  "captureStages":[
-                     "Screening","LoanInitiation","Application", "FieldAppraisal","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal","Sanction"
+                     "Screening","Varam_LoanInitiation","Application", "FieldAppraisal","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal","Sanction"
                  ]
               },
              "verificationReason":{
@@ -844,7 +616,7 @@
                    "minLength":1,
                    "maxLength":1000,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
                          
@@ -854,7 +626,7 @@
                    "minLength":1,
                    "maxLength":1000,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
               "payeeMobileNumber":{
@@ -863,7 +635,7 @@
                    "minLength":1,
                    "maxLength":1000,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
               "payeeAddress":{
@@ -872,7 +644,7 @@
                    "minLength":1,
                    "maxLength":1000,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
               "payeeRelationToApplicant":{
@@ -881,7 +653,7 @@
                    "minLength":1,
                    "maxLength":1000,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
                 "schemeCode":{
@@ -890,7 +662,7 @@
                    "minLength":1,
                    "maxLength":50,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
               "loanChannels":{
@@ -899,7 +671,7 @@
                    "minLength":1,
                    "maxLength":1000,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
                 "transactionType":{
@@ -908,7 +680,7 @@
                    "minLength":1,
                    "maxLength":1000,
                    "captureStages":[
-                     "Screening","LoanInitiation","Application", "FieldAppraisal","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal","Sanction"
+                     "Screening","Varam_LoanInitiation","Application", "FieldAppraisal","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal","Sanction"
                    ]
                 },
               "assignedTo":{
@@ -917,7 +689,7 @@
                    "minLength":1,
                    "maxLength":1000,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
                 "expectedCommercialCibilCharge":{
@@ -926,7 +698,7 @@
                    "minimum":0,
                    "maximum":10000000,
                    "captureStages":[
-                      "Screening", "Application", "FieldAppraisal", "LoanInitiation"
+                      "Screening", "Application", "FieldAppraisal", "Varam_LoanInitiation"
                    ]
                 },
                 "securityEmi":{
@@ -944,7 +716,7 @@
                    "minimum":0,
                    "maximum":10000000,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "portfolioInsuranceUrn":{
@@ -953,7 +725,7 @@
                    "minLength":16,
                    "maxLength":16,
                    "captureStages":[
-                      "Screening", "LoanInitiation", "PendingForPartner"
+                      "Screening", "Varam_LoanInitiation", "PendingForPartner"
                    ]
                 },
                 "portfolioInsurancePremiumCalculated":{
@@ -962,84 +734,84 @@
                    "minLength":16,
                    "maxLength":16,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "interestRate":{
                    "title":"Interest Rate",
                    "type":"float",
                    "captureStages":[
-                      "ScreeningReview","Screening", "Sanction", "LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation", "FieldAppraisal"
+                      "ScreeningReview","Screening", "Sanction", "Varam_LoanInitiation","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "Varam_LoanInitiation", "FieldAppraisal"
                    ]
                 },
                 "processingFeeInPaisa":{
                    "title":"Processing Fee In Paisa",
                    "type":"number",
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "processingFeePercentage":{
                    "title":"Processing Fee Percentage",
                    "type":"number",
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
                 "expectedProcessingFeePercentage":{
                    "title":"Expected Processing Fee Percentage",
                    "type":"number",
                    "captureStages":[
-                      "Screening", "Application", "FieldAppraisal", "LoanInitiation"
+                      "Screening", "Application", "FieldAppraisal", "Varam_LoanInitiation"
                    ]
                 },
                 "securityEmiRequired":{
                    "title":"SecurityEmiRequired",
                    "type":"string",
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected"
+                      "Screening", "Sanction", "Varam_LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected"
                    ]
                 },
                 "fee3":{
                    "title":"Fee3",
                    "type":"number",
                    "captureStages":[
-                      "Screening", "LoanInitiation","Application"
+                      "Screening", "Varam_LoanInitiation","Application"
                    ]
                 },
                 "fee4":{
                    "title":"fee4",
                    "type":"number",
                    "captureStages":[
-                      "Screening", "LoanInitiation", "Application"
+                      "Screening", "Varam_LoanInitiation", "Application"
                    ]
                 },
                 "fee5":{
                    "title":"fee5",
                    "type":"number",
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "firstRepaymentDate":{
                    "title":"REPAYMENT_DATE",
                    "type":"date",
                    "captureStages":[
-                      "LoanBooking", "LoanInitiation"
+                      "LoanBooking", "Varam_LoanInitiation"
                    ]
                 },
                 "frequency":{
                    "title":"Frequency",
                    "type":"string",
                    "captureStages":[
-                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "Varam_LoanInitiation"
                    ]
                 },
                 "assetAvailableForHypothecation": {
                    "title": "assetAvailableForHypothecation",
                    "type": "string",
                    "captureStages": [
-                       "ScreeningReview","Screening", "FieldAppraisal", "Application", "LoanInitiation"
+                       "ScreeningReview","Screening", "FieldAppraisal", "Application", "Varam_LoanInitiation"
  
                    ]
                 },
@@ -1047,42 +819,42 @@
                    "title": "estimatedValueOfAssets",
                    "type": "number",
                    "captureStages": [
-                       "ScreeningReview","Screening", "FieldAppraisal", "Application", "LoanInitiation"
+                       "ScreeningReview","Screening", "FieldAppraisal", "Application", "Varam_LoanInitiation"
                    ]
                 },
                 "frequencyRequested": {
                    "title": "frequencyRequested",
                    "type": "string",
                    "captureStages": [
-                       "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Application", "LoanInitiation"
+                       "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Application", "Varam_LoanInitiation"
                    ]
                 },
                 "emiRequested": {
                    "title": "emiRequested",
                    "type": "number",
                    "captureStages": [
-                       "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Application", "LoanInitiation"
+                       "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Application", "Varam_LoanInitiation"
                    ]
                 },
                 "estimatedEmi": {
                    "title": "estimatedEmi",
                    "type": "number",
                    "captureStages": [
-                       "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","ApplicationReview","FieldAppraisal","SanctionInput", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation", "FieldAppraisal"
+                       "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","ApplicationReview","FieldAppraisal","SanctionInput", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "Varam_LoanInitiation", "FieldAppraisal"
                    ]
                 },
                 "expectedPortfolioInsurancePremium": {
                    "title": "expectedPortfolioInsurancePremium",
                    "type": "string",
                    "captureStages": [
-                       "Screening", "ScreeningReview", "Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "Screening", "ScreeningReview", "Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "productCategory": {
                    "title": "productCategory",
                    "type": "string",
                    "captureStages": [
-                       "ScreeningReview","Screening", "FieldAppraisal", "Application", "LoanInitiation"
+                       "ScreeningReview","Screening", "FieldAppraisal", "Application", "Varam_LoanInitiation"
                    ]
                 },
                 "proposedHires": {
@@ -1110,70 +882,70 @@
                    "title": "emiPaymentDateRequested",
                    "type": "string",
                    "captureStages": [
-                       "ScreeningReview","Screening","Application","FieldAppraisal", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal", "Varam_LoanInitiation"
                    ]
                 },
                 "expectedInterestRate": {
                    "title": "expectedInterestRate",
                    "type": "number",
                    "captureStages": [
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "tenureRequested": {
                    "title": "tenureRequested",
                    "type": "number",
                    "captureStages": [
-                       "ScreeningReview","Screening", "Application", "FieldAppraisal", "LoanInitiation"
+                       "ScreeningReview","Screening", "Application", "FieldAppraisal", "Varam_LoanInitiation"
                    ]
                 },
                 "estimatedDateOfCompletion": {
                    "title": "estimatedDateOfCompletion",
                    "type": "date",
                    "captureStages": [
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "customerSignDateExpected": {
                    "title": "customerSignDateExpected",
                    "type": "date",
                    "captureStages": [
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "expectedJobCreation": {
                    "title": "expectedJobCreation",
                    "type": "number",
                    "captureStages": [
-                       "ScreeningReview","Screening", "FieldAppraisal", "Application", "LoanInitiation"
+                       "ScreeningReview","Screening", "FieldAppraisal", "Application", "Varam_LoanInitiation"
                    ]
                 },
                 "expectedIncrementalIncome": {
                    "title": "expectedJobCreation",
                    "type": "number",
                    "captureStages": [
-                       "ScreeningReview","Screening", "FieldAppraisal", "Application", "LoanInitiation"
+                       "ScreeningReview","Screening", "FieldAppraisal", "Application", "Varam_LoanInitiation"
                    ]
                 },
                 "expectedInterestSaving": {
                    "title": "expectedJobCreation",
                    "type": "number",
                    "captureStages": [
-                       "ScreeningReview","Screening", "FieldAppraisal", "Application", "LoanInitiation"
+                       "ScreeningReview","Screening", "FieldAppraisal", "Application", "Varam_LoanInitiation"
                    ]
                 },
                 "psychometricCompleted": {
                    "title": "psychometricCompleted",
                    "type": "string",
                    "captureStages": [
-                       "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
+                       "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "Varam_LoanInitiation"
                    ]
                 },
                 "dscOverrideRemarks": {
                    "title": "dscOverrideRemarks",
                    "type": "string",
                    "captureStages": [
-                       "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
+                       "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "Varam_LoanInitiation"
                    ]
                 },
                 "partnerApprovalStatus":{
@@ -1194,56 +966,56 @@
                    "title":"collectionBankName",
                    "type":"string",
                    "captureStages":[
-                      "Application", "Screening", "LoanInitiation","DocumentUpload"
+                      "Application", "Screening", "Varam_LoanInitiation","DocumentUpload"
                    ]
                 },
                 "collectionBankBranchName":{
                    "title":"collectionBankBranchName",
                    "type":"string",
                    "captureStages":[
-                      "Application", "Screening", "LoanInitiation","DocumentUpload"
+                      "Application", "Screening", "Varam_LoanInitiation","DocumentUpload"
                    ]
                 },
                 "collectionIfscCode":{
                    "title":"collectionIfscCode",
                    "type":"string",
                    "captureStages":[
-                      "Application", "Screening", "LoanInitiation","DocumentUpload"
+                      "Application", "Screening", "Varam_LoanInitiation","DocumentUpload"
                    ]
                 },
                 "collectionAccountNumber":{
                    "title":"collectionAccountNumber",
                    "type":"string",
                    "captureStages":[
-                      "Application", "Screening", "LoanInitiation","DocumentUpload"
+                      "Application", "Screening", "Varam_LoanInitiation","DocumentUpload"
                    ]
                 },
                 "collectionAccountType":{
                    "title":"collectionAccountType",
                    "type":"string",
                    "captureStages":[
-                      "Application", "Screening", "LoanInitiation","DocumentUpload"
+                      "Application", "Screening", "Varam_LoanInitiation","DocumentUpload"
                    ]
                 },
                 "collectionCustomerNameAsInBank":{
                    "title":"collectionCustomerNameAsInBank",
                    "type":"string",
                    "captureStages":[
-                      "Application", "Screening", "LoanInitiation","DocumentUpload"
+                      "Application", "Screening", "Varam_LoanInitiation","DocumentUpload"
                    ]
                 },
                 "collectionPaymentType":{
                    "title":"collectionPaymentType",
                    "type":"string",
                    "captureStages":[
-                      "Application", "Screening", "FieldAppraisal", "LoanInitiation","DocumentUpload"
+                      "Application", "Screening", "FieldAppraisal", "Varam_LoanInitiation","DocumentUpload"
                    ]
                 },
              "scheduleStartDate":{
                    "title":"scheduleStartDate",
                    "type":"string",
                    "captureStages":[
-                      "LoanInitiation"
+                      "Varam_LoanInitiation"
                    ]
                 },
                 "status": {
@@ -1261,7 +1033,7 @@
                        "CreditCommitteeReview",
                        "Rejected",
                        "Sanction",
-                       "LoanInitiation",
+                       "Varam_LoanInitiation",
                        "PendingForPartner",
                        "LoanBooking",
                        "DocumentUpload",
@@ -1284,7 +1056,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Varam_LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineeMiddleName":{
@@ -1293,7 +1065,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Varam_LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineeLastName":{
@@ -1302,14 +1074,14 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Varam_LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineeRelationship":{
                       "title":"Nominee Relationship",
                       "type":"string",
                       "captureStages":[
-                        "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                        "Varam_LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ],
                       "refCodeCategory":"relation"
                    },
@@ -1319,7 +1091,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                        "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                        "Varam_LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineeStreet":{
@@ -1328,7 +1100,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Varam_LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineeLocality":{
@@ -1337,14 +1109,14 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Varam_LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineeDistrict":{
                       "title":"Nominee District",
                       "type":"string",
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Varam_LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ],
                       "refCodeCategory":"district"
                    },
@@ -1354,7 +1126,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                        "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                        "Varam_LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineePincode":{
@@ -1363,21 +1135,21 @@
                       "minimum":6,
                       "maximum":6,
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Varam_LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineeDOB":{
                       "title":"Nominee DOB",
                       "type":"string",
                       "captureStages":[
-                        "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview","FieldAppraisal"
+                        "Varam_LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview","FieldAppraisal"
                       ]
                    },
                    "nomineeGender":{
                       "title":"Nominee Gender",
                       "type":"string",
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Varam_LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ],
                       "refCodeCategory":"gender"
                    },
@@ -1385,7 +1157,7 @@
                       "title":"Nominee Minor",
                       "type":"boolean",
                       "captureStages":[
-                         "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Varam_LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianTitle":{
@@ -1394,7 +1166,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Varam_LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianFirstName":{
@@ -1403,7 +1175,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Varam_LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianMiddleName":{
@@ -1412,7 +1184,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Varam_LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianLastName":{
@@ -1421,14 +1193,14 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Varam_LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianRelationWithMinor":{
                       "title":"Guardian Relation With Minor",
                       "type":"string",
                       "captureStages":[
-                        "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                        "Varam_LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ],
                       "refCodeCategory":"relationship"
                    },
@@ -1436,7 +1208,7 @@
                       "title":"Guardian DOB",
                       "type":"string",
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Varam_LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianDoorNo":{
@@ -1445,7 +1217,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Varam_LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianStreet":{
@@ -1454,7 +1226,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Varam_LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianLocality":{
@@ -1463,14 +1235,14 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                        "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                        "Varam_LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianDistrict":{
                       "title":"Guardian District",
                       "type":"string",
                       "captureStages":[
-                         "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Varam_LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ],
                       "refCodeCategory":"district"
                    },
@@ -1480,7 +1252,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                        "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                        "Varam_LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianPincode":{
@@ -1489,14 +1261,14 @@
                       "minimum":6,
                       "maximum":6,
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Varam_LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianGender":{
                       "title":"Guardian Gender",
                       "type":"string",
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Varam_LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ],
                       "refCodeCategory":"gender"
                    }
@@ -1684,7 +1456,7 @@
                       "minimum":16,
                       "maximum":16,
                       "captureStages":[
-                         "Screening", "LoanInitiation", "LoanBooking", "PendingForPartner"
+                         "Screening", "Varam_LoanInitiation", "LoanBooking", "PendingForPartner"
                       ]
                    },
                    "assetDetails":{
@@ -1693,7 +1465,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation", "PendingForPartner"
+                         "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
                    "totalLiabilities":{
@@ -1702,7 +1474,7 @@
                       "minimum":1,
                       "maximum":100000000,
                       "captureStages":[
-                         "LoanInitiation", "PendingForPartner"
+                         "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
                    "guaCustomerId":{
@@ -1711,7 +1483,7 @@
                       "minimum":1,
                       "maximum":100000000,
                       "captureStages":[
-                         "LoanInitiation", "PendingForPartner", "Screening", "Application", "FieldAppraisal"
+                         "Varam_LoanInitiation", "PendingForPartner", "Screening", "Application", "FieldAppraisal"
                       ]
                    }
                 }
@@ -1738,7 +1510,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "insuranceFrom":{
@@ -1747,7 +1519,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "insuranceId":{
@@ -1756,14 +1528,14 @@
                    "minimum":1,
                    "maximum":9999999,
                    "captureStages":[
-                      "Application", "LoanInitiation"
+                      "Application", "Varam_LoanInitiation"
                    ]
                 },
                 "insuranceExpiryDate":{
                    "title":"Insurance ExpiryDate",
                    "type":"string",
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "insuranceCompany":{
@@ -1772,14 +1544,14 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "insuranceHypothecation":{
                    "title":"Insurance Hypothecation",
                    "type":"boolean",
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "sumInsured":{
@@ -1788,7 +1560,7 @@
                    "minimum":1,
                    "maximum":99999999,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 }
              }
@@ -1810,7 +1582,7 @@
                       "minLength":16,
                       "maxLength":16,
                       "captureStages":[
-                         "Screening", "LoanInitiation","Application", "FieldAppraisal", "PendingForPartner"
+                         "Screening", "Varam_LoanInitiation","Application", "FieldAppraisal", "PendingForPartner"
                       ]
                    },
                    "customerId":{
@@ -1819,7 +1591,7 @@
                       "minimum":1,
                       "maximum":9999999,
                       "captureStages":[
-                         "Screening", "LoanInitiation","Application", "FieldAppraisal", "PendingForPartner"
+                         "Screening", "Varam_LoanInitiation","Application", "FieldAppraisal", "PendingForPartner"
                       ]
                    },
                    "relation":{
@@ -1828,7 +1600,7 @@
                       "minLength":6,
                       "maxLength":100,
                       "captureStages":[
-                         "Screening", "LoanInitiation","Application", "FieldAppraisal", "PendingForPartner"
+                         "Screening", "Varam_LoanInitiation","Application", "FieldAppraisal", "PendingForPartner"
                       ]
                    },
                    "relationshipWithApplicant":{
@@ -1837,7 +1609,7 @@
                       "minLength":0,
                       "maxLength":100,
                       "captureStages":[
-                         "Screening", "LoanInitiation","Application", "FieldAppraisal", "PendingForPartner"
+                         "Screening", "Varam_LoanInitiation","Application", "FieldAppraisal", "PendingForPartner"
                       ]
                    },
                    "psychometricRequired":{
@@ -1855,7 +1627,7 @@
                       "minLength":0,
                       "maxLength":3,
                       "captureStages":[
-                         "Application", "Screening", "LoanInitiation"
+                         "Application", "Screening", "Varam_LoanInitiation"
                       ]
                    }
                 }
@@ -1874,7 +1646,7 @@
                    "title":"Marital Status",
                    "type":"string",
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ],
                    "refCodeCategory":"marital_status"
                 },
@@ -1884,21 +1656,21 @@
                    "minimum":1,
                    "maximum":9999999,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "cmsDisbursementDate":{
                    "title":"CMS Disbursement Date",
                    "type":"string",
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "fldgFlag":{
                    "title":"Fldg Flag",
                    "type":"boolean",
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "fldgUpdatedBy":{
@@ -1907,14 +1679,14 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "fldgUpdatedAt":{
                    "title":"Fldg Updated At",
                    "type":"string",
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "agreementStatus":{
@@ -1923,14 +1695,14 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "agreementStatusUpdatedOn":{
                    "title":"AgreementStatusUpdatedOn",
                    "type":"string",
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "agreementStatusUpdatedBy":{
@@ -1939,7 +1711,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "agreementFileName":{
@@ -1948,7 +1720,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "agreementFileId":{
@@ -1957,7 +1729,7 @@
                    "minimum":1,
                    "maximum":100,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 }
              }
@@ -1977,7 +1749,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "Varam_LoanInitiation"
                    ]
                 },
                 "jewelPouchLocationId":{
@@ -1986,7 +1758,7 @@
                    "minimum":1,
                    "maximum":100,
                    "captureStages":[
-                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "Varam_LoanInitiation"
                    ]
                 },
                 "jewelPouchNo":{
@@ -1995,7 +1767,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "Varam_LoanInitiation"
                    ]
                 },
                 "jewelPouchMovementId":{
@@ -2004,21 +1776,21 @@
                    "minimum":1,
                    "maximum":100,
                    "captureStages":[
-                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "Varam_LoanInitiation"
                    ]
                 },
                 "transitRequest":{
                    "title":"Transit Request",
                    "type":"boolean",
                    "captureStages":[
-                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "Varam_LoanInitiation"
                    ]
                 },
                 "encoreClosed":{
                    "title":"Encore Closed",
                    "type":"boolean",
                    "captureStages":[
-                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "LoanInitiation"
+                      "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "Varam_LoanInitiation"
                    ]
                 }
              }
@@ -2041,7 +1813,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "vehicleType": {
@@ -2050,7 +1822,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ] 
                 },
                 "endUse": {
@@ -2059,7 +1831,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ] 
                 },
                 "vehicleModel": {
@@ -2068,7 +1840,7 @@
                   "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ] 
                 },
                 "category": {
@@ -2077,7 +1849,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                      ]   
                  },
                 "valuationPurpose":{
@@ -2086,14 +1858,14 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                   "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                   "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "valuationDate":{
                    "title":"valuationDate",
                    "type":"date",              
                    "captureStages":[
-                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "valuationPlace":{
@@ -2102,7 +1874,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "registeredOwnerName":{
@@ -2111,7 +1883,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "proposedOwnerName":{
@@ -2120,7 +1892,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "bankReferenceNumber":{
@@ -2129,14 +1901,14 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "inspectionDate":{
                    "title":"inspectionDate",
                    "type":"date",
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "permitType":{
@@ -2145,7 +1917,7 @@
                    "minLength":1,
                    "maxLength":20,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
  "viabilityCategory":{
@@ -2154,7 +1926,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
  "grossVehicleWeight":{
@@ -2162,7 +1934,7 @@
                     "type":"number",
                    
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
  "payLoad":{
@@ -2171,7 +1943,7 @@
                    "minLength":1,
                    "maxLength":45,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
  "typeofLoad":{
@@ -2180,77 +1952,77 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
  "ratePerTrip":{
                    "title":"ratePerTrip",
                     "type":"number",
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
  "mileage":{
                    "title":"mileage",
                     "type":"number",
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
  "fuelConsumptionPerHour":{
                    "title":"fuelConsumptionPerHour",
                     "type":"number",
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
  "noOfTyres":{
                    "title":"noOfTyres",
                     "type":"number",
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
  "costOfTyre":{
                    "title":"costOfTyre",
                     "type":"number",
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
  "lifeOfTyre":{
                    "title":"lifeOfTyre",
                     "type":"number",
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
  "dailyWorkingHours":{
                    "title":"dailyWorkingHours",
                     "type":"number",
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
  "monthlyWorkingDays":{
                    "title":"monthlyWorkingDays",
                     "type":"number",
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
  "hourlyRate":{
                    "title":"hourlyRate",
                     "type":"number",
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                  "insuredDeclaredValue":{
                    "title":"Insured Declared Value",
                     "type":"number",
                     "captureStages":[
-                    "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                    "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "inspectedBy":{
@@ -2259,14 +2031,14 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "vehicleMoved":{
                    "title":"vehicleMoved",
                    "type":"boolean",
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "inspectionLatitude":{
@@ -2275,7 +2047,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "inspectionLongitude":{
@@ -2284,7 +2056,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "inspectionAltitude":{
@@ -2293,7 +2065,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
              "yearOfManufacture":{
@@ -2302,7 +2074,7 @@
                    "minLength":1,
                    "maxLength":45,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
              "vehicleUseSegment":{
@@ -2311,7 +2083,7 @@
                    "minLength":1,
                    "maxLength":50,
                    "captureStages":[
-                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
              "vehicleUseSubSegment":{
@@ -2320,14 +2092,14 @@
                    "minLength":1,
                    "maxLength":50,
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "engineStarted":{
                    "title":"engineStarted",
                    "type":"boolean",
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "make":{
@@ -2336,7 +2108,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                   "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                   "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "variant":{
@@ -2345,7 +2117,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "colour":{
@@ -2354,7 +2126,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "trailer":{
@@ -2363,7 +2135,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "chasisNo":{
@@ -2372,7 +2144,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "engineNo":{
@@ -2381,7 +2153,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
  "assetDetails":{
@@ -2390,7 +2162,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
  "assetSubDetails":{
@@ -2399,7 +2171,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "odometerReading":{
@@ -2408,7 +2180,7 @@
                       "minimum":0,
                       "maximum":99999999,
                    "captureStages":[
-                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "estimatedReading":{
@@ -2417,7 +2189,7 @@
                "minimum":0,
                       "maximum":99999999,
                    "captureStages":[
-                 "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                 "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "transmission":{
@@ -2426,7 +2198,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                   "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                   "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "odometer":{
@@ -2435,7 +2207,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "usedFor":{
@@ -2444,14 +2216,14 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "reRegistered":{
                    "title":"reRegistered",
                    "type":"boolean",
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "previousRegistrationNumber":{
@@ -2460,7 +2232,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "registrationAsPerRcbook":{
@@ -2469,7 +2241,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "registrationAsPerActual":{
@@ -2478,7 +2250,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "numberPlateCOlour":{
@@ -2487,7 +2259,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "registeredAddress":{
@@ -2496,7 +2268,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "ownerSerialNo":{
@@ -2505,14 +2277,14 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                    "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                    "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "registrationDate":{
                    "title":"registrationDate",
                    "type":"date",
                    "captureStages":[
-                 "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                 "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "vehicleClass":{
@@ -2521,7 +2293,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                    "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                    "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "bodyType":{
@@ -2530,7 +2302,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "fuelUsed":{
@@ -2539,7 +2311,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "cubicCapacity":{
@@ -2548,7 +2320,7 @@
                "minimum":1,
                       "maximum":999999999,
                    "captureStages":[
-                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "makersClassification":{
@@ -2557,7 +2329,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                    "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                    "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "seatingCapacity":{
@@ -2566,7 +2338,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "unladenWeight":{
@@ -2575,7 +2347,7 @@
                "minimum":1,
                       "maximum":99999999,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "hypothecatedTo":{
@@ -2584,14 +2356,14 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "fitnesscertifiedUpto":{
                    "title":"date",
                    "type":"boolean",
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "permitStatus":{
@@ -2600,14 +2372,14 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "permitValidUpto":{
                    "title":"permitValidUpto",
                    "type":"date",
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "operationroute":{
@@ -2616,7 +2388,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "taxPaid":{
@@ -2625,7 +2397,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "taxValidUpto":{
@@ -2634,7 +2406,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "insuranceCompany":{
@@ -2643,7 +2415,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                  "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                  "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "insurancePolicyNumber":{
@@ -2652,7 +2424,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "insuranceIdv":{
@@ -2661,21 +2433,21 @@
                "minimum":1,
                       "maximum":99999999,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "insuranceValidTo":{
                    "title":"insuranceValidTo",
                    "type":"date",
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
              "insuranceValidFrom":{
                    "title":"insuranceValidFrom",
                    "type":"date",
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "insurancePolicyType":{
@@ -2684,7 +2456,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "modelUnderProduction":{
@@ -2693,14 +2465,14 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation" 
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation" 
                    ]
                 },
                 "accident":{
                    "title":"accident",
                    "type":"boolean",
                    "captureStages":[
-                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "accidentRemarks":{
@@ -2709,7 +2481,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
              "price":{
@@ -2718,7 +2490,7 @@
                "minimum":1,
                    "maximum":99999999,
                    "captureStages":[
-                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "originalInvoiceValue":{
@@ -2727,14 +2499,14 @@
                "minimum":1,
                       "maximum":99999999,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "majorRepair":{
                    "title":"majorRepair",
                    "type":"boolean",
                    "captureStages":[
-                  "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                  "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "currentInvoiceValue":{
@@ -2743,14 +2515,14 @@
                "minimum":1,
                       "maximum":99999999,
                    "captureStages":[
-                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "rcbookStatus":{
                    "title":"rcbookStatus",
                    "type":"boolean",
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "recommendationStatus":{
@@ -2759,7 +2531,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "recommendationRemarks":{
@@ -2768,42 +2540,42 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "recommendationDate":{
                    "title":"recommendationDate",
                    "type":"date",
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "powerWindowFont":{
                    "title":"powerWindowFont",
                    "type":"boolean",
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "powerWindowRear":{
                    "title":"powerWindowRear",
                    "type":"boolean",
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "powerSteering":{
                    "title":"powerSteering",
                    "type":"boolean",
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "airbag":{
                    "title":"airbag",
                    "type":"boolean",
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "accessories":{
@@ -2812,14 +2584,14 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "accessoriesStatus":{
                    "title":"accessoriesStatus",
                    "type":"boolean",
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "valuationRating":{
@@ -2828,7 +2600,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "futureLife":{
@@ -2837,7 +2609,7 @@
                    "minimum":0,
                    "maximum":1000000,
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "currentMarketValue":{
@@ -2846,7 +2618,7 @@
                    "minimum":0,
                    "maximum":10000000,
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "distressValue":{
@@ -2855,7 +2627,7 @@
                    "minimum":0,
                    "maximum":10000000,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"               ]
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"               ]
                 },
              "segment":{
                    "title":"segment",
@@ -2863,7 +2635,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                    "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                    "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },"subSegment":{
                    "title":"subSegment",
@@ -2871,7 +2643,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },"entityType":{
                    "title":"entityType",
@@ -2879,7 +2651,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },"attachedWith":{
                    "title":"attachedWith",
@@ -2887,7 +2659,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },"attachedAddress":{
                    "title":"attachedAddress",
@@ -2895,7 +2667,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                    "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                    "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },"attachedContactNumber":{
                    "title":"attachedContactNumber",
@@ -2903,7 +2675,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },"locationAddress":{
                    "title":"locationAddress",
@@ -2911,7 +2683,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },"locationContactName":{
                    "title":"locationContactName",
@@ -2919,7 +2691,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },"locationContactNumber":{
                    "title":"locationContactNumber",
@@ -2927,7 +2699,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 }
              }
@@ -2948,21 +2720,21 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
                    "valuationDate":{
                       "title":"valuationDate",
                       "type":"date",
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
                    "valuation":{
                       "title":"valuation",
                       "type":"number",
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    }
                 }
@@ -2984,7 +2756,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                    "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                    "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                       ]
                    },
                     "fileId":{
@@ -2993,28 +2765,28 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                    "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                    "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                       ]
                    },
                    "issueDate":{
                       "title":"issueDate",
                       "type":"date",
                       "captureStages":[
-                   "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                   "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                       ]
                    },
                    "expiryDate":{
                       "title":"expiryDate",
                       "type":"date",
                       "captureStages":[
-                  "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                  "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                       ]
                    },
                     "udf1":{
                       "title":"udf1",
                       "type":"string",
                       "captureStages":[
-                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                       "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                       ]
                    },
  
@@ -3022,7 +2794,7 @@
                       "title":"udf4",
                       "type":"string",
                       "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                       ]
                    },
  
@@ -3030,7 +2802,7 @@
                       "title":"udf2",
                       "type":"string",
                       "captureStages":[
-                    "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                    "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                       ]
                    },
  
@@ -3038,7 +2810,7 @@
                       "title":"udf3",
                       "type":"string",
                       "captureStages":[
-                   "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                   "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                       ]
                    },
  
@@ -3046,28 +2818,28 @@
                       "title":"udf5",
                       "type":"string",
                       "captureStages":[
-                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"   
+                     "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"   
                       ]
                    },
                     "udfDate1":{
                    "title":"date1",
                    "type":"string",
                    "captureStages":[
-                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                      "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "udfDate2":{
                    "title":"date2",
                    "type":"string",
                    "captureStages":[
-                  "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                  "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 },
                 "udfDate3":{
                    "title":"date2",
                    "type":"string",
                    "captureStages":[
-                   "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "LoanInitiation"
+                   "ScreeningReview","Screening","Application","FieldAppraisal","SanctionInput", "Varam_LoanInitiation"
                    ]
                 }
              }
@@ -3089,7 +2861,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
                    "componentCondition":{
@@ -3098,7 +2870,7 @@
                       "minLength":1,
                       "maxLength":1000,
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
                    "componentRemarks":{
@@ -3107,7 +2879,7 @@
                       "minLength":1,
                       "maxLength":1000,
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
                    "make":{
@@ -3116,7 +2888,7 @@
                       "minLength":1,
                       "maxLength":1000,
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    }
                 }
@@ -3138,7 +2910,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
                    "accessoryAvailable":{
@@ -3147,7 +2919,7 @@
                       "minLength":1,
                       "maxLength":1000,
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
                    "accessoryStatus":{
@@ -3156,7 +2928,7 @@
                       "minLength":1,
                       "maxLength":1000,
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    }
                 }
@@ -3179,7 +2951,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
                    "photoFileId":{
@@ -3188,7 +2960,7 @@
                       "minLength":1,
                       "maxLength":1000,
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
                    "photoRemarks":{
@@ -3197,7 +2969,7 @@
                       "minLength":1,
                       "maxLength":1000,
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    }
                 }
@@ -3219,14 +2991,14 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
                    "incomeAmount":{
                       "title":"incomeAmount",
                      "type":"number",
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    }
                 }
@@ -3248,14 +3020,14 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
                    "expenseAmount":{
                       "title":"expenseAmount",
                       "type":"number",
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    }
                 }
@@ -3277,7 +3049,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
                    "routeTo":{
@@ -3286,21 +3058,21 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
   "routesKms":{
                       "title":"routesKms",
                      "type":"number",
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
   "trips":{
                       "title":"trips",
                      "type":"number",
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
                "routeVia":{
@@ -3309,14 +3081,14 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
                    "ratePerTrip":{
                       "title":"ratePerTrip",
                       "type":"number",
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    }
                 }
@@ -3338,7 +3110,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
                    "noOfArticles":{
@@ -3347,7 +3119,7 @@
                       "minimum":1,
                       "maximum":100,
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
                    "grossWeightInGrams":{
@@ -3356,7 +3128,7 @@
                       "minimum":1,
                       "maximum":100,
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
                    "netWeightInGrams":{
@@ -3365,7 +3137,7 @@
                       "minimum":1,
                       "maximum":100,
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
                    "qualityInCarats":{
@@ -3374,28 +3146,28 @@
                       "minimum":1,
                       "maximum":100,
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
                    "ratePerGramInPaisa":{
                       "title":"Rate Per Gram In Paisa",
                       "type":"number",
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
                    "ratePerGram22CaratInPaisa":{
                       "title":"Rate Per Gram22 CaratInPaisa",
                       "type":"number",
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
                    "marketValueInPaisa":{
                       "title":"Market Value In Paisa",
                       "type":"number",
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
                    "stoneDescription":{
@@ -3404,7 +3176,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    },
                    "jewelDefects":{
@@ -3413,7 +3185,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Screening", "LoanInitiation"
+                         "Screening", "Varam_LoanInitiation"
                       ]
                    }
                 }
@@ -3439,7 +3211,7 @@
                       "title":"Collateral Type",
                       "type":"string",
                       "captureStages":[
-                        "Screening","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                        "Screening","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ],
                       "refCodeCategory":"collateral_type"
                    },
@@ -3449,7 +3221,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
                    "collateralValue":{
@@ -3458,7 +3230,7 @@
                       "minimum":1,
                       "maximum":999999999,
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  "collateralCategory":{
@@ -3467,7 +3239,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
                    "loanToValue":{
@@ -3476,7 +3248,7 @@
                       "minimum":1,
                       "maximum":999999999,
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
                    "marginValue":{
@@ -3485,7 +3257,7 @@
                       "minimum":1,
                       "maximum":99999999,
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
                    "manufacturer":{
@@ -3494,7 +3266,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
                    "quantity":{
@@ -3503,7 +3275,7 @@
                       "minimum":1,
                       "maximum":100,
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
                    "modelNo":{
@@ -3512,7 +3284,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
                    "totalValue":{
@@ -3521,21 +3293,21 @@
                       "minimum":1,
                       "maximum":99999999,
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
                    "isMachineOld":{
                       "title":"Is Machine Old",
                       "type":"boolean",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
                    "expectedIncome": {
                        "title": "expectedIncome",
                        "type": "number",
                        "captureStages": [
-                           "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                           "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                        ]
                    },
                    "machineAttachedToBuilding": {
@@ -3544,7 +3316,7 @@
                        "minLength": 1,
                        "maxLength": 100,
                        "captureStages": [
-                           "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                           "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                        ]
                    },
                    "serialNo": {
@@ -3553,7 +3325,7 @@
                        "minLength": 1,
                        "maxLength": 100,
                        "captureStages": [
-                           "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                           "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                        ]
                    },
                    "hypothecatedToBank": {
@@ -3562,7 +3334,7 @@
                        "minLength": 1,
                        "maxLength": 100,
                        "captureStages": [
-                           "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                           "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                        ]
                    },
                    "electricityAvailable": {
@@ -3571,7 +3343,7 @@
                        "minLength": 1,
                        "maxLength": 100,
                        "captureStages": [
-                           "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                           "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                        ]
                    },
                    "spaceAvailable": {
@@ -3580,7 +3352,7 @@
                        "minLength": 1,
                        "maxLength": 100,
                        "captureStages": [
-                           "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                           "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                        ]
                    },
                 "collateral1FilePath": {
@@ -3589,7 +3361,7 @@
                        "minLength": 1,
                        "maxLength": 100,
                        "captureStages": [
-                           "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                           "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                        ]
                    },
                 "collateral2FilePath": {
@@ -3598,7 +3370,7 @@
                        "minLength": 1,
                        "maxLength": 100,
                        "captureStages": [
-                           "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                           "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                        ]
                    },
                 "collateral3FilePath": {
@@ -3607,7 +3379,7 @@
                        "minLength": 1,
                        "maxLength": 100,
                        "captureStages": [
-                           "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                           "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                        ]
                    },
                 "photoFilePath": {
@@ -3616,7 +3388,7 @@
                        "minLength": 1,
                        "maxLength": 100,
                        "captureStages": [
-                           "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                           "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                        ]
                    },
  
@@ -3632,7 +3404,7 @@
                       "title":"propertyType",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3640,7 +3412,7 @@
                       "title":"extentOfProperty",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3648,7 +3420,7 @@
                       "title":"extentOfPropertyUnit",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3656,7 +3428,7 @@
                       "title":"documentType",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3664,7 +3436,7 @@
                       "title":"collateral4FilePath",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3672,7 +3444,7 @@
                       "title":"collateral5FilePath",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3680,7 +3452,7 @@
                       "title":"documentNumber",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3688,7 +3460,7 @@
                       "title":"dateOfRegistration",
                       "type":"date",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3696,7 +3468,7 @@
                       "title":"subRegistrar",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3704,7 +3476,7 @@
                       "title":"subRegistrarPincode",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3712,7 +3484,7 @@
                       "title":"subRegistrarVillage",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3720,7 +3492,7 @@
                       "title":"subRegistrarDistrict",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3728,7 +3500,7 @@
                       "title":"subRegistrarState",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3736,7 +3508,7 @@
                       "title":"subRegistrarArea",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3744,7 +3516,7 @@
                       "title":"propertyOwner",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3752,7 +3524,7 @@
                       "title":"relationWithApplicant",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3760,7 +3532,7 @@
                       "title":"propertyOwnerName",
                       "type":"string",
                       "captureStages":[
-                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3768,7 +3540,7 @@
                       "title":"doorNo",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3776,7 +3548,7 @@
                       "title":"surveyNo",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3784,7 +3556,7 @@
                       "title":"landmark",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3792,7 +3564,7 @@
                       "title":"village",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3800,7 +3572,7 @@
                       "title":"mandal",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3808,7 +3580,7 @@
                       "title":"district",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3816,7 +3588,7 @@
                       "title":"state",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Application", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3824,7 +3596,7 @@
                       "title":"udf1",
                       "type":"string",
                       "captureStages":[
-                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3832,7 +3604,7 @@
                       "title":"udf4",
                       "type":"string",
                       "captureStages":[
-                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3840,7 +3612,7 @@
                       "title":"udf2",
                       "type":"string",
                       "captureStages":[
-                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3848,7 +3620,7 @@
                       "title":"udf3",
                       "type":"number",
                       "captureStages":[
-                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3856,7 +3628,7 @@
                       "title":"udf5",
                       "type":"string",
                       "captureStages":[
-                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction", "FieldAppraisal", "Sanction", "Varam_LoanInitiation", "PendingForPartner"
                       ]
                    }
  
@@ -3925,35 +3697,35 @@
                    "minLength":1,
                    "maxLength":500,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "udf2":{
                    "title":"Availed Any MFI service?",
                    "type":"boolean",
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "udf3": {
                    "title": "Business Income",
                    "type": "number",
                    "captureStages": [
-                      "Screening", "LoanInitiation", "PendingForPartner"
+                      "Screening", "Varam_LoanInitiation", "PendingForPartner"
                    ]
                 },
                 "udf4": {
                    "title": "Loan Purpose Value",
                    "type": "number",
                    "captureStages": [
-                      "Screening", "LoanInitiation", "PendingForPartner"
+                      "Screening", "Varam_LoanInitiation", "PendingForPartner"
                    ]
                 },
                 "udf5": {
                   "title": "DSC Override status",
                   "type": "boolean",
                   "captureStages": [
-                     "Screening", "LoanInitiation", "PendingForPartner", "DSCApproval"
+                     "Screening", "Varam_LoanInitiation", "PendingForPartner", "DSCApproval"
                   ]
                 },
                 "udf6": {
@@ -3967,7 +3739,7 @@
                    "title": "Eligible Disposable Income",
                    "type": "number",
                    "captureStages": [
-                      "Screening", "LoanInitiation", "PendingForPartner"
+                      "Screening", "Varam_LoanInitiation", "PendingForPartner"
                    ]
                 }
                }
@@ -3986,14 +3758,14 @@
                    "title":"date1",
                    "type":"string",
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 },
                 "udfDate2":{
                    "title":"date2",
                    "type":"string",
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 }
              }
@@ -4013,7 +3785,7 @@
                    "minimum":1,
                    "maximum":999999,
                    "captureStages":[
-                      "Screening", "LoanInitiation"
+                      "Screening", "Varam_LoanInitiation"
                    ]
                 }
              }
@@ -4035,7 +3807,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "DocumentVerification","LoanBooking", "Completed","DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation"
+                         "DocumentVerification","LoanBooking", "Completed","DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "Varam_LoanInitiation"
                       ]
                    },
                    "document":{
@@ -4044,7 +3816,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "DocumentVerification", "LoanBooking","Completed","DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "LoanInitiation"
+                         "DocumentVerification", "LoanBooking","Completed","DocumentUpload", "Screening", "ScreeningReview", "Application", "ApplicationReview", "FieldAppraisal", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "Varam_LoanInitiation"
                       ]
                    },
                    "remarks":{
@@ -4093,21 +3865,21 @@
                    "minimum":1,
                    "maximum":100,
                   "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
                 "fundAllocationPercentage":{
                    "title":"fund Allocation Percentage",
                    "type":"number",
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
                 "consumptionDetails":{
                    "title":"consumption Details",
                    "type":"string",
                   "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
                 "udf1":{
@@ -4116,7 +3888,7 @@
                    "minLength":1,
                    "maxLength":100,
                   "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
                 "udf2":{
@@ -4125,7 +3897,7 @@
                    "minLength":1,
                    "maxLength":100,
                   "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
                 "udf3":{
@@ -4134,7 +3906,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 },
                 "udfDate1":{
@@ -4143,7 +3915,7 @@
                    "minLength":1,
                    "maxLength":100,
                    "captureStages":[
-                      "Screening", "Sanction", "LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
+                      "Screening", "Sanction", "Varam_LoanInitiation", "PendingForPartner","ApplicationReview","ScreeningReview", "FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview", "CreditCommitteeReview","Rejected", "FieldAppraisal"
                    ]
                 }   
              }
@@ -4163,7 +3935,7 @@
                       "title":"customerSignatureDate",
                       "type":"date",
                       "captureStages":[
-                         "Screening", "Sanction", "LoanBooking", "DSCOverride","LoanInitiation"
+                         "Screening", "Sanction", "LoanBooking", "DSCOverride","Varam_LoanInitiation"
                       ]
                    },
                    "moratoriumPeriodInDays": {
@@ -4172,35 +3944,35 @@
                       "minimum": 1,
                       "maximum": 10000000,
                       "captureStages": [
-                         "Screening", "Sanction", "LoanBooking","DSCOverride", "LoanInitiation"
+                         "Screening", "Sanction", "LoanBooking","DSCOverride", "Varam_LoanInitiation"
                       ]
                    },
                    "disbursementAmount":{
                       "title":"disbursementAmount",
                       "type":"integer",
                       "captureStages":[
-                         "Screening", "Sanction", "LoanBooking","DSCOverride", "LoanInitiation"
+                         "Screening", "Sanction", "LoanBooking","DSCOverride", "Varam_LoanInitiation"
                       ]
                    },
                    "disbursementFromBankAccountNumber":{
                       "title":"disbursementFromBankAccountNumber",
                       "type":"string",
                       "captureStages":[
-                         "Screening", "LoanInitiation","DSCOverride","DocumentUpload"
+                         "Screening", "Varam_LoanInitiation","DSCOverride","DocumentUpload"
                       ]
                    },
                    "scheduledDisbursementDate":{
                       "title":"scheduledDisbursementDate",
                       "type":"date",
                       "captureStages":[
-                         "Screening","LoanBooking","DSCOverride", "LoanInitiation"
+                         "Screening","LoanBooking","DSCOverride", "Varam_LoanInitiation"
                       ]
                    },
                    "trancheNumber":{
                       "title":"trancheNumber",
                       "type":"string",
                       "captureStages":[
-                         "Screening", "Sanction", "DSCOverride","LoanInitiation", "PendingForPartner"
+                         "Screening", "Sanction", "DSCOverride","Varam_LoanInitiation", "PendingForPartner"
                       ]
                    },
                    "tranchCondition":{
@@ -4209,7 +3981,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Screening", "Sanction", "LoanInitiation","DSCOverride", "PendingForPartner"
+                         "Screening", "Sanction", "Varam_LoanInitiation","DSCOverride", "PendingForPartner"
                       ]
                    },
                    "customerAccountNumber":{
@@ -4218,7 +3990,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Screening", "LoanInitiation", "PendingForPartner","DSCOverride", "DocumentUpload"
+                         "Screening", "Varam_LoanInitiation", "PendingForPartner","DSCOverride", "DocumentUpload"
                       ]
                    },
                    "customerNameInBank":{
@@ -4227,35 +3999,35 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "Screening" ,"DocumentUpload", "DSCOverride","LoanInitiation"
+                         "Screening" ,"DocumentUpload", "DSCOverride","Varam_LoanInitiation"
                       ]
                    },
                    "ifscCode":{
                       "title":"ifscCode",
                       "type":"string",
                       "captureStages":[
-                         "Screening", "LoanInitiation", "PendingForPartner","DSCOverride", "DocumentUpload"
+                         "Screening", "Varam_LoanInitiation", "PendingForPartner","DSCOverride", "DocumentUpload"
                       ]
                    },
                    "customerBankName":{
                       "title":"customerBankName",
                       "type":"string",
                       "captureStages":[
-                         "Screening", "LoanInitiation", "PendingForPartner", "DSCOverride","DocumentUpload"
+                         "Screening", "Varam_LoanInitiation", "PendingForPartner", "DSCOverride","DocumentUpload"
                       ]
                    },
                    "customerBankBranchName":{
                       "title":"customerBankBranchName",
                       "type":"string",
                       "captureStages":[
-                         "Screening", "LoanInitiation", "PendingForPartner","DSCOverride", "DocumentUpload"
+                         "Screening", "Varam_LoanInitiation", "PendingForPartner","DSCOverride", "DocumentUpload"
                       ]
                    },
                    "party":{
                       "title":"party",
                       "type":"string",
                       "captureStages":[
-                         "Screening", "DocumentUpload", "DSCOverride","LoanInitiation"
+                         "Screening", "DocumentUpload", "DSCOverride","Varam_LoanInitiation"
                       ]
                    },
                    "feeAmountPayment":{
@@ -4335,7 +4107,7 @@
                     "title": "DscOverride",
                     "type":"boolean",
                     "captureStages":[
-                       "LoanInitiation", "DocumentUpload" ,"DSCOverride","Checker1","Checker2"
+                       "Varam_LoanInitiation", "DocumentUpload" ,"DSCOverride","Checker1","Checker2"
                     ]
                    }
                 }
