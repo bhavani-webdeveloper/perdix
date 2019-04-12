@@ -87,6 +87,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
                 minimum: 1,
                 maximum: 1,
                 order: 5
+            }, {
+                pageName: 'loans.individual.screening.detail.PortfolioAnalyticsView',
+                title: 'Portfolio Analytics',
+                pageClass: 'portfolio-analytics',
+                minimum: 1,
+                maximum: 1,
+                order: 90
             }
         ];
             return definition;
@@ -296,6 +303,13 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.FieldAppraisalRe
                                 pageClass: 'cbview',
                                 model: {
                                     loanAccount: res
+                                }
+                            });
+
+                            $this.bundlePages.push({
+                                pageClass: 'portfolio-analytics',
+                                model: {
+                                    loanId: bundleModel.loanId
                                 }
                             });
 
