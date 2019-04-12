@@ -39,7 +39,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             var configFile = function () {
                 return{
                     "loanProcess.loanAccount.currentStage":{
-                        "KYCCheck":{
+                        "Screening":{
                             "overrides":{
                                 "IndividualInformation":{
                                     "readonly":true
@@ -65,7 +65,163 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                             }
                         },
-                        "Rejected":{
+                        "Application":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
+                        },
+                        "CreditAppraisal":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
+                        },
+                        "BusinessTeamReview":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
+                        },
+                        "CreditOfficerReview":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
+                        },
+                        "CreditManagerReview":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
+                        },
+                        "CBOCreditHeadReview":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
+                        },
+                        "CEOMDReview":{
                             "overrides":{
                                 "IndividualInformation":{
                                     "readonly":true
@@ -142,6 +298,32 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
 
                             }
+                        },                 
+                        "KYCCheck":{
+                            "overrides":{
+                                "IndividualInformation":{
+                                    "readonly":true
+                                },
+                                "KYC":{
+                                    "readonly":true
+                                },
+                                "ContactInformation":{
+                                    "readonly":true
+                                },
+                                "loanInformation":{
+                                    "readonly":true
+                                },
+                                "FamilyDetails":{
+                                    "readonly":true
+                                },
+                                "IndividualFinancials":{
+                                    "readonly":true
+                                },
+                                "IndividualReferences":{
+                                    "readonly":true
+                                }
+
+                            }
                         },
                         "RiskReviewAndLoanSanction":{
                             "overrides":{
@@ -168,8 +350,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
 
                             }
-                        },  
-                        "BusinessTeamReview":{
+                        },
+                        "Rejected":{
                             "overrides":{
                                 "IndividualInformation":{
                                     "readonly":true
@@ -194,111 +376,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
 
                             }
-                        }, 
-                        "CreditOfficerReview":{
-                            "overrides":{
-                                "IndividualInformation":{
-                                    "readonly":true
-                                },
-                                "KYC":{
-                                    "readonly":true
-                                },
-                                "ContactInformation":{
-                                    "readonly":true
-                                },
-                                "loanInformation":{
-                                    "readonly":true
-                                },
-                                "FamilyDetails":{
-                                    "readonly":true
-                                },
-                                "IndividualFinancials":{
-                                    "readonly":true
-                                },
-                                "IndividualReferences":{
-                                    "readonly":true
-                                }
-
-                            }
-                        }, 
-                        "CreditManagerReview":{
-                            "overrides":{
-                                "IndividualInformation":{
-                                    "readonly":true
-                                },
-                                "KYC":{
-                                    "readonly":true
-                                },
-                                "ContactInformation":{
-                                    "readonly":true
-                                },
-                                "loanInformation":{
-                                    "readonly":true
-                                },
-                                "FamilyDetails":{
-                                    "readonly":true
-                                },
-                                "IndividualFinancials":{
-                                    "readonly":true
-                                },
-                                "IndividualReferences":{
-                                    "readonly":true
-                                }
-
-                            }
-                        }, 
-                        "CBOCreditHeadReview":{
-                            "overrides":{
-                                "IndividualInformation":{
-                                    "readonly":true
-                                },
-                                "KYC":{
-                                    "readonly":true
-                                },
-                                "ContactInformation":{
-                                    "readonly":true
-                                },
-                                "loanInformation":{
-                                    "readonly":true
-                                },
-                                "FamilyDetails":{
-                                    "readonly":true
-                                },
-                                "IndividualFinancials":{
-                                    "readonly":true
-                                },
-                                "IndividualReferences":{
-                                    "readonly":true
-                                }
-
-                            }
-                        }, 
-                        "CEOMDReview":{
-                            "overrides":{
-                                "IndividualInformation":{
-                                    "readonly":true
-                                },
-                                "KYC":{
-                                    "readonly":true
-                                },
-                                "ContactInformation":{
-                                    "readonly":true
-                                },
-                                "loanInformation":{
-                                    "readonly":true
-                                },
-                                "FamilyDetails":{
-                                    "readonly":true
-                                },
-                                "IndividualFinancials":{
-                                    "readonly":true
-                                },
-                                "IndividualReferences":{
-                                    "readonly":true
-                                }
-
-                            }
-                        }, 
+                        },                         
                     },
                     "pageClass": {
                         "applicant": {
