@@ -88,27 +88,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "BusinessInformation.officemailingLocality",
                     "BusinessInformation.officemailingDistrict",
                     "BusinessInformation.officemailingState",
-                    "CpvFeedback",
-                    // "CpvFeedback.recommendation",
-                    // "CpvFeedback.caseStatus",
-                    // "CpvFeedback.verifierRemarks",
-                    // "CpvFeedback.supervisorRemarks",
-                    "CpvFeedback.questions",
-                    "CpvFeedback.telecallingQuestionnaireList",
-                    "CpvFeedback.telecallingQuestionnaireList.question",
-                    "CpvFeedback.telecallingQuestionnaireList.answer1",
-                    "CpvFeedback.telecallingQuestionnaireList.answer2",
-                    "CpvFeedback.telecallingQuestionnaireList.answer3",
-                    "CpvFeedback.telecallingQuestionnaireList.answer4",
-                    "CpvFeedback.telecallingQuestionnaireList.answer5",
-                    "CpvFeedback.telecallingQuestionnaireList.answer6",
-
-                    "LoanDocuments",
-                    "LoanDocuments.loanDocuments",
-                    "LoanDocuments.loanDocuments.document",
-                    "LoanDocuments.loanDocuments.documentId",
-
-
+                    "Fcu",
+                    "Fcu.document",
+                    "Fcu.document1",
+                    "Fcu.document2",
                 ];
 
             }
@@ -432,132 +415,162 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         }
                                     }              
                     },
-                            
-                    "CpvFeedback": {
-                                "type": "box",
-                                "title": "FCU_MARKING_DOCUMENTS",
-                                "orderNo": 3,
-                                "items": {
-                                    "questions": {
-                                        "type": "fieldset",
-                                        "title": "DOCUMENTS",
-                                        "items": []
-                                    },
-                                    "telecallingQuestionnaireList": {
-                                        "key": "applicant.telecallingQuestionnaireList",
-                                        "type": "array",
-                                        "add": null,
-                                        "remove": null,
-                                        "view": "fixed",
-                                        "items": {
-                                            "question":{
-                                                "key": "applicant.telecallingQuestionnaireList[].question",
-                                                "type": "textarea",
-                                                "title": "DOCUMENTS",
-                                                "readonly": true
-                                            },
-                                            "answer1":{
-                                                "key": "applicant.telecallingQuestionnaireList[].answer",
-                                                "type": "string",
-                                                "title": "REMARKS",
-                                                "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='string'"
-                                            },
-                                            "answer2":{
-                                                "key": "applicant.telecallingQuestionnaireList[].answer",
-                                                "type": "textarea",
-                                                "title": "REMARKS",
-                                                "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='textarea'"
-                                            },
-                                            "answer3":{
-                                                "key": "applicant.telecallingQuestionnaireList[].answer",
-                                                "type": "number",
-                                                "title": "REMARKS",
-                                                "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='number'"
-                                            },
-                                            "answer4":{
-                                                "key": "applicant.telecallingQuestionnaireList[].answer",
-                                                "title": "REMARKS",
-                                                "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='select'",
-                                                "type": "lov",
-                                                "autolov": true,
-                                                "lovonly": true,
-                                                "bindMap": {},
-                                                "searchHelper": formHelper,
-                                                "search": function (inputModel, form, model, context) {
-                                                    var list = {};
-                                                    list = model.applicant.telecallingQuestionnaireList[context.arrayIndex].select;
-
-                                                    var out = [];
-                                                    _.forEach(list, function (val) {
-                                                        out.push({ "name": val });
-                                                    });
-
-                                                    return $q.resolve({
-                                                        headers: {
-                                                            "x-total-count": out.length
-                                                        },
-                                                        body: out
-                                                    });
-                                                },
-                                                onSelect: function (valueObj, model, context) {
-                                                    model.applicant.telecallingQuestionnaireList[context.arrayIndex].answer = valueObj.name;
-                                                },
-                                                getListDisplayItem: function (item, index) {
-                                                    return [
-                                                        item.name
-                                                    ];
-                                                }
-                                            },
-                                            "answer5":{
-                                                "key": "applicant.telecallingQuestionnaireList[].answer",
-                                                "type": "date",
-                                                "title": "REMARKS",
-                                                "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='date'"
-                                            },
-                                            "answer6":{
-                                                "key": "applicant.telecallingQuestionnaireList[].answer",
-                                                "type": "radios",
-                                                "titleMap":{
-                                                    "positive":"Positive",
-                                                    "nagative":"Nagative"
-                                                },
-                                                "title": "REMARKS",
-                                                "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='radio'"
-                                            },
-                                        }
-                                    }
+                    "Fcu":{
+                        "type":"box",
+                        "title":"FCU_DOCUMENT",
+                        "orderNo": 3,
+                        "items":{
+                            "document":{
+                                "type":"checkbox",
+                                "title":"PANCARD",
+                                "key":"",
+                                "schema": {
+                                    "default": false
                                 }
                             },
-                            "LoanDocuments": {
-                                "type": "box",
-                                "orderNo": 2,
-                                "title": "DOCUMENT_UPLOAD",
-                                "items": {
-                                    "loanDocuments": {
-                                        "type": "array",
-                                        "key": "loanAccount.loanDocuments",
-                                        "view": "fixed",
-                                        "startEmpty": true,
-                                        "title": "DOCUMENT_UPLOAD",
-                                        "items": {
-                                            "document": {
-                                                "key": "loanAccount.loanDocuments[].document",
-                                                "title": "DOCUMENT_NAME",
-                                                "type": "string"
-                                            },
-                                            "documentId": {
-                                                "title": "UPLOAD_DOCUMENT",
-                                                "key": "loanAccount.loanDocuments[].documentId",
-                                                "type": "file",
-                                                "fileType": "application/pdf",
-                                                "category": "Loan",
-                                                "subCategory": "DOC1",
-                                                "using": "scanner"
-                                            }
-                                        }
-                                    }
+                            "document1":{
+                                "type":"checkbox",
+                                "title":"ADHARCARD",
+                                "key":"",
+                                "schema": {
+                                    "default": false
+                                }
+                            },
+                            "document2":{
+                                "type":"checkbox",
+                                "title":"ADDITIONAL_KYC",
+                                "key":"",
+                                "schema": {
+                                    "default": false
                                 }
                             }
+                        }
+                    },      
+                    // "CpvFeedback": {
+                    //             "type": "box",
+                    //             "title": "FCU_MARKING_DOCUMENTS",
+                    //             "orderNo": 3,
+                    //             "items": {
+                    //                 "questions": {
+                    //                     "type": "fieldset",
+                    //                     "title": "DOCUMENTS",
+                    //                     "items": []
+                    //                 },
+                    //                 "telecallingQuestionnaireList": {
+                    //                     "key": "applicant.telecallingQuestionnaireList",
+                    //                     "type": "array",
+                    //                     "add": null,
+                    //                     "remove": null,
+                    //                     "view": "fixed",
+                    //                     "items": {
+                    //                         "question":{
+                    //                             "key": "applicant.telecallingQuestionnaireList[].question",
+                    //                             "type": "textarea",
+                    //                             "title": "DOCUMENTS",
+                    //                             "readonly": true
+                    //                         },
+                    //                         "answer1":{
+                    //                             "key": "applicant.telecallingQuestionnaireList[].answer",
+                    //                             "type": "string",
+                    //                             "title": "REMARKS",
+                    //                             "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='string'"
+                    //                         },
+                    //                         "answer2":{
+                    //                             "key": "applicant.telecallingQuestionnaireList[].answer",
+                    //                             "type": "textarea",
+                    //                             "title": "REMARKS",
+                    //                             "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='textarea'"
+                    //                         },
+                    //                         "answer3":{
+                    //                             "key": "applicant.telecallingQuestionnaireList[].answer",
+                    //                             "type": "number",
+                    //                             "title": "REMARKS",
+                    //                             "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='number'"
+                    //                         },
+                    //                         "answer4":{
+                    //                             "key": "applicant.telecallingQuestionnaireList[].answer",
+                    //                             "title": "REMARKS",
+                    //                             "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='select'",
+                    //                             "type": "lov",
+                    //                             "autolov": true,
+                    //                             "lovonly": true,
+                    //                             "bindMap": {},
+                    //                             "searchHelper": formHelper,
+                    //                             "search": function (inputModel, form, model, context) {
+                    //                                 var list = {};
+                    //                                 list = model.applicant.telecallingQuestionnaireList[context.arrayIndex].select;
+
+                    //                                 var out = [];
+                    //                                 _.forEach(list, function (val) {
+                    //                                     out.push({ "name": val });
+                    //                                 });
+
+                    //                                 return $q.resolve({
+                    //                                     headers: {
+                    //                                         "x-total-count": out.length
+                    //                                     },
+                    //                                     body: out
+                    //                                 });
+                    //                             },
+                    //                             onSelect: function (valueObj, model, context) {
+                    //                                 model.applicant.telecallingQuestionnaireList[context.arrayIndex].answer = valueObj.name;
+                    //                             },
+                    //                             getListDisplayItem: function (item, index) {
+                    //                                 return [
+                    //                                     item.name
+                    //                                 ];
+                    //                             }
+                    //                         },
+                    //                         "answer5":{
+                    //                             "key": "applicant.telecallingQuestionnaireList[].answer",
+                    //                             "type": "date",
+                    //                             "title": "REMARKS",
+                    //                             "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='date'"
+                    //                         },
+                    //                         "answer6":{
+                    //                             "key": "applicant.telecallingQuestionnaireList[].answer",
+                    //                             "type": "radios",
+                    //                             "titleMap":{
+                    //                                 "positive":"Positive",
+                    //                                 "nagative":"Nagative"
+                    //                             },
+                    //                             "title": "REMARKS",
+                    //                             "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='radio'"
+                    //                         },
+                    //                     }
+                    //                 }
+                    //             }
+                    //         },
+                            // "LoanDocuments": {
+                            //     "type": "box",
+                            //     "orderNo": 2,
+                            //     "title": "DOCUMENT_UPLOAD",
+                            //     "items": {
+                            //         "loanDocuments": {
+                            //             "type": "array",
+                            //             "key": "loanAccount.loanDocuments",
+                            //             "view": "fixed",
+                            //             "startEmpty": true,
+                            //             "title": "DOCUMENT_UPLOAD",
+                            //             "items": {
+                            //                 "document": {
+                            //                     "key": "loanAccount.loanDocuments[].document",
+                            //                     "title": "DOCUMENT_NAME",
+                            //                     "type": "string"
+                            //                 },
+                            //                 "documentId": {
+                            //                     "title": "UPLOAD_DOCUMENT",
+                            //                     "key": "loanAccount.loanDocuments[].documentId",
+                            //                     "type": "file",
+                            //                     "fileType": "application/pdf",
+                            //                     "category": "Loan",
+                            //                     "subCategory": "DOC1",
+                            //                     "using": "scanner"
+                            //                 }
+                            //             }
+                            //         }
+                            //     }
+                            // }
                         },
                         "additions": [   
                             {

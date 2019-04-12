@@ -264,7 +264,9 @@ define({
             "title": "LOAN_RECOMMENDATION",
             "subTitle": "",
             initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
-              
+                model.UIUDF = {
+                    'fcu_document': []
+                };
                 model.currentStage = bundleModel.currentStage;
                 model.bundleModel = bundleModel;
                 //model.loanAccount = bundleModel.loanAccount;
@@ -278,8 +280,7 @@ define({
                 model.expectedTurnoverObj = {};
                 documentArrayFormation(model);
                 var self = this;
-               
-                
+                               
             /*Asset details*/
                 if (model.loanAccount.collateral.length != 0) {
                     model.asset_details = [];
@@ -305,38 +306,51 @@ define({
                     'tableData': [],
                     'tableData1':[]
             }
+
+
+            model.UIUDF.fcu_document = model.loanAccount.loanDocuments;
+           // model.loanAccount.loanDocuments.length=2; 
         /*FCU DOCUMENT*/
 
-        // if (self.form[self.form.length - 1].title != "FCU") {
-        //     var fcu = [];
-        //     console.log(model.customer);
-        //     for (i in model.loanAccount.loanDocuments) {
+        // if(model.loanAccount.loanDocuments.length !=0){
+        //     var fcu=[];
+        //     var tempArray = [];
+        //     for(i in model.loanAccount.loanDocuments){
         //         fcu.push({
-        //             "key": "loanAccount.loanDocuments[" + i + "].documentId",
-        //             "notitle": true,
-        //             "title": model.loanAccount.loanDocuments[i].document,
+        //             //"key":"loanAccount.loanDocuments[" + i + "].documentId",
+        //             "notitle":true,
+        //             "title":model.loanAccount.loanDocuments[i].document,
         //             "category": "Loan",
         //             "subCategory": "DOC1",
         //             "type": "file",
-        //             "preview": "pdf"
-        //         });
-        //      }
-             
+        //             "items":[{
+        //                 "Title":"Want for FCU",
+        //                 "type":"checkbox",
+        //                 "schema": {
+        //                     "default": false
+        //                 }
+        //             }]
+        //         })
+        //         // tempArray.push({
+        //         //     "title": model.loanAccount.loanDocuments[i].document,
+        //         // })
+
+        //     }
 
         //     self.form.push({
         //         "type": "box",
         //         "colClass": "col-sm-12",
         //         "readonly": true,
-        //         "overrideType": "default-view",
-        //         "title": "FCU",/*
+        //         //"overrideType": "default-view",
+        //         "title": "Fcu Document",/*
         //         "condition": "model.loanAccount.loanDocuments.length != 0",*/
         //         "items": [{
         //             "type": "section",
-        //             "html": '<div style="overflow-x:scroll"><div style="width:10000px"><div ng-repeat="item in form.items" style="display: inline-block; text-align: center; width: 180px;"><div style="margin-top: -10px; margin-right: 8px;"><sf-decorator form="item"></sf-decorator>{{item.title}}</div></div></div></div>',
-        //             "items": fcu
+                   
         //         }]
         //     });
         // }
+        // console.log("Heloo"+fcu);
             /*Upload Document */
             if (self.form[self.form.length - 1].title != "VIEW_UPLOADS") {
                 var fileForms = [];
@@ -1232,6 +1246,7 @@ define({
             {
                 "type": "box",
                 "title": "ADDITIONAL_DOCUMENT_UPLOAD",
+                "colClass": "col-sm-12",
                 "items": [{
 
                     "type": "array",
@@ -1259,6 +1274,24 @@ define({
                 
                 ]
             },
+            {
+                       "type": "box",
+                       "readonly": true,
+                       "colClass": "col-sm-12",
+                       "condition":"model.loanAccount.loanDocuments.length !=0",
+                       "items":[
+                           {
+                               "type":"section",
+                               "html": '<table class="table"><thead><tr><th>Document Name</th><th>Allow for FCU</th></tr></thead><tbody>' +
+                               '<tr ng-repeat="item in model.loanAccount.loanDocuments">' +
+                               '<td style:"font-size:20px;">{{ item.document }}</td>' +
+                               '<td><input type="checkbox"  ng-model="m.selected" ng-checked="m.selected" style="width:30px;height:20px"></td>' +
+                               '</tr></tbody></table>',
+                           }
+                       ]
+                        
+               }
+           
 
         ],
 

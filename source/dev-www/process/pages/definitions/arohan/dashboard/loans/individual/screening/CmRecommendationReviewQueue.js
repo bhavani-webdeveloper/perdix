@@ -181,7 +181,7 @@ define({
 					},
 					getActions: function() {
 						return [{
-							name: "CM_RECOMMENDATION_REVIEW",
+							name: "CM_RECOMMENDATION",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
