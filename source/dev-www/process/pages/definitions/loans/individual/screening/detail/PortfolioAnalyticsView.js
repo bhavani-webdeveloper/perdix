@@ -9,19 +9,45 @@ define({
 	<table class="table table-condensed table-bordered table-sm table-responsive">
 		<colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup>
 		<tbody>
-			<tr class="table-sub-header" style="font-size: 30px;"><th class="text-center" colspan="2">{{model.portfolioAnalytics.emiProfitPercentage.toFixed(2)}}%</th><th><div ng-style="model.portfolioAnalytics.emiProfitPercentage<=model.emiProfitThreshold?{\'background-color\':\'#18c118\'}:{\'background-color\':\'#FFBF00\'}">&nbsp;</div></th></tr>
-			<tr class="table-sub-header"><th <td class="text-center">{{"% Time & Above" | translate}}</th><th class="text-center">{{"Income" | translate}}</th><th class="text-center">{{"Ability to Pay" | translate}}</th></tr>
-			<tr><td class="text-center">{{model.emiProfitThreshold}}%</td><td class="text-center">{{model.portfolioAnalytics.incomeAverage.toLocaleString("en-in")}}</td><td class="text-center">{{model.portfolioAnalytics.ability.toLocaleString("en-in")}}</td></tr>
+			<tr class="table-sub-header" style="font-size: 30px;">
+				<th class="text-center" colspan="2">{{model.portfolioAnalytics.emiProfitPercentage.toFixed(2)}}%</th>
+				<th><div ng-style="model.portfolioAnalytics.emiProfitPercentage<=model.emiProfitThreshold?{\'background-color\':\'#18c118\'}:{\'background-color\':\'#FFBF00\'}">&nbsp;</div></th>
+			</tr>
+			<tr class="table-sub-header">
+				<th <td class="text-center">{{"% Time & Above" | translate}}</th>
+				<th class="text-center">{{"Income" | translate}}</th>
+				<th class="text-center">{{"Ability to Pay" | translate}}</th>
+			</tr>
+			<tr>
+				<td class="text-center">{{model.emiProfitThreshold}}%</td>
+				<td class="text-center">{{model.portfolioAnalytics.incomeAverage.toLocaleString("en-in")}}</td>
+				<td class="text-center">{{model.portfolioAnalytics.incomeAbility.toLocaleString("en-in")}}</td>
+			</tr>
 		</tbody>
 	</table>
 	<table class="table table-bordered table-condensed table-sm table-responsive">
 		<colgroup><col width="65%"><col width="35%"></colgroup>
 		<tbody>
-			<tr><td>{{"Average" | translate}}</td><td style="text-align:right">{{model.portfolioAnalytics.incomeAverage.toLocaleString("en-in")}}</td></tr>
-			<tr><td>{{"Std Dev" | translate}}</td><td style="text-align:right">{{model.portfolioAnalytics.incomeStdDev.toLocaleString("en-in")}}</td></tr>
-			<tr><td>{{model.portfolioAnalytics.incomeSimulationRange}}%</td><td style="text-align:right">{{model.portfolioAnalytics.incomePercentile.toLocaleString("en-in")}}</td></tr>
-			<tr><td>{{"Ability" | translate}}</td><td style="text-align:right">{{model.portfolioAnalytics.ability.toLocaleString("en-in")}}</td></tr>
-			<tr><td>{{"Kinara EMI" | translate}}</td><td style="text-align:right">{{model.portfolioAnalytics.emi.toLocaleString("en-in")}}</td></tr>
+			<tr>
+				<td>{{"Average" | translate}}</td>
+				<td style="text-align:right">{{model.portfolioAnalytics.incomeAverage.toLocaleString("en-in")}}</td>
+			</tr>
+			<tr>
+				<td>{{"Std Dev" | translate}}</td>
+				<td style="text-align:right">{{model.portfolioAnalytics.incomeStdDev.toLocaleString("en-in")}}</td>
+			</tr>
+			<tr>
+				<td>{{model.portfolioAnalytics.incomeSimulationRange}}%</td>
+				<td style="text-align:right">{{model.portfolioAnalytics.incomePercentile.toLocaleString("en-in")}}</td>
+			</tr>
+			<tr>
+				<td>{{"Ability" | translate}}</td>
+				<td style="text-align:right">{{model.portfolioAnalytics.incomeAbility.toLocaleString("en-in")}}</td>
+			</tr>
+			<tr>
+				<td>{{"Kinara EMI" | translate}}</td>
+				<td style="text-align:right">{{model.portfolioAnalytics.emi.toLocaleString("en-in")}}</td>
+			</tr>
 			<tr><td>{{"Kinara EMI % to Net Income" | translate}}</td><td style="text-align:right">{{model.portfolioAnalytics.emiProfitPercentage.toFixed(3)}}</td></tr>
 		</tbody>
 	</table>
@@ -49,19 +75,49 @@ define({
 	<table class="table table-bordered table-sm table-responsive table-condensed">
 		<colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup>
 		<tbody>
-			<tr class="table-sub-header" style="font-size: 30px;"><th class="text-center" colspan="2">{{model.portfolioAnalytics.emiBankBalancePercentage.toFixed(2)}}%</th><th><div ng-style="model.portfolioAnalytics.emiBankBalancePercentage<=model.emiBankBalanceThreshold?{\'background-color\':\'#18c118\'}:{\'background-color\':\'#FFBF00\'}">&nbsp;</div></th></tr>
-			<tr class="table-sub-header"><th class="text-center">{{"% Time & Above" | translate}}</th><th class="text-center">{{"Income" | translate}}</th><th >{{"Ability to Pay" | translate}}</th></tr>
-			<tr><td class="text-center">{{model.emiBankBalanceThreshold}}%</td><td class="text-center">{{model.portfolioAnalytics.bankBalancePercentile.toLocaleString("en-in")}}</td><td class="text-center">{{model.portfolioAnalytics.bankBalancePercentile.toLocaleString("en-in")}}</td></tr>
+			<tr class="table-sub-header" style="font-size: 30px;">
+				<th class="text-center" colspan="2">{{model.portfolioAnalytics.emiBankBalancePercentage.toFixed(2)}}%</th>
+				<th><div ng-style="model.portfolioAnalytics.emiBankBalancePercentage<=model.emiBankBalanceThreshold?{\'background-color\':\'#18c118\'}:{\'background-color\':\'#FFBF00\'}">&nbsp;</div></th>
+			</tr>
+			<tr class="table-sub-header">
+				<th class="text-center">{{"% Time & Above" | translate}}</th>
+				<th class="text-center">{{"Income" | translate}}</th>
+				<th >{{"Ability to Pay" | translate}}</th>
+			</tr>
+			<tr>
+				<td class="text-center">{{model.emiBankBalanceThreshold}}%</td>
+				<td class="text-center">{{model.portfolioAnalytics.bankBalanceAverage.toLocaleString("en-in")}}</td>
+				<td class="text-center">{{model.portfolioAnalytics.bankBalanceAbility.toLocaleString("en-in")}}</td>
+			</tr>
 		</tbody>
 	</table>
 	<table class="table table-condensed table-bordered table-sm table-responsive">
 		<colgroup><col width="65%"><col width="35%"></colgroup>
 		<tbody>
-			<tr><td>{{"Average" | translate}}</td><td style="text-align:right">{{model.portfolioAnalytics.bankBalanceAverage.toLocaleString("en-in")}}</td></tr>
-			<tr><td>{{"Std Dev" | translate}}</td><td style="text-align:right">{{model.portfolioAnalytics.bankBalanceStdDev.toLocaleString("en-in")}}</td></tr>
-			<tr><td>{{model.portfolioAnalytics.bankBalanceSimulationRange}}%</td><td style="text-align:right">{{model.portfolioAnalytics.bankBalancePercentile.toLocaleString("en-in")}}</td></tr>
-			<tr><td>{{"Kinara EMI" | translate}}</td><td style="text-align:right">{{model.portfolioAnalytics.emi.toLocaleString("en-in")}}</td></tr>
-			<tr><td>{{"Kinara EMI % to MC ABB" | translate}}</td><td style="text-align:right">{{model.portfolioAnalytics.emiBankBalancePercentage.toFixed(3)}}</td></tr>
+			<tr>
+				<td>{{"Average" | translate}}</td>
+				<td style="text-align:right">{{model.portfolioAnalytics.bankBalanceAverage.toLocaleString("en-in")}}</td>
+			</tr>
+			<tr>
+				<td>{{"Std Dev" | translate}}</td>
+				<td style="text-align:right">{{model.portfolioAnalytics.bankBalanceStdDev.toLocaleString("en-in")}}</td>
+			</tr>
+			<tr>
+				<td>{{model.portfolioAnalytics.bankBalanceSimulationRange}}%</td>
+				<td style="text-align:right">{{model.portfolioAnalytics.bankBalancePercentile.toLocaleString("en-in")}}</td>
+			</tr>
+			<tr>
+				<td>{{"Ability" | translate}}</td>
+				<td style="text-align:right">{{model.portfolioAnalytics.bankBalanceAbility.toLocaleString("en-in")}}</td>
+			</tr>
+			<tr>
+				<td>{{"Kinara EMI" | translate}}</td>
+				<td style="text-align:right">{{model.portfolioAnalytics.emi.toLocaleString("en-in")}}</td>
+			</tr>
+			<tr>
+				<td>{{"Kinara EMI % to MC ABB" | translate}}</td>
+				<td style="text-align:right">{{model.portfolioAnalytics.emiBankBalancePercentage.toFixed(3)}}</td>
+			</tr>
 		</tbody>
 	</table>
 </div>`,

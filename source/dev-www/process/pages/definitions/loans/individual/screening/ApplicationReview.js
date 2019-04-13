@@ -292,12 +292,12 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.ApplicationRevie
                                 }
                             });
 
-                            // $this.bundlePages.push({
-                            //     pageClass: 'portfolio-analytics',
-                            //     model: {
-                            //         loanId: bundleModel.loanId
-                            //     }
-                            // });
+                            $this.bundlePages.push({
+                                pageClass: 'portfolio-analytics',
+                                model: {
+                                    loanId: bundleModel.loanId
+                                }
+                            });
 
 
                             deferred.resolve();

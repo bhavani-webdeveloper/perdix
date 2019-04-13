@@ -1520,6 +1520,7 @@ define({
                     model.active_accounts = model.liabilities.length;
                     model.monthly_installment = monthly_installment;
                     model.outstanding_bal = outstanding_bal;
+                    debugger;
 
 
                 }

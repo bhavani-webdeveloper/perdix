@@ -69,6 +69,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                 }
                             },
                             "loanType": {
+                                "condition":"siteCode != 'kgfs'",
                                 "key": "product.loanType",
                                 "title": "LOAN_TYPE",
                                 "type": ["string","null"],
@@ -77,7 +78,18 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                         "enumCode": "booking_loan_type",                                        
                                     }
                             },
+                            "loanType": {
+                                "condition":"siteCode == 'kgfs'",
+                                "key": "product.loanType",
+                                "title": "LOAN_TYPE",
+                                "type": ["string","null"],
+                                "x-schema-form": {
+                                        "type": "select",
+                                        "enumCode": "booking_loan_type_readyForDisburse",                                        
+                                    }
+                            },
                             "productCategory":{
+                                "condition":"siteCode != 'kgfs'",
                                 "key": "product.productCategory",
                                 "title": "PRODUCT_CATEGORY",
                                 "type": ["string","null"],
@@ -87,7 +99,19 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                         "parentEnumCode": "booking_loan_type",
                                         "screenFilter": true
                                     }
-                            },                            
+                            },  
+                            "productCategory":{
+                                "condition":"siteCode == 'kgfs'",
+                                "key": "product.productCategory",
+                                "title": "PRODUCT_CATEGORY",
+                                "type": ["string","null"],
+                                    "x-schema-form": {
+                                        "type": "select",
+                                        "enumCode": "loan_product_category_master_readyForDisburse",
+                                        "parentEnumCode": "booking_loan_type_readyForDisburse",
+                                        "screenFilter": true
+                                    }
+                            },                          
                             "loan_product": {
                                 "title": "PRODUCT_CODE",
                                 "type": "string",
