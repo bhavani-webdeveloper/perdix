@@ -207,7 +207,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
                     },
                     {
                         "key": "loanAccount.modeOfDisburments",
-                        "title": "MODE_OF_DISBURSEMENTS",
+                        "title": "PAYMENT_MODE",
                         "lovonly": true,
                         "type": "lov",
                         bindMap: {
@@ -994,6 +994,8 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentVerificati
              
                     model.loanAccount.loanDocuments=[];
                     model.loanAccount.tempMasterDocuments = [];
+
+                    
                     if (model.allExistingDocs) {
                         for(var i=0;i< model.allExistingDocs.length;i++){
                             if( model.allExistingDocs[i].documentId){
