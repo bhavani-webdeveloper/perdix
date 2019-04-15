@@ -621,6 +621,7 @@ define([],function(){
                             }
                         },
                         "LoanRecommendation.interestRate": {
+                            "title":"INTEREST_RATE1",
                             onChange:function(value,form,model){
                                 computeEMI(model);
                             }
@@ -658,6 +659,7 @@ define([],function(){
                             "orderNo":140,
                             onChange:function(value,form,model){
                                 computeEstimatedEMI(model);
+                                model.loanAccount.interestRate=model.loanAccount.expectedInterestRate;
                             }
                         },                        
                         "PreliminaryInformation.productType": {
@@ -975,7 +977,8 @@ define([],function(){
                     if (_.hasIn(model, 'loanAccount.loanPurpose2') && model.loanAccount.loanPurpose2 !=null && model.loanAccount.loanPurpose2.length > 0)
                     model.loanAccount.loanPurpose3=model.loanAccount.loanPurpose2;
                     model.loanAccount.interestRateEstimatedEMI={};
-                    
+                    if (_.hasIn(model, 'loanAccount.expectedInterestRate') && model.loanAccount.expectedInterestRate !=null && model.loanAccount.expectedInterestRate.length > 0)
+                    model.loanAccount.interestRate=model.loanAccount.expectedInterestRate;
                     var postReviewActionArray = {
                         "REJECT": "REJECT",
                         "SEND_BACK": "SEND_BACK",
