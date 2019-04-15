@@ -3294,7 +3294,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "type":"select",
                                                             "enumCode":"work_sector",
                                                             "required": true,
-                                                            "orderNo": 50
+                                                            "orderNo": 50,
+                                                            onChange:function(valueObj,context,model){
+                                                                model.customer.familyMembers[context.arrayIndexes[0]].incomes[context.arrayIndexes[1]].skillLevel = null;
+                                                            }
                                                         },
                                                         "incomeSource": {
                                                             key: "customer.familyMembers[].incomes[].incomeSource",
