@@ -14,6 +14,8 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanOriginationDashboar
                 "Page/Engine/kgfs.loans.individual.screening.MELApplicationFormQueue",
                 "Page/Engine/kgfs.loans.individual.screening.ApplicationQueue",
                 "Page/Engine/kgfs.loans.individual.screening.CreditAppraisalQueue",
+                "Page/Engine/kgfs.loans.individual.screening.DscQueue",
+                "Page/Engine/kgfs.loans.individual.screening.DscOverrideQueue",
                 
                 "Page/Engine/kgfs.loans.individual.screening.BusinessTeamReviewQueue",
                 "Page/Engine/kgfs.loans.individual.screening.CreditOfficerReviewQueue",
@@ -21,10 +23,7 @@ irf.pageCollection.controller(irf.controller("kgfs.loans.LoanOriginationDashboar
                 "Page/Engine/kgfs.loans.individual.screening.CBOCreditHeadReviewQueue",
                 "Page/Engine/kgfs.loans.individual.screening.CEOMDReviewQueue",
 
-                "Page/Engine/kgfs.loans.individual.screening.DscQueue",
-                "Page/Engine/kgfs.loans.individual.screening.DscOverrideQueue",
-                "Page/Engine/kgfs.loans.individual.screening.KYCCheckQueue",
-                "Page/Engine/kgfs.loans.individual.screening.RiskReviewAndLoanSanctionQueue",
+                
                 "Page/Engine/kgfs.loans.individual.screening.RejectedQueue"
             ]
         };
