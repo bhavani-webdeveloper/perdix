@@ -3459,7 +3459,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     // model.customer.enterprise = {
                         
                     // }
-                    model.customer.enterprise.ownerSalary = "67%";
+                   
                     if (model.loanAccount.currentStage == 'Screening' && _.hasIn(model, 'loanProcess.applicantEnrolmentProcess') && model.loanProcess.applicantEnrolmentProcess !=null){
                         model.applicantEnrolmentProcessDetails = {}; 
                         model.applicantEnrolmentProcessDetails=model.loanProcess.applicantEnrolmentProcess.customer;
@@ -3472,6 +3472,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     model.customer.enterprise.businessType  = "Services";
                     computeTotalMonthlySurpluse("value","form",model);
                     if(model.currentStage != 'Screening' && model.currentStage != 'Application'){
+                        model.customer.enterprise.ownerSalary = "67%";
                         model.customer.enterprise.initialEstimateMonthlySale = (model.customer.enterprise.monthlyBusinessExpenses) ? Number(model.customer.enterprise.monthlyBusinessExpenses * 4):0;
                         if(model.customer.enterprise){
                             model.customer.enterprise.serviceTaxNumber = model.customer.enterprise.serviceTaxNumber? model.customer.enterprise.serviceTaxNumber:0;
