@@ -182,7 +182,8 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                         "orderNo": 5
                                     },
                                     "PaymentDetails.fileId":{
-                                        "orderNo": 6
+                                        "orderNo": 6,
+                                        "required":false,
                                     },
                                     "PaymentDetails.paymentPurpose":{
                                         "readonly":true,
