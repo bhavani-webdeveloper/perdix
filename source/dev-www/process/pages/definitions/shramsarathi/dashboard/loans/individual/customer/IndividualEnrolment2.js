@@ -2594,9 +2594,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Liabilities.liabilities.noOfInstalmentPaid",
                     "Liabilities.liabilities.frequencyOfInstallment",
                     "Liabilities.liabilities.liabilityLoanPurpose",
-                    "Liabilities.liabilities.interestOnly",
+                    //"Liabilities.liabilities.interestOnly",
                     "Liabilities.liabilities.interestRate",
-                    "Liabilities.liabilities.masonValuation",
+                    //"Liabilities.liabilities.masonValuation",
                     "Liabilities.liabilities.amountPaidInterest",
                     "Liabilities.liabilities.amountPaid",
 
@@ -3294,7 +3294,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "type":"select",
                                                             "enumCode":"work_sector",
                                                             "required": true,
-                                                            "orderNo": 50
+                                                            "orderNo": 50,
+                                                            onChange:function(valueObj,context,model){
+                                                                model.customer.familyMembers[context.arrayIndexes[0]].incomes[context.arrayIndexes[1]].skillLevel = null;
+                                                            }
                                                         },
                                                         "incomeSource": {
                                                             key: "customer.familyMembers[].incomes[].incomeSource",
@@ -3305,7 +3308,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "enumCode": "occupation",
                                                             "parentEnumCode": "work_sector",
                                                             "parentValueExpr":"model.customer.familyMembers[context.arrayIndex].incomes[context.arrayIndex].workSector",
-                                                            "orderNo": 60
+                                                            "orderNo": 60,
+                                                            "onChange":function(valueObj,context,model){
+                                                                var skillLevel  = formHelper.enum('skill_type').data.filter(function(value){
+                                                                    return value.parentCode == valueObj;
+                                                                });
+                                                                if (skillLevel && skillLevel.length > 0)
+                                                                    model.customer.familyMembers[context.arrayIndexes[0]].incomes[context.arrayIndexes[1]].skillLevel = skillLevel[0].name;
+                                                            }
                                                         },
                                                         "incomeEarned": {
                                                             key: "customer.familyMembers[].incomes[].incomeEarned",
@@ -3329,18 +3339,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             "type":"select",
                                                             "enumCode":"occupation_type",
                                                             "required":true,
-                                                            "orderNo":20
+                                                            "orderNo":20,
                                                             
                                                         },
                                                         "skillLevel":{
                                                             "key":"customer.familyMembers[].incomes[].skillLevel",
                                                             "title":"SKILL_LEVEL",
                                                             "type":"select",
-                                                            "titleMap":{
-                                                                "skilled":"SKILLED",
-                                                                "unskilled":"UNSKILLED",
-                                                                "semi_skilled":"SEMI_SKILLED"
-                                                            },
+                                                            "enumCode":"skill_type",
+                                                            "parentEnumCode": "occupation",
+                                                            "parentValueExpr":"model.customer.familyMembers[context.arrayIndexes[0]].incomes[context.arrayIndexes[1]].incomeSource",
                                                             "required":true,
                                                             "orderNo":70
                                                             

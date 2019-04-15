@@ -39,15 +39,15 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.scr
 	                    //     "title": "BUSINESS_NAME",
 	                    //     "type": "string"
 	                    // },
-	                    'branch': {
-	                    	'title': "BRANCH",
-	                    	"type": ["string", "null"],
-							"x-schema-form": {
-								"type":"userbranch",
-								"screenFilter": true
-							}
-	                    },
-						"centre": {
+	                    // 'branch': {
+	                    // 	'title': "BRANCH",
+	                    // 	"type": ["string", "null"],
+						// 	"x-schema-form": {
+						// 		"type":"userbranch",
+						// 		"screenFilter": true
+						// 	}
+	                    // },
+						"centreCode": {
                             "title": "ZONE_NAME",
                             "required":false,
 							"type": ["integer", "null"],
@@ -105,7 +105,7 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.scr
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
 	                    'per_page': pageOpts.itemsPerPage,
-	                    'centreCode': searchOptions.centre
+	                    'centreCode': searchOptions.centreCode
 	                }).$promise;
 				},
 				paginationOptions: {
