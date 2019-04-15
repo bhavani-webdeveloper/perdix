@@ -333,7 +333,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                                 if(model.telecalling.applicant.followupCallRequired){
                                                                     var followupCallRequiredDate = moment(model.telecalling.applicant.followupCallRequired, SessionStore.getSystemDateFormat());
                                                                     var customerCalledDateValid = moment(model.telecalling.applicant.customerCalledDate, SessionStore.getSystemDateFormat());
-                                                                    if (followupCallRequiredDate < customerCalledDateValid) {
+                                                                    if (followupCallRequiredDate <= customerCalledDateValid) {
                                                                         model.telecalling.applicant.followupCallRequired = null;
                                                                         PageHelper.showErrors({data:{error:"Followup Call Required Date always more than customer Called Date"}});
                                                                         return false;
