@@ -264,6 +264,9 @@ define({
             "title": "LOAN_RECOMMENDATION",
             "subTitle": "",
             initialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
+                model.UIUDF = {
+                    'fcu_document': []
+                };
                 model.currentStage = bundleModel.currentStage;
                 model.bundleModel = bundleModel;
                 //model.loanAccount = bundleModel.loanAccount;
@@ -276,6 +279,8 @@ define({
                 model.loanMitigants= model.loanAccount.loanMitigants;
                 model.expectedTurnoverObj = {};
                 documentArrayFormation(model);
+                var self = this;
+                               
             /*Asset details*/
                 if (model.loanAccount.collateral.length != 0) {
                     model.asset_details = [];
@@ -302,12 +307,351 @@ define({
                     'tableData1':[]
             }
 
-     
+
+            model.UIUDF.fcu_document = model.loanAccount.loanDocuments;
+           // model.loanAccount.loanDocuments.length=2; 
+        /*FCU DOCUMENT*/
+
+        // if(model.loanAccount.loanDocuments.length !=0){
+        //     var fcu=[];
+        //     var tempArray = [];
+        //     for(i in model.loanAccount.loanDocuments){
+        //         fcu.push({
+        //             //"key":"loanAccount.loanDocuments[" + i + "].documentId",
+        //             "notitle":true,
+        //             "title":model.loanAccount.loanDocuments[i].document,
+        //             "category": "Loan",
+        //             "subCategory": "DOC1",
+        //             "type": "file",
+        //             "items":[{
+        //                 "Title":"Want for FCU",
+        //                 "type":"checkbox",
+        //                 "schema": {
+        //                     "default": false
+        //                 }
+        //             }]
+        //         })
+        //         // tempArray.push({
+        //         //     "title": model.loanAccount.loanDocuments[i].document,
+        //         // })
+
+        //     }
+
+        //     self.form.push({
+        //         "type": "box",
+        //         "colClass": "col-sm-12",
+        //         "readonly": true,
+        //         //"overrideType": "default-view",
+        //         "title": "Fcu Document",/*
+        //         "condition": "model.loanAccount.loanDocuments.length != 0",*/
+        //         "items": [{
+        //             "type": "section",
+                   
+        //         }]
+        //     });
+        // }
+        // console.log("Heloo"+fcu);
+            /*Upload Document */
+            if (self.form[self.form.length - 1].title != "VIEW_UPLOADS") {
+                var fileForms = [];
+                console.log(model.customer);
+                for (i in model.loanAccount.loanDocuments) {
+                    fileForms.push({
+                        "key": "loanAccount.loanDocuments[" + i + "].documentId",
+                        "notitle": true,
+                        "title": model.loanAccount.loanDocuments[i].document,
+                        "category": "Loan",
+                        "subCategory": "DOC1",
+                        "type": "file",
+                        "preview": "pdf",
+                        "orderNo":20
+                       
+                    });
+                 }
+                  fileForms.push({
+                        "key": "customer.businessSignboardImage",
+                        "notitle": true,
+                        "title": "Business Signboard",
+                        "category": "Loan",
+                        "subCategory": "DOC1",
+                        "type": "file",
+                        "preview": "pdf",
+                        using: "scanner"
+                    })
+                fileForms.push({
+                    "key": "customer.latitude",
+                    "notitle": true,
+                    "title": $filter("translate")("BUSINESS_LOCATION"),
+                    "type": "geotag",
+                    "latitude": "customer.latitude",
+                    "longitude": "customer.longitude"
+                })
+              
+                self.form.push({
+                    "type": "box",
+                    "colClass": "col-sm-12",
+                    "readonly": true,
+                    "overrideType": "default-view",
+                    "title": "VIEW_UPLOADS",
+                    "orderNo":1,
+                    /*
+                    "condition": "model.loanAccount.loanDocuments.length != 0",*/
+                    "items": [{
+                        "type": "section",
+                        "html": '<div style="overflow-x:scroll"><div style="width:10000px"><div ng-repeat="item in form.items" style="display: inline-block; text-align: center; width: 180px;"><div style="margin-top: -10px; margin-right: 8px;"><sf-decorator form="item"></sf-decorator>{{item.title}}</div></div></div></div>',
+                        "items": fileForms
+                    }]
+                })
+               
+                var postForm = [  
+                    {
+
+                    "type": "box",		
+                    "colClass": "col-sm-12",		
+                    "readonly": true,		
+                    "overrideType": "default-view",		
+                    condition: "model.currentStage !== 'ApplicationReview' && model.currentStage !== 'Scrutiny' && model.loanAccount.documents.length != 0",		
+                    "title": "RCU Documents",		
+                    "items": [  {		
+                        "key": "loanAccount.documents",		
+                        "type": "array",		
+                        "title": "Documents",	
+                        //startEmpty: true,		
+                        "items": [		
+                        {		
+                            key:"loanAccount.documents[].document",		
+                            type:"text",		
+                            title:"Document Name",		
+                            required: true,		
+                        },		
+                        {		
+                            key:"loanAccount.documents[].documentId",		
+                            title : "Upload",		
+                            type:"file",		
+                            required: true,		
+                            category: "Loan",		
+                            subCategory: "DOC3",
+                        }		
+                        ]		
+                        },]		
+                }, 
+                {
+                    "type": "box",
+                    "colClass": "col-sm-12",
+                    condition: "model.currentStage == 'FieldAppraisalReview'",
+                    "title": "Add Guarantor",
+                    "items": [
+                        {
+                            key: "loanAccount.isGuarantorRequired",
+                            type: "radios",
+                            title:"Guarantor required",
+                            titleMap: {
+                                "YES": "YES",
+                                "NO": "NO"
+                            },
+                            required: true,
+                        },
+                        {
+                            key:"loanAccount.noOfGuarantersRequired",
+                            title : "No.of Guarantors",
+                            type:"select",
+                            condition: "model.loanAccount.isGuarantorRequired == 'YES'",
+                            titleMap: [{
+                                value: 1,
+                                name: 1
+                            },{
+                                value: 2,
+                                name: 2
+                            }],
+                            required: true,
+                        }
+                    ]
+                },
+              
+                 {
+        
+                        "type": "box",
+                        "title": "Post Review Decision",
+                        "colClass": "col-sm-12",
+                        "items": [{
+                            key: "review.action",
+                            type: "radios",
+                            titleMap: {
+                                "REJECT": "REJECT",
+                                "SEND_BACK": "SEND_BACK",
+                                "PROCEED": "PROCEED",
+                                "HOLD": "HOLD"
+                            }
+                        }, {
+                            type: "section",
+                            htmlClass: "col-sm-8",
+                            condition: "model.review.action=='REJECT'",
+                            items: [{
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                required: true
+                            }, {
+                                key: "loanAccount.rejectReason",
+                                type: "lov",
+                                autolov: true,
+                                required: true,
+                                title: "REJECT_REASON",
+                                bindMap: {},
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model, context) {
+                                    var stage1 = model.currentStage;
+        
+                                    if (model.currentStage == 'Application' || model.currentStage == 'ApplicationReview') {
+                                        stage1 = "Application";
+                                    }
+                                    if (model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview') {
+                                        stage1 = "FieldAppraisal";
+                                    }
+        
+                                    var rejectReason = formHelper.enum('application_reject_reason').data;
+                                    var out = [];
+                                    for (var i = 0; i < rejectReason.length; i++) {
+                                        var t = rejectReason[i];
+                                        if (t.field1 == stage1) {
+                                            out.push({
+                                                name: t.name,
+                                            })
+                                        }
+                                    }
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": out.length
+                                        },
+                                        body: out
+                                    });
+                                },
+                                onSelect: function(valueObj, model, context) {
+                                    model.loanAccount.rejectReason = valueObj.name;
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.name
+                                    ];
+                                }
+                            }, {
+                                key: "review.rejectButton",
+                                type: "button",
+                                title: "REJECT",
+                                required: true,
+                                onClick: "actions.reject(model, formCtrl, form, $event)"
+                            }]
+                        }, {
+                            type: "section",
+                            htmlClass: "col-sm-8",
+                            condition: "model.review.action=='HOLD'",
+                            items: [{
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                required: true
+                            }, {
+                                key: "review.holdButton",
+                                type: "button",
+                                title: "HOLD",
+                                required: true,
+                                onClick: "actions.hold(model, formCtrl, form, $event)"
+                            }]
+                        }, {
+                            type: "section",
+                            htmlClass: "col-sm-8",
+                            condition: "model.review.action=='SEND_BACK'",
+                            items: [{
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                required: true
+                            }, {
+                                key: "review.targetStage1",
+                                type: "lov",
+                                autolov: true,
+                                lovonly:true,
+                                title: "SEND_BACK_TO_STAGE",
+                                bindMap: {},
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model, context) {
+                                    var stage1 = model.currentStage;
+                                    var targetstage = formHelper.enum('targetstage').data;
+                                    var out = [];
+                                    for (var i = 0; i < targetstage.length; i++) {
+                                        var t = targetstage[i];
+                                        if (t.field1 == stage1) {
+                                            out.push({
+                                                name: getStageNameByStageCode(t.name),
+                                                value:t.code
+                                            })
+                                        }
+                                    }
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": out.length
+                                        },
+                                        body: out
+                                    });
+                                },
+                                onSelect: function(valueObj, model, context) {
+                                    model.review.targetStage1 = valueObj.name;
+                                    model.review.targetStage = valueObj.value;
+        
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.name
+                                    ];
+                                }
+                            }, {
+                                key: "review.sendBackButton",
+                                type: "button",
+                                title: "SEND_BACK",
+                                onClick: "actions.sendBack(model, formCtrl, form, $event)"
+                            }]
+                        }, {
+                            type: "section",
+                            htmlClass: "col-sm-8",
+                            condition: "model.review.action=='PROCEED'",
+                            items: [{
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                required: true
+                            }, {
+                                key: "review.proceedButton",
+                                type: "button",
+                                title: "PROCEED",
+                                onClick: "actions.proceed(model, formCtrl, form, $event)"
+                            }]
+                        }]
+                    }, {
+                        "type": "actionbox",
+                        "condition": "model.loanAccount.customerId && model.currentStage !== 'loanApplicationView'",
+                        "items": [{
+                            "type": "button",
+                            "icon": "fa fa-circle-o",
+                            "title": "SAVE",
+                            "onClick": "actions.save(model, formCtrl, form, $event)"
+                        }]
+                    }]
+               self.form = self.form.concat(postForm)  ;
+                console.log(self.form)
+            }
+
             Enrollment.getCustomerById({
                 id: model.customerId
             }).$promise.then(function(res) {
                 model.customer = res;
             });
+
+
+            // IndividualLoan.getCustomerById({
+            //     id:model.customerId
+            // }).$promise.then(function(ress){
+            //     model.test=ress;
+            // })
             // calling individual loan api to get then result of loan amount requested
             if(_.isNull(model.loanAccount['transactionType'])) model.loanAccount.transactionType="New Loan";
             if (!(_.isNull(model.loanAccount.transactionType)) && model.loanAccount.transactionType.toLowerCase() == 'renewal') {
@@ -323,8 +667,10 @@ define({
              }
 
         },
-        form: [{
+        form: [
+            {
                 "type": "section",
+                "orderNo":2,
                 "html": '<div class="col-xs-12">' +
                     '<div class="box no-border">' +
                     '<div class="box-body" style="padding-right: 0">' +
@@ -364,6 +710,7 @@ define({
             }, {
                 "type": "box",
                 "readonly": true,
+                "orderNo":3,
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
                 "title": "Preliminary Loan Information",
@@ -896,149 +1243,78 @@ define({
                     }]
                 }]
             }, 
+        {
+            "type": "box",
+            "colClass": "col-sm-12",
+            "title": "FCU_MARKING",
+            //"condition": "model.currentStage != 'ScreeningReview'",
+            "items": [{
+                "type": "section",
+                "colClass": "col-sm-12",
+                "html": '<table class="table"><colgroup><col width="20%"><col width="5%"><col width="20%"></colgroup><thead><tr><th>Parameter Name</th></tr></thead><tbody>' +
+                    '<tr ng-repeat="item in model.deviationDetails">' +
+                    '<td>{{ item["parameter"] }}</td>' +
+                    '<td> <span class="square-color-box" style="background: {{ item.color_hexadecimal }}"> </span></td>' +
+                    '<td>{{ item["deviation"] }}</td>' +
+                    '<td><ul class="list-unstyled">' +
+                    '<li ng-repeat="m in item.mitigants " id="{{m.mitigant}}">' +
+                    '<input type="checkbox"  ng-model="m.selected" ng-checked="m.selected"> {{ m.mitigant }}' +
+                    // '<input type="checkbox"  ng-model="m.selected" ng-change="model.updateChosenMitigant(m.selected,m)"> {{ m.mitigant }}' +
+                    '</li></ul></td></tr></tbody></table>'
 
-            // {
-            //     "type": "box",
-            //     "readonly": false,
-            //     "colClass": "col-sm-12",
-            //     "overrideType": "default-view",
-            //     "title": "PD_FEEDBACK",
-            //     "items": [{
-            //         "type": "grid",
-            //         "orientation": "horizontal",
-            //         "items": [{
-            //             "type": "grid",
-            //             "orientation": "vertical",
-            //             "items": [
-            //             {
-            //                 "key": "",
-            //                 "title": "Promotor Background",
-            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                            
-            //             }, 
-            //             {
-            //                 "key": "",
-            //                 "title": "Strength",
-            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                          
-            //             },
-            //             {
-            //                 "key":   "",
-            //                 "title": "Weekness",
-            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                            
-            //             },
-            //             {
-            //                 "key": "",
-            //                 "title": "Recommendation",
-            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                            
-            //             },
-            //             {
-            //                 "key":  "",
-            //                 "title": "Remark1",
-            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-            //             },
-            //             {
-            //                 "key":  "",
-            //                 "title": "Remark2",
-            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-            //             },
-            //             {
-            //                 "key":  "",
-            //                 "title": "Remark3",
-            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-            //             }
-
-            //         ]
-            //         },]
-            //     }]
-            // }, 
-            // {
-            //     "type": "box",
-            //     "readonly": false,
-            //     "colClass": "col-sm-12",
-            //     "overrideType": "default-view",
-            //     "title": "CPV_FEEDBACK",
-            //     "items": [{
-            //         "type": "grid",
-            //         "orientation": "horizontal",
-            //         "items": [{
-            //             "type": "grid",
-            //             "orientation": "vertical",
-            //             "items": [
-            //             {
-            //                 "key": "",
-            //                 "title": "Recommendation",
-            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                            
-            //             }, 
-            //             {
-            //                 "key": "",
-            //                 "title": "Case Status",
-            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                          
-            //             },
-            //             {
-            //                 "key":   "",
-            //                 "title": "Verifier Remark",
-            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                            
-            //             },
-            //             {
-            //                 "key": "",
-            //                 "title": "Supervisor Remarks",
-            //                 "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                            
-            //             },
-                       
-            //         ]
-            //         },]
-            //     }]
-            // }, 
+            }]
+        },
             {
                 "type": "box",
-                "readonly": false,
+                "title": "ADDITIONAL_DOCUMENT_UPLOAD",
                 "colClass": "col-sm-12",
-                "overrideType": "default-view",
-                "title": "DOCUMENT_FOR_FCU",
                 "items": [{
-                    "type": "grid",
-                    "orientation": "horizontal",
-                    "items": [{
-                        "type": "grid",
-                        "orientation": "vertical",
-                        "items": [
+
+                    "type": "array",
+                    //"key": "loanAccount.loanDocuments",
+                    "view": "fixed",
+                    "startEmpty": true,
+                    "title": "DOCUMENT_UPLOAD",
+                    "items":[
                         {
                             "key": "loanAccount.loanDocuments[].document",
-                            "title": "Document name ",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
-                            "type":"array"
-                            
-                        }, 
-                        {
-                            "key": "",
-                            "title": "FCU Marking",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                          
+                            "title": "DOCUMENT_NAME",
+                            "type": "string"
                         },
                         {
-                            "key":   "",
-                            "title": "Document Download",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                            
-                        },
-                        {
-                            "key": "",
-                            "title": "FCU Remarks",
-                            "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
-                            
-                        },
-                       
-                    ]
-                    },]
-                }]
-            }, 
+                            "title": "UPLOAD_DOCUMENT",
+                            "key": "loanAccount.loanDocuments[].documentId",
+                            "type": "file",
+                            "fileType": "application/pdf",
+                            "category": "Loan",
+                            "subCategory": "DOC1",
+                            "using": "scanner"
+                        }
+                      ]
+                    },
+                
+                ]
+            },
+            {
+                       "type": "box",
+                       "readonly": true,
+                       "colClass": "col-sm-12",
+                       "condition":"model.loanAccount.loanDocuments.length !=0",
+                       "items":[
+                           {
+                               "type":"section",
+                               "html": '<table class="table"><thead><tr><th>Document Name</th><th>Allow for FCU</th></tr></thead><tbody>' +
+                               '<tr ng-repeat="item in model.loanAccount.loanDocuments">' +
+                               '<td style:"font-size:20px;">{{ item.document }}</td>' +
+                               '<td><input type="checkbox"  ng-model="m.selected" ng-checked="m.selected" style="width:30px;height:20px"></td>' +
+                               '</tr></tbody></table>',
+                           }
+                       ]
+                        
+               }
+           
+
+        ],
 
 
         //     {
@@ -1150,237 +1426,7 @@ define({
         //                 }                            
         //             }]
         // },
-        {
-
-            "type": "box",		
-            "colClass": "col-sm-12",		
-            "readonly": true,		
-            "overrideType": "default-view",		
-            condition: "model.currentStage !== 'ApplicationReview' && model.currentStage !== 'Scrutiny' && model.loanAccount.documents.length != 0",		
-            "title": "RCU Documents",		
-            "items": [  {		
-                "key": "loanAccount.documents",		
-                "type": "array",		
-                "title": "Documents",	
-                //startEmpty: true,		
-                "items": [		
-                {		
-                    key:"loanAccount.documents[].document",		
-                    type:"text",		
-                    title:"Document Name",		
-                    required: true,		
-                },		
-                {		
-                    key:"loanAccount.documents[].documentId",		
-                    title : "Upload",		
-                    type:"file",		
-                    required: true,		
-                    category: "Loan",		
-                    subCategory: "DOC3",
-                }		
-                ]		
-                },]		
-        }, 
-        {
-            "type": "box",
-            "colClass": "col-sm-12",
-            condition: "model.currentStage == 'FieldAppraisalReview'",
-            "title": "Add Guarantor",
-            "items": [
-                {
-                    key: "loanAccount.isGuarantorRequired",
-                    type: "radios",
-                    title:"Guarantor required",
-                    titleMap: {
-                        "YES": "YES",
-                        "NO": "NO"
-                    },
-                    required: true,
-                },
-                {
-                    key:"loanAccount.noOfGuarantersRequired",
-                    title : "No.of Guarantors",
-                    type:"select",
-                    condition: "model.loanAccount.isGuarantorRequired == 'YES'",
-                    titleMap: [{
-                        value: 1,
-                        name: 1
-                    },{
-                        value: 2,
-                        name: 2
-                    }],
-                    required: true,
-                }
-            ]
-        },
-         {
-
-                "type": "box",
-                "title": "Post Review Decision",
-                "colClass": "col-sm-12",
-                "items": [{
-                    key: "review.action",
-                    type: "radios",
-                    titleMap: {
-                        "REJECT": "REJECT",
-                        "SEND_BACK": "SEND_BACK",
-                        "PROCEED": "PROCEED",
-                        "HOLD": "HOLD"
-                    }
-                }, {
-                    type: "section",
-                    htmlClass: "col-sm-8",
-                    condition: "model.review.action=='REJECT'",
-                    items: [{
-                        title: "REMARKS",
-                        key: "review.remarks",
-                        type: "textarea",
-                        required: true
-                    }, {
-                        key: "loanAccount.rejectReason",
-                        type: "lov",
-                        autolov: true,
-                        required: true,
-                        title: "REJECT_REASON",
-                        bindMap: {},
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model, context) {
-                            var stage1 = model.currentStage;
-
-                            if (model.currentStage == 'Application' || model.currentStage == 'ApplicationReview') {
-                                stage1 = "Application";
-                            }
-                            if (model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview') {
-                                stage1 = "FieldAppraisal";
-                            }
-
-                            var rejectReason = formHelper.enum('application_reject_reason').data;
-                            var out = [];
-                            for (var i = 0; i < rejectReason.length; i++) {
-                                var t = rejectReason[i];
-                                if (t.field1 == stage1) {
-                                    out.push({
-                                        name: t.name,
-                                    })
-                                }
-                            }
-                            return $q.resolve({
-                                headers: {
-                                    "x-total-count": out.length
-                                },
-                                body: out
-                            });
-                        },
-                        onSelect: function(valueObj, model, context) {
-                            model.loanAccount.rejectReason = valueObj.name;
-                        },
-                        getListDisplayItem: function(item, index) {
-                            return [
-                                item.name
-                            ];
-                        }
-                    }, {
-                        key: "review.rejectButton",
-                        type: "button",
-                        title: "REJECT",
-                        required: true,
-                        onClick: "actions.reject(model, formCtrl, form, $event)"
-                    }]
-                }, {
-                    type: "section",
-                    htmlClass: "col-sm-8",
-                    condition: "model.review.action=='HOLD'",
-                    items: [{
-                        title: "REMARKS",
-                        key: "review.remarks",
-                        type: "textarea",
-                        required: true
-                    }, {
-                        key: "review.holdButton",
-                        type: "button",
-                        title: "HOLD",
-                        required: true,
-                        onClick: "actions.hold(model, formCtrl, form, $event)"
-                    }]
-                }, {
-                    type: "section",
-                    htmlClass: "col-sm-8",
-                    condition: "model.review.action=='SEND_BACK'",
-                    items: [{
-                        title: "REMARKS",
-                        key: "review.remarks",
-                        type: "textarea",
-                        required: true
-                    }, {
-                        key: "review.targetStage1",
-                        type: "lov",
-                        autolov: true,
-                        lovonly:true,
-                        title: "SEND_BACK_TO_STAGE",
-                        bindMap: {},
-                        searchHelper: formHelper,
-                        search: function(inputModel, form, model, context) {
-                            var stage1 = model.currentStage;
-                            var targetstage = formHelper.enum('targetstage').data;
-                            var out = [];
-                            for (var i = 0; i < targetstage.length; i++) {
-                                var t = targetstage[i];
-                                if (t.field1 == stage1) {
-                                    out.push({
-                                        name: getStageNameByStageCode(t.name),
-                                        value:t.code
-                                    })
-                                }
-                            }
-                            return $q.resolve({
-                                headers: {
-                                    "x-total-count": out.length
-                                },
-                                body: out
-                            });
-                        },
-                        onSelect: function(valueObj, model, context) {
-                            model.review.targetStage1 = valueObj.name;
-                            model.review.targetStage = valueObj.value;
-
-                        },
-                        getListDisplayItem: function(item, index) {
-                            return [
-                                item.name
-                            ];
-                        }
-                    }, {
-                        key: "review.sendBackButton",
-                        type: "button",
-                        title: "SEND_BACK",
-                        onClick: "actions.sendBack(model, formCtrl, form, $event)"
-                    }]
-                }, {
-                    type: "section",
-                    htmlClass: "col-sm-8",
-                    condition: "model.review.action=='PROCEED'",
-                    items: [{
-                        title: "REMARKS",
-                        key: "review.remarks",
-                        type: "textarea",
-                        required: true
-                    }, {
-                        key: "review.proceedButton",
-                        type: "button",
-                        title: "PROCEED",
-                        onClick: "actions.proceed(model, formCtrl, form, $event)"
-                    }]
-                }]
-            }, {
-                "type": "actionbox",
-                "condition": "model.loanAccount.customerId && model.currentStage !== 'loanApplicationView'",
-                "items": [{
-                    "type": "button",
-                    "icon": "fa fa-circle-o",
-                    "title": "SAVE",
-                    "onClick": "actions.save(model, formCtrl, form, $event)"
-                }]
-            }],
+      
             schema: function() {
                 return SchemaResource.getLoanAccountSchema().$promise;
             },

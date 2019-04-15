@@ -1,24 +1,28 @@
 define({
-	pageUID: "arohan.dashboard.loans.individual.screening.CmRecommendationReviewQueue",
+	pageUID: "arohan.dashboard.fcu.FcuQueue",
     pageType: "Engine",
     dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
     	var branch = SessionStore.getBranch();
 		var centres = SessionStore.getCentres();
 		var centreId=[];
-	    if (centres && centres.length) {
+		if (centres && centres.length) {
 		    for (var i = 0; i < centres.length; i++) {
 			    centreId.push(centres[i].centreId);
 		    }
 	    }
 		return {
 			"type": "search-list",
-			"title": "CM_RECOMMENDATION_QUEUE",
+			"title": "CPV_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				model.branch = SessionStore.getCurrentBranch().branchName;
-				model.branchId = SessionStore.getCurrentBranch().branchId;
+				//model.branch = branch;
 				$log.info("search-list sample got initialized");
+				// var centres = SessionStore.getCentres();
+				// if (_.isArray(centres) && centres.length > 0){
+				// 	model.centre = centres[0].centreName;
+				// 	model.centreCode = centres[0].centreCode;
+				// }
 			},
 			definition: {
 				title: "SEARCH_LOAN",
@@ -30,7 +34,7 @@ define({
 					"type": 'object',
 					"title": 'SEARCH_OPTIONS',
 					"properties": {
-					
+						
 						"applicantName": {
 	                        "title": "APPLICANT_NAME",
 	                        "type": "string"
@@ -42,8 +46,9 @@ define({
 						'branch': {
 	                    	'title': "BRANCH",
 	                    	"type": ["string", "null"],
+	                    	"enumCode": "branch",
 							"x-schema-form": {
-								"type":"userbranch",
+								"type": "userbranch",
 								"screenFilter": true
 							}
 	                    },
@@ -53,8 +58,7 @@ define({
 							"x-schema-form": {
 								"type": "select",
 								"enumCode": "centre",
-								"parentEnumCode": "branch_id",
-								"parentValueExpr": "model.branch",
+								"parentEnumCode": "branch",
 								"screenFilter": true
 							}
 						},
@@ -65,8 +69,8 @@ define({
 	                    "area": {
 	                        "title": "AREA",
 	                        "type": "string"
-						},					
-	                    "cityTownVillage": {
+						},
+						"cityTownVillage": {
 	                        "title": "CITY_TOWN_VILLAGE",
 	                        "type": "string"
 						},
@@ -74,6 +78,7 @@ define({
 	                        "title": "PIN_CODE",
 	                        "type": "string"
 	                    },
+	                    
 						"status":
 	                    {
                             "type":"string",
@@ -94,8 +99,9 @@ define({
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-	                    'stage': 'ApplicationReview',
-						'branchName':searchOptions.branch,
+	                    'stage': 'Application',
+	                    'centreCode':searchOptions.centreCode,
+						'branchName':branch,
 						'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
@@ -103,8 +109,8 @@ define({
 	                    'villageName':searchOptions.villageName,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,
-	                    'per_page': pageOpts.itemsPerPage,
-	                    'centreCode':  searchOptions.centre
+						'per_page': pageOpts.itemsPerPage,
+						'centreCode': searchOptions.centre
 	                }).$promise;
 				},
 				paginationOptions: {
@@ -128,19 +134,22 @@ define({
 					},
 					getListItem: function(item) {
 						return [
-							item.screeningDate,
 							item.applicantName,
 							item.customerName,
 							item.area,
 							item.villageName,
-							item.enterprisePincode
+							item.enterprisePincode,
+							item.branchName,
+							item.centreName,
+							
 						]
+						
 					},
+					
 					getTableConfig: function() {
 						return {
 							"serverPaginate": true,
 							"paginate": true,
-							"searching": true,
 							"pageLength": 10
 						};
 					},
@@ -156,13 +165,16 @@ define({
 						{
 							title: 'SCREENING_DATE',
 							data: 'screeningDate'
-						},{
+						},
+						{
 							title: 'APPLICANT_NAME',
 							data: 'applicantName'
-						},{
+						},
+						{
 							title: 'BUSINESS_NAME',
 							data: 'customerName'
 						},
+						
 						{
 							title: 'Loan Amount',
 							data: 'loanAmount'
@@ -176,22 +188,23 @@ define({
 							title: 'PIN_CODE',
 							data: 'enterprisePincode'
 						}
-
 					]
 					},
 					getActions: function() {
 						return [{
-							name: "CM_RECOMMENDATION",
+							name: "FCU_REVIEW",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('arohan.dashboard.loans.individual.screening.CmRecommendationReview', {
+								
+								entityManager.setModel('arohan.dashboard.fcu.Fcu', {
 									_request: item
 								});
-								$state.go("Page.Bundle", {
-									pageName: "arohan.dashboard.loans.individual.screening.CmRecommendationReview",
+								$state.go("Page.Engine", {
+									pageName: "arohan.dashboard.fcu.Fcu",
 									pageId: item.loanId
 								});
+								//BundleManager.broadcastEvent('cpv-response', item);
 							},
 							isApplicable: function(item, index) {
 

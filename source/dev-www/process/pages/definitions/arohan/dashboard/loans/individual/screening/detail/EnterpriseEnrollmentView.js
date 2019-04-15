@@ -41,6 +41,10 @@ define({
                     id: model.customerId
                 }).$promise.then(function(res) {
                     model.customer = res;
+
+                    
+
+
                     BundleManager.pushEvent('business', model._bundlePageObj, model.customer);
 
                     model.customer.presetAddress = [
@@ -534,7 +538,7 @@ define({
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
                 "title": "BUSINESS_FINANCE",
-                "condition":"model.currentStage !='CustomerSignedDocumentUpload'",
+                //"condition":"model.currentStage !='CustomerSignedDocumentUpload'",
                 //"condition": "model.enterpriseRelationship",
                 "items": [{
                     "type": "grid",
@@ -618,7 +622,7 @@ define({
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
                 "title": "BUSINESS_LIABILITIES",
-                "condition": "model.customer.liabilities.length !=0 && model.currentStage !='CustomerSignedDocumentUpload'",
+                //"condition": "model.customer.liabilities.length !=0 && model.currentStage !='CustomerSignedDocumentUpload'",
                 "items": [{
                     "type": "grid",
                     "orientation": "horizontal",
@@ -836,7 +840,8 @@ define({
                     "type": "section",
                     "html": '<div ng-repeat="data in model.loanCustomerRel"><p >{{data.relation}}, <u>{{data.first_name}}</u> is the <u>{{data.relationship_with_applicant}}</u> of Applicant <u ng-bind-html="model.loanCustomerRelation.applicant.first_name"></u></p></div>'
                 }]
-            }, {
+            }, 
+            {
                 "type": "box",
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
@@ -857,7 +862,8 @@ define({
                             "title": "No. of Female Employees",
                             "type": "number"
                         }]
-                    }, {
+                    },
+                     {
                         "type": "grid",
                         "orientation": "vertical",
                         "items": [{
@@ -868,6 +874,7 @@ define({
                     }]
                 }]
             }, 
+            
             // {
             //     "type": "box",
             //     "colClass": "col-sm-12",
@@ -1351,6 +1358,61 @@ define({
                 "colClass": "col-sm-12",
                 "overrideType": "default-view",
                 "readonly": true,
+                "title": "COMMERCIAL_BUREAU_CHECK",
+                "items": [{
+                    "type": "grid",
+                    "orientation": "horizontal",
+                    "items": [{
+                        "type": "grid",
+                        "orientation": "vertical",
+                        "items": [
+                        {
+                            "key": "customer.enterpriseBureauDetails[].bureau",
+                            "title": "Bureau",
+                            //"condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                            
+                        }, 
+                        {
+                            "key": "customer.enterpriseBureauDetails[].fileId",
+                            "title": "File",
+                           // "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                          
+                        },
+                        {
+                            "key":   "customer.enterpriseBureauDetails[].doubtful",
+                            "title": "Doubtful Accounts",
+                            //"condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                            
+                        },
+                        {
+                            "key": "customer.enterpriseBureauDetails[].loss",
+                            "title": "Loss Account",
+                            //"condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                            
+                        },
+                        {
+                            "key": "customer.enterpriseBureauDetails[].specialMentionAccount",
+                            "title": "Special Mentioned Accounts",
+                           // "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                        }, {
+                            "key": "customer.enterpriseBureauDetails[].standard",
+                            "title": "Standard Accounts", 
+                           // "condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                        }, {
+                            "key": "customer.enterpriseBureauDetails[].subStandard",
+                            "title": "Sub Standard Accounts",
+                            //"condition":"model.currentStage !='CustomerSignedDocumentUpload'"
+                        }, 
+                       
+                    ]
+                    },]
+                }]
+            }, 
+            {
+                "type": "box",
+                "colClass": "col-sm-12",
+                "overrideType": "default-view",
+                "readonly": true,
                 "title": "Reference Check",
                 "items": [{
                     "type": "grid",
@@ -1458,6 +1520,7 @@ define({
                     model.active_accounts = model.liabilities.length;
                     model.monthly_installment = monthly_installment;
                     model.outstanding_bal = outstanding_bal;
+                    debugger;
 
 
                 }

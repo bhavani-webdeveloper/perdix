@@ -1,7 +1,7 @@
 define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/AngularResourceService'], function (EnrolmentProcess, AngularResourceService) {
     EnrolmentProcess = EnrolmentProcess['EnrolmentProcess'];
     return {
-        pageUID: "arohan.dashboard.loans.individual.screening.InternalPd",
+        pageUID: "arohan.dashboard.fcu.Fcu",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
             "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository"],
@@ -27,7 +27,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "overrides": {
                                 "ApplicantTeleverification":{"readonly":true}
                             }
+                        },
+                        "CmRecommendationReview":
+                        {
+                            "excludes": [
+                            ],
+                            "overrides": {
+                                "CpvFeedback":{"readonly":true}
+                            }
                         }
+                        
                     }
                 }
             }
@@ -37,7 +46,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             }
             var getIncludes = function (model) {
                 return [
-                    //"ApplicantInformation",
+                    "ApplicantInformation",
                     "ApplicantInformation.personalInformationFieldSet",
                     "ApplicantInformation.branchName",
                     "ApplicantInformation.zoneId",
@@ -45,13 +54,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ApplicantInformation.firstName",
                     "ApplicantInformation.dob",
                     "ApplicantInformation.gender",
-                    "ApplicantInformation.fatherName",
-                    "ApplicantInformation.customerPhoto",
-                    "ApplicantInformation.kycFieldSet",
-                    "ApplicantInformation.identityProofNo",
-                    "ApplicantInformation.identityProof",
-                    "ApplicantInformation.addressProof",
                     "ApplicantInformation.contactInformationFieldSet",
+                    "ApplicantInformation.careOf",
                     "ApplicantInformation.mobileNo",
                     "ApplicantInformation.doorNo",
                     "ApplicantInformation.pincode",
@@ -59,38 +63,35 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ApplicantInformation.villageName",
                     "ApplicantInformation.district",
                     "ApplicantInformation.state",
-                    "ApplicantInformation.bankAccounts",
-                    "ApplicantInformation.bankAccounts.ifscCode",
-                    "ApplicantInformation.bankAccounts.customerBankBranchName",
-                    "ApplicantInformation.bankAccounts.customerNameAsInBank",
-                    "ApplicantInformation.bankAccounts.accountNumber",
-                    "ApplicantInformation.loanDetailsFieldSet",
-                    "ApplicantInformation.loanPurpose1",
-                    "ApplicantInformation.amountRequested",
-                    "ApplicantInformation.frequency",
-                    "ApplicantInformation.tenure",
-                    // "ApplicantInformation.remarksFieldSet",
-                    // "ApplicantInformation.remarks",
-                    // "ApplicantInformation.feedback",
-
-
-                    "ApplicantTeleverification",
-                    // "ApplicantTeleverification.callingAttemptsFieldSet",
-                    // "ApplicantTeleverification.telecallingResponse",
-                    // "ApplicantTeleverification.noOfCallAttempts",
-                    // "ApplicantTeleverification.followupCallRequired",
-                    // "ApplicantTeleverification.telecallingRemarks",
-                    "ApplicantTeleverification.externalDiscussion",
-                    "ApplicantTeleverification.questions",
-                    "ApplicantTeleverification.telecallingQuestionnaireList",
-                    "ApplicantTeleverification.telecallingQuestionnaireList.question",
-                    "ApplicantTeleverification.telecallingQuestionnaireList.answer1",
-                    "ApplicantTeleverification.telecallingQuestionnaireList.answer2",
-                    "ApplicantTeleverification.telecallingQuestionnaireList.answer3",
-                    "ApplicantTeleverification.telecallingQuestionnaireList.answer4",
-                    "ApplicantTeleverification.telecallingQuestionnaireList.answer5",
-
-
+                    "BusinessInformation",
+                    "BusinessInformation.businessInformationFieldset",
+                    "BusinessInformation.entityname",
+                    "BusinessInformation.premisesOwnership",
+                    "BusinessInformation.constitution",
+                    "BusinessInformation.registrationDate",
+                    "BusinessInformation.businessSector",
+                    "BusinessInformation.doorBuilding",
+                    "BusinessInformation.street",
+                    "BusinessInformation.landmark",
+                    "BusinessInformation.pincode",
+                    "BusinessInformation.area",
+                    "BusinessInformation.cityVillage",
+                    "BusinessInformation.district",
+                    "BusinessInformation.state",
+                    "BusinessInformation.officeAddressFieldSet",
+                    "BusinessInformation.officemailingmobilePhone",
+                    "BusinessInformation.officemailinglandLineNo",
+                    "BusinessInformation.officemailingDoorNo",
+                    "BusinessInformation.officemailingStreet",
+                    "BusinessInformation.officemailingLandmark",
+                    "BusinessInformation.officemailingPincode",
+                    "BusinessInformation.officemailingLocality",
+                    "BusinessInformation.officemailingDistrict",
+                    "BusinessInformation.officemailingState",
+                    "Fcu",
+                    "Fcu.document",
+                    "Fcu.document1",
+                    "Fcu.document2",
                 ];
 
             }
@@ -220,14 +221,29 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "type": "fieldset",
                                         "title": "CONTACT_INFORMATION",
                                         "items": []
-                                    }, "mobileNo": {
+                                    },
+                                     "mobileNo": {
                                         "key": "applicant.customer.mobilePhone",
                                         "type": "text",
                                         "title": "MOBILE_PHONE",
                                         "inputmode": "number",
                                         "numberType": "tel",
+                                        "readonly": true,
+                                    },
+                                    "mobileNo2": {
+                                        "key": "applicant.customer.mobileNumber2",
+                                        "type": "text",
+                                        "title": "MOBILE_PHONE_2",
+                                        "inputmode": "number",
+                                        "numberType": "tel",
+                                        "readonly": true,
+                                    },
+                                    "careOf": {
+                                        "key": "applicant.customer.careOf",
+                                        "title": "CARE_OF",
                                         "readonly": true
-                                    }, "doorNo": {
+                                    },
+                                     "doorNo": {
                                         "key": "applicant.customer.doorNo",
                                         "title": "DOOR_NO",
                                         "readonly": true
@@ -262,215 +278,299 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "title": "STATE",
                                         "readonly": true
                                     },
-                                    "bankAccounts": {
-                                        "type": "array",
-                                        "title": "BANK_ACCOUNTS",
-                                        "view": "fixed",
-                                        "add": null,
-                                        "remove": null,
-                                        "key": "applicant.customer.customerBankAccounts",
-                                        "items": {
-                                            "ifscCode": {
-                                                "key": "applicant.customer.customerBankAccounts[].ifscCode",
-                                                "resolver": "BankIFSCLOVConfiguration",
-                                                "type": "lov",
-                                                "lovonly": true,
-                                                "title": "IFSC_CODE",
-                                                "readonly": true
-                                            },
-                                            "customerBankName": {
-                                                "key": "applicant.customer.customerBankAccounts[].customerBankName",
-                                                "title": "BANK_NAME",
-                                                "readonly": true
-                                            },
-                                            "customerBankBranchName": {
-                                                "key": "applicant.customer.customerBankAccounts[].customerBankBranchName",
-                                                "title": "BANK_BRANCH_NAME",
-                                                "readonly": true
-                                            },
-                                            "customerNameAsInBank": {
-                                                "key": "applicant.customer.customerBankAccounts[].customerNameAsInBank",
-                                                "title": "CUSTOMER_NAME_IN_BANK",
-                                                "readonly": true
-                                            },
-                                            "accountNumber": {
-                                                "key": "applicant.customer.customerBankAccounts[].accountNumber",
-                                                "title": "ACCOUNT_NUMBER",
-                                                "readonly": true
-                                            }
+                            }
+                        },
+                    "BusinessInformation":{
+                        "orderNo":4,
+                        "type":"box",
+                        "title":"BUSINESS_INFORMATION",
+                        "items":{
+                            "businessInformationFieldset":{
+                                        "type": "fieldset",
+                                        "title": "BUSINESS_INFORMATION",
+                                        "items": []
+                                    },
+                                    "entityname":{
+                                        "key": "applicant.customer.firstName",
+                                        "title": "ENTITY_NAME",
+                                        "type": "string",
+                                        "readonly": true
+                        },
+                                    "premisesOwnership":{
+                                        "key": "applicant.customer.enterprise.ownership",
+                                        "title": "PREMISES_OWNERSHIP",
+                                        "type": "string",
+                                        "readonly": true
+                        },          "constitution":{
+                                        "key": "applicant.customer.enterprise.businessConstitution",
+                                        "title": "CONSTITUTION",
+                                        "type": "string",
+                                        "readonly": true
+                        },          "registrationDate":{
+                                        "key": "applicant.customer.enterpriseRegistrations[].registeredDate",
+                                        "title": "REGISTRATION_DATE",
+                                        "type": "date",
+                                        "readonly": true
+                        },          "businessSector":{
+                                        "key": "applicant.customer.enterprise.businessSector",
+                                        "title": "BUSINESS_SECTOR",
+                                        "type": "string",
+                                        "readonly": true
+                        },
+                                        "doorBuilding": {
+                                            "key": "applicant.customer.doorNo",
+                                            "title": "DOOR_BUILDING",
+                                            "readonly": true
+                                        },
+                                        "street": {
+                                            "key": "applicant.customer.street",
+                                            "title": "STREET",
+                                            "readonly": true
+                                        },
+                                        "landmark": {
+                                            "key": "applicant.customer.landmark",
+                                            "title": "LANDMARK",
+                                            //"type": "lov",
+                                            "fieldType": "number",
+                                        },
+                                        "pincode": {
+                                            "key": "applicant.customer.pincode",
+                                            "title": "PINCODE",
+                                            "readonly": true
+                                        },
+                                        "area": {
+                                            "key": "applicant.customer.villageName",
+                                            "title": "AREA",
+                                            "enumCode": "village",
+                                            "readonly": true
+                                        },
+                                        "cityVillage": {
+                                            "key": "applicant.customer.villageName",
+                                            "title": "VILLAGE_NAME",
+                                            "enumCode": "village",
+                                            "readonly": true
+                                        },
+                                        "district": {
+                                            "key": "applicant.customer.district",
+                                            "title": "DISTRICT",
+                                            "enumCode": "district",
+                                            "readonly": true
+                                        },
+                                        "state": {
+                                            "key": "applicant.customer.state",
+                                            "title": "STATE",
+                                            "readonly": true
+                                        },
+                                        "officeAddressFieldSet":{
+                                            "type":"fieldset",
+                                            "title":"OFFICE_ADDRESS",
+                                            "readonly": true
+                                        },
+                                        "officemailingmobilePhone":{
+                                            "type":"number",
+                                            "title":"MOBILE_NUMBER",
+                                            "readonly": true
+                                        },
+                                         "officemailinglandLineNo":{
+                                            "type":"number",
+                                            "title":"PHONE_2",
+                                            "readonly": true
+                                         },
+                                        "officemailingDoorNo":{
+                                            "type":"number",
+                                            "title":"DOOR_NO",
+                                            "readonly": true
+                                        },
+                                        "officemailingStreet":{
+                                            "type":"text",
+                                            "title":"STREET",
+                                            "readonly": true
+                                        },
+                                        "officemailingLandmark":{
+                                            "type":"text",
+                                            "title":"LANDMARK",
+                                            "readonly": true
+                                        },
+                                        "officemailingPincode":{
+                                            "type":"lov",
+                                            "title":"PINCODE",
+                                            "resolver": "PincodeLOVConfiguration",
+                                            "searchHelper": formHelper,
+                                            "readonly": true
+                                        },
+                                        "officemailingLocality":{
+                                            "type":"text",
+                                            "title":"LOCALITY",
+                                            "readonly": true
+                                        },
+                                        "officemailingDistrict":{
+                                            "type":"text",
+                                            "title":"DISTRICT",
+                                            "readonly": true
+                                        },
+                                        "officemailingState":{
+                                            "type":"text",
+                                            "title":"STATE",
+                                            "readonly": true
                                         }
-
-
-                                    }, "loanDetailsFieldSet": {
-                                        "type": "fieldset",
-                                        "title": "LOAN_DETAILS",
-                                        "items": []
-                                    },
-                                    "loanPurpose1": {
-                                        "key": "loanAccount.loanPurpose1",
-                                        "type": "lov",
-                                        "resolver": "LoanPurpose1LOVConfiguration",
-                                        "autolov": true,
-                                        "title": "LOAN_PURPOSE_LEVEL_1",
-                                        "readonly": true
-                                    },
-                                    "amountRequested": {
-                                        "key": "loanAccount.loanAmountRequested",
-                                        "type": "amount",
-                                        "title": "REQUESTED_LOAN_AMOUNT",
-                                        "readonly": true
-                                    },
-                                    "frequency": {
-                                        "key": "loanAccount.frequencyRequested",
-                                        "type": "select",
-                                        "title": "FREQUENCY_REQUESTED",
-                                        "enumCode": "frequency",
-                                        "readonly": true
-                                    },
-                                    "tenure": {
-                                        "key": "loanAccount.tenureRequested",
-                                        "type": "number",
-                                        "title": "TENURE_REQUESETED",
-                                        "readonly": true
-                                    }, "remarksFieldSet": {
-                                        "type": "fieldset",
-                                        "title": "Remarks",
-                                        "items": []
-                                    },
-                                    "remarks": {
-                                        "title": "REMARKS",
-                                        "type": "text"
-                                    },
-                                    "feedback": {
-                                        "title": "FEEDBACK",
-                                        "type": "textarea"
-                                    }
+                                    }              
+                    },
+                    "Fcu":{
+                        "type":"box",
+                        "title":"FCU_DOCUMENT",
+                        "orderNo": 3,
+                        "items":{
+                            "document":{
+                                "type":"checkbox",
+                                "title":"PANCARD",
+                                "key":"",
+                                "schema": {
+                                    "default": false
                                 }
                             },
-                            "ApplicantTeleverification": {
-                                "type": "box",
-                                
-                                "title": "PD_QUESTIONS",
-                                "orderNo": 3,
-                                "items": {
-                                    "callingAttemptsFieldSet": {
-                                        "type": "fieldset",
-                                        "title": "CALLING_ATTEMPTS",
-                                        "items": []
-                                    },
-                                    "telecallingResponse": {
-                                        "key": "applicant.telecallingResponse",
-                                        "type": "select",
-                                        "title": "TELECALLING_RESPONSE",
-                                        "enumCode": "telecalling_response"
-                                    },
-                                    "noOfCallAttempts": {
-                                        "key": "applicant.noOfCallAttempts",
-                                        "type": "number",
-                                        "title": "NO_OF_CALLATTEMPTS"
-                                    },
-                                    "followupCallRequired": {
-                                        "key": "applicant.followupCallRequired",
-                                        "type": "date",
-                                        "title": "FOLLOWUP_ON"
-                                    },
-                                    "telecallingRemarks": {
-                                        "key": "applicant.telecallingRemarks",
-                                        "type": "textarea",
-                                        "title": "TELECALLING_REMARKS"
-                                    },
-                                    "externalDiscussion": {
-                                        //"key": "",
-                                        "key":"customer.addressPfSameAsIdProof",    
-                                        "type": "radios",
-                                        "title": "REQUEST_FOR_EXTERNAL_PERSONAL_DISCUSSION",
-                                        "titleMap":{
-                                            "yes":"Yes",
-                                            "no":"No"
-                                        }
-                                    },
-                                    "questions": {
-                                        "type": "fieldset",
-                                        "title": "QUESTIONS",
-                                        "items": []
-                                    },
-                                    "telecallingQuestionnaireList": {
-                                        "key": "applicant.telecallingQuestionnaireList",
-                                        "type": "array",
-                                        "add": null,
-                                        "remove": null,
-                                        "view": "fixed",
-                                        "conditions":"model.customer.addressPfSameAsIdProof=='no'",
-                                        "items": {
-                                            "question":{
-                                                "key": "applicant.telecallingQuestionnaireList[].question",
-                                                "type": "textarea",
-                                                "title": "QUESTION",
-                                                "readonly": true
-                                            },
-                                            "answer1":{
-                                                "key": "applicant.telecallingQuestionnaireList[].answer",
-                                                "type": "string",
-                                                "title": "ANSWER",
-                                                "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='string'"
-                                            },
-                                            "answer2":{
-                                                "key": "applicant.telecallingQuestionnaireList[].answer",
-                                                "type": "textarea",
-                                                "title": "ANSWER",
-                                                "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='textarea'"
-                                            },
-                                            "answer3":{
-                                                "key": "applicant.telecallingQuestionnaireList[].answer",
-                                                "type": "number",
-                                                "title": "ANSWER",
-                                                "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='number'"
-                                            },
-                                            "answer4":{
-                                                "key": "applicant.telecallingQuestionnaireList[].answer",
-                                                "title": "ANSWER",
-                                                "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='select'",
-                                                "type": "lov",
-                                                "autolov": true,
-                                                "lovonly": true,
-                                                "bindMap": {},
-                                                "searchHelper": formHelper,
-                                                "search": function (inputModel, form, model, context) {
-                                                    var list = {};
-                                                    list = model.applicant.telecallingQuestionnaireList[context.arrayIndex].select;
-
-                                                    var out = [];
-                                                    _.forEach(list, function (val) {
-                                                        out.push({ "name": val });
-                                                    });
-
-                                                    return $q.resolve({
-                                                        headers: {
-                                                            "x-total-count": out.length
-                                                        },
-                                                        body: out
-                                                    });
-                                                },
-                                                onSelect: function (valueObj, model, context) {
-                                                    model.applicant.telecallingQuestionnaireList[context.arrayIndex].answer = valueObj.name;
-                                                },
-                                                getListDisplayItem: function (item, index) {
-                                                    return [
-                                                        item.name
-                                                    ];
-                                                }
-                                            },
-                                            "answer5":{
-                                                "key": "applicant.telecallingQuestionnaireList[].answer",
-                                                "type": "date",
-                                                "title": "ANSWER",
-                                                "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='date'"
-                                            },
-                                        }
-                                    }
+                            "document1":{
+                                "type":"checkbox",
+                                "title":"ADHARCARD",
+                                "key":"",
+                                "schema": {
+                                    "default": false
+                                }
+                            },
+                            "document2":{
+                                "type":"checkbox",
+                                "title":"ADDITIONAL_KYC",
+                                "key":"",
+                                "schema": {
+                                    "default": false
                                 }
                             }
+                        }
+                    },      
+                    // "CpvFeedback": {
+                    //             "type": "box",
+                    //             "title": "FCU_MARKING_DOCUMENTS",
+                    //             "orderNo": 3,
+                    //             "items": {
+                    //                 "questions": {
+                    //                     "type": "fieldset",
+                    //                     "title": "DOCUMENTS",
+                    //                     "items": []
+                    //                 },
+                    //                 "telecallingQuestionnaireList": {
+                    //                     "key": "applicant.telecallingQuestionnaireList",
+                    //                     "type": "array",
+                    //                     "add": null,
+                    //                     "remove": null,
+                    //                     "view": "fixed",
+                    //                     "items": {
+                    //                         "question":{
+                    //                             "key": "applicant.telecallingQuestionnaireList[].question",
+                    //                             "type": "textarea",
+                    //                             "title": "DOCUMENTS",
+                    //                             "readonly": true
+                    //                         },
+                    //                         "answer1":{
+                    //                             "key": "applicant.telecallingQuestionnaireList[].answer",
+                    //                             "type": "string",
+                    //                             "title": "REMARKS",
+                    //                             "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='string'"
+                    //                         },
+                    //                         "answer2":{
+                    //                             "key": "applicant.telecallingQuestionnaireList[].answer",
+                    //                             "type": "textarea",
+                    //                             "title": "REMARKS",
+                    //                             "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='textarea'"
+                    //                         },
+                    //                         "answer3":{
+                    //                             "key": "applicant.telecallingQuestionnaireList[].answer",
+                    //                             "type": "number",
+                    //                             "title": "REMARKS",
+                    //                             "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='number'"
+                    //                         },
+                    //                         "answer4":{
+                    //                             "key": "applicant.telecallingQuestionnaireList[].answer",
+                    //                             "title": "REMARKS",
+                    //                             "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='select'",
+                    //                             "type": "lov",
+                    //                             "autolov": true,
+                    //                             "lovonly": true,
+                    //                             "bindMap": {},
+                    //                             "searchHelper": formHelper,
+                    //                             "search": function (inputModel, form, model, context) {
+                    //                                 var list = {};
+                    //                                 list = model.applicant.telecallingQuestionnaireList[context.arrayIndex].select;
 
+                    //                                 var out = [];
+                    //                                 _.forEach(list, function (val) {
+                    //                                     out.push({ "name": val });
+                    //                                 });
+
+                    //                                 return $q.resolve({
+                    //                                     headers: {
+                    //                                         "x-total-count": out.length
+                    //                                     },
+                    //                                     body: out
+                    //                                 });
+                    //                             },
+                    //                             onSelect: function (valueObj, model, context) {
+                    //                                 model.applicant.telecallingQuestionnaireList[context.arrayIndex].answer = valueObj.name;
+                    //                             },
+                    //                             getListDisplayItem: function (item, index) {
+                    //                                 return [
+                    //                                     item.name
+                    //                                 ];
+                    //                             }
+                    //                         },
+                    //                         "answer5":{
+                    //                             "key": "applicant.telecallingQuestionnaireList[].answer",
+                    //                             "type": "date",
+                    //                             "title": "REMARKS",
+                    //                             "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='date'"
+                    //                         },
+                    //                         "answer6":{
+                    //                             "key": "applicant.telecallingQuestionnaireList[].answer",
+                    //                             "type": "radios",
+                    //                             "titleMap":{
+                    //                                 "positive":"Positive",
+                    //                                 "nagative":"Nagative"
+                    //                             },
+                    //                             "title": "REMARKS",
+                    //                             "condition": "model.applicant.telecallingQuestionnaireList[arrayIndex].input_type=='radio'"
+                    //                         },
+                    //                     }
+                    //                 }
+                    //             }
+                    //         },
+                            // "LoanDocuments": {
+                            //     "type": "box",
+                            //     "orderNo": 2,
+                            //     "title": "DOCUMENT_UPLOAD",
+                            //     "items": {
+                            //         "loanDocuments": {
+                            //             "type": "array",
+                            //             "key": "loanAccount.loanDocuments",
+                            //             "view": "fixed",
+                            //             "startEmpty": true,
+                            //             "title": "DOCUMENT_UPLOAD",
+                            //             "items": {
+                            //                 "document": {
+                            //                     "key": "loanAccount.loanDocuments[].document",
+                            //                     "title": "DOCUMENT_NAME",
+                            //                     "type": "string"
+                            //                 },
+                            //                 "documentId": {
+                            //                     "title": "UPLOAD_DOCUMENT",
+                            //                     "key": "loanAccount.loanDocuments[].documentId",
+                            //                     "type": "file",
+                            //                     "fileType": "application/pdf",
+                            //                     "category": "Loan",
+                            //                     "subCategory": "DOC1",
+                            //                     "using": "scanner"
+                            //                 }
+                            //             }
+                            //         }
+                            //     }
+                            // }
                         },
                         "additions": [   
                             {
@@ -479,7 +579,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "items": [
                                     {
                                         "type": "button",
-                                        "title": "SAVE",
+                                        "title": "SUBMIT",
                                         "onClick": "actions.save(model, formCtrl, form, $event)"
                                     }
                                 ]
@@ -491,7 +591,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
             return {
                 "type": "schema-form",
-                "title": "TELEVERIFICATION",
+                "title": "VERIFICATION",
                 "subTitle": "",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
 
@@ -504,30 +604,39 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.coapplicant = {};
                     model.guarantor = {};
                     model.telecalling = [];
-                    model.loanAccount = model.loanProcess.loanAccount;
+                    model.applicant.customer=model._request;
+                    
+                    EnrolmentProcess.fromCustomerID($stateParams.pageId)
+                    .subscribe(function(resp){
+                      model.applicant.customer=resp.customer;
+                        },function(err){
+
+                        }
+                    )
+                    //model.loanAccount = model.loanProcess.loanAccount;
                     // Setting necessary parties to child arrays.
-                    model.applicant.customer = model.loanProcess.applicantEnrolmentProcess.customer;
-                    model.loanCustomer.customer = model.loanProcess.loanCustomerEnrolmentProcess.customer;
+                    // model.applicant.customer = model.loanProcess.applicantEnrolmentProcess.customer;
+                    // model.loanCustomer.customer = model.loanProcess.loanCustomerEnrolmentProcess.customer;
 
-                    _.forEach(model.loanProcess.coApplicantsEnrolmentProcesses, function(i){
-                        model.coApplicants.push({"customer":i.customer});
-                    })
+                    // _.forEach(model.loanProcess.coApplicantsEnrolmentProcesses, function(i){
+                    //     model.coApplicants.push({"customer":i.customer});
+                    // })
 
-                    _.forEach(model.loanProcess.guarantorsEnrolmentProcesses, function(i){
-                        model.guarantors.push({"customer":i.customer});
-                    })
+                    // _.forEach(model.loanProcess.guarantorsEnrolmentProcesses, function(i){
+                    //     model.guarantors.push({"customer":i.customer});
+                    // })
 
-                    // applicant telecalling details
-                    model.telecalling.applicant = _.filter(model.loanAccount.telecallingDetails, {"partyType": "applicant"});
-                    // coapplicant telecalling details
-                    model.telecalling.coApplicant = _.filter(model.loanAccount.telecallingDetails, {"partyType": "coApplicant"});
-                    // guarantor telecalling details
-                    model.telecalling.guarantor = _.filter(model.loanAccount.telecallingDetails, {"partyType": "guarantor"});
-                    // business telecalling details
-                    model.telecalling.loanCustomer = _.filter(model.loanAccount.telecallingDetails, {"partyType": "loanCustomer"});
+                    // // applicant telecalling details
+                    // model.telecalling.applicant = _.filter(model.loanAccount.telecallingDetails, {"partyType": "applicant"});
+                    // // coapplicant telecalling details
+                    // model.telecalling.coApplicant = _.filter(model.loanAccount.telecallingDetails, {"partyType": "coApplicant"});
+                    // // guarantor telecalling details
+                    // model.telecalling.guarantor = _.filter(model.loanAccount.telecallingDetails, {"partyType": "guarantor"});
+                    // // business telecalling details
+                    // model.telecalling.loanCustomer = _.filter(model.loanAccount.telecallingDetails, {"partyType": "loanCustomer"});
 
                     var self = this;
-                    Queries.questionnaireDetails('PERSONALDISCUSSION', 'personal', 'personaldiscussion').then(
+                    Queries.questionnaireDetails('CPV', 'cpv', 'cpverification').then(
                         function(res) { 
                             model.applicant.telecallingQuestionnaireList = _.filter(res, function(obj) {
                                 return obj.party_type == 'applicant';     
@@ -637,6 +746,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     
                 },
                 eventListeners: {
+                    // "cpv-response":function(bundleModel,model,params){
+                    //             debugger;
+                    //     		console.log("Individual_Enrollment",params);
+                    //     		//model.liability=params.liabilities.length;
+                    //             //debugger;
+                    // }
                 },
                 offlineInitialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
                     model.loanProcess = bundleModel.loanProcess;
@@ -669,12 +784,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         model.applicant.customerId = model.applicant.customer.id;
                         model.applicant.partyType = "applicant";
                         model.applicant.customerCalledAt = new Date();
-                        model.loanAccount.telecallingDetails.push(model.applicant);
+                        //model.loanAccount.telecallingDetails.push(model.applicant);
 
                         model.loanCustomer.customerId = model.loanCustomer.customer.id;
                         model.loanCustomer.partyType = "loanCustomer";
                         model.loanCustomer.customerCalledAt = new Date();
-                        model.loanAccount.telecallingDetails.push(model.loanCustomer);
+                       // model.loanAccount.telecallingDetails.push(model.loanCustomer);
 
 
 

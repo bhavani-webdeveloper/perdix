@@ -93,7 +93,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             },
                             {
                                 pageName: 'arohan.dashboard.CPV.Verification',
-                                title: 'VERIFICATION',
+                                title: 'CPV_FEEDBACK',
                                 pageClass: 'verification',
                                 minimum: 1,
                                 maximum: 1,
@@ -105,15 +105,15 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'pd_feedback',
                                 minimum: 1,
                                 maximum: 1,
-                                order:110
+                                order:101
                             },
                             // {
-                            //     pageName: 'arohan.dashboard.loans.individual.screening.Review',
-                            //     title: 'CPV_FEEDBACK',
-                            //     pageClass: 'cpv-feedback',
+                            //     pageName: 'arohan.dashboard.fcu.Fcu',
+                            //     title: 'FCU_MARKING',
+                            //     pageClass: 'fcu_marking',
                             //     minimum: 1,
                             //     maximum: 1,
-                            //     order:110
+                            //     order:102
                             // },
                             {
                                 pageName: 'arohan.dashboard.loans.individual.screening.Review',
@@ -394,6 +394,15 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         
                                         $this.bundlePages.push({
                                             pageClass: 'pd_feedback',
+                                            model: {
+                                                enrolmentProcess:loanProcessts.loanCustomerEnrolmentProcess,
+                                                loanProcess: loanProcessts,
+                                                //loanAccount:res 
+                                            }
+                                        });
+
+                                        $this.bundlePages.push({
+                                            pageClass: 'fcu_marking',
                                             model: {
                                                 enrolmentProcess:loanProcessts.loanCustomerEnrolmentProcess,
                                                 loanProcess: loanProcessts,
