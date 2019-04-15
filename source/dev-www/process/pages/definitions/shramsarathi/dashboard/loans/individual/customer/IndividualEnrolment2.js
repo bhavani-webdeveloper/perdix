@@ -2594,9 +2594,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "Liabilities.liabilities.noOfInstalmentPaid",
                     "Liabilities.liabilities.frequencyOfInstallment",
                     "Liabilities.liabilities.liabilityLoanPurpose",
-                    "Liabilities.liabilities.interestOnly",
+                    //"Liabilities.liabilities.interestOnly",
                     "Liabilities.liabilities.interestRate",
-                    "Liabilities.liabilities.masonValuation",
+                    //"Liabilities.liabilities.masonValuation",
                     "Liabilities.liabilities.amountPaidInterest",
                     "Liabilities.liabilities.amountPaid",
 
