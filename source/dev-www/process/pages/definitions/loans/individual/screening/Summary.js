@@ -141,7 +141,6 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.businessPL = res[8];
         model.balanceSheet = res[9];
         model.bankAccountDetails = res[10];
-        console.log(model);
         model.totalScores = res[11];
         model.deviationDetails = res[12];
         model.deviationParameter = res[12];
@@ -917,19 +916,19 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             ]
         });
 
-        var personalBankStmtSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.personalBankStmtSummary'></irf-simple-summary-table>";
-        form.push({
-             type: "box",
-            colClass: "col-sm-12 table-box",
-            title: model.personalBankStmtSummary.title,
-            items: [
-                {
-                    type: "section",
-                    colClass: "col-sm-12",
-                    html: personalBankStmtSummaryTable
-                }
-            ]
-        });
+        // var personalBankStmtSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.personalBankStmtSummary'></irf-simple-summary-table>";
+        // form.push({
+        //      type: "box",
+        //     colClass: "col-sm-12 table-box",
+        //     title: model.personalBankStmtSummary.title,
+        //     items: [
+        //         {
+        //             type: "section",
+        //             colClass: "col-sm-12",
+        //             html: personalBankStmtSummaryTable
+        //         }
+        //     ]
+        // });
 
         form.push({
              type: "box",
