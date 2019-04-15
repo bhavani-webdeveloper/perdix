@@ -3313,7 +3313,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                                 var skillLevel  = formHelper.enum('skill_type').data.filter(function(value){
                                                                     return value.parentCode == valueObj;
                                                                 });
-                                                                model.customer.familyMembers[context.arrayIndexes[0]].incomes[context.arrayIndexes[1]].skillLevel = skillLevel[0].name;
+                                                                if (skillLevel && skillLevel.length > 0)
+                                                                    model.customer.familyMembers[context.arrayIndexes[0]].incomes[context.arrayIndexes[1]].skillLevel = skillLevel[0].name;
                                                             }
                                                         },
                                                         "incomeEarned": {
