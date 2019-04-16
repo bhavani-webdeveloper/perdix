@@ -1072,7 +1072,16 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 key:"loanAccount.commercialCibilCharge",
                                 type:"amount",
                                 required:true,
-                                "condition" : "model.siteCode != 'IREPDhan' && model.siteCode != 'pahal' && model.siteCode != 'witfin' && !model.additional.config.loanAccount_commercialCibilCharge",                            
+                                "condition" : "model.siteCode != 'IREPDhan' && model.siteCode != 'shramsarathi' && model.siteCode != 'pahal' && model.siteCode != 'witfin' && !model.additional.config.loanAccount_commercialCibilCharge",
+                                onChange:function(value,form,model){
+                                    getSanctionedAmount(model);
+                                }
+                            },
+                            {
+                                key:"loanAccount.commercialCibilCharge",
+                                type:"amount",
+                                required:false,
+                                "condition" : "model.siteCode == 'shramsarathi'",
                                 onChange:function(value,form,model){
                                     getSanctionedAmount(model);
                                 }
@@ -1082,7 +1091,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 type:"select",
                                 required: true,
                                 enumCode: "decisionmaker",
-                                "condition" : "model.siteCode != 'IREPDhan' && !model.additional.config.loanAccount_securityEmiRequired"
+                                "condition" : "model.siteCode != 'IREPDhan' && !model.additional.config.loanAccount_securityEmiRequired && model.siteCode != 'shramsarathi'"
                             },
                             {
                                 key:"loanAccount.processingFeePercentage",

@@ -335,16 +335,17 @@ define({
                                         condition : "model.centre.meetingPreference === 'MONTHLY'",
                                         key: "centre.monthlyMeetingStatus",
                                         type: "radios",
+                                        "required":true,
                                         titleMap:{
                                         "DAY":"DAY",
                                         "DATE":"DATE"
                                         }
                                     },
                                     {
-                                        condition : "model.centre.meetingPreference === 'MONTHLY'",
                                         key: "centre.monthlyMeetingDate",
                                         type: "select",
-                                        condition: "model.centre.monthlyMeetingStatus=='DATE'",
+                                        'required':true,
+                                        condition: "model.centre.monthlyMeetingStatus=='DATE' && model.centre.meetingPreference === 'MONTHLY'",
                                          titleMap:{
                                         "1":"1",
                                         "2":"2",
@@ -383,6 +384,7 @@ define({
                                         condition : "model.centre.meetingPreference === 'MONTHLY' && model.centre.monthlyMeetingStatus=='DAY'",
                                         key: "centre.monthlyMeetingDateNumber",
                                         type: "select",
+                                        "required":true,
                                         titleMap:{
                                         "1":"1",
                                         "2":"2",
@@ -394,6 +396,7 @@ define({
                                         condition : "model.centre.meetingPreference === 'MONTHLY' && model.centre.monthlyMeetingStatus=='DAY'",
                                         key: "centre.monthlyMeetingDay",
                                         type: "select",
+                                        "required":true,
                                         titleMap:{
                                         "SUNDAY":"SUNDAY",
                                         "MONDAY":"MONDAY",
@@ -408,11 +411,13 @@ define({
                                         condition : "model.centre.meetingPreference === 'MONTHLY'",
                                         key: "centre.monthlyMeetingTime",
                                         type: "time",
+                                        "required":true
                                     },
                                     {
                                         condition : "model.centre.meetingPreference === 'WEEKLY'",
                                         key: "centre.weeklyMeetingDay",
                                         type: "select",
+                                        "required":true,
                                         titleMap:{
                                         "SUNDAY":"SUNDAY",
                                         "MONDAY":"MONDAY",
@@ -427,11 +432,13 @@ define({
                                         condition : "model.centre.meetingPreference === 'WEEKLY'",
                                         key: "centre.weeklyMeetingTime",
                                         type: "time",
+                                        "required":true,
                                     },
                                     {
                                         condition : "model.centre.meetingPreference === 'FORTNIGHTLY'",
                                         key: "centre.fortnightlyMeetingDay",
                                         type: "select",
+                                        "required":true,
                                         titleMap:{
                                         "SUNDAY":"SUNDAY",
                                         "MONDAY":"MONDAY",
@@ -445,7 +452,8 @@ define({
                                     {
                                         condition : "model.centre.meetingPreference === 'FORTNIGHTLY'",
                                         key: "centre.fortnightlyMeetingTime",
-                                        type: "time"
+                                        type: "time",
+                                        "required":true
                                     } 
                                  ]
                         },
