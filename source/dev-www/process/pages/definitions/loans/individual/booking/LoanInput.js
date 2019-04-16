@@ -1816,7 +1816,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
             {
                 "type":"box",
                 "title":"HYPOTHECATION",
-                "condition": "model.siteCode != 'IFMRCapital' && model.siteCode != 'IREPDhan'",
+                "condition": "model.siteCode != 'IFMRCapital' && model.siteCode != 'IREPDhan' && model.siteCode != 'shramsarathi'",
                 "items":[
                     {
                         "key":"loanAccount.collateral",
