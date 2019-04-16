@@ -1571,29 +1571,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                             },
                             "additions": [
-                                {
-                                    "type": "actionbox",
-                                    "condition": "!model.customer.currentStage",
-                                    "orderNo": 1000,
-                                    "items": [
-                                        {
-                                            "type": "submit",
-                                            "title": "SUBMIT"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type": "actionbox",
-                                    "condition": "model.customer.currentStage && (model.currentStage=='Screening' || (model.currentStage=='GuarantorAddition' && model.pageClass=='guarantor'))",
-                                    "orderNo": 1200,
-                                    "items": [
-                                        {
-                                            "type": "button",
-                                            "title": "UPDATE",
-                                            "onClick": "actions.proceed(model, formCtrl, form, $event)"
-                                        }
-                                    ]
-                                }
+                                
                             ]
                         }
                     };
