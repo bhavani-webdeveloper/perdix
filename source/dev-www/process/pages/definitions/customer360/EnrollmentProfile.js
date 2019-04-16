@@ -727,7 +727,8 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                                     $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
                                     var promise = Enrollment.search({
                                         'branchName': SessionStore.getBranch() || inputModel.branchName,
-                                        'firstName': inputModel.first_name,
+                                        'firstName': inputModel.firstName,
+                                        'centreId': inputModel.centreId,
                                     }).$promise;
                                     return promise;
                                 },
