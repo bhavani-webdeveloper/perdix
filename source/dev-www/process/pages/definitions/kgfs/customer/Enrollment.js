@@ -1018,10 +1018,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                     "BusinessOccupationDetails.agricultureDetails.nonIrrigated",
                     "BusinessOccupationDetails.agricultureDetails.irrigated",
                     "BusinessOccupationDetails.agricultureDetails.harvestMonth",
-                    "BusinessOccupationDetails.agricultureDetails.landArea",
-                    "Biometric",
-                    "Biometric.CaptureFingerPrint",
-                    "Biometric.FingerPrintSection",
+                    "BusinessOccupationDetails.agricultureDetails.landArea",                    
                     "HouseVerification",
                     "HouseVerification.fullName",
                     "HouseVerification.nameInLocalLanguage",
@@ -1389,27 +1386,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             }
                             $q.all(fpPromisesArr).then(function(){
                                 /** Valid check whether the user have enrolled or fingerprints or not **/
-                                 if (!(_.has(reqData['customer'], 'leftHandThumpImageId') && !_.isNull(reqData['customer']['leftHandThumpImageId']) &&
-                                    _.has(reqData['customer'], 'leftHandIndexImageId') && !_.isNull(reqData['customer']['leftHandIndexImageId']) &&
-                                   _.has(reqData['customer'], 'leftHandMiddleImageId') && !_.isNull(reqData['customer']['leftHandMiddleImageId']) &&
-                                    _.has(reqData['customer'], 'leftHandRingImageId') && !_.isNull(reqData['customer']['leftHandRingImageId']) &&
-                                     _.has(reqData['customer'], 'leftHandSmallImageId') && !_.isNull(reqData['customer']['leftHandSmallImageId']) &&
-                                     _.has(reqData['customer'], 'rightHandThumpImageId') && !_.isNull(reqData['customer']['rightHandThumpImageId']) &&
-                                    _.has(reqData['customer'], 'rightHandIndexImageId') && !_.isNull(reqData['customer']['rightHandIndexImageId']) &&
-                                     _.has(reqData['customer'], 'rightHandMiddleImageId') && !_.isNull(reqData['customer']['rightHandMiddleImageId']) &&
-                                    _.has(reqData['customer'], 'rightHandRingImageId') && !_.isNull(reqData['customer']['rightHandRingImageId']) &&
-                                     _.has(reqData['customer'], 'rightHandSmallImageId') && !_.isNull(reqData['customer']['rightHandSmallImageId'])
-                                 )) {
-                                     PageHelper.showErrors({
-                                        "data": {
-                                            "error": "Fingerprints are not enrolled. Please check"
-                                        }
-                                    });
-                                     PageHelper.hideLoader();
-            
-                                     return;
-                                 }
-                            
+                                
                             try {
                                 var liabilities = reqData['customer']['liabilities'];
                                 if (liabilities && liabilities != null && typeof liabilities.length == "number" && liabilities.length > 0) {
@@ -1550,26 +1527,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             }
                             $q.all(fpPromisesArr).then(function(){
                                 /** Valid check whether the user have enrolled or fingerprints or not **/
-                                 if (!(_.has(reqData['customer'], 'leftHandThumpImageId') && !_.isNull(reqData['customer']['leftHandThumpImageId']) &&
-                                    _.has(reqData['customer'], 'leftHandIndexImageId') && !_.isNull(reqData['customer']['leftHandIndexImageId']) &&
-                                   _.has(reqData['customer'], 'leftHandMiddleImageId') && !_.isNull(reqData['customer']['leftHandMiddleImageId']) &&
-                                    _.has(reqData['customer'], 'leftHandRingImageId') && !_.isNull(reqData['customer']['leftHandRingImageId']) &&
-                                     _.has(reqData['customer'], 'leftHandSmallImageId') && !_.isNull(reqData['customer']['leftHandSmallImageId']) &&
-                                     _.has(reqData['customer'], 'rightHandThumpImageId') && !_.isNull(reqData['customer']['rightHandThumpImageId']) &&
-                                    _.has(reqData['customer'], 'rightHandIndexImageId') && !_.isNull(reqData['customer']['rightHandIndexImageId']) &&
-                                     _.has(reqData['customer'], 'rightHandMiddleImageId') && !_.isNull(reqData['customer']['rightHandMiddleImageId']) &&
-                                    _.has(reqData['customer'], 'rightHandRingImageId') && !_.isNull(reqData['customer']['rightHandRingImageId']) &&
-                                     _.has(reqData['customer'], 'rightHandSmallImageId') && !_.isNull(reqData['customer']['rightHandSmallImageId'])
-                                 )) {
-                                     console.log(reqData);
-                                     PageHelper.showErrors({
-                                        "data": {
-                                            "error": "Fingerprints are not enrolled. Please check"
-                                        }
-                                    });
-                                     PageHelper.hideLoader();
-                                     return;
-                                 }
+                               
                             
                             try {
                                 var liabilities = reqData['customer']['liabilities'];
