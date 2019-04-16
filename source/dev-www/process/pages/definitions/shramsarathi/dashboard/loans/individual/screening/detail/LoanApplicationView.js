@@ -1228,7 +1228,7 @@ define({
                             model.loanAccount.loanMitigants.push(v);
                         }
                     })
-
+                    model.loanAccount.interestRate=model.loanAccount.expectedInterestRate;
                     /* TODO Call save service for the loan */
                     /* if(!validateAndPopulateMitigants(model)){
                          return;
@@ -1327,6 +1327,7 @@ define({
                             model.loanAccount.loanDocuments.push(model.loanAccount.documents[k]);
                         }
                     }
+                    model.loanAccount.interestRate=model.loanAccount.expectedInterestRate;
                     Utils.confirm("Are You Sure?").then(function() {
 
                         var reqData = {
@@ -1359,6 +1360,7 @@ define({
                     if (!preLoanSaveOrProceed(model)){
                     return;
                 }
+                model.loanAccount.interestRate=model.loanAccount.expectedInterestRate;
                     if (_.hasIn(model.loanAccount, 'documents') && _.isArray(model.loanAccount.documents)){
                         for(var k=0;k <model.loanAccount.documents.length; k++) {
                             model.loanAccount.loanDocuments.push(model.loanAccount.documents[k]);
@@ -1415,6 +1417,7 @@ define({
                             model.loanAccount.loanDocuments.push(model.loanAccount.documents[k]);
                         }
                     }
+                    model.loanAccount.interestRate=model.loanAccount.expectedInterestRate;
                     Utils.confirm("Are You Sure?").then(function() {
 
                         var reqData = {
@@ -1488,7 +1491,7 @@ define({
                             model.loanAccount.loanMitigants.push(v);
                         }
                     })
-
+                    model.loanAccount.interestRate=model.loanAccount.expectedInterestRate;
                     $log.info("Inside Proceed()");
                     PageHelper.clearErrors();
                     var nextStage = null;

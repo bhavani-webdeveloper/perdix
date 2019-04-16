@@ -2482,6 +2482,8 @@ define([],function(){
                             completeLead = true;
                         }
                         PageHelper.showProgress('loan-process', 'Updating Loan');
+                        
+                        model.loanAccount.interestRate=model.loanAccount.expectedInterestRate;
                         model.loanProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
@@ -2517,6 +2519,7 @@ define([],function(){
                             model.loanAccount.documentTracking = "PENDING";
                             model.loanAccount.psychometricCompleted = "NO";
                         }
+                        model.loanAccount.interestRate=model.loanAccount.expectedInterestRate;
                         model.loanAccount.status = "HOLD";
                         Utils.confirm("Are You Sure?")
                         .then(
@@ -2554,7 +2557,8 @@ define([],function(){
                         else if (model.loanProcess.remarks==null || model.review.remarks =="" || model.review.targetStage1==null || model.review.targetStage1==""){
                             PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
                             return false;
-                        }          
+                        }     
+                        model.loanAccount.interestRate=model.loanAccount.expectedInterestRate;     
                         Utils.confirm("Are You Sure?")
                         .then(
                             function() {          
@@ -2584,6 +2588,7 @@ define([],function(){
                             PageHelper.showErrors({"data": {"error":"Tele Verification should be Mandatory"}});
                             return false;
                         } 
+                        model.loanAccount.interestRate=model.loanAccount.expectedInterestRate;
                         if (!validateForm(formCtrl)){
                             return;
                         }
@@ -2645,6 +2650,7 @@ define([],function(){
                             PageHelper.showProgress("update-loan", "Reject Reason / Remarks is mandatory", 3000);
                             return false;
                         }  
+                        model.loanAccount.interestRate=model.loanAccount.expectedInterestRate;
                         Utils.confirm("Are You Sure?")
                         .then(
                             function() {

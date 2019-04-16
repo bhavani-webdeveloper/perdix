@@ -10,7 +10,22 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.scr
 		    for (var i = 0; i < centres.length; i++) {
 			    centreId.push(centres[i].centreId);
 		    }
-	    }
+		}
+		var centreCode = formHelper.enum('centre').data;
+		var out = [];
+		if (centres && centres.length) {
+			for (var i = 0; i < centreCode.length; i++) {
+				for (var j = 0; j < centres.length; j++) {
+					if (centreCode[i].value == centres[j].id) {
+						out.push({
+							name: centreCode[i].name,
+							value:centreCode[i].code
+						})
+					}
+				}
+			}
+		}
+		
 		return {
 			"type": "search-list",
 			"title": "SCREENING_REVIEW_QUEUE",
@@ -18,6 +33,7 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.scr
 			initialize: function(model, form, formCtrl) {
 				// model.branch = branch;
 				model.branch = SessionStore.getCurrentBranch().branchId;
+				model.centreCode=out[0].value;
 				$log.info("search-list sample got initialized");
 
 			},
@@ -95,7 +111,7 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.scr
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-	                    'branchId':searchOptions.branch,
+	                    // 'branchId':searchOptions.branch,
 	                    'stage': 'ScreeningReview',
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
