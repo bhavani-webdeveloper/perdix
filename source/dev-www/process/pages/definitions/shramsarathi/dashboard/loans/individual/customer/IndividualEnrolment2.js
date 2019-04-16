@@ -360,8 +360,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 
                                 "ContactInformation.villageName": {
                                     "readonly": true,
-                                    "title":"VILLAGE",
-                                    
+                                    "title":"VILLAGE"   
                                 },
                                 "ContactInformation.district": {
                                     "readonly": true
@@ -856,7 +855,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ContactInformation.mailingLocality": {
                                     "condition": "!model.customer.mailSameAsResidence",
-                                    "title":"PANCHAYAT"
+                                    "title":"PANCHAYAT/CITY"
                                 },
                                 "ContactInformation.mailingDistrict": {
                                     "condition": "!model.customer.mailSameAsResidence",
@@ -1363,6 +1362,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ContactInformation": {
                                     "readonly": true
                                 },
+                                "ContactInformation.villageName": {
+                                    "readonly": true,
+                                    "title":"VILLAGE"   
+                                },
                                 "IndividualInformation.photoImageId": {
                                     "required": true
                                 },
@@ -1733,7 +1736,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ContactInformation.mailingLocality": {
                                     "condition": "!model.customer.mailSameAsResidence",
                                     "readonly": true,
-                                    "title":"PANCHAYAT",
+                                    "title":"PANCHAYAT/CITY",
                                     "required":true
                                 },
                                 "ContactInformation.mailingDistrict": {
@@ -2385,7 +2388,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.mailingLocality": {
                         "condition": "!model.customer.mailSameAsResidence",
                         "readonly": true,
-                        "title":"PANCHAYAT"
+                        "title":"PANCHAYAT/CITY"
                     },
                     "ContactInformation.mailingDistrict": {
                         "condition": "!model.customer.mailSameAsResidence",

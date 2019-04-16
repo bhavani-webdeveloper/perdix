@@ -306,7 +306,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     model: {
                                         loanAccount: res
                                     }
-                                });debugger
+                                });
                                 $this.bundlePages.push({
                                     pageClass: 'televerification',
                                     model: {

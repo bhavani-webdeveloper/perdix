@@ -12,7 +12,7 @@ export class PincodeLOVConfigurationShramsarathi extends LOVElementConfiguration
         },
         "division": {
             key: "customer.division",
-            title: "Panchayat"
+            title: "PANCHAYAT/CITY"
         },
         // "region": {
         //     key: "customer.region"

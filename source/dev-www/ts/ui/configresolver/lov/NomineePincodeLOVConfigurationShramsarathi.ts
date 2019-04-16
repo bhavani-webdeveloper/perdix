@@ -16,7 +16,7 @@ export class NomineePincodeLOVConfigurationShramsarathi extends LOVElementConfig
         },
         "division": {
             key: "loanAccount.nominees[].nomineeLocality",
-            title: "Panchayat"
+            title: "PANCHAYAT/CITY"
         },
     };
     outputMap: Object = {

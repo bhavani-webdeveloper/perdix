@@ -773,7 +773,7 @@ define([],function(){
                                 },
                                 "NomineeDetails.nominees.nomineeLocality": {
                                     "orderNo":50,
-                                    "title":"PANCHAYAT"
+                                    "title":"PANCHAYAT/CITY"
                                 },
                                 "PreliminaryInformation": {
                                     "orderNo": 1,
@@ -869,7 +869,7 @@ define([],function(){
                             "overrides": {
                                 "NomineeDetails.nominees.nomineeLocality": {
                                     "orderNo":50,
-                                    "title":"PANCHAYAT"
+                                    "title":"PANCHAYAT/CITY"
                                 },
                                 "PreliminaryInformation": {
                                     "orderNo": 1,
@@ -1575,7 +1575,7 @@ define([],function(){
                         
                         "NomineeDetails.nominees.nomineeLocality": {
                             "orderNo":70,
-                            "title":"PANCHAYAT",
+                            "title":"PANCHAYAT/CITY",
                             "readonly":true
                         },
                         "NomineeDetails.nominees.nomineeDistrict":{

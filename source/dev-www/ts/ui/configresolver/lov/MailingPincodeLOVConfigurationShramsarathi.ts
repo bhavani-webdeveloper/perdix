@@ -12,7 +12,7 @@ export class MailingPincodeLOVConfigurationShramsarathi extends LOVElementConfig
         },
         "mailingDivision":{
             key: "customer.mailingLocality",
-            title: "Panchayat"
+            title: "PANCHAYAT/CITY"
         }
     };
     outputMap: Object = {
