@@ -724,7 +724,7 @@ define([],function(){
                                 return deferred.promise;
                             },
                             onSelect: function (valueObj, model, context) {
-                                clearAll("loanAccount",["loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
+                                clearAll("loanAccount",["loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate","loanAmountRequested","tenureRequested","interestRate","estimatedEmi","emiRequested"],model);
                                 model.loanAccount.productCode = valueObj.productCode;
                                 if(model.loanAccount.loanType == 'JEWEL')
                                     getGoldRate(model); 
