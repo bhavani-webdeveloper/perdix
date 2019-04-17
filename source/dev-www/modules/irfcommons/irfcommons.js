@@ -432,7 +432,8 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 		        '<button class="btn btn-primary" ng-click="model.takeDataForMantra();">Validate Finger</button>' +
 		        '<div><button id="statusMatchTrue" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 350%; color: green;">✓</button>' +
 		        '<button id="statusMatchFalse"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 350%; color: red;">X</button> <div>' +
-				'<button id="notCaptured"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Not Captured</button> <div>' +
+				'<button id="notCaptured"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Unable to capture Finger print, please try again</button> <div>' +
+				'<button id="placeFinger"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Unable to capture Finger print, please try again</button> <div>' +
 				'<div id="responsediv" class="text-danger">' +
 		        '</div>' +
 		        '<style>.button {background-color: #4CAF50' +
@@ -464,7 +465,8 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 					document.getElementById("notCaptured").style.visibility = 'hidden';
 					document.getElementById("serverMessage").style.visibility = 'hidden';
 		        },
-		        takeDataForMantra: function () {fpMatchStatus="";
+				takeDataForMantra: function () {fpMatchStatus="";
+				document.getElementById("placeFinger").style.visibility = 'visible';
 		            Files.getBase64DataFromFileId(fileId, {}, true)
 		                .then(function (res) {
 		                    fingerData = res;
@@ -475,6 +477,7 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 		                        function (verifyResponse) {
 									//responsediv.innerHTML=verifyResponse.match;
 								   // lastCapturedFingerValidationStatus = verifyResponse.match;
+								   document.getElementById("placeFinger").style.visibility = 'hidden';
 								   fpMatchStatus=verifyResponse.match?"Match found":"Not Matched";
 		                            if (verifyResponse.match) {
 		                                document.getElementById("statusMatchTrue").style.visibility = 'visible';
@@ -663,8 +666,9 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 			        '<button id="RIGHT_HAND_SMALL" ng-click="$close(model.takeData($event))" class="button button5"><img  class="button button5" alt= "RIGHT_HAND_SMALL" src=""></button></div>' +
 					'<div style="padding-left: 100px;"><button id="statusMatchTrue"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 350%; color: green;">✓</button>'+
 					'<button id="statusMatchFalse"  class="" style="font-size: 8px; visibility:hidden; background-color:white;  font-size: 450%; border: aliceblue; color: red;">x</button>'+
-					'<button id="notCaptured"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Not Captured</button> <div>'+
+					'<button id="notCaptured"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Unable to capture Finger print, please try again</button> <div>'+
 					'<button id="serverMessage"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Please restart the server</button> <div>'+
+					'<button id="placeFinger"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Unable to capture Finger print, please try again</button> <div>' +
 					'<div id="submitPanel" ><button id="validateLastCapturedFP" class="btn btn-primary" ng-click="$close(model.validateLastCaptured())" style="margin-top: 10%; margin-right: 10%; visibility:hidden;">VALIDATE LAST CAPTURED</button>' +
 					'<button id="" class="btn btn-primary" ng-click="$close(model.submitFPDetails())" style="margin-top: 10%; margin-right: 10%;">Submit</button></div>'+
 			        '<style>.button {background-color: #4CAF50' +
@@ -687,6 +691,7 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 
 			    var result = [];
 			    var verifyFingerPrint = function (isoTemplate) {
+					document.getElementById("placeFinger").style.visibility = 'visible';
 			        MantraFingrePrintService.verifyFingerPrintMantra({
 			                base64ISOTemplate: isoTemplate
 			            },
@@ -694,6 +699,7 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 							lastCapturedFingerValidationStatus = verifyResponse.match;
 							document.getElementById("notCaptured").style.visibility = 'hidden';
 							document.getElementById("serverMessage").style.visibility = 'hidden';
+							document.getElementById("placeFinger").style.visibility = 'hidden';
 							if (lastCapturedFingerValidationStatus) {
 							    document.getElementById("statusMatchTrue").style.visibility = 'visible';
 								document.getElementById("statusMatchFalse").style.visibility = 'hidden';
@@ -705,6 +711,7 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 			            function (error) {
 							document.getElementById("statusMatchTrue").style.visibility = 'hidden';
 							document.getElementById("statusMatchFalse").style.visibility = 'hidden';
+							document.getElementById("placeFinger").style.visibility = 'hidden';
 							if(error.status==-1){
 								document.getElementById("serverMessage").style.visibility = 'visible';
 							}
@@ -718,13 +725,15 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 			    var lastCapturedFingerPrintISOTemplate = '';
 			    var lastCapturedFingerValidationStatus = false;
 			    var uploadFingerPrint = function (targetElement) {
-			        var temp = "data:image/png;base64,";
+					var temp = "data:image/png;base64,";
+					document.getElementById("placeFinger").style.visibility = 'visible';
 			        var baseElem = document.getElementById("mantraFPModal").childNodes;
 			        for (var i = 0; i < baseElem.length; i++) {
 						if(i!=5){
 							document.getElementById(baseElem[i].id).disabled = true;
 						}
-			            };
+						};
+						
 						MantraFingrePrintService.captureFingerPrintMantra(
 			            function (biometricDetails) {
 			                var b = biometricDetails;
@@ -750,6 +759,7 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 							document.getElementById("validateLastCapturedFP").style.visibility = 'visible';
 			            },
 			            function (err) {
+							document.getElementById("placeFinger").style.visibility = 'hidden';
 			                var baseElem = document.getElementById("mantraFPModal").childNodes;
 			                for (var i = 0; i < baseElem.length; i++) {
 								if(i!=5)
@@ -759,7 +769,7 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 								console.log("server restart");
 								document.getElementById("serverMessage").style.visibility = 'visible';
 							}else{
-								document.getElementById("notCaptured").style.visibility = 'visible';
+								document.getElementById("notCaptured").style.visibility = 'visible';	
 							}
 			                $log.info(err);
 			            }
@@ -778,7 +788,7 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 						document.getElementById("serverMessage").style.visibility = 'hidden';
 			            result = uploadFingerPrint(targetElem);
 			            for (var i = 0; i < result.length; i++) {
-
+						
 			                switch (i) {
 			                    case 0:
 			                        tableField = 'leftHandThumpImageId';

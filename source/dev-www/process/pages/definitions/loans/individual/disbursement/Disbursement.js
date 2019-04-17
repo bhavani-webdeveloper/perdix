@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"),
-    ["$log", "Enrollment","BiometricService","elementsUtils", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "Utils","LoanAccount","formHelper","Queries",
-        function($log, Enrollment,BiometricService,elementsUtils, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource, Utils,LoanAccount,formHelper,Queries){
+    ["$log", "Enrollment","BiometricService","elementsUtils", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "Utils","LoanAccount","formHelper","Queries","BranchCreationResource",
+        function($log, Enrollment,BiometricService,elementsUtils, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource, Utils,LoanAccount,formHelper,Queries,BranchCreationResource){
 
         var branch = SessionStore.getBranch();
         var siteCode = SessionStore.getGlobalSetting("siteCode");
@@ -21,6 +21,27 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
             "subTitle": "",
             initialize: function (model, form, formCtrl) {
                 $log.info("Disbursement Page got initialized");
+                   //start
+                   model.branchId = SessionStore.getBranchId();
+                   if (!Utils.isCordova) {
+                    BranchCreationResource.getBranchByID({
+                            id: model.branchId
+                        },
+                        function (res) {
+                            if (res.fingerPrintDeviceType) {
+                                if (res.fingerPrintDeviceType == "MANTRA") {
+                                    model.fingerPrintDeviceType = res.fingerPrintDeviceType;
+                                }
+                            }
+
+                            PageHelper.hideLoader();
+                        },
+                        function (err) {
+                            $log.info(err);
+                        }
+                    );
+                }
+            //end
                 model.customer=model.customer||{};
                 model.loanAccountDisbursementSchedule = model.loanAccountDisbursementSchedule || {};
                 model.fee=model.fee||{};
@@ -492,16 +513,31 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                 'RightLittle': model.customer.rightHandSmallImageId
                             };
 
-                            BiometricService.validate(fingerprintObj).then(function(data) {
-                                model.customer.isBiometricMatched = data;
-                                if (data == "Match found") {
-                                    model.loanAccountDisbursementSchedule.fpVerified = true;
-                                } else {
-                                    model.loanAccountDisbursementSchedule.fpVerified = false;
-                                }
-                            }, function(reason) {
-                                console.log(reason);
-                            });
+                            if (model.fingerPrintDeviceType == "MANTRA") {
+                                BiometricService.validateFingerPrintByMantra(fingerprintObj).then(function (data) {
+                                    model.customer.isBiometricMatched = data;
+                                    if (data == "Match found") {
+                                        model.loanAccountDisbursementSchedule.fpVerified= true;
+                                    } else {
+                                        model.loanAccountDisbursementSchedule.fpVerified = false;
+                                    }
+                                }, function (reason) {
+                                    console.log(reason);
+                                });
+
+                            }
+                            else{
+                                BiometricService.validate(fingerprintObj).then(function(data) {
+                                    model.customer.isBiometricMatched = data;
+                                    if (data == "Match found") {
+                                        model.loanAccountDisbursementSchedule.fpVerified = true;
+                                    } else {
+                                        model.loanAccountDisbursementSchedule.fpVerified = false;
+                                    }
+                                }, function(reason) {
+                                    console.log(reason);
+                                });
+                            }
                         }
                     }, {
                         "key": "customer.isBiometricMatched",
