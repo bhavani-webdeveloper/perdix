@@ -366,6 +366,7 @@ define({
                                     type: "lov",
                                     autolov: true,
                                     title: "REJECT_REASON",
+                                    required: true,
                                     bindMap: {},
                                     searchHelper: formHelper,
                                     search: function (inputModel, form, model, context) {
