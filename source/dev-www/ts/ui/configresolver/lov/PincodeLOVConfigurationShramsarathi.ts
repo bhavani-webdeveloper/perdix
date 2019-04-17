@@ -4,19 +4,24 @@ import AngularResourceService = require("../../../infra/api/AngularResourceServi
 export class PincodeLOVConfigurationShramsarathi extends LOVElementConfiguration {
     inputMap: Object = {
         "pincode": "customer.pincode",
+        "region":{
+            key: "customer.region",
+            title: "VILLAGE"
+        },
+        "division": {
+            key: "customer.division",
+            title: "PANCHAYAT/CITY"
+        },
+        "taluk": {
+            key: "customer.taluk",
+            title: "SUB-DISTRICT"
+        },
         "district": {
             key: "customer.district"
         },
         "state": {
             key: "customer.state"
         },
-        "division": {
-            key: "customer.division",
-            title: "PANCHAYAT/CITY"
-        },
-        // "region": {
-        //     key: "customer.region"
-        // }
     };
     outputMap: Object = {
         "division": "customer.locality",
@@ -50,7 +55,9 @@ export class PincodeLOVConfigurationShramsarathi extends LOVElementConfiguration
             inputModel.pincode,
             inputModel.district,
             inputModel.state,
-            inputModel.division
+            inputModel.division,
+            inputModel.region,
+            inputModel.taluk
         );
     };
 

@@ -1114,6 +1114,12 @@
                             "nomineePincode": {
                                 "type": ["integer", "string", "null"]
                             },
+                            "nomineeRegion": {
+                                "type": ["string","null"]
+                            },
+                            "nomineeTaluk": {
+                                "type": ["string","null"]
+                            },
                             "nomineeRelationship": {
                                 "type": ["string", "null"],
                                 "enumCode":"relation"

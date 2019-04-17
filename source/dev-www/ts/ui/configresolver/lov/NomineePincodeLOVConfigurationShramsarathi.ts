@@ -5,18 +5,26 @@ export class NomineePincodeLOVConfigurationShramsarathi extends LOVElementConfig
     inputMap: Object = {
         "pincode": {
             "key": "loanAccount.nominees[].nomineePincode",
-            "title": "pinCode",
+            "title": "PINCODE",
             "type": "string"
+        },
+        "region":{
+            "key": "loanAccount.nominees[].nomineeRegion",
+            "title": "VILLAGE",
+        },
+        "division": {
+            "key": "loanAccount.nominees[].nomineeLocality",
+            "title": "PANCHAYAT/CITY"
+        },
+        "taluk": {
+            "key": "loanAccount.nominees[].nomineeTaluk",
+            "title": "SUB-DISTRICT",
         },
         "district": {
             "key": "loanAccount.nominees[].nomineeDistrict"
         },
         "state": {
             "key": "loanAccount.nominees[].nomineeState"
-        },
-        "division": {
-            key: "loanAccount.nominees[].nomineeLocality",
-            title: "PANCHAYAT/CITY"
         },
     };
     outputMap: Object = {
@@ -26,7 +34,7 @@ export class NomineePincodeLOVConfigurationShramsarathi extends LOVElementConfig
         "state": "loanAccount.nominees[arrayIndex].nomineeState"
     };
     initialize: Function = function(inputModel, form, model, context) {
-        inputModel.pincode = model.loanAccount.nominees[context.arrayIndex].nomineePincode;
+        inputModel.pincode = model.loanAccount.nominees[context.arrayIndex].nomineePincode || "";
     };
     search: Function = function(inputModel, form, model, context) {
         let $q = AngularResourceService.getInstance().getNGService("$q");
@@ -39,6 +47,8 @@ export class NomineePincodeLOVConfigurationShramsarathi extends LOVElementConfig
             inputModel.district || model.loanAccount.nominees[context.arrayIndex].nomineeDistrict,
             inputModel.state || model.loanAccount.nominees[context.arrayIndex].nomineeState,
             inputModel.division || model.loanAccount.nominees[context.arrayIndex].nomineeLocality,
+            inputModel.region || model.loanAccount.nominees[context.arrayIndex].nomineeRegion,
+            inputModel.taluk || model.loanAccount.nominees[context.arrayIndex].nomineeTaluk,
         );
     };
 

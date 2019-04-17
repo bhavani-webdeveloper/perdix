@@ -4,22 +4,31 @@ import AngularResourceService = require("../../../infra/api/AngularResourceServi
 export class MailingPincodeLOVConfigurationShramsarathi extends LOVElementConfiguration {
     inputMap: Object = {
         "mailingPincode": "customer.mailingPincode",
+        "mailingRegion": {
+            key: "customer.mailingRegion",
+            title: "VILLAGE" 
+        },
+        "mailingDivision":{
+            key: "customer.mailingLocality",
+            title: "PANCHAYAT/CITY"
+        },
+        "mailingtaluk":{
+            key: "customer.mailingtaluk",
+            title: "SUB-DISTRICT"
+        },
         "mailingDistrict": {
             key: "customer.mailingDistrict"
         },
         "mailingState": {
             key: "customer.mailingState"
-        },
-        "mailingDivision":{
-            key: "customer.mailingLocality",
-            title: "PANCHAYAT/CITY"
-        }
+        },  
     };
     outputMap: Object = {
         "mailingDivision": "customer.mailingLocality",
         "mailingPincode": "customer.mailingPincode",
         "mailingDistrict": "customer.mailingDistrict",
-        "mailingState": "customer.mailingState"
+        "mailingState": "customer.mailingState",
+        "mailingRegion": "customer.mailingRegion",
     };
     initialize: Function = function(inputModel) {
         let $log = AngularResourceService.getInstance().getNGService("$log");
@@ -36,7 +45,9 @@ export class MailingPincodeLOVConfigurationShramsarathi extends LOVElementConfig
             inputModel.mailingPincode,
             inputModel.mailingDistrict,
             inputModel.mailingState,
-            inputModel.mailingDivision
+            inputModel.mailingDivision,
+            inputModel.mailingRegion,
+            inputModel.mailingtaluk
         );
     };
     getListDisplayItem: Function = function(item, index) {
@@ -51,6 +62,8 @@ export class MailingPincodeLOVConfigurationShramsarathi extends LOVElementConfig
         model.customer.mailingLocality = result.division;
         model.customer.mailingState = result.state;
         model.customer.mailingDistrict = result.district;
+        model.customer.mailingRegion = result.region;
+        model.customer.mailingtaluk = result.taluk;
         NGHelper.refreshUI();
     };
     autolov: boolean = true;
