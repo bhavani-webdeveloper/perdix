@@ -125,7 +125,7 @@ define([],function(){
             var computeEstimatedEMI = function(model){
                 var fee = 0;
                 
-
+                model.loanAccount.cbCheckCompletedFlag=true;
                 if(model.loanAccount.commercialCibilCharge)
                     if(!_.isNaN(model.loanAccount.commercialCibilCharge))
                         fee+=model.loanAccount.commercialCibilCharge;
@@ -171,7 +171,7 @@ define([],function(){
             };
 
             var computeEMI = function(model){
-
+                model.loanAccount.cbCheckCompletedFlag=true;
                 // Get the user's input from the form. Assume it is all valid.
                 // Convert interest from a percentage to a decimal, and convert from
                 // an annual rate to a monthly rate. Convert payment period in years
@@ -684,6 +684,7 @@ define([],function(){
                             "onChange": function(valueObj,context,model){
                                 clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
                                 model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
+                                model.loanAccount.cbCheckCompletedFlag=true;
                                 //clearAll('additions',['tenurePlaceHolder','interestPlaceHolder','amountPlaceHolder'],model)
                             },
                         },
@@ -726,6 +727,7 @@ define([],function(){
                             onSelect: function (valueObj, model, context) {
                                 clearAll("loanAccount",["loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate","loanAmountRequested","tenureRequested","interestRate","estimatedEmi","emiRequested"],model);
                                 model.loanAccount.productCode = valueObj.productCode;
+                                model.loanAccount.cbCheckCompletedFlag=true;
                                 if(model.loanAccount.loanType == 'JEWEL')
                                     getGoldRate(model); 
                                 model.additions.tenurePlaceHolder = valueObj.tenure_from == valueObj.tenure_to ? valueObj.tenure_from : valueObj.tenure_from + '-' + valueObj.tenure_to;
@@ -985,6 +987,7 @@ define([],function(){
                         "PROCEED": "PROCEED"
                     }
 
+                    model.loanAccount.cbCheckCompletedFlag=false;
 
                     
                     //var postReviewActionArray = {};
@@ -1474,7 +1477,9 @@ define([],function(){
                                 if(params.cbType == 'BASE')
                                     model.loanAccount.loanCustomerRelations[i].highmarkCompleted = true;
                                 else if(params.cbType == 'INDIVIDUAL')
+                                    {   model.loanAccount.cbCheckCompletedFlag=false;
                                     model.loanAccount.loanCustomerRelations[i].cbCheckCompleted = true;
+                                }
                             }
                         }
                     },
@@ -1709,9 +1714,12 @@ define([],function(){
                             for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
                                 if (model.loanAccount.loanCustomerRelations[i].customerId) {
                                     if(!model.loanAccount.loanCustomerRelations[i].cbCheckCompleted){
-                                        model.loanAccount.loanMitigants=[];
-                                        PageHelper.showProgress("loan-create","CB Check pending. Please do a CB check and then proceed",5000);
-                                        return false;
+                                            model.loanAccount.loanMitigants=[];
+                                        if(model.loanAccount.cbCheckCompletedFlag)
+                                        {
+                                            PageHelper.showProgress("loan-create","CB Check pending. Please do a CB check and then proceed",5000);
+                                            return false;                                            
+                                        }
                                     }                            
                                 }
                             }
