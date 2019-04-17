@@ -433,7 +433,7 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 		        '<div><button id="statusMatchTrue" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 350%; color: green;">✓</button>' +
 		        '<button id="statusMatchFalse"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 350%; color: red;">X</button> <div>' +
 				'<button id="notCaptured"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Unable to capture Finger print, please try again</button> <div>' +
-				'<button id="placeFinger"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Unable to capture Finger print, please try again</button> <div>' +
+				'<button id="placeFinger"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Kindly place your finger on mantra device</button> <div>' +
 				'<div id="responsediv" class="text-danger">' +
 		        '</div>' +
 		        '<style>.button {background-color: #4CAF50' +
@@ -669,7 +669,7 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 					'<button id="statusMatchFalse"  class="" style="font-size: 8px; visibility:hidden; background-color:white;  font-size: 450%; border: aliceblue; color: red;">x</button>'+
 					'<button id="notCaptured"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Unable to capture Finger print, please try again</button> <div>'+
 					'<button id="serverMessage"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Please restart the server</button> <div>'+
-					'<button id="placeFinger"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Unable to capture Finger print, please try again</button> <div>' +
+					'<button id="placeFinger"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Kindly place your finger on mantra device</button> <div>' +
 					'<div id="submitPanel" ><button id="validateLastCapturedFP" class="btn btn-primary" ng-click="$close(model.validateLastCaptured())" style="margin-top: 10%; margin-right: 10%; visibility:hidden;">VALIDATE LAST CAPTURED</button>' +
 					'<button id="" class="btn btn-primary" ng-click="$close(model.submitFPDetails())" style="margin-top: 10%; margin-right: 10%;">Submit</button></div>'+
 			        '<style>.button {background-color: #4CAF50' +
