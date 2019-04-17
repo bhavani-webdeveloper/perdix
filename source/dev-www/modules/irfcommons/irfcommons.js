@@ -572,7 +572,7 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
                 var result = [];
                 var out = null;
 
-                var BiometricModal = irfSimpleModal("Capture Data", BiometricHTML, {
+                var BiometricModal = irfSimpleModal("Capture Finger Prints", BiometricHTML, {
                 	"result": result,
                 	"takeData": function() {
                 		var applet = document.getElementById('webCaptureApplet');
@@ -775,7 +775,7 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 			            }
 			        );
 			    }
-			    var BiometricModal = irfSimpleModal("Capture Data", BiometricHTML, {
+			    var BiometricModal = irfSimpleModal("Capture Finger Prints", BiometricHTML, {
 			        "result": result,
 			        "takeData": function (event) {
 			            var targetElem = event.target.alt;
