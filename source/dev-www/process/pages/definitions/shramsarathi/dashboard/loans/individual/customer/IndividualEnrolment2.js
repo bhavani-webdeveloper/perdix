@@ -1986,6 +1986,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "EnterpriseFinancials.currentAsset":{
                         "titleExpr":"model.customer.currentAssets[arrayIndex].titleExpr",
                     },
+
+                    "Liabilities.liabilities.liabilityLoanPurpose":{
+                        "type": "lov",
+                        "resolver": "LoanPurpose1LOVConfigurationShramsarathi",
+                        "autolov": true
+                    },
+                  
                     // "FamilyDetails.familyMembers.dateOfBirth":{
                     //     "onChange": function (modelValue, form, model, formCtrl, event) {
                     //         if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {

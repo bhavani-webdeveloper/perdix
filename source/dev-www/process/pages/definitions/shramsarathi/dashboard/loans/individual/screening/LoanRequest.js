@@ -2299,10 +2299,7 @@ define([],function(){
                 "title": "LOAN_REQUEST",
                 "subTitle": "BUSINESS",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
-                //     console.log(model);
-                // console.log("-------- Model");
-                // console.log(form);
-                // console.log("-------- form");
+                //   
                     // AngularResourceService.getInstance().setInjector($injector);
  
                     /* Setting data recieved from Bundle */
@@ -2331,8 +2328,8 @@ define([],function(){
                      });
                     }
  
-                    BundleManager.broadcastEvent('loan-account-loaded', {loanAccount: model.loanAccount});                    
- 
+                    BundleManager.broadcastEvent('loan-account-loaded', {loanAccount: model.loanAccount});
+                            
                      /* Deviations and Mitigations grouping */
                      if(!_.hasIn(model.loanAccount,'transactionType')|| _.isNull(model.loanAccount.transactionType)){
                         model.loanAccount.transactionType = "New Loan";
@@ -2388,7 +2385,10 @@ define([],function(){
         
                         });
                         Enrollment.getCustomerById({id:model.loanAccount.customerId}).$promise.then(function(customer){
-                            model.customer = customer
+                            model.customer = customer;
+                            if(model.loanAccount.frequencyRequested == undefined){
+                                model.loanAccount.frequencyRequested='Monthly';
+                            }
                         },function(err){
 
                         })
@@ -2397,6 +2397,11 @@ define([],function(){
                         model.loanAccount.loanPurpose3temp = model.loanAccount.loanPurpose3; 
                     }
  
+                    if(model.loanAccount.frequencyRequested == undefined){
+                        model.loanAccount.frequencyRequested='Monthly';
+                    }
+                   
+
                     self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
                     p1.then(function(repo) {                  
