@@ -466,6 +466,7 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 					document.getElementById("serverMessage").style.visibility = 'hidden';
 		        },
 				takeDataForMantra: function () {fpMatchStatus="";
+				document.getElementById("notCaptured").style.visibility = 'hidden';
 				document.getElementById("placeFinger").style.visibility = 'visible';
 		            Files.getBase64DataFromFileId(fileId, {}, true)
 		                .then(function (res) {
@@ -491,7 +492,7 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 		                        function (error) {
 		                            document.getElementById("statusMatchTrue").style.visibility = 'hidden';
 									document.getElementById("statusMatchFalse").style.visibility = 'hidden';
-
+									document.getElementById("notCaptured").style.visibility = 'hidden';
 									if(error.status==-1){
 										document.getElementById("serverMessage").style.visibility = 'visible';
 									}else{
@@ -726,6 +727,7 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 			    var lastCapturedFingerValidationStatus = false;
 			    var uploadFingerPrint = function (targetElement) {
 					var temp = "data:image/png;base64,";
+					document.getElementById("notCaptured").style.visibility = 'hidden';
 					document.getElementById("placeFinger").style.visibility = 'visible';
 			        var baseElem = document.getElementById("mantraFPModal").childNodes;
 			        for (var i = 0; i < baseElem.length; i++) {
