@@ -757,7 +757,8 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 			                for (var i = 0; i < baseElem.length; i++) {
 								if(i!=5)
 			                    document.getElementById(baseElem[i].id).disabled = false;
-			                };
+							};
+							document.getElementById("placeFinger").style.visibility = 'hidden';
 							document.getElementById("validateLastCapturedFP").style.visibility = 'visible';
 			            },
 			            function (err) {
