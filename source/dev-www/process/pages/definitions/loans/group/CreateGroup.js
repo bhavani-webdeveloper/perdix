@@ -291,25 +291,6 @@ define({
                             "Spoke": "group.centreCode",
                         },
                         "inputMap": {
-                            "fullName":{
-                                "title":'CUSTOMER_NAME',
-                                "type":['string',null],
-                                "key":"searchSchema.fullName",
-                                "x-schema-form": {
-                                    'type':"string"
-                                },
-                            },
-                            "urnNo":{
-                                "key":"searchSchema.urnNo",
-                                "x-schema-form": {
-                                    'type':"string"
-                                },
-                                "title":"URN_NO",
-                                "type":['string',null],
-                                "schema":{
-                                    "type":"string"
-                                }
-                            },
                             "branchId": {
                                 "key": "group.branchId",
                                 "title": "BRANCH_NAME",
@@ -349,13 +330,10 @@ define({
                             
                             console.log(inputModel);
                             var promise = Enrollment.search({
-                                'firstName':inputModel.fullName,
-                                'lastName':inputModel.lastName,
-                                'urnNo':inputModel.urnNo,
                                 'branchName': branchName,
                                 'centreId': inputModel.centreId,
                                 'customerType':'INDIVIDUAL',
-                                'stage' : 'Completed',
+                                'stage' : 'Completed'
                             }).$promise.then(function(response){
                                 $log.info(response.body);
                                 var ret = [];
@@ -424,7 +402,7 @@ define({
                                 .finally(function(){
                                     PageHelper.hideLoader();
                                 })        
-                        },
+                        }
                     },
                     {
                         "key": "group.jlgGroupMembers[].firstName",
@@ -644,21 +622,7 @@ define({
                                 "type": "integer"
                             }
                         }
-                    },
-                    "searchSchema":{"type": "object",
-                    "required": [],
-                    "properties": {
-                        'fullName':{
-                            "type":['string',null]
-                        },
-                        "lastName":{
-                            "type":['string',null]
-                        },
-                        "urnNo":{
-                            "type":['string',null]
-                        }
                     }
-                }
                 }
             },
 

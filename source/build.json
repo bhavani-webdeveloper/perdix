@@ -1,0 +1,18 @@
+{
+    "android": {
+        "debug": {
+            "keystore": "../configuration/mobile/perdix_kinara_debug_key.keystore",
+            "storePassword": "Kinara@blr",
+            "alias": "perdix_kinara_debug",
+            "password" : "Kinara@blr",
+            "keystoreType": ""
+        },
+        "release": {
+            "keystore": "../configuration/mobile/perdix_kinara_release_key.keystore",
+            "storePassword": "",
+            "alias": "perdix_kinara",
+            "password" : "",
+            "keystoreType": ""
+        }
+    }
+}
