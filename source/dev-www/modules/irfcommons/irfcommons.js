@@ -433,7 +433,7 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 		        '<div><button id="statusMatchTrue" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 350%; color: green;">✓</button>' +
 		        '<button id="statusMatchFalse"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 350%; color: red;">X</button> <div>' +
 				'<button id="notCaptured"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Unable to capture Finger print, please try again</button> <div>' +
-				'<button id="placeFinger"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Kindly place your finger on mantra device</button> <div>' +
+				'<button id="placeFinger"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: #0f18af;">Kindly place your finger on mantra device</button> <div>' +
 				'<div id="responsediv" class="text-danger">' +
 		        '</div>' +
 		        '<style>.button {background-color: #4CAF50' +
@@ -653,23 +653,22 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 
 			    var BiometricHTML = '\
                      \
-					<div id="mantraFPModal" style="padding-left: 100px;">' +
-			        '<button id="LEFT_HAND_THUMB" ng-click="$close(model.takeData($event)) " class="button button5" ><img class="button button5" alt="LEFT_HAND_THUMB"  src=""/></button>' +
-			        '<button id="LEFT_HAND_INDEX" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5"  alt= "LEFT_HAND_INDEX"  src=""></button>' +
-			        '<button id="LEFT_HAND_MIDDLE" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5" alt= "LEFT_HAND_MIDDLE" src=""></button>' +
-			        '<button id="LEFT_HAND_RING" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5" alt= "LEFT_HAND_RING"  src=""></button>' +
-			        '<button id="LEFT_HAND_SMALL" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5" alt= "LEFT_HAND_SMALL"  src=""></button>' +
-					'</br>'+
-			        '<button id="RIGHT_HAND_THUMB" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5" alt="RIGHT_HAND_THUMB"  src=""></button>' +
-			        '<button id="RIGHT_HAND_INDEX" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5"  alt= "RIGHT_HAND_INDEX" src=""></button>' +
-			        '<button id="RIGHT_HAND_MIDDLE" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5" alt= "RIGHT_HAND_MIDDLE" src=""></button>' +
-			        '<button id="RIGHT_HAND_RING" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5" alt= "RIGHT_HAND_RING"  src=""></button>' +
-			        '<button id="RIGHT_HAND_SMALL" ng-click="$close(model.takeData($event))" class="button button5"><img  class="button button5" alt= "RIGHT_HAND_SMALL" src=""></button></div>' +
+					<div id="mantraFPModal" style="padding-left: 67px;">' +
+			        '<div class="row" id="row1"><div class="col-sm-2"><button id="LEFT_HAND_THUMB" ng-click="$close(model.takeData($event)) " class="button button5" ><img class="button button5" alt="LEFT_HAND_THUMB"  src=""/></button></br><div><span class="span_font">Left Hand Thumb</span></div></div>' +
+			        '<div class="col-sm-2"><button id="LEFT_HAND_INDEX" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5"  alt= "LEFT_HAND_INDEX"  src=""></button></br><span class="span_font">Left Hand Index</span></div>' +
+			        '<div class="col-sm-2"><button id="LEFT_HAND_MIDDLE" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5" alt= "LEFT_HAND_MIDDLE" src=""></button></br><span class="span_font">Left Hand Middle</span></div>' +
+			        '<div class="col-sm-2"><button id="LEFT_HAND_RING" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5" alt= "LEFT_HAND_RING"  src=""></button></br><span class="span_font">Left Hand Ring</span></div>' +
+			        '<div class="col-sm-2"><button id="LEFT_HAND_SMALL" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5" alt= "LEFT_HAND_SMALL"  src=""></button></br><span class="span_font">Left Hand Small</span></div></div>'+
+			        '<div class="row" id="row2"><div class="col-sm-2"><button id="RIGHT_HAND_THUMB" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5" alt="RIGHT_HAND_THUMB"  src=""></button></br><span class="span_font">Right Hand Thumb</span></div>' +
+			        '<div class="col-sm-2"><button id="RIGHT_HAND_INDEX" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5"  alt= "RIGHT_HAND_INDEX" src=""></button></br><span class="span_font">Right Hand Index</span></div>' +
+			        '<div class="col-sm-2"><button id="RIGHT_HAND_MIDDLE" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5" alt= "RIGHT_HAND_MIDDLE" src=""></button></br><span class="span_font">Right Hand Middle</span></div>' +
+			        '<div class="col-sm-2"><button id="RIGHT_HAND_RING" ng-click="$close(model.takeData($event))" class="button button5"><img class="button button5" alt= "RIGHT_HAND_RING"  src=""></button></br><span class="span_font">Right Hand Ring</span></div>' +
+			        '<div class="col-sm-2"><button id="RIGHT_HAND_SMALL" ng-click="$close(model.takeData($event))" class="button button5"><img  class="button button5" alt= "RIGHT_HAND_SMALL" src=""></button></br><span class="span_font">Right Hand Small</span></div></div>' +
 					'<div style="padding-left: 100px;"><button id="statusMatchTrue"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 350%; color: green;">✓</button>'+
 					'<button id="statusMatchFalse"  class="" style="font-size: 8px; visibility:hidden; background-color:white;  font-size: 450%; border: aliceblue; color: red;">x</button>'+
 					'<button id="notCaptured"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Unable to capture Finger print, please try again</button> <div>'+
 					'<button id="serverMessage"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Please restart the server</button> <div>'+
-					'<button id="placeFinger"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Kindly place your finger on mantra device</button> <div>' +
+					'<button id="placeFinger"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: #0f18af;">Kindly place your finger on mantra device</button> <div>' +
 					'<div id="submitPanel" ><button id="validateLastCapturedFP" class="btn btn-primary" ng-click="$close(model.validateLastCaptured())" style="margin-top: 10%; margin-right: 10%; visibility:hidden;">VALIDATE LAST CAPTURED</button>' +
 					'<button id="" class="btn btn-primary" ng-click="$close(model.submitFPDetails())" style="margin-top: 10%; margin-right: 10%;">Submit</button></div>'+
 			        '<style>.button {background-color: #4CAF50' +
@@ -688,7 +687,8 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 			        'border-left-width: 0px;' +
 			        'border-top-width: 0px;' +
 			        'border-right-width: 0px;background-color: #9cf739;' +
-			        'border-radius: 50%;    margin-right: 10px;} </style>';
+					'border-radius: 50%;    margin-right: 10px;}'+
+					 '.span_font{font-size: 12px;}</style>';
 
 			    var result = [];
 			    var verifyFingerPrint = function (isoTemplate) {
@@ -729,44 +729,99 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 					var temp = "data:image/png;base64,";
 					document.getElementById("notCaptured").style.visibility = 'hidden';
 					document.getElementById("placeFinger").style.visibility = 'visible';
-			        var baseElem = document.getElementById("mantraFPModal").childNodes;
+					var baseElem = document.getElementById("mantraFPModal").childNodes;
+					
 			        for (var i = 0; i < baseElem.length; i++) {
-						if(i!=5){
-							document.getElementById(baseElem[i].id).disabled = true;
+						var baseChileNodes=document.getElementById("row1").childNodes;
+						for(var j=0;j<baseChileNodes.length;j++){
+							console.log(baseChileNodes[j].childNodes[0]);
+							baseChileNodes[j].childNodes[0].disabled = true;
+							//document.getElementById(baseChileNodes[j].id).disabled = true;
 						}
+						var baseChileNodesR2=document.getElementById("row2").childNodes;
+						for(var j=0;j<baseChileNodesR2.length;j++){
+							console.log(baseChileNodesR2[j].childNodes[0]);
+							baseChileNodesR2[j].childNodes[0].disabled = true;
+							//document.getElementById(baseChileNodes[j].id).disabled = true;
+						}
+						// if(i!=5){
+						// 	document.getElementById(baseElem[i].id).disabled = true;
+						// }
 						};
-						
+						// here new
+						// var applet = document.getElementById('mantraFPModal');
+						// lastCapturedFingerPrintISOTemplate = "Rk1SACAyMAAAAAFEAAABAAGQAMUAxQEAAQBdLwB6AA8gAABPACckAACBADCgAABBADkYAAC5ADycAAB6AEOgAACiAEOkAABsAEUgAABsAF2kAABZAF+YAAAqAG38AAC5AG2cAABBAG+MAACFAG8oAABLAHKkAACdAHYgAADhAHmcAAA6AHuIAABNAIIgAABEAIUkAABSAIWYAADfAJUkAADqAJUQAABIAJegAAAzAJ6EAAAVAKEAAADqAKgUAAC7ALQkAADhALsYAABgAL+gAAC+AMskAAAnANB8AACRANAkAADVANcgAAAcAN58AADqAOMYAAAeAO4EAACMAQacAAA2AQiEAABEAQqUAAAuARkMAACyARmoAABdASSQAAC7AUisAABZAVGQAAC3AVosAACWAV2cAAAMCgEADF8FaAAAAAAA";//"b.base64ISOTemplate";
+						// var child = applet.childNodes;
+						// //for (var i = 0; i < child.length; i++) {
+						// 	//if (targetElement == child[i].id) {
+						// 		var tempImg = document.getElementById(targetElement).childNodes;
+						// 		tempImg[0].src = temp +"Rk1SACAyMAAAAAFEAAABAAGQAMUAxQEAAQBdLwB6AA8gAABPACckAACBADCgAABBADkYAAC5ADycAAB6AEOgAACiAEOkAABsAEUgAABsAF2kAABZAF+YAAAqAG38AAC5AG2cAABBAG+MAACFAG8oAABLAHKkAACdAHYgAADhAHmcAAA6AHuIAABNAIIgAABEAIUkAABSAIWYAADfAJUkAADqAJUQAABIAJegAAAzAJ6EAAAVAKEAAADqAKgUAAC7ALQkAADhALsYAABgAL+gAAC+AMskAAAnANB8AACRANAkAADVANcgAAAcAN58AADqAOMYAAAeAO4EAACMAQacAAA2AQiEAABEAQqUAAAuARkMAACyARmoAABdASSQAAC7AUisAABZAVGQAAC3AVosAACWAV2cAAAMCgEADF8FaAAAAAAA";//+ b.base64Image;
+						// 		fingerArray.push({
+						// 			'name':targetElement,
+						// 			'data':"Rk1SACAyMAAAAAFEAAABAAGQAMUAxQEAAQBdLwB6AA8gAABPACckAACBADCgAABBADkYAAC5ADycAAB6AEOgAACiAEOkAABsAEUgAABsAF2kAABZAF+YAAAqAG38AAC5AG2cAABBAG+MAACFAG8oAABLAHKkAACdAHYgAADhAHmcAAA6AHuIAABNAIIgAABEAIUkAABSAIWYAADfAJUkAADqAJUQAABIAJegAAAzAJ6EAAAVAKEAAADqAKgUAAC7ALQkAADhALsYAABgAL+gAAC+AMskAAAnANB8AACRANAkAADVANcgAAAcAN58AADqAOMYAAAeAO4EAACMAQacAAA2AQiEAABEAQqUAAAuARkMAACyARmoAABdASSQAAC7AUisAABZAVGQAAC3AVosAACWAV2cAAAMCgEADF8FaAAAAAAA"//b.base64ISOTemplate,
+						// 		});
+
+							//}
+					//	}
+						//
 						MantraFingrePrintService.captureFingerPrintMantra(
 			            function (biometricDetails) {
 			                var b = biometricDetails;
 			                var iso = b.base64ISOTemplate;
 			                var applet = document.getElementById('mantraFPModal');
 			                lastCapturedFingerPrintISOTemplate = b.base64ISOTemplate;
-			                var child = applet.childNodes;
-			                for (var i = 0; i < child.length; i++) {
-			                    if (targetElement == child[i].id) {
-			                        var tempImg = document.getElementById(targetElement).childNodes;
-									tempImg[0].src = temp + b.base64Image;
+							var child = applet.childNodes;
+							
+							//here  new 
+							var tempImg = document.getElementById(targetElement).childNodes;
+							tempImg[0].src = temp + b.base64Image;
 									fingerArray.push({
 										'name':targetElement,
 										'data':b.base64ISOTemplate,
 									});
+	
+							if(baseElem.length){
 
-			                    }
-			                }
-			                for (var i = 0; i < baseElem.length; i++) {
-								if(i!=5)
-			                    document.getElementById(baseElem[i].id).disabled = false;
-							};
+								var baseChileNodes=document.getElementById("row1").childNodes;
+								for (var j = 0; j < baseChileNodes.length; j++) {
+									//console.log(baseChileNodes[j].childNodes[0]);
+									baseChileNodes[j].childNodes[0].disabled = false;
+									//document.getElementById(baseChileNodes[j].id).disabled = true;
+								}
+								var baseChileNodesR2 = document.getElementById("row2").childNodes;
+								for (var j = 0; j < baseChileNodesR2.length; j++) {
+									//console.log(baseChileNodesR2[j].childNodes[0]);
+									baseChileNodesR2[j].childNodes[0].disabled = false;
+									//document.getElementById(baseChileNodes[j].id).disabled = true;
+								}
+							}
+			                // for (var i = 0; i < baseElem.length; i++) {
+							// 	if(i!=5)
+			                //     document.getElementById(baseElem[i].id).disabled = false;
+							// };
 							document.getElementById("placeFinger").style.visibility = 'hidden';
 							document.getElementById("validateLastCapturedFP").style.visibility = 'visible';
 			            },
 			            function (err) {
 							document.getElementById("placeFinger").style.visibility = 'hidden';
 			                var baseElem = document.getElementById("mantraFPModal").childNodes;
-			                for (var i = 0; i < baseElem.length; i++) {
-								if(i!=5)
-			                    document.getElementById(baseElem[i].id).disabled = false;
+			                if (baseElem.length) {
+								//console.log("+++++++++++++")
+								var baseChileNodes=document.getElementById("row1").childNodes;
+								for (var j = 0; j < baseChileNodes.length; j++) {
+									//console.log(baseChileNodes[j].childNodes[0]);
+									baseChileNodes[j].childNodes[0].disabled = false;
+									//document.getElementById(baseChileNodes[j].id).disabled = true;
+								}
+								var baseChileNodesR2 = document.getElementById("row2").childNodes;
+								for (var j = 0; j < baseChileNodesR2.length; j++) {
+									//console.log(baseChileNodesR2[j].childNodes[0]);
+									baseChileNodesR2[j].childNodes[0].disabled = false;
+									//document.getElementById(baseChileNodes[j].id).disabled = true;
+								}
+								
+								//if(i!=5)
+			                    //document.getElementById(baseElem[i].id).disabled = false;
 							};
 							if(err.status==-1){
 								console.log("server restart");
