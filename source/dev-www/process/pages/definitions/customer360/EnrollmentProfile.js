@@ -299,25 +299,25 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                                 };
                             }
                         },
-                        {
-                            "title": "RISK_PROFILE",
-                            "condition":"model.isRiskProfileAccess",
-                            "type": "select",
-                            "key": "customer.riskProfile",
-                            "enumCode":"customer_risk_profile",
-                            onChange: function (valueObj, form, model) {
-                            }
-                        },
-                        {
-                            "title": "RISK_PROFILE",
-                            "condition":"!model.isRiskProfileAccess",
-                            "readonly":true,
-                            "type": "select",
-                            "key": "customer.riskProfile",
-                            "enumCode":"customer_risk_profile",
-                            onChange: function (valueObj, form, model) {
-                            }
-                        }
+                        // {
+                        //     "title": "RISK_PROFILE",
+                        //     "condition":"model.isRiskProfileAccess",
+                        //     "type": "select",
+                        //     "key": "customer.riskProfile",
+                        //     "enumCode":"customer_risk_profile",
+                        //     onChange: function (valueObj, form, model) {
+                        //     }
+                        // },
+                        // {
+                        //     "title": "RISK_PROFILE",
+                        //     "condition":"!model.isRiskProfileAccess",
+                        //     "readonly":true,
+                        //     "type": "select",
+                        //     "key": "customer.riskProfile",
+                        //     "enumCode":"customer_risk_profile",
+                        //     onChange: function (valueObj, form, model) {
+                        //     }
+                        // }
 
                         
                     ]
@@ -1690,14 +1690,14 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                                 };
                             }
                         },
-                        {
-                            "title": "RISK_PROFILE",
-                            "type": "select",
-                            "key": "customer.riskProfile",
-                            "enumCode":"customer_risk_profile",
-                            onChange: function (valueObj, form, model) {
-                            }
-                        }
+                        // {
+                        //     "title": "RISK_PROFILE",
+                        //     "type": "select",
+                        //     "key": "customer.riskProfile",
+                        //     "enumCode":"customer_risk_profile",
+                        //     onChange: function (valueObj, form, model) {
+                        //     }
+                        // }
                     ]
                 },
                 {
@@ -1861,15 +1861,15 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                                 };
                             }
                         },
-                        {
-                            "title": "RISK_PROFILE",
-                            "type": "select",
-                            "key": "customer.riskProfile",
-                            "enumCode":"customer_risk_profile",
-                            onChange: function (valueObj, form, model) {
-                            },
-                            readonly:true
-                        }
+                        // {
+                        //     "title": "RISK_PROFILE",
+                        //     "type": "select",
+                        //     "key": "customer.riskProfile",
+                        //     "enumCode":"customer_risk_profile",
+                        //     onChange: function (valueObj, form, model) {
+                        //     },
+                        //     readonly:true
+                        // }
                     ]
                 },
                 {
