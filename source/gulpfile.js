@@ -9,6 +9,20 @@ var ts = require('gulp-typescript');
 var merge = require('merge2');
 var babel = require("gulp-babel");
 var $ = gulpLoadPlugins();
+var exec = require('child_process').exec;
+var execSync = require('child_process').execSync;
+var ifElse = require('gulp-if-else');
+const mysql = require('mysql');
+
+// var bowerInstall = new Promise(function(resolve,reject){
+//     var data = exec('rm -rf dev-www/bower_components ; bower install');
+//     data.stdout.on('data',function(data){
+//         console.log(data);
+//     })
+//     data.on('exit', function(code) {
+//         resolve('success');
+//     });
+// })
 
 /*
  |--------------------------------------------------------------------------
@@ -128,7 +142,7 @@ gulp.task('androidManifestUpgrade', function(){
 
     return gulp.src(['./config.xml'])
         .pipe($.print())
-        .pipe($.cheerio({
+        .pipe($.if(argv.apkRequired == 'true',$.cheerio({
             run: function($, file){
                 console.log("Updating version to " + version);
                 console.log("Updating bundleId to " + bundleId);
@@ -140,18 +154,18 @@ gulp.task('androidManifestUpgrade', function(){
             parserOptions: {
                 xmlMode: true
             }
-        }))
+        })))
         .pipe(gulp.dest("./"));
 });
 
 gulp.task('updateLegacyURLInIndex', function(){
     var legacySystemUrl = argv.legacySystemUrl;
     return gulp.src(['./dev-www/integration.html'])
-        .pipe($.cheerio({
+        .pipe($.if(argv.perdix7 == 'true',$.cheerio({
             run: function($, file){
                 $("#i7iframe").attr("src",legacySystemUrl)
             }
-        }))
+        })))
         .pipe(gulp.dest("./dev-www/"))
 })
 
@@ -176,10 +190,10 @@ gulp.task('appManifestUpdate', function(){
     var sql = "update `global_settings` set `value` = '" + versionString + "' where `name` = 'cordova.latest_apk_version';";
     console.log("SQL to update version is ::: " + sql);
     return gulp.src(['./dev-www/app_manifest.json'])
-        .pipe($.jsonModify({
+        .pipe($.if(argv.apkRequired =='true',$.jsonModify({
             key: "version",
             value: versionString
-        }))
+        })))
         .pipe(gulp.dest('./dev-www/'));
 })
 
@@ -244,3 +258,212 @@ gulp.task("resources", function(){
 })
 gulp.task('build', ['html', 'assets', 'fonts']);
 
+gulp.task('bower-check',function(){
+    ifElse(argv.bower == 'true', function () {
+        var bowerInstall = execSync('bower cache clean irf-elements ; bower uninstall irf-elements angular-data-table ; bower install');
+        // bowerInstall.stdout.on('data',function(data){
+        //     console.log(data);
+        // })
+        // bowerInstall.stderr.on('err',function(err){
+        //     console.log(err);
+        // });
+        console.log(bowerInstall.toString());
+    }, function () {
+        exec('grep -o \'irf-common-elements#trunk\' bower.json', function (err, stdout, stderr) {
+            var temp = stdout.replace('\n', '').replace('\r', '').toString();
+            ifElse(temp == 'irf-common-elements#trunk', function () {
+                var bowerInstall = execSync('bower install')
+                // bowerInstall.stdout.on('data', function (data) {
+                //     console.log(data.toString());
+                // bowerInstall.stderr.on('err',function(err){
+                //     console.log(err);
+                // })
+                console.log(bowerInstall.toString());
+            }, function () {
+                console.log('Skipping bower install...')
+            })
+        })
+    })
+})
+gulp.task('npm-install',function(){
+    makeItWork.then(function(){
+        var npmInstall = exec('rm -rf node_modules ; npm install');
+        npmInstall.stdout.on('data',function(data){
+        console.log(data);
+    })
+    npmInstall.stderr.on('err',function(err){
+        console.log(err);
+    })
+    // console.log(npmInstall.toString());
+    })
+    
+    
+})
+gulp.task('prepareAndroid',['appManifestUpdate','androidManifestUpgrade'],function(){
+    console.log(argv.apkRequired);
+    ifElse(argv.apkRequired == 'true',function(){
+        console.log(argv.apkRequired);
+        execsync('cp ../../build/env_config/perdix-client__irf-env.js ./www/js/irf-env.js ; rm -rf platforms/ ; rm -rf plugins/ ')
+        execsync('ls build.json',function(err,stdout,stderr){
+            if (err || stderr)
+                return
+            exec('rm build.json');
+        
+        })
+        var prepAnd = execsync('cordova platform add android'+argv.CdvAndVersion+ ' ;  mv ../../build/env_config/build-signing.properties ./platforms/android/'+argv.buildMode+'-signing.properties ; mv ../../build/env_config/release-key.keystore ./platforms/android/release-key.keystore ; cordova prepare android ; cordova build android --'+argv.buildMode+' ;  mv source/platforms/android/build/outputs/apk/'+argv.buildMode+'/android-'+argv.buildMode+'.apk generated/'+argv.apkFileName);
+        // prepAnd.stdout.on('data',function(data){
+        //     console.log(data);
+        // })
+        // prepAnd.stderr.on('err',function(err){
+        //     console.log(err);
+        // })
+        console.log(preAnd.toString());
+    },function(){})
+    return true;
+})
+gulp.task('preparePerdix7',['updateLegacyURLInIndex'],function(){
+    ifElse(argv.perdix7 == 'true',function(){
+       var result = execSync('cp www/index.html www/index8.html ; cp www/integration.html www/index.html && echo "Peridx & Integration is Success..."' ); 
+       console.log(result.toString());
+    },function(){})
+})
+gulp.task('prepareManagement',function(){
+    ifElse(argv.cleanManagement == 'true',function(){
+        var prepManagement = execSync('cd ../configuration/management/server-ext && rm -rf vendor/ && composer install --ignore-platform-reqs && cd ../../../ && echo "Composer Install is Successfull..."');
+        // prepManagement.stdout.on('data',function(data){
+        //     console.log(data);
+        // })
+        // prepManagement.stderr.on('err',function(err){
+        //     console.log(err);
+        // })
+        console.log(prepManagement.toString());
+    },function(){
+        var prepManagement = execSync('cd ../configuration/management/server-ext && composer install --ignore-platform-reqs && cd ../../../ && pwd && echo "Composer Install is Successfull..."');
+        // prepManagement.stdout.on('data',function(data){
+        //     console.log(data);
+        // })
+        // prepManagement.stderr.on('err',function(err){
+        //     console.log(err);
+        // })
+        console.log(prepManagement.toString());
+    })  
+    return true;
+})
+gulp.task('prepareRest',['prepareManagement'],function(){
+    exec('cd .. && mkdir generated ; cp configuration/"Process Definition JSONs"/Active/'+argv.processJsonDir+'/*.json generated/json ; cp -R configuration/management generated/',function(err,stdout,stderr){
+        if (stderr){
+            console.log('Error copying Process Json');
+            console.log(stderr);
+            return;
+        }
+        if (err){
+            console.log(err)
+            return;
+        }
+        if (stdout)
+            console.log(stdout);
+        console.log('Successfully copied Process json...');
+    })
+    exec('ls -d ../configuration/smsTemplate/'+argv.smsTemplateDir,function(err,stdout,stderr){
+      
+        if (stderr){
+            console.log('Sms Template dir is not available, Hence Skipping ...')
+            console.log(stderr);
+            return
+        }
+        if (err){
+            console.log(err);
+            return
+        }
+        exec('cp -R ../configuration/smsTemplate/'+argv.smsTemplateDir+'/smsTemplate.txt ../generated/',function(err,stdout,stderr){
+            if (stderr){
+                console.log(stderr);
+                return
+            }
+            if (err){
+                console.log(err);
+                return
+            }
+        })
+    })
+    exec('ls -d ../configuration/perdix-server-scripts/'+argv.perdixGroovyDir,function(err,stdout,stderr){
+        if (stderr){
+            console.log('Groovy Dir is not available, Hence Skipping ...')
+            console.log(stderr);
+            return
+        };
+        if (err){
+            console.log(err);
+            return
+        }
+        exec('cp -R ../configuration/perdix-server-scripts/'+argv.perdixGroovyDir+' ../generated/perdix-server-scripts',function(err,stdout,stderr){
+            if (err){
+                console.log(err);
+                return
+            }
+            if (stderr){
+                console.log(stderr);
+                return
+            }
+        })
+    })
+    exec('ls -d ../configuration/awaazde/'+argv.confDirName,function(err,stdout,stderr){
+        if (stderr){
+            console.log('Awaazde dir is not available, Hence Skipping ...');
+            console.log(stderr);
+            return
+        };
+        if (err){
+            console.log(err);
+            return
+        }
+        exec('cp -R ../configuration/awaazde/'+argv.confDirName+' ../generated/awaazde',function(err,stdout,stderr){
+            if (err){
+                console.log(err);
+                return
+            }
+            if (stderr){
+                console.log(stderr);
+                return
+            }
+        })
+    })
+})
+gulp.task('prepareConfig',['prepareRest'],function(){
+    var prepConfig = exec('cd .. && mv ../build/env_config/perdix-client__irf-env.js generated/perdix-client/js/irf-env.js ; mv ../build/env_config/scoring__ConfigureDbs.php generated/management/scoring/includes/ConfigureDbs.php ; mv ../build/env_config/scoring__db.php generated/management/scoring/includes/db.php ; mv ../build/env_config/user-management__init.php generated/management/user-management/_init.php ; mv ../build/env_config/server-ext__env.env generated/management/server-ext/.env');
+    prepConfig.stdout.on('data',function(data){
+        console.log(data);
+    })
+    prepConfig.stderr.on('err',function(err){
+        console.log(err);
+    })
+})
+gulp.task('generateZip',['prepareConfig'],function(){
+    var generateZip = exec('cd .. && cd generated ; tar -czf build.tar.gz * ; cd .. ; mv generated/build.tar.gz target/');
+    generateZip.stdout.on('data',function(data){
+        console.log(data);
+    })
+    generateZip.stderr.on('err',function(err){
+        console.log(err);
+    })
+});
+gulp.task('updateApkVersion',function(){
+    var connection = mysql.createConnection({
+        host:'sit.perdix.co.in',
+        user:'ruser',
+        password:'pass@123',
+        database:'sit_kgfs_financialForms'
+    })
+    connection.connect();
+    connection.query('select * from customer limit 1',function(err,results,fields){
+        if (err) throw err;
+        console.log(results);
+    })
+    return true;
+});
+gulp.task('pacakage',['clean','npm-install','build','prepareAndroid','preparePerdix7','generateZip','updateApkversion'],function(){
+
+})
+
+gulp.task('test',['npm-install','build'],function(){
+})
