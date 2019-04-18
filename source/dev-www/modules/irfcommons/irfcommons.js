@@ -734,36 +734,13 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 			        for (var i = 0; i < baseElem.length; i++) {
 						var baseChileNodes=document.getElementById("row1").childNodes;
 						for(var j=0;j<baseChileNodes.length;j++){
-							console.log(baseChileNodes[j].childNodes[0]);
 							baseChileNodes[j].childNodes[0].disabled = true;
-							//document.getElementById(baseChileNodes[j].id).disabled = true;
-						}
+							}
 						var baseChileNodesR2=document.getElementById("row2").childNodes;
 						for(var j=0;j<baseChileNodesR2.length;j++){
-							console.log(baseChileNodesR2[j].childNodes[0]);
 							baseChileNodesR2[j].childNodes[0].disabled = true;
-							//document.getElementById(baseChileNodes[j].id).disabled = true;
-						}
-						// if(i!=5){
-						// 	document.getElementById(baseElem[i].id).disabled = true;
-						// }
+							}
 						};
-						// here new
-						// var applet = document.getElementById('mantraFPModal');
-						// lastCapturedFingerPrintISOTemplate = "Rk1SACAyMAAAAAFEAAABAAGQAMUAxQEAAQBdLwB6AA8gAABPACckAACBADCgAABBADkYAAC5ADycAAB6AEOgAACiAEOkAABsAEUgAABsAF2kAABZAF+YAAAqAG38AAC5AG2cAABBAG+MAACFAG8oAABLAHKkAACdAHYgAADhAHmcAAA6AHuIAABNAIIgAABEAIUkAABSAIWYAADfAJUkAADqAJUQAABIAJegAAAzAJ6EAAAVAKEAAADqAKgUAAC7ALQkAADhALsYAABgAL+gAAC+AMskAAAnANB8AACRANAkAADVANcgAAAcAN58AADqAOMYAAAeAO4EAACMAQacAAA2AQiEAABEAQqUAAAuARkMAACyARmoAABdASSQAAC7AUisAABZAVGQAAC3AVosAACWAV2cAAAMCgEADF8FaAAAAAAA";//"b.base64ISOTemplate";
-						// var child = applet.childNodes;
-						// //for (var i = 0; i < child.length; i++) {
-						// 	//if (targetElement == child[i].id) {
-						// 		var tempImg = document.getElementById(targetElement).childNodes;
-						// 		tempImg[0].src = temp +"Rk1SACAyMAAAAAFEAAABAAGQAMUAxQEAAQBdLwB6AA8gAABPACckAACBADCgAABBADkYAAC5ADycAAB6AEOgAACiAEOkAABsAEUgAABsAF2kAABZAF+YAAAqAG38AAC5AG2cAABBAG+MAACFAG8oAABLAHKkAACdAHYgAADhAHmcAAA6AHuIAABNAIIgAABEAIUkAABSAIWYAADfAJUkAADqAJUQAABIAJegAAAzAJ6EAAAVAKEAAADqAKgUAAC7ALQkAADhALsYAABgAL+gAAC+AMskAAAnANB8AACRANAkAADVANcgAAAcAN58AADqAOMYAAAeAO4EAACMAQacAAA2AQiEAABEAQqUAAAuARkMAACyARmoAABdASSQAAC7AUisAABZAVGQAAC3AVosAACWAV2cAAAMCgEADF8FaAAAAAAA";//+ b.base64Image;
-						// 		fingerArray.push({
-						// 			'name':targetElement,
-						// 			'data':"Rk1SACAyMAAAAAFEAAABAAGQAMUAxQEAAQBdLwB6AA8gAABPACckAACBADCgAABBADkYAAC5ADycAAB6AEOgAACiAEOkAABsAEUgAABsAF2kAABZAF+YAAAqAG38AAC5AG2cAABBAG+MAACFAG8oAABLAHKkAACdAHYgAADhAHmcAAA6AHuIAABNAIIgAABEAIUkAABSAIWYAADfAJUkAADqAJUQAABIAJegAAAzAJ6EAAAVAKEAAADqAKgUAAC7ALQkAADhALsYAABgAL+gAAC+AMskAAAnANB8AACRANAkAADVANcgAAAcAN58AADqAOMYAAAeAO4EAACMAQacAAA2AQiEAABEAQqUAAAuARkMAACyARmoAABdASSQAAC7AUisAABZAVGQAAC3AVosAACWAV2cAAAMCgEADF8FaAAAAAAA"//b.base64ISOTemplate,
-						// 		});
-
-							//}
-					//	}
-						//
 						MantraFingrePrintService.captureFingerPrintMantra(
 			            function (biometricDetails) {
 			                var b = biometricDetails;
@@ -771,8 +748,6 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 			                var applet = document.getElementById('mantraFPModal');
 			                lastCapturedFingerPrintISOTemplate = b.base64ISOTemplate;
 							var child = applet.childNodes;
-							
-							//here  new 
 							var tempImg = document.getElementById(targetElement).childNodes;
 							tempImg[0].src = temp + b.base64Image;
 									fingerArray.push({
@@ -784,45 +759,29 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 
 								var baseChileNodes=document.getElementById("row1").childNodes;
 								for (var j = 0; j < baseChileNodes.length; j++) {
-									//console.log(baseChileNodes[j].childNodes[0]);
 									baseChileNodes[j].childNodes[0].disabled = false;
-									//document.getElementById(baseChileNodes[j].id).disabled = true;
 								}
 								var baseChileNodesR2 = document.getElementById("row2").childNodes;
 								for (var j = 0; j < baseChileNodesR2.length; j++) {
-									//console.log(baseChileNodesR2[j].childNodes[0]);
 									baseChileNodesR2[j].childNodes[0].disabled = false;
-									//document.getElementById(baseChileNodes[j].id).disabled = true;
-								}
+									}
 							}
-			                // for (var i = 0; i < baseElem.length; i++) {
-							// 	if(i!=5)
-			                //     document.getElementById(baseElem[i].id).disabled = false;
-							// };
-							document.getElementById("placeFinger").style.visibility = 'hidden';
+			                document.getElementById("placeFinger").style.visibility = 'hidden';
 							document.getElementById("validateLastCapturedFP").style.visibility = 'visible';
 			            },
 			            function (err) {
 							document.getElementById("placeFinger").style.visibility = 'hidden';
 			                var baseElem = document.getElementById("mantraFPModal").childNodes;
 			                if (baseElem.length) {
-								//console.log("+++++++++++++")
 								var baseChileNodes=document.getElementById("row1").childNodes;
 								for (var j = 0; j < baseChileNodes.length; j++) {
-									//console.log(baseChileNodes[j].childNodes[0]);
 									baseChileNodes[j].childNodes[0].disabled = false;
-									//document.getElementById(baseChileNodes[j].id).disabled = true;
-								}
+									}
 								var baseChileNodesR2 = document.getElementById("row2").childNodes;
 								for (var j = 0; j < baseChileNodesR2.length; j++) {
-									//console.log(baseChileNodesR2[j].childNodes[0]);
 									baseChileNodesR2[j].childNodes[0].disabled = false;
-									//document.getElementById(baseChileNodes[j].id).disabled = true;
-								}
-								
-								//if(i!=5)
-			                    //document.getElementById(baseElem[i].id).disabled = false;
-							};
+									}
+								};
 							if(err.status==-1){
 								console.log("server restart");
 								document.getElementById("serverMessage").style.visibility = 'visible';
