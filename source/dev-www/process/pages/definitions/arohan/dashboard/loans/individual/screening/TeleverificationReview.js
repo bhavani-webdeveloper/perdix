@@ -7,7 +7,7 @@ define(["perdix/domain/model/loan/LoanProcess",
         var EnrolmentProcess = EnrolmentProcess["EnrolmentProcess"];
         var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
         return {
-             pageUID: "arohan.dashboard.loans.individual.screening.InternalPersonalDiscussionReview",
+             pageUID: "arohan.dashboard.loans.individual.screening.TeleverificationReview",
             pageType: "Bundle",
             dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
     "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "Message", "irfNavigator"],
@@ -64,6 +64,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                         maximum: 1,
                         order: 40
                     }, {
+                        pageName: 'arohan.dashboard.loans.individual.screening.TeleverificationV2',
+                        title: 'TELEVERIFICATION',
+                        pageClass: 'televerification',
+                        minimum: 1,
+                        maximum: 1,
+                        order: 41
+                    },{
                         pageName: 'loans.individual.screening.CreditBureauView',
                         title: 'CREDIT_BUREAU',
                         pageClass: 'cbview',
@@ -180,11 +187,11 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         guarantors: []
                                     };
 
-                                    if (res.currentStage != 'Televerification') {
-                                        PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
-                                        irfNavigator.goBack();
-                                        return;
-                                    }
+                                    // if (res.currentStage != 'Televerification') {
+                                    //     PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
+                                    //     irfNavigator.goBack();
+                                    //     return;
+                                    // }
 
                                     for (var i = 0; i < res.loanCustomerRelations.length; i++) {
                                         var cust = res.loanCustomerRelations[i];
@@ -244,6 +251,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     model: {
                                         customerId: res.customerId,
                                                 loanAccount: res
+                                    }
+                                });
+                                $this.bundlePages.push({
+                                    pageClass: 'televerification',
+                                    model: {
+                                        enrolmentProcess:loanProcessts.loanCustomerEnrolmentProcess,
+                                        loanProcess: loanProcessts,
+                                        loanAccount:res
                                     }
                                 });
 
