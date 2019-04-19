@@ -901,7 +901,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             {
                 "type": "box",
                 "title": "INTERNAL_FORE_CLOSURE_DETAILS", 
-                "condition": "model.siteCode == 'kinara' && model.loanAccount.linkedAccountNumber",
+                "condition": "(model.siteCode == 'kinara' ||model.siteCode == 'maitreya') && model.loanAccount.linkedAccountNumber",
                 "items": [{
                     "key": "loanAccount.linkedAccountNumber",
                     "title":"LINKED_ACCOUNT_NUMBER",
