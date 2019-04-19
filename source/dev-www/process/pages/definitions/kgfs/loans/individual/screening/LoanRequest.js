@@ -957,6 +957,7 @@ define([],function(){
                     // AngularResourceService.getInstance().setInjector($injector);
                     model.customer = {};
                     model.review = model.review|| {};
+                    model.customerId = null;
                     model.loanAccount = model.loanProcess.loanAccount;
                     if(model.loanAccount.currentStage == 'Screening' && !_.hasIn(model.loanAccount, 'id')){
                         model.loanAccount.isBusinessCaptured = false;
@@ -1464,7 +1465,8 @@ define([],function(){
                     "business-captures": function(bundleModel, model, params){
                         model.loanAccount.isBusinessCaptured = typeof params.customer.isCaptured  != undefined ? (params.customer.isCaptured?true:false):false;
                         model.loanAccount.isCreditAppraisal = typeof params.customer.isCreditAppraisal  != undefined ? (params.customer.isCreditAppraisal?true:false):false; 
-                        model.loanAccount.urnNo = model.customer.urnNo;            
+                        model.loanAccount.urnNo = model.customer.urnNo;    
+                        model.customerId=  params.customer.id;    
                     },
                     "dsc-response": function(bundleModel,model,obj){
                         model.loanAccount.loanCustomerRelations = obj;
@@ -1559,6 +1561,9 @@ define([],function(){
                             model.loanAccount.customerId=model.loanAccount.loanCustomerRelations[0].customerId;
                             model.loanAccount.urnNo=model.loanAccount.loanCustomerRelations[0].urn; 
                         }
+
+                        if(model.loanAccount.productCategory  == 'MEL' && model.loanAccount.customerId != model.customerId)
+                        model.loanProcess.loanAccount.customerId = model.customerId;
 
                         if(model.loanAccount.currentStage && model.loanAccount.currentStage == "Screening" && model.loanAccount.productCategory == 'MEL' && !model.loanAccount.isBusinessCaptured){
                             PageHelper.showProgress("loan-enrolment","Business Details are not captured",5000);

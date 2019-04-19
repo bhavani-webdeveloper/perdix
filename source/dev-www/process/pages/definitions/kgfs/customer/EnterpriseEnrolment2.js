@@ -92,7 +92,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                 model.customer.enterprise.workingDaysInMonth = Math.min((model.customer.enterprise.avgMonthlyNetIncome ? model.customer.enterprise.avgMonthlyNetIncome : 0), (model.loanAccount.estimatedEmi? model.loanAccount.estimatedEmi: 0));
                 var x = (((Math.pow(((model.loanAccount.interestRate / 12)), model.loanAccount.tenure) +1) * (model.customer.enterprise.workingDaysInMonth)) - 1)
                 var y = ((Math.pow(((model.loanAccount.interestRate/ 12)), model.loanAccount.tenure)+1) * ((model.loanAccount.interestRate/ 12))) + model.loanAccount.loanAmountRequested
-                model.customer.enterprise.employeeSalary = Math.round((x/y));
+                // model.customer.enterprise.employeeSalary = Math.round((x/y));
+                model.customer.enterprise.employeeSalary = 111;
             }
             var computeEstimatedEmi = function (model) {
                 if (model.loanAccount.loanAmountRequested == '' || model.loanAccount.interestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenure == '')
@@ -3774,6 +3775,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 model.enrolmentProcess.proceed()
                                     .subscribe(function (enrolmentProcess) {
+                                        model.loanProcess.loanAccount.customerId = enrolmentProcess.customer.id;
                                         model.enrolmentProcess.customer.centreName =  model.centreName
                                         model.customer.centreName =  model.centreName
                                         
