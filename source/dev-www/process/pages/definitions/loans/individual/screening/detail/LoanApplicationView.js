@@ -378,7 +378,7 @@ define({
                 })
                 .$promise.then(function(res){
                     model.linkedAccount=res;
-                    model.linkedLoanAmount = res.totalDisbursed;
+                    model.linkedLoanAmount = res.amount;
                 },function(err){
                     $log.info("loan request Individual/find api failure" + err);
                 });
