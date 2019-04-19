@@ -351,15 +351,16 @@ define({
                     });
                 },  
                 form: [],
-                formSource: [{
+                formSource: [
+                    {
                         "type": "section",
                         "html": `
-    <div class="col-sm-6">
-    <i class="fa fa-check-circle text-green" style="font-size:x-large">&nbsp;</i><em class="text-darkgray">{{model.existingCustomerStr}}</em><br>&nbsp;
-    </div>
-    <div class="col-sm-3">{{'BRANCH'|translate}}: <strong>{{model.customer.kgfsName}}</strong></div>
-    <div class="col-sm-3">{{'ZONE'|translate}}: <strong>{{model.customer.centreName}}</strong></div>
-    `
+                                <div class="col-sm-6">
+                                <i class="fa fa-check-circle text-green" style="font-size:x-large">&nbsp;</i><em class="text-darkgray">{{model.existingCustomerStr}}</em><br>&nbsp;
+                                </div>
+                                <div class="col-sm-3">{{'BRANCH'|translate}}: <strong>{{model.customer.kgfsName}}</strong></div>
+                                <div class="col-sm-3">{{'ZONE'|translate}}: <strong>{{model.customer.centreName}}</strong></div>
+                                `
                     }, {
                         "type": "box",
                         "readonly": true,
@@ -1170,45 +1171,22 @@ define({
                                 }
                             }]
                         }]
-                    }/*, {
-                        "type": "box",
-                        "colClass": "col-sm-12",
-                        "readonly": true,
-                        "overrideType": "default-view",
-                        "title": "View Uploads",
-                        "items": [{
-                            "type": "section",
-                            "html": '<div style="overflow-x:scroll"><div style="width:10000px"><div ng-repeat="item in form.items" style="display: inline-block; text-align: center; width: 180px;"><div style="margin-top: -10px; margin-right: 8px;"><sf-decorator form="item"></sf-decorator>{{item.title}}</div></div></div></div>',
-                            "items": [{
-                                "key": "customer.identityProofImageId",
-                                "type": "file",
-                                "notitle": true,
-                                "title": "KYC-PAN Card",
-                                "preview": "pdf",
-                                "using": "scanner"
-                            }, {
-    
-                                "key": "customer.addressProofImageId",
-                                "type": "file",
-                                "notitle": true,
-                                "title": "KYC-Aadhar Card",
-                                "preview": "pdf",
-                                "using": "scanner"
-                            }, {
-                                "key": "customer.houseVerificationPhoto",
-                                "notitle": true,
-                                "title": "House",
-                                "type": "file",
-                                "fileType": "image/*"
-                            }]
-                        }]
-                    }*/
-    
+                    }
                 ],
-    
+                
+                offlineInitialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
+                    
+                    // var p1 = UIRepository.getEnrolmentProcessUIRepository().$promise;
+                     var self = this;
+                    
+                         self.form = self.formSource;
+                },
+
+                
                 schema: function() {
                     return Enrollment.getSchema().$promise;
                 },
+                
                 eventListeners: {
                     "financial-summary": function(bundleModel, model, params) {
                         //model.customer = model.enrolmentProcess.customer;
