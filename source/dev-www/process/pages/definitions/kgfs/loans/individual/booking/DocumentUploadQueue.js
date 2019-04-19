@@ -64,7 +64,7 @@ define({
                             "type": "string"
                         },
                         "loanType": {
-                            "title": "PRODUCT_TYPE",
+                            "title": "LOAN_TYPE",
                             "enumCode": "booking_loan_type",
                             "type": "string",
                             "x-schema-form": {
