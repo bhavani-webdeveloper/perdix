@@ -247,11 +247,11 @@ define({
                     "type":"number",
                     required:true
                 },
-                // {
-                //     "title": "MATURITY_AGE",
-                //     "key":"product.maturityAge",
-                //     "type":"number"
-                // },
+                {
+                    "title": "MATURITY_AGE",
+                    "key":"product.maturityAge",
+                    "type":"number"
+                },
                 {
                     "key": "product.repaymentReminderEnabled",
                     "title": "REPAYMENT_REMINDER_ENABLED"
