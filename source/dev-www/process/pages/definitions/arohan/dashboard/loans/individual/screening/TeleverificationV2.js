@@ -4,10 +4,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
         pageUID: "arohan.dashboard.loans.individual.screening.TeleverificationV2",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
-            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository"],
+            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","irfFormToggler"],
 
         $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
-                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository) {
+                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,irfFormToggler) {
 
             var globalListkeys = [];
             var getAllIncludesFromJson = function (parentKey, previousKey, object,flag) {
@@ -488,30 +488,32 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
             };
             var prepareQuestionarieList = function(capturedData,model,type){
                 var questions = model.questions.filter(function(o){
-                    return o.process_type == type+'_reference';
+                    return o.party_type == type+'_reference';
                 })
                 var flag = true;    
                 var data = capturedData || {};
-                data.questionnaireDetails = data.questionnaireDetails || [];
-                if (data.questionnaireDetails.length>0){
+                data.telecallingQuestionnaireList = data.telecallingQuestionnaireList || [];
+                if (data.telecallingQuestionnaireList.length>0){
                     for(var i=0;i<questions.length;i++){
                         flag = true;
-                        for (var j =0;j<data.questionnaireDetails.length;j++){
-                            if (questions[i].question == data.questionnaireDetails[j].question)
+                        for (var j =0;j<data.telecallingQuestionnaireList.length;j++){
+                            if (questions[i].question == data.telecallingQuestionnaireList[j].question)
                                 flag = false;
                             if (flag)
-                                data.questionnaireDetails.push(question[i]);
+                                data.telecallingQuestionnaireList.push(question[i]);
                         }
                     }
                 } 
                 else{
-                    data.questionnaireDetails = questions;
+                    data.telecallingQuestionnaireList = questions;
                 }
                 return data;
             };
             var dummyData = function(){
+                var deferred = $q.defer()
                 let dummyDatas = {};
-                return dummyDatas;
+                deferred.resolve(dummyDatas);
+                return deferred.promise
             }
 
             var prepareModel = function(model,customers,flag){
@@ -521,18 +523,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 if (flag){
                     for(var i=0;i<model.customers.length;i++){
                         (function(customerIndex){
-                            Enrollment.getCustomerByID({id:model.customers[i].customerId}).then((customer)=>{
+                            Enrollment.getCustomerById({id:model.customers[i].customerId}).$promise.then((customer)=>{
                                 customerPromiseList -= 1;
-                                var referencePromiseList = referencePromiseList + customer.verifications.length
+                                referencePromiseList = referencePromiseList + customer.verifications.length
                                 for ( var j=0;j<customer.verifications.length;j++){
                                    (function(referenceIndex){
                                        var referenceName = customer.verifications[referenceIndex].referenceFirstName;
                                        var referencee = customer.verifications[referenceIndex];
-                                        dummyData.getDetailsById({processId:customer.verifications[j],customerId:model.customers[customerIndex].customerId}).then(
+                                        dummyData({processId:customer.verifications[j],customerId:model.customers[customerIndex].customerId}).then(
                                             (reference) =>{
+                                                var key = model.customers[customerIndex].type.toLowerCase()+'_reference_'+referenceIndex;
                                                 model.promiseArray[model.customers[customerIndex].type].push(key);
-                                                var key = model.customers[customerId].type.toLowerCase()+'_reference_'+referenceIndex;
-                                                var type = model.customers[customerId].type;
+                                                var type = model.customers[customerIndex].type;
                                                 var title = referenceName;
                                                 model.telecalling[key] = {
                                                     "key": key,
@@ -541,7 +543,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     'title':referenceName,
                                                     'referenceDetails':{
                                                         "firstName":referencee.referenceFirstName,
-                                                        'mobileNo': referencee.referennceMobileNo,
+                                                        'mobileNo': referencee.mobileNo,
                                                         "occupation":referencee.occupation,
                                                         'address':referencee.address
                                                     },
@@ -553,6 +555,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             }
                                         )
                                    })(j)
+                                }
+                                if (customerPromiseList == 0 && referencePromiseList ==0){
+                                    deferred.resolve();
                                 }
                             })
                         })(i)
@@ -576,32 +581,38 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "type":"box",
                         "items":{
                             "referenceDetails":{
+                                "type":"fieldset",
+                                "title":"REFERENCE_DETAILS",
+                                "items":{
                                 "referenceFirstName":{
                                     "title":"NAME",
                                     "type":"string",
-                                    "key":fullkey+".referenceDetails.referenceFirstName",
+                                    "key":fullkey+".referenceDetails.firstName",
                                     "readonly":true,
                                 },
                                 "referennceMobileNo":{
                                     "title":"MOBILE_NO",
                                     "type":"string",
-                                    "key":fullkey+".referenceDetails.referenceFirstName",
+                                    "key":fullkey+".referenceDetails.mobileNo",
                                     "readonly":true,
                                 },
                                 "referenceOccupation":{
                                     "title":"OCCUPATION",
                                     "type":"string",
-                                    "key":fullkey+".referenceDetails.referenceFirstName",
+                                    "key":fullkey+".referenceDetails.occupation",
                                     "readonly":true,
                                 },
                                 "referenceAddress":{
                                     "title":"ADDRESS",
                                     "type":"string",
-                                    "key":fullkey+".referenceDetails.referenceFirstName",
+                                    "key":fullkey+".referenceDetails.address",
                                     "readonly":true,
+                                }
                                 }
                             },
                             "telecallingDetails":{
+                                "type": "fieldset",
+                                "title":'TELECALLING_DETAILS',
                                 "items": {
                                     "callingAttemptsFieldSet": {
                                         "type": "fieldset",
@@ -708,14 +719,31 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 }
             };
             var DynamicformRequest = function(config){
+                getAllIncludesFromJson('','',dynamicTelecallingBox({}),true);
+                var tempIncludes = globalListkeys;
                 return {
-                    "overrides": overridesFields(model),
-                                "includes": getAllIncludesFromJson('','',dynamicTelecallingBox({}),true),
+                                "overrides": {},
+                                "includes": tempIncludes,
                                 "excludes": [],
                                 "options": {
-                                    "repositoryAddition":dynamicTelecallingBox(config)
+                                    "repositoryAdditions":dynamicTelecallingBox(config)
                                 }
                 }
+            }
+
+            var formaction = function(){
+                return [
+                    {
+                        "type": "actionbox",
+                        "items": [
+                            {
+                                "type": "button",
+                                "title": "SAVE",//PROCEED
+                                "onClick": "actions.submit(model, formCtrl, form, $event)"
+                            }
+                        ]
+                    },
+                ]
             }
 
             return {
@@ -727,7 +755,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.customers = [
                         {
                             'customerId':model.loanProcess.loanAccount.customerId,
-                            'type':'buiness',
+                            'type':'business',
                             'title':"BUSINESS",
                         }
                     ]
@@ -744,34 +772,47 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                     }
                     for (var i=0;i<model.customers.length;i++){
-                        model.promiseArray[model.customers[i].type]={};
+                        model.promiseArray[model.customers[i].type]=[];
                     }
+                    var self = this;
                     Queries.questionnaireDetails('TELECALLING', 'Tele', 'televerification').then(function(questions){
                         debugger;
                         model.questions = questions;
                         var outCount = 0;
+                        var formPromiseArrray =[];
                         self.childForm = [];
                         self.forms = [];
+                        var parentFormArray = [];
                         prepareModel(model,{},true).then(function(){
                             Object.keys(model.promiseArray).forEach(function(key,value) {
-                                (function(count){
-                                    Object.keys(model.telecalling).forEach(function(key,value){
-                                        formPromiseArrray[count].push(
-                                            IrfFormRequestProcessor.buildFormDefinition(repo, DynamicformRequest(model.telecalling[value]), {}, model).then(function(form){
-                                                self.childForm[count] = {...self.childForm[count], ...form};
-                                            })
-                                        )
-                                    })
-                                    
-                                    parentFormArray.push($q.all(formPromiseArrray[count]).then(function(){
-                                            self.forms = self.forms.push(self.childForm[count]);
+                                (function(key,count){
+                                    formPromiseArrray[count] = [];
+                                    self.childForm[count] = [];
+                                    var parentKey = model.promiseArray[key];
+                                    for (var i=0;i<model.promiseArray[key].length;i++){
+                                        (function(index){
+                                                formPromiseArrray[count].push(
+                                                    IrfFormRequestProcessor.buildFormDefinition({}, DynamicformRequest(model.telecalling[parentKey[i]]), {}, model).then(function(form){
+                                                        self.childForm[count] = self.childForm[count].concat(form);
+                                                    })
+                                                )
+                                        })(i);
+                                    }
+                                    if (formPromiseArrray[count].length>0){
+                                        parentFormArray.push($q.all(formPromiseArrray[count]).then(function(){
+                                            self.forms.push({
+                                                form:self.childForm[count],
+                                                title:key.toUpperCase()+'_REFERENCES'
+                                            });
                                         }
                                     ))
-                                    outCount = outCount+1;
-                                })(outCount);
+                                    }
+                                outCount = outCount+1;
+                                })(key,outCount)
+                                
                             });
                             $q.all(parentFormArray).then(function(){
-                                form=irfFormToggler.prepareToggleForm('BUSINESS', self.forms, formaction, model);
+                                form=irfFormToggler.prepareToggleForm('BUSINESS', self.forms, formaction(), model);
                                 console.log(form);
                                 self.form=form;
                             })
@@ -784,142 +825,142 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     // put a promise array for all the refrence and added to form toogels
                     // after form toglerr form generation call the form toggler
                     // 
-                    model.loanCustomer = {};
-                    model.applicant = {};
-                    model.coApplicants = [];
-                    model.guarantors = [];
+                //     model.loanCustomer = {};
+                //     model.applicant = {};
+                //     model.coApplicants = [];
+                //     model.guarantors = [];
 
-                    model.coapplicant = {};
-                    model.guarantor = {};
-                    model.loanAccount = model.loanProcess.loanAccount;
-                    // Setting necessary parties to child arrays.
-                    model.applicant.customer = model.loanProcess.applicantEnrolmentProcess.customer;
-                    model.loanCustomer.customer = model.loanProcess.loanCustomerEnrolmentProcess.customer;
+                //     model.coapplicant = {};
+                //     model.guarantor = {};
+                //     model.loanAccount = model.loanProcess.loanAccount;
+                //     // Setting necessary parties to child arrays.
+                //     model.applicant.customer = model.loanProcess.applicantEnrolmentProcess.customer;
+                //     model.loanCustomer.customer = model.loanProcess.loanCustomerEnrolmentProcess.customer;
 
-                    _.forEach(model.loanProcess.coApplicantsEnrolmentProcesses, function(i){
-                        model.coApplicants.push({"customer":i.customer});
-                    })
+                //     _.forEach(model.loanProcess.coApplicantsEnrolmentProcesses, function(i){
+                //         model.coApplicants.push({"customer":i.customer});
+                //     })
 
-                    _.forEach(model.loanProcess.guarantorsEnrolmentProcesses, function(i){
-                        model.guarantors.push({"customer":i.customer});
-                    })
+                //     _.forEach(model.loanProcess.guarantorsEnrolmentProcesses, function(i){
+                //         model.guarantors.push({"customer":i.customer});
+                //     })
 
-                    // applicant telecalling details
-                    model.telecalling.applicant = _.filter(model.loanAccount.telecallingDetails, {"partyType": "applicant"});
-                    // coapplicant telecalling details
-                    model.telecalling.coApplicant = _.filter(model.loanAccount.telecallingDetails, {"partyType": "coApplicant"});
-                    // guarantor telecalling details
-                    model.telecalling.guarantor = _.filter(model.loanAccount.telecallingDetails, {"partyType": "guarantor"});
-                    // business telecalling details
-                    model.telecalling.loanCustomer = _.filter(model.loanAccount.telecallingDetails, {"partyType": "loanCustomer"});
+                //     // applicant telecalling details
+                //     model.telecalling.applicant = _.filter(model.loanAccount.telecallingDetails, {"partyType": "applicant"});
+                //     // coapplicant telecalling details
+                //     model.telecalling.coApplicant = _.filter(model.loanAccount.telecallingDetails, {"partyType": "coApplicant"});
+                //     // guarantor telecalling details
+                //     model.telecalling.guarantor = _.filter(model.loanAccount.telecallingDetails, {"partyType": "guarantor"});
+                //     // business telecalling details
+                //     model.telecalling.loanCustomer = _.filter(model.loanAccount.telecallingDetails, {"partyType": "loanCustomer"});
 
-                    var self = this;
-                    Queries.questionnaireDetails('TELECALLING', 'Tele', 'televerification').then(
-                        function(res) { 
-                            model.applicant.telecallingQuestionnaireList = _.filter(res, function(obj) {
-                                return obj.party_type == 'applicant';     
-                            });
-                            model.loanCustomer.telecallingQuestionnaireList = _.filter(res, function(obj) {
-                                return obj.party_type == 'loanCustomer';
-                            });
-                            model.coapplicantQuestions = _.filter(res, function(obj) {
-                                return obj.party_type == 'coApplicant';
-                            });
-                            model.guarantorQuestions = _.filter(res, function(obj) {
-                                return obj.party_type == 'guarantor';
-                            });
+                //     var self = this;
+                //     Queries.questionnaireDetails('TELECALLING', 'Tele', 'televerification').then(
+                //         function(res) { 
+                //             model.applicant.telecallingQuestionnaireList = _.filter(res, function(obj) {
+                //                 return obj.party_type == 'applicant';     
+                //             });
+                //             model.loanCustomer.telecallingQuestionnaireList = _.filter(res, function(obj) {
+                //                 return obj.party_type == 'loanCustomer';
+                //             });
+                //             model.coapplicantQuestions = _.filter(res, function(obj) {
+                //                 return obj.party_type == 'coApplicant';
+                //             });
+                //             model.guarantorQuestions = _.filter(res, function(obj) {
+                //                 return obj.party_type == 'guarantor';
+                //             });
 
-                            _.forEach(model.coApplicants, function(val, key) {
-                                model.coApplicants[key].telecallingQuestionnaireList = model.coapplicantQuestions;
-                                if(model.telecalling.coApplicant.length>0) {
-                                    var findKey = _.findLastIndex(model.telecalling.coApplicant, ["customerId", val.customer.id]);
-                                    if(findKey!=-1) {
-                                        model.coApplicants[key].telecallingResponse = model.telecalling.coApplicant[findKey].telecallingResponse;
-                                        model.coApplicants[key].noOfCallAttempts = model.telecalling.coApplicant[findKey].noOfCallAttempts;
-                                        model.coApplicants[key].followupCallRequired = model.telecalling.coApplicant[findKey].followupCallRequired;
-                                        model.coApplicants[key].telecallingRemarks = model.telecalling.coApplicant[findKey].telecallingRemarks;
-                                        _.forEach(model.coapplicantQuestions, function(qval, qkey) {
-                                            var callingDetails = _.find(model.telecalling.coApplicant[findKey].telecallingQuestionnaireList, {"question": qval.question});
-                                            if(!_.isNull(callingDetails)) {
-                                               model.coApplicants[key].telecallingQuestionnaireList[qkey].answer = callingDetails.answer;
-                                            }
-                                        });
-                                    }
-                                }
-                            });
+                //             _.forEach(model.coApplicants, function(val, key) {
+                //                 model.coApplicants[key].telecallingQuestionnaireList = model.coapplicantQuestions;
+                //                 if(model.telecalling.coApplicant.length>0) {
+                //                     var findKey = _.findLastIndex(model.telecalling.coApplicant, ["customerId", val.customer.id]);
+                //                     if(findKey!=-1) {
+                //                         model.coApplicants[key].telecallingResponse = model.telecalling.coApplicant[findKey].telecallingResponse;
+                //                         model.coApplicants[key].noOfCallAttempts = model.telecalling.coApplicant[findKey].noOfCallAttempts;
+                //                         model.coApplicants[key].followupCallRequired = model.telecalling.coApplicant[findKey].followupCallRequired;
+                //                         model.coApplicants[key].telecallingRemarks = model.telecalling.coApplicant[findKey].telecallingRemarks;
+                //                         _.forEach(model.coapplicantQuestions, function(qval, qkey) {
+                //                             var callingDetails = _.find(model.telecalling.coApplicant[findKey].telecallingQuestionnaireList, {"question": qval.question});
+                //                             if(!_.isNull(callingDetails)) {
+                //                                model.coApplicants[key].telecallingQuestionnaireList[qkey].answer = callingDetails.answer;
+                //                             }
+                //                         });
+                //                     }
+                //                 }
+                //             });
 
-                            _.forEach(model.guarantors, function(val, key) {
-                                model.guarantors[key].telecallingQuestionnaireList = model.guarantorQuestions;
-                                if(model.telecalling.guarantor.length>0) {
-                                    var findKey = _.findLastIndex(model.telecalling.guarantor, ["customerId", val.customer.id]);
-                                    if(findKey!=-1) {
-                                        model.guarantors[key].telecallingResponse = model.telecalling.guarantor[findKey].telecallingResponse;
-                                        model.guarantors[key].noOfCallAttempts = model.telecalling.guarantor[findKey].noOfCallAttempts;
-                                        model.guarantors[key].followupCallRequired = model.telecalling.guarantor[findKey].followupCallRequired;
-                                        model.guarantors[key].telecallingRemarks = model.telecalling.guarantor[findKey].telecallingRemarks;
-                                        _.forEach(model.guarantorQuestions, function(qval, qkey) {
-                                            var callingDetails = _.find(model.telecalling.guarantor[findKey].telecallingQuestionnaireList, {"question": qval.question});
-                                            if(!_.isNull(callingDetails)) {
-                                               model.guarantors[key].telecallingQuestionnaireList[qkey].answer = callingDetails.answer;
-                                            }
-                                        });
-                                    }
-                                }
-                            });
+                //             _.forEach(model.guarantors, function(val, key) {
+                //                 model.guarantors[key].telecallingQuestionnaireList = model.guarantorQuestions;
+                //                 if(model.telecalling.guarantor.length>0) {
+                //                     var findKey = _.findLastIndex(model.telecalling.guarantor, ["customerId", val.customer.id]);
+                //                     if(findKey!=-1) {
+                //                         model.guarantors[key].telecallingResponse = model.telecalling.guarantor[findKey].telecallingResponse;
+                //                         model.guarantors[key].noOfCallAttempts = model.telecalling.guarantor[findKey].noOfCallAttempts;
+                //                         model.guarantors[key].followupCallRequired = model.telecalling.guarantor[findKey].followupCallRequired;
+                //                         model.guarantors[key].telecallingRemarks = model.telecalling.guarantor[findKey].telecallingRemarks;
+                //                         _.forEach(model.guarantorQuestions, function(qval, qkey) {
+                //                             var callingDetails = _.find(model.telecalling.guarantor[findKey].telecallingQuestionnaireList, {"question": qval.question});
+                //                             if(!_.isNull(callingDetails)) {
+                //                                model.guarantors[key].telecallingQuestionnaireList[qkey].answer = callingDetails.answer;
+                //                             }
+                //                         });
+                //                     }
+                //                 }
+                //             });
 
-                            if(model.telecalling.applicant.length>0) {
-                                var findKey = model.telecalling.applicant.length-1;
-                                model.applicant.telecallingResponse = model.telecalling.applicant[findKey].telecallingResponse;
-                                model.applicant.noOfCallAttempts = model.telecalling.applicant[findKey].noOfCallAttempts;
-                                model.applicant.followupCallRequired = model.telecalling.applicant[findKey].followupCallRequired;
-                                model.applicant.telecallingRemarks = model.telecalling.applicant[findKey].telecallingRemarks;
-                                _.forEach(model.applicant.telecallingQuestionnaireList, function(val, key) {
-                                    var callingDetails = _.find(model.telecalling.applicant[findKey].telecallingQuestionnaireList, {"question": val.question});
-                                    if(!_.isNull(callingDetails)) {
-                                       model.applicant.telecallingQuestionnaireList[key].answer = callingDetails.answer;
-                                    }
-                                });
-                            }
+                //             if(model.telecalling.applicant.length>0) {
+                //                 var findKey = model.telecalling.applicant.length-1;
+                //                 model.applicant.telecallingResponse = model.telecalling.applicant[findKey].telecallingResponse;
+                //                 model.applicant.noOfCallAttempts = model.telecalling.applicant[findKey].noOfCallAttempts;
+                //                 model.applicant.followupCallRequired = model.telecalling.applicant[findKey].followupCallRequired;
+                //                 model.applicant.telecallingRemarks = model.telecalling.applicant[findKey].telecallingRemarks;
+                //                 _.forEach(model.applicant.telecallingQuestionnaireList, function(val, key) {
+                //                     var callingDetails = _.find(model.telecalling.applicant[findKey].telecallingQuestionnaireList, {"question": val.question});
+                //                     if(!_.isNull(callingDetails)) {
+                //                        model.applicant.telecallingQuestionnaireList[key].answer = callingDetails.answer;
+                //                     }
+                //                 });
+                //             }
 
 
-                            if(model.telecalling.loanCustomer.length>0) {                            
-                                var findKey = model.telecalling.loanCustomer.length-1;
-                                model.loanCustomer.telecallingResponse = model.telecalling.loanCustomer[findKey].telecallingResponse;
-                                model.loanCustomer.noOfCallAttempts = model.telecalling.loanCustomer[findKey].noOfCallAttempts;
-                                model.loanCustomer.followupCallRequired = model.telecalling.loanCustomer[findKey].followupCallRequired;
-                                model.loanCustomer.telecallingRemarks = model.telecalling.loanCustomer[findKey].telecallingRemarks;
-                                _.forEach(model.loanCustomer.telecallingQuestionnaireList, function(val, key) {
-                                    var callingDetails = _.find(model.telecalling.loanCustomer[findKey].telecallingQuestionnaireList, {"question": val.question});
-                                    if(!_.isNull(callingDetails)) {
-                                       model.loanCustomer.telecallingQuestionnaireList[key].answer = callingDetails.answer;
-                                    }
-                                });
-                            }
+                //             if(model.telecalling.loanCustomer.length>0) {                            
+                //                 var findKey = model.telecalling.loanCustomer.length-1;
+                //                 model.loanCustomer.telecallingResponse = model.telecalling.loanCustomer[findKey].telecallingResponse;
+                //                 model.loanCustomer.noOfCallAttempts = model.telecalling.loanCustomer[findKey].noOfCallAttempts;
+                //                 model.loanCustomer.followupCallRequired = model.telecalling.loanCustomer[findKey].followupCallRequired;
+                //                 model.loanCustomer.telecallingRemarks = model.telecalling.loanCustomer[findKey].telecallingRemarks;
+                //                 _.forEach(model.loanCustomer.telecallingQuestionnaireList, function(val, key) {
+                //                     var callingDetails = _.find(model.telecalling.loanCustomer[findKey].telecallingQuestionnaireList, {"question": val.question});
+                //                     if(!_.isNull(callingDetails)) {
+                //                        model.loanCustomer.telecallingQuestionnaireList[key].answer = callingDetails.answer;
+                //                     }
+                //                 });
+                //             }
 
-                           /* UIRepository.getEnrolmentProcessUIRepository().$promise
-                            .then(function(repo){
-                                return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest(model), configFile(), model)
-                            })
-                            .then(function(form){
-                                self.form = form;
-                            });*/
-                        },
-                        function(err) {
-                            console.log(err);
-                        }
-                    )
-                   /* model.loanProcess = bundleModel.loanProcess;
-                    if(_.hasIn(model.loanProcess, 'loanAccount')) {
-                        model.loanAccount = model.loanProcess.loanAccount;
-                    }*/
-                    var self = this;
-                    UIRepository.getEnrolmentProcessUIRepository().$promise
-                    .then(function(repo){
-                        return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest(model), configFile(), model);
-                    })
-                    .then(function(form){
-                        self.form = form;
-                    });
+                //            /* UIRepository.getEnrolmentProcessUIRepository().$promise
+                //             .then(function(repo){
+                //                 return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest(model), configFile(), model)
+                //             })
+                //             .then(function(form){
+                //                 self.form = form;
+                //             });*/
+                //         },
+                //         function(err) {
+                //             console.log(err);
+                //         }
+                //     )
+                //    /* model.loanProcess = bundleModel.loanProcess;
+                //     if(_.hasIn(model.loanProcess, 'loanAccount')) {
+                //         model.loanAccount = model.loanProcess.loanAccount;
+                //     }*/
+                   
+                //     UIRepository.getEnrolmentProcessUIRepository().$promise
+                //     .then(function(repo){
+                //         return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest(model), configFile(), model);
+                //     })
+                //     .then(function(form){
+                //         self.form = form;
+                //     });
 
                     
                 },
