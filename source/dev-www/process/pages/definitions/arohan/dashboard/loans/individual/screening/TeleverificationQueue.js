@@ -6,7 +6,7 @@ define({
 		
 		return {
 			"type": "search-list",
-			"title": "EXTERNAL_PERSONAL_DISCUSSION_QUEUE",
+			"title": "TELEVERIFICATION_QUEUE",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {	
 				model.branch = SessionStore.getCurrentBranch().branchId;
@@ -182,7 +182,7 @@ define({
 					getActions: function() {
 						return [{
 							//name: "EXTERNAL_PERSONAL_DISCUSSION_QUEUE",
-							name:"EXTERNAL_PD_QUEUE",
+							name:"TELEVERIFICATION",
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
