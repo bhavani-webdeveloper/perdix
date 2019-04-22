@@ -401,7 +401,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                     "Pre-closure":"Pre-closure",
                                     "Prepayment":"Prepayment",
                                     "PenalInterestPayment":"PenalInterestPayment",
-                                    "Advance Payment":"Advance Payment"
+                                    "Advance Repayment":"Advance Repayment"
                                 },
                                 onChange: function(value ,form, model){
                                     if ( value == 'Pre-closure'){
