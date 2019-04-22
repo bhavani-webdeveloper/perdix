@@ -36,7 +36,7 @@ define({
 	                        "type": "string"
 	                    },
 	                    "area": {
-	                        "title": "AREA",
+	                        "title": "PANCHAYAT",
 	                        "type": "string"
 	                    },
 	                    "cityTownVillage": {
