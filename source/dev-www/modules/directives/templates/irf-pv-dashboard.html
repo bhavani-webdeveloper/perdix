@@ -1,0 +1,23 @@
+<div ng-if="dashboardData" style="margin:10px;">
+        <div ng-if="dashboardData.name">
+                <h4>{{dashboardData.name}}</h4ßß>
+        </div>
+        <div ng-repeat="section in dashboardData.sections">
+                <div ng-if="section.width=='col1'">
+                        <div class="col-md-4 col-sm-12 col-xs-12" style="float:left">
+                                <irf-pv-section section-data="section"></irf-pv-section>
+                        </div>
+                </div>
+                <div ng-if="section.width=='col3'">
+                        <div class="col-md-12 col-sm-12 col-xs-12" style="float:left">
+                                <irf-pv-section section-data="section"></irf-pv-section>
+                        </div>
+                </div>
+                <div ng-if="section.width=='col2'">
+                        <div class="col-md-8 col-sm-12 col-xs-12" style="float:left">
+                                <irf-pv-section section-data="section"></irf-pv-section>
+                        </div>
+                </div>
+
+        </div>
+</div>

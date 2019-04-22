@@ -51,7 +51,7 @@ irf.pageNameHtml = function(pageName) {
 	return pns.join('&nbsp;<i class="text-darkgray fa fa-angle-right"></i> ');
 };
 
-var pageCollection = irf.pageCollection = angular.module("IRFPageCollection", ["ui.router", "IRFCommons"]);
+var pageCollection = irf.pageCollection = angular.module("IRFPageCollection", ["ui.router", "IRFCommons","chart.js","IRFModels"]);
 
 irf.pageCollection.config(["$provide", function($provide){
 	irf.pageCollection.loadPage = function(name, dependencies, getFn){

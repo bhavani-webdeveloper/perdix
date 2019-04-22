@@ -18,7 +18,7 @@
     <!-- build:css css/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="bower_components/components-font-awesome/css/fontawesome.css" />
     <link rel="stylesheet" href="bower_components/ionicons/css/ionicons.css" />
     <link rel="stylesheet" href="bower_components/admin-lte/dist/css/skins/_all-skins.min.css" />
     <link rel="stylesheet" href="bower_components/admin-lte/bootstrap/css/bootstrap.min.css" />
@@ -112,6 +112,9 @@
 <script src="bower_components/mathjs/dist/math.min.js"></script>
 <script src="bower_components/lz-string/libs/lz-string.min.js"></script>
 <script src="bower_components/myforce-angularjs-query-builder/query-builder-directive.js"></script>
+
+<script  src="bower_components/chart.js/dist/Chart.js" ></script>
+<script  src="bower_components/angular-chart.js/dist/angular-chart.min.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
@@ -197,6 +200,8 @@
 <script src="process/models/v1/bank/SurveyInformation.js"></script>
 <script src="process/models/v1/customer/CustomerBankBranch.js"></script>
 <script src="process/models/v1/customer/Dedupe.js"></script>
+<script src="process/pages/definitions/customer/Dashboard.js"></script>
+
 <script src="process/models/v1/loans/LoanProcess.js"></script>
 <script src="process/models/v1/loans/LoanAccount.js"></script>
 <script src="process/models/v1/loans/LoanCollection.js"></script>
@@ -503,6 +508,8 @@
 <script src="process/pages/definitions/loans/individual/screening/LoanAnalyticsView.js"></script>
 <script src="process/pages/definitions/kgfs/loans/individual/screening/CreditBureauView.js"></script>
 
+<script src="process/pages/definitions/loans/individual/screening/FieldAppraisalReviewTest.js"></script>
+
 
 <script src="process/pages/definitions/loans/individual/screening/BranchNewConversationQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/BranchRepliedConversationQueue.js"></script>
@@ -534,6 +541,20 @@
 <script src="process/pages/definitions/loans/individual/booking/DocumentUploadQueue.js"></script>
 <script src="process/pages/definitions/loans/CloseLoan.js"></script>
 <script src="modules/directives/Questionnaire.js"></script>
+
+<script src="modules/directives/Balancesheet.js"></script>
+<script src="modules/directives/Box.js"></script>
+<script src="modules/directives/PnL.js"></script>
+<script src="modules/directives/Charts.js"></script>
+<script src="modules/directives/Container.js"></script>
+<script src="modules/directives/Dashboard.js"></script>
+<script src="modules/directives/Section.js"></script>
+<script src="modules/directives/Grid.js"></script>
+
+
+<script src="modules/models/common/Visulaization.js"></script>
+
+
 
 <script src="process/pages/definitions/loans/individual/misc/BalanceSheetHistory.js"></script>
 
