@@ -1541,6 +1541,16 @@ define([],function(){
                                 'guaCustomerId': params.customer.id,
                                 'guaUrnNo': params.customer.urnNo
                             });
+                            if (_.hasIn(model, 'loanAccount.guarantors') && _.isArray(model.loanAccount.guarantors)){
+                                if(model.loanAccount.guarantors.length > 1){
+                                    for (var i=0;i<model.loanAccount.guarantors.length; i++){
+                                        if(model.loanAccount.guarantors[i].guaUrnNo == model.loanAccount.applicant)
+                                            model.loanAccount.guarantors.splice(i, 1);
+                                    }          
+                                }
+                            }
+
+
                         } else {
                             if (!model.loanAccount.guarantors[existingGuarantorIndex].guaUrnNo){
                                 model.loanAccount.guarantors[existingGuarantorIndex].guaUrnNo = params.customer.urnNo;
