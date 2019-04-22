@@ -99,15 +99,15 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 minimum: 1,
                                 maximum: 1,
                                 order:80
+                            },
+                            {
+                                pageName: 'loans.individual.misc.BalanceSheetHistory',
+                                title: 'BALANCE_SHEET_HISTORY',
+                                pageClass: 'balance-sheet-history',
+                                minimum: 1,
+                                maximum: 1,
+                                order: 90
                             }
-                            // {
-                            //     pageName: 'loans.individual.misc.BalanceSheetHistory',
-                            //     title: 'BALANCE_SHEET_HISTORY',
-                            //     pageClass: 'balance-sheet-history',
-                            //     minimum: 1,
-                            //     maximum: 1,
-                            //     order: 90
-                            // }
                         ]);
                     },
                     "bundlePages": [],
@@ -315,13 +315,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-                            //    $this.bundlePages.push({
-                            //         pageClass: 'balance-sheet-history',
-                            //         model: {
-                            //             customerUrn: loanAccount.applicantEnrolmentProcess.customer.urnNo,
-                            //             loanId: bundleModel.loanId
-                            //         }
-                            //     });
+                               $this.bundlePages.push({
+                                    pageClass: 'balance-sheet-history',
+                                    model: {
+                                        customerUrn: loanProcessts.applicantEnrolmentProcess.customer.urnNo,
+                                        loanId: bundleModel.loanId
+                                    }
+                                });
 
                                 deferred.resolve();
 
