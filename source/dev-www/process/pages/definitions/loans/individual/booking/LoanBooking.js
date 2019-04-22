@@ -539,7 +539,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                     },
                                     {
                         "type": "fieldset",
-                        "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija' && model.siteCode != 'IREPDhan'",
+                        "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija' && model.siteCode != 'IREPDhan'&& model.siteCode != 'shramsarathi'",
                         "notitle": true,
                         "items": [
                             {
