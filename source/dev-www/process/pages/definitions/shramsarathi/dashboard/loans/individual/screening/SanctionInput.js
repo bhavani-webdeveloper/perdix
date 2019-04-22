@@ -61,7 +61,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             //     order:40
                             // },
                             {
-                                pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.LoanApplicationView',
+                                pageName: 'shramsarathi.dashboard.loans.individual.screening.LoanRequest',
                                 title: 'Loan Recommendation',
                                 pageClass: 'loan-recommendation',
                                 minimum: 1,
@@ -290,7 +290,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     pageClass: 'loan-recommendation',
                                     model: {
                                         customerId: res.customerId,
-                                        loanAccount: res
+                                        loanProcess: loanProcessts
                                     }
                                 });
 

@@ -691,7 +691,9 @@ define([],function(){
                                 "LoanRecommendation":{
                                     "readonly": true
                                 }, 
-                                
+                                "LoanRecommendation.loanDisbursementSchedule":{
+                                    "readonly": false
+                                }
                             }
                         },
                         "Screening":{
@@ -1102,7 +1104,7 @@ define([],function(){
                             "overrides":{
                                 "LoanCustomerRelations": {
                                     "readonly": true
-                                },
+                                }
                             }
                         },
                         "ZonalRiskReview":{
@@ -1316,17 +1318,19 @@ define([],function(){
             };
             var populateDisbursementSchedule=function (value,form,model){
                 PageHelper.showProgress("loan-create","Verify Disbursement Schedules",5000);
-                model.loanAccount.disbursementSchedules=[];
+                // model.loanAccount.disbursementSchedules=[];
                 for(var i=0;i<value;i++){
-                    model.loanAccount.disbursementSchedules.push({
-                        trancheNumber:""+(i+1),
-                        disbursementAmount:0
-                    });
+                    if(i==0){
+                        model.loanAccount.disbursementSchedules[0].trancheNumber="1";
+                        model.loanAccount.disbursementSchedules[0].disbursementAmount=model.loanAccount.loanAmount;
+                    }
+                    else{
+                        model.loanAccount.disbursementSchedules.push({
+                            trancheNumber:""+(i+1),
+                            disbursementAmount:0
+                        });
+                    } 
                 }
-                if (value ==1){
-                    model.loanAccount.disbursementSchedules[0].disbursementAmount = model.loanAccount.loanAmount;
-                }
-        
             }
              var overridesFields = function (bundlePageObj) {
                 return {
@@ -1739,7 +1743,7 @@ define([],function(){
                     // "LoanRecommendation.udf8",
                     // "LoanRecommendation.udf3",
  
-                     //"LoanSanction",
+                     "LoanSanction",
                      "LoanSanction.sanctionDate",
                      "LoanSanction.numberOfDisbursements",
                      "LoanSanction.disbursementSchedules",
