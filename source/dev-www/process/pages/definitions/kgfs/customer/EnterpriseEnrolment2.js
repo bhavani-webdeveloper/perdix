@@ -60,6 +60,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                 monthlySurpluse(model);
             }
 
+            var validateRequest = function(req) {
+                if (req.customer && req.customer.customerBankAccounts) {
+                    for (var i = 0; i < req.customer.customerBankAccounts.length; i++) {
+                        var bankAccount = req.customer.customerBankAccounts[i];
+                        if (bankAccount.accountNumber != bankAccount.confirmedAccountNumber) {
+                            PageHelper.showErrors({data:{error:"Bank Accounts: Account Number doesnt match with Confirmed Account Number"}});
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+
             var getAnnualSales = function (value, model, row, month) {
                 if(value){
                 model.customer.enterprise.avgAnnualSales = 0;
@@ -3744,6 +3757,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         if (PageHelper.isFormInvalid(form)) {
                             return false;
                         }
+                         var reqData = _.cloneDeep(model);
+
+                        if (!(validateRequest(reqData))) {
+                            return;
+                        }
                         model.customer.enterprise.ownerSalary = 67;
                         // for (i in model.customer.enterpriseRegistrations){
                         //     if(model.customer.enterpriseRegistrations[i].registeredDate > model.customer.enterpriseRegistrations[i].expiryDate){
@@ -3806,6 +3824,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         if (model.currentStage && model.currentStage == "CreditAppraisal" && model.loanAccount.productCategory == 'MEL' && model.customer.enterprise.employeeSalary<=0){
                             PageHelper.showProgress("loan-enrolment","Loan Amount Eligible for customer should be more than zero amount",5000);
                                 return false;    
+                        }
+
+                         var reqData = _.cloneDeep(model);
+
+                        if (!(validateRequest(reqData))) {
+                            return;
                         }
                         model.customer.enterprise.ownerSalary = 67;
                         PageHelper.showProgress('enrolment', 'Updating Customer',5000);
