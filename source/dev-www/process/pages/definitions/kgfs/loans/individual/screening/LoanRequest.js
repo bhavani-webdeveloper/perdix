@@ -1476,10 +1476,11 @@ define([],function(){
                     for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
                             if (model.loanAccount.loanCustomerRelations[i].customerId == params.customerId) {
                                 model.loanAccount.loanCustomerRelations[i].cbCheckCompleted=false;
+                                model.loanAccount.cbCheckCompletedFlag=false;
                                 if(params.cbType == 'BASE')
                                     model.loanAccount.loanCustomerRelations[i].highmarkCompleted = true;
                                 else if(params.cbType == 'INDIVIDUAL')
-                                    {   model.loanAccount.cbCheckCompletedFlag=false;
+                                    {   model.loanAccount.cbCheckCompletedFlag=true;
                                     model.loanAccount.loanCustomerRelations[i].cbCheckCompleted = true;
                                 }
                             }
