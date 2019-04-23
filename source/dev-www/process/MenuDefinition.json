@@ -16,6 +16,7 @@
             "items": [
                 "Page/Engine/sambandh.customer.CustomerSearch",
                 "Page/Engine/CustomerSearch",
+                "Page/Engine/customer.banking.Banking",
                 "Page/Engine/FSOCustomerSearch",
                 "Page/Engine/ProfileInformation",
                 "Page/Engine/kgfs.customer.Enrollment",
@@ -111,6 +112,7 @@
                 "Page/Engine/management.MasterDataMaintenance",
                 "Page/Engine/management.TaggingMaintenance",
                 "Page/ReferenceCodeDashboard",
+                "Page/Engine/customer.banking.CashManagement",
                 "Page/Adhoc/management.BranchCreationDashboard",
                 "Page/ScoreParameterMaintenanceDashboard",
                 "Page/CentreCreationDashboard",
