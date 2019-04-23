@@ -958,7 +958,7 @@
                                 "title":"REPAYMENT_DATE",
                                     "type":"date",
                              "captureStages":[
-                                  "LoanBooking","Application","ScreeningReview","ApplicationReview"
+                                  "LoanBooking","Application","ScreeningReview","ApplicationReview","LoanInitiation"
                               ]
                      },
                "frequency":{
