@@ -766,6 +766,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
     
                                 if (_.hasIn(model, 'customer.id')){
                                     BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails)
+                                    BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                                 }
                                 
                                 EnrolmentProcess.fromCustomerID(valueObj.id)
@@ -784,9 +785,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             model.customer.landLineNo=null;
                                         BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                                         BundleManager.pushEvent('load-bank-details', model._bundlePageObj, {customer: model.customer});
-                                        BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer});
                                         if(model.pageClass == 'applicant' && model.currentStage =='Screening')
                                         BundleManager.pushEvent('refresh-all-tabs', model._bundlePageObj, {customer: model.customer});
+                                    
+                                        BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails);
+                                        BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                                     })
                             }
                         },

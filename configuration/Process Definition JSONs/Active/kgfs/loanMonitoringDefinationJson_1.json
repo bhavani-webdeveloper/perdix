@@ -23,14 +23,6 @@
         "allowedRoles": [
             "WM"
         ]
-    },{
-        "order": 4,
-        "code": "LUCLegalRecovery",
-        "name": "LUC Legal and Recovery",
-        "stageType": "CAPTURE",
-        "allowedRoles": [
-            "WM"
-        ]
     }],
     "schema": {
         "$schema": "http://json-schema.org/draft-04/schema#",
@@ -58,8 +50,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                          "centreId": {
@@ -68,8 +60,8 @@
                            "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                          },
                          "branchName": {
@@ -78,8 +70,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                           },
 
@@ -91,8 +83,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "loanProductName": {
@@ -103,8 +95,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "loanPurposeCategory": {
@@ -113,8 +105,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "loanPurpose": {
@@ -125,8 +117,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "currentStage": {
@@ -137,8 +129,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "loanAmount": {
@@ -147,8 +139,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "disbursementDate": {
@@ -157,8 +149,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "numberOfAssetsDelivered": {
@@ -169,8 +161,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "amountUtilizedForAssetsPurchase": {
@@ -179,8 +171,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "percentage": {
@@ -189,8 +181,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "totalCreationAssetValue": {
@@ -199,8 +191,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "isAssetsOrdered": {
@@ -209,8 +201,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "reasonForNotOrderingAssets": {
@@ -221,8 +213,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "lucDone": {
@@ -233,8 +225,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "lucRescheduled": {
@@ -243,8 +235,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "lucRescheduleReason": {
@@ -253,8 +245,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "lucRescheduledDate": {
@@ -263,8 +255,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "lucEscalated": {
@@ -273,8 +265,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "lucEscalatedReason": {
@@ -285,8 +277,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "loanId": {
@@ -295,8 +287,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "accountNumber": {
@@ -305,8 +297,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "customerId": {
@@ -315,8 +307,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "customerName": {
@@ -327,8 +319,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "urn": {
@@ -339,8 +331,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "socialImpactDetailsId": {
@@ -349,8 +341,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "proprietoryName": {
@@ -361,8 +353,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "proprietoryUrn": {
@@ -373,8 +365,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "address": {
@@ -385,8 +377,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "assignedToUser": {
@@ -397,8 +389,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "lucDate": {
@@ -407,8 +399,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "bussinessName": {
@@ -419,8 +411,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "loanAmountUsed": {
@@ -429,8 +421,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "loanAmountPurpose": {
@@ -441,8 +433,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "verifiedBy": {
@@ -453,8 +445,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 
@@ -464,8 +456,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 
@@ -475,8 +467,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 
@@ -486,8 +478,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 
@@ -497,8 +489,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 
@@ -508,8 +500,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "nonIntendedPurposeAmountSpentOn": {
@@ -520,8 +512,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "repayedDebitAmount": {
@@ -530,8 +522,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "monthlyInterestForDebit": {
@@ -540,8 +532,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "remainingAmountPurpose": {
@@ -552,8 +544,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "remainingAmountUtilizedOn": {
@@ -562,8 +554,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "branchName": {
@@ -574,8 +566,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "udf1": {
@@ -584,8 +576,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "udf2": {
@@ -594,8 +586,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "udf3": {
@@ -604,8 +596,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 						"udf4": {
@@ -614,8 +606,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 						"udf5": {
@@ -624,8 +616,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 						"udf6": {
@@ -634,8 +626,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 						"udf7": {
@@ -644,8 +636,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 						"udf8": {
@@ -654,8 +646,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 						"udf9": {
@@ -664,8 +656,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 						"udf10": {
@@ -674,8 +666,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 						"udf11": {
@@ -684,8 +676,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 						"udf12": {
@@ -694,8 +686,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 						"udf13": {
@@ -704,8 +696,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 						"udf14": {
@@ -714,8 +706,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 						"udf15": {
@@ -724,8 +716,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 						"udf16": {
@@ -734,8 +726,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 						"udf17": {
@@ -744,8 +736,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 						"udf18": {
@@ -754,8 +746,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 						"udf19": {
@@ -764,8 +756,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 						"udf20": {
@@ -774,8 +766,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 						"photoImageId1": {
@@ -784,8 +776,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 						"photoImageId2": {
@@ -794,8 +786,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 						"photoImageId3": {
@@ -804,8 +796,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 						
@@ -815,8 +807,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 						"photoImageId5": {
@@ -825,8 +817,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
 						"isBiometricDone": {
@@ -835,8 +827,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "centreId": {
@@ -845,8 +837,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "presentOutStandingLoanAmount": {
@@ -855,8 +847,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "numberOfInstallmentsDue": {
@@ -865,8 +857,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "statusOfLoanAccount": {
@@ -875,8 +867,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         }
                     }
@@ -897,8 +889,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "averageSalaryOfMen": {
@@ -907,8 +899,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "menPartTimeEmployee": {
@@ -917,8 +909,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "menFullTimeEmployee": {
@@ -927,8 +919,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "avgSkillLevelOfMen": {
@@ -939,8 +931,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "noOfFirstJobsMen": {
@@ -949,8 +941,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "totalNumberOfWomen": {
@@ -959,8 +951,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "averageSalaryOfWomen": {
@@ -969,8 +961,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "womenPartTimeEmployee": {
@@ -979,8 +971,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "womenFullTimeEmployee": {
@@ -989,8 +981,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "avgSkillLevelOfWomen": {
@@ -1001,8 +993,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "noOfFirstJobsWomen": {
@@ -1011,8 +1003,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "preLoanMonthlyRevenue": {
@@ -1021,8 +1013,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "preLoanMonthlyNetIncome": {
@@ -1031,8 +1023,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "preLoanProprietorSalary": {
@@ -1041,8 +1033,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "preLoanNumberOfCustomersOrBuyers": {
@@ -1051,8 +1043,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "postLoanMonthlyRevenue": {
@@ -1061,8 +1053,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "postLoanMonthlyNetIncome": {
@@ -1071,8 +1063,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "postLoanProprietorSalary": {
@@ -1081,8 +1073,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "postLoanNumberOfCustomersOrBuyers": {
@@ -1091,8 +1083,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "noOfJobsAdded": {
@@ -1101,8 +1093,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "noOfWomenInAddedJobs": {
@@ -1111,8 +1103,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "noOfMenInAddedJobs": {
@@ -1121,8 +1113,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "noOfFreshersInAddedJobs": {
@@ -1131,8 +1123,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "avgSalaryOfNewJoinees": {
@@ -1141,8 +1133,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         }
                     }
@@ -1165,8 +1157,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "type": {
@@ -1177,8 +1169,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "year": {
@@ -1187,8 +1179,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "model": {
@@ -1199,8 +1191,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "serialNumber": {
@@ -1211,8 +1203,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "assetType": {
@@ -1223,8 +1215,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "hypothecationLabelBeenApplied": {
@@ -1233,8 +1225,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "companyNameInOriginalInvoice": {
@@ -1243,8 +1235,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "udf1": {
@@ -1253,8 +1245,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "udf2": {
@@ -1263,8 +1255,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "hypothecatedTo": {
@@ -1275,8 +1267,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         }
                     }
@@ -1299,8 +1291,8 @@
                             "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "documentSl": {
@@ -1311,8 +1303,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         },
                         "documentId": {
@@ -1323,8 +1315,8 @@
                              "captureStages": [
                                 "LUCSchedule",
                                 "LUCEscalate",
-                                "LUCReschedule",
-                                "LUCLegalRecovery"
+                                "LUCReschedule"
+                                
                             ]
                         }
                     }

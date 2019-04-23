@@ -1577,7 +1577,7 @@ define([],function(){
                             model.loanAccount.urnNo=model.loanAccount.loanCustomerRelations[0].urn; 
                         }
 
-                        if(model.loanAccount.productCategory  == 'MEL' && model.loanAccount.customerId != model.customerId)
+                        if(model.loanAccount.productCategory  == 'MEL' && model.customerId !=null && model.loanAccount.customerId != model.customerId)
                         model.loanProcess.loanAccount.customerId = model.customerId;
 
                         if(model.loanAccount.currentStage && model.loanAccount.currentStage == "Screening" && model.loanAccount.productCategory == 'MEL' && !model.loanAccount.isBusinessCaptured){
@@ -1699,7 +1699,7 @@ define([],function(){
                         }
                         setDeviation(model);
                         validateDeviationForm(model);
-                        if(_.isArray(validateDeviation) && validateDeviation.length > 0) {
+                        if(_.isArray(validateDeviation) && validateDeviation.length > 0 && model.loanAccount.currentStage != 'Screening') {
                             model.loanAccount.loanMitigants=[];
                             PageHelper.showErrors({data:{error:"Mitigation checkbox, Please check this box if you want to proceed"}});
                             return false;
