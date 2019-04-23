@@ -17,6 +17,8 @@ define({
             else
             return "NA";
         }
+
+
         var navigateToQueue = function(model) {
                     // Considering this as the success callback
                     // Deleting offline record on success submission
@@ -326,6 +328,7 @@ define({
              }
 
         },
+
         form: [
             // {
             //     "type": "section",
@@ -603,11 +606,26 @@ define({
                         "items": [{
                             "key": "loanAccount.nominees[0].nomineeRelationship",
                             "title": "Relationship To Insured"
-                        }, {
-                            "key": "loanAccount.fullAddress",
-                            "title": "Address"
-                        },{
-                            // "key": "loanAccount.nominees[0].nomineeDistrict"
+                        }, {  
+                            "type": "section",                                
+                            "htmlClass": "row",
+                            "items": [
+                                {
+                                    "type": "section",
+                                    "htmlClass": "col-sm-4",
+                                    "html": '<h5>' + "Address" + '</h5>'
+                                },
+                                {
+                                    "type": "section",
+                                    "htmlClass": "col-sm-8",
+                                    "html": '<p style = "font-size: 14px; color: #555;"><strong>{{model.loanAccount.nominees[0].nomineeDoorNo}} <br />\
+                                    {{model.loanAccount.nominees[0].nomineeLocality}} <br />\
+                                    {{model.loanAccount.nominees[0].nomineeDistrict}} <br />\
+                                    {{model.loanAccount.nominees[0].nomineeState}} <br /> \
+                                    {{model.loanAccount.nominees[0].nomineePincode}} <br /> \
+                                    <br /><strong></p>\
+                                    '
+                                }]     
                         }]
                     }]
                 }]
@@ -1108,58 +1126,57 @@ define({
             schema: function() {
                 return SchemaResource.getLoanAccountSchema().$promise;
             },
+
             eventListeners: {
-                    "financial-summary": function(bundleModel, model, params) {
-                    model._scores = params;
-                    model._deviationDetails = model._scores[12].data;
-                    model.expectedTurnoverObj['loanAmountRecommended']=  (params[0].data[0]['Recommended Loan Amount'] != null) ? Number((params[0].data[0]['Recommended Loan Amount']).replace(/,/g, '')) : null;
-                    var monthTurnover =  (params[0].data[0]['Monthly Turnover'] != null) ? Number((params[0].data[0]['Monthly Turnover']).replace(/,/g, '')) : null;
-                    model.expectedTurnoverObj['annualTurnover']=  ( monthTurnover * 12);
-                    model.deviationDetails = [];
-                    var allMitigants = {};
-                    model.allMitigants = allMitigants;
-                    for (i in model._deviationDetails) {
-                        var item = model._deviationDetails[i];
-                        var mitigants = item.Mitigant.split('|');
-                        for (j in mitigants) {
-                            allMitigants[mitigants[j]] = {
-                                mitigant: mitigants[j],
-                                parameter: item.Parameter,
-                                score: item.ParameterScore,
-                                selected: false
-                            };
-                            mitigants[j] = allMitigants[mitigants[j]];
-                        }
-                        if (item.ChosenMitigant && item.ChosenMitigant != null) {
-                            var chosenMitigants = item.ChosenMitigant.split('|');
-                            for (j in chosenMitigants) {
-                                allMitigants[chosenMitigants[j]].selected = true;
+                    "financial-sum": function(bundleModel, model, params) {
+                        // model.additional = {};
+                        let prepareFinancialData={};
+                        if(params){
+                            prepareFinancialData={
+                                'Category': 'Current Application',
+                                'Outstanding': 'NA',
+                                'disbursement_amount': 'NA',
+                                'loan_product': params[0].data[0]['Loan Product'],
+                                'loan_status': 'NA',
+                                'tenure': params[0].data[0]['Tenure'] 
                             }
                         }
-                        model.deviationDetails.push({
-                            parameter: item.Parameter,
-                            score: item.ParameterScore,
-                            deviation: item.Deviation,
-                            mitigants: mitigants,
-                            color_english: item.color_english,
-                            color_hexadecimal: item.color_hexadecimal
-                        });
-                    }
-
-                    model.additional = {};
-                    let prepareFinancialData={};
-                    if(params){
-                        prepareFinancialData={
-                            'Category': 'Current Application',
-                            'Outstanding': 'NA',
-                            'disbursement_amount': 'NA',
-                            'loan_product': params[0].data[0]['Loan Product'],
-                            'loan_status': 'NA',
-                            'tenure': params[0].data[0]['Tenure'] 
-                        }
-                    }
-                    model.customerHistoryFinancials['tableData'].push(prepareFinancialData);
-                    
+                        model.customerHistoryFinancials['tableData'].push(prepareFinancialData);
+                        // model._scores = params;
+                        // model._deviationDetails = model._scores[12].data;
+                        // model.expectedTurnoverObj['loanAmountRecommended']=  (params[0].data[0]['Recommended Loan Amount'] != null) ? Number((params[0].data[0]['Recommended Loan Amount']).replace(/,/g, '')) : null;
+                        // var monthTurnover =  (params[0].data[0]['Monthly Turnover'] != null) ? Number((params[0].data[0]['Monthly Turnover']).replace(/,/g, '')) : null;
+                        // model.expectedTurnoverObj['annualTurnover']=  ( monthTurnover * 12);
+                        // model.deviationDetails = [];
+                        // var allMitigants = {};
+                        // model.allMitigants = allMitigants;
+                        // for (i in model._deviationDetails) {
+                        //     var item = model._deviationDetails[i];
+                        //     var mitigants = item.Mitigant.split('|');
+                        //     for (j in mitigants) {
+                        //         allMitigants[mitigants[j]] = {
+                        //             mitigant: mitigants[j],
+                        //             parameter: item.Parameter,
+                        //             score: item.ParameterScore,
+                        //             selected: false
+                        //         };
+                        //         mitigants[j] = allMitigants[mitigants[j]];
+                        //     }
+                        //     if (item.ChosenMitigant && item.ChosenMitigant != null) {
+                        //         var chosenMitigants = item.ChosenMitigant.split('|');
+                        //         for (j in chosenMitigants) {
+                        //             allMitigants[chosenMitigants[j]].selected = true;
+                        //         }
+                        //     }
+                        //     model.deviationDetails.push({
+                        //         parameter: item.Parameter,
+                        //         score: item.ParameterScore,
+                        //         deviation: item.Deviation,
+                        //         mitigants: mitigants,
+                        //         color_english: item.color_english,
+                        //         color_hexadecimal: item.color_hexadecimal
+                        //     });
+                        // }
                 },
                 "telecall": function(bundleModel, model, obj){
                     $log.info("Telecall",obj);
