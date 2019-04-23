@@ -1,6 +1,5 @@
 	import java.time.*;
 	import java.math.BigDecimal.RoundingMode.*;
-	loanAccount = loanAccountRepository.findById(loanId);
 	customerPortFolioInsurancePremium = null;
 	customerPortfolioInsuranceServiceCharge = null;
 	customerPortfolioInsuranceServiceTax = null;
@@ -15,16 +14,17 @@
     spousePortfolioInsuranceServiceCharge = null;
     spousePortfolioInsuranceServiceTax = null;
     portfolioInsurancePremium=null;
+	expectedPortfolioInsurancePremium = null;
 	premiumPerThousandIncludingTax = 9.361;
     
-	noOfInstallments = Integer.parseInt(loanAccount.getTenure());
+	noOfInstallments = Integer.parseInt(loanAccountFromDB.getTenure());
 	noOfInstallmentsWithGracePeriod  = noOfInstallments+1;
     insuranceType = "Individual";
 
 
-	portfolioInsuranceUrn = (loanAccount.getPortfolioInsuranceUrn() == null || loanAccount.getPortfolioInsuranceUrn() == "") ? customer.getUrnNo() : loanAccount.getPortfolioInsuranceUrn();
+	portfolioInsuranceUrn = (loanAccountFromDB.getPortfolioInsuranceUrn() == null || loanAccountFromDB.getPortfolioInsuranceUrn() == "") ? customer.getUrnNo() : loanAccountFromDB.getPortfolioInsuranceUrn();
 	customerData = customerRepository.findByUrnNoAndCustomerStatusAndKgfsBankName(portfolioInsuranceUrn,user.getBankName());
-    loanAmount = loanAccount.getLoanAmount(); 
+    loanAmount = loanAccountFromDB.getLoanAmount(); 
 	
 	def noofInstallmentsAndRiskPeriodMap = [6:12,7:12,8:12,9:12,10:12,11:12,12:12,13:18,14:18,15:18,16:18,17:18,18:18,19:24,20:24,21:24,22:24,23:24,24:24,25:30,26:30,27:30,28:30,29:30,30:30,31:36,32:36,33:36,34:36,35:36,36:36,37:42,38:42,39:42,40:42,41:42,42:42];
 	             
@@ -106,6 +106,7 @@
 	   
 	totalPremium = firstYearPremium + secondYearPremium + thirdYearPremium +forthYearPremium+fifthYearPremium;
     customerPortFolioInsurancePremium = new BigDecimal(Math.ceil(totalPremium));
+	expectedPortfolioInsurancePremium = customerPortFolioInsurancePremium;
  }       
 	          
 	          
