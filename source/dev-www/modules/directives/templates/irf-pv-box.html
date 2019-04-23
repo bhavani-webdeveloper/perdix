@@ -1,0 +1,49 @@
+<div class="row" ng-if="boxData.subType=='info_box'">
+    <span ng-repeat="data in boxData.data">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span ng-if="data"><span class="info-box-icon" ng-class="getBoxClass(data.bgClass,$index)"><i ng-class="getIconClass(data.iconClass,$index)"></i></span></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">{{data.title}}</span>
+                    <span class="info-box-number">{{data.data}}</span>
+                </div>
+            </div>
+        </div>
+    </span>
+</div>
+<div class="row" ng-if="boxData.subType=='info_progress_box'">
+    <span ng-repeat="data in boxData.data">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box" ng-class="getBoxClass(data.bgClass,$index)">
+                <span class="info-box-icon"><i ng-class="getIconClass(data.iconClass,$index)"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">{{data.title}}</span>
+                    <span class="info-box-number">{{data.data}}</span>
+                    <div class="progress">
+                        <div class="progress-bar" ng-style="getProgressStyle(data)"></div>
+                    </div>
+                    <span class="progress-description" ng-init="progressWidth=getProgresswidth(data)">
+                        {{progressWidth}} Increase
+                    </span>
+                </div>
+            </div>
+        </div>
+    </span>
+</div>
+<div class="row" ng-if="boxData.subType=='small_box'">
+    <span ng-repeat="data in boxData.data">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="small-box" ng-class="getBoxClass(data.bgClass,$index)">
+                <div class="inner">
+                    <h3>{{data.data}}</h3>
+                    <p>{{data.title}}</p>
+                </div>
+                <div class="icon">
+                    <i ng-class="getIconClass(data.iconClass,$index)"></i>
+                </div>
+                <!-- <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-cir
+                    cle-right"></i></a> -->
+            </div>
+        </div>
+    </span>
+</div>

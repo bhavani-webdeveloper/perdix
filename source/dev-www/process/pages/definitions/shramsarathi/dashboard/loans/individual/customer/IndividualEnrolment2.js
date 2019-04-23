@@ -24,6 +24,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 }
                 return temp[i].name;
             }
+
             var getCurrentByCode= function(code){
                 var temp = formHelper.enum('current_asset_type').data;
                 console.log("enum",temp);
@@ -33,9 +34,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 }
                 return temp[i].name;
             }
-
-          
-
 
             var preSaveOrProceed = function (reqData) {
                 if (_.hasIn(reqData, 'customer.familyMembers') && _.isArray(reqData.customer.familyMembers)) {
@@ -1988,6 +1986,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "EnterpriseFinancials.currentAsset":{
                         "titleExpr":"model.customer.currentAssets[arrayIndex].titleExpr",
                     },
+
+                    "Liabilities.liabilities.liabilityLoanPurpose":{
+                        "type": "lov",
+                        "resolver": "LoanPurpose1LOVConfigurationShramsarathi",
+                        "autolov": true
+                    },
+                  
                     // "FamilyDetails.familyMembers.dateOfBirth":{
                     //     "onChange": function (modelValue, form, model, formCtrl, event) {
                     //         if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
@@ -2699,6 +2704,899 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
             }
 
+            var formRequest = function(model) {
+                return {
+                "overrides": overridesFields(model),
+                "includes": getIncludes(model),
+                "excludes": [
+                   // "KYC.addressProofSameAsIdProof",
+                ],
+                "options": {
+                    "repositoryAdditions": {
+                        "ContactInformation": {
+                            "items": {
+                                // "alternativeMobileNo": {
+                                //     "key": "customer.alternativeMobileNo",
+                                //     "title": "ALTERNATIVE_MOBILE_NO",
+                                //     "type": "number",
+                                //    // "orderNo": 100
+                                // },
+                                "mandal": {
+                                    "key": "customer.taluk",
+                                    "title": "SUB_DISTRICT",
+                                    "type": "string",
+                                    "required":false,
+                                    "readonly":true,
+                                    "orderNo": 130
+                                },
+                                // "mailingMandal": {
+                                //     "key": "customer.udf.userDefinedFieldValues.udf2",
+                                //     "title": "SUB_DISTRICT",
+                                //     "type": "string",
+                                //     "orderNo": 181
+                                // },
+                                "mailingLandmark": {
+                                    "key": "customer.landmark",
+                                    "title": "LANDMARK",
+                                    "type": "string",
+                                    "condition": "!model.customer.mailSameAsResidence"
+                                    //"orderNo": 181
+                                },
+                                // "collectionArea":{
+                                //     "key":"ContactInformation.collectionArea",
+                                //     "title":"COLLECTION_CENTRE",
+                                //     //"required": true,
+                                //     "type":"select",
+                                //     "orderNo":110
+                                // },
+                                "mailingMobileNo":{
+                                    "key":"ContactInformation.mailingMobileNo",
+                                    "title":"DESTINATION_PHONE_NO",
+                                    "type":"text",
+                                    "schema":{
+                                        "pattern": "^[0-9]{10,10}$"
+                                    },
+                                    "condition": "!model.customer.mailSameAsResidence"
+                                }
+                            }
+                        },
+                        "FamilyDetails": {
+                            "items": {
+                                "familyMembers": {
+                                    "items": {
+                                        // "migrantType":{
+                                        //     "key":"customer.familyMembers[].migrantType",
+                                        //     "type":"select",
+                                        //     "title":"MIGRATION_TYPE",
+                                        //     "required":true,
+                                        //     // "orderNo":0,
+                                        //     "titleMap":
+                                        //             {
+                                        //             "LCM":"LCM",
+                                        //             "SDM":"SDM",
+                                        //             "CM":"CM",
+                                        //             "RETURNEE":"RETURNEE",
+                                        //             "NOTaMigrate":"NOT A MIGRANT"
+                                        //             }
+                                        // },
+                                        "Gender":{
+                                            "key":"customer.familyMembers[].gender",
+                                            "type":"radios",
+                                            "title":"GENDER",
+                                            "orderNo":90,
+                                            "enumCode": "gender",
+                                            "required":true
+                                        },
+                                        "mobilePhone":{
+                                            "key":"customer.familyMembers[].mobilePhone",
+                                            "title":"MOBILE_PHONE",
+                                            "orderNo":130,
+                                            "type":"number"
+                                        },
+                                        "Health":{
+                                            "key":"customer.familyMembers[].Health",
+                                            "title":"HEALTH_STATUS",
+                                            "orderNo":200,
+                                            "type":"radios",
+                                            "titleMap":{
+                                                "good":"Good",
+                                                "bad":"bad"
+                                            }
+                                        },
+                                        "Age":{
+                                            "key":"customer.familyMembers[].age",
+                                            "type":"number",
+                                            "title":"AGE",
+                                           // "orderNo":140,
+                                            "required":true
+                                        },
+                                        // "incomes":{
+                                        //     "items":{
+                                        //         "workSector":{
+                                        //             "key":"customer.familyMembers[].incomes[].workSector",
+                                        //             "title":"WORK_SECTOR",
+                                        //             "type": "select",
+                                        //             "enumCode": "workSector"
+                                        //         },
+                                        //         "occupationType":{
+                                        //             "key":"customer.familyMembers[].incomes[].occupationType",
+                                        //             "title":"OCCUPATION_TYPE",
+                                        //             "type": "select",
+                                        //             "enumCode": "occupationType"
+                                                    
+                                        //         },
+                                        //         "skillLevel":{
+                                        //             "key":"customer.familyMembers[].incomes[].skillLevel",
+                                        //             "title":"SKILL_LEVEL",
+                                        //             "type": "select",
+                                        //             "enumCode": "skillLevel"
+                                                    
+                                        //         },
+                                        //         "avarageTimeSpend":{
+                                        //             "key":"customer.familyMembers[].incomes[].avarageTimeSpend",
+                                        //             "title":"AVARAGE_TIME_SPENT",
+                                        //             "type": "number",
+                                                   
+                                                   
+                                        //         },
+                                        //         "avarageReturn":{
+                                        //             "key":"customer.familyMembers[].incomes[].avarageReturn",
+                                        //             "title":"AVARAGE_RETURN",
+                                        //             "type": "numeber",
+                                        //             "titleMap":{
+                                        //                 "lessThanMonth":"Less Than Month",
+                                        //                 "biMonthly":"Bi Monthly",
+                                        //                 "etc":"etc"
+                                        //             }
+                                                   
+                                                    
+                                        //         },
+                                        //         "incomeFrom":{
+                                        //             "key":"customer.familyMembers[].incomes[].incomeFrom",
+                                        //             "title":"INCOME_FROM",
+                                        //             "type": "select",
+                                        //             "titleMap":{
+                                        //                 "sourceIncome":"Source Income",
+                                        //                 "DistanationIncome":"Destination Income"
+                                        //             }
+                                        //         }
+                                                
+                                        //     }
+                                        // }
+                                    }
+                                }
+                            }
+                        },
+                        "IndividualFinancials":{
+                            "items":{
+                                "expenditures":{
+                                    "items":{
+                                        "from":{
+                                            "key":"customer.expenditures[].expenditureSource",
+                                            "title":"EXPENSE_FROM",
+                                            "type":"select",
+                                            "enumCode":"expense_type",
+                                            "required":true
+                                        },
+                                    }
+                                },
+                            }
+                        },
+                        "KYC": {
+                            "items": {
+                                "firstName": {
+                                    "key": "customer.firstName",
+                                    "title": "CUSTOMER_NAME",
+                                    "type": "string",
+                                    "orderNo": 1,
+                                    //     "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='ScreeningReview'",
+
+                                },
+                                "identityProofBackside":{
+                                    "key":"customer.identityProofReverseImageId",
+                                    "type": "file",
+                                    "fileType": "application/pdf",
+                                    "using": "scanner",
+                                    "title":"IDENTITY_PROOF_BACKSIDE",
+                                   // "orderNo":70
+                                },
+                                "addressProofSameAsIdProof":{
+                                    "condition":"model.customer.identityProof!='PAN Card'",
+                                    "key":"customer.addressPfSameAsIdProof",
+                                    "title":"ADDRESS_PROOF_SAME_AS_IDPROOF",
+                                    "type":"radios",
+                                    "titleMap":{
+                                        "YES":"Yes",
+                                        "NO":"No"
+                                    },
+                                    "orderNo":60,
+                                    "onChange": function(modelValue, form, model, formCtrl, event) {
+                                                if(model.customer.addressPfSameAsIdProof==='YES'){
+                                                    model.customer.addressProof=model.customer.identityProof;
+                                                    model.customer.addressProofNo=model.customer.identityProofNo;
+                                                    model.customer.addressProofImageId=model.customer.identityProofImageId;
+                                                    model.customer.addressProofReverseImageId=model.customer.identityProofReverseImageId;
+                                                    model.customer.addressProofIssueDate=model.customer.idProofIssueDate;
+                                                    model.customer.addressProofValidUptoDate=model.customer.idProofValidUptoDate;
+                                                }else{
+                                                    model.customer.addressProof = null;
+                                                    model.customer.addressProofNo=null;
+                                                    model.customer.addressProofImageId=null;
+                                                    model.customer.addressProofReverseImageId=null;
+                                                    model.customer.addressProofIssueDate=null;
+                                                    model.customer.addressProofValidUptoDate=null;
+                                                }
+                                            }    
+                                },
+                                "addressProofBackside":{
+                                    "key":"customer.addressProofReverseImageId",
+                                    "title":"ADRESS_PROOF_BACKSIDE",
+                                    "fileType":"application/pdf",
+                                    "using":"scanner",
+                                    "type":"file",
+                                    "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'",
+                                    "orderNo":73
+                                },
+                            }
+
+                        },
+                        "FamilyDetails": {
+                            "type": "box",
+                            "title": "FAMILY_DETAILS",
+                            "items": {
+                                "familyMembers": {
+                                    key: "customer.familyMembers",
+                                    type: "array",
+                                    startEmpty: true,
+                                    items: {
+                                        "relationShip": {
+                                            key: "customer.familyMembers[].relationShip",
+                                            type: "select",
+                                            "orderNo": 1,
+                                            onChange: function (modelValue, form, model, formCtrl, event) {
+                                                if (modelValue && modelValue.toLowerCase() === 'self') {
+                                                    if (model.customer.id)
+                                                        model.customer.familyMembers[form.arrayIndex].customerId = model.customer.id;
+                                                    if (model.customer.firstName)
+                                                        model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.firstName;
+                                                    if (model.customer.gender)
+                                                        model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
+                                                    model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
+                                                    if (model.customer.dateOfBirth)
+                                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
+                                                    if (model.customer.maritalStatus)
+                                                        model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                                                    if (model.customer.mobilePhone)
+                                                        model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
+                                                } else if (modelValue && modelValue.toLowerCase() === 'spouse') {
+                                                    if (model.customer.spouseFirstName)
+                                                        model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.spouseFirstName;
+                                                    if (model.customer.gender)
+                                                        model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender == 'MALE' ? 'MALE' :
+                                                            (model.customer.gender == 'FEMALE' ? 'FEMALE' : model.customer.gender);
+                                                    model.customer.familyMembers[form.arrayIndex].age = model.customer.spouseAge;
+                                                    if (model.customer.spouseDateOfBirth)
+                                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.spouseDateOfBirth;
+                                                    if (model.customer.maritalStatus)
+                                                        model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
+                                                }
+                                            },
+                                            title: "T_RELATIONSHIP"
+                                        },
+                                        // "customerId": {
+                                        //     "orderNo": 2,
+                                        //     key: "customer.familyMembers[].customerId",
+                                        //     title:"MIGRANT_ID",
+                                        //     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                                        //     type: "lov",
+                                        //     "inputMap": {
+                                        //         "firstName": {
+                                        //             "key": "customer.firstName",
+                                        //             "title": "CUSTOMER_NAME"
+                                        //         },
+                                        //         "branchName": {
+                                        //             "key": "customer.kgfsName",
+                                        //             "type": "select"
+                                        //         },
+                                        //         "centreId": {
+                                        //             "key": "customer.centreId",
+                                        //             "type": "select"
+                                        //         }
+                                        //     },
+                                        //     "outputMap": {
+                                        //         "id": "customer.familyMembers[arrayIndex].customerId",
+                                        //         "firstName": "customer.familyMembers[arrayIndex].familyMemberFirstName"
+                                        //     },
+                                        //     "searchHelper": formHelper,
+                                        //     "search": function (inputModel, form) {
+                                        //         $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                        //         var promise = Enrollment.search({
+                                        //             'branchName': SessionStore.getBranch() || inputModel.branchName,
+                                        //             'firstName': inputModel.first_name,
+                                        //             'centreId': inputModel.centreId,
+                                        //         }).$promise;
+                                        //         return promise;
+                                        //     },
+                                        //     onSelect: function(valueObj, model, context){
+                                        //         // PageHelper.showProgress('customer-load', 'Loading customer...');
+    
+                                        //         Enrollment.getCustomerById({id: valueObj.id})
+                                        //             .$promise
+                                        //             .then(function(res){
+                                                       
+                                        //                 // PageHelper.showProgress("customer-load", "Done..", 5000);
+                                        //         model.customer.familyMembers[context.arrayIndex].gender=res.gender;
+                                        //          model.customer.familyMembers[context.arrayIndex].dateOfBirth=res.dateOfBirth;
+                                        //          if (model.customer.familyMembers[context.arrayIndex].dateOfBirth) {
+                                        //           model.customer.familyMembers[context.arrayIndex].age=moment().diff(moment(model.customer.familyMembers[model.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                        //          }
+                                        //         //  model.customer.familyMembers[form.arrayIndex].educationStatus=res.customer.id;
+                                        //          model.customer.familyMembers[context.arrayIndex].maritalStatus=res.maritalStatus;
+                                        //          model.customer.familyMembers[context.arrayIndex].mobilePhone=res.mobilePhone;
+                                                       
+                                        //             }, function(httpRes){
+                                        //                 // PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
+                                        //         })
+                                        //     },
+                                        //     getListDisplayItem: function (data, index) {
+                                        //         return [
+                                        //             [data.firstName, data.fatherFirstName].join(' '),
+                                        //             data.id
+                                        //         ];
+                                        //     }
+                                        // },
+                                        "familyMemberFirstName": {
+                                            "orderNo": 3,
+                                            key: "customer.familyMembers[].familyMemberFirstName",
+                                            condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                                            title: "FAMILY_MEMBER_FULL_NAME"
+                                        },
+                                        "gender": {
+                                            "orderNo": 4,
+                                            key: "customer.familyMembers[].gender",
+                                            condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                                            type: "radios",
+                                            title: "T_GENDER"
+                                        },
+                                        "dateOfBirth": {
+                                            "orderNo": 5,
+                                            key: "customer.familyMembers[].dateOfBirth",
+                                            condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                                            type: "date",
+                                            title: "T_DATEOFBIRTH",
+                                            "onChange": function (modelValue, form, model, formCtrl, event) {
+                                                if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                                                    model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                                }
+                                            }
+                                        },
+                                        "age": {
+                                            "orderNo": 6,
+                                            key: "customer.familyMembers[].age",
+                                            condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                                            title: "AGE",
+                                            type: "number",
+                                            "onChange": function (modelValue, form, model, formCtrl, event) {
+                                                if (model.customer.familyMembers[form.arrayIndex].age > 0) {
+                                                    if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-') + moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
+                                                    } else {
+                                                        model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-MM-DD');
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "educationStatus": {
+                                            "orderNo": 7,
+                                            key: "customer.familyMembers[].educationStatus",
+                                            type: "select",
+                                            title: "T_EDUCATION_STATUS"
+                                        },
+                                        "maritalStatus": {
+                                            "orderNo": 8,
+                                            key: "customer.familyMembers[].maritalStatus",
+                                            condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
+                                            type: "select",
+                                            title: "T_MARITAL_STATUS"
+                                        },
+                                        "mobilePhone": {
+                                            "orderNo": 9,
+                                            key: "customer.familyMembers[].mobilePhone",
+                                            condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
+                                        },
+                                        "healthStatus": {
+                                            "orderNo": 10,
+                                            key: "customer.familyMembers[].healthStatus",
+                                            type: "radios",
+                                            titleMap: {
+                                                "GOOD": "GOOD",
+                                                "BAD": "BAD"
+                                            },
+
+                                        },
+                                        "migrantType":{
+                                            "key":"customer.familyMembers[].migrantType",
+                                            "type":"select",
+                                            "title":"MIGRATION_TYPE",
+                                            "required":true,
+                                             "orderNo":0,
+                                            "titleMap":
+                                                    {
+                                                    "LDM":"LDM",
+                                                    "SDM":"SDM",
+                                                    "CM":"CM",
+                                                    "RETURNEE":"RETURNEE",
+                                                    "NOTaMigrate":"NOT A MIGRANT"
+                                                    }
+                                        },
+                                        "incomes": {
+                                            "orderNo": 11,
+                                            key: "customer.familyMembers[].incomes",
+                                            type: "array",
+                                            // readonly: true,
+                                            startEmpty: true,
+                                            items: {
+                                                "workSector":{
+                                                    "key":"customer.familyMembers[].incomes[].workSector",
+                                                    "title":"WORK_SECTOR",
+                                                    "type":"select",
+                                                    "enumCode":"work_sector",
+                                                    "required": true,
+                                                    "orderNo": 50,
+                                                    onChange:function(valueObj,context,model){
+                                                        model.customer.familyMembers[context.arrayIndexes[0]].incomes[context.arrayIndexes[1]].skillLevel = null;
+                                                    }
+                                                },
+                                                "incomeSource": {
+                                                    key: "customer.familyMembers[].incomes[].incomeSource",
+                                                    type: "select",
+                                                    title:"OCCUPATION",
+                                                    required: false,
+                                                    filter:{"parentCode": "work_sector"},
+                                                    "enumCode": "occupation",
+                                                    "parentEnumCode": "work_sector",
+                                                    "parentValueExpr":"model.customer.familyMembers[context.arrayIndex].incomes[context.arrayIndex].workSector",
+                                                    "orderNo": 60,
+                                                    "onChange":function(valueObj,context,model){
+                                                        var skillLevel  = formHelper.enum('skill_type').data.filter(function(value){
+                                                            return value.parentCode == valueObj;
+                                                        });
+                                                        if (skillLevel && skillLevel.length > 0)
+                                                            model.customer.familyMembers[context.arrayIndexes[0]].incomes[context.arrayIndexes[1]].skillLevel = skillLevel[0].name;
+                                                    }
+                                                },
+                                                "incomeEarned": {
+                                                    key: "customer.familyMembers[].incomes[].incomeEarned",
+                                                    title:"INCOME_AMOUNT",
+                                                    "orderNo": 30
+                                                },
+                                                "incomeType": {
+                                                    "key": "customer.familyMembers[].incomes[].incomeType",
+                                                    "title": "INCOME_TYPE",
+                                                    "orderNo": 10
+                                                },
+                                                "frequency": {
+                                                    key: "customer.familyMembers[].incomes[].frequency",
+                                                    type: "select",
+                                                    "enumCode":"income_frequency",
+                                                    "orderNo": 40
+                                                },
+                                                "occupationType":{
+                                                    "key":"customer.familyMembers[].incomes[].occupationType",
+                                                    "title":"OCCUPATION_TYPE",
+                                                    "type":"select",
+                                                    "enumCode":"occupation_type",
+                                                    "required":true,
+                                                    "orderNo":20,
+                                                    
+                                                },
+                                                "skillLevel":{
+                                                    "key":"customer.familyMembers[].incomes[].skillLevel",
+                                                    "title":"SKILL_LEVEL",
+                                                    "type":"select",
+                                                    "enumCode":"skill_type",
+                                                    "parentEnumCode": "occupation",
+                                                    "parentValueExpr":"model.customer.familyMembers[context.arrayIndexes[0]].incomes[context.arrayIndexes[1]].incomeSource",
+                                                    "required":true,
+                                                    "orderNo":70
+                                                    
+                                                },
+                                                "avarageTimeSpend":{
+                                                    "key":"customer.familyMembers[].incomes[].averageTimeSpent",
+                                                    "title":"AVERAGE_TIME_SPENT",
+                                                    "type":"text",
+                                                    "required":true,
+                                                    "orderNo":80,
+                                                    "schema": {
+                                                        "pattern": "(^[0-9]{0,3}$)|(^(0\.[0-9]{1,3}|[1-9]\.[0-9]{1,3}|[1-9][0-9]\.[0-9]{1,3}|[1-9][0-9][0-9]\.[0-9]{1,3})$)",
+                                                        //"pattern": "^\d{0,2}(\.\d{1,2})?$",                        
+                                                        "type": ["string"]
+                                                    }
+                                                },
+                                                "avarageReturn":{
+                                                    "key":"customer.familyMembers[].incomes[].averageReturn",
+                                                    "title":"AVERAGE_RETURN",
+                                                    "type":"select",
+                                                    "required":true,
+                                                    "enumCode":"average_return",
+                                                    "orderNo":90  
+                                                },
+                                                "incomeFrom":{
+                                                    "key":"customer.familyMembers[].incomes[].incomeType",
+                                                    "title":"INCOME_TYPE",
+                                                    "type":"select",
+                                                    "required":true,
+                                                    "enumCode":"income_type",
+                                                     "orderNo":10
+                                                },
+                                                "noOfDaysWorkedInMonth":{
+                                                    "key":"customer.familyMembers[].incomes[].noOfDaysWorkedInMonth",
+                                                    "title":"NO_OF_DAYS_WORKED_IN_MONTH",
+                                                    "type":"number",
+                                                    "required":true,
+                                                    "orderNo":100
+                                                },
+                                            }
+
+                                        },
+                                       
+                                    }
+                                }
+                            }
+                        },
+                        // "FamilyDetails": {
+                        //     "items": {
+                        //         "familyMembers": {
+                        //             "items": {
+                        //                 "relationShip1": {
+                        //                     "key": "customer.familyMembers[].relationShip",
+                        //                     "type": "select",
+                        //                     "title": "T_RELATIONSHIP"
+                        //                 }
+                        //             }
+                        //         }
+                        //     }
+                        // },
+                        "HouseVerification": {
+                            "items": {
+                                "rentLeaseStatus": {
+                                    "type": "select",
+                                    "key": "customer.udf.userDefinedFieldValues.udf3",
+                                    "title": "RENT_LEASE_STATUS"
+                                },
+                                "rentLeaseAgreement": {
+                                    "type": "date",
+                                    "key": "customer.udf.userDefinedDateFieldValues.udfDate1",
+                                    "title": "RENT_LEASE_AGREEMENT_VALID_TILL"
+                                },
+                                "houseStatus":{
+                                    "title":"HOUSE_STATUS",
+                                    "key":"customer.houseStatus",
+                                    "type":"select",
+                                    "enumCode":"house_verification"
+                                },
+                                "noOfRooms":{
+                                    "key":"customer.noOfRooms",
+                                    "type":"number",
+                                    "title":"NO_OF_ROOMS"
+                                }
+                            }
+                        },
+                        "Liabilities":{
+                            "items":{
+                                "liabilities":{
+                                    "items":{
+                                        "mortage": {
+                                            "key": "customer.liabilities[].udf1",
+                                            "title": "MORTAGE",
+                                            "condition": "model.customer.liabilities[arrayIndex].loanType.toLowerCase() === 'secured'",
+                                            "orderNo": 10
+                                        },
+                                        "mortageAmount": {
+                                            "key": "customer.liabilities[].mortageAmount",
+                                            "title": "MORTAGE_AMOUNT",
+                                            "orderNo": 10,
+                                            "condition": "model.customer.liabilities[arrayIndex].loanType.toLowerCase() === 'secured'",
+                                        },
+                                        "liabilityLoanPurpose":{
+                                            "orderNo": 11
+                                        },
+                                        "amountPaid":{
+                                            "key":"customer.liabilities[].principalExpense",
+                                            "title":"AMOUNT_PAID_PRINCIPAL",
+                                           // "orderNo":1
+                                        },
+                                        "amountPaidInterest":{
+                                            "key":"customer.liabilities[].interestExpense",
+                                            "title":"AMOUNT_PAID_INTEREST",
+                                            //"orderNo":2
+                                        },
+                                        "masonValuation":{
+                                            "key":"customer.liabilities[].udf2",
+                                            "title":"MASON_VALUATION_DOCUMENT",
+                                            "type":"file",
+                                            "fileType": "image/*",
+                                           // "orderNo":4
+                                        }
+                                       
+                                    }
+                                }
+                            }
+
+                        },
+                        "BankAccounts": {
+                            "title":"SAVING_DETAILS",
+                            "items": {
+                                "customerBankAccounts": {
+                                    "items": {
+                                        "bankStatements": {
+                                            "items": {
+                                                "cashDeposits": {
+                                                    "key": "customer.customerBankAccounts[].bankStatements[].cashDeposits",
+                                                    "title": "Cash Deposits",
+                                                    type: "amount",
+                                                    "orderNo": 115,
+                                                    "onChange": function (modelValue, form, model, formCtrl, event) {
+                                                        var index = form.key[2];
+                                                        var indexBank = form.key[4];
+                                                        modelValue = modelValue == null ? 0 : modelValue;
+                                                        var nonCashDeposits = 0;
+                                                        if (modelValue != null) {
+                                                            nonCashDeposits = (model.customer.customerBankAccounts[index].bankStatements[indexBank].nonCashDeposits != null) ? model.customer.customerBankAccounts[index].bankStatements[indexBank].nonCashDeposits : 0;
+
+                                                            model.customer.customerBankAccounts[index].bankStatements[indexBank].totalDeposits = nonCashDeposits + modelValue;
+                                                        }
+                                                    }
+                                                },
+                                                "nonCashDeposits": {
+                                                    "key": "customer.customerBankAccounts[].bankStatements[].nonCashDeposits",
+                                                    "title": "Non-cash Deposits",
+                                                    type: "amount",
+                                                    "orderNo": 117,
+                                                    "onChange": function (modelValue, form, model, formCtrl, event) {
+                                                        var index = form.key[2];
+                                                        var indexBank = form.key[4];
+                                                        modelValue = modelValue == null ? 0 : modelValue;
+                                                        var cashDeposits = 0;
+                                                        if (modelValue != null) {
+                                                            cashDeposits = (model.customer.customerBankAccounts[index].bankStatements[indexBank].cashDeposits != null) ? model.customer.customerBankAccounts[index].bankStatements[indexBank].cashDeposits : 0;
+
+                                                            model.customer.customerBankAccounts[index].bankStatements[indexBank].totalDeposits = cashDeposits + modelValue;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "References": {
+                            "type": "box",
+                            "title": "REFERENCES",
+                            "orderNo": 100,
+                            "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal' || model.currentStage=='Screening'|| model.currentStage=='ScreeningReview' || model.currentStage=='loanView'",
+                            "items": {
+                                "verifications": {
+                                    key: "customer.verifications",
+                                    title: "REFERENCES",
+                                    type: "array",
+                                    items: {
+                                        // "relationship" : {
+                                        //     key:"customer.verifications[].relationship",
+                                        //     title:"REFERENCE_TYPE",
+                                        //     type:"select",
+                                        //     required:"true",
+                                        //     enumCode: "business_reference_type"
+                                        // },
+                                        // "businessName" : {
+                                        //     key:"customer.verifications[].businessName",
+                                        //     title:"BUSINESS_NAME",
+                                        //     type:"string"
+                                        // },
+                                        "referenceFirstName": {
+                                            key: "customer.verifications[].referenceFirstName",
+                                            title: "CONTACT_PERSON_NAME",
+                                            required: "true",
+                                            type: "string"
+                                        },
+                                        "mobileNo": {
+                                            key: "customer.verifications[].mobileNo",
+                                            title: "CONTACT_NUMBER",
+                                            type: "string",
+                                            required: "true",
+                                            inputmode: "number",
+                                            numberType: "tel",
+                                            "schema": {
+                                                "pattern": "^[0-9]{10}$"
+                                            }
+                                        }/*,
+                                        {
+                                            key:"customer.verifications[].businessSector",
+                                            title:"BUSINESS_SECTOR",
+                                            type:"select",
+                                            enumCode: "businessSector"
+                                        },
+                                        {
+                                            key:"customer.verifications[].businessSubSector",
+                                            title:"BUSINESS_SUBSECTOR",
+                                            type:"select",
+                                            enumCode: "businessSubSector",
+                                            parentEnumCode: "businessSector"
+                                        },
+                                        {
+                                            key:"customer.verifications[].selfReportedIncome",
+                                            title:"SELF_REPORTED_INCOME",
+                                            type:"number"
+                                        }*/,
+                                        "occupation": {
+                                            key: "customer.verifications[].occupation",
+                                            title: "OCCUPATION",
+                                            type: "select",
+                                            "enumCode": "occupation",
+                                        },
+                                        "address": {
+                                            key: "customer.verifications[].address",
+                                            type: "textarea"
+                                        },
+                                        "ReferenceCheck": {
+                                            type: "fieldset",
+                                            title: "REFERENCE_CHECK",
+                                            //"condition": "model.currentStage=='ScreeningInput'",
+                                            items: {
+                                                /*,
+                                                {
+                                                    key:"customer.verifications[].remarks",
+                                                    title:"REMARKS",
+                                                },*/
+                                                "knownSince": {
+                                                    key: "customer.verifications[].knownSince",
+                                                    required: true
+                                                },
+                                                "relationship": {
+                                                    key: "customer.verifications[].relationship",
+                                                    title: "REFERENCE_TYPE1",
+                                                    type: "select",
+                                                    required: true,
+                                                    titleMap: {
+                                                        "Neighbour": "Neighbour",
+                                                        "Relative/friend": "Relative/friend"
+                                                    }
+                                                },
+                                                "opinion": {
+                                                    key: "customer.verifications[].opinion"
+                                                },
+                                                "financialStatus": {
+                                                    key: "customer.verifications[].financialStatus"
+                                                },
+                                                // "goodsSold" : {
+                                                //     key:"customer.verifications[].goodsSold",
+                                                //     "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
+                                                // },
+                                                // "goodsBought" : {
+                                                //     key:"customer.verifications[].goodsBought",
+                                                //     "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
+                                                // },
+                                                // "paymentTerms" : {
+                                                //     key:"customer.verifications[].paymentTerms",
+                                                //     type:"select",
+                                                //     "title":"payment_tarms",
+                                                //     enumCode: "payment_terms"
+                                                // },
+                                                // "modeOfPayment" : {
+                                                //     key:"customer.verifications[].modeOfPayment",
+                                                //     type:"select",
+                                                //     enumCode: "payment_mode"
+                                                // },
+                                                // "outstandingPayable" : {
+                                                //     key:"customer.verifications[].outstandingPayable",
+                                                //     "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
+                                                // },
+                                                // "outstandingReceivable" : {
+                                                //     key:"customer.verifications[].outstandingReceivable",
+                                                //     "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
+                                                // },
+                                                
+                                                "customerResponse": {
+                                                    key: "customer.verifications[].customerResponse",
+                                                    title: "CUSTOMER_RESPONSE",
+                                                    type: "select",
+                                                    required: true,
+                                                    titleMap: [{
+                                                        value: "positive",
+                                                        name: "positive"
+                                                    }, {
+                                                        value: "Negative",
+                                                        name: "Negative"
+                                                    }]
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                            }
+                        },
+                        "IndividualInformation": {
+                            "items": {
+                                "centreId1": {
+                                    key: "customer.centreId",
+                                    type: "select",
+                                    readonly: true,
+                                    title: "CENTRE_NAME",
+                                    filter: {
+                                        "parentCode": "branch_id"
+                                    },
+                                    parentEnumCode: "branch_id",
+                                    orderNo: 12,
+                                    parentValueExpr: "model.customer.customerBranchId",
+                                }
+                                // "groupName": {
+                                //     "key": "loanAccount.groupName",
+                                //     "title": "GROUP_NAME",
+                                //     "type": "string",
+                                //     "orderNo": 50
+                                // },
+                                // "groupID": {
+                                //     "key": "loanAccount.jlgGroupId ",
+                                //     "title": "GROUP_ID",
+                                //     "type": "string",
+                                //     "orderNo": 40,
+                                // }
+                            }
+                        },
+                        "PhysicalAssets":{
+                            "items":{
+                                "financialAssets":{
+                                    "title":"FINANCIAL_ASSET",
+                                    "items":{
+                                        "installmentAmount":{
+                                            "key":"customer.financialAssets.amountInPaisa",
+                                            "title":"INSTALLMENT_AMOUNT",
+                                            "required":true
+                                            },
+                                            "balance":{
+                                                "key":"customer.financialAssets.balance",
+                                                "title":"BALANCE_IN_THE_ACCOUNT",
+                                                "required":true
+                                            }
+                                    }
+
+
+                                }
+                                     
+                            }
+                            
+                        }
+                    },
+                    "additions": [
+                        {
+                            "type": "actionbox",
+                            "condition": "!model.customer.currentStage",
+                            "orderNo": 2700,
+                            "items": [
+                                {
+                                    "type": "submit",
+                                    "title": "SUBMIT"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "actionbox",
+                            "condition": "(model.customer.id && model.currentStage!=='ScreeningReview')",
+                            "orderNo": 2800,
+                            "items": [
+                                {
+                                    "type": "button",
+                                    "title": "SUBMIT",
+                                    "onClick": "actions.proceed(model, formCtrl, form, $event)"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                }
+            };
+
             function getLoanCustomerRelation(pageClass) {
                 switch (pageClass) {
                     case 'applicant':
@@ -2744,6 +3642,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "type": "schema-form",
                 "title": "INDIVIDUAL_ENROLLMENT_2",
                 "subTitle": "",
+
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                     // $log.info("Inside initialize of IndividualEnrolment2 -SPK " + formCtrl.$name);
                     if (bundlePageObj) {
@@ -2860,901 +3759,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 //    }
                     /* Form rendering starts */
                     var self = this;
-                    var formRequest = {
-                        "overrides": overridesFields(model),
-                        "includes": getIncludes(model),
-                        "excludes": [
-                           // "KYC.addressProofSameAsIdProof",
-                        ],
-                        "options": {
-                            "repositoryAdditions": {
-                                "ContactInformation": {
-                                    "items": {
-                                        // "alternativeMobileNo": {
-                                        //     "key": "customer.alternativeMobileNo",
-                                        //     "title": "ALTERNATIVE_MOBILE_NO",
-                                        //     "type": "number",
-                                        //    // "orderNo": 100
-                                        // },
-                                        "mandal": {
-                                            "key": "customer.taluk",
-                                            "title": "SUB_DISTRICT",
-                                            "type": "string",
-                                            "required":false,
-                                            "readonly":true,
-                                            "orderNo": 130
-                                        },
-                                        // "mailingMandal": {
-                                        //     "key": "customer.udf.userDefinedFieldValues.udf2",
-                                        //     "title": "SUB_DISTRICT",
-                                        //     "type": "string",
-                                        //     "orderNo": 181
-                                        // },
-                                        "mailingLandmark": {
-                                            "key": "customer.landmark",
-                                            "title": "LANDMARK",
-                                            "type": "string",
-                                            "condition": "!model.customer.mailSameAsResidence"
-                                            //"orderNo": 181
-                                        },
-                                        // "collectionArea":{
-                                        //     "key":"ContactInformation.collectionArea",
-                                        //     "title":"COLLECTION_CENTRE",
-                                        //     //"required": true,
-                                        //     "type":"select",
-                                        //     "orderNo":110
-                                        // },
-                                        "mailingMobileNo":{
-                                            "key":"ContactInformation.mailingMobileNo",
-                                            "title":"DESTINATION_PHONE_NO",
-                                            "type":"text",
-                                            "schema":{
-                                                "pattern": "^[0-9]{10,10}$"
-                                            },
-                                            "condition": "!model.customer.mailSameAsResidence"
-                                        }
-                                    }
-                                },
-                                "FamilyDetails": {
-                                    "items": {
-                                        "familyMembers": {
-                                            "items": {
-                                                // "migrantType":{
-                                                //     "key":"customer.familyMembers[].migrantType",
-                                                //     "type":"select",
-                                                //     "title":"MIGRATION_TYPE",
-                                                //     "required":true,
-                                                //     // "orderNo":0,
-                                                //     "titleMap":
-                                                //             {
-                                                //             "LCM":"LCM",
-                                                //             "SDM":"SDM",
-                                                //             "CM":"CM",
-                                                //             "RETURNEE":"RETURNEE",
-                                                //             "NOTaMigrate":"NOT A MIGRANT"
-                                                //             }
-                                                // },
-                                                "Gender":{
-                                                    "key":"customer.familyMembers[].gender",
-                                                    "type":"radios",
-                                                    "title":"GENDER",
-                                                    "orderNo":90,
-                                                    "enumCode": "gender",
-                                                    "required":true
-                                                },
-                                                "mobilePhone":{
-                                                    "key":"customer.familyMembers[].mobilePhone",
-                                                    "title":"MOBILE_PHONE",
-                                                    "orderNo":130,
-                                                    "type":"number"
-                                                },
-                                                "Health":{
-                                                    "key":"customer.familyMembers[].Health",
-                                                    "title":"HEALTH_STATUS",
-                                                    "orderNo":200,
-                                                    "type":"radios",
-                                                    "titleMap":{
-                                                        "good":"Good",
-                                                        "bad":"bad"
-                                                    }
-                                                },
-                                                "Age":{
-                                                    "key":"customer.familyMembers[].age",
-                                                    "type":"number",
-                                                    "title":"AGE",
-                                                   // "orderNo":140,
-                                                    "required":true
-                                                },
-                                                // "incomes":{
-                                                //     "items":{
-                                                //         "workSector":{
-                                                //             "key":"customer.familyMembers[].incomes[].workSector",
-                                                //             "title":"WORK_SECTOR",
-                                                //             "type": "select",
-                                                //             "enumCode": "workSector"
-                                                //         },
-                                                //         "occupationType":{
-                                                //             "key":"customer.familyMembers[].incomes[].occupationType",
-                                                //             "title":"OCCUPATION_TYPE",
-                                                //             "type": "select",
-                                                //             "enumCode": "occupationType"
-                                                            
-                                                //         },
-                                                //         "skillLevel":{
-                                                //             "key":"customer.familyMembers[].incomes[].skillLevel",
-                                                //             "title":"SKILL_LEVEL",
-                                                //             "type": "select",
-                                                //             "enumCode": "skillLevel"
-                                                            
-                                                //         },
-                                                //         "avarageTimeSpend":{
-                                                //             "key":"customer.familyMembers[].incomes[].avarageTimeSpend",
-                                                //             "title":"AVARAGE_TIME_SPENT",
-                                                //             "type": "number",
-                                                           
-                                                           
-                                                //         },
-                                                //         "avarageReturn":{
-                                                //             "key":"customer.familyMembers[].incomes[].avarageReturn",
-                                                //             "title":"AVARAGE_RETURN",
-                                                //             "type": "numeber",
-                                                //             "titleMap":{
-                                                //                 "lessThanMonth":"Less Than Month",
-                                                //                 "biMonthly":"Bi Monthly",
-                                                //                 "etc":"etc"
-                                                //             }
-                                                           
-                                                            
-                                                //         },
-                                                //         "incomeFrom":{
-                                                //             "key":"customer.familyMembers[].incomes[].incomeFrom",
-                                                //             "title":"INCOME_FROM",
-                                                //             "type": "select",
-                                                //             "titleMap":{
-                                                //                 "sourceIncome":"Source Income",
-                                                //                 "DistanationIncome":"Destination Income"
-                                                //             }
-                                                //         }
-                                                        
-                                                //     }
-                                                // }
-                                            }
-                                        }
-                                    }
-                                },
-                                "IndividualFinancials":{
-                                    "items":{
-                                        "expenditures":{
-                                            "items":{
-                                                "from":{
-                                                    "key":"customer.expenditures[].expenditureSource",
-                                                    "title":"EXPENSE_FROM",
-                                                    "type":"select",
-                                                    "enumCode":"expense_type",
-                                                    "required":true
-                                                },
-                                            }
-                                        },
-                                    }
-                                },
-                                "KYC": {
-                                    "items": {
-                                        "firstName": {
-                                            "key": "customer.firstName",
-                                            "title": "CUSTOMER_NAME",
-                                            "type": "string",
-                                            "orderNo": 1,
-                                            //     "condition": "model.currentStage=='ApplicationReview' || model.currentStage=='ScreeningReview'",
-
-                                        },
-                                        "identityProofBackside":{
-                                            "key":"customer.identityProofReverseImageId",
-                                            "type": "file",
-                                            "fileType": "application/pdf",
-                                            "using": "scanner",
-                                            "title":"IDENTITY_PROOF_BACKSIDE",
-                                           // "orderNo":70
-                                        },
-                                        "addressProofSameAsIdProof":{
-                                            "condition":"model.customer.identityProof!='PAN Card'",
-                                            "key":"customer.addressPfSameAsIdProof",
-                                            "title":"ADDRESS_PROOF_SAME_AS_IDPROOF",
-                                            "type":"radios",
-                                            "titleMap":{
-                                                "YES":"Yes",
-                                                "NO":"No"
-                                            },
-                                            "orderNo":60,
-                                            "onChange": function(modelValue, form, model, formCtrl, event) {
-                                                        if(model.customer.addressPfSameAsIdProof==='YES'){
-                                                            model.customer.addressProof=model.customer.identityProof;
-                                                            model.customer.addressProofNo=model.customer.identityProofNo;
-                                                            model.customer.addressProofImageId=model.customer.identityProofImageId;
-                                                            model.customer.addressProofReverseImageId=model.customer.identityProofReverseImageId;
-                                                            model.customer.addressProofIssueDate=model.customer.idProofIssueDate;
-                                                            model.customer.addressProofValidUptoDate=model.customer.idProofValidUptoDate;
-                                                        }else{
-                                                            model.customer.addressProof = null;
-                                                            model.customer.addressProofNo=null;
-                                                            model.customer.addressProofImageId=null;
-                                                            model.customer.addressProofReverseImageId=null;
-                                                            model.customer.addressProofIssueDate=null;
-                                                            model.customer.addressProofValidUptoDate=null;
-                                                        }
-                                                    }    
-                                        },
-                                        "addressProofBackside":{
-                                            "key":"customer.addressProofReverseImageId",
-                                            "title":"ADRESS_PROOF_BACKSIDE",
-                                            "fileType":"application/pdf",
-                                            "using":"scanner",
-                                            "type":"file",
-                                            "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'",
-                                            "orderNo":73
-                                        },
-                                    }
-
-                                },
-                                "FamilyDetails": {
-                                    "type": "box",
-                                    "title": "FAMILY_DETAILS",
-                                    "items": {
-                                        "familyMembers": {
-                                            key: "customer.familyMembers",
-                                            type: "array",
-                                            startEmpty: true,
-                                            items: {
-                                                "relationShip": {
-                                                    key: "customer.familyMembers[].relationShip",
-                                                    type: "select",
-                                                    "orderNo": 1,
-                                                    onChange: function (modelValue, form, model, formCtrl, event) {
-                                                        if (modelValue && modelValue.toLowerCase() === 'self') {
-                                                            if (model.customer.id)
-                                                                model.customer.familyMembers[form.arrayIndex].customerId = model.customer.id;
-                                                            if (model.customer.firstName)
-                                                                model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.firstName;
-                                                            if (model.customer.gender)
-                                                                model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender;
-                                                            model.customer.familyMembers[form.arrayIndex].age = model.customer.age;
-                                                            if (model.customer.dateOfBirth)
-                                                                model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.dateOfBirth;
-                                                            if (model.customer.maritalStatus)
-                                                                model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
-                                                            if (model.customer.mobilePhone)
-                                                                model.customer.familyMembers[form.arrayIndex].mobilePhone = model.customer.mobilePhone;
-                                                        } else if (modelValue && modelValue.toLowerCase() === 'spouse') {
-                                                            if (model.customer.spouseFirstName)
-                                                                model.customer.familyMembers[form.arrayIndex].familyMemberFirstName = model.customer.spouseFirstName;
-                                                            if (model.customer.gender)
-                                                                model.customer.familyMembers[form.arrayIndex].gender = model.customer.gender == 'MALE' ? 'MALE' :
-                                                                    (model.customer.gender == 'FEMALE' ? 'FEMALE' : model.customer.gender);
-                                                            model.customer.familyMembers[form.arrayIndex].age = model.customer.spouseAge;
-                                                            if (model.customer.spouseDateOfBirth)
-                                                                model.customer.familyMembers[form.arrayIndex].dateOfBirth = model.customer.spouseDateOfBirth;
-                                                            if (model.customer.maritalStatus)
-                                                                model.customer.familyMembers[form.arrayIndex].maritalStatus = model.customer.maritalStatus;
-                                                        }
-                                                    },
-                                                    title: "T_RELATIONSHIP"
-                                                },
-                                                // "customerId": {
-                                                //     "orderNo": 2,
-                                                //     key: "customer.familyMembers[].customerId",
-                                                //     title:"MIGRANT_ID",
-                                                //     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
-                                                //     type: "lov",
-                                                //     "inputMap": {
-                                                //         "firstName": {
-                                                //             "key": "customer.firstName",
-                                                //             "title": "CUSTOMER_NAME"
-                                                //         },
-                                                //         "branchName": {
-                                                //             "key": "customer.kgfsName",
-                                                //             "type": "select"
-                                                //         },
-                                                //         "centreId": {
-                                                //             "key": "customer.centreId",
-                                                //             "type": "select"
-                                                //         }
-                                                //     },
-                                                //     "outputMap": {
-                                                //         "id": "customer.familyMembers[arrayIndex].customerId",
-                                                //         "firstName": "customer.familyMembers[arrayIndex].familyMemberFirstName"
-                                                //     },
-                                                //     "searchHelper": formHelper,
-                                                //     "search": function (inputModel, form) {
-                                                //         $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                                //         var promise = Enrollment.search({
-                                                //             'branchName': SessionStore.getBranch() || inputModel.branchName,
-                                                //             'firstName': inputModel.first_name,
-                                                //             'centreId': inputModel.centreId,
-                                                //         }).$promise;
-                                                //         return promise;
-                                                //     },
-                                                //     onSelect: function(valueObj, model, context){
-                                                //         // PageHelper.showProgress('customer-load', 'Loading customer...');
-            
-                                                //         Enrollment.getCustomerById({id: valueObj.id})
-                                                //             .$promise
-                                                //             .then(function(res){
-                                                               
-                                                //                 // PageHelper.showProgress("customer-load", "Done..", 5000);
-                                                //         model.customer.familyMembers[context.arrayIndex].gender=res.gender;
-                                                //          model.customer.familyMembers[context.arrayIndex].dateOfBirth=res.dateOfBirth;
-                                                //          if (model.customer.familyMembers[context.arrayIndex].dateOfBirth) {
-                                                //           model.customer.familyMembers[context.arrayIndex].age=moment().diff(moment(model.customer.familyMembers[model.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                                                //          }
-                                                //         //  model.customer.familyMembers[form.arrayIndex].educationStatus=res.customer.id;
-                                                //          model.customer.familyMembers[context.arrayIndex].maritalStatus=res.maritalStatus;
-                                                //          model.customer.familyMembers[context.arrayIndex].mobilePhone=res.mobilePhone;
-                                                               
-                                                //             }, function(httpRes){
-                                                //                 // PageHelper.showProgress("customer-load", 'Unable to load customer', 5000);
-                                                //         })
-                                                //     },
-                                                //     getListDisplayItem: function (data, index) {
-                                                //         return [
-                                                //             [data.firstName, data.fatherFirstName].join(' '),
-                                                //             data.id
-                                                //         ];
-                                                //     }
-                                                // },
-                                                "familyMemberFirstName": {
-                                                    "orderNo": 3,
-                                                    key: "customer.familyMembers[].familyMemberFirstName",
-                                                    condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
-                                                    title: "FAMILY_MEMBER_FULL_NAME"
-                                                },
-                                                "gender": {
-                                                    "orderNo": 4,
-                                                    key: "customer.familyMembers[].gender",
-                                                    condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
-                                                    type: "radios",
-                                                    title: "T_GENDER"
-                                                },
-                                                "dateOfBirth": {
-                                                    "orderNo": 5,
-                                                    key: "customer.familyMembers[].dateOfBirth",
-                                                    condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
-                                                    type: "date",
-                                                    title: "T_DATEOFBIRTH",
-                                                    "onChange": function (modelValue, form, model, formCtrl, event) {
-                                                        if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
-                                                            model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
-                                                        }
-                                                    }
-                                                },
-                                                "age": {
-                                                    "orderNo": 6,
-                                                    key: "customer.familyMembers[].age",
-                                                    condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
-                                                    title: "AGE",
-                                                    type: "number",
-                                                    "onChange": function (modelValue, form, model, formCtrl, event) {
-                                                        if (model.customer.familyMembers[form.arrayIndex].age > 0) {
-                                                            if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
-                                                                model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-') + moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, 'YYYY-MM-DD').format('MM-DD');
-                                                            } else {
-                                                                model.customer.familyMembers[form.arrayIndex].dateOfBirth = moment(new Date()).subtract(model.customer.familyMembers[form.arrayIndex].age, 'years').format('YYYY-MM-DD');
-                                                            }
-                                                        }
-                                                    }
-                                                },
-                                                "educationStatus": {
-                                                    "orderNo": 7,
-                                                    key: "customer.familyMembers[].educationStatus",
-                                                    type: "select",
-                                                    title: "T_EDUCATION_STATUS"
-                                                },
-                                                "maritalStatus": {
-                                                    "orderNo": 8,
-                                                    key: "customer.familyMembers[].maritalStatus",
-                                                    condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
-                                                    type: "select",
-                                                    title: "T_MARITAL_STATUS"
-                                                },
-                                                "mobilePhone": {
-                                                    "orderNo": 9,
-                                                    key: "customer.familyMembers[].mobilePhone",
-                                                    condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
-                                                },
-                                                "healthStatus": {
-                                                    "orderNo": 10,
-                                                    key: "customer.familyMembers[].healthStatus",
-                                                    type: "radios",
-                                                    titleMap: {
-                                                        "GOOD": "GOOD",
-                                                        "BAD": "BAD"
-                                                    },
-
-                                                },
-                                                "migrantType":{
-                                                    "key":"customer.familyMembers[].migrantType",
-                                                    "type":"select",
-                                                    "title":"MIGRATION_TYPE",
-                                                    "required":true,
-                                                     "orderNo":0,
-                                                    "titleMap":
-                                                            {
-                                                            "LDM":"LDM",
-                                                            "SDM":"SDM",
-                                                            "CM":"CM",
-                                                            "RETURNEE":"RETURNEE",
-                                                            "NOTaMigrate":"NOT A MIGRANT"
-                                                            }
-                                                },
-                                                "incomes": {
-                                                    "orderNo": 11,
-                                                    key: "customer.familyMembers[].incomes",
-                                                    type: "array",
-                                                    // readonly: true,
-                                                    startEmpty: true,
-                                                    items: {
-                                                        "workSector":{
-                                                            "key":"customer.familyMembers[].incomes[].workSector",
-                                                            "title":"WORK_SECTOR",
-                                                            "type":"select",
-                                                            "enumCode":"work_sector",
-                                                            "required": true,
-                                                            "orderNo": 50,
-                                                            onChange:function(valueObj,context,model){
-                                                                model.customer.familyMembers[context.arrayIndexes[0]].incomes[context.arrayIndexes[1]].skillLevel = null;
-                                                            }
-                                                        },
-                                                        "incomeSource": {
-                                                            key: "customer.familyMembers[].incomes[].incomeSource",
-                                                            type: "select",
-                                                            title:"OCCUPATION",
-                                                            required: false,
-                                                            filter:{"parentCode": "work_sector"},
-                                                            "enumCode": "occupation",
-                                                            "parentEnumCode": "work_sector",
-                                                            "parentValueExpr":"model.customer.familyMembers[context.arrayIndex].incomes[context.arrayIndex].workSector",
-                                                            "orderNo": 60,
-                                                            "onChange":function(valueObj,context,model){
-                                                                var skillLevel  = formHelper.enum('skill_type').data.filter(function(value){
-                                                                    return value.parentCode == valueObj;
-                                                                });
-                                                                if (skillLevel && skillLevel.length > 0)
-                                                                    model.customer.familyMembers[context.arrayIndexes[0]].incomes[context.arrayIndexes[1]].skillLevel = skillLevel[0].name;
-                                                            }
-                                                        },
-                                                        "incomeEarned": {
-                                                            key: "customer.familyMembers[].incomes[].incomeEarned",
-                                                            title:"INCOME_AMOUNT",
-                                                            "orderNo": 30
-                                                        },
-                                                        "incomeType": {
-                                                            "key": "customer.familyMembers[].incomes[].incomeType",
-                                                            "title": "INCOME_TYPE",
-                                                            "orderNo": 10
-                                                        },
-                                                        "frequency": {
-                                                            key: "customer.familyMembers[].incomes[].frequency",
-                                                            type: "select",
-                                                            "enumCode":"income_frequency",
-                                                            "orderNo": 40
-                                                        },
-                                                        "occupationType":{
-                                                            "key":"customer.familyMembers[].incomes[].occupationType",
-                                                            "title":"OCCUPATION_TYPE",
-                                                            "type":"select",
-                                                            "enumCode":"occupation_type",
-                                                            "required":true,
-                                                            "orderNo":20,
-                                                            
-                                                        },
-                                                        "skillLevel":{
-                                                            "key":"customer.familyMembers[].incomes[].skillLevel",
-                                                            "title":"SKILL_LEVEL",
-                                                            "type":"select",
-                                                            "enumCode":"skill_type",
-                                                            "parentEnumCode": "occupation",
-                                                            "parentValueExpr":"model.customer.familyMembers[context.arrayIndexes[0]].incomes[context.arrayIndexes[1]].incomeSource",
-                                                            "required":true,
-                                                            "orderNo":70
-                                                            
-                                                        },
-                                                        "avarageTimeSpend":{
-                                                            "key":"customer.familyMembers[].incomes[].averageTimeSpent",
-                                                            "title":"AVERAGE_TIME_SPENT",
-                                                            "type":"text",
-                                                            "required":true,
-                                                            "orderNo":80,
-                                                            "schema": {
-                                                                "pattern": "(^[0-9]{0,3}$)|(^(0\.[0-9]{1,3}|[1-9]\.[0-9]{1,3}|[1-9][0-9]\.[0-9]{1,3}|[1-9][0-9][0-9]\.[0-9]{1,3})$)",
-                                                                //"pattern": "^\d{0,2}(\.\d{1,2})?$",                        
-                                                                "type": ["string"]
-                                                            }
-                                                        },
-                                                        "avarageReturn":{
-                                                            "key":"customer.familyMembers[].incomes[].averageReturn",
-                                                            "title":"AVERAGE_RETURN",
-                                                            "type":"select",
-                                                            "required":true,
-                                                            "enumCode":"average_return",
-                                                            "orderNo":90  
-                                                        },
-                                                        "incomeFrom":{
-                                                            "key":"customer.familyMembers[].incomes[].incomeType",
-                                                            "title":"INCOME_TYPE",
-                                                            "type":"select",
-                                                            "required":true,
-                                                            "enumCode":"income_type",
-                                                             "orderNo":10
-                                                        },
-                                                        "noOfDaysWorkedInMonth":{
-                                                            "key":"customer.familyMembers[].incomes[].noOfDaysWorkedInMonth",
-                                                            "title":"NO_OF_DAYS_WORKED_IN_MONTH",
-                                                            "type":"number",
-                                                            "required":true,
-                                                            "orderNo":100
-                                                        },
-                                                    }
-
-                                                },
-                                               
-                                            }
-                                        }
-                                    }
-                                },
-                                // "FamilyDetails": {
-                                //     "items": {
-                                //         "familyMembers": {
-                                //             "items": {
-                                //                 "relationShip1": {
-                                //                     "key": "customer.familyMembers[].relationShip",
-                                //                     "type": "select",
-                                //                     "title": "T_RELATIONSHIP"
-                                //                 }
-                                //             }
-                                //         }
-                                //     }
-                                // },
-                                "HouseVerification": {
-                                    "items": {
-                                        "rentLeaseStatus": {
-                                            "type": "select",
-                                            "key": "customer.udf.userDefinedFieldValues.udf3",
-                                            "title": "RENT_LEASE_STATUS"
-                                        },
-                                        "rentLeaseAgreement": {
-                                            "type": "date",
-                                            "key": "customer.udf.userDefinedDateFieldValues.udfDate1",
-                                            "title": "RENT_LEASE_AGREEMENT_VALID_TILL"
-                                        },
-                                        "houseStatus":{
-                                            "title":"HOUSE_STATUS",
-                                            "key":"customer.houseStatus",
-                                            "type":"select",
-                                            "enumCode":"house_verification"
-                                        },
-                                        "noOfRooms":{
-                                            "key":"customer.noOfRooms",
-                                            "type":"number",
-                                            "title":"NO_OF_ROOMS"
-                                        }
-                                    }
-                                },
-                                "Liabilities":{
-                                    "items":{
-                                        "liabilities":{
-                                            "items":{
-                                                "mortage": {
-                                                    "key": "customer.liabilities[].udf1",
-                                                    "title": "MORTAGE",
-                                                    "condition": "model.customer.liabilities[arrayIndex].loanType.toLowerCase() === 'secured'",
-                                                    "orderNo": 10
-                                                },
-                                                "mortageAmount": {
-                                                    "key": "customer.liabilities[].mortageAmount",
-                                                    "title": "MORTAGE_AMOUNT",
-                                                    "orderNo": 10,
-                                                    "condition": "model.customer.liabilities[arrayIndex].loanType.toLowerCase() === 'secured'",
-                                                },
-                                                "liabilityLoanPurpose":{
-                                                    "orderNo": 11
-                                                },
-                                                "amountPaid":{
-                                                    "key":"customer.liabilities[].principalExpense",
-                                                    "title":"AMOUNT_PAID_PRINCIPAL",
-                                                   // "orderNo":1
-                                                },
-                                                "amountPaidInterest":{
-                                                    "key":"customer.liabilities[].interestExpense",
-                                                    "title":"AMOUNT_PAID_INTEREST",
-                                                    //"orderNo":2
-                                                },
-                                                "masonValuation":{
-                                                    "key":"customer.liabilities[].udf2",
-                                                    "title":"MASON_VALUATION_DOCUMENT",
-                                                    "type":"file",
-                                                    "fileType": "image/*",
-                                                   // "orderNo":4
-                                                }
-                                               
-                                            }
-                                        }
-                                    }
-
-                                },
-                                "BankAccounts": {
-                                    "title":"SAVING_DETAILS",
-                                    "items": {
-                                        "customerBankAccounts": {
-                                            "items": {
-                                                "bankStatements": {
-                                                    "items": {
-                                                        "cashDeposits": {
-                                                            "key": "customer.customerBankAccounts[].bankStatements[].cashDeposits",
-                                                            "title": "Cash Deposits",
-                                                            type: "amount",
-                                                            "orderNo": 115,
-                                                            "onChange": function (modelValue, form, model, formCtrl, event) {
-                                                                var index = form.key[2];
-                                                                var indexBank = form.key[4];
-                                                                modelValue = modelValue == null ? 0 : modelValue;
-                                                                var nonCashDeposits = 0;
-                                                                if (modelValue != null) {
-                                                                    nonCashDeposits = (model.customer.customerBankAccounts[index].bankStatements[indexBank].nonCashDeposits != null) ? model.customer.customerBankAccounts[index].bankStatements[indexBank].nonCashDeposits : 0;
-
-                                                                    model.customer.customerBankAccounts[index].bankStatements[indexBank].totalDeposits = nonCashDeposits + modelValue;
-                                                                }
-                                                            }
-                                                        },
-                                                        "nonCashDeposits": {
-                                                            "key": "customer.customerBankAccounts[].bankStatements[].nonCashDeposits",
-                                                            "title": "Non-cash Deposits",
-                                                            type: "amount",
-                                                            "orderNo": 117,
-                                                            "onChange": function (modelValue, form, model, formCtrl, event) {
-                                                                var index = form.key[2];
-                                                                var indexBank = form.key[4];
-                                                                modelValue = modelValue == null ? 0 : modelValue;
-                                                                var cashDeposits = 0;
-                                                                if (modelValue != null) {
-                                                                    cashDeposits = (model.customer.customerBankAccounts[index].bankStatements[indexBank].cashDeposits != null) ? model.customer.customerBankAccounts[index].bankStatements[indexBank].cashDeposits : 0;
-
-                                                                    model.customer.customerBankAccounts[index].bankStatements[indexBank].totalDeposits = cashDeposits + modelValue;
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                                "References": {
-                                    "type": "box",
-                                    "title": "REFERENCES",
-                                    "orderNo": 100,
-                                    "condition": "model.currentStage=='Application' || model.currentStage=='FieldAppraisal' || model.currentStage=='Screening'|| model.currentStage=='ScreeningReview' || model.currentStage=='loanView'",
-                                    "items": {
-                                        "verifications": {
-                                            key: "customer.verifications",
-                                            title: "REFERENCES",
-                                            type: "array",
-                                            items: {
-                                                // "relationship" : {
-                                                //     key:"customer.verifications[].relationship",
-                                                //     title:"REFERENCE_TYPE",
-                                                //     type:"select",
-                                                //     required:"true",
-                                                //     enumCode: "business_reference_type"
-                                                // },
-                                                // "businessName" : {
-                                                //     key:"customer.verifications[].businessName",
-                                                //     title:"BUSINESS_NAME",
-                                                //     type:"string"
-                                                // },
-                                                "referenceFirstName": {
-                                                    key: "customer.verifications[].referenceFirstName",
-                                                    title: "CONTACT_PERSON_NAME",
-                                                    required: "true",
-                                                    type: "string"
-                                                },
-                                                "mobileNo": {
-                                                    key: "customer.verifications[].mobileNo",
-                                                    title: "CONTACT_NUMBER",
-                                                    type: "string",
-                                                    required: "true",
-                                                    inputmode: "number",
-                                                    numberType: "tel",
-                                                    "schema": {
-                                                        "pattern": "^[0-9]{10}$"
-                                                    }
-                                                }/*,
-                                                {
-                                                    key:"customer.verifications[].businessSector",
-                                                    title:"BUSINESS_SECTOR",
-                                                    type:"select",
-                                                    enumCode: "businessSector"
-                                                },
-                                                {
-                                                    key:"customer.verifications[].businessSubSector",
-                                                    title:"BUSINESS_SUBSECTOR",
-                                                    type:"select",
-                                                    enumCode: "businessSubSector",
-                                                    parentEnumCode: "businessSector"
-                                                },
-                                                {
-                                                    key:"customer.verifications[].selfReportedIncome",
-                                                    title:"SELF_REPORTED_INCOME",
-                                                    type:"number"
-                                                }*/,
-                                                "occupation": {
-                                                    key: "customer.verifications[].occupation",
-                                                    title: "OCCUPATION",
-                                                    type: "select",
-                                                    "enumCode": "occupation",
-                                                },
-                                                "address": {
-                                                    key: "customer.verifications[].address",
-                                                    type: "textarea"
-                                                },
-                                                "ReferenceCheck": {
-                                                    type: "fieldset",
-                                                    title: "REFERENCE_CHECK",
-                                                    //"condition": "model.currentStage=='ScreeningInput'",
-                                                    items: {
-                                                        /*,
-                                                        {
-                                                            key:"customer.verifications[].remarks",
-                                                            title:"REMARKS",
-                                                        },*/
-                                                        "knownSince": {
-                                                            key: "customer.verifications[].knownSince",
-                                                            required: true
-                                                        },
-                                                        "relationship": {
-                                                            key: "customer.verifications[].relationship",
-                                                            title: "REFERENCE_TYPE1",
-                                                            type: "select",
-                                                            required: true,
-                                                            titleMap: {
-                                                                "Neighbour": "Neighbour",
-                                                                "Relative/friend": "Relative/friend"
-                                                            }
-                                                        },
-                                                        "opinion": {
-                                                            key: "customer.verifications[].opinion"
-                                                        },
-                                                        "financialStatus": {
-                                                            key: "customer.verifications[].financialStatus"
-                                                        },
-                                                        // "goodsSold" : {
-                                                        //     key:"customer.verifications[].goodsSold",
-                                                        //     "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
-                                                        // },
-                                                        // "goodsBought" : {
-                                                        //     key:"customer.verifications[].goodsBought",
-                                                        //     "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
-                                                        // },
-                                                        // "paymentTerms" : {
-                                                        //     key:"customer.verifications[].paymentTerms",
-                                                        //     type:"select",
-                                                        //     "title":"payment_tarms",
-                                                        //     enumCode: "payment_terms"
-                                                        // },
-                                                        // "modeOfPayment" : {
-                                                        //     key:"customer.verifications[].modeOfPayment",
-                                                        //     type:"select",
-                                                        //     enumCode: "payment_mode"
-                                                        // },
-                                                        // "outstandingPayable" : {
-                                                        //     key:"customer.verifications[].outstandingPayable",
-                                                        //     "condition": "model.customer.verifications[arrayIndex].relationship=='Business Material Suppliers'"
-                                                        // },
-                                                        // "outstandingReceivable" : {
-                                                        //     key:"customer.verifications[].outstandingReceivable",
-                                                        //     "condition": "model.customer.verifications[arrayIndex].relationship=='Business Buyer'"
-                                                        // },
-                                                        
-                                                        "customerResponse": {
-                                                            key: "customer.verifications[].customerResponse",
-                                                            title: "CUSTOMER_RESPONSE",
-                                                            type: "select",
-                                                            required: true,
-                                                            titleMap: [{
-                                                                value: "positive",
-                                                                name: "positive"
-                                                            }, {
-                                                                value: "Negative",
-                                                                name: "Negative"
-                                                            }]
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        },
-                                    }
-                                },
-                                "IndividualInformation": {
-                                    "items": {
-                                        "centreId1": {
-                                            key: "customer.centreId",
-                                            type: "select",
-                                            readonly: true,
-                                            title: "CENTRE_NAME",
-                                            filter: {
-                                                "parentCode": "branch_id"
-                                            },
-                                            parentEnumCode: "branch_id",
-                                            orderNo: 12,
-                                            parentValueExpr: "model.customer.customerBranchId",
-                                        }
-                                        // "groupName": {
-                                        //     "key": "loanAccount.groupName",
-                                        //     "title": "GROUP_NAME",
-                                        //     "type": "string",
-                                        //     "orderNo": 50
-                                        // },
-                                        // "groupID": {
-                                        //     "key": "loanAccount.jlgGroupId ",
-                                        //     "title": "GROUP_ID",
-                                        //     "type": "string",
-                                        //     "orderNo": 40,
-                                        // }
-                                    }
-                                },
-                                "PhysicalAssets":{
-                                    "items":{
-                                        "financialAssets":{
-                                            "title":"FINANCIAL_ASSET",
-                                            "items":{
-                                                "installmentAmount":{
-                                                    "key":"customer.financialAssets.amountInPaisa",
-                                                    "title":"INSTALLMENT_AMOUNT",
-                                                    "required":true
-                                                    },
-                                                    "balance":{
-                                                        "key":"customer.financialAssets.balance",
-                                                        "title":"BALANCE_IN_THE_ACCOUNT",
-                                                        "required":true
-                                                    }
-                                            }
-
-
-                                        }
-                                             
-                                    }
-                                    
-                                }
-                            },
-                            "additions": [
-                                {
-                                    "type": "actionbox",
-                                    "condition": "!model.customer.currentStage",
-                                    "orderNo": 2700,
-                                    "items": [
-                                        {
-                                            "type": "submit",
-                                            "title": "SUBMIT"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type": "actionbox",
-                                    "condition": "(model.customer.id && model.currentStage!=='ScreeningReview')",
-                                    "orderNo": 2800,
-                                    "items": [
-                                        {
-                                            "type": "button",
-                                            "title": "SUBMIT",
-                                            "onClick": "actions.proceed(model, formCtrl, form, $event)"
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    };
-
                     UIRepository.getEnrolmentProcessUIRepository().$promise
                         .then(function (repo) {
                             console.log(model.pageClass);
-                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest, configFile(), model)
+                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest(model), configFile(), model)
                         })
                         .then(function (form) {
                             self.form = form;
@@ -3861,14 +3869,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     } 
                                 }  
                             })
-
-
-
-
-
-
-
-
                     },
                     "origination-stage": function (bundleModel, model, obj) {
                         model.currentStage = obj
@@ -3955,6 +3955,40 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         } 
                         }  
                     }
+                },
+                offlineInitialize: function(model, form, formCtrl, bundlePageObj, bundleModel) {
+                    var self = this;
+                    
+                    model.loanProcess = bundleModel.loanProcess;
+                    if(model.pageClass == "applicant" && _.hasIn(model.loanProcess, 'applicantEnrolmentProcess')) {
+                        model.enrolmentProcess = model.loanProcess.applicantEnrolmentProcess;
+                    } else if(model.pageClass == "co-applicant" && _.hasIn(model.loanProcess, 'coApplicantsEnrolmentProcesses')) {
+                        var key = _.findIndex(model.loanProcess.coApplicantsEnrolmentProcesses, function(enrolment) {
+                            return enrolment.customer.id == model.customer.id;
+                        });
+                        if(key!=-1) {
+                            model.enrolmentProcess = model.loanProcess.coApplicantsEnrolmentProcesses[key];
+                        }
+                    } else if(model.pageClass == "guarantor" && _.hasIn(model.loanProcess, 'guarantorsEnrolmentProcesses')) {
+                        var key = _.findIndex(model.loanProcess.guarantorsEnrolmentProcesses, function(enrolment) {
+                            return enrolment.customer.id == model.customer.id;
+                        });
+                        if(key!=-1) {
+                            model.enrolmentProcess = model.loanProcess.guarantorsEnrolmentProcesses[key];
+                        }
+                    }
+
+                    if(_.hasIn(model, 'enrolmentProcess') && _.hasIn(model.enrolmentProcess, 'customer')) {
+                        model.customer = model.enrolmentProcess.customer;
+                    }
+                    
+                    UIRepository.getEnrolmentProcessUIRepository().$promise
+                        .then(function(repo){
+                            return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest(model), configFile(), model)
+                        })
+                        .then(function(form){
+                            self.form = form;
+                        });
                 },
                 offline: false,
                 getOfflineDisplayItem: function (item, index) {

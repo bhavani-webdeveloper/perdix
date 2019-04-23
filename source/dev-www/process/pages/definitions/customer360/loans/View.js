@@ -220,7 +220,7 @@ irf.pageCollection.factory(irf.page('customer360.loans.View'),
                                     pagePermission:'Page/Engine/loans.LoanAmend',
                                     isApplicable: function(item, index){
                                         var siteCode = SessionStore.getGlobalSetting('siteCode');
-                                        if(siteCode == 'sambandh'||siteCode == 'KGFS') {
+                                        if(siteCode == 'sambandh'||siteCode == 'KGFS' || siteCode == 'shramsarathi') {
                                             return false;
                                         }
                                         return true;

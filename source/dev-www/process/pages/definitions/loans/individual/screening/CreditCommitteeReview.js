@@ -205,7 +205,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CreditCommitteeR
                                     pageClass: 'summary',
                                     model: {
                                             cbModel: {
-                                            customerId:loanProcess.loanAccount.customerId,
+                                            customerId:res.customerId,
                                             loanId:bundleModel.loanId,
                                             scoreName:'RiskScore2'
                                         }

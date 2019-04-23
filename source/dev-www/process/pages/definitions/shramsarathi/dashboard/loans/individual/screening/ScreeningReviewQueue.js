@@ -80,7 +80,7 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.scr
 	                        "type": "string"
 	                    },
 	                    "area": {
-	                        "title": "AREA",
+	                        "title": "PANCHAYAT",
 	                        "type": "string"
 	                    },
 	                    "cityTownVillage": {
@@ -115,7 +115,7 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.scr
 	                    'stage': 'ScreeningReview',
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
-	                    'area':searchOptions.area,
+	                    'area ':searchOptions.area,
 	                    'villageName':searchOptions.villageName,
 	                    'status':searchOptions.status,
 	                    'customerName': searchOptions.businessName,

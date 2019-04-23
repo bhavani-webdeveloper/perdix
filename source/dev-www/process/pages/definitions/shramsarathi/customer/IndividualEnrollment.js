@@ -1933,6 +1933,11 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                      "orderNo":23,
                      "enumCode": "no_of_payments" 
                     },
+                    "Liabilities.liabilities.liabilityLoanPurpose":{
+                        "type": "lov",
+                        "resolver": "LoanPurpose1LOVConfigurationShramsarathi",
+                        "autolov": true
+                    },
                     // "FamilyDetails.familyMembers.dateOfBirth":{
                     //     "onChange": function (modelValue, form, model, formCtrl, event) {
                     //         if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {

@@ -539,7 +539,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                                     },
                                     {
                         "type": "fieldset",
-                        "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija' && model.siteCode != 'IREPDhan'",
+                        "condition": "model.siteCode != 'sambandh' && model.siteCode != 'saija' && model.siteCode != 'IREPDhan'&& model.siteCode != 'shramsarathi'",
                         "notitle": true,
                         "items": [
                             {
@@ -901,7 +901,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             {
                 "type": "box",
                 "title": "INTERNAL_FORE_CLOSURE_DETAILS", 
-                "condition": "model.siteCode == 'kinara' && model.loanAccount.linkedAccountNumber",
+                "condition": "(model.siteCode == 'kinara' ||model.siteCode == 'maitreya') && model.loanAccount.linkedAccountNumber",
                 "items": [{
                     "key": "loanAccount.linkedAccountNumber",
                     "title":"LINKED_ACCOUNT_NUMBER",
@@ -1024,6 +1024,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
             },
             {
                 "type": "actionbox",
+                "condition": "model.siteCode != 'maitreya'",
                 "items": [{
                     "type": "button",
                     "title": "BACK",
@@ -1038,6 +1039,202 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                     "type": "submit",
                     "title": "CONFIRM_LOAN_CREATION"
                 }]
+            },
+            {
+                "type": "box",
+                "title": "POST_REVIEW",
+                "condition": "model.loanAccount.id && model.siteCode == 'maitreya'",
+                "items": [
+                    {
+                        key: "review.action",
+                        type: "radios",
+                        condition: "model.siteCode != 'sambandh' && model.siteCode != 'saija'",
+                        titleMap: {
+                            "REJECT": "REJECT",
+                            "SEND_BACK": "SEND_BACK",
+                            "PROCEED": "PROCEED",
+                            "HOLD": "HOLD"
+                        }
+                    },
+                    {
+                        key: "review.action",
+                        type: "radios",
+                        condition: "model.siteCode == 'sambandh' || model.siteCode == 'saija'",
+                        titleMap: {
+                            "SEND_BACK": "SEND_BACK",
+                            "PROCEED": "PROCEED",
+                        }
+                    },
+                    {
+                        type: "section",
+                        condition: "model.review.action=='REJECT'",
+                        items: [
+                            {
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                condition: "model.siteCode != 'sambandh'",
+                                type: "textarea",
+                                required: true
+                            }, 
+                            {
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                condition: "model.siteCode == 'sambandh'"
+                            },
+                            {
+                                key: "loanAccount.rejectReason",
+                                type: "lov",
+                                autolov: true,
+                                title: "REJECT_REASON",
+                                bindMap: {},
+                                searchHelper: formHelper,
+                                search: function(inputModel, form, model, context) {
+                                    var stage1 = model.currentStage;
+
+                                    if (model.currentStage == 'Application' || model.currentStage == 'ApplicationReview') {
+                                        stage1 = "Application";
+                                    }
+                                    if (model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview') {
+                                        stage1 = "FieldAppraisal";
+                                    }
+                                    if(typeof stage1 === 'undefined'){
+                                        stage1=model.loanAccount.currentStage;
+                                    }
+                                    var rejectReason = formHelper.enum('application_reject_reason').data;
+                                    var out = [];
+                                    for (var i = 0; i < rejectReason.length; i++) {
+                                        var t = rejectReason[i];
+                                        if (t.field1 == stage1) {
+                                             out.push({
+                                                name: t.name,
+                                            })
+                                        }
+                                        else{
+                                            console.log(t.field1);
+                                        }
+                                    }
+                                    return $q.resolve({
+                                        headers: {
+                                            "x-total-count": out.length
+                                        },
+                                        body: out
+                                    });
+                                },
+                                onSelect: function(valueObj, model, context) {
+                                    model.loanAccount.rejectReason = valueObj.name;
+                                },
+                                getListDisplayItem: function(item, index) {
+                                    return [
+                                        item.name
+                                    ];
+                                }
+                            },
+                                
+                            {
+                                key: "review.rejectButton",
+                                type: "button",
+                                title: "REJECT",
+                                required: true,
+                                onClick: "actions.reject(model, formCtrl, form, $event)"
+                            }
+                        ]
+                    },
+                    {   
+                        type: "section",
+                        condition: "model.review.action=='HOLD'",
+                        items: [
+                            {
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                condition: "model.siteCode != 'sambandh'",
+                                type: "textarea",
+                                required: true
+                            },
+                            {
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                condition: "model.siteCode == 'sambandh'"
+                            },
+                            {
+                                key: "review.holdButton",
+                                type: "button",
+                                title: "HOLD",
+                                required: true,
+                                onClick: "actions.holdButton(model, formCtrl, form, $event)"
+                            }
+                        ]
+                    },
+                    {
+                        type: "section",
+                        condition: "model.review.action=='SEND_BACK'",
+                        items: [{
+                            title: "REMARKS",
+                            key: "review.remarks",
+                            condition: "model.siteCode != 'sambandh'",
+                            type: "textarea",
+                            required: true
+                        },
+                        {
+                            title: "REMARKS",
+                            key: "review.remarks",
+                            type: "textarea",
+                            condition: "model.siteCode == 'sambandh'"
+                        }, {
+                            key: "review.targetStage",
+                            title: "SEND_BACK_TO_STAGE",
+                            type: "select",
+                            required: true,
+                            titleMap: {
+                                "LoanInitiation": "LoanInitiation"
+
+                            },
+                        }, {
+                            key: "review.sendBackButton",
+                            type: "button",
+                            title: "SEND_BACK",
+                            onClick: "actions.sendBack(model, formCtrl, form, $event)"
+                        }]
+                    },
+                    {
+                        type: "section",
+                        condition: "model.review.action=='PROCEED'",
+                        items: [
+                            {
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                condition: "model.siteCode != 'sambandh'",
+                                type: "textarea",
+                                required: true
+                            },
+                            {
+                                title: "REMARKS",
+                                key: "review.remarks",
+                                type: "textarea",
+                                condition: "model.siteCode == 'sambandh'"
+                            },
+                            {
+                                key: "review.proceedButton",
+                                type: "button",
+                                title: "PROCEED",
+                                onClick: "actions.proceed(model, formCtrl, form, $event)"
+                            }
+                        ]
+                    }
+                ]
+            },          
+            {
+                "type": "actionbox",
+                condition: "model.siteCode == 'maitreya'",
+                "items": [{
+                    "type": "button",
+                    "title": "BACK",
+                    "onClick": "actions.reenter(model, formCtrl, form, $event)"
+                }/*, {
+                    "type": "submit",
+                    "title": "Submit"
+                }*/]
             }],
             schema: function () {
                 return SchemaResource.getLoanAccountSchema().$promise;
@@ -1321,7 +1518,268 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         pageName: 'loans.individual.booking.PendingQueue',
                         pageId: null
                     });
-                }
+                },
+                sendBack: function(model, formCtrl, form, $event){
+                    $log.info("Inside sendBack()");
+                    if (_.isEmpty(model.review.remarks) || _.isEmpty(model.review.targetStage)) {
+                        PageHelper.showProgress("update-loan", "Please Enter Remarks and Stage.", 3000);
+                        return false;
+                    }
+                    Utils.confirm("Are You Sure?").then(function () {
+                        model.loanAccount.loanDocuments = [];
+                        if (model.allExistingDocs) {
+                            for (var i = 0; i < model.allExistingDocs.length; i++) {
+                                if(model.allExistingDocs[i].documentId){
+                                    model.loanAccount.loanDocuments.push(model.allExistingDocs[i]);
+                                }
+                            }
+                        }
+                        if (model.remainingDocsArray) {
+                            for (var i = 0; i < model.remainingDocsArray.length; i++) {
+                                if (model.remainingDocsArray[i].documentId) {
+                                    model.loanAccount.loanDocuments.push(model.remainingDocsArray[i]);
+                                }
+                            }
+                        }
+                        var reqData = { loanAccount: _.cloneDeep(model.loanAccount) };
+                        reqData.loanAccount.status = '';
+                        reqData.loanProcessAction = "PROCEED";
+                        reqData.remarks = model.review.remarks;
+                        reqData.stage = model.review.targetStage;
+                        reqData.remarks = model.review.remarks;
+                        PageHelper.showLoader();
+                        PageHelper.showProgress("update-loan", "Working...");
+                        IndividualLoan.update(reqData)
+                            .$promise
+                            .then(function (res) {
+                                PageHelper.showProgress("update-loan", "Done.", 3000);
+                                // $state.go('Page.Engine', {
+                                //     pageName: 'loans.individual.booking.DocumentUploadQueue'
+                                // });
+                                irfNavigator.goBack();
+                            }, function (httpRes) {
+                                PageHelper.showProgress("update-loan", "Oops. Some error occured.", 3000);
+                                PageHelper.showErrors(httpRes);
+                            })
+                            .finally(function () {
+                                PageHelper.hideLoader();
+                            })
+                    })
+
+                },
+                proceed: function (model, form, formName) {
+                    $log.info("submitting");
+                    PageHelper.clearErrors();
+                        if (PageHelper.isFormInvalid(form)) {
+                            return false;
+                    }
+                    var cbsdate=SessionStore.getCBSDate();
+                    if(model._currentDisbursement.scheduledDisbursementDate)
+                        var scheduledDisbursementDate = moment(model._currentDisbursement.scheduledDisbursementDate,SessionStore.getSystemDateFormat());
+                    if(model._currentDisbursement.scheduledDisbursementDate && cbsdate)
+                        var BackedDatedDiffDays = scheduledDisbursementDate.diff(cbsdate, "days");
+                        var BackedDatedDiffmonth = scheduledDisbursementDate.diff(cbsdate, "month");
+                    if(model.loanAccount.sanctionDate)
+                        var sanctionDate = moment(model.loanAccount.sanctionDate,SessionStore.getSystemDateFormat());
+                    if(model._currentDisbursement.customerSignatureDate)
+                        var customerSignatureDate = moment(model._currentDisbursement.customerSignatureDate,SessionStore.getSystemDateFormat());
+                    if(model._currentDisbursement.scheduledDisbursementDate && model.loanAccount.sanctionDate)
+                        var diffDays = scheduledDisbursementDate.diff(sanctionDate, "days");
+                    if(model.loanAccount.firstRepaymentDate)
+                        var firstRepaymentDate = moment(model.loanAccount.firstRepaymentDate,SessionStore.getSystemDateFormat());
+                    if (model.loanAccount.firstRepaymentDate){
+                        var date = firstRepaymentDate.get("date");
+                        if(model.siteCode != 'sambandh' &&model.siteCode != 'pahal' && model.siteCode != 'saija' && model.siteCode != 'witfin' && date != 5 && date != 10 && date != 15){
+                            PageHelper.showProgress("loan-create","First repayment date should be 5, 10 or 15",5000);
+                            return false;
+                        }
+                        if(model.siteCode == 'witfin' && date != 6 && date!= 16) {
+                            PageHelper.showProgress("loan-create","First repayment date should be 6 or 16",5000);
+                            return false;
+                        }
+                        if(model.siteCode == 'pahal' && date != 5 && date != 10 && date != 15 && date != 20  ) {
+                            PageHelper.showProgress("loan-create","First repayment date should be 5, 10, 15 or 20",5000);
+                            return false;
+                        }
+                    }
+
+                    if (model.allowPreEmiInterest && model.siteCode == 'IREPDhan' ) {
+                        var diffDay = 0;
+                        var scheduleStartDate;
+                        if(model.loanAccount.scheduleStartDate){
+                            scheduleStartDate = moment(model.loanAccount.scheduleStartDate, SessionStore.getSystemDateFormat());
+                        }
+                        if(scheduleStartDate && scheduledDisbursementDate){
+                            diffDay = scheduleStartDate.diff(scheduledDisbursementDate, "days");
+                        }
+                        if (diffDay > 0) {
+                            model.loanAccount.firstRepaymentDate = scheduleStartDate.format("YYYY-MM-DD");
+                        }
+                        for (var i = 0; i < model.loanAccount.disbursementSchedules.length; i++) {
+                            model.loanAccount.disbursementSchedules[i].moratoriumPeriodInDays = diffDay;
+                        }
+                    }
+
+                    var cbsmonth = ((new Date(cbsdate)).getMonth());
+                    var dismonth = ((new Date(scheduledDisbursementDate)).getMonth());
+
+                    //$log.info(BackedDatedDiffmonth);
+                    /* 1) Loc-Renewal chnage includes default processing fee to 0.2 ans calculation of process amount 
+                    */
+                    if (!validateWaiverDetails(model)){
+                        return;
+                    }
+                    if(!validateDisbursementDate(model)){
+                        return;
+                    };
+
+                    if(model.loanAccount.transactionType && model.loanAccount.transactionType !='New Loan'){
+                         if(!model.loanAccount.precloseuredetails){
+                            PageHelper.setError({
+                                message: "Please Generate Linked Account Details by clicking Submit" 
+                            });
+                            return;
+                         }
+                    }
+
+                    if(model.loanAccount.linkedAccountNumber && model.siteCode == 'kinara'){
+                        if(model.loanAccount.transactionType && model.loanAccount.transactionType.toLowerCase()=='renewal'){
+                            model.loanAccount.processingFeePercentage=0.2;
+                            model.loanAccount.processingFeeInPaisa=(2*model.loanAccount.loanAmount);
+                        }
+                        var loanfee = parseInt(model.loanAccount.processingFeeInPaisa / 100) + model.loanAccount.commercialCibilCharge + model.loanAccount.portfolioInsurancePremium + parseInt(model.loanAccount.portfolioInsuranceServiceCharge - model.loanAccount.portfolioInsuranceServiceTax) + model.loanAccount.fee3 + model.loanAccount.fee4 + model.loanAccount.fee5 + model.loanAccount.securityEmi;
+                        if (loanfee) {
+                            var netdisbursementamount = model.loanAccount.disbursementSchedules[0].disbursementAmount - loanfee;
+                        }
+                        var linkedaccountoutstanding=(parseInt(model.loanAccount.precloseurePrincipal) +parseInt(model.loanAccount.precloseureNormalInterest)+parseInt(model.loanAccount.precloseurePenalInterest)+parseInt(model.loanAccount.precloseureTotalFee))-(model.loanAccount.disbursementSchedules[0].normalInterestDuePayment+model.loanAccount.disbursementSchedules[0].penalInterestDuePayment+model.loanAccount.disbursementSchedules[0].feeAmountPayment);
+                        if(parseInt(netdisbursementamount) < parseInt(linkedaccountoutstanding)){
+                            PageHelper.setError({
+                                message: "New loan First schedule disbursement amount with fees" + " " +netdisbursementamount+ " "+ "should  be greater then Linked Account Balence with Waiver amount" +"  " + linkedaccountoutstanding
+                            });
+                           return;
+                        }
+    
+                            if(model.loanAccount.waiverdocumentstatus){
+                                if(model.loanAccount.loanDocuments && model.loanAccount.loanDocuments.length>0){
+                                    for(documents of model.loanAccount.loanDocuments){
+                                        if(documents.document=='WAIVERAPPROVAL'){
+                                            documents.documentId=model.loanAccount.waiverdocumentId;
+                                            documents.documentStatus=model.loanAccount.waiverdocumentstatus;
+                                            documents.rejectReason=model.loanAccount.waiverdocumentrejectReason;
+                                            documents.remarks=model.loanAccount.waiverdocumentremarks; 
+                                        }
+                                    }
+                                }
+                            }else{
+                                model.loanAccount.loanDocuments.push({
+                                    loanId:model.loanAccount.id,
+                                    documentId:model.loanAccount.waiverdocumentId,
+                                    document:"WAIVERAPPROVAL",
+                                    accountNumber:model.loanAccount.accountNumber,
+                                    documentStatus:"PENDING",
+                                });
+                            }
+                         
+                    }
+
+                    if(model.siteCode != 'sambandh' && model.siteCode != 'saija'){
+
+                        if(model.siteCode != 'witfin' && model.siteCode != 'maitreya') {
+                            if(model.postDatedTransactionNotAllowed) {
+                                if (customerSignatureDate.diff(cbsdate, "days") <0) {
+                                    PageHelper.showProgress("loan-create", "Customer signature date should be greater than or equal to system date", 5000);
+                                    return false;
+                                }
+                            }
+                        }
+
+                        if(model.BackedDatedDisbursement && model.BackedDatedDisbursement=="ALL"){
+                            if (scheduledDisbursementDate.diff(cbsdate, "days") <0) {
+                                PageHelper.showProgress("loan-create", "scheduledDisbursementDate date should be greater than CBS date", 5000);
+                                return false;
+                            }
+                        }
+
+                        if(model.BackedDatedDisbursement && model.BackedDatedDisbursement=="CURRENT_MONTH"){
+                            if (scheduledDisbursementDate.diff(cbsdate, "days") <0 && (cbsmonth !== dismonth)) {
+                                PageHelper.showProgress("loan-create", "scheduledDisbursementDate date should not be a previous month of CBS date", 5000);
+                                return false;
+                            }
+                        }
+                        if (diffDays > pendingDisbursementDays) {
+                            PageHelper.showProgress("loan-create", "Difference between Loan sanction date and disbursement date is greater than " + pendingDisbursementDays + " days", 5000);
+                            return false;
+                        }
+                        
+                        if(model.siteCode != 'witfin'){
+                            if (customerSignatureDate.isBefore(sanctionDate)) {
+                                PageHelper.showProgress("loan-create", "Customer sign date should be greater than the Loan sanction date", 5000);
+                                return false;
+                            }
+                        }
+
+                        if (model.loanAccount.firstRepaymentDate) {
+                            if (firstRepaymentDate.diff(scheduledDisbursementDate, "days") <= 0) {
+                                PageHelper.showProgress("loan-create", "Repayment date should be greater than sanction date", 5000);
+                                return false;
+                            }
+                        }
+                    }
+                    
+                    if(model.siteCode == 'sambandh' || model.siteCode == 'saija'||model.siteCode == 'kinara' || model.siteCode == 'IREPDhan') {
+                        if (scheduledDisbursementDate.diff(customerSignatureDate,"days") < 0){
+                            PageHelper.showProgress("loan-create","Scheduled disbursement date should be greater than or equal to Customer sign date",5000);
+                            return false;
+                        }
+                    }
+                    else  {
+                        if(model.siteCode != 'witfin' && model.siteCode != 'maitreya'){
+                            if (scheduledDisbursementDate.diff(customerSignatureDate,"days") <= 0){
+                                PageHelper.showProgress("loan-create","Scheduled disbursement date should be greater than Customer sign date",5000);
+                                return false;
+                            }
+                        }
+                    }
+                    
+                    var validatePromise = [];
+                    if(model.siteCode == 'sambandh' && SessionStore.getGlobalSetting('individualLoan.cbCheck.required') == "true" && 
+                        model.loanAccount.loanAmount >= Number(SessionStore.getGlobalSetting('individualLoan.cbCheck.thresholdAmount'))) {
+                        validatePromise.push(isCBCheckValid(model));
+                    }
+
+                    if(model.basicLoanDedupe) {
+                        validatePromise.push(doBasicLoanDedupeCheck(model));
+                    }
+
+                    $q.all(validatePromise).then(function() {
+                        Utils.confirm("Ready to book the loan?")
+                        .then(function(){
+                            model.loanAccount.disbursementSchedules[model.loanAccount.numberOfDisbursed].customerSignatureDate = model._currentDisbursement.customerSignatureDate;
+                            model.loanAccount.disbursementSchedules[model.loanAccount.numberOfDisbursed].scheduledDisbursementDate = model._currentDisbursement.scheduledDisbursementDate;
+
+                            var reqData = { 'loanAccount': _.cloneDeep(model.loanAccount), 'loanProcessAction': 'PROCEED'};
+                            PageHelper.showProgress('update-loan', 'Working...');
+                            return IndividualLoan.update(reqData)
+                                .$promise
+                                .then(
+                                    function(res){
+                                        PageHelper.showProgress('update-loan', 'Done', 2000);
+                                        // $state.go('Page.Engine', {pageName: 'loans.individual.booking.PendingQueue'});
+                                        irfNavigator.goBack();
+                                        return;
+                                    }, function(httpRes){
+                                        PageHelper.showProgress('update-loan', 'Some error occured while updating the details. Please try again', 2000);
+                                        PageHelper.showErrors(httpRes);
+                                    }
+                                )
+                        }, function(){
+                            $log.info("User selected No");
+                        })
+                    }, function(httpRes){
+                        PageHelper.showProgress('update-loan', 'Some error occured while updating the details. Please try again', 2000);
+                        PageHelper.showErrors(httpRes);
+                    });
+                },
             }
         };
     }]);

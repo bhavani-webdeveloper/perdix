@@ -624,7 +624,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     if(_.hasIn(model.loanProcess, 'loanAccount')) {
                         model.loanAccount = model.loanProcess.loanAccount;
                     }
-                    // var self = this;
+                    var self = this;
                     UIRepository.getEnrolmentProcessUIRepository().$promise
                     .then(function(repo){
                         return IrfFormRequestProcessor.buildFormDefinition(repo, formRequest(model), configFile(), model)

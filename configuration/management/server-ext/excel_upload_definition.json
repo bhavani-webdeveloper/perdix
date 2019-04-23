@@ -575,5 +575,53 @@
             "columnName":"payment_mode"
          }
       ]
+   },
+   "Village Master":{  
+      "table":"village_master",
+      "enableTruncate":false,
+      "columns":[  
+         {  
+            "fieldName":"Village Name",
+            "columnName":"village_name"
+         },
+         {  
+            "fieldName":"Branch Name",
+            "columnName":"branch_name"
+         },
+         
+         {  
+            "fieldName":"Bank Id",
+            "columnName":"bank_id"
+         },
+         {  
+            "fieldName":"Pincode",
+            "columnName":"pincode"
+         },
+         {  
+            "fieldName":"Fregcode",
+            "columnName":"fregcode"
+         },
+         {  
+            "columnName":"created_by",
+            "default":"system"
+         },
+         {  
+            "columnName":"created_at",
+            "default":"NOW()"
+         },
+         {  
+            "columnName":"last_edited_by",
+            "default":"system"
+         },
+         {  
+            "columnName":"last_edited_at",
+            "default":"NOW()"
+         },
+         {  
+            "fieldName":"status",
+            "columnName":"status",
+            "default":"1"
+         }
+      ]
    }
 }

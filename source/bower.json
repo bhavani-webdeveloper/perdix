@@ -52,7 +52,9 @@
     "class-transformer": "https://github.com/typestack/class-transformer/commit/bfee63f5672aaad60c749e0f31c37140c368fca2",
     "lz-string": "^1.4.4",
     "myforce-angularjs-query-builder":"latest",
-    "pdfjs-dist": "^2.1.0"
+    "pdfjs-dist": "^2.1.0",
+    "chart.js": "^2.8.0",
+    "angular-chart.js": "^1.1.1"
   },
   "overrides": {
     "admin-lte": {

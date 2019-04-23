@@ -56,7 +56,7 @@ define({////shramsarathi.dashboard.loans.individual.screening.FieldAppraisal
 	                        "type": "string"
 	                    },
 	                    "area": {
-	                        "title": "AREA",
+	                        "title": "PANCHAYAT",
 	                        "type": "string"
 	                    },
 	                    "cityTownVillage": {

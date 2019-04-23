@@ -79,6 +79,14 @@ define({
 	                    //         }
 						// 	}
 						// },
+						'branch': {
+	                    	'title': "BRANCH",
+	                    	"type": ["string", "null"],
+							"x-schema-form": {
+								"type":"userbranch",
+								"screenFilter": true
+							}
+	                    },
 						"centreCode": {
                             "title": "ZONE_NAME",
                             "required":false,
@@ -104,7 +112,7 @@ define({
 	                        "type": "string"
 	                    },
 	                    "area": {
-	                        "title": "AREA",
+	                        "title": "PANCHAYAT",
 	                        "type": "string"
 						},
 						"pincode": {

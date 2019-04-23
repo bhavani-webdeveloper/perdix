@@ -115,8 +115,12 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
     var branch = SessionStore.getBranch();
     var scoreName;
 
+    function removeNullIn(prop, obj) {
+        var pr = obj[prop];
+        if (pr === null || pr === undefined) delete obj[prop];
+        else if (typeof pr === 'object') for (var i in pr) removeNullIn(i, pr);
+    }
     var prepareData = function(res, model) {
-
         model.enterpriseDetails = res[0];
         model.scoreDetails = [res[1], res[2], res[3], res[4]];
         model.c = res[25].summary;
@@ -157,12 +161,15 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.nonMachineryDetails = res[24];
         model.hypothecationType = res[25];
 
-
         model.enterpriseDetails.columns = model.enterpriseDetails.columns.concat(model.ratioDetails.columns);
         model.ratioDetails.data[0] = _.omit(model.ratioDetails.data[0],['Average Bank Deposit']);
         model.enterpriseDetails.data[0] = _.omit(model.enterpriseDetails.data[0],['Average Bank Balances']);
-        _.merge(model.enterpriseDetails.data[0],model.ratioDetails.data[0]);
-
+        var tempRatioDetails=model.ratioDetails.data[0];
+        for (var i in tempRatioDetails) {
+            removeNullIn(i, tempRatioDetails);
+        }
+        //_.merge(model.enterpriseDetails.data[0],model.ratioDetails.data[0]);
+        _.merge(model.enterpriseDetails.data[0], tempRatioDetails);
         /* Populate values for Balance Sheet */
         model.assetsAndLiabilities = {};
         model.assetsAndLiabilities.cashInBank = model.balanceSheet.data[0]['Cash in bank'];

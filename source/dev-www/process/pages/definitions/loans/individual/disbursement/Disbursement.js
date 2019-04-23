@@ -128,6 +128,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         model.loanAccountDisbursementSchedule.linkedAccountNormalInterestDue= resp[0].linkedAccountNormalInterestDue;
                         model.loanAccountDisbursementSchedule.linkedAccountTotalPrincipalDue= resp[0].linkedAccountTotalPrincipalDue;
 
+                        if(model.siteCode != 'shramsarathi') {
                         Queries.getBankAccountsByProduct(model.additional.productCode,true,false).then(function(res){
                             for(var i=0;i<res.body.length;i++) {
                                     model.loanAccountDisbursementSchedule.customerNameInBank=resp[0].customerName;
@@ -140,6 +141,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                 }
                             }
                         });
+                    }
                         // to validate customer profile updated or not
                         if(model.siteCode == 'KGFS') {
                             model.loanAccountDisbursementSchedule.scheduledDisbursementDate = moment().format(SessionStore.getSystemDateFormat());

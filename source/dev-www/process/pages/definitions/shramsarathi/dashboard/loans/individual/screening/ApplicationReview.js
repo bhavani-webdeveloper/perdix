@@ -39,7 +39,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
                                 title: 'GUARANTOR',
                                 pageClass: 'guarantor',
-                                minimum: 3,
+                                minimum: 4,
                                 maximum: 0,
                                 order:30
                             },

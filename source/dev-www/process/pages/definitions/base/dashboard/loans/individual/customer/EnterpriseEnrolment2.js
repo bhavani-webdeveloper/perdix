@@ -1142,7 +1142,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ProxyIndicators.bookKeepingQuality",
                     "ProxyIndicators.challengingChequeBounce",
                     "ProxyIndicators.allMachinesAreOperational",
-                    "ProxyIndicators.employeeSatisfaction",
                     "ProxyIndicators.politicalOrPoliceConnections",
                     "ProxyIndicators.multipleProducts",
                     "ProxyIndicators.multipleBuyers",
