@@ -8,9 +8,9 @@ irf.pages.controller("LUCDashboardCtrl", ['$log', '$scope', 'PagesDefinition', '
 			"items": [
 				"Page/Engine/loans.individual.luc.LucScheduleQueue",
 				"Page/Engine/loans.individual.luc.LucRescheduledQueue",
-				"Page/Engine/loans.individual.luc.LucReviewQueue",
+				// "Page/Engine/loans.individual.luc.LucReviewQueue",
 				"Page/Engine/loans.individual.luc.LucRiskQueue",
-				"Page/Engine/loans.individual.luc.LucLegalRecoveryQueue",
+				// "Page/Engine/loans.individual.luc.LucLegalRecoveryQueue",
 				"Page/Engine/loans.individual.luc.LucCompletedQueue"
 			]
 		};
@@ -65,24 +65,24 @@ irf.pages.controller("LUCDashboardCtrl", ['$log', '$scope', 'PagesDefinition', '
 				});
 			}
 
-			var lrwqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.luc.LucReviewQueue"];
-			if (lrwqMenu) {
-				LUC.search({
-					'accountNumber': '',
-					'currentStage':"LUCReview",
-					'centreId': centreId[0],
-					'monitoringType':"LUC",
-					'branchName': branch.branchName,
-					'page': 1,
-					'per_page': 1,
-					'applicantName': '',
-					'businessName': '',
-				}).$promise.then(function(response, headerGetter) {
-					lrwqMenu.data = response.headers['x-total-count'];
-				}, function() {
-					lrwqMenu.data = '-';
-				});
-			}
+			// var lrwqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.luc.LucReviewQueue"];
+			// if (lrwqMenu) {
+			// 	LUC.search({
+			// 		'accountNumber': '',
+			// 		'currentStage':"LUCReview",
+			// 		'centreId': centreId[0],
+			// 		'monitoringType':"LUC",
+			// 		'branchName': branch.branchName,
+			// 		'page': 1,
+			// 		'per_page': 1,
+			// 		'applicantName': '',
+			// 		'businessName': '',
+			// 	}).$promise.then(function(response, headerGetter) {
+			// 		lrwqMenu.data = response.headers['x-total-count'];
+			// 	}, function() {
+			// 		lrwqMenu.data = '-';
+			// 	});
+			// }
 
 			var leqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.luc.LucRiskQueue"];
 			if (leqMenu) {
@@ -103,24 +103,24 @@ irf.pages.controller("LUCDashboardCtrl", ['$log', '$scope', 'PagesDefinition', '
 				});
 			}
 
-			var llrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.luc.LucLegalRecoveryQueue"];
-			if (llrqMenu) {
-				LUC.search({
-					'accountNumber': '',
-					'currentStage':"LUCLegalRecovery",
-					'centreId': centreId[0],
-					'monitoringType':"LUC",
-					'branchName': branch.branchName,
-					'page': 1,
-					'per_page': 1,
-					'applicantName': '',
-					'businessName': '',
-				}).$promise.then(function(response, headerGetter) {
-					llrqMenu.data = response.headers['x-total-count'];
-				}, function() {
-					llrqMenu.data = '-';
-				});
-			}
+			// var llrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.luc.LucLegalRecoveryQueue"];
+			// if (llrqMenu) {
+			// 	LUC.search({
+			// 		'accountNumber': '',
+			// 		'currentStage':"LUCLegalRecovery",
+			// 		'centreId': centreId[0],
+			// 		'monitoringType':"LUC",
+			// 		'branchName': branch.branchName,
+			// 		'page': 1,
+			// 		'per_page': 1,
+			// 		'applicantName': '',
+			// 		'businessName': '',
+			// 	}).$promise.then(function(response, headerGetter) {
+			// 		llrqMenu.data = response.headers['x-total-count'];
+			// 	}, function() {
+			// 		llrqMenu.data = '-';
+			// 	});
+			// }
 
 			var lcqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/loans.individual.luc.LucCompletedQueue"];
 			if (lcqMenu) {
