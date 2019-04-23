@@ -13,7 +13,7 @@ irf.pageCollection.directive("irfPvDashboard", function () {
         "dashboardName": "los_business_financials_1",
         "parameters": {
             "CustomerId": $scope.visualizationData.customerId,
-            "LoanId": $scope.visualizationData.loanId
+            "LoanId": $scope.visualizationData.loanId,
             "CustomerId": 11791,
             "LoanId": 6396
         }
