@@ -459,6 +459,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             model.loanAccount.scheduleStartDate = moment(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate, "YYYY-MM-DD").add(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays, 'days').format("YYYY-MM-DD");
                         }
 
+                        if(siteCode=='shramsarathi'){
+                            model._currentDisbursement = model.loanAccount.disbursementSchedules[0];
+                            model.loanAccount.scheduleStartDate = moment(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate, "YYYY-MM-DD").add(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays, 'days').format("YYYY-MM-DD");
+                        }
+
                         model.linkedAccount={};
 
                         if(_.hasIn(model, 'loanAccount') && model.loanAccount.transactionType == 'New Loan') {
