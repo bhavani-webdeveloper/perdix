@@ -1,8 +1,8 @@
 define({
 	pageUID: "shramsarathi.dashboard.loans.individual.screening.detail.EnterpriseFinancialView",
 	pageType: "Engine",
-	dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "irfElementsConfig", "Model_ELEM_FC","Misc","BundleManager"],
-	$pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, irfElementsConfig, Model_ELEM_FC,Misc,BundleManager) {
+	dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "irfElementsConfig", "Model_ELEM_FC","Misc","BundleManager","IndividualLoan"],
+	$pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, irfElementsConfig, Model_ELEM_FC,Misc,BundleManager,IndividualLoan) {
 		var randomColor = function() {
 			return (function(m,s,c){return (c ? arguments.callee(m,s,c-1) : '#') + s[m.floor(m.random() * s.length)]})(Math,'0123456789ABCDEF',5);
 		}
@@ -48,10 +48,18 @@ define({
 				model.familyInfo.noOfSchoolGoing = resp.no_of_school_going;
 				model.familyInfo.noOfCollegeGoing = resp.no_of_college_going;
 				model.proposedAmount = 0;
-
-				BundleManager.broadcastEvent('Financial-Summary', resp);
 				})
-				
+
+				//financial summary event
+				IndividualLoan.get({
+					id: model.customerId
+				})
+				.$promise
+				.then(function(resp){
+					var params=[{data:[{'Loan Product':resp.productCategory,'Tenure':resp.tenure}]}];
+                       BundleManager.broadcastEvent('financial-sum', params);
+				},function(err){
+				})	
 			},
 			form: [	
 				{
