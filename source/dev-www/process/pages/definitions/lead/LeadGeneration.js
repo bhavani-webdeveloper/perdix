@@ -902,32 +902,7 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                     items: [{
                             key: "lead.transactionType",
                             title: "TRANSACTION_TYPE",
-                            type: "select",
-                            "titleMap":{
-                                "New Loan":"New Loan",
-                              //  "Renewal":"Renewal",
-                                "Loan Restructure":"Loan Restructure",
-                                "Internal Foreclosure":"Internal Foreclosure"
-                            },
-                            "schema":{
-                                "enumCode":undefined
-                            },
-                            condition: "model.lead.transactionType.toLowerCase()!='renewal'",
-                            readonly: true,
-                            required:true
-                        },{
-                            key: "lead.transactionType",
-                            title: "TRANSACTION_TYPE",
                             type: "text",
-                            // "titleMap":{
-                            //     "New Loan":"New Loan",
-                            //     "Renewal":"Renewal",
-                            //     "Loan Restructure":"Loan Restructure",
-                            //     "Internal Foreclosure":"Internal Foreclosure"
-                            // },
-                            // "schema":{
-                            //     "enumCode":undefined
-                            // },
                             condition: "model.lead.transactionType.toLowerCase()=='renewal'",
                             readonly: true,
                             required:true
@@ -938,7 +913,6 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                             type: "select",
                             "titleMap":{
                                 "New Loan":"New Loan",
-                                "Renewal":"Renewal",
                                 "Loan Restructure":"Loan Restructure",
                                 "Internal Foreclosure":"Internal Foreclosure"
                             },
