@@ -195,7 +195,7 @@ define({
                                 }, {
                                     "type": "section",
                                     "htmlClass": "col-sm-2",
-                                    "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus === 'REJECTED'",
+                                    "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus === 'REJECTED' && model.loanAccount.loanDocuments[arrayIndex].documentId",
                                     "items": [{
                                         title: "Remarks",
                                         notitle: true,
@@ -205,7 +205,7 @@ define({
                                 }, {
                                     "type": "section",
                                     "htmlClass": "col-sm-5",
-                                    "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'REJECTED'",
+                                    "condition": "model.loanAccount.loanDocuments[arrayIndex].documentStatus !== 'REJECTED' && model.loanAccount.loanDocuments[arrayIndex].documentId",
                                     "items": [{
                                         title: "Remarks",
                                         notitle: true,
