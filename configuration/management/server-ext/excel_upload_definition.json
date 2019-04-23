@@ -254,11 +254,6 @@
       "enableTruncate":true,
       "columns":[  
          {  
-            "columnName":"version",
-            "fieldName":"version",
-            "default":"0"
-         },
-         {  
             "fieldName":"Machine Name",
             "columnName":"machine_name"
          },
