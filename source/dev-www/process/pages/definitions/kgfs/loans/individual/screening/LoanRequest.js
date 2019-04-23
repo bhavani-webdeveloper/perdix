@@ -1467,10 +1467,7 @@ define([],function(){
                         model.loanAccount.isCreditAppraisal = typeof params.customer.isCreditAppraisal  != undefined ? (params.customer.isCreditAppraisal?true:false):false; 
                         model.loanAccount.urnNo = model.customer.urnNo;    
                         model.customerId=  params.customer.id;    
-                    },
-                    "dsc-response": function(bundleModel,model,obj){
-                        model.loanAccount.loanCustomerRelations = obj;
-                    },
+                    },                    
                     "cb-check-update": function(bundleModel, model, params){
                     $log.info("Inside cb-check-update of LoanRequest");
                     for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
@@ -1506,6 +1503,13 @@ define([],function(){
                                 }
                             })
                         }
+                    },
+                    "refresh-all-tabs-customer": function (bundleModel, model, params) {                        
+                        clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate","loanAmountRequested","tenureRequested","estimatedEmi","psychometricCompleted","interestRate","emiRequested"],model);                                     
+                        model.loanAccount.collateral=[];
+                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6=null;
+                        model.loanAccount.loanDocuments=[];
+                        model.loanAccount.loanMitigants=[];                      
                     },
                     "new-guarantor": function(bundleModel, model, params){
                         $log.info("Insdie guarantor of LoanRequest");
@@ -1611,7 +1615,8 @@ define([],function(){
                                     }
                                 /* Collateral */
                                 setLoanMitigantsGroup(model);
-                                BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount});                                    
+                                BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount}); 
+                                BundleManager.pushEvent('new-loanAccount-id', model._bundlePageObj, {loanId: model.loanAccount.id});                                    
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);                                
 
