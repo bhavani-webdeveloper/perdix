@@ -666,7 +666,7 @@ define([],function(){
                         "required": true,
                         "enumCode":"booking_loan_type",
                         "onChange": function(valueObj,context,model){
-                                clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
+                                clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate","psychometricCompleted"],model);
                                 model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                                    if(valueObj == "JEWEL"){
                                     getGoldRate(model);
@@ -682,7 +682,7 @@ define([],function(){
                         "PreliminaryInformation.partner": {
                             "enumCode": "loan_partner",
                             "onChange": function(valueObj,context,model){
-                                clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
+                                clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate","psychometricCompleted"],model);
                                 model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                                 model.loanAccount.cbCheckCompletedFlag=true;
                                 //clearAll('additions',['tenurePlaceHolder','interestPlaceHolder','amountPlaceHolder'],model)
@@ -694,7 +694,7 @@ define([],function(){
                             "enumCode": "loan_product_frequency",
                             "onChange": function(valueObj,context,model){
                                 computeEstimatedEMI(model);                                                             
-                                clearAll('loanAccount',['productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
+                                clearAll('loanAccount',['productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate","psychometricCompleted"],model);
                                 model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                                 //clearAll('additions',['tenurePlaceHolder','interestPlaceHolder','amountPlaceHolder'],model)
                             }
@@ -725,7 +725,7 @@ define([],function(){
                                 return deferred.promise;
                             },
                             onSelect: function (valueObj, model, context) {
-                                clearAll("loanAccount",["loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate","loanAmountRequested","tenureRequested","interestRate","estimatedEmi","emiRequested"],model);
+                                clearAll("loanAccount",["loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate","loanAmountRequested","tenureRequested","interestRate","estimatedEmi","emiRequested","psychometricCompleted"],model);
                                 model.loanAccount.productCode = valueObj.productCode;
                                 model.loanAccount.cbCheckCompletedFlag=true;
                                 if(model.loanAccount.loanType == 'JEWEL')
