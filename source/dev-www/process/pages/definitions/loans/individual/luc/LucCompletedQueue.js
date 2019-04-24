@@ -2,23 +2,35 @@ define({
     pageUID: "loans.individual.luc.LucCompletedQueue",
     pageType: "Engine",
     dependencies: ["$log", "formHelper", "LUC", "$state", "SessionStore", "Utils", "irfNavigator"],
-    $pageFn: function($log, formHelper, LUC, $state, SessionStore, Utils, irfNavigator) {
+    $pageFn: function ($log, formHelper, LUC, $state, SessionStore, Utils, irfNavigator) {
+        var searchSchemaGen = function (siteCode) {
+            if (siteCode == 'shramsarathi') {
+                return {
+                    "type": 'object',
+                    "title": 'SearchOptions',
+                    "properties": {
+                        "applicantName": {
+                            "title": "APPLICANT_NAME",
+                            "type": "string"
+                        },
+                        "accountNumber": {
+                            "title": "LOAN_ACCOUNT_NUMBER",
+                            "type": "string",
 
-        return {
-            "type": "search-list",
-            "title": "LUC_COMPLETED_QUEUE",
-            "subTitle": "",
-            initialize: function(model, form, formCtrl) {
-                $log.info("luc Schedule Queue got initialized");
-                model.siteCode = SessionStore.getGlobalSetting("siteCode");
-            },
-            definition: {
-                title: "CUSTOMER_SEARCH",
-                searchForm: [
-                    "*"
-                ],
-                autoSearch: true,
-                searchSchema: {
+                        },
+                        "lucCompletedDate": {
+                            "title": "LUC_COMPLETED_DATE",
+                            "type": "string",
+                            "x-schema-form": {
+                                "type": "date"
+                            }
+                        },
+
+                    },
+                    "required": ["LoanAccountNumber"]
+                }
+            } else {
+                return {
                     "type": 'object',
                     "title": 'SearchOptions',
                     "properties": {
@@ -45,30 +57,46 @@ define({
 
                     },
                     "required": ["LoanAccountNumber"]
-                },
-                
-                getSearchFormHelper: function() {
+                }
+            }
+        }
+        return {
+            "type": "search-list",
+            "title": "LUC_COMPLETED_QUEUE",
+            "subTitle": "",
+            initialize: function (model, form, formCtrl) {
+                $log.info("luc Schedule Queue got initialized");
+                model.siteCode = SessionStore.getGlobalSetting("siteCode");
+            },
+            definition: {
+                title: "CUSTOMER_SEARCH",
+                searchForm: [
+                    "*"
+                ],
+                autoSearch: true,
+                searchSchema: searchSchemaGen(SessionStore.getGlobalSetting("siteCode")),
+
+                getSearchFormHelper: function () {
                     return formHelper;
                 },
-                getResultsPromise: function(searchOptions, pageOpts) { 
-                var branch = SessionStore.getCurrentBranch();
-                var centres = SessionStore.getCentres();
-                var centreId=[];
-                 if(centres && centres.length)
-                {
-                    for (var i = 0; i < centres.length; i++) {
-                    centreId.push(centres[i].id);
-                }
+                getResultsPromise: function (searchOptions, pageOpts) {
+                    var branch = SessionStore.getCurrentBranch();
+                    var centres = SessionStore.getCentres();
+                    var centreId = [];
+                    if (centres && centres.length) {
+                        for (var i = 0; i < centres.length; i++) {
+                            centreId.push(centres[i].id);
+                        }
 
-                }
+                    }
 
                     var promise = LUC.search({
                         'accountNumber': searchOptions.accountNumber,
-                        'currentStage':"Completed",
+                        'currentStage': "Completed",
                         'centreId': centreId[0],
                         'branchName': branch.branchName,
                         'page': pageOpts.pageNo,
-                        'monitoringType':"LUC",
+                        'monitoringType': "LUC",
                         'per_page': pageOpts.itemsPerPage,
                         'applicantName': searchOptions.applicantName,
                         'bussinessName': searchOptions.businessName,
@@ -78,10 +106,10 @@ define({
                     return promise;
                 },
                 paginationOptions: {
-                    "getItemsPerPage": function(response, headers) {
+                    "getItemsPerPage": function (response, headers) {
                         return 100;
                     },
-                    "getTotalItemsCount": function(response, headers) {
+                    "getTotalItemsCount": function (response, headers) {
                         return headers['x-total-count']
                     }
                 },
@@ -89,14 +117,14 @@ define({
                     selectable: false,
                     expandable: true,
                     listStyle: "table",
-                    itemCallback: function(item, index) {},
-                    getItems: function(response, headers) {
+                    itemCallback: function (item, index) { },
+                    getItems: function (response, headers) {
                         if (response != null && response.length && response.length != 0) {
                             return response;
                         }
                         return [];
                     },
-                    getListItem: function(item) {
+                    getListItem: function (item) {
                         return [
                             item.applicantName,
                             item.businessName,
@@ -106,76 +134,106 @@ define({
                             item.lucDate,
                         ]
                     },
-                    getTableConfig: function() {
+                    getTableConfig: function () {
                         return {
                             "serverPaginate": true,
                             "paginate": true,
                             "pageLength": 10
                         };
                     },
-                    getColumns: function() {
-                        return [
-                        {
-                            title: 'HUB',
-                            data: 'branchName'
-                        },
-                         {
-                            title: 'CENTRE',
-                            data: 'centreName'
-                        },
-                        {
-                            title: 'APPLICANT_NAME',
-                            data: 'customerName'
-                        }, {
-                            title: 'BUSINESS_NAME',
-                            data: 'bussinessName'
-                        }, {
-                            title: 'LOAN_ACCOUNT_NUMBER',
-                            data: 'accountNumber'
-                        }, {
-                            title: 'LOAN_ID',
-                            data: 'loanId'
-                        },{
-                            title: 'LUC_COMPLETED_DATE',
-                            data: 'lastStageChangedAt',
-                            render: function(data, type, full, meta) {
-                                return (moment(data).format("DD-MM-YYYY"));
-                            }
-                        }]
+                    getColumns: function () {
+                        if (SessionStore.getGlobalSetting("siteCode") == 'shramsarathi') {
+                            return [
+                                {
+                                    title: 'HUB',
+                                    data: 'branchName'
+                                },
+                                {
+                                    title: 'CENTRE',
+                                    data: 'centreName'
+                                },
+                                {
+                                    title: 'APPLICANT_NAME',
+                                    data: 'customerName'
+                                }, {
+                                    title: 'LOAN_ACCOUNT_NUMBER',
+                                    data: 'accountNumber'
+                                }, {
+                                    title: 'LOAN_ID',
+                                    data: 'loanId'
+                                }, {
+                                    title: 'LUC_COMPLETED_DATE',
+                                    data: 'lastStageChangedAt',
+                                    render: function (data, type, full, meta) {
+                                        return (moment(data).format("DD-MM-YYYY"));
+                                    }
+                                }]
+
+                        } else {
+                            return [
+                                {
+                                    title: 'HUB',
+                                    data: 'branchName'
+                                },
+                                {
+                                    title: 'CENTRE',
+                                    data: 'centreName'
+                                },
+                                {
+                                    title: 'APPLICANT_NAME',
+                                    data: 'customerName'
+                                }, {
+                                    title: 'BUSINESS_NAME',
+                                    data: 'bussinessName'
+                                }, {
+                                    title: 'LOAN_ACCOUNT_NUMBER',
+                                    data: 'accountNumber'
+                                }, {
+                                    title: 'LOAN_ID',
+                                    data: 'loanId'
+                                }, {
+                                    title: 'LUC_COMPLETED_DATE',
+                                    data: 'lastStageChangedAt',
+                                    render: function (data, type, full, meta) {
+                                        return (moment(data).format("DD-MM-YYYY"));
+                                    }
+                                }]
+                        }
+
                     },
-                    getActions: function() {
+                    getActions: function () {
                         return [{
                             name: "View LUC Data",
                             desc: "",
                             icon: "fa fa-pencil-square-o",
-                            fn: function(item, index) {
+                            fn: function (item, index) {
                                 irfNavigator.go({
-                                    state: "Page.Engine", 
+                                    state: "Page.Engine",
                                     pageName: "loans.individual.luc.LucData",
                                     pageId: item.id,
-                                    pageData: {_lucCompleted : true}
+                                    pageData: { _lucCompleted: true }
                                 },
-                                {
-                                    state: "Page.Engine", 
-                                    pageName: "loans.individual.luc.LucCompletedQueue",
-                                });
+                                    {
+                                        state: "Page.Engine",
+                                        pageName: "loans.individual.luc.LucCompletedQueue",
+                                    });
                             },
-                            isApplicable: function(item, model) {
+                            isApplicable: function (item, model) {
                                 return (model.siteCode != "KGFS");
                             }
-                        },{
+                        }, {
                             name: "View LUC Data",
                             desc: "",
                             icon: "fa fa-pencil-square-o",
-                            fn: function(item, index) {
+                            fn: function (item, index) {
                                 irfNavigator.go({
-                                    state: "Page.Engine", 
+                                    state: "Page.Engine",
                                     pageName: "loans.individual.luc.LucVerification",
                                     pageId: item.id,
-                                    pageData: {_lucCompleted : true}
+                                    pageData: { _lucCompleted: true }
                                 });
                             },
-                            isApplicable: function(item, model) {
+                            isApplicable: function (item, model) {
                                 return (model.siteCode == "KGFS");
                             }
                         }];
