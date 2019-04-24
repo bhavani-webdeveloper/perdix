@@ -332,7 +332,7 @@ define({
                             "urnNo": "group.jlgGroupMembers[arrayIndex].urnNo",
                             "firstName": "group.jlgGroupMembers[arrayIndex].firstName",
                             "fatherFirstName": "group.jlgGroupMembers[arrayIndex].fatherFirstName",
-                            "customerId": "group.jlgGroupMembers[arrayIndex].customerId",
+                            "id": "group.jlgGroupMembers[arrayIndex].customerId",
                             "spouseFirstName": "group.jlgGroupMembers[arrayIndex].spouseFirstName"
                         },
                         "searchHelper": formHelper,
