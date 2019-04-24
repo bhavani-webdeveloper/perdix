@@ -87,6 +87,7 @@ var getIncludes = function (model) {
                    "InsurancePolicyInformation.urnNo",
                    "InsurancePolicyInformation.insuranceRecommendations",
                    "InsurancePolicyInformation.recommendationStatus",
+                   "InsurancePolicyInformation.recommendationResponseMessage",
                    "InsurancePolicyInformation.question",
                    "InsurancePolicyInformation.accountNumber",
                    "InsurancePolicyInformation.accountType",

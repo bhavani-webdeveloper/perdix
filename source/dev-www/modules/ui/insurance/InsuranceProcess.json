@@ -245,6 +245,13 @@
             "type":"string",
             "orderNo":134
          },
+         "recommendationResponseMessage":{  
+            "key":"insurancePolicyDetailsDTO.recommendationResponseMessage",
+            "title":"RECOMMENDATION_RESPONSE_MESSAGE",
+            "type":"html",
+            "orderNo":133,
+            "condition":"model.insurancePolicyDetailsDTO.recommendationStatus == 'FAILURE'"
+         },
          "recommendationOverride":{  
             "key":"insurancePolicyDetailsDTO.recommendationOverride",
             "title":"RECOMMENDTAION_OVERRIDE",
