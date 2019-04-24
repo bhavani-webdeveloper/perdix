@@ -33,7 +33,7 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.scr
 			initialize: function(model, form, formCtrl) {
 				// model.branch = branch;
 				model.branch = SessionStore.getCurrentBranch().branchId;
-				model.centreCode=out[0].value;
+				// model.centreCode=out[0].value;
 				$log.info("search-list sample got initialized");
 
 			},
@@ -65,8 +65,8 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.scr
 	                    // },
 						"centreCode": {
                             "title": "ZONE_NAME",
-                            "required":false,
 							"type": ["integer", "null"],
+							"required":false,
 							"x-schema-form": {
 								"type": "select",
 								"enumCode": "centre",
@@ -111,7 +111,7 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.scr
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-	                    // 'branchId':searchOptions.branch,
+	                    'branchId':searchOptions.branch,
 	                    'stage': 'ScreeningReview',
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
