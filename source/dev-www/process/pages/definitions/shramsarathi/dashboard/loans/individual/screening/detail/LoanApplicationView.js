@@ -326,7 +326,11 @@ define({
                     $log.info("loan request Individual/find api failure" + err);
                 });
              }
-
+  //Newly added
+  if(model.loanAccount.nominees[0].nomineeDOB){
+    model.loanAccount.nominees[0].nomineeDOB=moment(model.loanAccount.nominees[0].nomineeDOB).format('DD-MM-YYYY');
+  } 
+  
         },
 
         form: [
