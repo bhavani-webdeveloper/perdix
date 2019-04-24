@@ -128,6 +128,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                     },
                                     "KYC.customerId": {
                                         "resolver": "IndividualCustomerIDLOVConfiguration"
+
                                     },
                                     "KYC.identityProof": {
                                         "required": true
@@ -1208,7 +1209,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                     "KYC.customerId": {
                                         key: "customer.id",
                                         type: "lov",
-                                        title: "CUSTOMER_SEARCH",
+                                        title: "CUSTOMER_SEARCH1",
                                         autolov:false,
                                         bindMap: {},
                                         inputMap: {},
@@ -1288,6 +1289,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
 
                         "KYC.customerId": {
                             "orderNo": 10,
+                            condition:"!model.customer.customerId"
                         },
                         "PhysicalAssets.physicalAssets.unit": {
                             "type": "string"
