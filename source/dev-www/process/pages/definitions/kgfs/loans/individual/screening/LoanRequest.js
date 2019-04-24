@@ -1519,8 +1519,8 @@ define([],function(){
                             if (model.loanAccount.loanCustomerRelations[i].customerId == params.customer.id) {
                                 addToRelation = false;
                                 if (params.customer.urnNo)
-                                    model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
-                                    model.loanAccount.loanCustomerRelations[i].name =params.customer.firstName;
+                                    //model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
+                                    //model.loanAccount.loanCustomerRelations[i].name =params.customer.firstName;
                                 break;
                             }
                         }
