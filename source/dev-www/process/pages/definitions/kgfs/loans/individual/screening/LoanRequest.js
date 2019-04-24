@@ -1467,6 +1467,9 @@ define([],function(){
                         model.loanAccount.isCreditAppraisal = typeof params.customer.isCreditAppraisal  != undefined ? (params.customer.isCreditAppraisal?true:false):false; 
                         model.loanAccount.urnNo = model.customer.urnNo;    
                         model.customerId=  params.customer.id;    
+                    },
+                    "dsc-response": function(bundleModel,model,obj){
+                        model.loanAccount.loanCustomerRelations = obj;
                     },                    
                     "cb-check-update": function(bundleModel, model, params){
                     $log.info("Inside cb-check-update of LoanRequest");

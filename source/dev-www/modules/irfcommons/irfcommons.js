@@ -434,6 +434,7 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 		        '<button id="statusMatchFalse"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 350%; color: red;">X</button> <div>' +
 				'<button id="notCaptured"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Unable to capture Finger print, please try again</button> <div>' +
 				'<button id="placeFinger"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: #0f18af;">Kindly place your finger on mantra device</button> <div>' +
+				'<button id="serverMessage"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Please restart the server</button> <div>'+
 				'<div id="responsediv" class="text-danger">' +
 		        '</div>' +
 		        '<style>.button {background-color: #4CAF50' +
