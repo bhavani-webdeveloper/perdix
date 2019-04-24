@@ -634,7 +634,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "KYC.customerId":{
                             orderNo:10,
                             required:true,
-                            condition:"!model.customer.customerId",
+                            condition:"!model.customer.customerId && !model.loanProcess.loanAccount.id",
                             initialize: function(model, form, parentModel, context) {
                                 model.customerBranchId = parentModel.customer.customerBranchId;
                                 model.centreId = parentModel.customer.centreId;
@@ -783,9 +783,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         model.customer = enrolmentProcess.customer;
                                         if (_.hasIn(model, 'customer.landLineNo') && model.customer.landLineNo == '')
                                             model.customer.landLineNo=null;
-
                                         BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
                                         BundleManager.pushEvent('load-bank-details', model._bundlePageObj, {customer: model.customer});
+                                        if(model.pageClass == 'applicant' && model.currentStage =='Screening')
+                                        BundleManager.pushEvent('refresh-all-tabs', model._bundlePageObj, {customer: model.customer});
+                                    
                                         BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails);
                                         BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                                     })
@@ -1668,6 +1670,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "origination-stage": function (bundleModel, model, obj) {
                         model.currentStage = obj
+                    },
+                    "new-loanAccounts-id": function(bundleModel,model,obj){
+                        model.loanProcess.loanAccount.id = obj.loanId;
                     }
                 },
                 offline: false,

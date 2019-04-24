@@ -292,7 +292,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     },
                     "load-bank-details": function(pageObj, bundleModel, params){
                         BundleManager.broadcastEvent("load-bank-details-business", params);
-                    },
+                    },                    
                     "load_business": function(pageObj, bundleModel, params){
                         console.log(params)
                         model.productCategory = params
@@ -344,6 +344,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                         $log.info("Inside new-loan of CBCheck");
                         BundleManager.broadcastEvent("new-loan", params);
                     },
+                    "new-loanAccount-id": function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("new-loanAccounts-id", params);
+                    },                    
                     "business-capture": function(pageObj, bundleModel, params){
                         $log.info("Inside business-capture of Screening");
                         BundleManager.broadcastEvent("business-captures", params);
@@ -378,6 +381,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                     },
                     "dsc-status":function(pageObj,bundlePageObj, obj){
                         BundleManager.broadcastEvent('dsc-response',pageObj);
+                    },
+                    "refresh-all-tabs": function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("refresh-all-tabs-customer", params);
                     }
                 },
                 preSave: function(offlineData) {

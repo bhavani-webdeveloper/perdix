@@ -666,7 +666,7 @@ define([],function(){
                         "required": true,
                         "enumCode":"booking_loan_type",
                         "onChange": function(valueObj,context,model){
-                                clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
+                                clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate","psychometricCompleted"],model);
                                 model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                                    if(valueObj == "JEWEL"){
                                     getGoldRate(model);
@@ -682,7 +682,7 @@ define([],function(){
                         "PreliminaryInformation.partner": {
                             "enumCode": "loan_partner",
                             "onChange": function(valueObj,context,model){
-                                clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
+                                clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate","psychometricCompleted"],model);
                                 model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                                 model.loanAccount.cbCheckCompletedFlag=true;
                                 //clearAll('additions',['tenurePlaceHolder','interestPlaceHolder','amountPlaceHolder'],model)
@@ -694,7 +694,7 @@ define([],function(){
                             "enumCode": "loan_product_frequency",
                             "onChange": function(valueObj,context,model){
                                 computeEstimatedEMI(model);                                                             
-                                clearAll('loanAccount',['productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
+                                clearAll('loanAccount',['productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate","psychometricCompleted"],model);
                                 model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
                                 //clearAll('additions',['tenurePlaceHolder','interestPlaceHolder','amountPlaceHolder'],model)
                             }
@@ -725,7 +725,7 @@ define([],function(){
                                 return deferred.promise;
                             },
                             onSelect: function (valueObj, model, context) {
-                                clearAll("loanAccount",["loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate","loanAmountRequested","tenureRequested","interestRate","estimatedEmi","emiRequested"],model);
+                                clearAll("loanAccount",["loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate","loanAmountRequested","tenureRequested","interestRate","estimatedEmi","emiRequested","psychometricCompleted"],model);
                                 model.loanAccount.productCode = valueObj.productCode;
                                 model.loanAccount.cbCheckCompletedFlag=true;
                                 if(model.loanAccount.loanType == 'JEWEL')
@@ -1470,7 +1470,7 @@ define([],function(){
                     },
                     "dsc-response": function(bundleModel,model,obj){
                         model.loanAccount.loanCustomerRelations = obj;
-                    },
+                    },                    
                     "cb-check-update": function(bundleModel, model, params){
                     $log.info("Inside cb-check-update of LoanRequest");
                     for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
@@ -1507,6 +1507,13 @@ define([],function(){
                             })
                         }
                     },
+                    "refresh-all-tabs-customer": function (bundleModel, model, params) {                        
+                        clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate","loanAmountRequested","tenureRequested","estimatedEmi","psychometricCompleted","interestRate","emiRequested"],model);                                     
+                        model.loanAccount.collateral=[];
+                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6=null;
+                        model.loanAccount.loanDocuments=[];
+                        model.loanAccount.loanMitigants=[];                      
+                    },
                     "new-guarantor": function(bundleModel, model, params){
                         $log.info("Insdie guarantor of LoanRequest");
                         // model.loanAccount.coApplicant = params.customer.id;
@@ -1515,8 +1522,8 @@ define([],function(){
                             if (model.loanAccount.loanCustomerRelations[i].customerId == params.customer.id) {
                                 addToRelation = false;
                                 if (params.customer.urnNo)
-                                    model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
-                                    model.loanAccount.loanCustomerRelations[i].name =params.customer.firstName;
+                                    //model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
+                                    //model.loanAccount.loanCustomerRelations[i].name =params.customer.firstName;
                                 break;
                             }
                         }
@@ -1573,7 +1580,7 @@ define([],function(){
                             model.loanAccount.urnNo=model.loanAccount.loanCustomerRelations[0].urn; 
                         }
 
-                        if(model.loanAccount.productCategory  == 'MEL' && model.loanAccount.customerId != model.customerId)
+                        if(model.loanAccount.productCategory  == 'MEL' && model.customerId !=null && model.loanAccount.customerId != model.customerId)
                         model.loanProcess.loanAccount.customerId = model.customerId;
 
                         if(model.loanAccount.currentStage && model.loanAccount.currentStage == "Screening" && model.loanAccount.productCategory == 'MEL' && !model.loanAccount.isBusinessCaptured){
@@ -1611,7 +1618,8 @@ define([],function(){
                                     }
                                 /* Collateral */
                                 setLoanMitigantsGroup(model);
-                                BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount});                                    
+                                BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount}); 
+                                BundleManager.pushEvent('new-loanAccount-id', model._bundlePageObj, {loanId: model.loanAccount.id});                                    
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);                                
 
@@ -1694,7 +1702,7 @@ define([],function(){
                         }
                         setDeviation(model);
                         validateDeviationForm(model);
-                        if(_.isArray(validateDeviation) && validateDeviation.length > 0) {
+                        if(_.isArray(validateDeviation) && validateDeviation.length > 0 && model.loanAccount.currentStage != 'Screening') {
                             model.loanAccount.loanMitigants=[];
                             PageHelper.showErrors({data:{error:"Mitigation checkbox, Please check this box if you want to proceed"}});
                             return false;

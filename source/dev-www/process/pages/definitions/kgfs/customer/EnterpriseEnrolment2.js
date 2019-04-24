@@ -29,6 +29,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                 }
                
             }
+
+            var clearAll = function(baseKey,listOfKeys,model){
+                if(listOfKeys != null && listOfKeys.length > 0){
+                    for(var i =0 ;i<listOfKeys.length;i++){
+                        if(typeof model[baseKey][listOfKeys[i]] !="undefined"){
+                                model[baseKey][listOfKeys[i]] = null;
+                        }
+                    }
+                }
+                else{
+                    model[baseKey] = {};
+                }
+            }
+
             var getEnterpriseProductDetails = function (model) {
                 model.customer.enterprise.totalDailySales = 0
                 model.customer.enterprise.totalDailyCost = 0
@@ -3694,7 +3708,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "guarantor-updated": function (bundleModel, model, params) {
                         model.enrolmentProcess.refreshEnterpriseCustomerRelations(model.loanProcess);
-                    },
+                    },                    
                     "load-address-business": function (bundleModel, model, params) {
                         if(params.customer.fcuStatus){
                             model.customer.mobilePhone = params.customer.mobilePhone;
@@ -3730,6 +3744,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             model.applicantEnrolmentProcessDetails=model.loanProcess.applicantEnrolmentProcess.customer;
                             model.customer.customerBankAccounts=model.applicantEnrolmentProcessDetails.customerBankAccounts;
                         }
+                    },
+                    "refresh-all-tabs-customer": function (bundleModel, model, params) {
+                        clearAll('customer',['firstName',"distanceFromBranch","mobilePhone","landLineNo","doorNo","street","landmark","pincode","locality","villageName","district","state"],model);
+                        model.customer.enterprise.companyOperatingSince=null;
+                        model.customer.enterprise.ownership=null;
+                        model.customer.enterprise.businessConstitution=null;
+                        model.customer.enterprise.serviceTaxNumber=null;
+                        model.customer.enterprise.noOfPartners=null;
+                        model.customer.enterprise.companyRegistered=null;
+                        model.customer.customerBankAccounts=[];
+                        model.customer.enterpriseDocuments=[];                        
+                        model.customer.liabilities=[];
+                        model.customer.enterpriseRegistrations=[];   
+                                             
                     }
                 },
                 form: [

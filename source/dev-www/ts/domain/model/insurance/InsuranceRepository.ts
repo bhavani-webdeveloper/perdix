@@ -46,7 +46,8 @@ export class InsuranceRepository implements IInsuranceRepository {
             	if(obj)
             		var a = obj.insuranceRecmdtnInPaisa/100;
                     insuranceProcess.insurancePolicyDetailsDTO.recommendationAmount = a;
-                    insuranceProcess.insurancePolicyDetailsDTO.recommendationStatus = obj.trxnStatus;
+					insuranceProcess.insurancePolicyDetailsDTO.recommendationStatus = obj.trxnStatus;
+					insuranceProcess.insurancePolicyDetailsDTO.recommendationResponseMessage = obj.responseMessage;
                 return insuranceProcess;
             });
 	}
