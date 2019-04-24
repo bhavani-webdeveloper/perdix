@@ -1425,7 +1425,7 @@
             "fingerPrint": {
                 "title": "Finger Print",
                 "type": "object",
-                "required": ["fingerPrintisRequired"],
+                "required": ["fingerPrintisRequired","leftHandIndexImageId","leftHandMiddleImageId","leftHandRingImageId","leftHandSmallImageId","leftHandThumpImageId","rightHandIndexImageId","rightHandMiddleImageId","rightHandRingImageId","rightHandSmallImageId","rightHandThumpImageId"],
                 "properties": {
                     "fingerPrintisRequired": {
                         "title": "Finger Print is Required",
