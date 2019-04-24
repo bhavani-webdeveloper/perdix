@@ -44,10 +44,10 @@ define({
 				var branchId = SessionStore.getBranchId();
 				var branchName = SessionStore.getBranch();
 				model.branchName = SessionStore.getCurrentBranch().branchName;
-				var centres = SessionStore.getCentres();
-				if (_.isArray(centres) && centres.length > 0){
-					model.centre = centres[0].centreName;
-				}
+				// var centres = SessionStore.getCentres();
+				// if (_.isArray(centres) && centres.length > 0){
+				// 	model.centre = centres[0].centreName;
+				// }
 			},
 			definition: {
 				title: "SEARCH_LEAD",
@@ -95,7 +95,7 @@ define({
 								"enumCode": "centre",
 								"parentEnumCode": "branch_id",
 								"parentValueExpr": "model.branch",
-								"screenFilter": true
+								"screenFilter": true,
 							}
 						}
 						// "centre": {
