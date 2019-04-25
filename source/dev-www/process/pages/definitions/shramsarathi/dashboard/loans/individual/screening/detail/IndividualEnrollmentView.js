@@ -78,7 +78,7 @@ define({
                         else
                         {
                             //model.UIUDF.income[0].incomes[0].incomeEarned=0;
-                            model.netincome= 0 - model.UIUDF.expenditures[0].annualExpenses;
+                            // model.netincome= 0 - model.UIUDF.expenditures[0].annualExpenses;
                         }
                        // debugger;
                         /*Family fields*/
@@ -167,10 +167,10 @@ define({
                            } 
                        }
 
-                       if( model.UIUDF.liabilities[0].startDate){
+                       if( model.UIUDF.liabilities[0] != undefined){
                         model.UIUDF.liabilities[0].startDate=moment( model.UIUDF.liabilities[0].startDate).format('DD-MM-YYYY');
                        }
-                       if(model.UIUDF.liabilities[0].maturityDate){
+                       if(model.UIUDF.liabilities[0] != undefined){
                         model.UIUDF.liabilities[0].maturityDate=moment( model.UIUDF.liabilities[0].maturityDate).format('DD-MM-YYYY');
                        }
                        
@@ -658,14 +658,18 @@ define({
                                         "title": "Bank Balance",
                                         "data": "bankStatements[0].balanceAsOn15th",
                                         render: function(data, type, full, meta) {
-                                            return irfCurrencyFilter(full.bankStatements[0].balanceAsOn15th)
+                                            if(full.bankStatements[0] != undefined){
+                                                return irfCurrencyFilter(full.bankStatements[0].balanceAsOn15th)
+                                            }
                                             //return irfCurrencyFilter(full.incomes[0].incomeEarned);
                                         }
                                     }, {
                                         "title": "Bank Deposit",
                                         "data": "BankAvgDep",
                                         render: function(data, type, full, meta) {
+                                            if(full.bankStatements[0] != undefined){
                                             return irfCurrencyFilter(full.bankStatements[0].totalDeposits)
+                                            }
                                         }
                                     },
                                      {
