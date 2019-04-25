@@ -2019,7 +2019,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "resolver": "LoanPurpose1LOVConfigurationShramsarathi",
                         "autolov": true
                     },
-                  
+                    "Liabilities.liabilities.frequencyOfInstallment":{
+                        "required":false,
+                    },
                     // "FamilyDetails.familyMembers.dateOfBirth":{
                     //     "onChange": function (modelValue, form, model, formCtrl, event) {
                     //         if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
