@@ -236,7 +236,8 @@ else{
         $DownloadFileName= 'No_Documents_found.pdf';
         file_put_contents($files_folder_path.$DownloadFileName,'No Documents found');
         $files_to_zip[] = $DownloadFileName;
-        $output_filename = 'No_Documents_found.zip';
+        $attachment_zip_file = 'No_Documents_found';
+        $output_filename = $zipping_folder_path.'/'.$attachment_zip_file.'.zip';
     }
     create_zip($files_to_zip, $files_folder_path, $output_filename);
     foreach($files_to_zip AS $file_name) {
