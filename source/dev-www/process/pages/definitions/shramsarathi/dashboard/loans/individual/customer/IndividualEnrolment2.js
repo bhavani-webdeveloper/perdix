@@ -328,24 +328,36 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         switch(type){
                                            case "Aadhaar Card":
                                            pattern='^\\d{4}\\d{4}\\d{4}$';break;
+                                           case "Driving License":
+                                           pattern='^[A-Z]{2}[0-9]{13}$';break;
+                                           case "PAN Card":
+                                           pattern='^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$';break;
+                                           case "Aajeevika Bureau Card":
+                                           pattern='^[a-zA-Z]{6}[0-9]{5}$';break;
+                                           case "NREGA Job Card":
+                                           pattern='^[0-9]{18}$';break;
+                                           case "Voter ID Card":
+                                           pattern ='^[a-zA-Z]{3}[0-9]{7}$';break;
+                                           case "Passport":
+                                           pattern ='^[A-Z]{1}[0-9]{8}';break;
                                         }
                                         var regex = new RegExp(pattern);
                                         if(regex.test(model.customer.identityProofNo) == false){
-                                            model.customer.identityProofNo.warningHtml = '<p style=\"font-size:13px !important\"><font color=#FF6347>'+type+' Number doesn\'t match the Patteren : '+pattern+'</font><hp>'
+                                            model.warningHtml = '<p style=\"font-size:13px !important\"><font color=#FF6347>'+type+' Number doesn\'t match the Patteren : '+pattern+'</font><hp>'
                                         }
                                         else{
-                                            if(model.customer.identityProofNo.warningHtml)
-                                                delete model.customer.identityProofNo.warningHtml;
+                                            if(model.warningHtml)
+                                                delete model.warningHtml;
                                         }
                                     }
                                 },
                                 "KYC.regexWarning":{
-                                    "type":'text',
-                                    "title":"regex",
-                                    // "notitle":true,
-                                    "key":"customer.identityProofNo.warningHtml",
-                                    //  "condition":"model.customer.identityProofNo.warningHtml"
-                                   // "orderNo": 230,
+                                    "type":'html',
+                                    // "title":"regex",
+                                     "notitle":true,
+                                    "key":"warningHtml",
+                                   "condition":"model.warningHtml",
+                                    "orderNo":55
                                 },
                                 "KYC.addressProofFieldSet":{
                                     "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
@@ -2084,7 +2096,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     //over 
                     "KYC.idProofIssueDate":{
-                        "orderNo":50
+                        "orderNo":57
                     },
                     "KYC.idProofValidUptoDate":{
                         "orderNo":60
@@ -2929,6 +2941,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "using": "scanner",
                                     "title":"IDENTITY_PROOF_BACKSIDE",
                                    // "orderNo":70
+                                },
+                                "regexWarning":{
+                                    "type":'html',
+                                    // "title":"regex",
+                                     "notitle":true,
+                                    "key":"warningHtml",
+                                     "condition":"warningHtml",
+                                     "orderNo": 55
                                 },
                                 "addressProofSameAsIdProof":{
                                     "condition":"model.customer.identityProof!='PAN Card'",
