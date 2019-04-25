@@ -28,6 +28,10 @@ let config = {
                     {
                         "name":"MandatoryFieldsPolicy",
                         "arguments": null
+                    },
+                    {
+                        "name": "VerifyEnrollmentSpokePolicy",
+                        "arguments": null
                     }
                 ]
             },
@@ -49,6 +53,12 @@ let config = {
                 ]
             },
             "beforeProceed": {
+                "defaults": [
+                    {
+                        "name":"VerifyEnrollmentSpokePolicy",
+                        "arguments": null
+                    }
+                ],
                 "overrides": [
                     {
                         "type": "expr",
