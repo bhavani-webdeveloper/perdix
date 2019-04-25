@@ -989,6 +989,7 @@ define([],function(){
                     }
 
                     model.loanAccount.cbCheckCompletedFlag=false;
+                    model.loanAccount.cbCheckCompletedFlagCheck=true;
 
                     
                     //var postReviewActionArray = {};
@@ -1476,11 +1477,11 @@ define([],function(){
                     for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
                             if (model.loanAccount.loanCustomerRelations[i].customerId == params.customerId) {
                                 model.loanAccount.loanCustomerRelations[i].cbCheckCompleted=false;
-                                model.loanAccount.cbCheckCompletedFlag=false;
+                                model.loanAccount.cbCheckCompletedFlagCheck=false;
                                 if(params.cbType == 'BASE')
                                     model.loanAccount.loanCustomerRelations[i].highmarkCompleted = true;
                                 else if(params.cbType == 'INDIVIDUAL')
-                                    {   model.loanAccount.cbCheckCompletedFlag=true;
+                                    {   model.loanAccount.cbCheckCompletedFlagCheck=true;
                                     model.loanAccount.loanCustomerRelations[i].cbCheckCompleted = true;
                                 }
                             }
@@ -1594,7 +1595,9 @@ define([],function(){
                             model.loanAccount.isRestructure = false;
                             model.loanAccount.documentTracking = "PENDING";
                         }
-
+                        model.loanAccount.cbCheckCompletedFlag=false;
+                        if(model.loanAccount.cbCheckCompletedFlagCheck)
+                        model.loanAccount.cbCheckCompletedFlag=true;
                         if(!(validateCoGuarantor(model.additions.co_borrower_required,model.additions.number_of_guarantors,'validate',model.loanAccount.loanCustomerRelations,model)))
                             return false;
                         PageHelper.showProgress('loan-process', 'Updating Loan');
