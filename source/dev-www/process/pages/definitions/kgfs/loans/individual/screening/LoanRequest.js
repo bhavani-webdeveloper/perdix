@@ -989,7 +989,7 @@ define([],function(){
                     }
 
                     model.loanAccount.cbCheckCompletedFlag=false;
-                    model.loanAccount.cbCheckCompletedFlagCheck=true;
+                    model.loanAccount.dataCheckChanges=false;
 
                     
                     //var postReviewActionArray = {};
@@ -1477,11 +1477,11 @@ define([],function(){
                     for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
                             if (model.loanAccount.loanCustomerRelations[i].customerId == params.customerId) {
                                 model.loanAccount.loanCustomerRelations[i].cbCheckCompleted=false;
-                                model.loanAccount.cbCheckCompletedFlagCheck=false;
                                 if(params.cbType == 'BASE')
                                     model.loanAccount.loanCustomerRelations[i].highmarkCompleted = true;
                                 else if(params.cbType == 'INDIVIDUAL')
-                                    {   model.loanAccount.cbCheckCompletedFlagCheck=true;
+                                    {   
+                                    model.loanAccount.dataCheckChanges=false;
                                     model.loanAccount.loanCustomerRelations[i].cbCheckCompleted = true;
                                 }
                             }
@@ -1595,9 +1595,12 @@ define([],function(){
                             model.loanAccount.isRestructure = false;
                             model.loanAccount.documentTracking = "PENDING";
                         }
-                        model.loanAccount.cbCheckCompletedFlag=false;
-                        if(model.loanAccount.cbCheckCompletedFlagCheck)
-                        model.loanAccount.cbCheckCompletedFlag=true;
+                        if(model.loanAccount.cbCheckCompletedFlag)
+                        {
+                            model.loanAccount.dataCheckChanges=true;
+                            model.loanAccount.cbCheckCompletedFlag=false;
+                        }
+
                         if(!(validateCoGuarantor(model.additions.co_borrower_required,model.additions.number_of_guarantors,'validate',model.loanAccount.loanCustomerRelations,model)))
                             return false;
                         PageHelper.showProgress('loan-process', 'Updating Loan');
@@ -1737,17 +1740,28 @@ define([],function(){
                             }
                         
                         }
+                        if(model.loanAccount.cbCheckCompletedFlag)
+                        {
+                            model.loanAccount.dataCheckChanges=true;
+                            model.loanAccount.cbCheckCompletedFlag=false;
+                        }
+
                         if(model.loanAccount.currentStage && model.loanAccount.currentStage == 'Screening' && model.loanAccount.loanType != 'JEWEL'){
                             for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
                                 if (model.loanAccount.loanCustomerRelations[i].customerId) {
                                     if(!model.loanAccount.loanCustomerRelations[i].cbCheckCompleted){
-                                            model.loanAccount.loanMitigants=[];
-                                        if(model.loanAccount.cbCheckCompletedFlag)
+                                        model.loanAccount.loanMitigants=[];
+                                        if(model.loanAccount.dataCheckChanges)
                                         {
                                             PageHelper.showProgress("loan-create","CB Check pending. Please do a CB check and then proceed",5000);
                                             return false;                                            
-                                        }
-                                    }                            
+                                        }                                            
+                                    }
+                                    else if(model.loanAccount.dataCheckChanges)
+                                    {
+                                        PageHelper.showProgress("loan-create","CB Check pending. Please do a CB check and then proceed",5000);
+                                        return false;                                            
+                                    }                          
                                 }
                             }
                         }
