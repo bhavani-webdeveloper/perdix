@@ -92,7 +92,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true,
                                     "condition":"model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'",
                                     "schema": {
-                                        "pattern": "(^\\d{4}\\d{4}\\d{4}$)|(^[A-Z]{2}[0-9]{13}$)|(^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$)|(^[a-zA-Z]{6}[0-9]{5}$)",
+                                       "pattern": "(^\\d{4}\\d{4}\\d{4}$)|(^[A-Z]{2}[0-9]{13}$)|(^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$)|(^[a-zA-Z]{6}[0-9]{5}$)",
                                         "type": ["integer", "string"]
                                     }
                                 },
@@ -318,10 +318,34 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "KYC.identityProofNo": {
                                     "required": true,
-                                    "schema": {
-                                        "pattern": "(^\\d{4}\\d{4}\\d{4}$)|(^[A-Z]{2}[0-9]{13}$)|(^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$)|(^[a-zA-Z]{6}[0-9]{5}$)",
-                                        "type": ["integer", "string"]
+                                    // "schema": {
+                                    //     "pattern": "(^\\d{4}\\d{4}\\d{4}$)|(^[A-Z]{2}[0-9]{13}$)|(^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$)|(^[a-zA-Z]{6}[0-9]{5}$)",
+                                    //     "type": ["integer", "string"]
+                                    // }
+                                    "onChange": function(value,context,model,form){
+                                        var type = model.customer.identityProof;
+                                        var pattern;
+                                        switch(type){
+                                           case "Aadhaar Card":
+                                           pattern='^\\d{4}\\d{4}\\d{4}$';break;
+                                        }
+                                        var regex = new RegExp(pattern);
+                                        if(regex.test(model.customer.identityProofNo) == false){
+                                            model.customer.identityProofNo.warningHtml = '<p style=\"font-size:13px !important\"><font color=#FF6347>'+type+' Number doesn\'t match the Patteren : '+pattern+'</font><hp>'
+                                        }
+                                        else{
+                                            if(model.customer.identityProofNo.warningHtml)
+                                                delete model.customer.identityProofNo.warningHtml;
+                                        }
                                     }
+                                },
+                                "KYC.regexWarning":{
+                                    "type":'text',
+                                    "title":"regex",
+                                    // "notitle":true,
+                                    "key":"customer.identityProofNo.warningHtml",
+                                    //  "condition":"model.customer.identityProofNo.warningHtml"
+                                   // "orderNo": 230,
                                 },
                                 "KYC.addressProofFieldSet":{
                                     "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
@@ -2477,6 +2501,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "KYC.identityProof",
                     "KYC.identityProofImageId",
                     "KYC.identityProofNo",
+                    "KYC.regexWarning",
                     "KYC.idProofIssueDate",
                     "KYC.idProofValidUptoDate",
                     "KYC.identityProofBackside",
