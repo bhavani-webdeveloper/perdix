@@ -2096,7 +2096,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "required": true,
                     },
                     "IndividualInformation.fatherFirstName": {
-                        "required": false,
+                        "required": true,
                         "title": "FATHER_NAME"
                     },
                     "ContactInformation.mobilePhone":{
