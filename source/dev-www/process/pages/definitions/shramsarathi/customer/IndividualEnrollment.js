@@ -518,6 +518,9 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced": {
                                     "required": true
                                 },
+                                "BankAccounts.customerBankAccounts.customerNameAsInBank":{
+                                    "required": true
+                                },
                                 "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced": {
                                     "required": true
                                 },
