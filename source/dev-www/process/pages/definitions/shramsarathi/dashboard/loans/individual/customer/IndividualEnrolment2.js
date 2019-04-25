@@ -1360,6 +1360,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ContactInformation": {
                                     "readonly": true
                                 },
+                                "ContactInformation.doorNo":{
+                                    "title": "HAMLET_FALA",
+                                },
                                 "ContactInformation.villageName": {
                                     "readonly": true,
                                     "title":"VILLAGE"   
