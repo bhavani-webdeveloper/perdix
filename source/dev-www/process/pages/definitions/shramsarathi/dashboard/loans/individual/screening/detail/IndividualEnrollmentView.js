@@ -154,24 +154,29 @@ define({
                         // model.household=res.expenditures;
 
                         //Newly added 
-                        if(model.customer.dateOfBirth){
+                        if(model.customer.dateOfBirth!= undefined || model.customer.dateOfBirth!=null){
                             model.customer.dateOfBirth=moment(model.customer.dateOfBirth).format('DD-MM-YYYY');
                         }
-                       if(model.customer.spouseDateOfBirth){
+                       if(model.customer.spouseDateOfBirth!=undefined ||model.customer.spouseDateOfBirth!=null){
                         model.customer.spouseDateOfBirth=moment(model.customer.spouseDateOfBirth).format('DD-MM-YYYY');
                        }
                        
                        if(model.UIUDF.bankAccount.length > 0){
-                           if( model.UIUDF.bankAccount[0].bankingSince){
+                           if( model.UIUDF.bankAccount[0].bankingSince!=undefined || model.UIUDF.bankAccount[0].bankingSince!=null){
                             model.UIUDF.bankAccount[0].bankingSince=moment(model.UIUDF.bankAccount[0].bankingSince).format('DD-MM-YYYY');
                            } 
                        }
 
                        if( model.UIUDF.liabilities[0] != undefined){
-                        model.UIUDF.liabilities[0].startDate=moment( model.UIUDF.liabilities[0].startDate).format('DD-MM-YYYY');
+                           if(model.UIUDF.liabilities[0].startDate != undefined||model.UIUDF.liabilities[0].startDate != null){
+                            model.UIUDF.liabilities[0].startDate=moment( model.UIUDF.liabilities[0].startDate).format('DD-MM-YYYY');
+                           }
+                        
                        }
                        if(model.UIUDF.liabilities[0] != undefined){
+                        if(model.UIUDF.liabilities[0].maturityDate != undefined||model.UIUDF.liabilities[0].maturityDate != null){
                         model.UIUDF.liabilities[0].maturityDate=moment( model.UIUDF.liabilities[0].maturityDate).format('DD-MM-YYYY');
+                        }
                        }
                        
 
