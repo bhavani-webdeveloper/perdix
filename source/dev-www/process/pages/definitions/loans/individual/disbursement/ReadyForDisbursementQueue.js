@@ -85,7 +85,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                 "type": ["string","null"],
                                 "x-schema-form": {
                                         "type": "select",
-                                        "enumCode": "booking_loan_type_readyForDisburse",                                        
+                                        "enumCode": "booking_loan_type_disburse",                                        
                                     }
                             },
                             "productCategory":{
@@ -107,8 +107,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.ReadyForDisbu
                                 "type": ["string","null"],
                                     "x-schema-form": {
                                         "type": "select",
-                                        "enumCode": "loan_product_category_master_readyForDisburse",
-                                        "parentEnumCode": "booking_loan_type_readyForDisburse",
+                                        "enumCode": "loan_pro_cat_disburse",
+                                        "parentEnumCode": "booking_loan_type_disburse",
                                         "screenFilter": true
                                     }
                             },                          
