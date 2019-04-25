@@ -2566,7 +2566,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     "ContactInformation.villageName",
                     "ContactInformation.district",
                     "ContactInformation.state",
-                    "ContactInformation.mailSameAsResidence",
+                    // "ContactInformation.mailSameAsResidence",
                     "ContactInformation.permanentAddressFieldSet",
                     "ContactInformation.mailingLandmark",
                     "ContactInformation.mailingMobilePhone",
