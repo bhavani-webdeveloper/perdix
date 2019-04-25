@@ -247,7 +247,8 @@ define({
                 }, {
                     key: "loanMonitoringDetails.proprietoryName",
                     type: "string",
-                    "readonly": true
+                    "readonly": true,
+                    condition: "model.siteCode != 'shramsarathi'",
                 }, {
                     key: "loanMonitoringDetails.loanId",
                     type: "number",
