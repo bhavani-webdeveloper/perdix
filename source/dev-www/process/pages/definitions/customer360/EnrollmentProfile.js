@@ -726,7 +726,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                                 "search": function(inputModel, form) {
                                     $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
                                     var promise = Enrollment.search({
-                                        'branchName': SessionStore.getBranch() || inputModel.branchName,
+                                        'branchName': inputModel.branchName,
                                         'firstName': inputModel.firstName,
                                         'centreId': inputModel.centreId,
                                     }).$promise;
