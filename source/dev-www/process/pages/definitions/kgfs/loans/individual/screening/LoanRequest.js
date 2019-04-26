@@ -810,13 +810,7 @@ define([],function(){
                         "CollateralInformation.collateral.nameOfOwner": {
                             "required":true
                         },
-                        "CollateralInformation.collateral.collateralName": {
-                             "required":true
-                        },
                         "CollateralInformation.collateral.marketValueOfAsset": {
-                             "required":true
-                        },
-                        "CollateralInformation.collateral.timeSinceTheAssetIsOwned": {
                              "required":true
                         },
                         "CollateralInformation.collateral.collateralDocuments": {
@@ -951,7 +945,7 @@ define([],function(){
 
             return {
                 "type": "schema-form",
-                "title": "LOAN_REQUEST",
+                "title": "LOAN_DETAILS",
                 "subTitle": "BUSINESS",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                     // AngularResourceService.getInstance().setInjector($injector);
@@ -1144,7 +1138,7 @@ define([],function(){
                                             },
                                             "comfortableEMI": {
                                                 "key":"loanAccount.estimatedEmi",
-                                                "title": "COMFORTABLE_EMI",
+                                                "title": "EMI",
                                                 "type": "string",
                                                 "orderNo": 140
                                             },

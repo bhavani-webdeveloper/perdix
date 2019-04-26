@@ -261,9 +261,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                 if(model.customer.idProofIssueDate){
                                     model.customer.idProofValidUptoDate = "";
                                 }
-                            }
+                            },
+                            required:true
                         },
                         "KYC.IdentityProof1.idProofValidUptoDate":{
+                            required:true,
                             onChange: function (value, form, model, event) {
                                 if(model.customer.idProofValidUptoDate){
                                     var idProof1IssueDate = moment(model.customer.idProofIssueDate, SessionStore.getSystemDateFormat());

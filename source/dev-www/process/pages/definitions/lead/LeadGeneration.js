@@ -1364,6 +1364,7 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                         }, {
                             "key": "lead.leadInteractions1[].picture",
                             readonly: true,
+                            required:true,
                             "type": "file",
                             "fileType": "image/*",
                             "condition": "model.lead.leadInteractions1[arrayIndex].typeOfInteraction === 'Visit'",
