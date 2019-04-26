@@ -182,6 +182,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             pageClass: 'co-applicant',
                                             model: {
                                                 enrolmentProcess: loanProcess.coApplicantsEnrolmentProcesses[i],
+                                                loanProcess: loanProcess,
                                                 loanRelation: loanAccount.coApplicantsEnrolmentProcesses[i]
                                             }
                                         });
@@ -193,6 +194,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             pageClass: 'guarantor',
                                             model: {
                                                 enrolmentProcess: loanProcess.guarantorsEnrolmentProcesses[i],
+                                                loanProcess: loanProcess,
                                                 loanRelation: loanAccount.guarantorsEnrolmentProcesses[i]
                                             }
                                         });

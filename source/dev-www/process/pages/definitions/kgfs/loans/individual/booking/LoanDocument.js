@@ -148,6 +148,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             .subscribe(function (loanProcess) {
                                 bundleModel.loanProcess = loanProcess;
                                 var loanAccount = loanProcess;
+                                var loanType=loanProcess.loanAccount.loanType;
                                 loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.loanAccount.customerId;
                                 if (_.hasIn($stateParams.pageData, 'lead_id') && _.isNumber($stateParams.pageData['lead_id'])) {
                                     var _leadId = $stateParams.pageData['lead_id'];
@@ -217,12 +218,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess: loanProcess
                                     }
                                 });
+                                if(loanType != 'JEWEL') {
                                 $this.bundlePages.push({
                                     pageClass: 'cb-check',
                                     model: {
                                         loanAccount: loanProcess.loanAccount
                                     }
                                 });
+                                }
                                 $this.bundlePages.push({
                                     pageClass: 'dsc-check',
                                     model: {
@@ -276,13 +279,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         loanProcess: loanProcess
                                     }
                                 });
-
+                                if(loanType != 'JEWEL') {
                                 $this.bundlePages.push({
                                     pageClass: 'cb-check',
                                     model: {
                                         loanAccount: loanProcess.loanAccount
                                     }
                                 });
+                                }
                                 $this.bundlePages.push({
                                     pageClass: 'dsc-check',
                                     model: {
