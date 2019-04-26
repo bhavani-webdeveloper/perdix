@@ -790,11 +790,7 @@ define([],function(){
                         },
                         "PreliminaryInformation.collectionPaymentType": {
                             orderNo:160,
-                            titleMap:[{
-                                "ACH":"ACH",
-                                "PDC":"PDC",
-                                "CASH":"CASH"
-                            }],
+                            "enumCode": "mode_of_repayment",
                         },
                         "LoanCustomerRelations": {
                             "orderNo": 2                            
