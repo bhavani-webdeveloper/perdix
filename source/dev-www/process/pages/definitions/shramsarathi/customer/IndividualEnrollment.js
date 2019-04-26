@@ -2037,7 +2037,7 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                         "required": true,
                     },
                     "IndividualInformation.fatherFirstName": {
-                        "required": false,
+                        "required": true,
                         "title": "FATHER_NAME"
                     },
                     "ContactInformation.mobilePhone": {
