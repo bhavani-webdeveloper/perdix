@@ -387,7 +387,23 @@ define([], function () {
                     "loanProcess.loanAccount.currentStage": {
                         "LoanInitiation": {
                             "excludes": [],
-                            "overrides": {}
+                            "overrides": {
+                                "LoanSanction":{
+                                    "readonly":true,
+                                },
+                                "NomineeDetails": {
+                                    "orderNo": 3,
+                                    "readonly": true
+                                },
+                                "JewelDetails": {
+                                    "orderNo": 2,
+                                    "readonly": true,
+                                    condition: "model.loanAccount.loanType == 'JEWEL'"
+                                },                                
+                                "CollateralInformation" : {
+                                    "readonly":true,
+                                }
+                            }
                         },
                         "DSCOverride": {
                             "excludes": [],
@@ -504,7 +520,8 @@ define([], function () {
                         "orderNo": 1,
                         "type": "select",
                         "readonly": true,
-                        "enumCode": "centre"
+                        "enumCode": "centre",
+                        "readonly": true
                     },
                     "LoanDetails.loanType": {
                         "orderNo": 2,
@@ -528,6 +545,7 @@ define([], function () {
                     "LoanDetails.partner": {
                         "orderNo": 3,
                         "enumCode": "loan_partner",
+                        "readonly": true,
                         "onChange": function(valueObj,context,model){
                             clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
                             model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf6 = null;
@@ -536,6 +554,7 @@ define([], function () {
                     },
                     "LoanDetails.frequency": {
                         "required":true,
+                        "readonly": true,
                         "enumCode": "loan_product_frequency",
                         "onChange": function(valueObj,context,model){
                             clearAll('loanAccount',['productCode',"loanAmount","tenure","interestRate","loanPurpose1","loanPurpose2","loanPurpose3"],model);
@@ -553,6 +572,7 @@ define([], function () {
                         },
                         autolov: true,
                         required: true,
+                        "readonly": true,
                         searchHelper: formHelper,
                         search: function (inputModel, form, model, context) {
                             var deferred = $q.defer();
@@ -597,11 +617,13 @@ define([], function () {
                         },
                     },
                     "LoanDetails.loanProductName":{
-                        "orderNo":4
+                        "orderNo":4,
+                        "readonly": true,
                     },
                     "LoanDetails.interestRate":{
                         "orderNo":6,
                         required:false,
+                        "readonly": true,
                         "placeholderExpr": "model.additions.interestPlaceHolder",
                     },
                     "LoanDetails.loanPurpose1": {
@@ -609,6 +631,7 @@ define([], function () {
                         "type": "lov",
                         "autolov": true,
                         "lovonly":true,
+                        "readonly": true,
                         "title": "LOAN_PURPOSE_1",
                         bindMap: {},
                         outputMap: {
@@ -636,6 +659,7 @@ define([], function () {
                         "title": "LOAN_PURPOSE_2",
                         "type": "lov",
                         "lovonly":true,
+                        "readonly": true,
                         bindMap: {},
                         outputMap: {
                             "purpose2": "loanAccount.loanPurpose2"
@@ -661,6 +685,7 @@ define([], function () {
                         "orderNo": 8,
                         "type": "lov",
                         "lovonly":true,
+                        "readonly": true,
                         bindMap: {},
                         outputMap: {
                             "loan_purpose": "loanAccount.loanPurpose3"
@@ -680,6 +705,7 @@ define([], function () {
                     },
                     "LoanDetails.loanAmountRequested": {
                         "orderNo": 5,
+                        "readonly": true,
                         "placeholderExpr": "model.additions.amountPlaceHolder",
                         onChange: function (value, form, model) {
                             model.loanAccount.disbursementSchedules[0].disbursementAmount = value;
@@ -692,6 +718,7 @@ define([], function () {
                     "LoanDetails.requestedTenure": {
                         "orderNo": 6,
                         required: true,
+                        "readonly": true,
                         "placeholderExpr": "model.additions.tenurePlaceHolder",
                     },
                     "LoanDetials.witnessDetails": {
@@ -1184,6 +1211,7 @@ define([], function () {
                                                     "title": "BORROWERS",
                                                     "type": "radios",
                                                     "orderNo": 8,
+                                                    "readonly":true,
                                                     "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4",
                                                     "titleMap": [{
                                                             value: "Father",
@@ -1214,12 +1242,14 @@ define([], function () {
                                                     "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4 == 'Husband'",
                                                     "type": "text",
                                                     "key": "loanAccount.husbandOrFatherFirstName",
+                                                    "readonly":true
                                                 },
                                                 "borrowersFatherName": {
                                                     "orderNo": 8,
                                                     "title": "FATHER_NAME",
                                                     "condition": "model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf4 == 'Father'",
                                                     "type": "text",
+                                                    "readonly":true,
                                                     "key": "loanAccount.husbandOrFatherFirstName"
                                                 },
                                                 "borrowersRealtionship": {
@@ -1233,6 +1263,7 @@ define([], function () {
                                                     "title":"REQUIRED",
                                                     orderNo:4,
                                                     "type":"html",
+                                                    "readonly":true,
                                                     "condition":"model.loanAccount.productCode",
                                                     "key":"additions.noOfGuarantorCoApplicantHtml"
                                                 },
@@ -1245,6 +1276,7 @@ define([], function () {
                                                     "key": "loanAccount.collectionPaymentType",
                                                     "title": "Mode Of Repayment",
                                                     "type": "select",
+                                                    "readonly":true,
                                                     titleMap:{
                                                         "ACH":"ACH",
                                                         "PDC":"PDC",
