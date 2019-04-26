@@ -100,7 +100,6 @@ class Chart extends AbstractVisualizationSection
                 }
             }
         }
-        sort($this->keyCheck);
         if (!($this->subType == 'pie' || $this->subType == 'doughnut')) {
             $i = 0;
             foreach ($this->result['XLabels'] as $Xlabels) {
@@ -146,7 +145,6 @@ class Chart extends AbstractVisualizationSection
             }
 
         }
-        print_r($this->final);
         return $this->result;
     }
 

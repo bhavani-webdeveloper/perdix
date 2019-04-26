@@ -10,7 +10,7 @@ irf.pageCollection.directive("irfPvDashboard", function () {
 }).controller('irfPvDashboardController', ["$scope", "VisualizationCodeResource", "$q", function ($scope, VisualizationCodeResource, $q) {
     var deferred = $q.defer();
     VisualizationCodeResource.getDashboardData({
-        "dashboardName": "los_business_financials_1",
+        "dashboardName": "business_financials",
         "parameters": {
             "CustomerId": $scope.visualizationData.customerId,
             "LoanId": $scope.visualizationData.loanId,
