@@ -70,11 +70,6 @@ define({
                     PageHelper.showErrors(httpRes);
                 });
             },
-            eventListeners: {
-                "teleVerification-capture": function(bundleModel, model, params){
-                    model.loanAccount.telecallingDetails = params.customer.telecallingDetails;            
-                }
-            },
             form: [
             {
                 "type": "box",
@@ -134,9 +129,8 @@ define({
                                         "readonly": false,
                                         "key": "loanAccount.loanDocs[].documentId",
                                         "onClick": function(model, form, schemaForm, event) {
-                                            //var fileId = model.loanAccount.loanDocuments[schemaForm.arrayIndex].documentId;
-                                            //Utils.downloadFile(Files.getFileDownloadURL(fileId));
-                                            Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + "applicant_details" + "&record_id=" + model.loanAccount.id+ "&display=content")
+                                            var fileId = model.loanAccount.loanDocuments[schemaForm.arrayIndex].documentId;
+                                            Utils.downloadFile(Files.getFileDownloadURL(fileId));
                                         }
                                     }]
                                 }, {
@@ -323,12 +317,12 @@ define({
                                 bindMap: {},
                                 searchHelper: formHelper,
                                 search: function(inputModel, form, model, context) {
-                                    var stage1 = model.loanAccount.currentStage;
+                                    var stage1 = model.currentStage;
 
-                                    if (model.loanAccount.currentStage == 'Application' || model.loanAccount.currentStage == 'ApplicationReview') {
+                                    if (model.currentStage == 'Application' || model.currentStage == 'ApplicationReview') {
                                         stage1 = "Application";
                                     }
-                                    if (model.loanAccount.currentStage == 'FieldAppraisal' || model.loanAccount.currentStage == 'FieldAppraisalReview') {
+                                    if (model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview') {
                                         stage1 = "FieldAppraisal";
                                     }
 
@@ -406,25 +400,11 @@ define({
                             bindMap: {},
                             searchHelper: formHelper,
                             search: function (inputModel, form, model, context) {
-                                        var stage1 = model.loanAccount.currentStage;
-                                        var productCategory = model.loanProcess.loanAccount.productCategory;
-                                        if(model.loanAccount.currentStage=='Rejected')
-                                        var stage1= model.review.preStage;
-                                        
-                                        if((productCategory == 'Consumer' || productCategory == 'Personal') && model.loanAccount.currentStage !='Rejected')
-                                        var targetstage = formHelper.enum('targetstagemelpersonal').data;
-                                        else if(productCategory == 'JEWEL' && model.loanAccount.currentStage !='Rejected')
-                                        var targetstage = formHelper.enum('targetstagemeljewel').data;
-                                         else if(productCategory == 'JEWEL' && model.loanAccount.currentStage =='Rejected')
-                                        var targetstage = formHelper.enum('targetstagemeljewelreject').data;
-                                        else if((productCategory == 'Consumer' || productCategory == 'Personal') && model.loanAccount.currentStage =='Rejected' )
-                                        var targetstage = formHelper.enum('targetstagemelpersonalreject').data;
-                                        else
-                                        var targetstage = formHelper.enum('booking_target_stage').data;
-
+                                var stage1 = model.loanAccount.currentStage;
+                                var booking_target_stage = formHelper.enum('booking_target_stage').data;
                                 var out = [];
-                                for (var i = 0; i < targetstage.length; i++) {
-                                    var t = targetstage[i];
+                                for (var i = 0; i < booking_target_stage.length; i++) {
+                                    var t = booking_target_stage[i];
                                     if (t.field1 == stage1) {
                                         out.push({
                                             name: t.name,
@@ -505,11 +485,6 @@ define({
             actions: {
                 reject: function(model, formCtrl, form, $event){
                     $log.info("Inside reject()");
-                    if (model.review.remarks==null || model.review.remarks =="" || model.loanAccount.rejectReason ==null || model.loanAccount.rejectReason ==""){
-                               PageHelper.showProgress("update-loan", "Reject Reason / Remarks is mandatory", 3000);
-                               PageHelper.hideLoader();
-                               return false;
-                        }
                     Utils.confirm("Are You Sure?").then(function(){
                         var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
                         reqData.loanAccount.status = '';
@@ -606,10 +581,9 @@ define({
                 },
                 sendBack: function(model, formCtrl, form, $event){
                     $log.info("Inside sendBack()");
-                    if (model.review.remarks==null || model.review.remarks =="" || model.review.targetStage ==null || model.review.targetStage ==""){
-                               PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
-                               PageHelper.hideLoader();
-                               return false;
+                    if(_.isEmpty(model.review.remarks) || _.isEmpty(model.review.targetStage)) {
+                        PageHelper.showProgress("update-loan", "Please Enter Remarks and Stage.", 3000);
+                        return false;
                     }
                     Utils.confirm("Are You Sure?").then(function(){
                         var reqData = {loanAccount: _.cloneDeep(model.loanAccount)};
@@ -617,7 +591,6 @@ define({
                         reqData.loanProcessAction = "PROCEED";
                         reqData.remarks = model.review.remarks;
                         reqData.stage = model.review.targetStage;
-                        reqData.loanAccount.version = model.loanProcess.loanAccount.version
                         reqData.remarks = model.review.remarks;
                         PageHelper.showLoader();
                         PageHelper.showProgress("update-loan", "Working...");
@@ -649,11 +622,6 @@ define({
                 proceed: function(model, form, formName) {
 
                     if (PageHelper.isFormInvalid(form)){
-                        return false;
-                    }
-                    /** Checking Televerification for Applicant*/
-                    if(model.loanAccount.currentStage == "Checker2" &&_.isEmpty(model.loanAccount.telecallingDetails)) {
-                        PageHelper.showProgress("proceed-loan", "Televerification details are Mandatory.", 3000);
                         return false;
                     }
 

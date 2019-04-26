@@ -217,6 +217,13 @@
                    "Screening", "LoanInitiation"
                 ]
              },
+ "firstRepaymentDate":{
+                     "title":"REPAYMENT_DATE",
+                     "type":"date",
+                     "captureStages":[
+                        "Screening","ScreeningReview","Application","LoanBooking","ApplicationReview"
+                     ]
+                  },
               "groupName":{
                 "title":"group name",
                 "type":"string",
@@ -958,7 +965,7 @@
                                 "title":"REPAYMENT_DATE",
                                     "type":"date",
                              "captureStages":[
-                                  "LoanBooking","Application","ScreeningReview","ApplicationReview"
+                                  "LoanBooking","Application","ScreeningReview","ApplicationReview","LoanInitiation"
                               ]
                      },
                "frequency":{

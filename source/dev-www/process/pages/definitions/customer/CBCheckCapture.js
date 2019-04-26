@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("CBCheckCapture"),
-	["$log", "$q", "CreditBureau", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "irfProgressMessage", "Queries","$filter", "PageHelper", "Enrollment","PagesDefinition",
-	function($log, $q, CreditBureau, SessionStore, $state, entityManager, formHelper, $stateParams, PM,Queries, $filter, PageHelper, Enrollment,PagesDefinition){
+	["$log", "$q", "CreditBureau", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "irfProgressMessage", "$filter", "PageHelper", "Enrollment","PagesDefinition",
+	function($log, $q, CreditBureau, SessionStore, $state, entityManager, formHelper, $stateParams, PM, $filter, PageHelper, Enrollment,PagesDefinition){
 	return {
 		"type": "schema-form",
 		"title": "CREDIT_BUREAU_CHECK",
@@ -159,56 +159,27 @@ irf.pageCollection.factory(irf.page("CBCheckCapture"),
 				PageHelper.showLoader();
 				if (form.$valid) {
 					PM.pop('cbcheck-submit', 'CB Check Submitting...');
-					
-					Queries.getLoanProduct(model.productCode).then(
-						function(res) {                                       
-						model.loanType = res.body[0].loanType;
-						if(SessionStore.getGlobalSetting('siteCode')  == 'KGFS'){
-							if(model.loanType == 'JLG'){
-								model.subModuleCode = 'MFI';
-								if(model.partner == 'AXIS'){
-									model.partnerCode = 'AXIS';
-								}else{
-									model.partnerCode = 'PFSPL';
-								}	
-							}else if(model.loanType == 'JEWEL'){
-								model.loanLimit = SessionStore.getGlobalSetting("cibilSubModuleCodeLimitJewel");
-								model.partnerCode = 'PFSPL';
-								model.subModuleCode = 'COMBO';
-								if(model.loanLimit && model.loanAmount <= model.loanLimit)
-									model.subModuleCode = 'MFI';
-							}else{
-								model.partnerCode = 'PFSPL';
-								model.subModuleCode = 'COMBO';
-							}	
-						}				
-						CreditBureau.postcreditBureauCheck({
-							customerId: model.customerId,
-							type: model.creditBureau,
-							purpose: model.creditBureau == 'CIBIL'? 'Business Loan - General': model.loanPurpose1,
-							loanAmount: model.loanAmount,	
-							subModuleCode :  model.subModuleCode,
-							productCode : model.productCode,					
-							force: model.force						
-						}, function(response){
-							PageHelper.hideLoader();
-							if(response.success==true){
-								PM.pop('cbcheck-submit', 'CB Check success for ' + model.customerName, 5000);
-							}
-							else{
-								PM.pop('cbcheck-submit', 'CB Check Submitted for ', + model.customerName + '. ' + 
-									'To get latest status Re-initate CB check in CB Status Queue.' , 5000);
-							}
-							$state.go("Page.Engine", {pageName:"CBCheck", pageId:null});
-						}, function(errorResponse){
-							PageHelper.showErrors(errorResponse);
-							PageHelper.hideLoader();
-							PM.pop('cbcheck-submit', 'CB Check Failed for ' + model.customerName, 5000);
-						});
-						}, function(error) {
-							PageHelper.showErrors(error);
-						});
-					
+					CreditBureau.postcreditBureauCheck({
+						customerId: model.customerId,
+						type: model.creditBureau,
+						purpose: model.creditBureau == 'CIBIL'? 'Business Loan - General': model.loanPurpose1,
+						loanAmount: model.loanAmount,
+						force: model.force
+					}, function(response){
+						PageHelper.hideLoader();
+						if(response.success==true){
+							PM.pop('cbcheck-submit', 'CB Check success for ' + model.customerName, 5000);
+						}
+						else{
+							PM.pop('cbcheck-submit', 'CB Check Submitted for ', + model.customerName + '. ' + 
+								'To get latest status Re-initate CB check in CB Status Queue.' , 5000);
+						}
+						$state.go("Page.Engine", {pageName:"CBCheck", pageId:null});
+					}, function(errorResponse){
+						PageHelper.showErrors(errorResponse);
+						PageHelper.hideLoader();
+						PM.pop('cbcheck-submit', 'CB Check Failed for ' + model.customerName, 5000);
+					});
 				}
 			}
 		}

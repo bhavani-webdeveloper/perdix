@@ -1,5 +1,5 @@
 { 
- "isDepositCheckRequired" : "No",
+ "isDepositCheckRequired" : "Yes",
   "stages":[
      {
         "order":1,

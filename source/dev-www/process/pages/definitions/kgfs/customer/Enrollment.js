@@ -19,7 +19,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                 var policyOnSubmit = function(policyName,model){
                     if(policyName){
                         if(policyName == "minimumFamilyMembers"){
-                            if(model.customer.familyMembers && model.customer.familyMembers.length<1){
+                            if(model.customer.familyMembers.length<1){
                                 PageHelper.showErrors({
                                     "data":{
                                         "error":"Minimum One Familymember is required other than Self."
@@ -27,21 +27,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                 });
                                 PageHelper.hideLoader();
                                 return false;
-                            }
-                            else if (model.customer.familyMembers && model.customer.familyMembers.length>1){
-                                for (var i=0;i<model.customer.familyMembers.length;i++){
-                                    if (model.customer.familyMembers[i].relationShip == "Self")
-                                        error = false
-                                }
-                                if (error){
-                                    PageHelper.showErrors({
-                                        "data":{
-                                            "error":"Relation Self is necessary in Family Member."
-                                        }
-                                    });
-                                    PageHelper.hideLoader();
-                                    return false;
-                                }
                             }
                         }
                     }
@@ -838,9 +823,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                         "actionbox":{
                             "condition":"model.customer.udf.userDefinedFieldValues.udf40=='ACCEPT'"
                         },
-                        "actionbox3":{
-                            "condition":"model.customer.udf.userDefinedFieldValues.udf40 !='ACCEPT' && model.customer.udf.userDefinedFieldValues.udf40 !='REJECT'"
-                        },                        
                         "actionbox1":{
                             "condition":"model.customer.udf.userDefinedFieldValues.udf40=='REJECT'"
                         }
@@ -1066,11 +1048,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                     "EDF.condition",
                     "actionbox",
                     "actionbox.submit",
-                    "actionbox.save",
-                    "actionbox3",
-                    "actionbox3.save",
                     "actionbox1",
                     "actionbox1.saveBasicDetails",
+                    "actionbox2",
+                    "actionbox2.save"
                     ];
 
                 }
@@ -1168,28 +1149,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                               }
                                         }
                                     },
-                                    "actionbox": {
-                                        "type": "actionbox",
-                                        "items": {
-                                            "save": {
-                                                "type": "save",
-                                                "title": "Offline Save"
-                                            },
-                                            "submit": {
-                                                "type": "submit",
-                                                "title": "Submit"
-                                            }
-                                        }
-                                    },
-                                     "actionbox3": {
-                                        "type": "actionbox",
-                                        "items": {
-                                            "save": {
-                                                "type": "save",
-                                                "title": "Offline Save"
-                                            }
-                                        }
-                                    },                                    
+                                    
                                 },
                                 "additions": [
                                 ]

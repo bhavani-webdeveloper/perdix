@@ -182,8 +182,8 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                                         "orderNo": 5
                                     },
                                     "PaymentDetails.fileId":{
-                                        "orderNo": 6,
-                                        "required":false,
+                                        "readonly":true,
+                                        "orderNo": 6
                                     },
                                     "PaymentDetails.paymentPurpose":{
                                         "readonly":true,
@@ -438,7 +438,7 @@ define(['perdix/domain/model/payment/PaymentProcess'], function(PaymentProcess) 
                         obs.subscribe(function(res) {                            
                             model.PaymentProcess = res;
                             model.payment = res.payment;
-                        model.payment.transactionType = "MANUAL";  
+                        model.payment.transactionType = "Manual";  
                         model.payment.currentStage = "PaymentInitiation";
 
                     UIRepository.getPaymentDetails().$promise

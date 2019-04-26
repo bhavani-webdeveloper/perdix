@@ -33,9 +33,9 @@ define({
 	                    'branch': {
 	                    	'title': "BRANCH",
 	                    	"type": ["string", "null"],
-	                    	//"enumCode": "branch",
+	                    	"enumCode": "branch",
 							"x-schema-form": {
-								"type": "userbranch",
+								"type": "select",
 								"screenFilter": true
 							}
 	                    },
@@ -46,7 +46,7 @@ define({
 								"type": "select",
 								"enumCode": "centre",
 								"parentEnumCode": "branch",
-								"parentValueExpr": "model.branch",
+								"parentValueExpr": "model.branchId",
 								"screenFilter": true
 							}
 						},
@@ -95,7 +95,7 @@ define({
 	                }
 					return IndividualLoan.search({
 	                    'stage': 'AppraisalReview',
-	                    'branchId':searchOptions.branch,
+	                    'branchName':searchOptions.branch,
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,

@@ -485,7 +485,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     })
                     .$promise.then(function(res){
                         model.linkedAccount=res;
-                        model.linkedLoanAmount = res.amount;
+                        model.linkedLoanAmount = res.totalDisbursed;
                     },function(err){
                         $log.info("loan request Individual/find api failure" + err);
                     });
@@ -670,7 +670,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                     })
                     .$promise.then(function(res){
                         model.linkedAccount=res;
-                        model.linkedLoanAmount = res.amount;
+                        model.linkedLoanAmount = res.totalDisbursed;
                     },function(err){
                         $log.info("loan request Individual/find api failure" + err);
                     });
@@ -935,7 +935,6 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         title: "TRANSACTION_TYPE",
                         readonly:true,
                         required: false,
-                        type:"text",
                         condition: "model.loanAccount.transactionType.toLowerCase() == 'renewal'"
                      },
                      {
@@ -944,7 +943,7 @@ function($log, $q, LoanAccount,LoanProcess, Scoring, Enrollment,EnrollmentHelper
                         type: "select",
                         "titleMap":{
                             "New Loan":"New Loan",
-                            //"Renewal":"Renewal",
+                            "Renewal":"Renewal",
                             "Loan Restructure":"Loan Restructure",
                             "Internal Foreclosure":"Internal Foreclosure"
                         },

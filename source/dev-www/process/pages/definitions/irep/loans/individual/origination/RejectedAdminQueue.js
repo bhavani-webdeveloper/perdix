@@ -25,11 +25,10 @@ define({
 						"branch": 
 						{
 	                        "title": "HUB_NAME",
-	                        "type": ["string", "null"],
-	                        //"enumCode": "branch_id",
+	                        "type": "integer",
+	                        "enumCode": "branch_id",
 	                        "x-schema-form": {
-								"type": "userbranch",
-								"screenFilter": true
+	                            "type": "select"
 							}
 	                    },
 						"centre": 
@@ -40,8 +39,7 @@ define({
 	                        "screenFilter": true,
 	                        "x-schema-form": {
 	                            "type": "select",
-								"parentEnumCode":"branch",
-								"parentValueExpr": "model.branch",
+	                        	"parentEnumCode":"branch_id"
 							}
 	                    },
 	                    "applicantName":
@@ -89,7 +87,7 @@ define({
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'villageName':searchOptions.villageName,
-	                    'branchId': searchOptions.branch,
+	                    'branchName': branchName,
 	                    'centreCode': searchOptions.centre,
 	                    'customerName': searchOptions.businessName,
 	                    'page': pageOpts.pageNo,

@@ -540,7 +540,6 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                     return false;
                                 }
                                 LeadHelper.proceedData(reqData).then(function (resp) {
-
                                     irfNavigator.go({
                                         state:"Page.Adhoc",
                                         pageName:'base.dashboard.lead.LeadDashboard'
@@ -554,7 +553,6 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                             }
                         } else {
                             LeadHelper.saveData(reqData).then(function (res) {
-                                model.lead = res.lead;
                                 LeadHelper.proceedData(res).then(function (resp) {
                                     irfNavigator.go({
                                         state:"Page.Adhoc",

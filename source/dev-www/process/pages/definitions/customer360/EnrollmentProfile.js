@@ -8,7 +8,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
    
     var mapCustomerToSelfFamilyMemeber = function(model){
         var temp = model.customer.familyMembers;
-        if(temp && temp.length > 0){
+        if(temp.length > 0){
             var isThere = false;
             for (var i=0;i<1;i++){
                 if(temp[i].relationShip == "Self"){

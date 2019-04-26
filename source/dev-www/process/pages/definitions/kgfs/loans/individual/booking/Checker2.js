@@ -338,10 +338,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                         $log.info("Inside new-loan of CBCheck");
                         BundleManager.broadcastEvent("new-loan", params);
                     },
-                    "teleVerification-capture": function(pageObj, bundleModel, params){
-                        $log.info("Inside teleVerification-capture");
-                        BundleManager.broadcastEvent("teleVerification-capture", params);
-                    },
                     "applicant-updated": function(pageObj, bundlePageObj, obj){
                         /* Update other pages */
                         BundleManager.broadcastEvent("applicant-updated", obj);

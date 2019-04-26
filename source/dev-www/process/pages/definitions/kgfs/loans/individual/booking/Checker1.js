@@ -168,6 +168,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     });
                                 }
 
+                                 if (loanProcess.loanAccount.productCategory == 'MEL') {
+                                    $this.bundlePages.push({
+                                        pageClass: "business",
+                                        model: {
+                                            enrolmentProcess: loanProcess.loanCustomerEnrolmentProcess,
+                                            loanProcess: loanProcess
+                                        }
+                                    });
+                                }
+
                                $this.bundlePages.push({
                                     pageClass: 'loan-booking',
                                     model:{

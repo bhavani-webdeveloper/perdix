@@ -235,6 +235,7 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
 
 
             if (_.hasIn(model, 'loanRelation')){
+                console.log(model.loanRelation);
                 var custId = model.loanRelation.customerId;
                 Enrollment.getCustomerById({id:custId})
                     .$promise
@@ -274,18 +275,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                                     }
                                 }
                             });
-                        }
-                        if( model.customer.customerBankAccounts){
-                            for(var i=0;i< model.customer.customerBankAccounts.length;i++){
-                               if (model.customer.customerBankAccounts[i].bankStatements) {
-                                for(var j=0;j< model.customer.customerBankAccounts[i].bankStatements.length;j++){
-                                    if(model.customer.customerBankAccounts[i].bankStatements[j].udf1){
-                                        var b=parseInt(model.customer.customerBankAccounts[i].bankStatements[j].udf1);
-                                        model.customer.customerBankAccounts[i].bankStatements[j].udf1=b;
-                                    }
-                                }
-                            }
-                            }
                         }
                         var actualCentre = $filter('filter')(allowedCentres, {id: model.customer.centreId}, true);
                         model.customer.centreName = actualCentre && actualCentre.length > 0 ? actualCentre[0].centreName : model.customer.centreName;
@@ -2436,29 +2425,6 @@ function($log, $q, Enrollment, EnrollmentHelper, PageHelper,formHelper,elementsU
                             }
                         }
                     }
-                }
-                if(model.customer.customerBankAccounts){
-                    var isPreferredCount=0;
-                    var returnFlag=false;
-                    angular.forEach(model.customer.customerBankAccounts,function(customerBankAC,key){
-                        if(customerBankAC.isTransactionAccount==="YES"){
-                            isPreferredCount++;
-                            if(isPreferredCount>1){
-                                PageHelper.showProgress("Multiple","Only one bank account can be selected as preferred bank account", 5000);
-                                returnFlag =true;
-                            }
-                        }
-                    });
-                    if(returnFlag){
-                        return false;
-                    }
-                    if(isPreferredCount==0){
-                        PageHelper.showProgress("minimum","Please select one bank account as Preferred Bank account", 9000);
-                        return false;
-                    }
-                }else{
-                    PageHelper.showProgress("EmptyAccountDetails","Bank Account Detail is Mandatory", 5000);
-                                return false;
                 }
                 var reqData = _.cloneDeep(model);
                 EnrollmentHelper.fixData(reqData);

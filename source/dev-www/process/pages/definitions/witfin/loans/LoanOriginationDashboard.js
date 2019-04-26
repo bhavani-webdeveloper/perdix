@@ -45,44 +45,20 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
             var centres = SessionStore.getCentres();
 
             var lapqMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/witfin.lead.LeadAssignmentPendingQueue"];
-            if (lapqMenu) {
-                lapqMenu.offlineMenu = {
-                    state: 'Page.EngineOffline',
-                    pageName: 'witfin.lead.LeadGeneration'
-                };
-                lapqMenu.data = 0;
-            }
-
             var lfuqMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/witfin.lead.LeadFollowUpQueue"];
-            if (lfuqMenu) {
-                lfuqMenu.offlineMenu = {
-                    state: 'Page.EngineOffline',
-                    pageName: 'witfin.lead.LeadGeneration'
-                };
-                lfuqMenu.data = 0;
-            }
-
             var ilqMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/witfin.lead.IncompleteLeadQueue"];
-            if (ilqMenu) {
-                ilqMenu.offlineMenu = {
-                    state: 'Page.EngineOffline',
-                    pageName: 'witfin.lead.LeadGeneration'
-                };
-                ilqMenu.data = 0;
-            }
 
             var rMenu = $scope.leadDashboardDefinition.$menuMap["Page/Engine/witfin.lead.LeadRejectedQueue"];
-            if (rMenu) {
-                rMenu.offlineMenu = {
-                    state: 'Page.EngineOffline',
-                    pageName: 'witfin.lead.LeadGeneration'
-                };
-                rMenu.data = 0;
-            };
+
+            if (rMenu) rMenu.data = 0;
+            if (lapqMenu) lapqMenu.data = 0;
+            if (lfuqMenu) lfuqMenu.data = 0;
+            if (ilqMenu) ilqMenu.data = 0;
 
 
+               _.forEach(centres, function(centre) {
 
-            _.forEach(centres, function(centre) {
+
                 if (lfuqMenu) {
                     Lead.search({
                         'branchName': branchName,
@@ -177,13 +153,7 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
             var centres = SessionStore.getCentres();
 
             var rfqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.lead.ReadyForScreeningQueue"];
-            if (rfqMenu) {
-                rfqMenu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.ScreeningInput'
-                };
-                rfqMenu.data = 0;
-            }
+            if (rfqMenu) rfqMenu.data = 0;
             _.forEach(centres, function(centre) {
                 if (rfqMenu) {
                     Lead.search({
@@ -211,10 +181,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
             var sqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.ScreeningQueue"];
 
             if (sqMenu) {
-                sqMenu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.ScreeningInput'
-                };
                 sqMenu.data = 0;
                 _.forEach(centres, function(centre) {
                     IndividualLoan.search({
@@ -238,10 +204,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
 
             var srqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.ScreeningReviewQueue"];
             if (srqMenu) {
-                srqMenu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.ScreeningReview'
-                };
                 IndividualLoan.search({
                     'stage': 'ScreeningReview',
                     'enterprisePincode': '',
@@ -260,10 +222,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
 
             var gng1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.GoNoGoApproval1Queue"];
             if (gng1Menu) {
-                gng1Menu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.GoNoGoApproval1'
-                };
                 IndividualLoan.search({
                     'stage': 'GoNoGoApproval1',
                     'enterprisePincode': '',
@@ -282,10 +240,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
 
             var gng2Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.GoNoGoApproval2Queue"];
             if (gng2Menu) {
-                gng2Menu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.GoNoGoApproval2'
-                };
                 IndividualLoan.search({
                     'stage': 'GoNoGoApproval2',
                     'enterprisePincode': '',
@@ -302,12 +256,26 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
                 });
             }
 
+          /*  var prqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.VehicleValuationQueue"];
+            if (prqMenu) {
+                IndividualLoan.search({
+                    'stage': 'VehicleValuation',
+                    'enterprisePincode': '',
+                    'applicantName': '',
+                    'area': '',
+                    'villageName': '',
+                    'customerName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    prqMenu.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    prqMenu.data = '-';
+                });
+            }*/
+
             var fiq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.FieldInvestigation1Queue"];
             if (fiq1Menu) {
-                fiq1Menu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.FieldInvestigation1'
-                };  
                 IndividualLoan.search({
                     'stage': 'FieldInvestigation1',
                     'enterprisePincode': '',
@@ -326,10 +294,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
 
             var fiq2Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.FieldInvestigation2Queue"];
             if (fiq2Menu) {
-                fiq2Menu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.FieldInvestigation2'
-                };
                 IndividualLoan.search({
                     'stage': 'FieldInvestigation2',
                     'enterprisePincode': '',
@@ -348,10 +312,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
 
             var fiq3Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.FieldInvestigation3Queue"];
             if (fiq3Menu) {
-                fiq3Menu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.FieldInvestigation3'
-                };
                 IndividualLoan.search({
                     'stage': 'FieldInvestigation3',
                     'enterprisePincode': '',
@@ -369,10 +329,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
             }
             var tvq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.TeleVerificationQueue"];
             if (tvq1Menu) {
-                tvq1Menu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.TeleVerification'
-                };
                 IndividualLoan.search({
                     'stage': 'TeleVerification',
                     'enterprisePincode': '',
@@ -392,10 +348,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
 
             var caq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.CreditAppraisalQueue"];
             if (caq1Menu) {
-                caq1Menu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.CreditApproval1'
-                };
                 IndividualLoan.search({
                     'stage': 'CreditAppraisal',
                     'enterprisePincode': '',
@@ -415,10 +367,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
 
             var daq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.DeviationApproval1Queue"];
             if (daq1Menu) {
-                daq1Menu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.DeviationApproval1'
-                };
                 IndividualLoan.search({
                     'stage': 'DeviationApproval1',
                     'enterprisePincode': '',
@@ -437,10 +385,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
 
             var daq2Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.DeviationApproval2Queue"];
             if (daq2Menu) {
-                daq2Menu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.DeviationApproval2'
-                };
                 IndividualLoan.search({
                     'stage': 'DeviationApproval2',
                     'enterprisePincode': '',
@@ -460,10 +404,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
             var baq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.BusinessApproval1Queue"];
 
             if (baq1Menu) {
-                baq1Menu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.BusinessApproval1'
-                };
                 IndividualLoan.search({
                     'stage': 'BusinessApproval1',
                     'enterprisePincode': '',
@@ -483,10 +423,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
             var baq2Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.BusinessApproval2Queue"];
 
             if (baq2Menu) {
-                baq2Menu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.BusinessApproval2'
-                };
                 IndividualLoan.search({
                     'stage': 'BusinessApproval2',
                     'enterprisePincode': '',
@@ -506,10 +442,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
             var baq3Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.BusinessApproval3Queue"];
 
             if (baq3Menu) {
-                baq3Menu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.BusinessApproval3'
-                };
                 IndividualLoan.search({
                     'stage': 'BusinessApproval3',
                     'enterprisePincode': '',
@@ -529,10 +461,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
             var baq4Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.BusinessApproval4Queue"];
 
             if (baq4Menu) {
-                baq4Menu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.BusinessApproval4'
-                };
                 IndividualLoan.search({
                     'stage': 'BusinessApproval4',
                     'enterprisePincode': '',
@@ -552,10 +480,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
             var baq5Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.BusinessApproval5Queue"];
 
             if (baq5Menu) {
-                baq5Menu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.BusinessApproval5'
-                };
                 IndividualLoan.search({
                     'stage': 'BusinessApproval5',
                     'enterprisePincode': '',
@@ -575,10 +499,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
             var caq1Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.CreditApproval1Queue"];
 
             if (caq1Menu) {
-                caq1Menu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.CreditApproval1'
-                };
                 IndividualLoan.search({
                     'stage': 'CreditApproval1',
                     'enterprisePincode': '',
@@ -598,10 +518,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
             var caq2Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.CreditApproval2Queue"];
 
             if (caq2Menu) {
-                caq2Menu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.CreditApproval2'
-                };
                 IndividualLoan.search({
                     'stage': 'CreditApproval2',
                     'enterprisePincode': '',
@@ -621,10 +537,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
             var caq3Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.CreditApproval3Queue"];
 
             if (caq3Menu) {
-                caq3Menu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.CreditApproval3'
-                };
                 IndividualLoan.search({
                     'stage': 'CreditApproval3',
                     'enterprisePincode': '',
@@ -644,10 +556,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
             var caq4Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.CreditApproval4Queue"];
 
             if (caq4Menu) {
-                caq4Menu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.CreditApproval4'
-                };
                 IndividualLoan.search({
                     'stage': 'CreditApproval4',
                     'enterprisePincode': '',
@@ -668,10 +576,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
             var caq5Menu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.CreditApproval5Queue"];
 
             if (caq5Menu) {
-                caq5Menu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.CreditApproval5'
-                };
                 IndividualLoan.search({
                     'stage': 'CreditApproval5',
                     'enterprisePincode': '',
@@ -690,10 +594,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
 
             var rjqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.RejectedQueue"];
             if (rjqMenu) {
-                rjqMenu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.Rejected'
-                };
                 IndividualLoan.search({
                     'stage': 'Rejected',
                     'enterprisePincode': '',
@@ -712,10 +612,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
 
             var bncqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.BranchNewConversationQueue"];
             if (bncqMenu) {
-                bncqMenu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.LoanView'
-                };
                 Messaging.findConversation({
                     'replied': 'false',
                     'page': 1,
@@ -729,10 +625,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
 
             var brcqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.BranchRepliedConversationQueue"];
             if (brcqMenu) {
-                brcqMenu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.LoanView'
-                };
                 Messaging.findConversation({
                     'replied': 'true',
                     'page': 1,
@@ -746,10 +638,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
 
             var sncqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.SpokeNewConversationQueue"];
             if (sncqMenu) {
-                sncqMenu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.LoanView'
-                };
                 var centreCode = [];
                 _.forEach(centres, function (centre) {
                     centreCode.push(centre.centreCode);
@@ -770,10 +658,6 @@ irf.pageCollection.controller(irf.controller("witfin.loans.LoanOriginationDashbo
 
             var srcqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/loans.individual.screening.SpokeRepliedConversationQueue"];
             if (srcqMenu) {
-                srcqMenu.offlineMenu = {
-                    state: 'Page.BundleOffline',
-                    pageName: 'witfin.loans.individual.screening.LoanView'
-                };
                 var centreCode = [];
                 _.forEach(centres, function (centre) {
                     centreCode.push(centre.centreCode);

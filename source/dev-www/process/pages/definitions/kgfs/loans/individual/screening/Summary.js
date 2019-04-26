@@ -137,21 +137,6 @@ define({
             household: [],
             business: {}
         };
-        // var totalBusinessLiabilities  = 0;
-        // if (_.isArray(model.liabilitiesSummary.subgroups) && model.liabilitiesSummary.subgroups.length > 0){
-        //     for (var i=0;i<model.liabilitiesSummary.subgroups.length; i++){
-        //         if (_.isArray(model.liabilitiesSummary.subgroups[i].data) && model.liabilitiesSummary.subgroups[i].data.length > 0){
-                    
-        //             for (var j=0;j<model.liabilitiesSummary.subgroups[i].data.length; j++){
-        //                 var noOfMonth = 12;
-        //                 if(model.liabilitiesSummary.subgroups[i].data[j]['Start Date'] != null) {
-        //                     noOfMonth = getNoOfMonth();
-        //                 }
-        //                 totalBusinessLiabilities = totalBusinessLiabilities + (model.liabilitiesSummary.subgroups[i].data[j]['Installment Amount'] * noOfMonth)
-        //             }
-        //         }
-        //     }
-        // }
 
         if(model.houseHoldPL && model.houseHoldPL.length){
             for (var i=0; i<model.houseHoldPL.length; i++){
@@ -163,8 +148,8 @@ define({
                         otherIncomeSalaries : model.houseHoldPL[i].data[0]['Other Income/salaries'],
                         familyMemberIncomes : model.houseHoldPL[i].data[0]['Family Member Incomes'],
                         Expenses : model.houseHoldPL[i].data[0]['Total Expenses'],
-                        declaredEducationExpense : model.houseHoldPL[i].data[0]['Household Expenses'],
-                        emiHouseholdLiabilities : (parseInt(model.businessPL.data[0]['Business Liabilities']) * 12),
+                        declaredEducationExpense : model.houseHoldPL[i].data[0]['Expenses Declared or based on the educational expense whichever is higher'],
+                        emiHouseholdLiabilities : model.houseHoldPL[i].data[0]['EMI\'s of household liabilities'],
                         netHouseholdIncome : model.houseHoldPL[i].data[0]['Net Household Income'],
                         relationDetails: model.houseHoldPL[i]['relation_detail']
                     })
@@ -172,21 +157,15 @@ define({
                
             }
         }
-        model.pl.business.incomeFromBusiness = model.businessPL.data[0]['Income From Business'];
+
         model.pl.business.otherBusinessIncome = model.businessPL.data[0]['Other Business Income'];
-        model.pl.business.totalBusinessIncome = parseInt(model.businessPL.data[0]['Income From Business']) + parseInt(model.businessPL.data[0]['Other Business Income']);
-        model.pl.business.purchase = model.businessPL.data[0]['Total Purchases'];
-        
-        //model.pl.business.businessLiabilities = totalBusinessLiabilities;
-        model.pl.business.businessLiabilities = model.businessPL.data[0]['Business Liabilities'] * 12;
-        model.pl.business.businessExpense = model.businessPL.data[0]['Business Expenses'];
-        model.pl.business.personalExpense = model.businessPL.data[0]['Personal Expenses'];
-        model.pl.business.netBusinessIncome = parseFloat(model.businessPL.data[0]['Monthly Sales']) - parseInt(model.businessPL.data[0]['Business Expenses']);
-        model.pl.business.kgfsEMi = ((model.pl.business.netBusinessIncome + parseInt(model.pl.business.otherBusinessIncome)) - (parseInt(model.pl.business.personalExpense) + parseInt(model.businessPL.data[0]['Total Emi Amount']))) * parseInt(model.businessPL.data[0]['Own Salary']);
-        model.pl.business.netIncome = Math.round(model.pl.business.netBusinessIncome - (model.pl.business.kgfsEMi + model.businessPL.data[0]['Personal Expenses']));
-        model.pl.business.netBusinessIncome = Math.round(model.pl.business.netBusinessIncome);
-        model.pl.business.kgfsEMi = Math.round(model.pl.business.kgfsEMi);
-        //model.pl.business.finalKgfsEmi = model.businessPL.data[0]['Final Kinara EMI'];
+        model.pl.business.purchase = model.businessPL.data[0]['Purchases'];
+        model.pl.business.businessLiabilities = model.businessPL.data[0]['Business Liabilities'];
+        model.pl.business.netBusinessIncome = model.businessPL.data[0]['Net Business Income'];
+        model.pl.business.kgfsEMi = model.businessPL.data[0]['Kinara EMI'];
+        model.pl.business.netIncome = model.businessPL.data[0]['Net Income'];
+        model.pl.business.finalKgfsEmi = model.businessPL.data[0]['Final Kinara EMI'];
+
         model.additional = {};
 
         $log.info("Karthik here");
@@ -212,17 +191,7 @@ define({
 
 
     }; // END OF prepareData()
-    // var getNoOfMonth = function(startDate) {
-    //     var startTime = new Date(startDate);
-    //     var totalNoOfMonth = 0;
-    //     var startMonth = startTime.getMonth();
-    //     if(startMonth > 3) {
-    //         totalNoOfMonth = (12 - startMonth) + 3;
-    //     } else {
-    //         totalNoOfMonth = 3 - startMonth;
-    //     }
-    //     return totalNoOfMonth;
-    // }
+
 
     var HOUSEHOLD_PL_HTML =
     '<table class="table">'+
@@ -234,9 +203,9 @@ define({
             '<tr> <td>{{"OTHER_INCOME_SALARIES" | translate}}</td> <td>{{household.otherIncomeSalaries | irfCurrency}}</td> </tr>'+
             '<tr> <td>{{"FAMILY_MEMBER_INCOMES" | translate}}</td> <td>{{household.familyMemberIncomes | irfCurrency}}</td> </tr>'+
             '<tr class="table-sub-header"> <th>{{"EXPENSES" | translate}}</th> <th></th></tr>'+
-            '<tr> <td>{{"HOUSEHOLD_EXPENSE" | translate}}</td> <td>{{household.declaredEducationExpense | irfCurrency }}</td> </tr>'+
-            '<tr> <td>{{"EMI_EXPENSES" | translate}}</td> <td>{{household.emiHouseholdLiabilities | irfCurrency }}</td> </tr>'+
-            '<tr> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td>{{household.netHouseholdIncome | irfCurrency}}</td> </tr>'+
+            '<tr> <td>{{"HOUSEHOLD_EXPENSE" | translate}}</td> <td></td> </tr>'+
+            '<tr> <td>{{"EMI_EXPENSES" | translate}}</td> <td></td> </tr>'+
+            '<tr> <td>{{"NET_HOUSEHOLD_INCOME" | translate}}</td> <td> {{household.netHouseholdIncome}}</td> </tr>'+
         '</tbody>'+
     '</table>';
 
@@ -271,7 +240,6 @@ define({
             "type": "box",
                 "colClass": "col-sm-12 table-box",
                 "title": "Business Summary",
-                "condition": "model.loanProcess.loanAccount.productCategory  == 'MEL'",
                 "readonly": true,
                 "items": [
                     {
@@ -386,7 +354,6 @@ define({
             type: "box",
             colClass: "col-sm-12 table-box",
             title: "BUSINESS_PL",
-            "condition": "model.loanProcess.loanAccount.productCategory  == 'MEL'",
             items: [
                 {
                     type: "section",
@@ -398,18 +365,17 @@ define({
     '</colgroup>'+
     '<tbody>'+
         '<tr class="table-sub-header"> <th>{{"REVENUE_TURNOVER" | translate}}</th> <th></th></tr>'+
-        '<tr> <td>{{"INCOME_FROM_BUSINESS" | translate}}</td><td>{{model.pl.business.incomeFromBusiness}}</td> </tr>'+
+        '<tr> <td>{{"INCOME_FROM_BUSINESS" | translate}}</td><td></td> </tr>'+
         '<tr> <td>{{"OTHER_BUSINESS_INCOME" | translate}}</td><td>{{model.pl.business.otherBusinessIncome}}</td> </tr>'+
         '<tr > <td><strong>{{"TOTAL_BUSINESS_INCOME" | translate}}<strong></td><td><strong>{{model.pl.business.totalBusinessIncome | irfCurrency}}<strong></td></tr>'+
-        '<tr> <td>{{"PURCHASES" | translate}}</td><td>{{model.pl.business.purchase }}</td></tr>'+
-        '<tr> <td>{{"OTHER_BUSINESS_EXPENSE" | translate}}</td><td>{{model.pl.business.businessExpense}}</td></tr>'+
+        '<tr> <td>{{"PURCHASES" | translate}}</td><td>{{model.pl.business.purchases }}</td></tr>'+
+        '<tr> <td>{{"OTHER_BUSINESS_EXPENSE" | translate}}</td><td>{{}}</td></tr>'+
         '<tr class="table-sub-header"> <th>{{"EXISTING_LOAN_PAYMENTS" | translate}}</th> <th></th> </tr>'+
         '<tr> <td>{{"BUSINESS_LIABILITIES" | translate}}</td><td>{{model.pl.business.businessLiabilities | irfCurrency}}</td> </tr>'+
         '<tr> <td>{{"NET_BUSINESS_INCOME" | translate}}</td><td>{{model.pl.business.netBusinessIncome | irfCurrency}}</td></tr>'+
-        '<tr> <td><strong>{{"KGFS_EMI" | translate}}</strong></td><td><strong>{{model.pl.business.kgfsEMi | irfCurrency}}</strong></td></tr>'+
-        '<tr> <td><strong>{{"PERSONAL_EXPENSE" | translate}}</strong></td><td><strong>{{model.pl.business.personalExpense | irfCurrency}}</strong></td></tr>'+
+        '<tr> <td><strong>{{"KGFS_EMI" | translate}}</strong></td><td><strong>{{model.pl.business.kgfsEmi | irfCurrency}}</strong></td></tr>'+
         '<tr> <td><strong>{{"NET_INCOME" | translate}}</strong></td><td><strong>{{model.pl.business.netIncome | irfCurrency}}</strong></td></tr>'+
-       
+        '<tr class="table-bottom-summary"><td><strong>Final KGFS EMI</strong></td><td>{{model.pl.business.finalKgfsEmi | irfCurrency}}</td></tr>'+
     '</tbody>'+
 '</table>'
                 }
@@ -475,7 +441,6 @@ define({
              type: "box",
             colClass: "col-sm-12 table-box",
             title: model.liabilitiesSummary.title,
-            "condition": "model.loanProcess.loanAccount.productCategory  == 'MEL'",
             items: items
         });
 

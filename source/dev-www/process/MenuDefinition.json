@@ -20,7 +20,6 @@
                 "Page/Engine/ProfileInformation",
                 "Page/Engine/kgfs.customer.Enrollment",
                 "Page/Engine/customer.IndividualEnrollment",
-                "Page/Engine/customer.banking.Banking",
                 "Page/Engine/shramsarathi.customer.IndividualEnrollment",
                 "Page/Engine/customer.EnterpriseEnrollment",
                 "Page/Engine/customer.IndividualEnrollment3",
@@ -53,11 +52,7 @@
         "Page/Adhoc/kgfs.loans.LoanBookingDashboard",
         "Page/Adhoc/base.dashboard.lead.LeadDashboard",
         "Page/Adhoc/base.dashboard.loans.LoanOriginationDashboard",
-        "Page/Adhoc/arohan.dashboard.loans.LoanOriginationDashboard",
-        "Page/Adhoc/arohan.dashboard.lead.LeadDashboard",
-        "Page/Adhoc/arohan.dashboard.CPV.CPVDashboard",
-        "Page/Adhoc/arohan.dashboard.fcu.FcuQueue",
-        
+       
         "Page/DocumentTrackingDashboard", {
             "title": "INDIVIDUAL_LOANS",
             "iconClass": "fa fa-female",
@@ -104,7 +99,6 @@
                 "Page/Engine/management.AdminScreen",
                 "Page/Engine/management.RolesReports",
                 "Page/Engine/management.ScoreMaintenance",
-                "Page/Engine/customer.banking.CashManagement",
                 "Page/Adhoc/management.product.LoanProductDashboard",
                 "Page/Engine/management.SpokeMerger/interbranch",
                 "Page/Engine/management.SpokeMerger/intrabranch",
@@ -151,8 +145,6 @@
         "Page/ReportsDashboard",
         "Page/ScoreDashboard",
         "Page/Adhoc/audit.AuditDashboard",
-        "Page/Engine/excelUpload.ExcelUpload",
-        "Page/Engine/arohan.dashboard.CPV.CPVQueue",
-        "Page/Engine/arohan.dashboard.fcu.FcuQueue"
+        "Page/Engine/excelUpload.ExcelUpload"
     ]
 }

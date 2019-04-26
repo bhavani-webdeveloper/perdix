@@ -25,9 +25,9 @@ define({
 						'branch': {
 	                    	'title': "BRANCH",
 	                    	"type": ["string", "null"],
-	                    	//"enumCode": "branch",
+	                    	"enumCode": "branch",
 							"x-schema-form": {
-								"type": "userbranch",
+								"type": "select",
 								"screenFilter": true
 							}
 	                    },
@@ -38,7 +38,6 @@ define({
 								"type": "select",
 								"enumCode": "centre",
 								"parentEnumCode": "branch",
-								"parentValueExpr": "model.branch",
 								"screenFilter": true
 							}
 						},
@@ -92,7 +91,7 @@ define({
 	                    'applicantName':searchOptions.applicantName,
 	                    'area':searchOptions.area,
 	                    'villageName':searchOptions.villageName,
-	                    'branchId': searchOptions.branch,
+	                    'branchName': searchOptions.branch,
 	                    'status':searchOptions.status,
 	                    'centreCode': searchOptions.centre,
 	                    'customerName': searchOptions.businessName,

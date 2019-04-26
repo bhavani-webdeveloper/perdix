@@ -39,7 +39,7 @@ define({
 			},
 			definition: {
 				title: "CHECKER2_QUEUE",
-				autoSearch:false,
+				autoSearch:true,
 				searchForm: [
 					{
 	                	"type": "section",
@@ -241,8 +241,7 @@ define({
 							}
 						}];
 					}
-				},
-				
+				}
 			}
 		};
 	}

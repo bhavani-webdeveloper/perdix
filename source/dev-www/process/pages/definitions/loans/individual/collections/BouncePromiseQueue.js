@@ -141,41 +141,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                             isApplicable: function(item, index){
                                 return true;
                             }
-                        },
-                        {
-                            name: "COLLECT_ADHOC_CHARGES",
-                            desc: "",
-                            fn: function(item, index){
-                                $state.go("Page.Engine",{
-                                    pageName:"loans.individual.collections.ChargeFee",
-                                    pageId:item.accountId
-                                });
-                            },
-                            isApplicable: function(item, index){
-                                var siteCode = SessionStore.getGlobalSetting('siteCode');
-                                if(siteCode == 'witfin') { 
-                                    return true
-                                }else{
-                                    return false
-                                }                                     }
-                        },
-                        {
-							name: "View Details",
-							desc: "",
-							fn: function(item, index){
-								$state.go('Page.Engine', {
-									pageName: 'customer360.loans.LoanDetails',
-									pageId: item.loanId
-								})
-							},
-							isApplicable: function(item, index){
-								var siteCode = SessionStore.getGlobalSetting('siteCode');
-								if (siteCode=='witfin'){
-									return true;
-								}
-								return false;
-							}
-						}
+                        }
                     ];
                 }
             }

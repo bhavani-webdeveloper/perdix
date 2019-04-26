@@ -28,18 +28,6 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                 eventListeners: {
                     "new-business": function(bundleModel,model,obj){
                         model.customer = obj.customer;
-                        if (model.customer.customerBankAccounts) {
-                            for (var i = 0; i < model.customer.customerBankAccounts.length; i++) {
-                                if (model.customer.customerBankAccounts[i].bankStatements) {
-                                    for (var j = 0; j < model.customer.customerBankAccounts[i].bankStatements.length; j++) {
-                                        if (model.customer.customerBankAccounts[i].bankStatements[j].udf1 != "undefined") {
-                                            var b = parseInt(model.customer.customerBankAccounts[i].bankStatements[j].udf1);
-                                            model.customer.customerBankAccounts[i].bankStatements[j].udf1 = b;
-                                        }
-                                    }
-                                }
-                            }
-                        }
                         if(typeof model.customer.incomeThroughSales == "undefined"){
                             model.customer.incomeThroughSales = [];
                         }   
@@ -163,15 +151,6 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                                     type: "amount"
                                 },
                                 {
-                                    key: "customer.customerBankAccounts[].isTransactionAccount",
-                                    title: "PREFERRED_BANK",
-                                    "type": "select",
-                                    "titleMap": {
-                                        "YES": "YES",
-                                        "NO": "NO"
-                                    }
-                                },
-                                {
                                     key: "customer.customerBankAccounts[].bankStatements",
                                     type: "datatable",
                                     title: "STATEMENT_DETAILS",
@@ -196,21 +175,7 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                                                         //         model.customer.customerBankAccounts[context.arrayIndexes[0]].bankStatements[context.arrayIndexes[1]].totalDeposits = result.totalCredit;
                                                         //         model.customer.customerBankAccounts[context.arrayIndexes[0]].bankStatements[context.arrayIndexes[1]].totalWithdrawals = result.totalDebit;
                                                         // },
-                                                        //name: "TOTAL_DEPOSITS"
-                                                        name:"BUYER_DEPOSITS"
-                                                    },
-                                                    {
-                                                       // key: "customer.customerBankAccounts[].bankStatements[].udf1",
-                                                       prop:"udf1", 
-                                                       type: "number",
-                                                        required:true,
-                                                       calculator: true,
-                                                       creditDebitBook: true,
-                                                        // onDone: function(result, model, context){
-                                                        //         model.customer.customerBankAccounts[context.arrayIndexes[0]].bankStatements[context.arrayIndexes[1]].udf1 = result.totalCredit;
-                                                        //         model.customer.customerBankAccounts[context.arrayIndexes[0]].bankStatements[context.arrayIndexes[1]].totalWithdrawals = result.totalDebit;
-                                                        // },
-                                                        name:"TOTAL_DEPOSITS"
+                                                        name: "TOTAL_DEPOSITS"
                                                     },
                                                     {
                                                         prop: "totalWithdrawals",
@@ -608,29 +573,6 @@ irf.pageCollection.factory(irf.page("customer.EnterpriseEnrolment2BusinessFinanc
                                 "isCondition": false
                             }
                         ];
-                        if(model.customer.customerBankAccounts){
-                            var isPreferredCount=0;
-                            var returnFlag=false;
-                            angular.forEach(model.customer.customerBankAccounts,function(customerBankAC,key){
-                                if(customerBankAC.isTransactionAccount==="YES"){
-                                    isPreferredCount++;
-                                    if(isPreferredCount>1){
-                                        PageHelper.showProgress("Multiple","Only one bank account can be selected as preferred bank account", 5000);
-                                        returnFlag =true;
-                                    }
-                                }
-                            });
-                            if(returnFlag){
-                                return false;
-                            }
-                            if(isPreferredCount==0){
-                                PageHelper.showProgress("minimum","Please select one bank account as Preferred Bank account", 9000);
-                                return false;
-                            }
-                        }else{
-                            PageHelper.showProgress("EmptyAccountDetails","Bank Account Detail is Mandatory", 5000);
-                                        return false;
-                        }
                         // var errorMsg = validate(model,mandatoryIncomeThroughSale);
                         var mandatoryPurchases = null;
                         var temp;

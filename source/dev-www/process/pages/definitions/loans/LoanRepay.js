@@ -374,7 +374,12 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                                 "type":"select",
                                 "required": true,
                                 condition: "!model._pageGlobals.hideTransactionName && model.siteCode == 'witfin'",
-                                enumCode: "transaction_name",
+                                titleMap: {
+                                    "Scheduled Demand":"Scheduled Demand",
+                                    "Fee Payment":"Fee Payment",
+                                    "Pre-closure":"Pre-closure",
+                                    "PenalInterestPayment":"PenalInterestPayment"
+                                },
                                 onChange: function(value ,form, model){
                                     if ( value == 'Pre-closure'){
                                         model.repayment.amount = model.repayment.totalPayoffAmountToBePaid;

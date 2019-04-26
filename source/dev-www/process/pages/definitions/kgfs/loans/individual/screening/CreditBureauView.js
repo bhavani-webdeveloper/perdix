@@ -221,14 +221,13 @@ irf.pageCollection.factory("CIBILAppendix", [function(){
 irf.pageCollection.factory(irf.page("kgfs.loans.individual.screening.CreditBureauView"),
 ["$log", "$q", 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch",
-"CreditBureau","AuthTokenHelper","irfSimpleModal", "CIBILAppendix","$timeout","Files",
+"CreditBureau","AuthTokenHelper","irfSimpleModal", "CIBILAppendix","$timeout",
 function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
     irfProgressMessage,SessionStore,$state,$stateParams, Queries, Utils, CustomerBankBranch,
-    CreditBureau,AuthTokenHelper,showModal, CIBILAppendix, $timeout,Files){
+    CreditBureau,AuthTokenHelper,showModal, CIBILAppendix, $timeout){
 
     var branch = SessionStore.getBranch();
-    var viewStyle;
-    // 1 for mobile 2 for web
+
     /*var HIGHMARK_HTML = 
 '<div>'+
     '<h3 ng-show="CBDATA.highMark.highmarkScore" style="font-weight:bold;color:#ccc;">HIGHMARK REPORT</h3>'+
@@ -296,7 +295,7 @@ function($log, $q, SchemaResource, PageHelper,formHelper,elementsUtils,
 '</div>';*/
     var HIGHMARK_HTML =
 '<div>'+
-    '<h3 ng-show="CBDATA.highMark.reportHtml" style="font-weight:bold;color:#ccc;">HIGHMARK REPORT</h3>'+
+    '<h3 ng-show="CBDATA.highMark.highmarkScore" style="font-weight:bold;color:#ccc;">HIGHMARK REPORT</h3>'+
     '<iframe ng-show="CBDATA.highMark.reportHtml" id="{{CBDATA._highmarkId}}" style="border:0;width:100%;height:500px;"></iframe>'+
     '<div ng-hide="CBDATA.highMark.reportHtml">'+
         '<center><b style="color:tomato">{{CBDATA.customer.first_name||CBDATA.customerId}} - HighMark Scores NOT available</b></center>'+
@@ -308,7 +307,7 @@ var EQUIFAX_HTML =
     '<h3 ng-show="CBDATA.equifax.equifaxScore" style="font-weight:bold;color:#ccc;">EQUIFAX REPORT</h3>'+
     '<iframe ng-show="CBDATA.equifax.reportHtml" id="{{CBDATA._equifaxId}}" style="border:0;width:100%;height:500px;"></iframe>'+
     '<div ng-hide="CBDATA.equifax.reportHtml">'+
-        '<center><b style="color:tomato">{{CBDATA.customer.first_name||CBDATA.customerId}} - EQUIFAX Scores NOT available</b></center>'+
+        '<center><b style="color:tomato">{{CBDATA.customer.first_name||CBDATA.customerId}} - Equifax Scores NOT available</b></center>'+
     '</div>'+
 '</div>';
 var INDIVIDUAL_HTML =
@@ -321,10 +320,6 @@ var INDIVIDUAL_HTML =
 '</div>';
     var CIBIL_HTML =
 '<div>'+
-    '<h3 ng-show="CBDATA.cibil.pdfRender" style="font-weight:bold;color:#ccc;">CIBIL REPORT</h3>'+
-    '<h4 style="padding:5px" ng-show="CBDATA.cibil.pdfRender"><span style="font-weight:bold">{{CBDATA.customer.first_name||CBDATA.customerId}}</span></h4>'+
-    '<div ng-show="CBDATA.cibil.pdfRender" style="overflow: scroll;" id = "{{CBDATA._cibilPdfId}}"></div>'+
-
     '<h3 ng-show="CBDATA.cibil.cibilScore.length" style="font-weight:bold;color:#ccc;">CIBIL REPORT</h3>'+
     '<h4 style="padding:5px" ng-show="CBDATA.cibil.cibilScore.length"><span style="font-weight:bold">{{CBDATA.customer.first_name||CBDATA.customerId}}</span><span class="pull-right">DATE: <b>{{CBDATA.cibil.dateOfIssue|userDate}}</b></span></h4>'+
 
@@ -453,7 +448,7 @@ var INDIVIDUAL_HTML =
         '</tr>'+
     '</table>'+
 
-    '<div ng-hide="CBDATA.cibil.cibilScore.length || CBDATA.cibil.pdfRender">'+
+    '<div ng-hide="CBDATA.cibil.cibilScore.length">'+
         '<center><b style="color:tomato">{{CBDATA.customer.first_name||CBDATA.customerId}} - CIBIL Scores NOT available</b></center>'+
     '</div>'+
 
@@ -540,13 +535,6 @@ var INDIVIDUAL_HTML =
                     bureauPromise.then(function(httpres) {
                         // Data processing for UI - starts
                         // CIBIL
-                        if (httpres && httpres.cibil && typeof httpres.cibil.fileId){
-                            var fileId = httpres.cibil.fileId;
-                            httpres.cibil = {};
-                            httpres.cibil.pdfRender = true;
-                            httpres._cibilPdfId = httpres.customerId+"cbpdf";
-                            httpres._cbilFileId = fileId;
-                        }
                         if (httpres && httpres.cibil && httpres.cibil.cibilLoanDetails && httpres.cibil.cibilLoanDetails.length) {
                             for (i in httpres.cibil.cibilLoanDetails) {
                                 var cld = httpres.cibil.cibilLoanDetails[i];
@@ -702,31 +690,6 @@ var INDIVIDUAL_HTML =
             if (v.individual && v.individual.reportHtml) {
                 $('#individual_'+k)[0].contentWindow.document.write(v.individual.reportHtml);
             }
-            if (v.cibil && v.cibil.pdfRender){
-                var url = Files.getFileDownloadURL(v._cbilFileId);
-                pdfjsLib.getDocument(url).then(doc =>{
-                            var viewer = document.getElementById(v._cibilPdfId);
-                            while(viewer.firstChild)
-                                viewer.removeChild(viewer.firstChild);
-                            for (var i=1;i<=doc.numPages;i++){
-                                var mycanvas = document.createElement("canvas");
-                                mycanvas.className = 'pdf-page-canvas'; 
-                                viewer.appendChild(mycanvas);
-
-                                (function(mycanvas){
-                                    doc.getPage(i).then(page => {
-                                        var viewport = page.getViewport(viewStyle);
-                                        mycanvas.width = viewport.width;
-                                        mycanvas.height = viewport.height;
-                                        page.render({
-                                            canvasContext:mycanvas.getContext('2d'),
-                                            viewport:viewport
-                                        })
-                                    })
-                                })(mycanvas);
-                            }
-                        })
-            }
         });
     };
 
@@ -735,7 +698,6 @@ var INDIVIDUAL_HTML =
         "title": "",
         "subTitle": "",
         initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
-            viewStyle = Utils.isCordova ? 1 : 2;
             model.currentStage = bundleModel.currentStage;
             model.CBType= SessionStore.getGlobalSetting("CBCheckType");
             if(model.CBType){
@@ -744,7 +706,7 @@ var INDIVIDUAL_HTML =
             //model.CBType = JSON.parse(SessionStore.getGlobalSetting("CBCheckType").replace(/'/g, '"'));
             if (model.CBType && model.CBType.length) {
                 for (i in model.CBType) {
-                    (model.CBType[i] == "CIBIL" || model.CBType[i] == "CIBILCR" )?model.CIBIL = true:(model.CBType[i] == "BASE"?model.BASE = true:(model.CBType[i] == "EQUIFAX"?model.EQUIFAX = true:(model.CBType[i] == "CHMHUB"?model.CHMHUB=true:(model.CBType[i] == "INDIVIDUAL"?model.INDIVIDUAL=true:false))));
+                    (model.CBType[i] == "CIBIL")?model.CIBIL = true:(model.CBType[i] == "BASE"?model.BASE = true:(model.CBType[i] == "EQUIFAX"?model.EQUIFAX = true:(model.CBType[i] == "CHMHUB"?model.CHMHUB=true:(model.CBType[i] == "INDIVIDUAL"?model.INDIVIDUAL=true:false))));
                 }
             } else {
                 model.CIBIL = true;
@@ -766,7 +728,7 @@ var INDIVIDUAL_HTML =
         form: [
             {
                 type: "button",
-                title: "REFRESH",
+                title: "Refresh",
                 notitle: true,
                 onClick: function(model, formCtrl) {
                     refreshCB(model).then(function() {
@@ -790,7 +752,7 @@ var INDIVIDUAL_HTML =
                 "items": [
                     {
                         type: "section",
-                        html: '<div ng-init="CBDATA=model.applicant">' +'<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+CIBIL_HTML+'</div>'+'<div ng-show="model.EUQIFAX">'+EQUIFAX_HTML+'</div>'+'<div ng-show="model.INDIVIDUAL">'+INDIVIDUAL_HTML+'</div>'+'<div ng-show="model.CHMHUB">'+IDENCHECK_HTML+'</div></div>'
+                        html: '<div ng-init="CBDATA=model.applicant">' + '<div ng-show="model.BASE">'+HIGHMARK_HTML+'</div>'+'<div ng-show="model.CIBIL">'+ CIBIL_HTML +'</div>'+ '<div ng-show="model.EQUIFAX">'+EQUIFAX_HTML+'</div>'+'<div ng-show="model.CHMHUB">'+IDENCHECK_HTML+'</div>'+'<div ng-show="model.INDIVIDUAL">'+INDIVIDUAL_HTML+'</div>'+'</div>'
                     }
                 ]
             },

@@ -115,12 +115,8 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
     var branch = SessionStore.getBranch();
     var scoreName;
 
-    function removeNullIn(prop, obj) {
-        var pr = obj[prop];
-        if (pr === null || pr === undefined) delete obj[prop];
-        else if (typeof pr === 'object') for (var i in pr) removeNullIn(i, pr);
-    }
     var prepareData = function(res, model) {
+
         model.enterpriseDetails = res[0];
         model.scoreDetails = [res[1], res[2], res[3], res[4]];
         model.c = res[25].summary;
@@ -161,15 +157,12 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
         model.nonMachineryDetails = res[24];
         model.hypothecationType = res[25];
 
+
         model.enterpriseDetails.columns = model.enterpriseDetails.columns.concat(model.ratioDetails.columns);
         model.ratioDetails.data[0] = _.omit(model.ratioDetails.data[0],['Average Bank Deposit']);
         model.enterpriseDetails.data[0] = _.omit(model.enterpriseDetails.data[0],['Average Bank Balances']);
-        var tempRatioDetails=model.ratioDetails.data[0];
-        for (var i in tempRatioDetails) {
-            removeNullIn(i, tempRatioDetails);
-        }
-        //_.merge(model.enterpriseDetails.data[0],model.ratioDetails.data[0]);
-        _.merge(model.enterpriseDetails.data[0], tempRatioDetails);
+        _.merge(model.enterpriseDetails.data[0],model.ratioDetails.data[0]);
+
         /* Populate values for Balance Sheet */
         model.assetsAndLiabilities = {};
         model.assetsAndLiabilities.cashInBank = model.balanceSheet.data[0]['Cash in bank'];
@@ -923,19 +916,19 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
             ]
         });
 
-        // var personalBankStmtSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.personalBankStmtSummary'></irf-simple-summary-table>";
-        // form.push({
-        //      type: "box",
-        //     colClass: "col-sm-12 table-box",
-        //     title: model.personalBankStmtSummary.title,
-        //     items: [
-        //         {
-        //             type: "section",
-        //             colClass: "col-sm-12",
-        //             html: personalBankStmtSummaryTable
-        //         }
-        //     ]
-        // });
+        var personalBankStmtSummaryTable = "<irf-simple-summary-table irf-table-def = 'model.personalBankStmtSummary'></irf-simple-summary-table>";
+        form.push({
+             type: "box",
+            colClass: "col-sm-12 table-box",
+            title: model.personalBankStmtSummary.title,
+            items: [
+                {
+                    type: "section",
+                    colClass: "col-sm-12",
+                    html: personalBankStmtSummaryTable
+                }
+            ]
+        });
 
         form.push({
              type: "box",
@@ -945,7 +938,7 @@ function($log, $q, Enrollment, SchemaResource, PageHelper,formHelper,elementsUti
                 {
                     type: "section",
                     colClass: "col-sm-12",
-                    html: '<div ng-repeat="bankAccount in model.bankAccountDetails.BankAccounts"><table class="table table-condensed" style="width:50%"><colgroup><col width="40%"><col width="60%"></colgroup><tbody><tr class="table-sub-header"><td>{{ "ACCOUNT_NAME" | translate }}</td><td>{{ bankAccount["Account Holder Name"] }}</td></tr><tr><td> {{ "LOAN_RELATION" | translate }}</td><td>{{ bankAccount["Customer Relation"] }}</td></tr><tr><td>{{ "ACCOUNT_TYPE" | translate }}</td><td>{{ bankAccount["Account Type"] }}</td></tr><tr><td>{{ "BANK_NAME" | translate }}</td><td>{{ bankAccount["Bank Name"] }}</td></tr><tr><td>{{ "ACCOUNT_NUMBER" | translate }}</td><td>{{ bankAccount["Account Number"] }}</td></tr><tr><td>{{ "IFS_CODE" | translate }}</td><td>{{ bankAccount["IFS Code"] }}</td></tr><tr><td>{{ "LIMIT" | translate }}</td><td>{{ bankAccount["Limit"] }}</td></tr><tr><td>{{ "Preffered Bank" | translate }}</td><td>{{ bankAccount["Preffered Bank"] }}</td></tr><tr><td>{{ "OUTSTANDING_BALANCE" | translate }}</td><td>{{ bankAccount["Sanctioned Amount"] }}</td></tr></tbody></table><div class="clearfix"></div><table class="table table-condensed"><colgroup><col width="20%"><col width="20%"><col width="20%"><col width="20%"><col width="20%"></colgroup><thead><tr><th> {{ "MONTH" | translate }}</th><th> {{ "BANK_BALANCE" | translate }}</th><th> {{ "Total Deposits" | translate }}</th><th> {{ "Buyer Deposits" | translate }}</th><th> {{ "EMI_BOUNCED" | translate }}</th><th> {{ "NO_OF_CHEQUE_BOUNCED_SP" | translate }}</th></tr></thead><tbody><tr ng-repeat="bankStatement in bankAccount.BankStatements"><td>{{ bankStatement["Month"] }}</td><td>{{ bankStatement["Balance"] | irfCurrency}}</td><td>{{ bankStatement["Total_Deposit"] | irfCurrency}}</td><td>{{ bankStatement["Deposits"] | irfCurrency}}</td><td>{{ bankStatement["EMI Bounced"] }}</td><td>{{ bankStatement["Non-EMI Cheque Bounced"] }}</td></tr><tr class="top-bar with-bold"><td></td><td>{{ "AVERAGE_BANK_BALANCE" | translate }} <br /> {{ bankAccount["Average Bank Balance"] | irfCurrency}}</td><td>{{ "AVERAGE_BANK_DEPOSIT" | translate }} <br /> {{ bankAccount["Average Bank Deposit"] | irfCurrency}}</td><td>{{ "TOTAL_EMI_BOUNCED" | translate }} <br /> {{ bankAccount["Total EMI Bounced"] }}</td><td>{{ "TOTAL_CHEQUEU_BOUNCED_NON_EMI" | translate }} <br /> {{ bankAccount["Total Cheque Bounced (Non EMI)"] }}</td></tr></tbody></table> <br/><hr class="dotted"> <br/></div>'
+                    html: '<div ng-repeat="bankAccount in model.bankAccountDetails.BankAccounts"><table class="table table-condensed" style="width:50%"><colgroup><col width="40%"><col width="60%"></colgroup><tbody><tr class="table-sub-header"><td>{{ "ACCOUNT_NAME" | translate }}</td><td>{{ bankAccount["Account Holder Name"] }}</td></tr><tr><td> {{ "LOAN_RELATION" | translate }}</td><td>{{ bankAccount["Customer Relation"] }}</td></tr><tr><td>{{ "ACCOUNT_TYPE" | translate }}</td><td>{{ bankAccount["Account Type"] }}</td></tr><tr><td>{{ "BANK_NAME" | translate }}</td><td>{{ bankAccount["Bank Name"] }}</td></tr><tr><td>{{ "ACCOUNT_NUMBER" | translate }}</td><td>{{ bankAccount["Account Number"] }}</td></tr><tr><td>{{ "IFS_CODE" | translate }}</td><td>{{ bankAccount["IFS Code"] }}</td></tr><tr><td>{{ "LIMIT" | translate }}</td><td>{{ bankAccount["Limit"] }}</td></tr><tr><td>{{ "OUTSTANDING_BALANCE" | translate }}</td><td>{{ bankAccount["Sanctioned Amount"] }}</td></tr></tbody></table><div class="clearfix"></div><table class="table table-condensed"><colgroup><col width="20%"><col width="20%"><col width="20%"><col width="20%"><col width="20%"></colgroup><thead><tr><th> {{ "MONTH" | translate }}</th><th> {{ "BANK_BALANCE" | translate }}</th><th> {{ "DEPOSITS" | translate }}</th><th> {{ "EMI_BOUNCED" | translate }}</th><th> {{ "NO_OF_CHEQUE_BOUNCED_SP" | translate }}</th></tr></thead><tbody><tr ng-repeat="bankStatement in bankAccount.BankStatements"><td>{{ bankStatement["Month"] }}</td><td>{{ bankStatement["Balance"] | irfCurrency}}</td><td>{{ bankStatement["Deposits"] | irfCurrency}}</td><td>{{ bankStatement["EMI Bounced"] }}</td><td>{{ bankStatement["Non-EMI Cheque Bounced"] }}</td></tr><tr class="top-bar with-bold"><td></td><td>{{ "AVERAGE_BANK_BALANCE" | translate }} <br /> {{ bankAccount["Average Bank Balance"] | irfCurrency}}</td><td>{{ "AVERAGE_BANK_DEPOSIT" | translate }} <br /> {{ bankAccount["Average Bank Deposit"] | irfCurrency}}</td><td>{{ "TOTAL_EMI_BOUNCED" | translate }} <br /> {{ bankAccount["Total EMI Bounced"] }}</td><td>{{ "TOTAL_CHEQUEU_BOUNCED_NON_EMI" | translate }} <br /> {{ bankAccount["Total Cheque Bounced (Non EMI)"] }}</td></tr></tbody></table> <br/><hr class="dotted"> <br/></div>'
                 }
             ]
         });

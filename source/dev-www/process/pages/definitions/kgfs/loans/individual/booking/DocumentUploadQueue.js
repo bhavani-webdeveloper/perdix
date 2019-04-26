@@ -171,7 +171,6 @@ define({
                     },
                     getListItem: function(item){
                         return [
-                            item.loanType,
                             item.customerName ,
                             item.urn,
                             item.accountNumber,
@@ -188,9 +187,6 @@ define({
                     getColumns: function() {
 						return [
                         {
-                            title: 'LOAN_ID',
-                            data: 'id'
-                        },{
 							title: 'CUSTOMER_NAME',
 							data: 'customerName'
                         },{
@@ -203,10 +199,7 @@ define({
 
 							title: 'LOAN_AMOUNT_SANCTIONED',
 							data: 'loanAmount'
-						},{
-                            title: 'PRODUCT_TYPE',
-                            data: 'loanType'
-                        }
+						}
                     ]
 					},
                     getActions: function(){

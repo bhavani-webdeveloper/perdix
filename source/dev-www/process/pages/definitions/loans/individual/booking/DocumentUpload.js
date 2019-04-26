@@ -1397,7 +1397,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.DocumentUpload"), 
                     }
                 
                     model.loanAccount.loanDocuments=[];
-
                     if (model.allExistingDocs) {
                        
                         for (var i = 0; i<model.allExistingDocs.length; i++) {

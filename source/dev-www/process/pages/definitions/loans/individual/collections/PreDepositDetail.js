@@ -148,13 +148,13 @@ define({
                         
                     */
                     if (PageHelper.isFormInvalid(formCtrl)) {
-                        return false;
-                    }
-                    formCtrl.scope.$broadcast('schemaFormValidate');
+                            return false;
+                        }
+                        formCtrl.scope.$broadcast('schemaFormValidate');
 
-                    if (formCtrl && formCtrl.$invalid) {
-                        PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
-                        return false;
+                        if (formCtrl && formCtrl.$invalid) {
+                            PageHelper.showProgress("loan", "Your form have errors. Please fix them.", 5000);
+                            return false;
                     }
                     var count = 0;
                     _.forEach( model.collectionDetails, function(collectionDetail){
@@ -204,7 +204,7 @@ define({
                                         irfNavigator.goBack();
                                     }, function (httpres) {
                                         PageHelper.showProgress("PreDeposit", "Error in proceeding to Deposit", 5000);
-                                        PageHelper.showErrors(httpres);
+
                                     })
                                     .finally(function () {
                                         PageHelper.hideBlockingLoader();
@@ -224,7 +224,6 @@ define({
                                         irfNavigator.goBack();
                                     }, function (httpres) {
                                         PageHelper.showProgress("PreDeposit", "Error in proceeding to Deposit", 5000);
-                                        PageHelper.showErrors(httpres);
 
                                     })
                                     .finally(function () {

@@ -400,7 +400,7 @@ irf.commons.provider("formHelper", function() {
 		}
 		for (i = 0; i < list.length; i++) {
 			node = list[i];
-			if (node[parentId] && node[parentId] !== "0" && list[map[node[parentId]]]) {
+			if (node[parentId] && node[parentId] !== "0") {
 				// if you have dangling branches check that map[node[parentId]] exists
 				list[map[node[parentId]]].children.push(node);
 			} else {

@@ -39,7 +39,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                     },
                     "EnterpriseInformation.centreId":{
                         "enumCode": "usercentre",
-                        "required": true
                     },
                     "EnterpriseInformation.rentLeaseStatus": {
                          "schema": {

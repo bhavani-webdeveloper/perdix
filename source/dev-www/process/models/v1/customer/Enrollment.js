@@ -618,8 +618,7 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
             "dist":null,
             "state":null,
             "pc":null,
-            "po": null,
-            'fatherName':null,
+            "po": null
         };
         var aadhaarDoc = $.parseXML(aadhaarXml);
         aadhaarXmlData = $(aadhaarDoc).find('PrintLetterBarcodeData');
@@ -630,9 +629,6 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
             aadhaarData['pc'] = Number(aadhaarData['pc']);
             var g = aadhaarData['gender'].toUpperCase();
             aadhaarData['gender'] = (g === 'M' || g === 'MALE') ? 'MALE' : ((g === 'F' || g === 'FEMALE') ? 'FEMALE' : 'OTHERS');
-            var value = aadhaarData['gender'] == 'MALE' ? 'S/O: ' : 'D/O: ';
-            if(_.includes(aadhaarData['co'], value))
-                aadhaarData['fatherName'] = aadhaarData['co'].replace(value,'');
         }
         return aadhaarData;
     };
@@ -650,8 +646,6 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
         model.customer.street = aadhaarData.street;
         model.customer.locality = aadhaarData.loc;
         model.customer.villageName = aadhaarData.vtc;
-        if (aadhaarData.fatherName !=null)
-        model.customer.fatherFirstName = aadhaarData.fatherName;
         //model.customer.district = aadhaarData.dist;
         //model.customer.state = aadhaarData.state;
         model.customer.pincode = aadhaarData.pc;
@@ -685,7 +679,6 @@ function($log, $q, Enrollment,formHelper, PageHelper, irfProgressMessage, Utils,
         if (!model.customer.identityProof && !model.customer.identityProofNo) {
             model.customer.identityProof = 'Aadhar card';
             model.customer.identityProofNo = aadhaarData.uid;
-            model.customer.aadhaarNo = aadhaarData.uid;
         }
         if (!model.customer.addressProof && !model.customer.addressProofNo) {
             model.customer.addressProof = 'Aadhar card';

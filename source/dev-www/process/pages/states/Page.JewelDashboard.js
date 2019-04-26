@@ -92,7 +92,7 @@ irf.pages.controller("JewelDashboardCtrl",['$log', '$scope', 'PagesDefinition', 
 							//"toDate"			  	: '',	
 							//"urnNo"				: '',
 							//"accountNo"			: '',
-							"transitStatus"			: 'RETURN_REQUESTED',
+							"transitStatus"			: 'RETURN_REQUEST',
 							//"sourceBranchId"	    : originBranchId,	
 							//"destinationBranchId" : originBranch
 							// 'page'				: 1,

@@ -108,23 +108,28 @@ irf.pageCollection.factory(irf.page("jewelloan.BranchJewelQueue"),
 							var sourceBranchName = null;
 							var destinationBranchName = null;
 	
-							for (var i=0; i<response.length; i++){								
+							for (var i=0; i<response.length; i++){
 								for (var j=0; j<branches.length; j++){
 									var branch = branches[j];
-									if (branch.code == response[i].sourceBranchId){
-										 response[i].sourceBranch = branch.name;
-									}		 
+									if (branch.code == response[i].sourceBranchId)
+								 		sourceBranchName = branch.name;
 								 	if (response[i].destinationBranchId != null && branch.code == response[i].destinationBranchId){	
-										response[i].destinationBranch	= branch.name ;	
+										 destinationBranchName = branch.name ;
+										 if	(sourceBranchName!=null && destinationBranchName!=null)
+									 		break; 	
 									 }	
-									 else{
-										response[i].destinationBranch = "";
-									 }
+									 if (response[i].destinationBranchId == null && sourceBranchName!=null )
+									 		break;
 								}
+							}	
+
+							for (var i=0;i<response.length;i++){
 								response[i].customerFullName 	= response[i].customerFirstName + " "+(response[i].customerLastName!=null?response[i].customerLastName:"");
 								response[i].transitStatus    	= transitStatusValue;
+								response[i].sourceBranch 	 	= sourceBranchName;
+								response[i].destinationBranch	= destinationBranchName;
 								response[i].disbursedAmount     = (response[i].disbursedAmountInPaisa/100);
-							}	
+								}
 							return response;
 						}
 						return [];
@@ -164,32 +169,41 @@ irf.pageCollection.factory(irf.page("jewelloan.BranchJewelQueue"),
 									title: 'Destination Branch',
 									data: 'destinationBranch'
 								},{
-									title: 'Customer Name',
+									title: 'Customer FullName',
 									data: 'customerFullName'
-								},{
-									title: 'URN No',
-									data: 'urnNo'
 								},{
 									title: 'Account No',
 									data: 'accountNo'
 								},{
-									title: 'Disbursement Date',
-									data: 'loanDisbursementDate'
-								},{
-									title: 'Disbursed Amount',
-									data: 'disbursedAmount'
+									title: 'URN No',
+									data: 'urnNo'
 								},{
 									title: 'Jewel Pouch No',
 									data: 'jewelPouchNo'
+								}, {
+									title: 'Disbursed Amount',
+									data: 'disbursedAmount'
 								},{
+									title: 'Loan Disbursement Date',
+									data: 'loanDisbursementDate'
+								},
+								// {
+								// 	title: 'Investor',
+								// 	data: 'investor'
+								// },{
+								// 	title: 'Rejected Reason',
+								// 	data: 'rejectedReason'
+								// },
+								{
 									title: 'Remarks',
 									data: 'remarks'
-								},{
-									title: 'Reject Reason',
-									data: 'rejectedReason'
-								}
+								},
+								// {
+								// 	title: 'Transit Status',
+								// 	data: 'transitStatus'
+								// }
 							];
-                    },
+					},
 					getActions: function() {
 						return [];
 					},

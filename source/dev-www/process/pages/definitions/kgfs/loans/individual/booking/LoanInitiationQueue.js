@@ -99,7 +99,7 @@ define({
                     },
                     getListItem: function (item) {
                         return [
-                            "{{'PRODUCT_TYPE'|translate}} : " + item.loanType,
+
                             "{{'CUSTOMER_NAME'|translate}} : " + item.customerName,
                             "{{'URN_NO'|translate}} : " + item.urn,
                             "{{'LOAN_AMOUNT'|translate}} : " + item.loanAmount,
@@ -116,9 +116,6 @@ define({
                     getColumns: function() {
 						return [
                         {
-                            title: 'LOAN_ID',
-                            data: 'id'
-                        },{
                             title: 'CUSTOMER_NAME',
                             data: 'customerName'
                         },{
@@ -127,9 +124,6 @@ define({
                         },{
 							title: 'LOAN_AMOUNT',
 							data: 'loanAmount'
-                        },{
-                            title: 'PRODUCT_TYPE',
-                            data: 'loanType'
                         }
                     ]
 					},

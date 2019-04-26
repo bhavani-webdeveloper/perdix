@@ -1240,7 +1240,7 @@ define([],function(){
                         if(model.loanAccount.currentStage && model.loanAccount.currentStage == 'KYC'){
                             for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
                                 if (model.loanAccount.loanCustomerRelations[i].customerId) {
-                                    if(model.loanAccount.loanCustomerRelations[i].relation!="Guarantor" && !model.loanAccount.loanCustomerRelations[i].equifaxCompleted){
+                                    if(!model.loanAccount.loanCustomerRelations[i].equifaxCompleted){
                                         PageHelper.showProgress("loan-create","CB Check pending. Please do a CB check and then proceed",5000);
                                         return false;
                                     }                            

@@ -968,7 +968,6 @@ define({
                 "overrideType": "default-view",
                 "readonly": true,
                 "title": "Proxy Indicators",
-                "condition": "model.loanAccount.currentStage != 'ApplicationReview'",
                 "items": [{
                     "type": "section",
                     "htmlClass": "col-sm-12",

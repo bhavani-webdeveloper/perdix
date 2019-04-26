@@ -15,6 +15,7 @@ define({
 				model.bundlePageObj = bundlePageObj;
 				model.bundleModel = bundleModel;
 				self = this;
+
 				self.form = [{
 					"type": "section",
 					"html": '<br><div style="text-align:center">Waiting for summary..<br><br><ripple-loader></ripple-loader></div>'
@@ -101,14 +102,7 @@ self.renderForm = function() {
 				"data": "limit",
 				"className": "text-right",
 				"render": currencyRightRender
-			},
-			{
-				"title": "Preferred bank account",
-				"data": "isTransactionAccount",
-				"className": "text-right",
-				//"render": currencyRightRender
-			}//•	Average Monthly deposit should show average monthly buyer deposit
-		];
+			}];
 		}
 	});
 	for (i in model.business.customerBankAccounts) {
@@ -129,21 +123,6 @@ self.renderForm = function() {
 					}
 				}, {
 					"title": "Total Deposit",
-					"data": "udf1",
-					"className": "text-right",
-					render: function(data, type, full, meta){
-						if(full.startMonth == "Average"){
-							if(full.averageDepositsUdf<0) return '-'+ irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(Math.abs(full.averageDepositsUdf), null, null, "decimal") ;
-							return irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(full.averageDepositsUdf, null, null, "decimal") ;
-							}
-						if(data<0)	
-						return '-'+ irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(Math.abs(data), null, null, "decimal") ;
-						return irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(Math.abs(data), null, null, "decimal") ;
-								
-					}
-				},
-				{
-					"title": "Buyer Deposit",
 					"data": "totalDeposits",
 					"className": "text-right",
 					render: function(data, type, full, meta){
@@ -156,8 +135,7 @@ self.renderForm = function() {
 						return irfElementsConfig.currency.iconHtml+ irfCurrencyFilter(Math.abs(data), null, null, "decimal") ;
 								
 					}
-				}
-				, {
+				}, {
 					"title": "Total Balance",
 					"data": "balanceAsOn15th",
 					"className": "text-right",
@@ -396,7 +374,7 @@ self.renderForm = function() {
 				"orientation": "vertical",
 				"items": [{
 					"key": "business.summary.bankStatement.averageMonthlyDeposit",
-					"title": "Average Monthly Buyer Deposit",
+					"title": "Average Monthly Deposit",
 					"type": "amount"
 				}, {
 					"key": "business.summary.bankStatement.averageMonthlyWithdrawal",
@@ -1159,7 +1137,7 @@ self.renderReady = function(eventName) {
 							"color": "firebrick",
 							"values": []
 						}];
-						var totalAverageDeposits = 0;var totalAverageDepositsUdf = 0;
+						var totalAverageDeposits = 0;
 						var totalAverageWithdrawals = 0;
 						var totalAvgbalanceon15 = 0;
 						var totalChequeBounces = 0;
@@ -1168,7 +1146,6 @@ self.renderReady = function(eventName) {
 						for (i = 0; i < model.business.customerBankAccounts.length; i++) {
 							var acc = model.business.customerBankAccounts[i];
 							var totalDeposits = 0;
-							var totalDepositsUdf = 0;
 							var totalWithdrawals = 0;
 							var balnceon15 = 0;
 							var noOfEmiChequeBounced = 0;
@@ -1176,10 +1153,6 @@ self.renderReady = function(eventName) {
 							for (j in acc.bankStatements) {
 								var stat = acc.bankStatements[j];
 								totalDeposits += stat.totalDeposits;
-								if(stat.udf1){
-									//parseInt(stat.udf1);
-									totalDepositsUdf += parseInt(stat.udf1);
-								}
 								totalWithdrawals += stat.totalWithdrawals;
 								balnceon15 += stat.balanceAsOn15th;
 								noOfEmiChequeBounced += stat.noOfEmiChequeBounced;
@@ -1212,16 +1185,13 @@ self.renderReady = function(eventName) {
 								"averageWithdrawals": totalWithdrawals / acc.bankStatements.length,
 								"Avgbalnceon15": balnceon15 / acc.bankStatements.length,
 								"noOfEmiChequeBounced": noOfEmiChequeBounced,
-								"noOfChequeBounced": noOfChequeBounced,
-								"averageDepositsUdf":totalDepositsUdf / acc.bankStatements.length,
+								"noOfChequeBounced": noOfChequeBounced
 							};
 							totalAverageDeposits += acc.total.averageDeposits;
 							totalAverageWithdrawals += acc.total.averageWithdrawals;
 							totalAvgbalanceon15 += acc.total.Avgbalnceon15,
 							totalEMIBounces += acc.total.noOfEmiChequeBounced;
 							totalChequeBounces += acc.total.noOfChequeBounced;
-							totalAverageDepositsUdf += acc.total.averageDepositsUdf;
-
 							acc.bankStatements.push(acc.total);
 						}
 						

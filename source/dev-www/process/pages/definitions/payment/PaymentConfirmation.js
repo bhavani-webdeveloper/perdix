@@ -53,7 +53,7 @@ define([], function() {
                                             "category": "ACH",
                                             "subCategory": "cat2",
                                             "type": "file",
-                                            "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain",
+                                            "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                                             customHandle: function(file, progress, modelValue, form, model) {
                                                 Payment.paymentConformation(file, progress).then(function(res) {
                                                     PageHelper.showProgress('payment', 'payment confirm.', 5000);                                   

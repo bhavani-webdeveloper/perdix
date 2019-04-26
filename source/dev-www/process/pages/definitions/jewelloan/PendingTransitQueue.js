@@ -145,35 +145,38 @@ irf.pageCollection.factory(irf.page("jewelloan.PendingTransitQueue"),
 									title: 'Destination Branch',
 									data: 'destinationBranch'
 								},{
-									title: 'Customer Name',
-									data: 'customerFullName'
+									title: 'Account No',
+									data: 'accountNo'
 								},{
 									title: 'URN No',
 									data: 'urnNo'
 								},{
-									title: 'Account No',
-									data: 'accountNo'
-								},{
-									title: 'Disbursement Date',
-									data: 'loanDisbursementDate'
-								},{
-									title: 'Disbursed Amount',
-									data: 'disbursedAmount'
+									title: 'Jewel Pouch No',
+									data: 'jewelPouchNo'
 								},{
 									title: 'Transit Status',
 									data: 'transitStatus'
 								},{
-									title: 'Jewel Pouch No',
-									data: 'jewelPouchNo'
+									title: 'Customer FullName',
+									data: 'customerFullName'
+								}, {
+									title: 'Disbursed Amount',
+									data: 'disbursedAmount'
+								},{
+									title: 'Loan Disbursement Date',
+									data: 'loanDisbursementDate'
+								},{
+									title: 'Investor',
+									data: 'investor'
+								},{
+									title: 'Rejected Reason',
+									data: 'rejectedReason'
 								},{
 									title: 'Remarks',
 									data: 'remarks'
-								},{
-									title: 'Reject Reason',
-									data: 'rejectedReason'
 								}
 							];
-                    },
+					},
 					getActions: function() {
 						return [];
 					},

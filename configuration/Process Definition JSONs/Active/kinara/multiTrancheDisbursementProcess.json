@@ -110,8 +110,7 @@
          ],
          "notRequiredForTranches":[
 
-         ],
-         "triggerPaymentStage":true
+         ]
       },      
       {
          "order":9,

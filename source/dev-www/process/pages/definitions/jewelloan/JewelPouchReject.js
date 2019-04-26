@@ -55,45 +55,49 @@ function($log,$stateParams,formHelper,PageHelper, Utils,irfNavigator,JewelLoan,S
                         "pageLength": 10,
                     },
                     getColumns: function() {
-						return [{
-									title: 'ID',
-									data: 'id'
-								},{
-									title: 'Source Branch',
-									data: 'sourceBranch'
-								},{
-									title: 'Destination Branch',
-									data: 'destinationBranch'
-								},{
-									title: 'Customer Name',
-									data: 'customerFullName'
-								},{
-									title: 'URN No',
-									data: 'urnNo'
-								},{
-									title: 'Account No',
-									data: 'accountNo'
-								},{
-									title: 'Disbursement Date',
-									data: 'loanDisbursementDate'
-								},{
-									title: 'Disbursed Amount',
-									data: 'disbursedAmount'
-								},{
-									title: 'Transit Status',
-									data: 'transitStatus'
-								},{
-									title: 'Jewel Pouch No',
-									data: 'jewelPouchNo'
-								},{
-									title: 'Remarks',
-									data: 'remarks'
-								},{
-									title: 'Reject Reason',
-									data: 'rejectedReason'
-								}
-							];
-                    },
+                        return [{
+                            title: 'ID',
+                            data: 'id'
+                        },{
+                            title: 'Source Branch',
+                            data: 'sourceBranch'
+                        },{
+                            title: 'Destination Branch',
+                            data: 'destinationBranch'
+                        },{
+                            title: 'Account No',
+                            data: 'accountNo'
+                        },{
+                            title: 'URN No',
+                            data: 'urnNo'
+                        },{
+                            title: 'Jewel Pouch No',
+                            data: 'jewelPouchNo'
+                        },{
+                            title: 'Transit Status',
+                            data: 'transitStatus'
+                        },{
+                            title: 'Customer FullName',
+                            data: 'customerFullName'
+                        }, {
+                            title: 'Disbursed Amount',
+                            data: 'disbursedAmount'
+                        },{
+                            title: 'Loan Disbursement Date',
+                            data: 'loanDisbursementDate'
+                        },{
+                            title: 'Investor',
+                            data: 'investor'
+                        }
+                        ,{
+                        	title: 'Rejected Reason',
+                        	data: 'rejectedReason'
+                        },{
+                        	title: 'Remarks',
+                        	data: 'remarks'
+                        }
+                    ];
+            },
                 }]
             },   
             {
@@ -110,7 +114,7 @@ function($log,$stateParams,formHelper,PageHelper, Utils,irfNavigator,JewelLoan,S
                             "title" : "Remarks",
                             "type"  : "textarea",
                             key     : "jewelloanResponse.remarks",
-                            required: true
+                            required: false
                         }
                     ]
             },
@@ -230,7 +234,7 @@ function($log,$stateParams,formHelper,PageHelper, Utils,irfNavigator,JewelLoan,S
 
                     if((model.jewelloanResponse[i].transitStatus && model.jewelloanResponse[i].transitStatus.toUpperCase() == 'PENDING_TRANSIT') &&
                         (model.jewelloanResponse[i].originBranchId != model.jewelloanResponse[i].sourceBranchId)){
-                            model.jewelloanResponse[i].status =  "DESTINATION" 
+                            model.jewelloanResponse[i].status =  "RETURN_REQUESTED" 
                      }
                      else {
                         model.jewelloanResponse[i].status =  "SOURCE" 

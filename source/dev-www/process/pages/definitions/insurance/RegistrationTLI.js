@@ -4,10 +4,10 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
        pageUID: "insurance.RegistrationTLI",
        pageType: "Engine",
        dependencies: ["$log", "$state", "$stateParams","Insurance", "SessionStore", "formHelper", "$q",
-           "PageHelper", "Utils", "PagesDefinition", "Queries", "irfProgressMessage", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator","Enrollment","BranchCreationResource"],
+           "PageHelper", "Utils", "PagesDefinition", "Queries", "irfProgressMessage", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository", "irfNavigator","Enrollment"],
 
        $pageFn: function ($log, $state, $stateParams, Insurance,SessionStore, formHelper, $q,
-                          PageHelper, Utils, PagesDefinition, Queries, PM, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator,Enrollment,BranchCreationResource) {
+                          PageHelper, Utils, PagesDefinition, Queries, PM, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository, irfNavigator,Enrollment) {
 
                            var configFile = function () {
                                return {
@@ -138,26 +138,6 @@ var getIncludes = function (model) {
              
                initialize: function (model, form, formCtrl) {
                    model.customer = {};
-                     //start
-                     var branchId = SessionStore.getBranchId();
-                     if (!Utils.isCordova) {
-                         BranchCreationResource.getBranchByID({
-                                 id: branchId
-                             },
-                             function (branchDetails) {
-                                 if (branchDetails.fingerPrintDeviceType) {
-                                     if (branchDetails.fingerPrintDeviceType == "MANTRA") {
-                                         model.fingerPrintDeviceType = branchDetails.fingerPrintDeviceType;
-                                     }
-                                 }
- 
-                                 PageHelper.hideLoader();
-                             },
-                             function (err) {
-                                 $log.info(err);
-                             }
-                         );
-                     }
                     if(_.hasIn($stateParams, "pageId") && !_.isNull($stateParams.pageId)) {
                        //PageHelper.showLoader();
                        idPresent = true;

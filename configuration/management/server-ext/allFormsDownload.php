@@ -232,13 +232,6 @@ else{
     $attachment_zip_file = $type.'_'.$record_id;
     $zipping_folder_path = $folder_path;
     $output_filename = $zipping_folder_path.'/'.$attachment_zip_file.".zip";
-    if (sizeof($individual_forms) == 0){
-        $DownloadFileName= 'No_Documents_found.pdf';
-        file_put_contents($files_folder_path.$DownloadFileName,'No Documents found');
-        $files_to_zip[] = $DownloadFileName;
-        $attachment_zip_file = 'No_Documents_found';
-        $output_filename = $zipping_folder_path.'/'.$attachment_zip_file.'.zip';
-    }
     create_zip($files_to_zip, $files_folder_path, $output_filename);
     foreach($files_to_zip AS $file_name) {
         // unlink($files_folder_path.$file_name);

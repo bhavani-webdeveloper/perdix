@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("jewelloan.ReturnRequestQueue"),
- ["$log", "formHelper","PageHelper", "JewelLoan", "$q", "SessionStore","irfNavigator","irfProgressMessage","Utils","$state",
-	function($log, formHelper,PageHelper, JewelLoan,$q, SessionStore,irfNavigator,irfProgressMessage,Utils,$state) {
+ ["$log", "formHelper","PageHelper", "JewelLoan", "$q", "SessionStore","irfNavigator","irfProgressMessage","Utils",
+	function($log, formHelper,PageHelper, JewelLoan,$q, SessionStore,irfNavigator,irfProgressMessage,Utils) {
         
             var BulkJewelPouchUpdate = function(items) {
                 $log.info("Inside submit()");
@@ -48,11 +48,7 @@ irf.pageCollection.factory(irf.page("jewelloan.ReturnRequestQueue"),
            .$promise
                 .then(function(res){
                     PageHelper.showProgress("Assign-Jewel", "Done.", 3000);
-                    // irfNavigator.go({
-					// 	state: "Page.Engine",
-					// 	pageName: "jewelloan.ReturnRequestQueue"
-					// 	});
-					$state.reload();
+                    irfNavigator.goBack();
                 }, function(httpRes){
                     PageHelper.showProgress("Assign-Jewel", "Oops. Some error occured.", 3000);
                     PageHelper.showErrors(httpRes);
@@ -65,7 +61,7 @@ irf.pageCollection.factory(irf.page("jewelloan.ReturnRequestQueue"),
         
 
         var sourceBranchId      = SessionStore.getBranchId();
-        //var destinationBranch   = SessionStore.getBranch();
+        var destinationBranch   = SessionStore.getBranch();
         var loginuser           = SessionStore.getLoginname();
 		var branch              = SessionStore.getBranch();
 		var transitStatusValue 	= 'RETURN_REQUESTED' ;
@@ -79,12 +75,12 @@ irf.pageCollection.factory(irf.page("jewelloan.ReturnRequestQueue"),
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				model.originBranch = branch;
-				//model.destinationBranch = destinationBranch;
+				model.destinationBranch = destinationBranch;
 				model.jewelloan = model.jewelloan || {};
 				$log.info("search-list sample got initialized");
 			},
 			definition: {
-				title: "SEARCH_DESTINATION_BRANCH",
+				title: "SEARCH_SOURCE_BRANCH",
 				searchForm: [
 					"*"
 				], 
@@ -215,32 +211,36 @@ irf.pageCollection.factory(irf.page("jewelloan.ReturnRequestQueue"),
 									title: 'Destination Branch',
 									data: 'destinationBranch'
 								},{
-									title: 'Customer Name',
-									data: 'customerFullName'
+									title: 'Account No',
+									data: 'accountNo'
 								},{
 									title: 'URN No',
 									data: 'urnNo'
 								},{
-									title: 'Account No',
-									data: 'accountNo'
-								},{
-									title: 'Disbursement Date',
-									data: 'loanDisbursementDate'
-								},{
-									title: 'Disbursed Amount',
-									data: 'disbursedAmount'
+									title: 'Jewel Pouch No',
+									data: 'jewelPouchNo'
 								},{
 									title: 'Transit Status',
 									data: 'transitStatus'
 								},{
-									title: 'Jewel Pouch No',
-									data: 'jewelPouchNo'
+									title: 'Customer FullName',
+									data: 'customerFullName'
+								}, {
+									title: 'Disbursed Amount',
+									data: 'disbursedAmount'
+								},{
+									title: 'Loan Disbursement Date',
+									data: 'loanDisbursementDate'
+								},{
+									title: 'Investor',
+									data: 'investor'
+								}
+								,{
+									title: 'Rejected Reason',
+									data: 'rejectedReason'
 								},{
 									title: 'Remarks',
 									data: 'remarks'
-								},{
-									title: 'Reject Reason',
-									data: 'rejectedReason'
 								}
 							];
                     },

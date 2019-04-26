@@ -24,7 +24,6 @@ import {DefaultVehicleDocumentsPolicy} from './DefaultVehicleDocumentsPolicy';
 import {DefaultCalculatedVehicleDetailsPolicy} from './DefaultCalculatedVehicleDetailsPolicy';
 import {DefaultIndividualReferencePolicy} from './DefaultIndividualReferencePolicy';
 import {LoanVirtualFieldsPolicy} from './LoanVirtualFieldsPolicy';
-import {VerifyEnrollmentSpokePolicy} from './VerifyEnrollmentSpokePolicy'
 
 export class LoanPolicyFactory implements IPolicyFactory{
 
@@ -89,8 +88,6 @@ export class LoanPolicyFactory implements IPolicyFactory{
                 return new DefaultIndividualReferencePolicy();
             case 'LoanVirtualFieldsPolicy':
                 return new LoanVirtualFieldsPolicy();
-            case 'VerifyEnrollmentSpokePolicy':
-                return new VerifyEnrollmentSpokePolicy();
             default:
                 return null;
         }

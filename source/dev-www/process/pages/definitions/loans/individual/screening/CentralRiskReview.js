@@ -92,13 +92,6 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                 minimum: 1,
                 maximum: 1,
                 order: 80
-            }, {
-                pageName: 'loans.individual.screening.detail.PortfolioAnalyticsView',
-                title: 'Portfolio Analytics',
-                pageClass: 'portfolio-analytics',
-                minimum: 1,
-                maximum: 1,
-                order: 90
             }
             ],
             "bundlePages": [],
@@ -297,13 +290,6 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.CentralRiskRevie
                                 pageClass: 'cbview',
                                 model: {
                                     loanAccount: res
-                                }
-                            });
-
-                            $this.bundlePages.push({
-                                pageClass: 'portfolio-analytics',
-                                model: {
-                                    loanId: bundleModel.loanId
                                 }
                             });
 

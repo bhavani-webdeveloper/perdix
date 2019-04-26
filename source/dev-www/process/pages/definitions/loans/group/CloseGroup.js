@@ -234,16 +234,7 @@ define({
 						}, {
 							"data": "currentStage",
 							"title": "CURRENT_STAGE"
-						},{
-							"title": "STATUS",
-							"data": "groupStatus",
-							render: function(data, type, full, meta) {
-								if (data) {
-	                                return data = full.groupStatus ? 'Open':'closed';
-	                            }
-	                            
-                            }
-						},]
+						}]
 					},
 					getActions: function() {
 						return [{

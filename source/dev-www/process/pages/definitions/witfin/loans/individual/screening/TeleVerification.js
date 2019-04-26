@@ -68,14 +68,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 maximum: 1,
                                 order:55
                             },
-                            // {
-                            //     pageName: 'witfin.loans.individual.screening.vehiclevaluation.VehicleValuation',
-                            //     title: 'VEHICLE_VALUATION',
-                            //     pageClass: 'vehicle-valuation',
-                            //     minimum: 1,
-                            //     maximum: 1,
-                            //     order:56
-                            // },
+                            {
+                                pageName: 'witfin.loans.individual.screening.vehiclevaluation.VehicleValuation',
+                                title: 'VEHICLE_VALUATION',
+                                pageClass: 'vehicle-valuation',
+                                minimum: 1,
+                                maximum: 1,
+                                order:56
+                            },
                             {
                                 pageName: 'witfin.customer.televerification',
                                 title: 'TELE_VERIFICATION',
@@ -260,12 +260,12 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-                                // $this.bundlePages.push({
-                                //     pageClass: 'vehicle-valuation',
-                                //     model: {
-                                //         loanProcess: loanProcess
-                                //     }
-                                // });
+                                $this.bundlePages.push({
+                                    pageClass: 'vehicle-valuation',
+                                    model: {
+                                        loanProcess: loanProcess
+                                    }
+                                });
 
                                 $this.bundlePages.push({
                                     pageClass: 'loan-request',

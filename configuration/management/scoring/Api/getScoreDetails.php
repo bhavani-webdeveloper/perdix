@@ -19,12 +19,12 @@ if (isset($_GET)) {
     include_once('../includes/ConfigureDbs.php');
 
     $error_log = "";
-    $tempScoreName =  $_GET['ScoreName'];
+    $tempScoreName = (!empty($_GET['ScoreName'])) ? connectDb()->getPdo()->quote($_GET['ScoreName']) : $_GET['ScoreName'];
     $NameOfTheScore = $tempScoreName;
-    $CustomerLoanId = $_GET['LoanId'];
+    $CustomerLoanId = (!empty($_GET['LoanId'])) ? intval(filter_var((connectDb()->getPdo()->quote($_GET['LoanId'])), FILTER_SANITIZE_NUMBER_INT)) : $_GET['LoanId'];
     $ScoreName =    $tempScoreName;
     $SessionUserName = "admin";
-    $isScoringOptimizationEnabled = $_GET['isScoringOptimizationEnabled'];
+    $isScoringOptimizationEnabled = (!empty($_GET['isScoringOptimizationEnabled'])) ? connectDb()->getPdo()->quote($_GET['isScoringOptimizationEnabled']) : $_GET['isScoringOptimizationEnabled'];
 
     //get all customer details from loan_accounts table
     $CustomerDetails = "SELECT
@@ -369,14 +369,14 @@ if (isset($_GET)) {
 
     //reserving the record for score details on calculation table
     $UpdateCalculation = "INSERT INTO sc_calculation ( ScoreName, ApplicationId, created_by, created_at) 
-	VALUES (:NameOfTheScore, :CustomerLoanId , :SessionUserName,NOW())";
+	VALUES (:NameOfTheScore, :CustomerLoanId , :SessionUserName,". date('Y-m-d H:i:s') . "')";
 
     try {
         $db = ConnectDb();
         $calculationTable = $db->prepare($UpdateCalculation);
-        $calculationTable->bindParam(':CustomerLoanId', $CustomerLoanId);
-        $calculationTable->bindParam(':NameOfTheScore', $NameOfTheScore);
-        $calculationTable->bindParam(':SessionUserName',$SessionUserName);
+        $calculationTable = $db->bindParam(':CustomerLoanId', $CustomerLoanId);
+        $calculationTable = $db->bindParam(':NameOfTheScore', $NameOfTheScore);
+        $calculationTable = $db->bindParam(':SessionUserName',$SessionUserName);
         $calculationTable->execute();
         $db = null;
 

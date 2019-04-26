@@ -69,8 +69,6 @@
 
 <!-- build:js js/vendor.js -->
 <!-- bower:js -->
-<script src="bower_components/pdfjs-dist/build/pdf.min.js"></script>
-<script src="bower_components/pdfjs-dist/build/pdf.worker.min.js"></script>
 <script src="bower_components/jquery/dist/jquery.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 <script src="bower_components/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
@@ -112,9 +110,6 @@
 <script src="bower_components/mathjs/dist/math.min.js"></script>
 <script src="bower_components/lz-string/libs/lz-string.min.js"></script>
 <script src="bower_components/myforce-angularjs-query-builder/query-builder-directive.js"></script>
-
-<script  src="bower_components/chart.js/dist/Chart.js" ></script>
-<script  src="bower_components/angular-chart.js/dist/angular-chart.min.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
@@ -200,13 +195,10 @@
 <script src="process/models/v1/bank/SurveyInformation.js"></script>
 <script src="process/models/v1/customer/CustomerBankBranch.js"></script>
 <script src="process/models/v1/customer/Dedupe.js"></script>
-<script src="process/pages/definitions/customer/Dashboard.js"></script>
-
 <script src="process/models/v1/loans/LoanProcess.js"></script>
 <script src="process/models/v1/loans/LoanAccount.js"></script>
 <script src="process/models/v1/loans/LoanCollection.js"></script>
 <script src="process/models/v1/loans/RepaymentReminder.js"></script>
-<script src="process/models/v1/loans/PaymentBank.js"></script>
 <script src="process/models/v1/loans/Groups.js"></script>
 <script src="process/models/v1/loans/GroupProcess.js"></script>
 <script src="process/models/v1/loans/ACH.js"></script>
@@ -217,7 +209,6 @@
 <script src="process/models/v1/loans/LoanProducts.js"></script>
 <script src="process/models/v1/loans/IndividualLoan.js"></script>
 <script src="process/models/v1/loans/SimpleLoanInput.js"></script>
-<script src="process/models/v1/loans/Telecalling.js"></script>
 <script src="process/models/v1/loans/DocumentTracking.js"></script>
 <script src="process/models/v1/excelUpload/ExcelUpload.js"></script>
 <script src="process/models/v1/loans/Inventory.js"></script>
@@ -359,8 +350,6 @@
 <script src="process/pages/definitions/irep/loans/LoanOriginationDashboard.js"></script>
 <script src="process/pages/definitions/kgfs/loans/LoanBookingDashboard.js"></script>
 <script src="process/pages/definitions/kgfs/loans/LoanOriginationDashboard.js"></script>
-<script src="process/pages/definitions/kgfs/lead/LeadAssignmentPendingQueue.js"></script>
-
 
 <script src="process/pages/definitions/kgfs/kgfsWorkflow/GpsFPApprovalDashboard.js"></script>
 <script src="process/pages/definitions/kgfs/customer/CustomerEnrollmentDashboard.js"></script>
@@ -508,8 +497,6 @@
 <script src="process/pages/definitions/loans/individual/screening/LoanAnalyticsView.js"></script>
 <script src="process/pages/definitions/kgfs/loans/individual/screening/CreditBureauView.js"></script>
 
-<script src="process/pages/definitions/loans/individual/screening/FieldAppraisalReviewTest.js"></script>
-
 
 <script src="process/pages/definitions/loans/individual/screening/BranchNewConversationQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/screening/BranchRepliedConversationQueue.js"></script>
@@ -542,20 +529,6 @@
 <script src="process/pages/definitions/loans/CloseLoan.js"></script>
 <script src="modules/directives/Questionnaire.js"></script>
 
-<script src="modules/directives/Balancesheet.js"></script>
-<script src="modules/directives/Box.js"></script>
-<script src="modules/directives/PnL.js"></script>
-<script src="modules/directives/Charts.js"></script>
-<script src="modules/directives/Container.js"></script>
-<script src="modules/directives/Dashboard.js"></script>
-<script src="modules/directives/Section.js"></script>
-<script src="modules/directives/Grid.js"></script>
-
-
-<script src="modules/models/common/Visulaization.js"></script>
-
-
-
 <script src="process/pages/definitions/loans/individual/misc/BalanceSheetHistory.js"></script>
 
 <script src="process/pages/definitions/loans/individual/disbursement/MultiTrancheQueue.js"></script>
@@ -575,7 +548,6 @@
 <script src="process/pages/definitions/loans/individual/disbursement/DisbursementDocumentUploadQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/disbursement/DisbursementDocumentUpload.js"></script>
 <script src="process/pages/definitions/loans/individual/disbursement/Disbursement.js"></script>
-<script src="process/pages/definitions/kinara/loans/individual/disbursement/Disbursement.js"></script>
 <script src="process/pages/definitions/loans/individual/disbursement/DisbursementConfirmation.js"></script>
 <script src="process/pages/definitions/loans/individual/disbursement/LOCDisbursementQueue.js"></script>
 <script src="process/pages/definitions/loans/individual/disbursement/LOCDisbursement.js"></script>
@@ -810,24 +782,6 @@
 <script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/screening/Review.js"></script>
 <script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/screening/Summary.js"></script>
 <script src="process/pages/definitions/shramsarathi/dashboard/loans/individual/screening/ScreeningReviewQueue.js"></script>
-
-<!-- arohan mappings -->
-<script src="process/pages/definitions/arohan/dashboard/lead/LeadDashboard.js"></script>
-<script src="process/pages/definitions/arohan/dashboard/loans/LoanOriginationDashboard.js"></script>
-<script src="process/pages/definitions/arohan/dashboard/loans/individual/screening/ScreeningReviewQueue.js"></script>
-<script src="process/pages/definitions/arohan/dashboard/loans/individual/screening/DocumentUpload.js"></script>
-<script src="process/pages/definitions/arohan/dashboard/loans/individual/screening/DocumentUploadQueue.js"></script>
-<script src="process/pages/definitions/arohan/dashboard/loans/individual/screening/CustomerSignedDocumentUpload.js"></script>
-<script src="process/pages/definitions/arohan/dashboard/loans/individual/screening/CustomerSignedDocumentUploadQueue.js"></script>
-<!-- <script src="process/pages/definitions/arohan/dashboard/CPV/CPVQueue.js"></script> -->
-<script src="process/pages/definitions/arohan/dashboard/loans/individual/screening/Review.js"></script>
-
-<!-- Newly Added Banking -->
-+<script src="process/pages/definitions/customer/banking/Banking.js"></script>
-+<script src="process/pages/definitions/customer/banking/SBTransaction.js"></script>
-+<script src="process/pages/definitions/customer/banking/Remittance.js"></script>
-+<script src="process/models/v1/customer/banking/Transaction.js"></script>
-+<script src="process/pages/definitions/customer/banking/CashManagement.js"></script>
 
 <!-- endbuild -->
 <!--Cordova-->

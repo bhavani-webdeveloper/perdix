@@ -64,7 +64,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'cbview',
                             minimum: 1,
                             maximum: 1,
-                            order:80
+                            order:20
                         },
                         {
                             pageName: 'kgfs.loans.individual.screening.Summary',
@@ -80,7 +80,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 pageClass: 'loan-review',
                                 minimum: 1,
                                 maximum: 1,
-                                order:90
+                                order:80
                         }
                     ]);
                 },
@@ -164,8 +164,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             customerId:loanProcess.loanAccount.customerId,
                                             loanId:bundleModel.loanId,
                                             scoreName:'RiskScore2'
-                                        },
-                                        loanProcess: loanProcess
+                                        }
                                     }
                                 });
                                 $this.bundlePages.push({

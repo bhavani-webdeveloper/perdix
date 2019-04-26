@@ -212,7 +212,6 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     }
                                  
                                 }
-                                
 
                             }
                         },

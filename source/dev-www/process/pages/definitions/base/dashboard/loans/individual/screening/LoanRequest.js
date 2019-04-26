@@ -1222,9 +1222,6 @@ define([],function(){
                         "PreliminaryInformation.emiPaymentDateRequested": {
                             "enumCode": "customerinfo_emirequest_date"
                         },
-                        "PreliminaryInformation.npa": {
-                            "condition":"model.loanAccount.transactionType == 'Loan Restructure'"
-                        },
                         "PreliminaryInformation.collectionPaymentType": {
                             "enumCode": "customerinfo_colctn_Pymt_type"
                         },
@@ -1632,13 +1629,10 @@ define([],function(){
                                         "Internal Foreclosure": "Internal Foreclosure"
                                     },
                                     "orderNo": 1,
-                                    //condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal'",
+                                    condition: "model.loanAccount.transactionType.toLowerCase() != 'renewal'",
                                     onChange:function(value,form,model){
                                         if(_.hasIn(model, 'loanAccount') && model.loanAccount.transactionType == 'New Loan') {
                                             model.loanAccount.linkedAccountNumber = null;
-                                        }
-                                        if(_.hasIn(model, 'loanAccount') && model.loanAccount.transactionType != 'Loan Restructure') {
-                                            model.loanAccount.npa = null;
                                         }
                                     }
                                 },

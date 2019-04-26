@@ -7,7 +7,7 @@ define({
 		var centres = SessionStore.getCentres();
 		var centreId=[];
 		if (centres && centres.length) {
-		    for (var i = 0; i < centres.length; i++) {  
+		    for (var i = 0; i < centres.length; i++) {
 			    centreId.push(centres[i].centreId);
 		    }
 	    }

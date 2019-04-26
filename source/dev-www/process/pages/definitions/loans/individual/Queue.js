@@ -17,8 +17,8 @@ Services
 IndividualLoan.search : To get all the Loan Accounts.
 */
 irf.pageCollection.factory(irf.page("loans.individual.Queue"),
-["$log", "formHelper","entityManager", "IndividualLoan","$state", "SessionStore", "Utils","PagesDefinition",
-function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Utils,PagesDefinition){
+["$log", "formHelper","entityManager", "IndividualLoan","$state", "SessionStore", "Utils",
+function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Utils){
 
 	var branch = SessionStore.getBranch();
 
@@ -131,7 +131,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 					]
 				},
 				getActions: function(){
-					return PagesDefinition.getUserAllowedQueueActionsDefinition([
+					return [
 						{
 							name: "LOAN_INPUT",
 							desc: "",
@@ -190,94 +190,6 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 							}
 						},
 						{
-							name: "View Details",
-							desc: "",
-							fn: function(item, index){
-								$state.go('Page.Engine', {
-									pageName: 'customer360.loans.LoanDetails',
-									pageId: item.loanId
-								})
-							},
-							isApplicable: function(item, index){
-								var siteCode = SessionStore.getGlobalSetting('siteCode');
-								if (item.loanId && siteCode=='witfin'){
-									return true;
-								}
-								return false;
-							}
-						},
-						{
-							name: "Repay",
-							desc: "",
-							fn: function(item, index){
-								$state.go('Page.Engine', {
-									pageName: 'loans.LoanRepay',
-									pageId: [item.accountNumber,item.urn].join(".")
-								})
-							},
-							isApplicable: function(item, index){
-								var siteCode = SessionStore.getGlobalSetting('siteCode');
-								if(siteCode == 'witfin')
-								{
-									return true;
-								} else {
-									return false;
-								}
-							}
-						},
-						{
-							name: "COLLECTION_STATUS",
-							desc: "",
-							fn: function(item, index){
-							   // entityManager.setModel('loans.individual.collections.P2PUpdate', {_bounce:item,_screen:"BounceQueue"});
-								$state.go('Page.Engine', {pageName: 'loans.individual.collections.P2PUpdate', pageId: item.accountNumber});
-							},
-							isApplicable: function(item, index){
-								var siteCode = SessionStore.getGlobalSetting('siteCode');
-								if(siteCode == 'witfin') return true;
-							}
-						},
-						{
-							name: "Amend",
-							desc: "",
-							fn: function(item, index){
-								$state.go('Page.Engine', {
-									pageName: 'loans.LoanAmend',
-									pageId: [item.accountNumber,item.urn].join(".")
-								})
-							},
-							pagePermission:'Page/Engine/loans.LoanAmend',
-							isApplicable: function(item, index){
-								var siteCode = SessionStore.getGlobalSetting('siteCode');
-								if(siteCode == 'witfin') {
-									return true;
-								}
-								return false;
-							}
-						},
-						{ 
-							name: "Unmark NPA",
-							desc: "",
-							fn: function(item, index){
-								$state.go('Page.Engine', {
-									pageName: 'loans.UnmarkNPA',
-									pageId: [item.accountNumber,item.urn].join(".")
-								})
-							},
-							pagePermission:'Page/Engine/loans.UnmarkNPA',
-							isApplicable: function(item, index){
-								var siteCode = SessionStore.getGlobalSetting('siteCode');
-									if (siteCode=='witfin') {
-										return true
-									} else {
-										return false
-									};
-
-
-						}
-						},
-
-						{
 							name: "CUSTOMER_360",
 							desc: "",
 							icon: "fa fa-user",
@@ -289,8 +201,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 								});
 							},
 							isApplicable: function(item, model){
-								var siteCode = SessionStore.getGlobalSetting('siteCode');
-								if(item.stage == "Completed" && siteCode=="witfin") {
+								if(item.stage == "Completed" && model.searchOptions.siteCode=="witfin") {
 									return true;
 								} else {
 									return false;
@@ -378,7 +289,7 @@ function($log, formHelper,EntityManager, IndividualLoan,$state, SessionStore, Ut
 
 							}
 						}
-					]);
+					];
 				}
 			}
 		}

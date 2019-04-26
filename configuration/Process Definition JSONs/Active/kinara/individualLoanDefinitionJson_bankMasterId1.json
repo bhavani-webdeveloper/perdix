@@ -4,7 +4,6 @@
    "customerMaxAgeBcProduct":75,
    "customerAgeLimitForSingleFemale":35,
    "productValidationFromStage":"LoanBooking",
-   "disbursemenStrategy": "SAVE_AND_PROCEED",
    "stages":[
       {
          "order":1,
@@ -58,6 +57,18 @@
       },
       {
          "order":5,
+         "code":"Televerification",
+         "name":"Televerification",
+         "stageType":"CAPTURE",
+         "sendSms":"No",
+         "smsCategory":"LoanBooking",
+         "isAccountOpening":false,
+         "allowedRoles":[
+            "WM"
+         ]
+      },
+      {
+         "order":6,
          "code":"ApplicationReview",
          "name":"Application Review",
          "stageType":"CAPTURE",
@@ -70,7 +81,7 @@
          ]
       },
       {
-         "order":6,
+         "order":7,
          "code":"FieldAppraisal",
          "name":"FieldAppraisal",
          "stageType":"CAPTURE",
@@ -83,7 +94,7 @@
          ]
       },
       {
-         "order":7,
+         "order":8,
          "code":"FieldAppraisalReview",
          "name":"FieldAppraisal Review",
          "stageType":"CAPTURE",
@@ -95,7 +106,7 @@
          ]
       },
       {
-         "order":8,
+         "order":9,
          "code":"ZonalRiskReview",
          "name":"ZonalRisk Review",
          "stageType":"CAPTURE",
@@ -107,7 +118,7 @@
          ]
       },
       {
-         "order":9,
+         "order":10,
          "code":"CentralRiskReview",
          "name":"Central Risk Review",
          "stageType":"CAPTURE",
@@ -119,7 +130,7 @@
          ]
       },
       {
-         "order":10,
+         "order":11,
          "code":"CreditCommitteeReview",
          "name":"Credit Committee Review",
          "stageType":"CAPTURE",
@@ -132,7 +143,7 @@
          ]
       },
       {
-         "order":11,
+         "order":12,
          "code":"Sanction",
          "name":"Sanction",
          "stageType":"CAPTURE",
@@ -144,7 +155,7 @@
          ]
       },
       {
-         "order":12,
+         "order":13,
          "code": "Rejected",
          "name": "Rejected",
          "stageType": "CAPTURE",
@@ -156,7 +167,7 @@
          ]
       },
       {
-         "order":13,
+         "order":14,
          "code":"LoanInitiation",
          "name":"Loan Input",
          "stageType":"CAPTURE",
@@ -168,7 +179,7 @@
          ]
       },
       {
-         "order":14,
+         "order":15,
          "code":"PendingForPartner",
          "name":"Pending for Partner",
          "stageType":"CAPTURE",
@@ -180,7 +191,7 @@
          ]
       },
       {
-         "order":15,
+         "order":16,
          "code":"LoanBooking",
          "name":"Loan Booking",
          "stageType":"CAPTURE",
@@ -192,7 +203,7 @@
          ]
       },
       {
-        "order":16,
+        "order":17,
         "code":"LinkedAccountVerification",
         "name":"Linked Account Verification",
         "stageType":"CAPTURE",
@@ -204,7 +215,7 @@
         ]
      },
       {
-         "order":17,
+         "order":18,
          "code":"DocumentUpload",
          "name":"Document Download and Upload",
          "stageType":"CAPTURE",
@@ -216,7 +227,7 @@
          ]
       },
       {
-         "order":18,
+         "order":19,
          "code":"DocumentVerification",
          "name":"Document Verification",
          "stageType":"CAPTURE",
@@ -228,7 +239,7 @@
          ]
       },
       {
-        "order":19,
+        "order":20,
         "code":"Completed",
         "name":"Completed",
         "stageType":"CAPTURE",

@@ -93,8 +93,8 @@ define({
             
             if(model.expectedTurnoverObj['annualTurnover'] && model.expectedTurnoverObj['annualTurnover'] != 0){
                 var kinaraExposureToAnnualTurovr = ((oustandingAmount + model.expectedTurnoverObj['loanAmountRecommended'])/model.expectedTurnoverObj['annualTurnover']);
-                var kinaraExposureToAnnualTurnover = (kinaraExposureToAnnualTurovr*100).toFixed(2)+"%";
-                model.expectedTurnoverObj['kinaraExposureToAnnualTurover'] = kinaraExposureToAnnualTurnover;
+                var kinaraExposureToAnnualTurnover = (kinaraExposureToAnnualTurovr*100)+"%";
+                model.expectedTurnoverObj['kinaraExposureToAnnualTurover'] = kinaraExposureToAnnualTurnover.toFixed(2);
             }
             else{
                 model.expectedTurnoverObj['kinaraExposureToAnnualTurover']  = 0+'%'; 
@@ -378,7 +378,7 @@ define({
                 })
                 .$promise.then(function(res){
                     model.linkedAccount=res;
-                    model.linkedLoanAmount = res.amount;
+                    model.linkedLoanAmount = res.totalDisbursed;
                 },function(err){
                     $log.info("loan request Individual/find api failure" + err);
                 });
@@ -661,8 +661,7 @@ define({
                         }]
                     }]
                 }]
-            }, 
-            {
+            }, {
                 "type": "box",
                 "colClass": "col-sm-12",
                 "title": "DEVIATION_AND_MITIGATIONS",
@@ -682,8 +681,7 @@ define({
                         '</li></ul></td></tr></tbody></table>'
 
                 }]
-            },
-             {
+            }, {
             "type": "box",
             "colClass": "col-sm-12",
             "title": "LOAN_DOCUMENTS",

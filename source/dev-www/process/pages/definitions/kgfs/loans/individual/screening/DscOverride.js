@@ -141,8 +141,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             customerId:loanProcess.loanAccount.customerId,
                                             loanId:bundleModel.loanId,
                                             scoreName:'RiskScore2'
-                                        },
-                                        loanProcess: loanProcess
+                                        }
                                     }
                                 });
                                 $this.bundlePages.push({
@@ -310,9 +309,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                         if(cbCustomer.customerId){
                             BundleManager.broadcastEvent('cb-check-update', cbCustomer);
                         }
-                    },                    
-                    "dsc-status":function(pageObj,bundlePageObj, obj){                        
-                        BundleManager.broadcastEvent('dsc-response',pageObj);
                     }
                 },
                 preSave: function(offlineData) {

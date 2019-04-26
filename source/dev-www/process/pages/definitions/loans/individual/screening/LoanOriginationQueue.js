@@ -26,7 +26,7 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 							"enumCode": "origination_stage",
 							"x-schema-form": {
 								"type": "select",
-								"required":"true",
+
 								"screenFilter": true
 							}
 						},

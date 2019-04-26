@@ -237,9 +237,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "readonly": false,
 
                                             "onClick": function(model, form, schemaForm, event) {
-                                                Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + "applicant_details" + "&record_id=" + model.loanAccount.id+ "&display=content")
-                                                // var fileId = irf.BI_BASE_URL + "/upload_template/" + model.master.templateFile;
-                                                // Utils.downloadFile(fileId);
+                                                var fileId = irf.BI_BASE_URL + "/upload_template/" + model.master.templateFile;
+                                                Utils.downloadFile(fileId);
                                                 //Utils.downloadFile(irf.MANAGEMENT_BASE_URL + "/forms/AllFormsDownload.php?record_id=" + model.loanAccount.id);
                                             }
                                         }
@@ -255,14 +254,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "title":"UPLOAD_MEL_APPLICATION_FORM",
                                         },
                                         "uploadMELApplicationForm":{
-                                            "key": "loanAccount.documents[].documentId",
-                                            type: "file",
-                                            fileType: "application/pdf",
-                                            category: "Loan",
-                                            subCategory: "DOC1",
-                                            "notitle": true,
-                                            using: "scanner",
-                                            required: true
+                                        "key": "loanAccount.documents[].documentId",
+                                        "notitle": true,
+                                        "type": "file",
+                                        "category": "ACH",
+                                        "subCategory": "cat2",
+                                        "fileType": "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                        customHandle: function(file, progress, modelValue, form, model) {
+                                            Maintenance.masterDataUpload(file, progress, {
+                                                fileType: model.master.uploadNameValue
+                                            }).then(function(resp) {
+                                                $log.info(resp.data.stats);
+                                                model.master.value = true;
+                                                model.uploadres = resp.data.stats;
+                                            });
+                                        }
                                         }
                                     }                                    
                                 },
@@ -559,11 +565,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                     },
                     sendBack: function(model, formCtrl, form, $event){                       
-                        if ( model.loanProcess.remarks==null ||  model.loanProcess.remarks =="" ||  model.loanProcess.stage==null ||  model.loanProcess.stage==""){
-                            PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory");
-                            return false;
-                        }
                         PageHelper.showLoader();
+                        // if ( model.loanAccount.review.remarks==null ||  model.loanAccount.review.remarks =="" ||  model.loanAccount.review.targetStage==null ||  model.loanAccount.review.targetStage==""){
+                        //     PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory");
+                        //     return false;
+                        // }
                         model.loanProcess.sendBack()
                             .finally(function () {
                                 PageHelper.hideLoader();
@@ -610,11 +616,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             });
                     },
                     reject: function(model, formCtrl, form, $event){
-                        // if(PageHelper.isFormInvalid(formCtrl)) {
-                        //     return false;
-                        // }
-                        if ( model.loanProcess.remarks==null ||  model.loanProcess.remarks =="" ||  model.loanAccount.rejectReason==null ||  model.loanAccount.rejectReason==""){
-                            PageHelper.showProgress("update-loan", "Reject Reason / Remarks is mandatory");
+                        if(PageHelper.isFormInvalid(formCtrl)) {
                             return false;
                         }
                         PageHelper.showLoader();

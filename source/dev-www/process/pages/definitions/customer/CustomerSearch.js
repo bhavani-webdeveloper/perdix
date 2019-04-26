@@ -80,7 +80,7 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 	                    key: "branch",
 	                    enumCode: "userbranches",
 	                    "type":"select",
-	                    condition: "model.siteCode=='sambandh'"
+	                    condition: "model.siteCode=='sambandh' || model.siteCode =='IREPDhan'"
 	                }, {
 	                    key: "centre",
 	                },{
@@ -400,8 +400,7 @@ function($log, formHelper,filterFilter, Enrollment,Queries,$q,$state, SessionSto
 						}
 					];
 				}
-			},
-			autoSearch:false
+			}
 		}
 	};
 }]);

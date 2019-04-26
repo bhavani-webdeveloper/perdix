@@ -41,9 +41,9 @@ define({
 	                    'branch': {
 	                    	'title': "BRANCH",
 	                    	"type": ["string", "null"],
-	                    	//"enumCode": "branch",
+	                    	"enumCode": "branch",
 							"x-schema-form": {
-								"type": "userbranch",
+								"type": "select",
 								"screenFilter": true
 							}
 	                    },
@@ -54,7 +54,6 @@ define({
 								"type": "select",
 								"enumCode": "centre",
 								"parentEnumCode": "branch",
-								"parentValueExpr": "model.branch",
 								"screenFilter": true
 							}
 						},
@@ -94,7 +93,7 @@ define({
 	                    searchOptions.centreCodeForSearch = LoanBookingCommons.getCentreCodeFromId(searchOptions.centreCode, formHelper);
 	                }
 					return IndividualLoan.search({
-	                    'branchId':searchOptions.branch,
+	                    'branchName':searchOptions.branch,
 	                    'stage': 'KYCReview',
 	                    'enterprisePincode':searchOptions.pincode,
 	                    'applicantName':searchOptions.applicantName,

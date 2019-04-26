@@ -105,9 +105,9 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
 
                     "actionboxBeforeSave",
                     "actionboxBeforeSave.save",
-                       "actionboxAfterSave",
-                       "actionboxAfterSave.OnlinePrint",
-                       "actionboxAfterSave.Back"
+                    //    "actionboxAfterSave",
+                    //    "actionboxAfterSave.OnlinePrint",
+                    //    "actionboxAfterSave.Back"
                 ];
 
             }
@@ -619,10 +619,11 @@ define(['perdix/domain/model/insurance/InsuranceProcess'], function (InsurancePr
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
-                                model.insurancePolicyDetailsDTO = value.insurancePolicyDetailsDTO;
+                                model.insurancePolicyDetailsDTO = value.insurancePolicyDetailsDTO[0];
                                 model.submissionDone = true;
                                 idPresent = true;
                                 PageHelper.showProgress('Insurance', 'Insurance Registration Saved', 5000);
+                                irfNavigator.goBack();
                             }, function (err) {
                                 PageHelper.showProgress('Insurance', 'Insurance Registration Failed', 5000);
                                 PageHelper.showErrors(err);

@@ -11,9 +11,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         var CBType;
         var loanAmount = model.loanAccount.loanAmountRequested;
         var loanPurpose;
-        var partner = model.loanAccount.partnerCode;
-        var subModuleCode;
-        var productCode = model.loanAccount.productCode;
         if(customerType=='APP'){
             customerId = model.customer.applicantid;
             // loanAmount = model.customer.loanAmount;
@@ -33,53 +30,23 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
         //loanPurpose = 'Agriculture';
         PageHelper.clearErrors();
         if (CBType != 'CHMHUB') {
+            CreditBureau.postcreditBureauCheck({
+                customerId: customerId,
+                type: CBType,
+                purpose: loanPurpose,
+                loanAmount: loanAmount
+            }, function(response) {
 
-            Queries.getLoanProduct(productCode).then(
-                function(res) {                                       
-                model.loanType = res.body[0].loanType;
-                if(SessionStore.getGlobalSetting('siteCode')  == 'KGFS'){
-                    if(model.loanType == 'JLG'){
-                        subModuleCode = 'MFI';
-                        if(partner == 'AXIS'){
-                            partnerCode = 'AXIS';
-                        }else{
-                            partnerCode = 'PFSPL';
-                        }	
-                    }else if(model.loanType == 'JEWEL'){
-                        model.loanLimit = SessionStore.getGlobalSetting("cibilSubModuleCodeLimitJewel");
-                        partnerCode = 'PFSPL';
-                        subModuleCode = 'COMBO';
-                        if(model.loanLimit && model.loanAmount <= model.loanLimit)
-                            subModuleCode = 'MFI';
-                    }else{
-                        partnerCode = 'PFSPL';
-                        subModuleCode = 'COMBO';
-                    }	
-                }
-                CreditBureau.postcreditBureauCheck({
-                    customerId: customerId,
-                    type: CBType,
-                    purpose: loanPurpose,
-                    loanAmount: loanAmount,
-                    productCode: productCode,
-                    subModuleCode: subModuleCode,
-                    partnerCode: partnerCode
+                checkResponse(response, model, customerType, CBType, index);
 
-                }, function(response) {
-    
-                    checkResponse(response, model, customerType, CBType, index);
-    
-                }, function(errorResponse) {
-                    PageHelper.hideLoader();
-                    PageHelper.showErrors(errorResponse);
-                    if (errorResponse && errorResponse.data && errorResponse.data.error)
-                        PageHelper.showProgress("cb-check", errorResponse.data.error, 5000);
-                    else
-                        PageHelper.showProgress("cb-check", "Failed while placing Credit Bureau Request", 5000);
-                });
-            });  
-
-            
+            }, function(errorResponse) {
+                PageHelper.hideLoader();
+                PageHelper.showErrors(errorResponse);
+                if (errorResponse && errorResponse.data && errorResponse.data.error)
+                    PageHelper.showProgress("cb-check", errorResponse.data.error, 5000);
+                else
+                    PageHelper.showProgress("cb-check", "Failed while placing Credit Bureau Request", 5000);
+            });
         } else {
             model.idenCheck.customerId = customerId;
             model.idenCheck.type = CBType;
@@ -182,16 +149,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                 }
                 else if(customerType == 'GUARANTOR'){
                     model.customer.guarantors[index].cibilStatus = response.status;
-                }
-            }
-            if(CBType == 'CIBILCR'){
-                if (customerType == 'APP')
-                    model.customer.cibilcrStatus = response.status;
-                else if(customerType == 'CO-APP'){
-                    model.customer.coapplicants[index].cibilcrStatus = response.status;
-                }
-                else if(customerType == 'GUARANTOR'){
-                    model.customer.guarantors[index].cibilcrStatus = response.status;
                 }
             }
             if(CBType == 'CHMHUB'){
@@ -350,12 +307,11 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             //model.CBType = JSON.parse(SessionStore.getGlobalSetting("CBCheckType").replace(/'/g, '"'));
             if (model.CBType && model.CBType.length) {
                 for (i in model.CBType) {
-                    (model.CBType[i] == "CIBIL")?model.CIBIL = true:(model.CBType[i] == "BASE"?model.BASE = true:(model.CBType[i] == "EQUIFAX"?model.EQUIFAX = true:(model.CBType[i] == "CHMHUB"?model.CHMHUB=true:(model.CBType[i] == "INDIVIDUAL"?model.INDIVIDUAL=true:(model.CBType[i] == "CIBILCR" ? model.CIBILCR=true:false)))));
+                    (model.CBType[i] == "CIBIL")?model.CIBIL = true:(model.CBType[i] == "BASE"?model.BASE = true:(model.CBType[i] == "EQUIFAX"?model.EQUIFAX = true:(model.CBType[i] == "CHMHUB"?model.CHMHUB=true:(model.CBType[i] == "INDIVIDUAL"?model.INDIVIDUAL=true:false))));
                 }
             } else {
                 model.CIBIL = true;
                 model.BASE = true;
-                model.CIBILCR = true;
             }
 
             if (_.hasIn(model, 'loanAccount')){
@@ -378,8 +334,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                                 model.customer.highmarkStatus = 'PROCESSED';
                                             else if(res.cbCheckList[x].reportType=='CIBIL')
                                                 model.customer.cibilStatus = 'PROCESSED';
-                                            else if(res.cbCheckList[x].reportType=='CIBILCR')
-                                                model.customer.cibilcrStatus = 'PROCESSED';    
                                         }
                                     }
                                 }
@@ -400,7 +354,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             .then(function(res){
                                 var highmarkStatus;
                                 var cibilStatus;
-                                var cibilcrStatus;
                                 if(res && res.cbCheckList && res.cbCheckList.length >0){
                                     for(x=0;x<res.cbCheckList.length;x++){
                                         if(res.cbCheckList[x].cbCheckValid){
@@ -414,9 +367,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                             else if(res.cbCheckList[x].reportType=='CIBIL'){
                                                 cibilStatus = 'PROCESSED';
                                             }
-                                            else if(res.cbCheckList[x].reportType=='CIBILCR'){
-                                                cibilcrStatus = 'PROCESSED';
-                                            }
                                         }
                                     }
                                 }
@@ -426,8 +376,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 "loanAmount":model.loanAccount.loanAmountRequested,
                                 "loanPurpose1":model.loanAccount.loanPurpose1,
                                 "highmarkStatus":highmarkStatus,
-                                "cibilStatus":cibilStatus,
-                                "cibilcrStatus":cibilcrStatus});
+                                "cibilStatus":cibilStatus});
                                 model.customer.loanSaved = true;
                             }, function(httpRes){
                                 PageHelper.showErrors(httpRes);
@@ -442,8 +391,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                             .then(function(res){
                                 var highmarkStatus;
                                 var cibilStatus;
-                                var cibilcrStatus;
-                                
                                 if(res && res.cbCheckList && res.cbCheckList.length >0){
                                     for(x=0;x<res.cbCheckList.length;x++){
                                         if(res.cbCheckList[x].cbCheckValid){
@@ -457,9 +404,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                             else if(res.cbCheckList[x].reportType=='CIBIL'){
                                                 cibilStatus = 'PROCESSED';
                                             }
-                                            else if(res.cbCheckList[x].reportType=='CIBILCR'){
-                                                cibilcrStatus = 'PROCESSED';
-                                            }
                                         }
                                     }
                                 }
@@ -469,8 +413,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                 "loanAmount":model.loanAccount.loanAmountRequested,
                                 "loanPurpose1":model.loanAccount.loanPurpose1,
                                 "highmarkStatus":highmarkStatus,
-                                "cibilStatus":cibilStatus,
-                                "cibilcrStatus":cibilcrStatus});
+                                "cibilStatus":cibilStatus});
                                 model.customer.loanSaved = true;
                             }, function(httpRes){
                                 PageHelper.showErrors(httpRes);
@@ -634,85 +577,6 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
                                         }, {
                                             "key": "customer.guarantors[].cibilStatus",
                                             "condition": "model.customer.guarantors[arrayIndex].cibilStatus",
-                                            readonly: true,
-                                            title: "Status"
-                                        }]
-                                    },
-
-                                ]
-                            },
-                            {
-                                type: "fieldset",
-                                condition:"model.CIBILCR",
-                                title: "CIBILCR",
-                                items: [{
-                                        key: "customer.applicantname",
-                                        title: "ApplicantName",
-                                        readonly: true,
-                                        type: "string",
-                                    }, {
-                                        type: 'button',
-                                        title: 'Submit for CBCheck',
-                                        "condition": "model.customer.loanSaved",
-                                        "onClick": "actions.save(model,'APP','CIBILCR', null)"
-                                    }, {
-                                        "key": "customer.cibilcrStatus",
-                                        "condition": "model.customer.cibilcrStatus",
-                                        readonly: true,
-                                        title: "Status"
-                                    }, {
-                                        key: "customer.coapplicants",
-                                        type: "array",
-                                        title: ".",
-                                        view: "fixed",
-                                        notitle: true,
-                                        "startEmpty": true,
-                                        "add": null,
-                                        "remove": null,
-                                        items: [{
-                                            key: "customer.coapplicants[].coapplicantname",
-                                            title: "Co ApplicantName",
-                                            readonly: true,
-                                            type: "string"
-                                        }, {
-                                            type: 'button',
-                                            key: "customer.coapplicants[].cibilcrbutton",
-                                            title: 'Submit for CBCheck',
-                                            "condition": "model.customer.loanSaved && model.customer.coapplicants.length",
-                                            "onClick": function(model, schemaForm, form, event) {
-                                                fnPost(model, 'CO-APP', 'CIBILCR', event.arrayIndex);
-                                            }
-                                        }, {
-                                            "key": "customer.coapplicants[].cibilcrStatus",
-                                            "condition": "model.customer.coapplicants[arrayIndex].cibilcrStatus",
-                                            readonly: true,
-                                            title: "Status"
-                                        }]
-                                    }, {
-                                        key: "customer.guarantors",
-                                        type: "array",
-                                        title: ".",
-                                        view: "fixed",
-                                        notitle: true,
-                                        "startEmpty": true,
-                                        "add": null,
-                                        "remove": null,
-                                        items: [{
-                                            key: "customer.guarantors[].guarantorname",
-                                            title: "Guarantor Name",
-                                            readonly: true,
-                                            type: "string"
-                                        }, {
-                                            type: 'button',
-                                            key: "customer.guarantors[].cibilcrbutton",
-                                            title: 'Submit for CBCheck',
-                                            "condition": "model.customer.loanSaved && model.customer.guarantors.length",
-                                            "onClick": function(model, schemaForm, form, event) {
-                                                fnPost(model, 'GUARANTOR', 'CIBILCR', event.arrayIndex);
-                                            }
-                                        }, {
-                                            "key": "customer.guarantors[].cibilcrStatus",
-                                            "condition": "model.customer.guarantors[arrayIndex].cibilcrStatus",
                                             readonly: true,
                                             title: "Status"
                                         }]
@@ -1147,3 +1011,4 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
 }
 
 ]);
+

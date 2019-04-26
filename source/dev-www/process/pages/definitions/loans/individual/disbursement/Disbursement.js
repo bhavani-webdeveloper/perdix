@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"),
-    ["$log", "Enrollment","BiometricService","elementsUtils", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "Utils","LoanAccount","formHelper","Queries","BranchCreationResource",
-        function($log, Enrollment,BiometricService,elementsUtils, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource, Utils,LoanAccount,formHelper,Queries,BranchCreationResource){
+    ["$log", "Enrollment","BiometricService","elementsUtils", "SessionStore","$state", "$stateParams", "PageHelper", "IndividualLoan", "SchemaResource", "Utils","LoanAccount","formHelper","Queries",
+        function($log, Enrollment,BiometricService,elementsUtils, SessionStore,$state,$stateParams, PageHelper, IndividualLoan, SchemaResource, Utils,LoanAccount,formHelper,Queries){
 
         var branch = SessionStore.getBranch();
         var siteCode = SessionStore.getGlobalSetting("siteCode");
@@ -21,27 +21,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
             "subTitle": "",
             initialize: function (model, form, formCtrl) {
                 $log.info("Disbursement Page got initialized");
-                   //start
-                   model.branchId = SessionStore.getBranchId();
-                   if (!Utils.isCordova) {
-                    BranchCreationResource.getBranchByID({
-                            id: model.branchId
-                        },
-                        function (res) {
-                            if (res.fingerPrintDeviceType) {
-                                if (res.fingerPrintDeviceType == "MANTRA") {
-                                    model.fingerPrintDeviceType = res.fingerPrintDeviceType;
-                                }
-                            }
-
-                            PageHelper.hideLoader();
-                        },
-                        function (err) {
-                            $log.info(err);
-                        }
-                    );
-                }
-            //end
                 model.customer=model.customer||{};
                 model.loanAccountDisbursementSchedule = model.loanAccountDisbursementSchedule || {};
                 model.fee=model.fee||{};
@@ -180,7 +159,6 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
 
                         model.loanAccountDisbursementSchedule.overrideStatus = "Requested";
                         model.loanAccountDisbursementSchedule.moratoriumPeriodInDays =model.additional.moratoriumPeriodInDays;
-                        if(model.siteCode=='IREPDhan'){
                         if(!model.additional.moratoriumPeriodInDays){
                             model.loanAccountDisbursementSchedule.moratoriumPeriodInDays = 0;
                         }
@@ -199,14 +177,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         else{
                             model.loanAccountDisbursementSchedule.firstRepaymentDate = null;
                         }
-                    }
-                    else{
-                        model.loanAccountDisbursementSchedule.firstRepaymentDate =model.additional.firstRepaymentDate;
-                    }
-                       
-                    // model.loanAccountDisbursementSchedule.firstRepaymentDate =model.additional.firstRepaymentDate;
-                        
-                        
+                       // model.loanAccountDisbursementSchedule.firstRepaymentDate =model.additional.firstRepaymentDate;
 
 
                         model.loanAccountDisbursementSchedule.disbursementAmount = Number(resp[0].amount);
@@ -353,8 +324,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         "title": "SCHEDULED_DISBURSEMENT_DATE",
                         "condition": "model.siteCode != 'IREPDhan'",
                         "type": "date",
-                        "required": true,
-                        "readonly":true
+                        "required": true
                     },
                     {
                         "key": "loanAccountDisbursementSchedule.scheduledDisbursementDate",
@@ -515,31 +485,16 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                 'RightLittle': model.customer.rightHandSmallImageId
                             };
 
-                            if (model.fingerPrintDeviceType == "MANTRA") {
-                                BiometricService.validateFingerPrintByMantra(fingerprintObj).then(function (data) {
-                                    model.customer.isBiometricMatched = data;
-                                    if (data == "Match found") {
-                                        model.loanAccountDisbursementSchedule.fpVerified= true;
-                                    } else {
-                                        model.loanAccountDisbursementSchedule.fpVerified = false;
-                                    }
-                                }, function (reason) {
-                                    console.log(reason);
-                                });
-
-                            }
-                            else{
-                                BiometricService.validate(fingerprintObj).then(function(data) {
-                                    model.customer.isBiometricMatched = data;
-                                    if (data == "Match found") {
-                                        model.loanAccountDisbursementSchedule.fpVerified = true;
-                                    } else {
-                                        model.loanAccountDisbursementSchedule.fpVerified = false;
-                                    }
-                                }, function(reason) {
-                                    console.log(reason);
-                                });
-                            }
+                            BiometricService.validate(fingerprintObj).then(function(data) {
+                                model.customer.isBiometricMatched = data;
+                                if (data == "Match found") {
+                                    model.loanAccountDisbursementSchedule.fpVerified = true;
+                                } else {
+                                    model.loanAccountDisbursementSchedule.fpVerified = false;
+                                }
+                            }, function(reason) {
+                                console.log(reason);
+                            });
                         }
                     }, {
                         "key": "customer.isBiometricMatched",
@@ -651,80 +606,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         elementsUtils.alert('Fingerprint not verified.');
                         return;
                     }
-                    if (model.siteCode == "KGFS"){
-                            if (typeof model.loanAccountDisbursementSchedule.firstRepaymentDate =='undefined' || model.loanAccountDisbursementSchedule.firstRepaymentDate == null || model.loanAccountDisbursementSchedule.firstRepaymentDate == ''){
-                                PageHelper.showErrors({
-                                    data:{
-                                        error:"First Repayment date is Required."
-                                    }
-                                })
-                                PageHelper.hideLoader();
-                                return false;
-                            }
-                            Utils.confirm("First Repayment Date: "+ model.loanAccountDisbursementSchedule.firstRepaymentDate+"\n\n Perform Disbursement?").then(function(msg){
-                                PageHelper.showLoader();
-                                var accountNumber = model.additional.accountNumber;
-                                var accountId = model.loanAccountDisbursementSchedule.loanId;
-        
-                                model.loanAccountDisbursementSchedule.udf1 = "Sent to Bank";
-                                PageHelper.showProgress('disbursement', 'Disbursing ' + accountId + '. Please wait.');
-        
-                                LoanAccount.activateLoan({"accountId": accountNumber},
-                                    function(data){
-                                        $log.info("Inside success of activateLoan");
-                                        var currDate = moment(new Date()).format("YYYY-MM-DD");
-                                        model.loanAccountDisbursementSchedule.accountNumber = accountNumber;
-        
-                                        var reqUpdateDisbData = _.cloneDeep(model);
-                                        delete reqUpdateDisbData.$promise;
-                                        delete reqUpdateDisbData.$resolved;
-                                        delete reqUpdateDisbData._disbursement;
-                                        delete reqUpdateDisbData.additional;
-                                        delete reqUpdateDisbData.arrayIndex;
-                                        reqUpdateDisbData.disbursementProcessAction = "SAVE";
-                                        IndividualLoan.updateDisbursement(reqUpdateDisbData,function(resp,header){
-                                            var toSendData = [];
-                                            toSendData.push(model.loanAccountDisbursementSchedule);
-                                            var reqData = {};
-        
-                                            reqData.stage = "DisbursementConfirmation";
-                                            reqData.loanAccountDisbursementSchedules = toSendData;
-                                            $log.info(reqData);
-        
-                                            IndividualLoan.batchDisburse(reqData,
-                                                function(data){
-                                                    PageHelper.showProgress('disbursement', 'Disbursement done', 2000);
-                                                    model.additional.disbursementDone=true;
-                                                    PageHelper.hideLoader();
-                                                    $state.go('Page.Engine', {pageName: 'loans.individual.disbursement.ReadyForDisbursementQueue', pageId: null});
-        
-                                                },
-                                                function(res){
-                                                    PageHelper.showErrors(res);
-                                                    PageHelper.showProgress('disbursement', 'Disbursement failed', 2000);
-                                                }).$promise.finally(function() {
-                                                    PageHelper.hideLoader();
-                                                }
-                                            );
-                                        },function(resp){
-                                            PageHelper.showProgress("upd-disb","Oops. An error occurred","5000");
-                                            PageHelper.showErrors(resp);
-                                            PageHelper.hideLoader();
-                                        }).$promise.finally(function(){
-                                        });
-                                    },
-                                    function(res){
-                                        PageHelper.hideLoader();
-                                        PageHelper.showErrors(res);
-                                        PageHelper.showProgress('disbursement', 'Error while activating loan.', 2000);
-                                    });
-                            },function(err){
-                                PageHelper.hideLoader();
-                            })
-                    
-                            
-                    }
-                    else if(window.confirm("Perform Disbursement?")){
+
+                    if(window.confirm("Perform Disbursement?")){
 
                         PageHelper.showLoader();
                         var accountNumber = model.additional.accountNumber;

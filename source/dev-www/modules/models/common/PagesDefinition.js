@@ -253,20 +253,5 @@ irf.models.factory('PagesDefinition', ["$resource", "$log", "BASE_URL", "$q", "S
         pDef.getRoleAllowedPageList();
     });
 
-    pDef.getUserAllowedQueueActionsDefinition = function(actions){
-        var deferred = $q.defer();
-        var temp=[];
-        pDef.getUserAllowedPages().then(function(res) {
-            _.forEach(actions, function(action){
-                if(!action.pagePermission || res[action.pagePermission]) {
-                    temp.push(action);
-                }
-            })
-            deferred.resolve(temp);
-        });
-        return deferred.promise;
-    }; 
- 
-
     return pDef;
 }]);
