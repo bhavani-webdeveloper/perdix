@@ -76,6 +76,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order: 70
                             },
                             {
+                                pageName: 'arohan.dashboard.loans.individual.screening.TeleverificationV2',
+                                title: 'TELEVERIFICATION',
+                                pageClass: 'televerification',
+                                minimum: 1,
+                                maximum: 1,
+                                order: 71
+                            },
+                            {
                                 pageName: 'arohan.dashboard.loans.individual.screening.Summary',
                                 title: 'SUMMARY',
                                 pageClass: 'summary',
@@ -366,6 +374,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             model: {
                                                 customerId: res.customerId,
                                                 loanAccount: res
+                                            }
+                                        });
+                                        $this.bundlePages.push({
+                                            pageClass: 'televerification',
+                                            model: {
+                                                enrolmentProcess:loanProcessts.loanCustomerEnrolmentProcess,
+                                                loanProcess: loanProcessts,
+                                                loanAccount:res
                                             }
                                         });
 
