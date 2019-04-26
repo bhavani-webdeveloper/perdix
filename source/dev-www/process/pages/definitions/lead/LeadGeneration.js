@@ -12,6 +12,8 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                 model.lead = model.lead || {};
                 model.siteCode = SessionStore.getGlobalSetting('siteCode');
                 model.loanAmountRequestedLeadLimit = SessionStore.getGlobalSetting('loanAmountRequestedLeadLimit');
+                model.leadMinorMinimumAge = SessionStore.getGlobalSetting('leadMinorMinimumAge');
+                model.leadMinorMaximumAge = SessionStore.getGlobalSetting('leadMinorMaximumAge');
 
                 if (!(model.$$STORAGE_KEY$$)) {
                     model.lead.customerType = "Enterprise";
@@ -1484,6 +1486,12 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                         if(model.lead.loanAmountRequested > model.loanAmountRequestedLeadLimit)
                         {
                             PageHelper.showErrors({data:{error:"Loan Amount Requested should be Maximum at 25 lakhs"}});
+                            return false;
+                        }
+
+                        if(model.lead.age < model.leadMinorMinimumAge || model.lead.age > model.leadMinorMaximumAge)
+                        {
+                            PageHelper.showErrors({data:{error:"Age should be Minimum Age 18 and Maximum Age 65"}});
                             return false;
                         }
                     }
