@@ -187,11 +187,11 @@ define(["perdix/domain/model/loan/LoanProcess",
                                         guarantors: []
                                     };
 
-                                    // if (res.currentStage != 'Televerification') {
-                                    //     PageHelper.showProgress('load-loan', 'Loan Application is in different Stage', 2000);
-                                    //     irfNavigator.goBack();
-                                    //     return;
-                                    // }
+                                    if (res.currentStage != 'Televerification') {
+                                        PageHelper.showProgress('send back', 'Loan Application is in different Stage', 3000);
+                                        irfNavigator.goBack();
+                                        return;
+                                    }
 
                                     for (var i = 0; i < res.loanCustomerRelations.length; i++) {
                                         var cust = res.loanCustomerRelations[i];

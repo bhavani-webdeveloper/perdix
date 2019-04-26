@@ -3,6 +3,7 @@ irf.models.factory('Telecalling',[
     function($resource,$httpParamSerializer,BASE_URL,searchResource,Upload,$q,PageHelper){
         var endpoint = BASE_URL + '/api/telecallingdetails'; 
         var endpoint2= BASE_URL + '/api/telecallingdetailsBulkUpdate'; 
+        var endpoint3 = BASE_URL + '/api/findTelecallingDetails'
         var resource = $resource(endpoint, null, {
             save:{
                 method:'POST',
@@ -14,7 +15,8 @@ irf.models.factory('Telecalling',[
             },
             find:{
               method:'GET',
-              url:endpoint+'/:processType/:processId',  
+              url:endpoint3+'/:processType/:processId',  
+              isArray:true
             },
             getByCustomerId:{
                 method:'GET',
@@ -27,7 +29,8 @@ irf.models.factory('Telecalling',[
             },
             bulkUpdate:{
                 method:'PUT',
-                url:endpoint2
+                url:endpoint2,
+                isArray:true
             },
             deleteById:{
                 method:'PUT',

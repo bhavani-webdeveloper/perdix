@@ -103,6 +103,18 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
                 acmMenu.data = '-';
             });
         }
+        var tvrMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/arohan.dashboard.loans.individual.screening.TeleverificationQueue"];
+        if (tvrMenu) {
+            IndividualLoan.search({
+                'stage': 'Televerification',
+                'page': 1,
+                'per_page': 1
+            }).$promise.then(function(response, headerGetter) {
+                tvrMenu.data = Number(response.headers['x-total-count']);
+            }, function() {
+                tvrMenu.data = '-';
+            });
+        }
 
          var ipd = $scope.dashboardDefinition.$menuMap["Page/Engine/Page/Engine/arohan.dashboard.loans.individual.screening.InternalPdQueue"];
         if (ipd) {

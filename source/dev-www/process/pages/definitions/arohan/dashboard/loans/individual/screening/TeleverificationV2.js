@@ -4,11 +4,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
         pageUID: "arohan.dashboard.loans.individual.screening.TeleverificationV2",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
-            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","irfFormToggler"],
+            "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","irfFormToggler","Telecalling"],
 
         $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
-                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,irfFormToggler) {
-
+                           PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch, BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,irfFormToggler,Telecalling) {
+            var currentStage;
+            var readonlyFlag = true;
             var globalListkeys = [];
             var getAllIncludesFromJson = function (parentKey, previousKey, object,flag) {
                 if (flag)
@@ -486,29 +487,68 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     }
                 };
             };
-            var prepareQuestionarieList = function(capturedData,model,type){
-                var questions = model.questions.filter(function(o){
-                    return o.party_type == type+'_reference';
-                })
+            var prepareQuestionarieList = function(capturedData,model,type,parentData){
+                var questions = [];
+                for(var i=0;i<model.questions.length;i++){
+                    if(model.questions[i].party_type == type+'_reference'){
+                        questions.push(model.questions[i]);
+                    }
+                }
                 var flag = true;    
                 var data = capturedData || {};
+                var newQuestionList = [];
                 data.telecallingQuestionnaireList = data.telecallingQuestionnaireList || [];
                 if (data.telecallingQuestionnaireList.length>0){
                     for(var i=0;i<questions.length;i++){
                         flag = true;
                         for (var j =0;j<data.telecallingQuestionnaireList.length;j++){
-                            if (questions[i].question == data.telecallingQuestionnaireList[j].question)
+                            if (questions[i].question == data.telecallingQuestionnaireList[j].question){
+                                newQuestionList.push(data.telecallingQuestionnaireList[j]);
                                 flag = false;
-                            if (flag)
-                                data.telecallingQuestionnaireList.push(question[i]);
+                                break;
+                            }
+                                
                         }
+                        if (flag)
+                                newQuestionList.push(questions[i]);
                     }
                 } 
                 else{
-                    data.telecallingQuestionnaireList = questions;
+                    newQuestionList = questions;
                 }
+                data.telecallingQuestionnaireList = newQuestionList;
+                data.customerId = data.customerId || parentData.customerId;
+                data.processId = data.processId || parentData.processId;
+                data.processType = 'CUSTOMER_REFERENCE';
+                data.telecallingQuestionnaireList = prepareInputType(questions,data.telecallingQuestionnaireList)
                 return data;
             };
+            var prepareInputType = function(pQ,cQ,partyType){
+                if (partyType){
+                   var question = [];
+                   for(var i=0;i<pQ.length;i++){
+                    if(pQ[i].party_type == partyType){
+                        question.push(pQ[i]);
+                    }
+                }
+                pQ = question;
+                }
+                var newQuestionList =[];
+                for (var i=0;i<pQ.length;i++){
+                    for(var j=0;j<cQ.length;j++){
+                        if (pQ[i].question == cQ[j].question){
+                            cQ[j].input_type = pQ[i].input_type;
+                            if (pQ[i].input_type == 'select'){
+                                cQ[j].select = pQ[i].select
+                            }
+                            newQuestionList.push(cQ[j]);
+                            break;
+                        }
+                    }
+                    
+                }
+                return newQuestionList;
+            }
             var dummyData = function(){
                 var deferred = $q.defer()
                 let dummyDatas = {};
@@ -530,12 +570,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                    (function(referenceIndex){
                                        var referenceName = customer.verifications[referenceIndex].referenceFirstName;
                                        var referencee = customer.verifications[referenceIndex];
-                                        dummyData({processId:customer.verifications[j],customerId:model.customers[customerIndex].customerId}).then(
+                                        Telecalling.find({processId:customer.verifications[j].id,processType:'CUSTOMER_REFERENCE'}).$promise.then(
                                             (reference) =>{
                                                 var key = model.customers[customerIndex].type.toLowerCase()+'_reference_'+referenceIndex;
                                                 model.promiseArray[model.customers[customerIndex].type].push(key);
                                                 var type = model.customers[customerIndex].type;
                                                 var title = referenceName;
+                                                var parentData = {
+                                                    'customerId':model.customers[customerIndex].customerId,
+                                                    'processId':referencee.id,
+                                                    'mobileNo': referencee.mobileNo,
+                                                    "occupation":referencee.occupation,
+                                                    'address':referencee.address
+                                                }
                                                 model.telecalling[key] = {
                                                     "key": key,
                                                     "fullkey": 'telecalling.'+key,
@@ -547,7 +594,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                         "occupation":referencee.occupation,
                                                         'address':referencee.address
                                                     },
-                                                    'telecallingDetails':prepareQuestionarieList(reference,model,type),
+                                                    'telecallingDetail':prepareQuestionarieList(reference[0],model,type,parentData),
                                                 };
                                                 referencePromiseList -= 1;
                                                 if (customerPromiseList == 0 && referencePromiseList ==0)
@@ -575,6 +622,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 var key = config.key || null;
                 var fullkey = config.fullkey || null;
                 var title = config.title || '';
+                var type = config.type || '';
                 return {
                     "telecallingBox":{
                         "title":title,
@@ -582,7 +630,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "items":{
                             "referenceDetails":{
                                 "type":"fieldset",
-                                "title":"REFERENCE_DETAILS",
+                                "title": type.toUpperCase()+'_REFERENCE_DETAILS',
                                 "items":{
                                 "referenceFirstName":{
                                     "title":"NAME",
@@ -610,76 +658,81 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 }
                                 }
                             },
-                            "telecallingDetails":{
+                            "telecallingDetail":{
                                 "type": "fieldset",
                                 "title":'TELECALLING_DETAILS',
                                 "items": {
-                                    "callingAttemptsFieldSet": {
-                                        "type": "fieldset",
-                                        "title": "CALLING_ATTEMPTS",
-                                        "items": []
-                                    },
                                     "telecallingResponse": {
-                                        "key": fullkey+".telecallingDetails.telecallingResponse",
+                                        "key": fullkey+".telecallingDetail.telecallingResponse",
                                         "type": "select",
                                         "title": "TELECALLING_RESPONSE",
-                                        "enumCode": "telecalling_response"
+                                        "enumCode": "telecalling_response",
+                                        "readonly":readonlyFlag,
                                     },
                                     "noOfCallAttempts": {
-                                        "key": fullkey+".telecallingDetails.noOfCallAttempts",
+                                        "readonly":readonlyFlag,
+                                        "key": fullkey+".telecallingDetail.noOfCallAttempts",
                                         "type": "number",
                                         "title": "NO_OF_CALLATTEMPTS"
                                     },
                                     "followupCallRequired": {
-                                        "key": fullkey+".telecallingDetails.followupCallRequired",
+                                        "readonly":readonlyFlag,
+                                        "key": fullkey+".telecallingDetail.followupCallRequired",
                                         "type": "date",
                                         "title": "FOLLOWUP_ON"
                                     },
                                     "telecallingRemarks": {
-                                        "key": fullkey+".telecallingDetails.telecallingRemarks",
+                                        "readonly":readonlyFlag,
+                                        "key": fullkey+".telecallingDetail.telecallingRemarks",
                                         "type": "textarea",
                                         "title": "TELECALLING_REMARKS"
                                     },
                                     "questions": {
+                                        "readonly":readonlyFlag,
                                         "type": "fieldset",
                                         "title": "QUESTIONS",
                                         "items": []
                                     },
                                     "telecallingQuestionnaireList": {
-                                        "key": fullkey+".telecallingDetails.telecallingQuestionnaireList",
+                                        "readonly":readonlyFlag,
+                                        "key": fullkey+".telecallingDetail.telecallingQuestionnaireList",
                                         "type": "array",
                                         "add": null,
                                         "remove": null,
                                         "view": "fixed",
                                         "items": {
                                             "question":{
-                                                "key": fullkey+".telecallingDetails.telecallingQuestionnaireList[].question",
+                                                "key": fullkey+".telecallingDetail.telecallingQuestionnaireList[].question",
                                                 "type": "textarea",
                                                 "title": "QUESTION",
                                                 "readonly": true
                                             },
                                             "answer1":{
-                                                "key": fullkey+".telecallingDetails.telecallingQuestionnaireList[].answer",
+                                                "readonly":readonlyFlag,
+                                                "key": fullkey+".telecallingDetail.telecallingQuestionnaireList[].answer",
                                                 "type": "string",
                                                 "title": "ANSWER",
-                                                "condition": "model."+fullkey+".telecallingDetails.telecallingQuestionnaireList[arrayIndex].input_type=='string'"
+                                                "condition": "model."+fullkey+".telecallingDetail.telecallingQuestionnaireList[arrayIndex].input_type=='string'"
                                             },
                                             "answer2":{
-                                                "key": fullkey+".telecallingDetails.telecallingQuestionnaireList[].answer",
+                                                "readonly":readonlyFlag,
+                                                "key": fullkey+".telecallingDetail.telecallingQuestionnaireList[].answer",
                                                 "type": "textarea",
                                                 "title": "ANSWER",
-                                                "condition": "model."+fullkey+".telecallingDetails.telecallingQuestionnaireList[arrayIndex].input_type=='textarea'"
+                                                "condition": "model."+fullkey+".telecallingDetail.telecallingQuestionnaireList[arrayIndex].input_type=='textarea'"
                                             },
                                             "answer3":{
-                                                "key": fullkey+".telecallingDetails.telecallingQuestionnaireList[].answer",
+                                                "readonly":readonlyFlag,
+                                                "key": fullkey+".telecallingDetail.telecallingQuestionnaireList[].answer",
                                                 "type": "number",
                                                 "title": "ANSWER",
-                                                "condition": "model."+fullkey+".telecallingDetails.telecallingQuestionnaireList[arrayIndex].input_type=='number'"
+                                                "condition": "model."+fullkey+".telecallingDetail.telecallingQuestionnaireList[arrayIndex].input_type=='number'"
                                             },
                                             "answer4":{
-                                                "key": fullkey+".telecallingDetails.telecallingQuestionnaireList[].answer",
+                                                "readonly":readonlyFlag,
+                                                "key": fullkey+".telecallingDetail.telecallingQuestionnaireList[].answer",
                                                 "title": "ANSWER",
-                                                "condition": "model."+fullkey+".telecallingDetails.telecallingQuestionnaireList[arrayIndex].input_type=='select'",
+                                                "condition": "model."+fullkey+".telecallingDetail.telecallingQuestionnaireList[arrayIndex].input_type=='select'",
                                                 "type": "lov",
                                                 "autolov": true,
                                                 "lovonly": true,
@@ -687,7 +740,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "searchHelper": formHelper,
                                                 "search": function (inputModel, form, model, context) {
                                                     var list = {};
-                                                    list = model[fullkey].telecallingDetails.telecallingQuestionnaireList[context.arrayIndex].select;
+                                                    list = model.telecalling[key].telecallingDetail.telecallingQuestionnaireList[context.arrayIndex].select;
 
                                                     var out = [];
                                                     _.forEach(list, function (val) {
@@ -702,7 +755,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     });
                                                 },
                                                 onSelect: function (valueObj, model, context) {
-                                                    model[fullkey].telecallingDetails.telecallingQuestionnaireList[context.arrayIndex].answer = valueObj.name;
+                                                    model.telecalling[key].telecallingDetail.telecallingQuestionnaireList[context.arrayIndex].answer = valueObj.name;
                                                 },
                                                 getListDisplayItem: function (item, index) {
                                                     return [
@@ -735,11 +788,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 return [
                     {
                         "type": "actionbox",
+                        "condition":"model.readonlyFlag",
                         "items": [
                             {
                                 "type": "button",
                                 "title": "SAVE",//PROCEED
-                                "onClick": "actions.submit(model, formCtrl, form, $event)"
+                                "onClick": "actions.save(model, formCtrl, form, $event)"
                             }
                         ]
                     },
@@ -752,6 +806,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "subTitle": "",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                     model.telecalling = {};
+                    currentStage = model.loanProcess.loanAccount.currentStage;
+                    if(currentStage == 'Televerification'){
+                        readonlyFlag =  false;
+                        model.readonlyFlag = !readonlyFlag;
+                    }   
+                        
                     model.customers = [
                         {
                             'customerId':model.loanProcess.loanAccount.customerId,
@@ -776,7 +836,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     }
                     var self = this;
                     Queries.questionnaireDetails('TELECALLING', 'Tele', 'televerification').then(function(questions){
-                        debugger;
                         model.questions = questions;
                         var outCount = 0;
                         var formPromiseArrray =[];
@@ -784,6 +843,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         self.forms = [];
                         var parentFormArray = [];
                         prepareModel(model,{},true).then(function(){
+                            console.log(model.telecalling);
                             Object.keys(model.promiseArray).forEach(function(key,value) {
                                 (function(key,count){
                                     formPromiseArrray[count] = [];
@@ -802,7 +862,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         parentFormArray.push($q.all(formPromiseArrray[count]).then(function(){
                                             self.forms.push({
                                                 form:self.childForm[count],
-                                                title:key.toUpperCase()+'_REFERENCES'
+                                                
+                                                title:key.charAt(0).toUpperCase()+key.slice(1)+' References'
                                             });
                                         }
                                     ))
@@ -846,13 +907,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 //     })
 
                 //     // applicant telecalling details
-                //     model.telecalling.applicant = _.filter(model.loanAccount.telecallingDetails, {"partyType": "applicant"});
+                //     model.telecalling.applicant = _.filter(model.loanAccount.telecallingDetail, {"partyType": "applicant"});
                 //     // coapplicant telecalling details
-                //     model.telecalling.coApplicant = _.filter(model.loanAccount.telecallingDetails, {"partyType": "coApplicant"});
+                //     model.telecalling.coApplicant = _.filter(model.loanAccount.telecallingDetail, {"partyType": "coApplicant"});
                 //     // guarantor telecalling details
-                //     model.telecalling.guarantor = _.filter(model.loanAccount.telecallingDetails, {"partyType": "guarantor"});
+                //     model.telecalling.guarantor = _.filter(model.loanAccount.telecallingDetail, {"partyType": "guarantor"});
                 //     // business telecalling details
-                //     model.telecalling.loanCustomer = _.filter(model.loanAccount.telecallingDetails, {"partyType": "loanCustomer"});
+                //     model.telecalling.loanCustomer = _.filter(model.loanAccount.telecallingDetail, {"partyType": "loanCustomer"});
 
                 //     var self = this;
                 //     Queries.questionnaireDetails('TELECALLING', 'Tele', 'televerification').then(
@@ -994,52 +1055,25 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 },
                 actions: {                    
                     save: function(model, formCtrl, form, $event) {
-                        model.applicant.customerId = model.applicant.customer.id;
-                        model.applicant.partyType = "applicant";
-                        model.applicant.customerCalledAt = new Date();
-                        model.loanAccount.telecallingDetails.push(model.applicant);
-
-                        model.loanCustomer.customerId = model.loanCustomer.customer.id;
-                        model.loanCustomer.partyType = "loanCustomer";
-                        model.loanCustomer.customerCalledAt = new Date();
-                        model.loanAccount.telecallingDetails.push(model.loanCustomer);
-
-
-
-                        //  _.forEach(model.coApplicants, function(val) {
-                        //     val.customerId = val.customer.id;
-                        //     val.partyType = "coApplicant";
-                        //     val.customerCalledAt = new Date();
-                        //     model.loanAccount.telecallingDetails.push(val);
-                        // });
-
-                        // _.forEach(model.guarantors, function(val) {                            
-                        //     val.customerId = val.customer.id;
-                        //     val.partyType = "guarantor";
-                        //     val.customerCalledAt = new Date();
-                        //     model.loanAccount.telecallingDetails.push(val);
-                        // });
-                        
-                        /* Loan SAVE */
-                        PageHelper.clearErrors();
-                        if (PageHelper.isFormInvalid(formCtrl)) {
-                            return false;
-                        }
                         PageHelper.showLoader();
-                        PageHelper.showProgress('loan-process', 'Updating Loan');
-                        model.loanProcess.save()
-                            .finally(function(data) {
-                                PageHelper.hideLoader();
-                            })
-                            .subscribe(function(value) {
-                                PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
-                                BundleManager.broadcastEvent("telecall",{telecallingDetails: model.loanAccount.telecallingDetails,version:model.loanAccount.version});
-                            }, function(err) {
-                                PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);
-                                PageHelper.showErrors(err);
-                                PageHelper.hideLoader();
-                            });
-
+                        var reqData = [];
+                        var requestMap = {};
+                        Object.keys(model.telecalling).forEach(function(key,value){
+                            var title = model.telecalling[key].telecallingDetail.customerId + '_' + model.telecalling[key].telecallingDetail.processId;
+                            reqData.push(model.telecalling[key]);
+                            requestMap[title] = {'key':key};
+                        })
+                        Telecalling.bulkUpdate(reqData).$promise.then(function(resp){
+                            PageHelper.hideLoader();
+                            for (var i=0;i<resp.length;i++){
+                                var title = resp[i].telecallingDetail.customerId+'_'+resp[i].telecallingDetail.processId;
+                                resp[i].telecallingDetail.telecallingQuestionnaireList = prepareInputType(model.questions,resp[i].telecallingDetail.telecallingQuestionnaireList,model.telecalling[requestMap[title].key].type+'_reference')
+                                model.telecalling[requestMap[title].key].telecallingDetail = resp[i].telecallingDetail;
+                            }
+                        },function(err){
+                            PageHelper.showErrors(err);
+                            PageHelper.hideLoader();
+                        })
                     }
                 }
             };
