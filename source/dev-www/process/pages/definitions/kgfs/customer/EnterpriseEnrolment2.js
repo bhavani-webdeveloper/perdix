@@ -3499,7 +3499,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     }
                     model.customer.enterprise.businessType  = "Services";
                     computeTotalMonthlySurpluse("value","form",model);
-                    if(model.currentStage != 'Screening' && model.currentStage != 'Application'){
+                    if(model.currentStage != 'Screening' && model.currentStage != 'Application' && model.currentStage != 'CreditAppraisal'){
                         model.customer.enterprise.ownerSalary = "67%";
                         model.customer.enterprise.initialEstimateMonthlySale = (model.customer.enterprise.monthlyBusinessExpenses) ? Number(model.customer.enterprise.monthlyBusinessExpenses * 4):0;
                         if(model.customer.enterprise){
