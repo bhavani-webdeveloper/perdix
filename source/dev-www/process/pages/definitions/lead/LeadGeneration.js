@@ -1328,7 +1328,7 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                 },
                 {
                     type: "box",
-                    title: "PREVIOUS_INTERACTIONS",
+                    title: "PREVIOUS_INTERACTIONS1",
                     condition: "model.lead.id && model.lead.currentStage == 'Inprocess'",
                     items: [{
                         key: "lead.leadInteractions1",
@@ -1346,7 +1346,6 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                         }, {
                             key: "lead.leadInteractions1[].typeOfInteraction",
                             type: "select",
-                            readonly: true,
                             titleMap: {
                                 "Call": "Call",
                                 "Visit": "Visit",
@@ -1415,6 +1414,7 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                             "key": "lead.leadInteractions[].picture",
                             "type": "file",
                             "fileType": "image/*",
+                            required:true,
                             "condition": "model.lead.leadInteractions[arrayIndex].typeOfInteraction === 'Visit'",
                         },]
                     }]
