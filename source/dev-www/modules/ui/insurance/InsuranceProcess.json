@@ -243,7 +243,8 @@
             "key":"insurancePolicyDetailsDTO.recommendationStatus",
             "title":"RECOMMENDATION_STATUS",
             "type":"string",
-            "orderNo":134
+            "orderNo":134,
+            "readonly":true
          },
          "recommendationResponseMessage":{  
             "key":"insurancePolicyDetailsDTO.recommendationResponseMessage",
