@@ -9,9 +9,9 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
             "title": "LEAD_GENERATION",
             "subTitle": "Lead",
             initialize: function (model, form, formCtrl) {
-
                 model.lead = model.lead || {};
                 model.siteCode = SessionStore.getGlobalSetting('siteCode');
+                model.loanAmountRequestedLeadLimit = SessionStore.getGlobalSetting('loanAmountRequestedLeadLimit');
 
                 if (!(model.$$STORAGE_KEY$$)) {
                     model.lead.customerType = "Enterprise";
@@ -1479,6 +1479,16 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                     if (model.siteCode == 'sambandh' || model.siteCode == 'saija' || model.siteCode == 'IREPDhan'|| model.siteCode == 'KGFS') {
                         model.lead.customerType = model.lead.customerTypeString;
                     }
+
+                    if (model.siteCode == 'KGFS') {
+                        if(model.lead.loanAmountRequested > model.loanAmountRequestedLeadLimit)
+                        {
+                            PageHelper.showErrors({data:{error:"Loan Amount Requested should be Maximum at 25 lakhs"}});
+                            return false;
+                        }
+                    }
+
+
                     var reqData = _.cloneDeep(model);
                     var centres = formHelper.enum('centre').data;
                     for (var i = 0; i < centres.length; i++) {
