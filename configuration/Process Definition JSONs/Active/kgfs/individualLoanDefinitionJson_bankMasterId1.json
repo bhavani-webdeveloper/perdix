@@ -1211,7 +1211,7 @@
                    "title":"collectionPaymentType",
                    "type":"string",
                    "captureStages":[
-                      "Application", "Screening", "FieldAppraisal", "LoanInitiation","DocumentUpload"
+                      "Application", "Screening","CreditAppraisal", "FieldAppraisal", "LoanInitiation","DocumentUpload"
                    ]
                 },
              "scheduleStartDate":{
@@ -1259,7 +1259,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Screening","Application","CreditAppraisal","LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineeMiddleName":{
@@ -1268,7 +1268,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Screening","Application","CreditAppraisal","LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineeLastName":{
@@ -1277,14 +1277,14 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Screening","Application","CreditAppraisal","LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineeRelationship":{
                       "title":"Nominee Relationship",
                       "type":"string",
                       "captureStages":[
-                        "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                        "Screening","Application","CreditAppraisal","LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ],
                       "refCodeCategory":"relation"
                    },
@@ -1294,7 +1294,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                        "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                        "Screening","Application","CreditAppraisal","LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineeStreet":{
@@ -1303,7 +1303,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Screening","Application","CreditAppraisal","LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineeLocality":{
@@ -1312,14 +1312,14 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Screening","Application","CreditAppraisal","LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineeDistrict":{
                       "title":"Nominee District",
                       "type":"string",
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Screening","Application","CreditAppraisal","LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ],
                       "refCodeCategory":"district"
                    },
@@ -1329,7 +1329,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                        "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                        "Screening","Application","CreditAppraisal","LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineePincode":{
@@ -1338,21 +1338,21 @@
                       "minimum":6,
                       "maximum":6,
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                        "Screening","Application","CreditAppraisal", "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "nomineeDOB":{
                       "title":"Nominee DOB",
                       "type":"string",
                       "captureStages":[
-                        "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview","FieldAppraisal"
+                        "Screening","Application","CreditAppraisal","LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview","FieldAppraisal"
                       ]
                    },
                    "nomineeGender":{
                       "title":"Nominee Gender",
                       "type":"string",
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Screening","Application","CreditAppraisal","LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ],
                       "refCodeCategory":"gender"
                    },
@@ -1360,7 +1360,7 @@
                       "title":"Nominee Minor",
                       "type":"boolean",
                       "captureStages":[
-                         "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                        "Screening","Application","CreditAppraisal", "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianTitle":{
@@ -1369,7 +1369,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Screening","Application","CreditAppraisal","LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianFirstName":{
@@ -1378,7 +1378,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Screening","Application","CreditAppraisal","LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianMiddleName":{
@@ -1387,7 +1387,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Screening","Application","CreditAppraisal","LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianLastName":{
@@ -1396,14 +1396,14 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Screening","Application","CreditAppraisal","LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianRelationWithMinor":{
                       "title":"Guardian Relation With Minor",
                       "type":"string",
                       "captureStages":[
-                        "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                        "Screening","Application","CreditAppraisal","LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ],
                       "refCodeCategory":"relationship"
                    },
@@ -1411,7 +1411,7 @@
                       "title":"Guardian DOB",
                       "type":"string",
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Screening","Application","CreditAppraisal","LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianDoorNo":{
@@ -1420,7 +1420,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Screening","Application","CreditAppraisal","LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianStreet":{
@@ -1429,7 +1429,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                         "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                        "Screening","Application","CreditAppraisal", "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianLocality":{
@@ -1438,14 +1438,14 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                        "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                        "Screening","Application","CreditAppraisal","LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianDistrict":{
                       "title":"Guardian District",
                       "type":"string",
                       "captureStages":[
-                         "LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Screening","Application","CreditAppraisal","LoanInitiation", "DSCOverride","PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ],
                       "refCodeCategory":"district"
                    },
@@ -1455,7 +1455,7 @@
                       "minLength":1,
                       "maxLength":100,
                       "captureStages":[
-                        "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                        "Screening","Application","CreditAppraisal","LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianPincode":{
@@ -1464,14 +1464,14 @@
                       "minimum":6,
                       "maximum":6,
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Screening","Application","CreditAppraisal","LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ]
                    },
                    "guardianGender":{
                       "title":"Guardian Gender",
                       "type":"string",
                       "captureStages":[
-                         "LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
+                         "Screening","Application","CreditAppraisal","LoanInitiation","DSCOverride", "PendingForPartner", "Application","ApplicationReview", "FieldAppraisal"
                       ],
                       "refCodeCategory":"gender"
                    }

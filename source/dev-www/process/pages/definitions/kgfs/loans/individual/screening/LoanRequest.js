@@ -72,6 +72,16 @@ define([],function(){
                 model.loanAccount.ornamentsAppraisals[index].ratePerGramInPaisa = parseFloat((dynamicRate/100).toFixed(2));
                 model.loanAccount.ornamentsAppraisals[index].marketValueInPaisa = parseFloat((dynamicMarketValue/100).toFixed(2));
             };
+
+            var addressMapCustomertoNominee= function (customer,nominee){
+                nominee.nomineeState = customer.state || null;
+                nominee.nomineeDistrict = customer.district ||null;
+                nominee.nomineePincode = customer.pincode || null;
+                nominee.nomineeLocality = customer.locality || null;
+                nominee.nomineeStreet = customer.street ||null;
+                nominee.nomineeDoorNo = customer.doorNo ||null;
+            };
+
             var pmt = function(rate, nper, pv, fv, type) {
                 if (!fv) fv = 0;
                 if (!type) type = 0;
@@ -311,6 +321,17 @@ define([],function(){
                     model.loanAccount.accountUserDefinedFields = {};
                     model.loanAccount.accountUserDefinedFields.userDefinedFieldValues = {};
                 }
+
+                 if (typeof model.loanAccount.nominees == "undefined" || model.loanAccount.nominees == null){
+                    model.loanAccount.nominees = [];
+                    model.loanAccount.nominees.push({});
+                }
+                else {
+                    if(!initFlag){
+                        model.loanAccount.nominees = [];
+                        model.loanAccount.nominees.push({});
+                    }
+                }
                 
                 if (typeof model.loanAccount.loanCentre == "undefined" || model.loanAccount.loanCentre == null){
                     model.loanAccount.loanCentre = {};
@@ -367,7 +388,13 @@ define([],function(){
                 }
             }
 
-
+             var mapNomineeAddress = function(model){
+                /** Here guardianTitle column is used as flag to capture AddressSameasBorrower due to no other column exists in nominee_details table*/
+                if (model.loanAccount.nominees[0].isnomineeAddressSameasBorrower)
+                    model.loanAccount.nominees[0].guardianTitle = "YES";
+                else
+                    model.loanAccount.nominees[0].guardianTitle = "NO";     
+                }  
 
            
                 function round(x) {
@@ -761,8 +788,16 @@ define([],function(){
                         "PreliminaryInformation.modeOfDisbursement": {
                             "required": true
                         },
+                        "PreliminaryInformation.collectionPaymentType": {
+                            orderNo:160,
+                            titleMap:[{
+                                "ACH":"ACH",
+                                "PDC":"PDC",
+                                "CASH":"CASH"
+                            }],
+                        },
                         "LoanCustomerRelations": {
-                            "orderNo": 2
+                            "orderNo": 2                            
                         },
                         "LoanCustomerRelations.loanCustomerRelations": {
                             "add": null,
@@ -855,7 +890,239 @@ define([],function(){
                         },
                         "JewelDetails.ornamentDetails.marketValue":{
                             readonly : true
+                        },
+                        "NomineeDetails":{
+                            "orderNo": 19
+                        },
+                        "NomineeDetails.nominees.nomineeFirstName": {
+                        "orderNo": 1,
+                        "type": "lov",
+                        "title": "NAME",
+                        required:true,
+                        searchHelper: formHelper,
+                        search: function (inputModel, form, model, context) {
+                            var out = [];
+                            var applicantCustomer = [];
+                            if (typeof model.loanProcess == "undefined" || typeof model.loanProcess.applicantEnrolmentProcess == "undefined" || typeof model.loanProcess.applicantEnrolmentProcess.customer == "undefined") {
+                                return out;
+                            }
+                            applicantCustomer = model.loanProcess.applicantEnrolmentProcess.customer;
+                            if (!applicantCustomer) {
+                                return out;
+                            }
+
+                            for (var i = 0; i < applicantCustomer.familyMembers.length; i++) {
+                                if(!(applicantCustomer.urnNo == applicantCustomer.familyMembers[i].enrolledUrnNo)){
+                                    out.push({
+                                        name: applicantCustomer.familyMembers[i].familyMemberFirstName,
+                                        dob: applicantCustomer.familyMembers[i].dateOfBirth,
+                                        relationship: applicantCustomer.familyMembers[i].relationShip,
+                                        gender: applicantCustomer.familyMembers[i].gender
+                                    })
+                                }
+                            }
+                            return $q.resolve({
+                                headers: {
+                                    "x-total-count": out.length
+                                },
+                                body: out
+                            });
+                        },
+                        onSelect: function (valueObj, model, context) {
+                            //add to the witnees array.
+                            if (_.isUndefined(model.loanAccount.nominees[context.arrayIndex])) {
+                                model.loanAccount.nominees[context.arrayIndex] = [];
+                            }
+                            model.loanAccount.nominees[context.arrayIndex].nomineeFirstName = valueObj.name;
+                            model.loanAccount.nominees[context.arrayIndex].nomineeRelationship = valueObj.relationship;
+                            model.loanAccount.nominees[context.arrayIndex].nomineeGender = valueObj.gender;
+                            model.loanAccount.nominees[context.arrayIndex].nomineeDOB = valueObj.dob
+                        },
+                        getListDisplayItem: function (item, index) {
+                            return [
+                                item.name
+                            ];
                         }
+
+                    },
+                    "NomineeDetails.nominees.nomineeDOB": {
+                        "orderNo": 2,
+                        required:true,
+                    },
+                    // "NomineeDetails.nominees.nomineeRelationship": {
+                    //     "readonly": true,
+                    //     "type": "text",
+                    // },
+                    "NomineeDetails.nominees.nomineeGender": {
+                        "orderNo": 3,
+                        //"readonly": true,
+                        required:true,
+                       // "type": "text"
+                    },
+                    "NomineeDetails.nominees.nomineePincode": {
+                        "orderNo": 6,
+                        fieldType: "number",    
+                        autolov: true,
+                        required:true,
+                        inputMap: {
+                            "district": {
+                                key: "loanAccount.nominees[].nomineeDistrict"
+                            },
+                            "state": {
+                                key: "loanAccount.nominees[].nomineeState"
+                            },
+                            "pincode": {
+                                key: "loanAccount.nominees[].nomineePincode"
+                            }
+                        },
+                        outputMap: {
+                            "division": "loanAccount.nominees[arrayIndex].nomineeLocality",
+                            "pincode": "loanAccount.nominees[arrayIndex].nomineePincode",
+                            "district": "loanAccount.nominees[arrayIndex].nomineeDistrict",
+                            "state": "loanAccount.nominees[arrayIndex].nomineeState"
+                        },
+                        searchHelper: formHelper,
+                        // initialize: function(inputModel, form, model, context) {
+                        //     inputModel.pincode = model.loanAccount.nominees[context.arrayIndex].nomineePincode;
+                        // },
+                        search: function (inputModel, form, model, context) {
+                            return Queries.searchPincodes(
+                                inputModel.pincode || model.loanAccount.nominees[context.arrayIndex].nomineePincode,
+                                inputModel.district,
+                                inputModel.state
+                            );
+                        },
+                        getListDisplayItem: function (item, index) {
+                            return [
+                                item.division + ', ' + item.region,
+                                item.pincode,
+                                item.district + ', ' + item.state
+                            ];
+                        }
+                    },
+                    "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianFirstName": {
+                        "type": "lov",
+                        "title": "NAME",
+                        required:true,
+                        searchHelper: formHelper,
+                        search: function (inputModel, form, model, context) {
+                            var out = [];
+                            var applicantCustomer = [];
+                            if (typeof model.loanProcess == "undefined" || typeof model.loanProcess.applicantEnrolmentProcess == "undefined" || typeof model.loanProcess.applicantEnrolmentProcess.customer == "undefined") {
+                                return out;
+                            }
+                            applicantCustomer = model.loanProcess.applicantEnrolmentProcess.customer;
+                            if (!applicantCustomer) {
+                                return out;
+                            }
+
+                            for (var i = 0; i < applicantCustomer.familyMembers.length; i++) {
+                                if(!(applicantCustomer.urnNo == applicantCustomer.familyMembers[i].enrolledUrnNo)){
+                                    out.push({
+                                        name: applicantCustomer.familyMembers[i].familyMemberFirstName,
+                                        dob: applicantCustomer.familyMembers[i].dateOfBirth,
+                                        relationship: applicantCustomer.familyMembers[i].relationShip,
+                                        gender: applicantCustomer.familyMembers[i].gender
+                                    })
+                                }
+                            }
+                            return $q.resolve({
+                                headers: {
+                                    "x-total-count": out.length
+                                },
+                                body: out
+                            });
+                        },
+                        onSelect: function (valueObj, model, context) {
+                            //add to the witnees array.
+                            if (_.isUndefined(model.loanAccount.nominees[context.arrayIndex])) {
+                                model.loanAccount.nominees[context.arrayIndex] = [];
+                            }
+                            model.loanAccount.nominees[context.arrayIndex].guardianFirstName = valueObj.name;
+                            model.loanAccount.nominees[context.arrayIndex].guardianRelationship = valueObj.relationship;
+                            model.loanAccount.nominees[context.arrayIndex].guardianGender = valueObj.gender;
+                            model.loanAccount.nominees[context.arrayIndex].guardianDOB = valueObj.dob
+                        },
+
+                        getListDisplayItem: function (item, index) {
+                            return [
+                                item.name
+                            ];
+                        }
+                    },
+                    "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianGender": {
+                        // "readonly": true,
+                        // "type": "text",
+                        "enumCode":"gender",
+                        required:true
+                    },
+                    "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianRelationship": {
+                        // "readonly": true,
+                        // "type": "text",
+                        //"enumCode":"relation",
+                        "titleMap": [{
+                            value: "Relative",
+                            name: "Relative"
+                            },
+                            {
+                                value: "Neighbour",
+                                name: "Neighbour"
+                            },
+                        ],
+                        required:true
+                    },
+                    "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianPincode": {
+                        autolov: true,
+                        required:true,
+                        inputMap: {
+                            "district": {
+                                key: "loanAccount.nominees[].guardianDistrict"
+                            },
+                            "state": {
+                                key: "loanAccount.nominees[].guardianState"
+                            },
+                            "pincode": {
+                                key: "loanAccount.nominees[].guardianPincode"
+                            }
+                        },
+                        searchHelper: formHelper,
+                        // initialize: function(inputModel, form, model, context) {
+                        //     inputModel.pincode = model.loanAccount.nominees[context.arrayIndex].guardianPincode;
+                        // },
+                        search: function (inputModel, form, model, context) {
+                            return Queries.searchPincodes(
+                                inputModel.pincode || model.loanAccount.nominees[context.arrayIndex].guardianPincode,
+                                inputModel.district,
+                                inputModel.state
+                            );
+                        },
+                        onSelect : function(valueObj,model,context){
+                            model.loanAccount.nominees[context.arrayIndex].guardianLocality = valueObj.region, 
+                            model.loanAccount.nominees[context.arrayIndex].guardianPincode =  valueObj.pincode.toString(),
+                            model.loanAccount.nominees[context.arrayIndex].guardianDistrict = valueObj.district,
+                            model.loanAccount.nominees[context.arrayIndex].guardianState = valueObj.state
+                        },
+                        getListDisplayItem: function (item, index) {
+                            return [
+                                item.division + ', ' + item.region,
+                                item.pincode,
+                                item.district + ', ' + item.state
+                            ];
+                        }
+                    },
+                    "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianAddressSameAsBorrower": {
+                        onChange: function(valueObj,form,model){
+                            if(valueObj == true)
+                                addressMapCustomertoGuardian(model.customer,model.loanAccount.nominees[0]);
+                            else
+                                addressMapCustomertoGuardian({},model.loanAccount.nominees[0]);
+                        }
+                    },
+                    "NomineeDetails.nominees.nomineeMinor":{
+                        onChange:function(valueObj,form,mode){
+                            clearAll("0",["guardianFirstName","guardianGender","guardianDOB","guardianDoorNo","guardianLocality","guardianDistrict","guardianStreet","guardianPincode","guardianState","guardianRelationWithMinor","guardianAddressSameAsCustomer"],model.loanAccount.nominees);
+                        }
+                    }
                     }
                 }
 
@@ -877,6 +1144,35 @@ define([],function(){
                     "PreliminaryInformation.comfortableEMI",
                     "PreliminaryInformation.expectedInterestRate",
                     "PreliminaryInformation.modeOfDisbursement",
+                    "PreliminaryInformation.collectionPaymentType",        
+
+                    "NomineeDetails",
+                    "NomineeDetails.nominees",
+                    "NomineeDetails.nominees.nomineeFirstName",
+                    "NomineeDetails.nominees.nomineeGender",
+                    "NomineeDetails.nominees.nomineeDOB",
+                    "NomineeDetails.nominees.nomineeButton",
+                    "NomineeDetails.nominees.nomineeAddressSameasBorrower",
+                    "NomineeDetails.nominees.nomineeDoorNo",
+                    "NomineeDetails.nominees.nomineeLocality",
+                    "NomineeDetails.nominees.nomineeStreet",
+                    "NomineeDetails.nominees.nomineePincode",
+                    "NomineeDetails.nominees.nomineeDistrict",
+                    "NomineeDetails.nominees.nomineeState",
+                    "NomineeDetails.nominees.nomineeRelationship",
+                    "NomineeDetails.nominees.nomineeMinor",
+                    "NomineeDetails.nominees.nomineeGuardian",
+                    "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianFirstName",
+                    "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianGender",
+                    "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianDOB",
+                    "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianAddressSameAsBorrower",
+                    "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianDoorNo",
+                    "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianLocality",
+                    "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianStreet",
+                    "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianPincode",
+                    "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianDistrict",
+                    "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianState",
+                    "NomineeDetails.nominees.nomineeGuardian.nomineeGuardianRelationship",
 
                     "JewelDetails",
                     "JewelDetails.jewelPouchNo",
