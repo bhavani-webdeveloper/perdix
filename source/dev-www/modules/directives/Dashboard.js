@@ -14,8 +14,8 @@ irf.pageCollection.directive("irfPvDashboard", function () {
         "parameters": {
             "CustomerId": $scope.visualizationData.customerId,
             "LoanId": $scope.visualizationData.loanId,
-            "CustomerId": 11791,
-            "LoanId": 6396
+            // "CustomerId": 11791,
+            // "LoanId": 6396
         }
     }).$promise.then(function (res) {
         $scope.dashboardData = res;
