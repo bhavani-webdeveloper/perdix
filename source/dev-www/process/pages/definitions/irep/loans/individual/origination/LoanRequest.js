@@ -112,11 +112,11 @@ define([],function(){
                                 "PreliminaryInformation.tenureRequested": {
                                     "type": "select",
                                     "schema": {
-                                             "enumCode": "tenure_requested"
+                                             "enumCode": "tenure_requested",
                                         }
                                 },
                                 "PreliminaryInformation.expectedEmi": {
-                                    "readonly": true
+                                    "readonly": true,
                                 },
                                 "PreliminaryInformation.emiRequested": {
                                     "required": true
@@ -855,7 +855,11 @@ define([],function(){
 
                     /* Setting data recieved from Bundle */
                     model.loanAccount = model.loanProcess.loanAccount;
-
+                    if (model.loanAccount.expectedInterestRate)
+                        model.loanAccount.expectedInterestRate = model.loanAccount.expectedInterestRate.toString();
+                    if (model.loanAccount.tenureRequested)
+                        model.loanAccount.tenureRequested = model.loanAccount.tenureRequested.toString();
+                        debugger;
                     if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
                         model.loanAccount.loanCustomerRelations!=null &&
                         model.loanAccount.loanCustomerRelations.length > 0) {
@@ -1164,8 +1168,13 @@ define([],function(){
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
+                                if (model.loanAccount.expectedInterestRate)
+                                    model.loanAccount.expectedInterestRate = model.loanAccount.expectedInterestRate.toString();
+                                if (model.loanAccount.tenureRequested)
+                                    model.loanAccount.tenureRequested = model.loanAccount.tenureRequested.toString();
                                 BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount});                                    
                                 Utils.removeNulls(value, true);
+                                
                                 PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
 
                             }, function (err) {
