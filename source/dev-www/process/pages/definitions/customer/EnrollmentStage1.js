@@ -429,10 +429,12 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "Lead", "LeadHe
                         }
                     }, {
                         key: "customer.idProofIssueDate",
-                        type: "date"
+                        type: "date",
+                        required:true
                     }, {
                         key: "customer.idProofValidUptoDate",
-                        type: "date"
+                        type: "date",
+                        required:true
                     }, {
                         key: "customer.addressProofSameAsIdProof"
                     }]
