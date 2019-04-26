@@ -30,6 +30,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                         if (!model._disbursementConfirmation) {
                             $log.info("Page visited directly");
                             backToQueue();
+                            return;
                         }
                         IndividualLoan.get({ id: loanId }, function (resp, head) {
                             model.loanacount = resp;
@@ -51,6 +52,43 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                             else {
                                 PageHelper.showProgress('loan-fetch', 'Done.', 5000);
                             }
+                            model.additional = {
+                                applicant : [],
+                                coapplicant : [],
+                                guarantor : [],
+                                isEntity : false
+                            }
+                            model.additional.globalCount = 0;
+                            Enrollment.getCustomerById({id: model.loanacount.customerId}).$promise.then(data => {
+                                model.additional.customer = data;
+                                PageHelper.showLoader();
+                                model.additional.isEntity = data.customerType == "Individual" ? false : true;
+                                for (var i=0;i<model.loanacount.loanCustomerRelations.length;i++){
+                                    if (!model.additional.isEntity && model.loanacount.loanCustomerRelations[i].relation == "Applicant"){
+                                        model.additional.globalCount += 1;
+                                        if(model.additional.globalCount == model.loanacount.loanCustomerRelations.length){
+                                            PageHelper.hideLoader();
+                                        }
+                                        continue;
+                                    }
+                                    (function(index){
+                                        Enrollment.getCustomerById({id:model.loanacount.loanCustomerRelations[index].customerId}).$promise.then(customer =>{
+                                            var type = ((model.loanacount.loanCustomerRelations[index].relation).replace('-','')).toLowerCase();
+                                            model.additional[type].push(customer);
+                                            model.additional.globalCount += 1;
+                                            if(model.additional.globalCount == model.loanacount.loanCustomerRelations.length){
+                                                PageHelper.hideLoader();
+                                            }
+                                        },function(err){
+                                            model.additional.globalCount += 1;
+                                            if(model.additional.globalCount == model.loanacount.loanCustomerRelations.length){
+                                                PageHelper.hideLoader();
+                                            }
+                                        })
+                                    })(i)
+                                }
+                                    
+                            })                            
                             console.log(model);
                             LoanAccount.get({
                                 accountId: model.loanacount.accountNumber
@@ -83,10 +121,10 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                 getOfflineDisplayItem: function (item, index) {
 
                 },
-                form: [{
+                form: [
+                    {
                     "type": "box",
                     "title": "DISBURSEMENT_DETAILS",
-                    "colClass": "col-sm-8",
                     "items": [
 
                         {
@@ -135,7 +173,8 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                             "key": "loanAccountDisbursementSchedule.udf5",
                             "title": "FINANCE_TEAM_REJECTION_REASON",
                             "type": "select",
-                            "condition": "model.loanAccountDisbursementSchedule.udf1=='Rejected'"
+                            "condition": "model.loanAccountDisbursementSchedule.udf1=='Rejected'",
+                            "required": true
                         },
                         {
                             "key": "loanAccountDisbursementSchedule.udf4",
@@ -191,7 +230,161 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.DisbursementC
                             }]
                         }
                     ]
-                }],
+                    },
+                    {
+                        "type":"box",
+                        "title":"LOAN_DETAILS",
+                        "readonly":true,
+                        "items":[
+                            {
+                                "key":"loanacount.accountNumber",
+                                "title":"LOAN_ACCOUNT_NUMBER",
+                            },
+                            // {
+                            //     "key":"loanacount.disbursedAmountInPaisa",
+                            //     "title":"DISBURSEMENT_AMOUNT",
+                            // },
+                            {
+                                "type":"fieldset",
+                                "title":"ENTITY_DETAILS",
+                                "condition":"model.additional.isEntity",
+                            },
+                            {
+                                "type":"string",
+                                "title":"ENTITY_NAME",
+                                "key":"additional.customer.firstName",
+                                "condition":"model.additional.isEntity",
+
+                            },
+                            {
+                                "type":"string",
+                                "title":"ENTITY_ID",
+                                "key":"additional.customer.id",
+                                "condition":"model.additional.isEntity",
+                            },
+                            {
+                                "type":"string",
+                                "title":"ENTITY_URN_NO",
+                                "key":"additional.customer.urnNo",
+                                "condition":"model.additional.isEntity",
+                            },
+                            {
+                                "type":"fieldset",
+                                "title":"APPLICANT_DETAILS",
+                                "condition":"model.additional.isEntity",
+                            },
+                            {
+                                "type":"array",
+                                "condition":"model.additional.isEntity && model.additional.applicant.length >= 1",
+                                "key":"additional.applicant",
+                                "add":null,
+                                "remove":null,
+                                "view": "fixed",
+                                "title":"APPLICANT",
+                                "items":[
+                                    {
+                                        "type":"string",
+                                        "title":"APPLICANT_NAME",
+                                        "key":"additional.applicant[].firstName"
+                                    },
+                                    {
+                                        "type":"string",
+                                        "title":"APPLICANT_ID",
+                                        "key":"additional.applicant[].id"
+                                    },
+                                    {
+                                        "type":"string",
+                                        "title":"APPLICANT_URN_NO",
+                                        "key":"additional.applicant[].urnNo"
+                                    }
+                                ]
+                            },
+                            {
+                                "type":"string",
+                                "title":"APPLICANT_NAME",
+                                "key":"additional.customer.firstName",
+                                "condition":"!model.additional.isEntity",
+
+                            },
+                            {
+                                "type":"string",
+                                "title":"APPLICANT_ID",
+                                "key":"additional.customer.id",
+                                "condition":"!model.additional.isEntity",
+                            },
+                            {
+                                "type":"string",
+                                "title":"APPLICANT_URN_NO",
+                                "key":"additional.customer.urnNo",
+                                "condition":"!model.additional.isEntity",
+                            },
+                            {
+                                "type":"fieldset",
+                                "title":"CO_APPLICANT_DETAILS",
+                                "condition":"model.additional.coapplicant.length >= 1"
+                            },
+                            {
+                                "type":"array",
+                                "key":"additional.coapplicant",
+                                "condition":"model.additional.coapplicant.length >= 1",
+                                "add":null,
+                                "remove":null,
+                                "view": "fixed",
+                                "title":"CO_APPLICANT",
+                                "items":[
+                                    {
+                                        "type":"string",
+                                        "title":"CO_APPLICANT_NAME",
+                                        "key":"additional.coapplicant[].firstName"
+                                    },
+                                    {
+                                        "type":"string",
+                                        "title":"CO_APPLICANT_ID",
+                                        "key":"additional.coapplicant[].id"
+                                    },
+                                    {
+                                        "type":"string",
+                                        "title":"CO_APPLICANT_URN_NO",
+                                        "key":"additional.coapplicant[].urnNo"
+                                    }
+                                ]
+                            },
+                            {
+                                "type":"fieldset",
+                                "title":"GUARANTOR_DETAILS",
+                                "condition":"model.additional.guarantor.length >= 1"
+                            },
+                            {
+                                "type":"array",
+                                "key":"additional.guarantor",
+                                "condition":"model.additional.guarantor.length >= 1",
+                                "add":null,
+                                "remove":null,
+                                "view": "fixed",
+                                "title":"GUARANTOR",
+                                "items":[
+                                    {
+                                        "type":"string",
+                                        "title":"GUARANTOR_NAME",
+                                        "key":"additional.guarantor[].firstName"
+                                    },
+                                    {
+                                        "type":"string",
+                                        "title":"GUARANTOR_ID",
+                                        "key":"additional.guarantor[].id"
+                                    },
+                                    {
+                                        "type":"string",
+                                        "title":"GUARANTOR_URN_NO",
+                                        "key":"additional.guarantor[].urnNo"
+                                    }
+                                ]
+                            }
+
+                            
+                        ]
+                    }
+                ],
                 schema: function () {
                     return SchemaResource.getDisbursementSchema().$promise;
                 },

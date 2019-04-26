@@ -369,12 +369,12 @@ define({
                                     bindMap: {},
                                     searchHelper: formHelper,
                                     search: function (inputModel, form, model, context) {
-                                        var stage1 = model.currentStage;
+                                        var stage1 = model.loanAccount.currentStage;
 
-                                        if (model.currentStage == 'Application' || model.currentStage == 'ApplicationReview') {
+                                        if (model.loanAccount.currentStage == 'Application' || model.loanAccount.currentStage == 'ApplicationReview') {
                                             stage1 = "Application";
                                         }
-                                        if (model.currentStage == 'FieldAppraisal' || model.currentStage == 'FieldAppraisalReview') {
+                                        if (model.loanAccount.currentStage == 'FieldAppraisal' || model.loanAccount.currentStage == 'FieldAppraisalReview') {
                                             stage1 = "FieldAppraisal";
                                         }
 
@@ -459,7 +459,21 @@ define({
                                     searchHelper: formHelper,
                                     search: function (inputModel, form, model, context) {
                                         var stage1 = model.loanAccount.currentStage;
-                                        var booking_target_stage = formHelper.enum('booking_target_stage').data;
+                                        var productCategory = model.loanProcess.loanAccount.productCategory;
+                                        if(model.loanAccount.currentStage=='Rejected')
+                                        var stage1= model.review.preStage;
+                                        
+                                        if((productCategory == 'Consumer' || productCategory == 'Personal') && model.loanAccount.currentStage !='Rejected')
+                                        var targetstage = formHelper.enum('targetstagemelpersonal').data;
+                                        else if(productCategory == 'JEWEL' && model.loanAccount.currentStage !='Rejected')
+                                        var targetstage = formHelper.enum('targetstagemeljewel').data;
+                                         else if(productCategory == 'JEWEL' && model.loanAccount.currentStage =='Rejected')
+                                        var targetstage = formHelper.enum('targetstagemeljewelreject').data;
+                                        else if((productCategory == 'Consumer' || productCategory == 'Personal') && model.loanAccount.currentStage =='Rejected' )
+                                        var targetstage = formHelper.enum('targetstagemelpersonalreject').data;
+                                        else
+                                        var targetstage = formHelper.enum('booking_target_stage').data;
+
                                         var out = [];
                                         for (var i = 0; i < booking_target_stage.length; i++) {
                                             var t = booking_target_stage[i];
@@ -604,6 +618,11 @@ define({
 
                 },
                 sendBack: function (model, formCtrl, form, $event) {
+                    if (model.review.remarks==null || model.review.remarks =="" || model.review.targetStage ==null || model.review.targetStage ==""){
+                               PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
+                               PageHelper.hideLoader();
+                               return false;
+                    }
                     PageHelper.showLoader();
                     model.loanProcess.sendBack()
                         .finally(function () {
@@ -621,6 +640,11 @@ define({
                         });
                 },
                 proceed: function (model, formCtrl, form, $event) {
+                    if (_.hasIn(model, 'review.targetStage'))
+                    {
+                        model.review.targetStage='';
+                        model.loanProcess.stage='';
+                    }
                     formCtrl.scope.$broadcast('schemaFormValidate');
 					    if(!formCtrl.$valid){
                             PageHelper.showProgress('form-error', 'Your form have errors. Please fix them.',5000);
@@ -647,8 +671,10 @@ define({
                         });
                 },
                 reject: function (model, formCtrl, form, $event) {
-                    if (PageHelper.isFormInvalid(formCtrl)) {
-                        return false;
+                    if (model.review.remarks==null || model.review.remarks =="" || model.loanAccount.rejectReason ==null || model.loanAccount.rejectReason ==""){
+                               PageHelper.showProgress("update-loan", "Reject Reason / Remarks is mandatory", 3000);
+                               PageHelper.hideLoader();
+                               return false;
                     }
                     PageHelper.showLoader();
                     model.loanProcess.reject()

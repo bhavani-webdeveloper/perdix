@@ -39,7 +39,7 @@ define({
 			},
 			definition: {
 				title: "CHECKER4_QUEUE",
-				autoSearch:true,
+				autoSearch:false,
 				searchForm: [
 					{
 	                	"type": "section",

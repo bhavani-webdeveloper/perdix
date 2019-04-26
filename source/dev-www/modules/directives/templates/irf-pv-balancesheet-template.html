@@ -1,0 +1,93 @@
+<div class="row ">
+    <!-- {{returnData}} -->
+    <div class="col-md-12 col-sm-12">
+        <div>
+            <h4>{{returnData.title}}</h4>
+            <div class="col-md-12 col-sm-12">
+
+
+                <div ng-if="enableUI">
+                    <div ng-repeat="returnValue in returnshowData.data">
+                            <div style="float:left">
+                                    {{returnValue.title}}
+                                </div>
+                                <div style="float:right">
+                                    {{returnValue.data}}
+                                </div>
+                    </div>
+                   
+                </div>
+                <div ng-if="typeof(returnData.data)==object &&  returnData!=''">
+                    <irf-pv-balancesheet-template balancesheettemp-data="returnData"></irf-pv-balancesheet-template>
+                </div>
+            </div>
+            <div ng-if="typeof(returnData.data)==object">
+                <div style="float:left">
+                    {{returnData.total.title}}
+                </div>
+                <div style="float:right">
+                    {{returnData.total.data}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [  
+   {  
+      "title":"Current Assets",
+      "parent":"Assets",
+      "data":[  
+         {  
+            "title":"Checking Account",
+            "data":"2000",
+            "parent":"Current Assets"
+         },
+         {  
+            "title":"Saving Account",
+            "data":"15000",
+            "parent":"Current Assets"
+         },
+         {  
+            "title":"Inventory",
+            "data":"5000",
+            "parent":"Current Assets"
+         },
+         {  
+            "title":"Petty Cash",
+            "data":"200",
+            "parent":"Current Assets"
+         }
+      ],
+      "total":{  
+         "title":"Total Current Assets",
+         "data":"22200",
+         "parent":"Current Assets"
+      }
+   },
+   {  
+      "title":"Fixed Assets",
+      "parent":"Assets",
+      "data":[  
+         {  
+            "title":"land",
+            "data":"60000",
+            "parent":"Fixed Assets"
+         },
+         {  
+            "title":"Building",
+            "data":"45000",
+            "parent":"Fixed Assets"
+         },
+         {  
+            "title":"Computer and Office Equipments",
+            "data":"25000",
+            "parent":"Fixed Assets"
+         }
+      ],
+      "total":{  
+         "title":"Total Fixed Assets",
+         "data":"130000",
+         "parent":"Fixed Assets"
+      }
+   }
+] -->

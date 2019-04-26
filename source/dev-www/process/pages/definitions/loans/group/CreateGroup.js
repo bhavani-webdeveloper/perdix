@@ -291,6 +291,25 @@ define({
                             "Spoke": "group.centreCode",
                         },
                         "inputMap": {
+                            "fullName":{
+                                "title":'CUSTOMER_NAME',
+                                "type":['string',null],
+                                "key":"searchSchema.fullName",
+                                "x-schema-form": {
+                                    'type':"string"
+                                },
+                            },
+                            "urnNo":{
+                                "key":"searchSchema.urnNo",
+                                "x-schema-form": {
+                                    'type':"string"
+                                },
+                                "title":"URN_NO",
+                                "type":['string',null],
+                                "schema":{
+                                    "type":"string"
+                                }
+                            },
                             "branchId": {
                                 "key": "group.branchId",
                                 "title": "BRANCH_NAME",
@@ -313,7 +332,7 @@ define({
                             "urnNo": "group.jlgGroupMembers[arrayIndex].urnNo",
                             "firstName": "group.jlgGroupMembers[arrayIndex].firstName",
                             "fatherFirstName": "group.jlgGroupMembers[arrayIndex].fatherFirstName",
-                            "customerId": "group.jlgGroupMembers[arrayIndex].customerId",
+                            "id": "group.jlgGroupMembers[arrayIndex].customerId",
                             "spouseFirstName": "group.jlgGroupMembers[arrayIndex].spouseFirstName"
                         },
                         "searchHelper": formHelper,
@@ -330,6 +349,8 @@ define({
                             
                             console.log(inputModel);
                             var promise = Enrollment.search({
+                                'firstName':inputModel.fullName,
+                                'urnNo':inputModel.urnNo,
                                 'branchName': branchName,
                                 'centreId': inputModel.centreId,
                                 'customerType':'INDIVIDUAL',
@@ -370,6 +391,12 @@ define({
                             model.group.jlgGroupMembers[context.arrayIndex].witnessRelationship= "";
                             Enrollment.getCustomerById({id:valueObj.id}).$promise
                                  .then(function(res){
+                                     model.group.jlgGroupMembers[context.arrayIndex].husbandOrFatherFirstName = res.fatherFirstName;
+                                     if (res.maritalStatus == 'MARRIED' && res.gender == "FEMALE" && res.spouseFirstName != null){
+                                         model.group.jlgGroupMembers[context.arrayIndex].relation = "Husband";
+                                         model.group.jlgGroupMembers[context.arrayIndex].husbandOrFatherFirstName = res.spouseFirstName;
+                                     }
+                                    
                                  model.group.jlgGroupMembers[context.arrayIndex].maritalStatus = res.maritalStatus;
                                  model.group.jlgGroupMembers[context.arrayIndex].loanAmount = res.requestedLoanAmount;
                                  model.group.jlgGroupMembers[context.arrayIndex].loanAmountRequested = res.requestedLoanAmount;
@@ -377,7 +404,7 @@ define({
                                  model.group.jlgGroupMembers[context.arrayIndex].loanPurpose1 = res.requestedLoanPurpose;
                                  model.group.jlgGroupMembers[context.arrayIndex].witnessFirstName = undefined;
                                  model.group.jlgGroupMembers[context.arrayIndex].witnessRelationship = undefined;
-
+                                 model.group.jlgGroupMembers[context.arrayIndex].spouseFirstName = res.spouseFirstName;
                                 for (i in res.familyMembers) {
                                     var obj = {};
                                     if(model.group.jlgGroupMembers[context.arrayIndex].urnNo != res.familyMembers[i].enrolledUrnNo){
@@ -415,7 +442,7 @@ define({
                         "key": "group.jlgGroupMembers[].maritalStatus",
                         "title": "MARITAL_STATUS",
                         "type":"select",
-                        "condition":"!model.group.partnerCode=='AXIS'",
+                        "condition":"model.group.partnerCode!='AXIS'",
                         "enumCode":"marital_status"
                     },
                     {
@@ -616,7 +643,21 @@ define({
                                 "type": "integer"
                             }
                         }
+                    },
+                    "searchSchema":{"type": "object",
+                    "required": [],
+                    "properties": {
+                        'fullName':{
+                            "type":['string',null]
+                        },
+                        "lastName":{
+                            "type":['string',null]
+                        },
+                        "urnNo":{
+                            "type":['string',null]
+                        }
                     }
+                }
                 }
             },
 

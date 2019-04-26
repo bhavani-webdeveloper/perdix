@@ -1,0 +1,21 @@
+<div>
+    <div ng-if="sectionData.type=='container'" class="box box-solid">
+            <div class="box-header with-border"><h3 class="box-title">
+                {{sectionData.displayName}}
+            </h3></div>
+        <div class="box-body">
+            <irf-pv-container container-data="sectionData"></irf-pv-container>
+        </div>
+    </div>
+    <div ng-if="sectionData.type=='box'">
+        <irf-pv-box box-data="sectionData"></irf-pv-box>
+    </div>
+    <div ng-if="sectionData.type=='grid'" class="box box-solid">
+        <div class="box-body">
+            <irf-pv-grid grid-data="sectionData"></irf-pv-grid>
+        </div>
+    </div>
+    <div ng-if="sectionData.type=='balance_sheet'">
+        <irf-pv-balancesheet balancesheet-data="sectionData"></irf-pv-balancesheet>
+    </div>
+</div>

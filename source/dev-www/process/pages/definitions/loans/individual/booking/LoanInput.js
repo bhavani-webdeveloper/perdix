@@ -209,11 +209,15 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                                 if(model.loanAccount.loanPurpose2 == loanPurpose2List[i].purpose2)
                                                     purpose2_found = true;
                                             }
-                                            if(!purpose2_found)
+                                            if(!purpose2_found){
                                                 model.loanAccount.loanPurpose2 = null;
+                                                model.loanAccount.loanPurpose3 = null;
+                                            }
                                         }
-                                        else
+                                        else{
                                             model.loanAccount.loanPurpose2 = null;
+                                            model.loanAccount.loanPurpose3 = null;
+                                        }
                                     },function(err){
                                         $log.info("Error while fetching Loan Purpose 1 by Product");
                                     });
@@ -248,6 +252,12 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
 
         var clearProduct = function(value, model) {
             model.loanAccount.productCode = '';
+        }
+
+        var clearLoanPurpose = function(value,model) {
+            model.loanAccount.loanPurpose1 = '';
+            model.loanAccount.loanPurpose2 = '';
+            model.loanAccount.loanPurpose3 = '';
         }
 
         return {
@@ -449,11 +459,6 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             model.loanAccount.scheduleStartDate = moment(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate, "YYYY-MM-DD").add(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays, 'days').format("YYYY-MM-DD");
                         }
 
-                        if(siteCode=='shramsarathi'){
-                            model._currentDisbursement = model.loanAccount.disbursementSchedules[0];
-                            model.loanAccount.scheduleStartDate = moment(model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate, "YYYY-MM-DD").add(model.loanAccount.disbursementSchedules[0].moratoriumPeriodInDays, 'days').format("YYYY-MM-DD");
-                        }
-
                         model.linkedAccount={};
 
                         if(_.hasIn(model, 'loanAccount') && model.loanAccount.transactionType == 'New Loan') {
@@ -561,6 +566,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "required": true,
                                 onChange: function(value, form, model) {
                                     clearProduct(value, model);
+                                    clearLoanPurpose(value,model)
                                 }
                             },
                             {

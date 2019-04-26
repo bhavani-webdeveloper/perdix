@@ -172,6 +172,11 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 var loanAccount = loanProcess;
                                 bundleModel.loanAccount = loanProcess.loanAccount;
                                 loanAccount.applicantEnrolmentProcess.customer.customerId = loanAccount.customerId;
+                                bundleModel.applicant = {};
+                                bundleModel.coApplicants = [];
+                                bundleModel.guarantors = [];
+                                bundleModel.business = {};
+                                bundleModel.urnNos = [];
                                 bundleModel.customer_detail = {
                                     applicant: {},
                                     coApplicants: {

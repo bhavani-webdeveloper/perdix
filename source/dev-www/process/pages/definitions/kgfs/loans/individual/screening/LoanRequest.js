@@ -12,24 +12,57 @@ define([],function(){
                           BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository, $injector, irfNavigator) {
             var branch = SessionStore.getBranch();
             var podiValue = SessionStore.getGlobalSetting("percentOfDisposableIncome");
-            //PMT calculation
             
+            //PMT calculation
+
             var setDeviation = function(model){
                       /* Deviations and Mitigations grouping */
-                      if (model.deviationMitigants && model.loanAccount.loanMitigants && _.isArray(model.loanAccount.loanMitigants)){
-                        
-                        for (var i=0; i<model.deviationMitigants.length; i++){
-                            model.loanAccount.loanMitigants.push(model.deviationMitigants[i]);
-                        }      
-                    }
+                        // var checkMitigants = true;
+                        // if(_.isArray(model.loanAccount.loanMitigants) && model.loanAccount.loanMitigants)
+                        // {
+                        //     if(_.hasIn(model.deviationMitigants[0], 'id'))
+                        //         checkMitigants=false;                            
+                        // }
+                        if (model.deviationMitigants && model.loanAccount.loanMitigants && _.isArray(model.loanAccount.loanMitigants)){
+                            for (var i=0; i<model.deviationMitigants.length; i++){
+                                model.loanAccount.loanMitigants.push(model.deviationMitigants[i]);
+                            }
+                        }
+                        else
+                        {
+                            if(_.isNull(model.loanAccount.loanMitigants))
+                            model.loanAccount.loanMitigants=[];
+                            if (model.deviationMitigants){
+                                for (var i=0; i<model.deviationMitigants.length; i++){
+                                    model.loanAccount.loanMitigants.push(model.deviationMitigants[i]);
+                                }                            
+                            }
+                        }
                     /* End of Deviations and Mitigations grouping */
             }
-            
+            var setLoanMitigantsGroup = function(model) {
+                if (_.hasIn(model.loanAccount, 'loanMitigants') && _.isArray(model.loanAccount.loanMitigants)){
+                    var loanMitigantsGrouped = {};
+                    for (var i=0; i<model.loanAccount.loanMitigants.length; i++){
+                        var item = model.loanAccount.loanMitigants[i];
+                        if (!_.hasIn(loanMitigantsGrouped, item.parameter)){
+                            loanMitigantsGrouped[item.parameter] = [];
+                        }
+                        loanMitigantsGrouped[item.parameter].push(item);
+                    }
+                    model.loanMitigantsGrouped=loanMitigantsGrouped;
+                    model.deviationMitigants  = model.loanAccount.loanMitigants;
+                    model.loanAccount.loanMitigants = [];                        
+
+                }
+            }
             var getGoldRate = function(model){
                 var value = Queries.getGoldRate();
                 value.then(function(resp){
-                    model.additions.goldRate = resp;
-                    model.additions.goldRatePerCarat = resp/22;
+                    if(model.additions) {
+                        model.additions.goldRate = resp;
+                        model.additions.goldRatePerCarat = resp/22;
+                    }
                 })
                 
             };
@@ -64,6 +97,19 @@ define([],function(){
                     return false;
                 }
                 return true;
+            };
+
+            var validateDeviation=[];            
+            var validateDeviationForm = function(model){
+                validateDeviation=[];
+                if (_.hasIn(model, 'loanAccount.loanMitigants') && _.isArray(model.loanAccount.loanMitigants) && model.loanAccount.loanMitigants !=null) {
+                    _.forEach(model.loanAccount.loanMitigants, function(mitigantStatus,item){
+                        if(mitigantStatus.mitigatedStatus || (!_.hasIn(mitigantStatus, 'id')))
+                            delete  validateDeviation[item];
+                        else
+                            validateDeviation[item]=mitigantStatus.mitigatedStatus;
+                    })
+                }
             };
 
             var getRelationFromClass = function(relation){
@@ -174,11 +220,23 @@ define([],function(){
                     model[baseKey] = {};
                 }
             }
+            
 
             var policyBasedOnLoanType = function(loanType,model){
+                var totalMarketValueInPaisa = 0;
                 if (loanType == "JEWEL"){
-                    if(model.loanAccount.loanAmountRequested >= (parseInt(model.loanAccount.ornamentsAppraisals[0].marketValueInPaisa/100))*75){
-                        var errMsg = 'Loan amount should be less then ' + ((parseInt(model.loanAccount.ornamentsAppraisals[0].marketValueInPaisa/100))*75);
+
+                    for (var i = model.loanAccount.ornamentsAppraisals.length - 1; i >= 0; i--) {
+                        totalMarketValueInPaisa +=(model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa || 0);
+                    }
+
+                    if(model.loanAccount.loanAmountRequested >= ((totalMarketValueInPaisa/100))*75){
+                        var errMsg = 'Loan amount should be less then ' + parseFloat((totalMarketValueInPaisa/100)*75).toFixed(2);
+                        PageHelper.showErrors({data:{error:errMsg}});
+                        return false;
+                    }
+                    if(model.loanAccount.loanAmount >= ((totalMarketValueInPaisa/100))*75){
+                        var errMsg = 'RecommendedLoan amount should be less then ' + parseFloat((totalMarketValueInPaisa/100)*75).toFixed(2);
                         PageHelper.showErrors({data:{error:errMsg}});
                         return false;
                     }
@@ -248,19 +306,12 @@ define([],function(){
                 model.additions.noOfGuarantorCoApplicantHtml = "<p stye=\"font-size:10px !important\"><font color=#FF6347>Number of Co-Applicants : {{model.additions.co_borrower_required}} Number of Guarantors :{{model.additions.number_of_guarantors}}</font><p>";
                 model.loanAccount.bcAccount = {};
                 model.loanAccount.processType = "1";
-                
-        
+               
                 if (typeof model.loanAccount.accountUserDefinedFields == "undefined") {
                     model.loanAccount.accountUserDefinedFields = {};
                     model.loanAccount.accountUserDefinedFields.userDefinedFieldValues = {};
                 }
-                else {
-                   if(!initFlag)
-                    {
-                    model.loanAccount.accountUserDefinedFields = {};
-                    model.loanAccount.accountUserDefinedFields.userDefinedFieldValues = {};
-                    }
-                }
+                
                 if (typeof model.loanAccount.loanCentre == "undefined" || model.loanAccount.loanCentre == null){
                     model.loanAccount.loanCentre = {};
                 }
@@ -295,7 +346,7 @@ define([],function(){
                                         {
                                             model.review.preStage = model.loanAccount.remarksHistory[i].preStage;
                                             model.review.targetStage = model.loanAccount.remarksHistory[i].preStage;
-                                            model.loanProcess.stage = model.loanAccount.remarksHistory[i].preStage;
+                                            //model.loanProcess.stage = model.loanAccount.remarksHistory[i].preStage;
                                         }
                                     }
                                 }
@@ -903,28 +954,49 @@ define([],function(){
                     model.customer = {};
                     model.review = model.review|| {};
                     model.loanAccount = model.loanProcess.loanAccount;
+                    if(model.loanAccount.currentStage == 'Screening' && !_.hasIn(model.loanAccount, 'id')){
+                        model.loanAccount.isBusinessCaptured = false;
+                    }
                     if(model.loanAccount.loanType == 'JEWEL' && model.loanAccount.currentStage == 'Screening'){
                         getGoldRate(model);
-                        model.loanAccount.jewelLoanDetails = {};
-                        model.loanAccount.jewelLoanDetails.encoreClosed = false;
-                        model.loanAccount.jewelLoanDetails.jewelPouchLocationType = "BRANCH";
+                        if (model.loanAccount.jewelLoanDetails ==undefined)
+                            model.loanAccount.jewelLoanDetails = {};
+
+                        if(model.loanAccount.jewelLoanDetails) {
+                            model.loanAccount.jewelLoanDetails.encoreClosed = false;
+                            model.loanAccount.jewelLoanDetails.jewelPouchLocationType = "BRANCH";
+                        }
                     }
+                    if(model.loanAccount.loanType == 'JEWEL')
+                        if(model.loanAccount.jewelLoanDetails) {
+                            model.loanAccount.jewelLoanDetails.jewelPouchNo=Number(model.loanAccount.jewelLoanDetails.jewelPouchNo);
+                        }
+
                     if (_.hasIn(model, 'loanAccount.loanPurpose2') && model.loanAccount.loanPurpose2 !=null && model.loanAccount.loanPurpose2.length > 0)
                     model.loanAccount.loanPurpose3=model.loanAccount.loanPurpose2;
                     model.loanAccount.interestRateEstimatedEMI={};
-                    var postReviewActionArray = {};
-                    if(model.loanAccount.currentStage == 'BusinessTeamReview' || model.loanAccount.currentStage == 'CreditOfficerReview' || model.loanAccount.currentStage == 'CreditManagerReview' || model.loanAccount.currentStage == 'CBOCreditHeadReview' || model.loanAccount.currentStage == 'CEOMDReview') {
-                        postReviewActionArray = {
-                            "SEND_BACK": "SEND_BACK",
-                            "PROCEED": "PROCEED"
-                        }
-                    } else {
-                        postReviewActionArray = {
-                            "REJECT": "REJECT",
-                            "SEND_BACK": "SEND_BACK",
-                            "PROCEED": "PROCEED"
-                        }
+                    
+                    var postReviewActionArray = {
+                        "REJECT": "REJECT",
+                        "SEND_BACK": "SEND_BACK",
+                        "PROCEED": "PROCEED"
                     }
+
+
+                    
+                    //var postReviewActionArray = {};
+                    // if(model.loanAccount.currentStage == 'BusinessTeamReview' || model.loanAccount.currentStage == 'CreditOfficerReview' || model.loanAccount.currentStage == 'CreditManagerReview' || model.loanAccount.currentStage == 'CBOCreditHeadReview' || model.loanAccount.currentStage == 'CEOMDReview') {
+                    //     postReviewActionArray = {
+                    //         "SEND_BACK": "SEND_BACK",
+                    //         "PROCEED": "PROCEED"
+                    //     }
+                    // } else {
+                    //     postReviewActionArray = {
+                    //         "REJECT": "REJECT",
+                    //         "SEND_BACK": "SEND_BACK",
+                    //         "PROCEED": "PROCEED"
+                    //     }
+                    // }
                     
                     defaultConfiguration(model,true);
 
@@ -1016,7 +1088,7 @@ define([],function(){
                                             },
                                             "productType": {
                                                 "key":"loanAccount.loanType",
-                                                "title": "PRODUCT_TYPE",
+                                                "title": "LOAN_TYPE",
                                                 "readonly":true,
                                                 "type": "select",
                                                 "orderNo": 9
@@ -1143,7 +1215,7 @@ define([],function(){
                                             '<td>{{ parameter }}</td>' +
                                             '<td><ul class="list-unstyled">' +
                                             '<li ng-repeat="m in item" id="{{m.mitigant}}">' +
-                                            '<input required type="checkbox" ng-checked="m.mitigatedStatus"  ng-model="m.mitigatedStatus"> {{ m.mitigant }}' +
+                                            '<input type="checkbox" ng-checked="m.mitigatedStatus"  ng-model="m.mitigatedStatus"> {{ m.mitigant }}' +
                                             '</li></ul></td></tr></tbody></table>'
                                     },                                    
                                     "loanMitigants":{
@@ -1166,11 +1238,7 @@ define([],function(){
                                             "mitigant":{
                                                "key":"loanAccount.loanMitigants[].mitigant",
                                                "title":"Mitigation",
-                                               "type":"string",
-                                               schema: {
-                                                    "pattern": "^[a-zA-Z: ]{0,250}$",
-                                                    "type": ["string", "null"],
-                                                }
+                                               "type":"string"
                                             }
                                         }
                                     }
@@ -1359,7 +1427,7 @@ define([],function(){
                 eventListeners: {
                     "new-applicant": function (bundleModel, model, obj) {
                         model.customer = obj.customer;
-                        clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
+                      //  clearAll('loanAccount',['frequency','productCode',"loanAmount","tenure","loanPurpose1","loanPurpose2","loanPurpose3","expectedInterestRate"],model);
                         model.loanAccount.customerId = model.customer.id;
                         model.loanAccount.urnNo = model.customer.urnNo;
                         defaultConfiguration(model,false);
@@ -1395,6 +1463,18 @@ define([],function(){
                     "dsc-response": function(bundleModel,model,obj){
                         model.loanAccount.loanCustomerRelations = obj;
                     },
+                    "cb-check-update": function(bundleModel, model, params){
+                    $log.info("Inside cb-check-update of LoanRequest");
+                    for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                            if (model.loanAccount.loanCustomerRelations[i].customerId == params.customerId) {
+                                model.loanAccount.loanCustomerRelations[i].cbCheckCompleted=false;
+                                if(params.cbType == 'BASE')
+                                    model.loanAccount.loanCustomerRelations[i].highmarkCompleted = true;
+                                else if(params.cbType == 'INDIVIDUAL')
+                                    model.loanAccount.loanCustomerRelations[i].cbCheckCompleted = true;
+                            }
+                        }
+                    },
                     "load-deviation":function(bundleModel, model, params){
                         $log.info("Inside Deviation List");
                         model.deviations = {};
@@ -1415,7 +1495,50 @@ define([],function(){
                                 }
                             })
                         }
-                    }
+                    },
+                    "new-guarantor": function(bundleModel, model, params){
+                        $log.info("Insdie guarantor of LoanRequest");
+                        // model.loanAccount.coApplicant = params.customer.id;
+                        var addToRelation = true;
+                        for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                            if (model.loanAccount.loanCustomerRelations[i].customerId == params.customer.id) {
+                                addToRelation = false;
+                                if (params.customer.urnNo)
+                                    model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
+                                    model.loanAccount.loanCustomerRelations[i].name =params.customer.firstName;
+                                break;
+                            }
+                        }
+        
+                        if (addToRelation) {
+                            model.loanAccount.loanCustomerRelations.push({
+                                'customerId': params.customer.id,
+                                'relation': "Guarantor",
+                                'urn': params.customer.urnNo,
+                                'name':params.customer.firstName
+                            })
+                        };
+        
+                        model.loanAccount.guarantors = model.loanAccount.guarantors || [];
+        
+                        var existingGuarantorIndex = _.findIndex(model.loanAccount.guarantors, function(g){
+                            if (g.guaUrnNo == params.customer.urnNo || g.guaCustomerId == params.customer.id)
+                                return true;
+                        })
+        
+                        if (existingGuarantorIndex<0){
+                            model.loanAccount.guarantors.push({
+                                'guaCustomerId': params.customer.id,
+                                'guaUrnNo': params.customer.urnNo
+                            });
+                        } else {
+                            if (!model.loanAccount.guarantors[existingGuarantorIndex].guaUrnNo){
+                                model.loanAccount.guarantors[existingGuarantorIndex].guaUrnNo = params.customer.urnNo;
+                            }
+                        }
+        
+        
+                    },
                 },
                 form: [],
                 schema: function() {
@@ -1423,21 +1546,13 @@ define([],function(){
                 },
                 actions: {
                     
-                    submit: function(model, formCtrl, form){
-
-                        setDeviation(model);
-
+                    submit: function(model, formCtrl, form){  
                         if(model.loanAccount.productCategory  != 'MEL'){
                             model.loanAccount.customerId=model.loanAccount.loanCustomerRelations[0].customerId;
                             model.loanAccount.urnNo=model.loanAccount.loanCustomerRelations[0].urn; 
                         }
 
-                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == "Screening" && model.loanAccount.productCategory == 'MEL' && !model.loanAccount.isBusinessCaptured && model.loanAccount.urnNo == null){
-                            PageHelper.showProgress("loan-enrolment","Business Details are not captured",5000);
-                                return false;
-                        }
-
-                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == "CreditAppraisal" && model.loanAccount.productCategory == 'MEL' && !model.loanAccount.isCreditAppraisal){
+                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == "Screening" && model.loanAccount.productCategory == 'MEL' && !model.loanAccount.isBusinessCaptured){
                             PageHelper.showProgress("loan-enrolment","Business Details are not captured",5000);
                                 return false;
                         }
@@ -1458,7 +1573,7 @@ define([],function(){
                         if(!(policyBasedOnLoanType(model.loanAccount.loanType,model))){
                             PageHelper.showProgress('loan-process','Oops Some Error',2000);
                             return false;}
-                                                    
+                        setDeviation(model);                                                    
                         model.loanProcess.save()
                             .finally(function () {
                                 PageHelper.hideLoader();
@@ -1471,11 +1586,13 @@ define([],function(){
                                         }
                                     }
                                 /* Collateral */
+                                setLoanMitigantsGroup(model);
                                 BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount});                                    
                                 Utils.removeNulls(value, true);
-                                PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
+                                PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);                                
 
                             }, function (err) {
+                                setLoanMitigantsGroup(model);
                                 PageHelper.showErrors(err);
                                 PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);                                
                                 PageHelper.hideLoader();
@@ -1507,10 +1624,19 @@ define([],function(){
                             });
 
                     },
-                    sendBack: function(model, formCtrl, form, $event){                       
-                        PageHelper.showLoader();
+                    sendBack: function(model, formCtrl, form, $event){      
+                        
+                        if(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5){
+                            model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = "false"
+                        }
                        if (model.loanProcess.remarks==null || model.loanProcess.remarks =="" || model.review.targetStage ==null || model.review.targetStage ==""){
                                PageHelper.showProgress("update-loan", "Send to Stage / Remarks is mandatory", 3000);
+                               PageHelper.hideLoader();
+                               return false;
+                        }
+                        PageHelper.showLoader();
+                         if (model.loanProcess.stage==null || model.loanProcess.stage ==""){
+                               PageHelper.showProgress("update-loan", "Send to Stage is mandatory", 3000);
                                PageHelper.hideLoader();
                                return false;
                         }
@@ -1530,8 +1656,28 @@ define([],function(){
                             });
                     },
                     proceed: function(model, formCtrl, form, $event){
+                    if (_.hasIn(model, 'review.targetStage'))
+                    {
+                        model.review.targetStage='';
+                        model.loanProcess.stage='';
+                    } 
+                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == "CreditAppraisal" && model.loanAccount.productCategory == 'MEL' && !model.loanAccount.isBusinessCaptured){
+                            PageHelper.showProgress("loan-enrolment","Business Details are not captured",5000);
+                                return false;
+                        } 
+                        if(_.isNull(model.loanAccount.loanMitigants) || (model.loanAccount.loanMitigants == undefined))   {
+                            model.loanAccount.loanMitigants = [];
+                        }
                         setDeviation(model);
+                        validateDeviationForm(model);
+                        if(_.isArray(validateDeviation) && validateDeviation.length > 0) {
+                            model.loanAccount.loanMitigants=[];
+                            PageHelper.showErrors({data:{error:"Mitigation checkbox, Please check this box if you want to proceed"}});
+                            return false;
+                        }
+                      
                          if (model.loanProcess.remarks==null || model.loanProcess.remarks ==""){
+                               model.loanAccount.loanMitigants=[];
                                PageHelper.showProgress("update-loan", "Remarks is mandatory", 3000);
                                PageHelper.hideLoader();
                                return false;
@@ -1544,15 +1690,28 @@ define([],function(){
                                 trancheTotalAmount+=(model.loanAccount.disbursementSchedules[i].disbursementAmount || 0);
                             }
                             if (trancheTotalAmount > model.loanAccount.loanAmount){
+                                model.loanAccount.loanMitigants=[];
                                 PageHelper.showProgress("loan-create","Total tranche amount is more than the Loan amount",5000);
                                 return false;
                               }  
                             
                             if (trancheTotalAmount < model.loanAccount.loanAmount){
+                                model.loanAccount.loanMitigants=[];
                                 PageHelper.showProgress("loan-create","Total tranche amount should match with the Loan amount",5000);
                                 return false;
                             }
                         
+                        }
+                        if(model.loanAccount.currentStage && model.loanAccount.currentStage == 'Screening' && model.loanAccount.loanType != 'JEWEL'){
+                            for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                                if (model.loanAccount.loanCustomerRelations[i].customerId) {
+                                    if(!model.loanAccount.loanCustomerRelations[i].cbCheckCompleted){
+                                        model.loanAccount.loanMitigants=[];
+                                        PageHelper.showProgress("loan-create","CB Check pending. Please do a CB check and then proceed",5000);
+                                        return false;
+                                    }                            
+                                }
+                            }
                         }
                         if (model.loanAccount.id && model.loanAccount.currentStage == 'DSCApproval'){
                             if(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length > 0){
@@ -1569,12 +1728,34 @@ define([],function(){
                                     }
                                     else{
                                         model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5  = "false"
+                                    }                                    
+                                }
+                            }
+                        }
+                        if (model.loanAccount.id && model.loanAccount.currentStage == 'DSCApproval'){
+                            if(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length > 0){
+                                for(i = 0; i< model.loanAccount.loanCustomerRelations.length;i++){
+                                    if((typeof model.loanAccount.loanCustomerRelations[i].dscStatus == "undefined" || model.loanAccount.loanCustomerRelations[i].dscStatus == null) && model.loanAccount.loanCustomerRelations[i].relation == "Applicant"){
+                                        model.loanAccount.loanMitigants=[];
+                                        PageHelper.showErrors({data:{error:"DSC Tab, Please click DSC Request button if you want to proceed"}});
+                                        return false;
                                     }
-                                    
+                                }
+                            }
+                        }
+                        if (model.loanAccount.id && model.loanAccount.currentStage == 'DSCOverride'){
+                            if(model.loanAccount.loanCustomerRelations && model.loanAccount.loanCustomerRelations.length > 0){
+                                for(i = 0; i< model.loanAccount.loanCustomerRelations.length;i++){
+                                    if(typeof model.loanAccount.loanCustomerRelations[i].dscStatus != "undefined" && model.loanAccount.loanCustomerRelations[i].relation == "Applicant" && model.loanAccount.loanCustomerRelations[i].dscStatus == "DSC_OVERRIDE_REQUIRED"){
+                                        model.loanAccount.loanMitigants=[];
+                                        PageHelper.showErrors({data:{error:"DSC Tab, Please click DSC Override button if you want to proceed"}});
+                                        return false;
+                                    }
                                 }
                             }
                         }
                         if((model.loanAccount.currentStage == 'DSCApproval') && (typeof model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 =="undefined" || model.loanProcess.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5 == null)){
+                            model.loanAccount.loanMitigants=[];
                             PageHelper.showErrors({data:{error:"DSC STATUS IS REQUIRED...."}});
                                 PageHelper.showProgress('enrolment','Oops. Some error.', 5000);
                                 PageHelper.hideLoader();
@@ -1594,6 +1775,7 @@ define([],function(){
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 irfNavigator.goBack();
                             }, function (err) {
+                                model.loanAccount.loanMitigants=[];
                                 PageHelper.showErrors(err);
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 
@@ -1601,7 +1783,8 @@ define([],function(){
                             });
                     },
                     reject: function(model, formCtrl, form, $event){
-                        if(PageHelper.isFormInvalid(formCtrl)) {
+                        if ( model.loanProcess.remarks==null ||  model.loanProcess.remarks =="" ||  model.loanAccount.rejectReason==null ||  model.loanAccount.rejectReason==""){
+                            PageHelper.showProgress("update-loan", "Reject Reason / Remarks is mandatory");
                             return false;
                         }
                         PageHelper.showLoader();

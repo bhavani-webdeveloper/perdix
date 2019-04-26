@@ -247,29 +247,29 @@ irf.pageCollection.factory(irf.page("user.UserMaintanence"),
                             // },
 
                             
-                            {
-                                key: "user.allowedDevices",
-                                type: "array",
-                                //view: "fixed",
-                                title: "MAC_ADRESS",
-                                startEmpty: true,
-                                onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
-                                    //modelValue.bankId=model.bankId;
-                                },
-                                items: [
-                                    {
-                                        "key": "user.allowedDevices[].deviceId",
-                                        "title": "DEVICE_ID",
-                                        "type": "String",
-                                    },
-                                    {
-                                        "key": "user.login",
-                                        "title": "USER_ID",
-                                        readonly: true,
-                                        "type": "String",
-                                    },
-                                ]
-                            },
+                            // {
+                            //     key: "user.allowedDevices",
+                            //     type: "array",
+                            //     //view: "fixed",
+                            //     title: "MAC_ADRESS",
+                            //     startEmpty: true,
+                            //     onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
+                            //         //modelValue.bankId=model.bankId;
+                            //     },
+                            //     items: [
+                            //         {
+                            //             "key": "user.allowedDevices[].deviceId",
+                            //             "title": "DEVICE_ID",
+                            //             "type": "String",
+                            //         },
+                            //         {
+                            //             "key": "user.login",
+                            //             "title": "USER_ID",
+                            //             readonly: true,
+                            //             "type": "String",
+                            //         },
+                            //     ]
+                            // },
                             
                         ]
                     },

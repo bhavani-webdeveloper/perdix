@@ -51,7 +51,7 @@ irf.pageNameHtml = function(pageName) {
 	return pns.join('&nbsp;<i class="text-darkgray fa fa-angle-right"></i> ');
 };
 
-var pageCollection = irf.pageCollection = angular.module("IRFPageCollection", ["ui.router", "IRFCommons"]);
+var pageCollection = irf.pageCollection = angular.module("IRFPageCollection", ["ui.router", "IRFCommons","chart.js","IRFModels"]);
 
 irf.pageCollection.config(["$provide", function($provide){
 	irf.pageCollection.loadPage = function(name, dependencies, getFn){
@@ -61,6 +61,48 @@ irf.pageCollection.config(["$provide", function($provide){
 		$provide.factory(irf.page(name), componentArgs);
 	}
 }])
+
+irf.pageCollection.factory("PageManager", ["$injector", "$q", "$log", function($injector, $q, $log) {
+	return {
+		getPage: function(pageName) {
+			var deferred = $q.defer();
+			try {
+				var page = _.cloneDeep($injector.get(irf.page(pageName)));
+				deferred.resolve(page);
+			} catch (e) {
+				if (e.message.startsWith("[$injector:unpr] Unknown provider: "+irf.page(pageName)+"Provider")) {
+					$log.error("Loading Dynamic page...");
+					try {
+						var pageDefPath = "pages/" + pageName.replace(/\./g, "/");
+						require([pageDefPath], function(pageDefObj){
+							/* Page is loaded, now bind it to pages */
+							$log.info("[REQUIRE] Done loading page(" + pageName + ")");
+							irf.pageCollection.loadPage(pageDefObj.pageUID, pageDefObj.dependencies, pageDefObj.$pageFn);
+							try {
+								var page = $injector.get(irf.page(pageName));
+								deferred.resolve(page);
+							} catch (e) {
+								$log.error(e);
+								deferred.reject();
+								$scope.error = true;
+							}
+						}, function(err){
+							$log.info("[REQUIRE] Error loading page(" + pageName + ")");
+							$log.error(err);
+						})
+					} catch(e) {
+						deferred.reject();
+						$log.error(e);
+					}
+				} else {
+					deferred.reject();
+					$log.error(e);
+				}
+			}
+			return deferred.promise;
+		}
+	}
+}]);
 
 
 var pages = irf.pages = angular.module("IRFPages", ["irf.elements", "IRFPageCollection","nvd3", "ngSanitize","ui.bootstrap","queryBuilder"], function ($compileProvider) {

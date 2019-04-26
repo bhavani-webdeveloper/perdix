@@ -428,6 +428,13 @@
                         "maxLength": 16,
                         "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
+                    "riskProfile":{
+                        "title": "Risk Profile",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 10,
+                        "captureStages":["Completed"]
+                    },
                     "parentCustomerId": {
                         "title": "Parent Customer Id",
                         "type": "string",
@@ -897,6 +904,11 @@
                         "type": "string",
                         "minLength": 12,
                         "maxLength": 12,
+                        "captureStages": ["Stage01","Stage02" ,"Completed"]
+                    },
+                    "fcuStatus": {
+                        "title": "fcuStatus",
+                        "type": "string",
                         "captureStages": ["Stage01","Stage02" ,"Completed"]
                     },
                     "addressProof": {
@@ -1413,7 +1425,7 @@
             "fingerPrint": {
                 "title": "Finger Print",
                 "type": "object",
-                "required": ["fingerPrintisRequired"],
+                "required": ["fingerPrintisRequired","leftHandIndexImageId","leftHandMiddleImageId","leftHandRingImageId","leftHandSmallImageId","leftHandThumpImageId","rightHandIndexImageId","rightHandMiddleImageId","rightHandRingImageId","rightHandSmallImageId","rightHandThumpImageId"],
                 "properties": {
                     "fingerPrintisRequired": {
                         "title": "Finger Print is Required",
@@ -1808,6 +1820,13 @@
                         "minLength": 1,
                         "maxLength": 100,
                         "captureStages": ["Stage01", "Stage02", "EDF", "Completed"]
+                    },
+                    "riskProfile":{
+                        "title": "Risk Profile",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 10,
+                        "captureStages":["Completed"]
                     },
                     "landLineNo": {
                         "title": "landLineNo",
@@ -3318,7 +3337,7 @@
                     }
                 }
               },
-                "enterpriseProductSales": {
+            "enterpriseProductSales": {
                 "title": "Enterprise Product Sales",
                 "type": "object",
                 "required": ["productName","salePrice","costPrice","quantity"],

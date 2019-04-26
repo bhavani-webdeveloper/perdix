@@ -1029,7 +1029,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "title": "Is Disbursement"
                     },
                      "IndividualInformation.centreId": {
-                        "resolver": "CentreLOVConfiguration"
+                        "resolver": "CentreLOVConfiguration",
+                        required: true
                     },
                     "KYC.identityProofFieldSet": {
                         "orderNo": 20

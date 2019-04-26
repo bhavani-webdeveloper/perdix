@@ -1,0 +1,28 @@
+<div ng-if="options">
+    <div ng-if="type=='line'">
+        <canvas id="{{type}}" class="chart chart-line" height="300px" chart-data="data" chart-labels="labels" chart-series="series"
+            chart-options="options" chart-dataset-override="datasetOverride" chart-colors="colors" chart-click="onClick">
+        </canvas>
+    </div>
+    <div ng-if="type=='bar'">
+        <canvas id="{{type}}" class="chart chart-bar itemHeight" height="300" chart-data="data" chart-labels="labels" chart-series="series"
+            chart-options="options" chart-dataset-override="datasetOverride" chart-colors="colors" chart-click="onClick">
+        </canvas>
+    </div>
+    <div ng-if="type=='pie'">
+        <canvas id="{{type}}"  chart-options="options"  height="300"  class="chart chart-pie" chart-data="data" chart-labels="labels" chart-colors="colors">
+        </canvas>
+    </div>
+    <div ng-if="type=='doughnut'">
+        <canvas id="{{type}}" chart-options="options" height="300px" class="chart chart-doughnut" chart-data="data" chart-labels="labels" chart-colors="colors">
+        </canvas>
+    </div>
+    <div ng-if="type=='area'">
+        <canvas id="line" class="chart chart-line" height="300px" chart-data="data" chart-labels="labels" chart-series="series"
+            chart-options="options" chart-dataset-override="datasetOverride" chart-colors="colors" chart-click="onClick">
+        </canvas>
+    </div>
+    <div></div>
+    <div></div>
+
+</div>

@@ -2264,6 +2264,13 @@
                         "maximum": 10000000,
                         "captureStages": ["BasicEnrolment", "Completed"]
                     },
+                    "serviceTaxNumber": {
+                        "title": "serviceTaxNumber",
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 10000000,
+                        "captureStages": ["BasicEnrolment", "Completed"]
+                    },
                     "monthlyBusinessExpenses": {
                         "title": "WEEKLY_SALES",
                         "type": "number",
@@ -2389,6 +2396,11 @@
                     "tin": {
                         "title": "SANCTIONED_LOAN_AMOUNT",
                         "type": "string",
+                        "captureStages": ["Completed"]
+                    },
+                    "insurancePremiumAmount": {
+                        "title": "SANCTIONED_LOAN_AMOUNT",
+                        "type": "number",
                         "captureStages": ["Completed"]
                     },
                     "coOwnerSalary": {
@@ -3492,7 +3504,7 @@
                       "totalSales": {
                         "title": "totalSales",
                         "type": "number",
-                        "minimum": 10,
+                        "minimum": 0,
                         "maximum": 1000000,
                         "captureStages": [
                           "BasicEnrolment",

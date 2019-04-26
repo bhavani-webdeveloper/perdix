@@ -2,6 +2,8 @@ irf.pages.controller("LeadDashboardCtrl", ['$log', '$scope', 'PagesDefinition', 
     function($log, $scope, PagesDefinition, SessionStore, Lead) {
         $log.info("Page.LeadsDashboard.html loaded");
 
+        var siteCode = SessionStore.getGlobalSetting("siteCode");
+
         var fullDefinition = {
             "title": "Leads Dashboard",
             "iconClass": "fa fa-book",
@@ -12,7 +14,8 @@ irf.pages.controller("LeadDashboardCtrl", ['$log', '$scope', 'PagesDefinition', 
                 "Page/Engine/lead.ReadyForScreeningQueue",
                 "Page/Engine/lead.LeadRejectedQueue",
                 "Page/Engine/lead.LeadBulkUpload",
-                "Page/Engine/lead.leadAssignmentPendingQueue"
+                "Page/Engine/lead.leadAssignmentPendingQueue",
+                "Page/Engine/kgfs.lead.leadAssignmentPendingQueue"
             ]
         };
 
@@ -33,12 +36,14 @@ irf.pages.controller("LeadDashboardCtrl", ['$log', '$scope', 'PagesDefinition', 
             var ilqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lead.IncompleteLeadQueue"];
             var rfqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lead.ReadyForScreeningQueue"];
             var rMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/lead.LeadRejectedQueue"];
+            var lapqMenuKgfs = $scope.dashboardDefinition.$menuMap["Page/Engine/kgfs.lead.leadAssignmentPendingQueue"];
 
             if (rMenu) rMenu.data = 0;
             if (lapqMenu) lapqMenu.data = 0;
             if (lfuqMenu) lfuqMenu.data = 0;
             if (ilqMenu) ilqMenu.data = 0;
             if (rfqMenu) rfqMenu.data = 0;
+            if (lapqMenuKgfs) lapqMenuKgfs.data = 0;
 
             _.forEach(centres, function(centre) {
 
@@ -130,7 +135,7 @@ irf.pages.controller("LeadDashboardCtrl", ['$log', '$scope', 'PagesDefinition', 
             })
 
 
-            if (lapqMenu) {
+            if (siteCode != 'KGFS' && lapqMenu) {
                 Lead.search({
                     'branchName': branchName,
                     'currentStage': "Assignment Pending",
@@ -144,6 +149,23 @@ irf.pages.controller("LeadDashboardCtrl", ['$log', '$scope', 'PagesDefinition', 
                     lapqMenu.data = Number(response.headers['x-total-count']);
                 }, function() {
                     lapqMenu.data = '-';
+                });
+            }
+
+            if (siteCode == 'KGFS' && lapqMenuKgfs) {
+                Lead.search({
+                    'branchName': branchName,
+                    'currentStage': "Assignment Pending",
+                    'leadName': '',
+                    'area': '',
+                    'cityTownVillage': '',
+                    'businessName': '',
+                    'page': 1,
+                    'per_page': 1,
+                }).$promise.then(function(response, headerGetter) {
+                    lapqMenuKgfs.data = Number(response.headers['x-total-count']);
+                }, function() {
+                    lapqMenuKgfs.data = '-';
                 });
             }
         });

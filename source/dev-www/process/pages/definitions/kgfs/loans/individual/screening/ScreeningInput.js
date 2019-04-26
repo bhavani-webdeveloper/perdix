@@ -54,7 +54,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'loan-request',
                             minimum: 1,
                             maximum: 1,
-                            order:60
+                            order:50
                         },
                         {
                             pageName: 'kgfs.loans.individual.screening.CBCheck',
@@ -62,7 +62,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageClass: 'cbview',
                             minimum: 1,
                             maximum: 1,
-                            order:50
+                            order:60
                         }
                     ]);
                 },
@@ -202,12 +202,18 @@ define(["perdix/domain/model/loan/LoanProcess",
                             .subscribe(function(loanProcess){
                                 loanProcess.loanAccount.currentStage = 'Screening';
                                 bundleModel.loanProcess = loanProcess;
+                                var productCategory = "";
                                 if($stateParams.pageData){
-                                    var productCategory = $stateParams.pageData.productCategory; 
-                                    loanProcess.loanAccount.loanType = $stateParams.pageData.loanType;
-                                    loanProcess.loanAccount.productCategory = productCategory;
+                                    localStorage.removeItem("productCategory");
+                                    localStorage.removeItem("loanType");
+                                    localStorage.setItem("productCategory", $stateParams.pageData.productCategory);
+                                    localStorage.setItem("loanType", $stateParams.pageData.loanType);
                                 }
-                                
+                                if(localStorage.getItem("productCategory") !== null && localStorage.getItem("loanType") !== null) {
+                                    productCategory = localStorage.getItem("productCategory");
+                                    loanProcess.loanAccount.loanType = localStorage.getItem("loanType");
+                                    loanProcess.loanAccount.productCategory = localStorage.getItem("productCategory");
+                                }               
                                  if (_.hasIn($stateParams.pageData, 'lead_id') &&  _.isNumber($stateParams.pageData['lead_id'])){
 
                                     var _leadId = $stateParams.pageData['lead_id'];
@@ -320,6 +326,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 if (!_.hasIn(bundleModel, 'guarantors')){
                                     bundleModel.guarantors = [];
                                 }
+                                BundleManager.broadcastEvent("new-guarantor", params);
                                 bundleModel.guarantors.push(params.guarantor);
                                 break;
                             case 'business':

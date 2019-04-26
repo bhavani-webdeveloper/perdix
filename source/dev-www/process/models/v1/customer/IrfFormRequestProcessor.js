@@ -138,8 +138,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             $log.info(result); // spouse id proof
                             var aadhaarData = EnrollmentHelper.parseAadhaar(result.text);
                             $log.info(aadhaarData);
-                            model.customer.udf.userDefinedFieldValues.udf33 = 'Aadhar card';
-                            model.customer.udf.userDefinedFieldValues.udf36 = aadhaarData.uid;
+                            // model.customer.udf.userDefinedFieldValues.udf33 = 'Aadhar card';
+                            // model.customer.udf.userDefinedFieldValues.udf36 = aadhaarData.uid;
                             model.customer.spouseFirstName = aadhaarData.name;
                             if (aadhaarData.yob) {
                                 model.customer.spouseDateOfBirth = aadhaarData.yob + '-01-01';
@@ -3360,6 +3360,8 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         key: "lead.leadInteractions",
                         type: "array",
                         startEmpty: true,
+                        add:null,
+                        remove:null,
                         view: "fixed",
                         title: "LEAD_INTERACTIONS",
                         items: {

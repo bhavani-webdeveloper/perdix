@@ -69,7 +69,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                                 "readonly": true
                                                             },                                                        
                                                             {
-                                                                "key": "customer.centreId",
+                                                                "key": "applicant.customer.centreId",
                                                                 "type": "select",
                                                                 "enumCode": "centre",
                                                                 "title": "CENTRE_NAME",
@@ -112,13 +112,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                                 "subCategory": "PHOTO",
                                                                 "fileType": "image/*",
                                                                 "readonly": true
-                                                            },
-                                                            {
-                                                                "key": "applicant.customer.customerCategory",
-                                                                "title": "CUSTOMER_CATEGORY",
-                                                                "type": "select",
-                                                                "enumCode": "lead_category",
-                                                                "readonly":true
                                                             }
                                                         ]                                                    
                                                     },
@@ -292,20 +285,21 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                             //     "readonly": true
                                                             // }
                                                         ]                                                    
-                                                    },{
-                                                        "type": "fieldset",
-                                                        "title": "Remarks",
-                                                        "items":[
-                                                            {
-                                                                "title":"REMARKS",
-                                                                "type":"text"
-                                                            },
-                                                            {
-                                                                "title":"FEEDBACK",
-                                                                "type":"textarea"
-                                                            }
-                                                        ]
-                                                    }
+                                                    },
+                                                    // {
+                                                    //     "type": "fieldset",
+                                                    //     "title": "Remarks",
+                                                    //     "items":[
+                                                    //         {
+                                                    //             "title":"REMARKS",
+                                                    //             "type":"text"
+                                                    //         },
+                                                    //         {
+                                                    //             "title":"FEEDBACK",
+                                                    //             "type":"textarea"
+                                                    //         }
+                                                    //     ]
+                                                    // }
                                                 ]
                                             },
                                             {
@@ -318,24 +312,32 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                         "title": "CALLING_ATTEMPTS",
                                                         "items": [
                                                             {
-                                                                "key": "applicant.telecallingResponse",
+                                                                "key": "telecalling.applicant.telecallingResponse",
                                                                 "type": "select",
                                                                 "title": "TELECALLING_RESPONSE",
-                                                                "enumCode": "telecalling_response",
+                                                                "enumCode": "telecalling_response1",
                                                                 "required" : true
                                                             },
                                                             {
-                                                                "key": "applicant.noOfCallAttempts",
+                                                                "key": "telecalling.applicant.noOfCallAttempts",
                                                                 "type": "number",
                                                                 "title": "NO_OF_CALLATTEMPTS"
                                                             },
                                                             {
-                                                                "key": "applicant.followupCallRequired",
+                                                                "key": "telecalling.applicant.followupCallRequired",
                                                                 "type": "date",
-                                                                "title": "FOLLOWUP_ON"
+                                                                "title": "FOLLOWUP_ON",
+                                                                "condition": "model.telecalling.applicant.telecallingResponse !='Reachable'",
+                                                                "required":true
                                                             },
                                                             {
-                                                                "key": "applicant.telecallingRemarks",
+                                                                "key": "telecalling.applicant.customerCalledDate",
+                                                                "type": "date",
+                                                                "title": "CUSTOMER_CALLED",
+                                                                "readonly":true
+                                                            },
+                                                            {
+                                                                "key": "telecalling.applicant.telecallingRemarks",
                                                                 "type": "textarea",
                                                                 "title": "TELECALLING_REMARKS"
                                                             }
@@ -368,7 +370,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 "subTitle": "",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
 
-                  
                     model.loanCustomer = {};
                     model.applicant = {};
                     model.telecalling = [];
@@ -378,8 +379,19 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     model.loanCustomer.customer = model.loanProcess.loanCustomerEnrolmentProcess.customer;
 
                     // applicant telecalling details
-                    model.telecalling.applicant = _.filter(model.loanAccount.telecallingDetails, {"partyType": "applicant"});
-                  
+                    var telecallingApplicant= _.filter(model.loanAccount.telecallingDetails, {"partyType": "applicant"}); 
+                    if(telecallingApplicant.length != 0) {
+                        model.telecalling.applicant = telecallingApplicant[telecallingApplicant.length -1];
+                    }
+
+                    if(model.loanAccount.telecallingDetails && model.loanAccount.telecallingDetails.length == 0){
+                        model.telecalling.applicant ={}
+                        model.telecalling.applicant.customerCalledDate=moment().format(SessionStore.getSystemDateFormat());
+                    }
+                    
+                    //if (_.hasIn(model, 'telecalling.applicant.customerCalled'))
+                    
+
                     model.telecalling.loanCustomer = _.filter(model.loanAccount.telecallingDetails, {"partyType": "loanCustomer"});
                     if (_.hasIn(model, 'loanProcess.applicantEnrolmentProcess') && model.loanProcess.applicantEnrolmentProcess !=null){
                         model.applicantEnrolmentProcessDetails = {}; 
@@ -439,6 +451,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         model.applicant.customerId = model.applicant.customer.id;
                         model.applicant.partyType = "applicant";
                         model.applicant.customerCalledAt = new Date();
+                        model.applicant.telecallingResponse = model.telecalling.applicant.telecallingResponse;
+                        model.applicant.noOfCallAttempts = model.telecalling.applicant.noOfCallAttempts;
+                        model.applicant.followupCallRequired = model.telecalling.applicant.followupCallRequired;
+                        model.applicant.telecallingRemarks = model.telecalling.applicant.telecallingRemarks;
+                        model.applicant.customerCalledDate = (model.telecalling.applicant.customerCalledDate == moment().format(SessionStore.getSystemDateFormat())) ? model.telecalling.applicant.customerCalledDate : moment().format(SessionStore.getSystemDateFormat());
                         model.loanAccount.telecallingDetails.push(model.applicant);
 
                         model.loanCustomer.customerId = model.loanCustomer.customer.id;
@@ -461,6 +478,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             })
                             .subscribe(function(value) {
                                 PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
+                                  
+                                    BundleManager.pushEvent('teleVerification-capture', model._bundlePageObj, {loanAccount: model.loanAccount});
+                                
                             }, function(err) {
                                 PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);
                                 PageHelper.showErrors(err);

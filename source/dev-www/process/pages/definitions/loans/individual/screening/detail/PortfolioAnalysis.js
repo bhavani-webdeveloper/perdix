@@ -266,7 +266,7 @@ define({
                                     }
                                 },
                                 {
-                                    "title": "Business liabilities",
+                                    "title": "Existing Loan Repayments",
                                     "data": "business_liabilities",
                                     render: function(data, type, full, meta) {
                                         
@@ -359,10 +359,10 @@ define({
                                     }
                                 },
                                 {
-                                    "title": "HypothecationValue:LoanAmount",
-                                    "data": "HypothecationValue:LoanAmount",
+                                    "title": "HypothecationValue: Loan Amount",
+                                    "data": "HypothecationValue: Loan Amount",
                                     "render": function(data, type, full, meta){
-                                        data = full['data'][0]['HypothecationValue:LoanAmount']+"%";
+                                        data = full['data'][0]['HypothecationValue: Loan Amount']+"%";
                                         return data
                                     }
                                 }
@@ -666,7 +666,7 @@ define({
                         'financialsGraph':{}
                         };
                         var ratios={};
-                    if(params.length){
+                    if(params.length){            
                         for(var i=0;i<params.length;i++){
                             params[i][3].tableData.data[0].net_business_income=params[i][1].data[0]['Net Business Income'];
                             params[i][3].tableData.data[0].Purchases=params[i][1].data[0].Purchases;
@@ -778,8 +778,10 @@ define({
                                 'Total_Liabilities': balancesheet['Total Liabilities'],
                                 'Own_capital': balancesheet['Own capital'],
                                 'luc_status': params[13].data[0]['luc_status']?params[13].data[0]['luc_status']:"NA",
-                                'HypothecationValue:LoanAmount':(params[0].data[0] && params[0].data[0]['HypothecationValue:LoanAmount'])?params[0].data[0]['HypothecationValue:LoanAmount']:"NA"
+                                'HypothecationValue: Loan Amount':(params[0].data[0] && params[0].data[0]['HypothecationValue: Loan Amount'])?params[0].data[0]['HypothecationValue: Loan Amount']:"NA"
+                                
                             };
+                            //'HypothecationValue:LoanAmount':(params[0].data[0] && params[0].data[0]['HypothecationValue:LoanAmount'])?params[0].data[0]['HypothecationValue:LoanAmount']:"NA"
                             var data={
                                 "data":[],
                                 "ratios":[
