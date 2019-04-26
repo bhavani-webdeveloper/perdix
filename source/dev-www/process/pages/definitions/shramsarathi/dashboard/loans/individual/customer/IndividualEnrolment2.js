@@ -35,6 +35,37 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 return temp[i].name;
             }
 
+            //identityProofNo validation
+           var idCardNoValidation = function (value,context,model,form){
+                var type = model.customer.identityProof;
+                var pattern,message;
+                switch(type){
+                   case "Aadhaar Card":
+                   pattern='^\\d{4}\\d{4}\\d{4}$';message='12 digits';break;
+                   case "Driving License":
+                   pattern='^[A-Z]{2}[0-9]{13}$';message='Required 2 uppercase alphabets, 13 digits';break;
+                   case "PAN Card":
+                   pattern='^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$';message='Required 5 alphabets, 4 digits, 1 alphabet';break;
+                   case "Aajeevika Bureau Card":
+                   pattern='^[a-zA-Z]{6}[0-9]{5}$';message='Required 6 alphabets, 5 digits';break;
+                   case "NREGA Job Card":
+                   pattern='^[0-9]{18}$';message='Required 18 digits';break;
+                   case "Voter ID Card":
+                   pattern ='^[a-zA-Z]{3}[0-9]{7}$';message='Required 3 alphabets,7 digits';break;
+                   case "Passport":
+                   pattern ='^[A-Z]{1}[0-9]{8}';message='Required 1 uppercase alphabet,8 digits';break;
+                }
+                var regex = new RegExp(pattern);
+                if(regex.test(model.customer.identityProofNo) == false){
+                    model.warningHtml = '<p style=\"font-size:13px !important\"><font color=#FF6347>'+type+' Number doesn\'t match the Pattern : '+pattern+' Message : '+message+'</font><hp>'
+                }
+                else{
+                    if(model.warningHtml)
+                        delete model.warningHtml;
+                }
+            }
+
+           
             var preSaveOrProceed = function (reqData) {
                 if (_.hasIn(reqData, 'customer.familyMembers') && _.isArray(reqData.customer.familyMembers)) {
                     var selfExist = false
@@ -195,8 +226,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"ALTERNATIVE_MOBILE_NO",
                                    
                                 },
-                              
-                              
+    
                                 "ContactInformation.residentialAddressFieldSet":{
                                     "title":"SOURCE_ADDRESS"
                                 },
@@ -251,9 +281,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title": "VALUE_OF_THE_ASSET",
                                     "type":"amount"
                                 },
-                               
-                              
-
+                          
                                 "IndividualInformation.centreId": {
                                     "required": true,
                                     "readonly": true,
@@ -309,6 +337,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                        }else{
                                         model.customer.addressPfSameAsIdProof='NO'
                                        }
+                                       if(model.warningHtml){delete model.warningHtml;}
                                        
                                     }
                                  
@@ -322,34 +351,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     //     "pattern": "(^\\d{4}\\d{4}\\d{4}$)|(^[A-Z]{2}[0-9]{13}$)|(^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$)|(^[a-zA-Z]{6}[0-9]{5}$)",
                                     //     "type": ["integer", "string"]
                                     // }
-                                    "onChange": function(value,context,model,form){
-                                        var type = model.customer.identityProof;
-                                        var pattern;
-                                        switch(type){
-                                           case "Aadhaar Card":
-                                           pattern='^\\d{4}\\d{4}\\d{4}$';break;
-                                           case "Driving License":
-                                           pattern='^[A-Z]{2}[0-9]{13}$';break;
-                                           case "PAN Card":
-                                           pattern='^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$';break;
-                                           case "Aajeevika Bureau Card":
-                                           pattern='^[a-zA-Z]{6}[0-9]{5}$';break;
-                                           case "NREGA Job Card":
-                                           pattern='^[0-9]{18}$';break;
-                                           case "Voter ID Card":
-                                           pattern ='^[a-zA-Z]{3}[0-9]{7}$';break;
-                                           case "Passport":
-                                           pattern ='^[A-Z]{1}[0-9]{8}';break;
-                                        }
-                                        var regex = new RegExp(pattern);
-                                        if(regex.test(model.customer.identityProofNo) == false){
-                                            model.warningHtml = '<p style=\"font-size:13px !important\"><font color=#FF6347>'+type+' Number doesn\'t match the Patteren : '+pattern+'</font><hp>'
-                                        }
-                                        else{
-                                            if(model.warningHtml)
-                                                delete model.warningHtml;
-                                        }
-                                    }
+                                    "onChange": idCardNoValidation  
                                 },
                                 "KYC.regexWarning":{
                                     "type":'html',
@@ -4066,8 +4068,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             return false;
                         }
 
-                        
-
                         if((model.customer.addressPfSameAsIdProof==='YES') && (model.customer.identityProof=='Aadhaar Card')){
                             model.customer.addressProof=model.customer.identityProof;
                             model.customer.addressProofNo=model.customer.identityProofNo;
@@ -4076,7 +4076,34 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             model.customer.addressProofIssueDate=model.customer.idProofIssueDate;
                             model.customer.addressProofValidUptoDate=model.customer.idProofValidUptoDate;
                         }
-                        
+                         //identity proof number validation
+                         try{
+                            var type = model.customer.identityProof;
+                            var pattern="";
+                            switch(type){
+                               case "Aadhaar Card":
+                               pattern='^\\d{4}\\d{4}\\d{4}$';break;
+                               case "Driving License":
+                               pattern='^[A-Z]{2}[0-9]{13}$';break;
+                               case "PAN Card":
+                               pattern='^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$';break;
+                               case "Aajeevika Bureau Card":
+                               pattern='^[a-zA-Z]{6}[0-9]{5}$';break;
+                               case "NREGA Job Card":
+                               pattern='^[0-9]{18}$';break;
+                               case "Voter ID Card":
+                               pattern ='^[a-zA-Z]{3}[0-9]{7}$';break;
+                               case "Passport":
+                               pattern ='^[A-Z]{1}[0-9]{8}';break;
+                            }
+                            var regex = new RegExp(pattern);
+                            if(regex.test(model.customer.identityProofNo) == false){
+                                PageHelper.showProgress("validation","Please enter valid " + model.customer.identityProof + " no",9000);
+                                return false;
+                            }
+                        } catch(err){
+                            console.error("idcardproofno validation err",err);
+                        }
                         // $q.all start
                         model.enrolmentProcess.save()
                             .finally(function () {
@@ -4101,6 +4128,35 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         if (PageHelper.isFormInvalid(form)) {
                             return false;
                         }
+                         //identity proof number validation
+                         try{
+                            var type = model.customer.identityProof;
+                            var pattern="";
+                            switch(type){
+                               case "Aadhaar Card":
+                               pattern='^\\d{4}\\d{4}\\d{4}$';break;
+                               case "Driving License":
+                               pattern='^[A-Z]{2}[0-9]{13}$';break;
+                               case "PAN Card":
+                               pattern='^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$';break;
+                               case "Aajeevika Bureau Card":
+                               pattern='^[a-zA-Z]{6}[0-9]{5}$';break;
+                               case "NREGA Job Card":
+                               pattern='^[0-9]{18}$';break;
+                               case "Voter ID Card":
+                               pattern ='^[a-zA-Z]{3}[0-9]{7}$';break;
+                               case "Passport":
+                               pattern ='^[A-Z]{1}[0-9]{8}';break;
+                            }
+                            var regex = new RegExp(pattern);
+                            if(regex.test(model.customer.identityProofNo) == false){
+                                PageHelper.showProgress("validation","Please enter valid " + model.customer.identityProof + " no",9000);
+                                return false;
+                            }
+                        } catch(err){
+                            console.error("idcardproofno validation err",err);
+                        }
+
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
                         model.enrolmentProcess.proceed()
@@ -4134,17 +4190,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 for(var i=0;i<model.customer.currentAssets.length;i++){
                                     model.customer.currentAssets[i].titleExpr = model.customer.currentAssets[i].assetType;
                                 }
-                               
                             }
                         }
                       
                          if(model.customer.physicalAssets!== undefined){
-                        if(model.customer.physicalAssets.length > 0)
-                        {
-                            for(var i=0;i<model.customer.physicalAssets.length;i++){
-                                model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
-                            }
-                        } 
+                            if(model.customer.physicalAssets.length > 0)
+                            {
+                                for(var i=0;i<model.customer.physicalAssets.length;i++){
+                                    model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
+                                }
+                            } 
                         }  
 
                         if((model.customer.addressPfSameAsIdProof==='YES') && (model.customer.identityProof=='Aadhaar Card')){
@@ -4155,6 +4210,36 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             model.customer.addressProofIssueDate=model.customer.idProofIssueDate;
                             model.customer.addressProofValidUptoDate=model.customer.idProofValidUptoDate;
                         }
+
+                            //identity proof number validation
+                            try{
+                                var type = model.customer.identityProof;
+                                var pattern="";
+                                switch(type){
+                                   case "Aadhaar Card":
+                                   pattern='^\\d{4}\\d{4}\\d{4}$';break;
+                                   case "Driving License":
+                                   pattern='^[A-Z]{2}[0-9]{13}$';break;
+                                   case "PAN Card":
+                                   pattern='^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$';break;
+                                   case "Aajeevika Bureau Card":
+                                   pattern='^[a-zA-Z]{6}[0-9]{5}$';break;
+                                   case "NREGA Job Card":
+                                   pattern='^[0-9]{18}$';break;
+                                   case "Voter ID Card":
+                                   pattern ='^[a-zA-Z]{3}[0-9]{7}$';break;
+                                   case "Passport":
+                                   pattern ='^[A-Z]{1}[0-9]{8}';break;
+                                }
+                                var regex = new RegExp(pattern);
+                                if(regex.test(model.customer.identityProofNo) == false){
+                                    PageHelper.showProgress("validation","Please enter valid " + model.customer.identityProof + " no",9000);
+                                    return false;
+                                }
+                            } catch(err){
+                                console.error("idcardproofno validation err",err);
+                            }
+
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
                         model.enrolmentProcess.save()
@@ -4169,34 +4254,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
                                 BundleManager.pushEvent('new-enrolment', model._bundlePageObj, { customer: model.customer });
 
-                               
-
-
                                 model.enrolmentProcess.proceed()
                                     .subscribe(function (enrolmentProcess) {
                                         PageHelper.showProgress('enrolment', 'Done.', 5000);
 
                                                     /* assets*/
-
                                     if(model.customer.currentAssets!== undefined){
                                         if(model.customer.currentAssets.length > 0){
                                             for(var i=0;i<model.customer.currentAssets.length;i++){
                                                 model.customer.currentAssets[i].titleExpr = model.customer.currentAssets[i].assetType;
                                             }
-                                        
                                         }
                                     }
                                 
                                     if(model.customer.physicalAssets!== undefined){
-                                    if(model.customer.physicalAssets.length > 0)
-                                    {
-                                        for(var i=0;i<model.customer.physicalAssets.length;i++){
-                                            model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
-                                        }
-                                    } 
+                                        if(model.customer.physicalAssets.length > 0)
+                                        {
+                                            for(var i=0;i<model.customer.physicalAssets.length;i++){
+                                                model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
+                                            }
+                                        } 
                                     }  
-
-
 
                                     }, function (err) {
                                         PageHelper.showErrors(err);

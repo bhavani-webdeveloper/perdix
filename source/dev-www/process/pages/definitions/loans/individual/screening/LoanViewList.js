@@ -90,6 +90,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanViewList'), 
                 $log.info("Inside pre_page_initialize");
                 bundleModel.currentStage = "loanView";
                 var deferred = $q.defer();
+                var siteCode = SessionStore.getGlobalSetting('siteCode');
 
                 var $this = this;
                 if (_.hasIn($stateParams, 'pageId') && !_.isNull($stateParams.pageId)) {
@@ -161,14 +162,17 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanViewList'), 
                                     });
                                 }
 
-                                $this.bundlePages.push({
-                                    pageClass: 'business',
-                                    model: {
-                                        loanRelation: {
-                                            customerId: res.customerId
+                                if(siteCode!='shramsarathi'){
+                                    $this.bundlePages.push({
+                                        pageClass: 'business',
+                                        model: {
+                                            loanRelation: {
+                                                customerId: res.customerId
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                                }
+                               
 
                                 $this.bundlePages.push({
                                     pageClass: 'loan-request',
