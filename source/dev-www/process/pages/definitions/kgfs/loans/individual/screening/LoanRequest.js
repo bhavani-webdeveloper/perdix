@@ -423,6 +423,9 @@ define([],function(){
                                 },
                                 "JewelDetails":{
                                     "readonly":true
+                                },
+                                "NomineeDetails":{
+                                    "readonly":true
                                 }
                             }
 
@@ -445,6 +448,9 @@ define([],function(){
                                     "readonly":true
                                 },
                                 "JewelDetails":{
+                                    "readonly":true
+                                },
+                                "NomineeDetails":{
                                     "readonly":true
                                 }
                             }
@@ -469,6 +475,9 @@ define([],function(){
                                 },
                                 "JewelDetails":{
                                     "readonly":true
+                                },
+                                "NomineeDetails":{
+                                    "readonly":true
                                 }
                             }
 
@@ -491,6 +500,9 @@ define([],function(){
                                     "readonly":true
                                 },
                                 "JewelDetails":{
+                                    "readonly":true
+                                },
+                                "NomineeDetails":{
                                     "readonly":true
                                 }
                             }
@@ -515,6 +527,9 @@ define([],function(){
                                 },
                                 "JewelDetails":{
                                     "readonly":true
+                                },
+                                "NomineeDetails":{
+                                    "readonly":true
                                 }
                             }
 
@@ -537,6 +552,9 @@ define([],function(){
                                     "readonly":true
                                 },
                                 "JewelDetails":{
+                                    "readonly":true
+                                },
+                                "NomineeDetails":{
                                     "readonly":true
                                 }
                             }
@@ -561,6 +579,9 @@ define([],function(){
                                 },
                                 "JewelDetails":{
                                     "readonly":true
+                                },
+                                "NomineeDetails":{
+                                    "readonly":true
                                 }
                             }
 
@@ -584,6 +605,9 @@ define([],function(){
                                 },
                                 "JewelDetails":{
                                     "readonly":true
+                                },
+                                "NomineeDetails":{
+                                    "readonly":true
                                 }
                             }
 
@@ -606,6 +630,9 @@ define([],function(){
                                     "readonly":true
                                 },
                                 "JewelDetails":{
+                                    "readonly":true
+                                },
+                                "NomineeDetails":{
                                     "readonly":true
                                 }
                             }
