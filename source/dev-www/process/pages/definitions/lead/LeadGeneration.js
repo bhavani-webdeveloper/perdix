@@ -739,6 +739,7 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                                 }, {
                                     key: "lead.dob",
                                     type: "date",
+                                    required:true,
                                     "onChange": function (modelValue, form, model) {
                                         if (model.lead.dob) {
                                             model.lead.age = moment().diff(moment(model.lead.dob, SessionStore.getSystemDateFormat()), 'years');
