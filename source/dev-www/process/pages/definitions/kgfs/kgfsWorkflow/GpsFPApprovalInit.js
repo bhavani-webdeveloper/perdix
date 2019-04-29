@@ -29,6 +29,7 @@ define({
                 model.customer.newRightHandMiddleImageId = model.customer.rightHandMiddleImageId;
                 model.customer.newRightHandRingImageId = model.customer.rightHandRingImageId;
                 model.customer.newRightHandSmallImageId = model.customer.rightHandSmallImageId;
+                model.customer.temporary = _.cloneDeep(model.customer);
                 $window.scrollTo(0, 0);
                 irfProgressMessage.pop("cust-load", "Load Complete", 2000);
             }, function (resp) {
@@ -144,7 +145,7 @@ define({
                 model._screenMode = 'VIEW';
                 PageHelper.showLoader();
                 irfProgressMessage.pop("cust-load", "Loading Customer Data...");
-
+                model.workflow = model.workflow || {};
                 if (workflowId != undefined || workflowId != null) {
                     update(model, workflowId);
 
