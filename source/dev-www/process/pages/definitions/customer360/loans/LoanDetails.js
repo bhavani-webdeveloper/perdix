@@ -1999,10 +1999,12 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                 }
                             ]
                         }]
-                    }, {
+                    }, 
+                    {
                         "type": "box",
                         "title": "COLLATERAL",
                         "condition": "model.loanAccount.collateral.length>0",
+                        "condition": "model.siteCode!='shramsarathi'",
                         "readonly": true,
                         "items": [{
                             "key": "loanAccount.collateral",
