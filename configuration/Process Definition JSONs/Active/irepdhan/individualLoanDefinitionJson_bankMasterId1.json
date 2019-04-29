@@ -3,6 +3,7 @@
     "customerMaxGenericAge":60,
     "customerMaxAgeBcProduct":58,
     "customerAgeLimitForSingleFemale":35,
+    "duplicateApplicantCheckStages":["KYC","KYCReview","Appraisal","AppraisalReview","Televerification","Evaluation","CreditCommitteeReview","IrepDhanApprovalReview","IrepCCRiskApprovalReview","IrepCCOpsConfirmation","CreditConfirmation","GuarantorAddition","Sanction"],
     "productValidationFromStage":"LoanBooking",
     "stages":[
        {
