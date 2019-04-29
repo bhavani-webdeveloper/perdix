@@ -321,7 +321,7 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                         if (PageHelper.isFormInvalid(form)) {
                             return false;
                         }
-                        model.remittance.trxnType = "REM_CASHIN";  
+                        model.remittance.trxnType = "REM_CASHOUT";  
                         Transaction.saveRemittance(model.remittance).$promise.then(function(resp){
                             console.log("resp",resp);
                         },function(err){

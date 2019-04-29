@@ -14,14 +14,9 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                 "title": "SB_ACCOUNT",
                 "subTitle": "",
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
-                    // $log.info("Inside initialize of IndividualEnrolment2 -SPK " + formCtrl.$name);
                     if (bundlePageObj) {
                         model._bundlePageObj = _.cloneDeep(bundlePageObj);
                     };
-                    /* Setting data recieved from Bundle */
-                    // model.loanCustomerRelationType =getLoanCustomerRelation(bundlePageObj.pageClass);
-                    // model.pageClass = bundlePageObj.pageClass;
-                    // model.currentStage = bundleModel.currentStage;
                     model.sbTransaction={};
                   var getEnrollment=function(id){
                     var deferred=$q.defer();
@@ -35,14 +30,17 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                   }
 
                     if($stateParams.pageId!=null || $stateParams.pageId!=undefined){
+                        PageHelper.showLoader();
                        var res= getEnrollment({id:$stateParams.pageId});
                        res.then(function(resp){
                             // model.customer=resp;
                             model.sbTransaction.customerId=resp.id;
                             model.sbTransaction.urnNo=resp.urnNo;
                             model.sbTransaction.firstName=resp.firstName;
+                            PageHelper.hideLoader();
                         },function(err){
                             console.log(err);
+                            PageHelper.hideLoader();
                         });
                     }
                     else
@@ -108,24 +106,17 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                             "Bank.transactionType",
                             "Bank.transactionAmount",
                             "Bank.remarks",
-                            "Bank.validateFingerPrint",
-
-                            "Biometric",
-                            "Biometric.validateFingerPrint",
+                            "Bank.validateFingerPrint"
                         ];
         
                     }
 
-
-                   
                     /* Form rendering starts */
                     var self = this;
                     var formRequest = {
                         "overrides": overridesFields(model),
                         "includes": getIncludes(model),
-                        "excludes": [
-                           // "KYC.addressProofSameAsIdProof",
-                        ],
+                        "excludes": [],
                         "options": {
                             "repositoryAdditions": {
                              "Bank":{
@@ -145,124 +136,47 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                                             "title": "CUSTOMER_NAME",
                                             "readonly": true
                                         },
-                                        // "accountNo":{
-                                        //     "type": "lov",
-                                        //     "title": "Account",
-                                        //     "resolver": "CustomerBankAccountConfiguration"
-                                        // },
                                         "accountNo": {
                                                 type: "lov",
                                                 lovonly: false,
                                                 title: "ACCOUNT_NO",
                                                 bindMap: {},
-                                                key: "model.sbTransaction.customerId",
+                                                key: "sbTransaction.accountNumber",
                                                 "outputMap": {
-                                                    "accountNo": "model.sbTransaction.customerBankAccounts",
+                                                    "accountNo": "sbTransaction.accountNumber",
                                                 },
                                                 "searchHelper": formHelper,
                                                 "search": function(inputModel, form) {
-                                                    // $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
-                                                    // var branches = formHelper.enum('branch_id').data;
-                                                    // var branchName;
-                                                    // for (var i = 0; i < branches.length; i++) {
-                                                    //     if (branches[i].code == inputModel.customerBranchId)
-                                                    //         branchName = branches[i].name;
-                                                    // }
-                                                    var customerBankAccounts=[];
                                                     var promise=getEnrollment({id:$stateParams.pageId}).then(
                                                       function(resp){
-                                                        customerBankAccounts=resp.customerBankAccounts;
+                                                           return {headers:{ "x-total-count": resp.customerBankAccounts.length},body:resp.customerBankAccounts};
                                                       },function(err){
-                                                        customerBankAccounts=[];
+                                                        return {headers:{ "x-total-count": 0},body:[]};
                                                       }
                                                     );
-                                                    // var promise = Enrollment.search({
-                                                    //     'customerId': inputModel.customerId,
-                                                    // }).$promise;
-                                                    // return promise;
-                                                    return $q.resolve({
-                                                        headers: {
-                                                            "x-total-count": customerBankAccounts.length
-                                                        },
-                                                        body: customerBankAccounts
-                                                    });
+                                                     return promise;
+                                                    // return $q.resolve({
+                                                    //     headers: {
+                                                    //         "x-total-count": customerBankAccounts.length
+                                                    //     },
+                                                    //     body: customerBankAccounts
+                                                    // });
                                                    
                                                   
                                                 },
                                                 getListDisplayItem: function(data, index) {
                                                     return [
-                                                        [data.firstName, data.fatherFirstName].join(' | '),
-                                                        data.firstName,
-                                                        data.urnNo
+                                                        data.accountNumber
                                                     ];
                                                 },
-                                                onSelect: function(valueObj, model, context) {
-                                                    PageHelper.showProgress('customer-load', 'Loading customer...');
-                                                    EnrolmentProcess.fromCustomerID(valueObj.id)
-                                                        .finally(function() {
-                                                            PageHelper.showProgress('customer-load', 'Done.', 5000);
-                                                        })
-                                                        .subscribe(function(enrolmentProcess) {
-                                                            /* Setting on the current page */
-                                                            model.enrolmentProcess = enrolmentProcess;
-                                                            model.customer = enrolmentProcess.customer;
-
-                                                            BundleManager.pushEvent(model.pageClass + "-updated", model._bundlePageObj, enrolmentProcess);
-                                                        })
+                                                onSelect: function(result, model, context) {
+                                                    model.sbTransaction.accountNumber = result.accountNumber; 
                                             }
                                         },
-                                        // "accountNo":{
-                                        //         key: "sbTransaction. customerBankAccounts",
-                                        //         type: "lov",
-                                        //         lovonly: true,
-                                        //         bindMap: {},
-                                        //         //key: "agent.customerId",
-                                        //         "inputMap": {
-                                        //             "customerId": {
-                                        //                 "key": "sbTransaction.customerId",
-                                        //                 "title": "CUSTOMER_ID",
-                                        //                 "type": "string"
-                                        //             }
-                                        //         },
-                                        //         "outputMap": {
-                                        //             "urnNo": "customer.urnNo",
-                                        //             "firstName": "customer.firstName"
-                                        //         },
-                                        //         "searchHelper": formHelper,
-                                        //         "search": function(inputModel, form) {
-                                                    
-                                        //             var promise = Enrollment.search({
-                                        //                 'customerId': inputModel.customerId,   
-                                        //             }).$promise;
-                                        //             return promise;
-                                        //         },
-                                        //         getListDisplayItem: function(data, index) {
-                                        //             return [
-                                        //                 [data.firstName, data.fatherFirstName].join(' | '),
-                                        //                 data.firstName,
-                                        //                 data.urnNo
-                                        //             ];
-                                        //         },
-                                        //         onSelect: function(valueObj, model, context) {
-                                        //             PageHelper.showLoader();
-                                        //             EnrolmentProcess.fromCustomerID(valueObj.id)
-                                        //                 .finally(function() {
-                                        //                     PageHelper.showProgress('customer-load', 'Done.', 5000);
-                                        //                 })
-                                        //                 .subscribe(function(enrolmentProcess) {
-                                        //                     /* Setting on the current page */
-                                                            
-                                        //                 })
-                                                    
-                                        //         }
-                                                                
-                                                                               
-                                        // },
                                         "transactionType":{
                                             "key": "sbTransaction.transactionType",
                                             "type": "radios",
                                             "title":"TRANSACTION_TYPE",
-                                            // "enumcode": "transaction_type"
                                             "titleMap":[{
                                                      "name": "Deposit",
                                                     "value": "DEPOSIT",
@@ -282,83 +196,43 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                                             "title": "REMARKS"
                                         },
                                         "validateFingerPrint":{
-                                            key:"sbTransaction.whichFinger",
-                                            title: "Validate Fingerprint",
-                                            type:"validatebiometric",
-                                            category: 'CustomerEnrollment',
-                                            subCategory: 'FINGERPRINT',
-                                            helper: formHelper,
-                                            biometricMap: {
-                                                leftThumb: "model.customer.leftHandThumpImageId",
-                                                leftIndex: "model.customer.leftHandIndexImageId",
-                                                leftMiddle: "model.customer.leftHandMiddleImageId",
-                                                leftRing: "model.customer.leftHandRingImageId",
-                                                leftLittle: "model.customer.leftHandSmallImageId",
-                                                rightThumb: "model.customer.rightHandThumpImageId",
-                                                rightIndex: "model.customer.rightHandIndexImageId",
-                                                rightMiddle: "model.customer.rightHandMiddleImageId",
-                                                rightRing: "model.customer.rightHandRingImageId",
-                                                rightLittle: "model.customer.rightHandSmallImageId"
+                                            "key":"sbTransaction.whichFinger",
+                                            "title": "Validate Fingerprint",
+                                            "type":"validatebiometric",
+                                            "category": 'CustomerEnrollment',
+                                            "subCategory": 'FINGERPRINT',
+                                            "helper": formHelper,
+                                            "biometricMap": {
+                                                "leftThumb": "model.customer.leftHandThumpImageId",
+                                                "leftIndex": "model.customer.leftHandIndexImageId",
+                                                "leftMiddle": "model.customer.leftHandMiddleImageId",
+                                                "leftRing": "model.customer.leftHandRingImageId",
+                                                "leftLittle": "model.customer.leftHandSmallImageId",
+                                                "rightThumb": "model.customer.rightHandThumpImageId",
+                                                "rightIndex": "model.customer.rightHandIndexImageId",
+                                                "rightMiddle": "model.customer.rightHandMiddleImageId",
+                                                "rightRing": "model.customer.rightHandRingImageId",
+                                                "rightLittle": "model.customer.rightHandSmallImageId"
                                             },
                                             viewParams: function(modelValue, form, model) {
                                                 return {
                                                     customerId: model.customer.id
                                                 };
                                             }
-                                        }
+                                        },
                                     }
                                 },
-                                // "Biometric":{
-                                //     "type":"box",
-                                //     "title":"BIOMETRIC",
-                                //     "orderNo": 2,
-                                // "items":{
-                                //     "validateFingerPrint":{
-                                //         key:"customer.isBiometricValidated",
-                                //         title: "Validate Fingerprint",
-                                //         type:"validatebiometric",
-                                //         category: 'CustomerEnrollment',
-                                //         subCategory: 'FINGERPRINT',
-                                //         helper: formHelper,
-                                //         biometricMap: {
-                                //             leftThumb: "model.customer.leftHandThumpImageId",
-                                //             leftIndex: "model.customer.leftHandIndexImageId",
-                                //             leftMiddle: "model.customer.leftHandMiddleImageId",
-                                //             leftRing: "model.customer.leftHandRingImageId",
-                                //             leftLittle: "model.customer.leftHandSmallImageId",
-                                //             rightThumb: "model.customer.rightHandThumpImageId",
-                                //             rightIndex: "model.customer.rightHandIndexImageId",
-                                //             rightMiddle: "model.customer.rightHandMiddleImageId",
-                                //             rightRing: "model.customer.rightHandRingImageId",
-                                //             rightLittle: "model.customer.rightHandSmallImageId"
-                                //         },
-                                //         viewParams: function(modelValue, form, model) {
-                                //             return {
-                                //                 customerId: model.customer.id
-                                //             };
-                                //         }
-                                //     }
-                                // }
-                                
-                                // }
                             },
                             "additions": [
                                 {
                                     "type": "actionbox",
-                                    // "condition": "(model.customer.id && model.currentStage!=='ScreeningReview')",
                                     "orderNo": 3,
+                                    "condition": "model.sbTransaction.whichFinger",
                                     "items": [
-                                        
-                                            {
-                                                "type": "submit",
-                                                "title": "SUBMIT",
-                                            },
-                                        
-                                        // {
-                                        //     "type": "button",
-                                        //     "title": "SUBMIT",
-                                        //     "onClick": "actions.proceed(model, formCtrl, form, $event)"
-                                        // }
+                                        {
+                                            "type": "submit",
+                                            "title": "SUBMIT",
+                                        },
                                     ]
                                 }
                             ]
@@ -380,30 +254,12 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                 },
 
                 preDestroy: function (model, form, formCtrl, bundlePageObj, bundleModel) {
-                    // console.log("Inside preDestroy");
-                    // console.log(arguments);
-                    // if (bundlePageObj) {
-                    //     var enrolmentDetails = {
-                    //         'customerId': model.customer.id,
-                    //         'customerClass': bundlePageObj.pageClass,
-                    //         'firstName': model.customer.firstName
-                    //     }
-                    //     // BundleManager.pushEvent('new-enrolment',  {customer: model.customer})
-                    //     BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails);
-                    //     model.loanProcess.removeRelatedEnrolmentProcess(model.enrolmentProcess, model.loanCustomerRelationType);
-                    // }
                     return $q.resolve();
                 },
-                eventListeners: {
-                  
-                },
+                eventListeners: {}, 
                 offline: false,
                 getOfflineDisplayItem: function (item, index) {
-                    return [
-                        // item.customer.urnNo,
-                        // Utils.getFullName(item.customer.firstName, item.customer.middleName, item.customer.lastName),
-                        // item.customer.villageName
-                    ]
+                    return []
                 },
                 form: [
                         // {
@@ -554,6 +410,7 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                     },
                     submit: function (model, form, formName) {
                         PageHelper.clearErrors();
+
                         if (PageHelper.isFormInvalid(form)) {
                             return false;
                         }
@@ -563,11 +420,20 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                         }else{
                             model.sbTransaction.whichFinger = 1;
                         }
+
+                        PageHelper.showLoader();
                         Transaction.saveSBTransaction(model.sbTransaction).$promise.then(function(resp){
                             console.log("resp",resp);
+                            PageHelper.hideLoader();
                         },function(err){
-                            console.log("ERR",err);
+                            console.log(err);
+                            PageHelper.hideLoader();
                         })
+
+                        irfNavigator.go({
+                            "state": "Page.Engine",
+                            "pageName": "customer.banking.Banking"
+                        });
                        
                     }
                 }

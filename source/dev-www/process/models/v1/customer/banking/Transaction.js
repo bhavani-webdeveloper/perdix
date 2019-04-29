@@ -21,8 +21,17 @@ var ret = $resource(endpoint, null, {
         saveCashManagement:{
             method: 'POST',
             url: endpoint + '/saveCashManagement'
+        },
+        saveFreezeTransaction:{
+            method: 'POST',
+            url: endpoint + '/saveFreezeTransaction',
+            params:{bankId:'@bankId',branchId:'@branchId'} 
+        },
+        updateEOD:{
+            method: 'POST',
+            url: endpoint + '/updateEOD',
+            params:{eodDate:'@eodDate'}
         }
-
     });
     return ret;
 });

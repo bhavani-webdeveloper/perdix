@@ -114,6 +114,7 @@
                 "Page/Engine/management.TaggingMaintenance",
                 "Page/ReferenceCodeDashboard",
                 "Page/Adhoc/management.BranchCreationDashboard",
+                "Page/Adhoc/management.bankadmin.BankAdminDashboard",
                 "Page/ScoreParameterMaintenanceDashboard",
                 "Page/CentreCreationDashboard",
                 "Page/UserDashboard",
