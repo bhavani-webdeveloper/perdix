@@ -1206,6 +1206,14 @@
               "Completed"
             ]
           },
+		   "mailingPincode": {
+            "title": "Mailing Pincode",
+            "type": "number",
+            "captureStages": [
+              "BasicEnrolment",
+              "Completed"
+            ]
+          },
           "firstName": {
             "title": "First Name",
             "type": "string",
