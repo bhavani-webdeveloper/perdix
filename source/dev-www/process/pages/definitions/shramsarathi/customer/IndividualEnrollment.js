@@ -36,7 +36,35 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                 }
                 return temp[i].name;
             }
-
+   //identityProofNo validation
+   var idCardNoValidation = function (value,context,model,form){
+    var type = model.customer.identityProof;
+    var pattern,message;
+    switch(type){
+       case "Aadhaar Card":
+       pattern='^\\d{4}\\d{4}\\d{4}$';message='12 digits';break;
+       case "Driving License":
+       pattern='^[A-Z]{2}[0-9]{13}$';message='Required 2 uppercase alphabets, 13 digits';break;
+       case "PAN Card":
+       pattern='^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$';message='Required 5 alphabets, 4 digits, 1 alphabet';break;
+       case "Aajeevika Bureau Card":
+       pattern='^[a-zA-Z]{6}[0-9]{5}$';message='Required 6 alphabets, 5 digits';break;
+       case "NREGA Job Card":
+       pattern='^[0-9]{18}$';message='Required 18 digits';break;
+       case "Voter ID Card":
+       pattern ='^[a-zA-Z]{3}[0-9]{7}$';message='Required 3 alphabets,7 digits';break;
+       case "Passport":
+       pattern ='^[A-Z]{1}[0-9]{8}';message='Required 1 uppercase alphabet,8 digits';break;
+    }
+    var regex = new RegExp(pattern);
+    if(regex.test(model.customer.identityProofNo) == false){
+        model.warningHtml = '<p style=\"font-size:13px !important\"><font color=#FF6347>'+type+' Number doesn\'t match the Pattern : '+pattern+' Message : '+message+'</font><hp>'
+    }
+    else{
+        if(model.warningHtml)
+            delete model.warningHtml;
+    }
+}
             var preSaveOrProceed = function (reqData) {
                 if (_.hasIn(reqData, 'customer.familyMembers') && _.isArray(reqData.customer.familyMembers)) {
                     var selfExist = false
@@ -410,11 +438,20 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
 
                                 },
                                 "KYC.identityProofNo": {
-                                    "required": true,
-                                    "schema": {
-                                        "pattern": "(^\\d{4}\\d{4}\\d{4}$)|(^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$)",
-                                        "type": ["integer", "string"]
-                                    }
+                                    // "required": true,
+                                    // "schema": {
+                                    //     "pattern": "(^\\d{4}\\d{4}\\d{4}$)|(^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$)",
+                                    //     "type": ["integer", "string"]
+                                    // }
+                                    "onChange": idCardNoValidation 
+                                },
+                                "KYC.regexWarning":{
+                                    "type":'html',
+                                    // "title":"regex",
+                                     "notitle":true,
+                                    "key":"warningHtml",
+                                   "condition":"model.warningHtml",
+                                    "orderNo":55
                                 },
                                 "KYC.addressProofFieldSet": {
                                     "condition": "model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
