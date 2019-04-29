@@ -1901,6 +1901,11 @@ define([],function(){
                             PageHelper.showProgress("loan-enrolment","Business Details are not captured",5000);
                                 return false;
                         }
+                        if(model.loanAccount.loanAmount > model.loanAccount.loanAmountRequested)
+                        {
+                            PageHelper.showErrors({data:{error:"Loan Amount Requested cannot be increased Loan Amount Recommended"}});
+                            return false;
+                        }
 
                         // model.loanAccount.customerId=model.loanAccount.loanCustomerRelations[0].customerId;
                         /* Loan SAVE */
@@ -2052,6 +2057,11 @@ define([],function(){
                                 return false;
                             }
                         
+                        }
+                        if(model.loanAccount.loanAmount > model.loanAccount.loanAmountRequested)
+                        {
+                            PageHelper.showErrors({data:{error:"Loan Amount Requested cannot be increased Loan Amount Recommended"}});
+                            return false;
                         }
                         if(model.loanAccount.cbCheckCompletedFlag)
                         {
