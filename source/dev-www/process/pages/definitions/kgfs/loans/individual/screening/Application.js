@@ -399,6 +399,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                         /* Update other pages */
                         BundleManager.broadcastEvent("business-updated", obj);
                     },
+                    "business-customer-bank-account": function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("business-customer-bank-accounts", params);
+                    },
                     "enrolment-removed": function(pageObj, bundlePageObj, enrolmentDetails){
                         if (enrolmentDetails.customerId){
                             BundleManager.broadcastEvent('remove-customer-relation', enrolmentDetails);

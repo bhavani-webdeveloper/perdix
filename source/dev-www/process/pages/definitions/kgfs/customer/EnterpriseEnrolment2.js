@@ -3827,7 +3827,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         
                                         model.customer.isCaptured = true
                                         BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer}); 
-                                        
+                                        BundleManager.pushEvent('business-customer-bank-account', model._bundlePageObj, {customer: model.customer});                                         
                                         PageHelper.showProgress('enrolment', 'Done.', 5000);
                                     }, function (err) {
                                         PageHelper.showErrors(err);
@@ -3920,6 +3920,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 
                                 model.customer.isCaptured = true
                                 BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer});
+                                BundleManager.pushEvent('business-customer-bank-account', model._bundlePageObj, {customer: model.customer});                                         
+
                                 if(model.currentStage == 'CreditAppraisal'){   
                                     model.customer.isCreditAppraisal = true
                                     BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer});

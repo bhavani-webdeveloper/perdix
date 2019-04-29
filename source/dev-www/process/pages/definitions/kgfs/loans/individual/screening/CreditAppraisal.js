@@ -381,6 +381,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                         $log.info("Inside business-capture of Screening");
                         BundleManager.broadcastEvent("business-captures", params);
                     },
+                    "business-customer-bank-account": function(pageObj, bundleModel, params){
+                        BundleManager.broadcastEvent("business-customer-bank-accounts", params);
+                    },
                     "applicant-updated": function(pageObj, bundlePageObj, obj){
                         /* Update other pages */
                         BundleManager.broadcastEvent("applicant-updated", obj);

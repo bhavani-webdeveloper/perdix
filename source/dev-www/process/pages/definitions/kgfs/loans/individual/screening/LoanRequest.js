@@ -12,6 +12,8 @@ define([],function(){
                           BundleManager, PsychometricTestService, LeadHelper, Message, $filter, Psychometric, IrfFormRequestProcessor, UIRepository, $injector, irfNavigator) {
             var branch = SessionStore.getBranch();
             var podiValue = SessionStore.getGlobalSetting("percentOfDisposableIncome");
+            var loanAmountRequestedLoanLimit = SessionStore.getGlobalSetting("loanAmountRequestedLoanLimit");
+            
             
             //PMT calculation
 
@@ -1780,7 +1782,10 @@ define([],function(){
                         model.loanAccount.isBusinessCaptured = typeof params.customer.isCaptured  != undefined ? (params.customer.isCaptured?true:false):false;
                         model.loanAccount.isCreditAppraisal = typeof params.customer.isCreditAppraisal  != undefined ? (params.customer.isCreditAppraisal?true:false):false; 
                         model.loanAccount.urnNo = model.customer.urnNo;    
-                        model.customerId=  params.customer.id;    
+                        model.customerId=  params.customer.id;
+                    },
+                    "business-customer-bank-accounts": function(bundleModel, model, params){
+                        model.customer.customerBankAccounts=params.customer.customerBankAccounts;    
                     },
                     "dsc-response": function(bundleModel,model,obj){
                         model.loanAccount.loanCustomerRelations = obj;
@@ -1905,6 +1910,16 @@ define([],function(){
                         {
                             PageHelper.showErrors({data:{error:"Loan Amount Requested cannot be increased Loan Amount Recommended"}});
                             return false;
+                        }
+                        if(model.loanAccount.productCategory  == 'MEL')
+                        {
+                            if(model.loanAccount.loanAmountRequested >= loanAmountRequestedLoanLimit)
+                            {
+                                if((_.hasIn(model.customer, 'customerBankAccounts')) && _.isArray(model.customer.customerBankAccounts) && model.customer.customerBankAccounts.length == 0) {
+                                    PageHelper.showErrors({data:{error:"Business Tab - Bank accounts details should be mandatory"}});
+                                    return false;
+                                } 
+                            }                            
                         }
 
                         // model.loanAccount.customerId=model.loanAccount.loanCustomerRelations[0].customerId;
