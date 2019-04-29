@@ -42,7 +42,7 @@ define({
             Workflow.getByID({ id: workflowId }, function (resp, header) {
 
                 model.workflow = _.cloneDeep(resp);
-                model.UpdatedWorkflow = JSON.parse(model.workflow.temporary);
+                model.UpdatedWorkflow = JSON.parse(model.workflow.customer.temporary);
                 model.customer = model.workflow.customer;
                 model.customer.biometricNotCaptured = "Not Captured";
                 model.customer.biometricCaptured = "Captured";
