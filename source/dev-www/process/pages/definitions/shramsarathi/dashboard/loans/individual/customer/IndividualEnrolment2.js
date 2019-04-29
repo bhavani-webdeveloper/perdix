@@ -199,9 +199,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualInformation.centreId1":{
                                     "title": "ZONE_NAME",
                                     "readonly":true
-                                }
-                                
-
+                                },
                             }
                         },
                         "FieldAppraisal":
@@ -290,6 +288,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualInformation.centreId1":{
                                     "title": "ZONE_NAME",
                                     "readonly":true
+                                },
+                                "IndividualInformation.caste":{
+                                    "enumcode": "caste",
+                                    "required": true
                                 },
                                 "IndividualInformation.age":{
                                     "required":false
@@ -393,7 +395,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "readonly": true,
                                     "required": true
                                 },
-                                
                                 "ContactInformation.villageName": {
                                     "readonly": true,
                                     "title":"VILLAGE"   
@@ -408,8 +409,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title":"ALTERNATIVE_MOBILE_NO",
                                    
                                 },
-                               
-                              
                                 "ContactInformation.residentialAddressFieldSet":{
                                     "title":"SOURCE_ADDRESS"
                                 },
@@ -452,6 +451,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "required": true,
                                     "resolver": "IFSCCodeLOVConfiguration",
                                     
+                                },
+                                "IndividualInformation.caste":{
+                                    "enumcode": "caste",
+                                    "required": true
                                 },
                                 "BankAccounts.customerBankAccounts.customerBankName": {
                                     "readonly": true,
@@ -2367,7 +2370,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     //     }
                     // },
                     "IndividualInformation.caste": {
-                        "enumCode": "caste"
+                        "enumCode": "caste",
+                        "required": true
                     },
                     "Liabilities.liabilities.startDate": {
                         "orderNo":20,
@@ -3581,7 +3585,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     parentEnumCode: "branch_id",
                                     orderNo: 12,
                                     parentValueExpr: "model.customer.customerBranchId",
-                                }
+                                },
                                 // "groupName": {
                                 //     "key": "loanAccount.groupName",
                                 //     "title": "GROUP_NAME",

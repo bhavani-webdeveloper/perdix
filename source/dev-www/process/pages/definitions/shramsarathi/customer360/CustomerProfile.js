@@ -2271,7 +2271,8 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     //     }
                     // },
                     "IndividualInformation.caste": {
-                        "enumCode": "caste"
+                        "enumCode": "caste",
+                        "required": true
                     },
                     "Liabilities.liabilities.startDate": {
                         "orderNo":20,
