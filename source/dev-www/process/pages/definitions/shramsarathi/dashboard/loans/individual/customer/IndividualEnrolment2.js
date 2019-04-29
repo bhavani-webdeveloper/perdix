@@ -3207,7 +3207,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     filter:{"parentCode": "work_sector"},
                                                     "enumCode": "occupation",
                                                     "parentEnumCode": "work_sector",
-                                                    "parentValueExpr":"model.customer.familyMembers[context.arrayIndex].incomes[context.arrayIndex].workSector",
+                                                    "parentValueExpr":"model.customer.familyMembers[arrayIndexes[0]].incomes[arrayIndexes[1]].workSector",
                                                     "orderNo": 60,
                                                     "onChange":function(valueObj,context,model){
                                                         var skillLevel  = formHelper.enum('skill_type').data.filter(function(value){
@@ -3248,7 +3248,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     "type":"select",
                                                     "enumCode":"skill_type",
                                                     "parentEnumCode": "occupation",
-                                                    "parentValueExpr":"model.customer.familyMembers[context.arrayIndexes[0]].incomes[context.arrayIndexes[1]].incomeSource",
+                                                    "parentValueExpr":"model.customer.familyMembers[arrayIndexes[0]].incomes[arrayIndexes[1]].incomeSource",
                                                     "required":true,
                                                     "orderNo":70
                                                     
