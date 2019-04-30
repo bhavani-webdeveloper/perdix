@@ -3701,6 +3701,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
 
                 initialize: function (model, form, formCtrl, bundlePageObj, bundleModel) {
                     // $log.info("Inside initialize of IndividualEnrolment2 -SPK " + formCtrl.$name);
+
                     if (bundlePageObj) {
                         model._bundlePageObj = _.cloneDeep(bundlePageObj);
                     };
@@ -3808,11 +3809,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         initialFixedCurrent();
                     }
                    }
-                   
-                //    var pattern = /^[A-Z]{2}[0-9]{13}$/;
-                //    var pat = function(){
-                //        if(model.)
-                //    }
+                   model.customer.mailSameAsResidence=false;
+               
                     /* Form rendering starts */
                     var self = this;
                     UIRepository.getEnrolmentProcessUIRepository().$promise
