@@ -39,6 +39,7 @@ define({
 					"condition": "model.siteCode !='sambandh'",
 				}
 			],
+			autoSearch: true,
 			searchSchema: {
 				"type": 'object',
 				"title": 'SearchOptions',
