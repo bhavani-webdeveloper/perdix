@@ -1086,8 +1086,16 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                 model.customer.street = res.addressLine2;
                                 model.customer.doorNo = res.addressLine1;
                                 model.customer.locality = res.area;
+                                model.customer.district = res.district;
+                                model.customer.mailingDistrict = res.district;
+                                model.customer.mailingState=res.state;
+                                model.customer.mailingPincode=res.pincode;
+                                model.customer.mailingStreet = res.addressLine2;
+                                model.customer.mailingDoorNo = res.addressLine1;
+                                model.customer.mailingLocality = res.area;
                                 model.customer.villageName = res.cityTownVillage;
                                 model.customer.landLineNo = res.alternateMobileNo;
+                                model.customer.kgfsBankName = SessionStore.getBankName();
                                 model.customer.age = moment().diff(moment(res.dob, SessionStore.getSystemDateFormat()), 'years');
                             },
                             function(err) {
