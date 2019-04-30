@@ -257,9 +257,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     
                                 },
                                 "ContactInformation.whatsAppMobileNo":{
-                                    "type": "number",
                                     "schema":{
-                                        "pattern": "^[0-9]{10}$"
+                                        "pattern": "^[0-9]{10}$",
+                                        "type": ['string', 'null']
                                     },
                                     "required": false
                                 },
