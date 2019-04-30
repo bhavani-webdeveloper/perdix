@@ -562,7 +562,7 @@ define({
                                     "render": self.strongRender
                                 }, 
                                 {
-                                    "title": "Average Bank Deposits",
+                                    "title": "Average Buyer Deposits",
                                     "data": "Average_Bank_Deposits",
                                     "render": self.currencyRightRender
                                 },
@@ -587,8 +587,8 @@ define({
                                     }
                                 },
                                 {
-                                    "title": "Average Bank Deposit: Average Revenue",
-                                    "data": "Average Bank Deposit : Average Revenue",
+                                    "title": "Average Buyer Deposit: Average Revenue",
+                                    "data": "Average Buyer Deposit : Average Revenue",
                                     "render": self.currencyRightRender
                                 }
                             ];

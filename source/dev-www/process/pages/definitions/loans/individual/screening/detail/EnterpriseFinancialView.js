@@ -881,7 +881,7 @@ self.renderReady = function(eventName) {
 										}
 									}
 								},{
-									"title": "Average Bank Deposit",
+									"title": "Average Buyer Deposit",
 									"amount": "",
 									"total": bpl['avgMonDep']?bpl['avgMonDep']:("0.00") ,
 									"percentage": CalPercentage(parseInt(bpl['Net Income']), parseInt(bpl['avgMonDep'])) ,
@@ -1073,7 +1073,7 @@ self.renderReady = function(eventName) {
 										}
 									}
 								},{
-									"title": "Average Bank Deposit",
+									"title": "Average Buyer Deposit",
 									"amount": "",
 									"total": bpl['avgMonDep']?bpl['avgMonDep']:("0.00") ,
 									"percentage": CalPercentage(parseInt(bpl['Net Income']), parseInt(bpl['avgMonDep'])) ,
@@ -1142,7 +1142,7 @@ self.renderReady = function(eventName) {
 
 					var bankStatementSummary = (function() {
 						var averageGraphData = [{
-							"key": "Avg Bank Deposits",
+							"key": "Avg Buyer Deposits",
 							"color": "limegreen",
 							"values": []
 						}, {
