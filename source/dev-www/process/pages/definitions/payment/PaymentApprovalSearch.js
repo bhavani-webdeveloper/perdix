@@ -128,7 +128,7 @@ define({
 					itemCallback: function(item, index) {},
 					getItems: function(response, headers) {
 						if (response != null && response.length && response.length != 0) {
-							return response;
+							return _.orderBy(response,['id'],['desc']);
 						}
 						return [];
 					},
