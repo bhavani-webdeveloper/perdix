@@ -72,8 +72,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageName: 'kgfs.loans.individual.booking.CreditBureauView',
                             title: 'CREDIT_BUREAU',
                             pageClass: 'cb-check',
-                            minimum: 1,
-                            maximum: 1,
                             order: 70
                         },
                         {

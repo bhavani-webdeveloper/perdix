@@ -63,8 +63,6 @@ define(["perdix/domain/model/loan/LoanProcess",
                             pageName: 'kgfs.loans.individual.screening.CreditBureauView',
                             title: 'CREDIT_BUREAU',
                             pageClass: 'cbview',
-                            minimum: 1,
-                            maximum: 1,
                             order:50
                         },   
                         {
