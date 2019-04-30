@@ -115,9 +115,9 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                     "readonly": true,
                                     "title": "VILLAGE"
                                 },
-                                "FamilyDetails.familyMembers": {
-                                    title: "MIGRANT_DETAILS"
-                                },
+                                // "FamilyDetails.familyMembers": {
+                                //     title: "MIGRANT_DETAILS"
+                                // },
 
                                 "ContactInformation.district": {
                                     "readonly": true
@@ -2218,21 +2218,22 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                     "HouseVerification.place": {
                         "orderNo": 90
                     },
-                    "BankAccounts.customerBankAccounts": {
-                        onArrayAdd: function (modelValue, form, model, formCtrl, $event) {
-                            modelValue.bankStatements = [];
-                            var CBSDateMoment = moment(SessionStore.getCBSDate(), SessionStore.getSystemDateFormat());
-                            var noOfMonthsToDisplay = 6;
-                            var statementStartMoment = CBSDateMoment.subtract(noOfMonthsToDisplay, 'months').startOf('month');
-                            for (var i = 0; i < noOfMonthsToDisplay; i++) {
-                                modelValue.bankStatements.push({
-                                    startMonth: statementStartMoment.format(SessionStore.getSystemDateFormat())
-                                });
-                                statementStartMoment = statementStartMoment.add(1, 'months').startOf('month');
-                            }
-                        }
-                    },
+                    // "BankAccounts.customerBankAccounts": {
+                        // onArrayAdd: function (modelValue, form, model, formCtrl, $event) {
+                        //     modelValue.bankStatements = [];
+                        //     var CBSDateMoment = moment(SessionStore.getCBSDate(), SessionStore.getSystemDateFormat());
+                        //     var noOfMonthsToDisplay = 6;
+                        //     var statementStartMoment = CBSDateMoment.subtract(noOfMonthsToDisplay, 'months').startOf('month');
+                        //     for (var i = 0; i < noOfMonthsToDisplay; i++) {
+                        //         modelValue.bankStatements.push({
+                        //             startMonth: statementStartMoment.format(SessionStore.getSystemDateFormat())
+                        //         });
+                        //         statementStartMoment = statementStartMoment.add(1, 'months').startOf('month');
+                        //     }
+                        // }
+                    // },
                     "BankAccounts.customerBankAccounts.bankStatements": {
+                        "startEmpty": true,
                         "titleExpr": "moment(model.customer.customerBankAccounts[arrayIndexes[0]].bankStatements[arrayIndexes[1]].startMonth).format('MMMM YYYY') + ' ' + ('STATEMENT_DETAILS' | translate)",
                         "titleExprLocals": { moment: window.moment },
                     },
@@ -2409,9 +2410,9 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                         "key": "customer.expenditures[].expenseType",
                         "enumCode": "expense_from"
                     },
-                    "BankAccounts.customerBankAccounts.bankStatements.startMonth": {
-                        "required": false
-                    },
+                    // "BankAccounts.customerBankAccounts.bankStatements.startMonth": {
+                    //     "required": false
+                    // },
                     "KYC.identityProof": {
                         "enumCode": "identity_proof",
                         "orderNo": 21
@@ -2634,7 +2635,7 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                     "BankAccounts.customerBankAccounts.bankStatements.noOfChequeBounced",
                     "BankAccounts.customerBankAccounts.bankStatements.noOfEmiChequeBounced",
                     "BankAccounts.customerBankAccounts.bankStatements.bankStatementPhoto",
-                    "BankAccounts.customerBankAccounts.isDisbersementAccount",
+                     "BankAccounts.customerBankAccounts.isDisbersementAccount",
                     //
                     "PhysicalAssets",
                     "PhysicalAssets.physicalAssets",
@@ -3038,7 +3039,7 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                 },
                                 "FamilyDetails": {
                                     "type": "box",
-                                    "title": "MIGRANT_DETAILS",
+                                    "title": "FAMILY_DETAILS",
                                     "items": {
                                         "familyMembers": {
                                             key: "customer.familyMembers",
@@ -3048,7 +3049,7 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                                 "relationShip": {
                                                     key: "customer.familyMembers[].relationShip",
                                                     type: "select",
-                                                    "orderNo": 1,
+                                                    "orderNo": 2,
                                                     onChange: function (modelValue, form, model, formCtrl, event) {
                                                         if (modelValue && modelValue.toLowerCase() === 'self') {
                                                             if (model.customer.id)
@@ -3142,7 +3143,7 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                                 //     }
                                                 // },
                                                 "familyMemberFirstName": {
-                                                    "orderNo": 3,
+                                                    "orderNo": 1,
                                                     key: "customer.familyMembers[].familyMemberFirstName",
                                                     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
                                                     title: "FAMILY_MEMBER_FULL_NAME"
@@ -3215,7 +3216,7 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                                     "type": "select",
                                                     "title": "MIGRATION_TYPE",
                                                     "required": true,
-                                                    "orderNo": 0,
+                                                    "orderNo": 3,
                                                     "titleMap":
                                                     {
                                                         "LCM": "LCM",

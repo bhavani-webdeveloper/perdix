@@ -2284,21 +2284,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     // "HouseVerification.place": {
                     //     "orderNo": 90
                     // },
-                    "BankAccounts.customerBankAccounts": {
-                        onArrayAdd: function (modelValue, form, model, formCtrl, $event) {
-                            modelValue.bankStatements = [];
-                            var CBSDateMoment = moment(SessionStore.getCBSDate(), SessionStore.getSystemDateFormat());
-                            var noOfMonthsToDisplay = 6;
-                            var statementStartMoment = CBSDateMoment.subtract(noOfMonthsToDisplay, 'months').startOf('month');
-                            for (var i = 0; i < noOfMonthsToDisplay; i++) {
-                                modelValue.bankStatements.push({
-                                    startMonth: statementStartMoment.format(SessionStore.getSystemDateFormat())
-                                });
-                                statementStartMoment = statementStartMoment.add(1, 'months').startOf('month');
-                            }
-                        }
-                    },
+                    // "BankAccounts.customerBankAccounts": {
+                    //     onArrayAdd: function (modelValue, form, model, formCtrl, $event) {
+                    //         modelValue.bankStatements = [];
+                    //         var CBSDateMoment = moment(SessionStore.getCBSDate(), SessionStore.getSystemDateFormat());
+                    //         var noOfMonthsToDisplay = 6;
+                    //         var statementStartMoment = CBSDateMoment.subtract(noOfMonthsToDisplay, 'months').startOf('month');
+                    //         for (var i = 0; i < noOfMonthsToDisplay; i++) {
+                    //             modelValue.bankStatements.push({
+                    //                 startMonth: statementStartMoment.format(SessionStore.getSystemDateFormat())
+                    //             });
+                    //             statementStartMoment = statementStartMoment.add(1, 'months').startOf('month');
+                    //         }
+                    //     }
+                    // },
                     "BankAccounts.customerBankAccounts.bankStatements": {
+                        "startEmpty": true,
                         "titleExpr": "moment(model.customer.customerBankAccounts[arrayIndexes[0]].bankStatements[arrayIndexes[1]].startMonth).format('MMMM YYYY') + ' ' + ('STATEMENT_DETAILS' | translate)",
                         "titleExprLocals": { moment: window.moment },
                     },
@@ -3008,7 +3009,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "relationShip": {
                                             key: "customer.familyMembers[].relationShip",
                                             type: "select",
-                                            "orderNo": 1,
+                                            "orderNo": 2,
                                             onChange: function (modelValue, form, model, formCtrl, event) {
                                                 if (modelValue && modelValue.toLowerCase() === 'self') {
                                                     if (model.customer.id)
@@ -3102,7 +3103,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         //     }
                                         // },
                                         "familyMemberFirstName": {
-                                            "orderNo": 3,
+                                            "orderNo": 1,
                                             key: "customer.familyMembers[].familyMemberFirstName",
                                             condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
                                             title: "FAMILY_MEMBER_FULL_NAME"
@@ -3175,7 +3176,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             "type":"select",
                                             "title":"MIGRATION_TYPE",
                                             "required":true,
-                                             "orderNo":0,
+                                             "orderNo":3,
                                             "titleMap":
                                                     {
                                                     "LDM":"LDM",
@@ -3792,7 +3793,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             obj.titleExpr=current[i].name;
                             model.customer.currentAssets.push(obj);  
                         }
-                        for(var i=0;i<fixed.length;i++){
+                        for(var i=0;i<fixed.length;i++){ 
                             var obj={};
                             obj.nameOfOwnedAsset=fixed[i].name;
                             obj.titleExpr=fixed[i].name; 

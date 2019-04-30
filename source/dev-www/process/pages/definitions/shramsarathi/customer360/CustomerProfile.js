@@ -3027,7 +3027,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 },
                                 "FamilyDetails": {
                                     "type": "box",
-                                    "title": "MIGRANT_DETAILS",
+                                    "title": "FAMILY_DETAILS",
                                     "items": {
                                         "familyMembers": {
                                             key: "customer.familyMembers",
@@ -3037,7 +3037,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                                 "relationShip": {
                                                     key: "customer.familyMembers[].relationShip",
                                                     type: "select",
-                                                    "orderNo": 1,
+                                                    "orderNo": 2,
                                                     onChange: function (modelValue, form, model, formCtrl, event) {
                                                         if (modelValue && modelValue.toLowerCase() === 'self') {
                                                             if (model.customer.id)
@@ -3131,7 +3131,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                                 //     }
                                                 // },
                                                 "familyMemberFirstName": {
-                                                    "orderNo": 3,
+                                                    "orderNo": 1,
                                                     key: "customer.familyMembers[].familyMemberFirstName",
                                                     condition: "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'",
                                                     title: "FAMILY_MEMBER_FULL_NAME"
@@ -3204,7 +3204,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                                     "type":"select",
                                                     "title":"MIGRATION_TYPE",
                                                     "required":true,
-                                                     "orderNo":0,
+                                                     "orderNo":3,
                                                     "titleMap":
                                                             {
                                                             "LCM":"LCM",
