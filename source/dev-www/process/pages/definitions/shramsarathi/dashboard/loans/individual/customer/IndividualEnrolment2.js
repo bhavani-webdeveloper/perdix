@@ -256,6 +256,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "titleExpr": "model.customer.physicalAssets[arrayIndex].titleExpr",
                                     
                                 },
+                                "ContactInformation.whatsAppMobileNo":{
+                                    "type": "number",
+                                    "schema":{
+                                        "pattern": "^[0-9]{10}$"
+                                    },
+                                    "required": false
+                                },
                                 "PhysicalAssets.physicalAssets.nameOfOwnedAsset": {
                                     "enumCode": "fixed_asset_type",
                                     onChange: function(valueObj,context,model){
@@ -407,7 +414,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "ContactInformation.landLineNo":{
                                     "title":"ALTERNATIVE_MOBILE_NO",
-                                   
+                                    "type": "number",
+                                    "required": false
                                 },
                                 "ContactInformation.residentialAddressFieldSet":{
                                     "title":"SOURCE_ADDRESS"
