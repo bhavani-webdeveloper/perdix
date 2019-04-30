@@ -18,11 +18,14 @@ class DashboardService
             ->get()
             ->toarray();
         $this->dashboardData = $querySection;
-        foreach ($this->dashboardData as $section) {
-            $this->_loadSection($section);
-
+        if (\count($this->dashboardData) > 0) {
+            foreach ($this->dashboardData as $section) {
+                $this->_loadSection($section);
+            }
+        } else {
+            echo ('Data is not available for '.$dashboardName.'.');
+            die();
         }
-
     }
 
     private function _loadSection($options)
@@ -34,8 +37,8 @@ class DashboardService
             $section->status = 'Failed';
             $section->message = $e->getMessage();
         }
+        $this->_sections['dashboard_name'] = $options["dashboard_name"];
         $this->_sections['sections'][] = $section;
-
     }
 
     public function validate($section)
@@ -103,4 +106,3 @@ class DashboardService
         print_r($this->toJson());
     }
 }
-?>

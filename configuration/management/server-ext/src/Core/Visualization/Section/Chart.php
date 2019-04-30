@@ -69,6 +69,7 @@ class Chart extends AbstractVisualizationSection
                     $label = $value;
                     if (!in_array($value, $this->keyCheck) || empty($this->keyCheck)) {
                         array_push($this->keyCheck, $value);
+                        $this->result['dataset'][$k]['backgroundColor'] = 'hsla(' . rand(0, 360) . ', 75%, 50%, 0.5)';
                         $this->result['dataset'][$k]['label'] = $value;
                         $k++;
                     }
@@ -90,10 +91,8 @@ class Chart extends AbstractVisualizationSection
                             $i = array_search($label, $this->keyCheck);
                             if (ctype_digit($style->color)) {
                                 $this->result['dataset'][$i]['backgroundColor'] = "hsla(" . $style->color . ",75%,50%,0.5)";
-                                $this->result['dataset'][$i]['borderColor'] = "hsla(" . $style->color . ",75%,50%,0.5)";
                             } else if (array_key_exists($style->color, $this->colors)) {
                                 $this->result['dataset'][$i]['backgroundColor'] = $this->colors[$style->color];
-                                $this->result['dataset'][$i]['borderColor'] = $this->colors[$style->color];
                             }
                         }
                     }
