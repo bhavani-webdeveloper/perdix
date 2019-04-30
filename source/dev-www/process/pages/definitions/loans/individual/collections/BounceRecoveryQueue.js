@@ -1,6 +1,74 @@
 irf.pageCollection.factory(irf.page("loans.individual.collections.BounceRecoveryQueue"),
 ["$log", "entityManager","formHelper", "LoanProcess", "$state", "SessionStore", "$q","Utils",
 function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,Utils){
+    getConditionalSearchSchema = function(){
+        var schema = {}
+        if (SessionStore.getGlobalSetting('siteCode') == "IREPDhan")
+       {
+        schema =  {
+            "type": 'object',
+            "required":["branch"],
+            "properties": {
+                "loan_no": {
+                    "title": "LOAN_ACCOUNT_NUMBER",
+                    "type": "string",
+                    "pattern": "^[0-9a-zA-Z]+$"
+                },
+                "first_name": {
+                    "title": "CUSTOMER_NAME",
+                    "type": "string"
+                },
+                "branchId": {
+                    'title': "BRANCH",
+                    "type": ["string", "null"],
+                    "x-schema-form": {
+                        "type": "userbranch",
+                        "screenFilter": true
+                    }
+                },
+                "centre": {
+                    "title": "CENTRE",
+                    "type": ["integer", "null"],
+                    "enumCode": "centre",
+                    "parentEnumCode": "branch_id",
+                    "x-schema-form": {
+                        type: "select",
+                        "parentValueExpr": "model.branch"
+                    }
+                }
+            }
+        }
+       }else{
+        schema =  {
+            "type": 'object',
+            "required":["branch"],
+            "properties": {
+                "loan_no": {
+                    "title": "LOAN_ACCOUNT_NUMBER",
+                    "type": "string",
+                    "pattern": "^[0-9a-zA-Z]+$"
+                },
+                "first_name": {
+                    "title": "CUSTOMER_NAME",
+                    "type": "string"
+                },
+                "centre": {
+                    "title": "CENTRE",
+                    "type": ["integer", "null"],
+                    "enumCode": "centre",
+                    "parentEnumCode": "branch_id",
+                    "x-schema-form": {
+                        type: "select",
+                        "parentValueExpr": "model.branch"
+                    }
+                }
+            }
+        }
+       }
+       return schema;    
+        
+    }
+    
     return {
         "type": "search-list",
         "title": "BOUNCED_PAYMENTS",
@@ -8,6 +76,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
             $log.info("search-list sample got initialized");
             model.branch = SessionStore.getCurrentBranch().branchId;
             model.branchName = SessionStore.getCurrentBranch().branchName;
+            model.siteCode = SessionStore.getGlobalSetting('siteCode');
         },
         definition: {
             title: "SEARCH_BOUNCED_PAYMENTS",
@@ -15,31 +84,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                 "*"
             ],
             autoSearch:false,
-            searchSchema: {
-                "type": 'object',
-                "required":["branch"],
-                "properties": {
-                    "loan_no": {
-                        "title": "LOAN_ACCOUNT_NUMBER",
-                        "type": "string",
-                        "pattern": "^[0-9a-zA-Z]+$"
-                    },
-                    "first_name": {
-                        "title": "CUSTOMER_NAME",
-                        "type": "string"
-                    },
-                    "centre": {
-                        "title": "CENTRE",
-                        "type": ["integer", "null"],
-                        "enumCode": "centre",
-                        "parentEnumCode": "branch_id",
-                        "x-schema-form": {
-                            type: "select",
-                            "parentValueExpr": "model.branch"
-                        }
-                    }
-                }
-            },
+            searchSchema: getConditionalSearchSchema(),
             getSearchFormHelper: function() {
                 return formHelper;
             },
@@ -54,7 +99,7 @@ function($log, entityManager, formHelper, LoanProcess, $state, SessionStore,$q,U
                     'per_page': pageOpts.itemsPerPage
                 }).$promise;*/
 
-                var branchId = SessionStore.getCurrentBranch().branchId;
+                var branchId = searchOptions.branchId || SessionStore.getCurrentBranch().branchId;
                 var promise = LoanProcess.bounceCollectionDemand({
                     'accountNumbers': searchOptions.loan_no,
                     'branchId': branchId,
