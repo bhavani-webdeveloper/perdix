@@ -12,6 +12,7 @@ class BalanceSheet extends AbstractVisualizationSection
     public $parent;
     protected $result = array();
     protected $branch = array();
+    protected $bsData = array();
 
     public function __construct($section, $requestParameters)
     {
@@ -31,6 +32,65 @@ class BalanceSheet extends AbstractVisualizationSection
         }
     }
 
+    private function _getNode($nodeKeyArray){
+
+    }
+
+    /**
+     * TODO-1
+     * 1. $key will be of format "A>B>C>D". Validate the format, if not valid (use regex), throw error.
+     * 2. Seperate key by '>'
+     * 3. 
+     */
+    private function _createOrExistingNode($key, $value = null){
+        // TODO-1 Add validation here
+
+        $keys = explode('>', $key);
+
+        $existingNode = $this->_getNode($keys);
+        if ($existingNode){
+            return $existingNode;
+        } 
+        
+        $lastKey = $keys[count($keys)-1];
+
+        if ($value == null){
+            $node = [
+                'title' => $lastKey,
+                'data' => []
+            ];
+        } else {
+            $node = [
+                'title' => $lastKey,
+                'data' => $value
+            ];
+        }
+
+        if (count($keys) > 1){
+            array_pop($keys);
+            $parentKey = join('>', $keys);
+            $parentNode = $this->_createOrExistingNode($parentKey, null);
+            $parentNode['data'][] = $node;
+        } else {
+            $this->bsData[] = $node;
+        }
+        return $node;
+    }
+
+    /**
+     * TODO-1
+     * 1. Fidn the node based on the key (remove the _TOTAL and send here)
+     * 2. Add total object to the node
+     */
+    public function _appendTotalToNode($key, $value){
+
+    }
+
+    /**
+     * 1. Start with a tree (with a single node)
+     * 2. 
+     * 
+     */
     private function formatData()
     {
         foreach ($this->data as &$sectionData) {

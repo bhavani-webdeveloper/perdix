@@ -3,6 +3,7 @@
 namespace App\Core\Visualization\Section;
 
 use App\Models\Visualization\Dashboard\BoxConfig;
+use App\Core\Visualization\Helper\StyleHelper;
 
 class Box extends AbstractVisualizationSection
 {
@@ -17,7 +18,12 @@ class Box extends AbstractVisualizationSection
     protected $style;
     protected $result = array();
 
-    private $fields = ["info_progress_box" => ['title', 'data', 'total'], "info_box" => ['title', 'data'], "small_box" => ['title', 'data']];
+    private $fields = [
+        "info_progress_box" => ['title', 'data', 'total'], 
+        "info_box" => ['title', 'data'], 
+        "small_box" => ['title', 'data']
+    ];
+
     public function __construct($section, $requestParameters)
     {
         parent::__construct($section, $requestParameters);
@@ -28,7 +34,7 @@ class Box extends AbstractVisualizationSection
         $this->subType = $section['sub_type'];
         $this->parent = $section['parent_section_name'];
         $this->displayName = $section['display_name'];
-        $this->style = \json_decode($section['style_source']);
+        $this->style = StyleHelper::getStyleObj($section['style_source']);
     }
 
     protected function processValidation()
@@ -60,26 +66,17 @@ class Box extends AbstractVisualizationSection
         }
     }
 
-    private function boxConfigData()
-    {
-        foreach ($this->data as &$sectionData) {
-            $queryConfig = BoxConfig::select('bg_class', 'icon_class')
-                ->where([
-                    ['field_name', $sectionData->title],
-                    ['dashboard_name', $this->dashboardName],
-                    ['section_name', $this->sectionName],
-                ])
-                ->get()
-                ->toarray();
-            if (count($queryConfig) > 0) {
-                $sectionData->bgClass = $queryConfig[0]['bg_class'];
-                $sectionData->iconClass = $queryConfig[0]['icon_class'];
-            } else {
-                throw new \Exception("Box configuration detail is not available for '" . $sectionData->title . "' field.");
-            }
-        }
-    }
 
+    /**
+     * TODO-1
+     * 1. If count of data is more than 1, throw error. 
+     * 1. Start the loop with the first row.
+     * 1. Seperate the columns in the row to two arrays: _dataArr & _totalsArr
+     * 1. Pass styles object to Style::fromString and get the Styles Array grouped by label.
+     * 2. Loop through the _dataArr and fill the result obj.
+     *   1.  Check for existence of key in totalAsArray, if yes. assign the total to result obj
+     *   2.  Check the existence of key in stylesArray, if yes. assign the styles
+     */
     private function formatData()
     {
         foreach ($this->data as &$sectionData) {
@@ -118,4 +115,3 @@ class Box extends AbstractVisualizationSection
         unset($this->result);
     }
 }
-?>

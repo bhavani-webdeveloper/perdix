@@ -23,7 +23,8 @@ class DashboardService
                 $this->_loadSection($section);
             }
         } else {
-            echo ('Data is not available for '.$dashboardName.'.');
+            // TODO-1 Handle this using exceptions
+            echo ('Data is not available for ' . $dashboardName . '.');
             die();
         }
     }
@@ -43,7 +44,6 @@ class DashboardService
 
     public function validate($section)
     {
-
         if ($section['data_source'] == 'query') {
             if ($section['query'] != null && !empty($section['query'])) {
                 $section['status'] = "Success";
@@ -103,6 +103,6 @@ class DashboardService
     {
         $this->load($dashboardName, $parameter);
         $this->_sections['sections'] = $this->buildTree($this->_sections['sections'], null);
-        print_r($this->toJson());
+        return $this->_sections;
     }
 }
