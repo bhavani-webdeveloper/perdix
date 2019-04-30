@@ -2178,7 +2178,7 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                         "autolov": false
                     },
                     "FamilyDetails.familyMembers.relationShip": {
-                        "title": "RELATIONSHIP_WITH_MIGRANT",
+                        "title": "T_RELATIONSHIP",
                         "enumCode": "relationship"
                     },
                     "FamilyDetails.familyMembers.familyMemberFirstName": {
