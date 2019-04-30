@@ -327,11 +327,11 @@ define({
                 });
              }
   //Newly added
-  if(model.loanAccount.nominees[0]!=undefined ){
-    if(model.loanAccount.nominees[0].nomineeDOB!=undefined || model.loanAccount.nominees[0].nomineeDOB!=null){
-        model.loanAccount.nominees[0].nomineeDOB=moment(model.loanAccount.nominees[0].nomineeDOB).format('DD-MM-YYYY');
-      } 
-  }
+//   if(model.loanAccount.nominees[0]!=undefined ){
+//     if(model.loanAccount.nominees[0].nomineeDOB!=undefined || model.loanAccount.nominees[0].nomineeDOB!=null){
+//         model.loanAccount.nominees[0].nomineeDOB=moment(model.loanAccount.nominees[0].nomineeDOB).format('DD-MM-YYYY');
+//       } 
+//   }
   
   
         },
