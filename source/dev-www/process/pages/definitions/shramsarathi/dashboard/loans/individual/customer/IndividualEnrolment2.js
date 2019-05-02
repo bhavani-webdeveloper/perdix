@@ -175,6 +175,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         model.customer.physicalAssets[context.arrayIndex].titleExpr = getFixedByCode(valueObj.toString());
                                      }
                                 },
+                                // "PhysicalAssets.physicalAssets.ownedAssetValue":{
+                                //     "key": "model.enrolmentProcess.customer.physicalAssets[].ownedAssetValue"
+                                // },
+                                
                                 "EnterpriseFinancials.currentAsset":{
                                     "titleExpr":"model.customer.currentAssets[arrayIndex].titleExpr",
                                     "title":"CURRENT_ASSET"
@@ -3843,9 +3847,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         }
                     }
 
-                    if(model.currentStage == "Application"){
-                        initialFixedCurrent();
-                    }
+                    // if(model.currentStage == "Application"){
+                    //     initialFixedCurrent();
+                    // }
+                //     if((model.customer.currentAssets==undefined || model.customer.currentAssets.length==0) &&
+                //     (model.customer.physicalAssets==undefined || model.customer.physicalAssets.length==0 )){
+                //     if(model.currentStage == "Application" ){
+                //         initialFixedCurrent();
+                //     }
+                //    }
                    if((model.customer.currentAssets==undefined || model.customer.currentAssets.length==0) &&
                     (model.customer.physicalAssets==undefined || model.customer.physicalAssets.length==0 )){
                     if(model.currentStage == "Screening" ){
