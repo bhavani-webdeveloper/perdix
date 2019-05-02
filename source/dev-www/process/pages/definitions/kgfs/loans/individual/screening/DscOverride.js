@@ -54,7 +54,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                         },
                         {
                             pageName: 'kgfs.loans.individual.screening.LoanRequest',
-                            title: 'LOAN_DETAILS',
+                            title: 'LOAN_APPROVAL',
                             pageClass: 'loan-request',
                             minimum: 1,
                             maximum: 1,
