@@ -448,7 +448,9 @@ define({
                                             "type": "section",
                                             "htmlClass": "col-sm-8",
                                             "html": '<p style = "font-size: 14px; color: #555;"><strong>{{model.customer.doorNo}} <br />\
-                                            {{model.customer.street}} <br />\
+                                            {{model.customer.landmark}} <br />\
+                                            {{model.customer.villageName}} <br />\
+                                            {{model.customer.locality}} <br />\
                                             {{model.customer.district}} <br />\
                                             {{model.customer.state}} <br /> \
                                             {{model.customer.pincode}} <br /> \
