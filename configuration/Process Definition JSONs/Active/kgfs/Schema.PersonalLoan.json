@@ -10,18 +10,61 @@
                   "null"
                ]
             },
+"religion":{  
+               "type":[  
+                  "string",
+                  "null"
+               ]
+            },
+"caste":{  
+               "type":[  
+                  "string",
+                  "null"
+               ]
+            },
+"language":{  
+               "type":[  
+                  "string",
+                  "null"
+               ]
+            },
+"houseVerificationPhoto":{  
+               "type":[  
+                  "string",
+                  "null"
+               ]
+            },
+"latitude":{  
+               "type":[  
+                  "string",
+                  "null"
+               ]
+            },
+"longitude":{  
+               "type":[  
+                  "string",
+                  "null"
+               ]
+            },
+
             "verification":{  
                "type":"array",
                "minItems":1,
                "items":{  
                   "type":"object",
                   "required":[  
-
+"houseNo","houseNoIsVerified","relationship","referenceFirstName"
                   ],
                   "properties":{  
                      "referenceFirstName":{  
                         "type":[  
                            "string",
+                           "null"
+                        ]
+                     },
+"houseNoIsVerified":{  
+                        "type":[  
+                           "boolean",
                            "null"
                         ]
                      },
@@ -162,6 +205,7 @@
             },
             "required":[  
                "doorNo",
+"religion","caste","language","houseVerificationPhoto","latitude","longitude",
                "verification"
             ]
          },
