@@ -1908,7 +1908,7 @@ define([],function(){
                         }
                         if(model.loanAccount.loanAmount > model.loanAccount.loanAmountRequested)
                         {
-                            PageHelper.showErrors({data:{error:"Loan Amount Requested cannot be increased Loan Amount Recommended"}});
+                            PageHelper.showErrors({data:{error:"Loan Amount Recommended should not be more than loan Amount requested"}});
                             return false;
                         }
                         if(model.loanAccount.productCategory  == 'MEL')
