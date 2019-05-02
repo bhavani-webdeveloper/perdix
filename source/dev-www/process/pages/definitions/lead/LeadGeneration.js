@@ -123,7 +123,8 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                                     if (centreCode[i].value == centres[j].id) {
                                         out.push({
                                             name: centreCode[i].name,
-                                            id: centreCode[i].value
+                                            id: centreCode[i].value,
+                                            centreAddress:centres[j].centreAddress
                                         })
                                     }
                                 }
@@ -139,6 +140,17 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                     onSelect: function (valueObj, model, context) {
                         model.lead.centreName = valueObj.name;
                         model.lead.centreId = valueObj.id;
+                         var addressArr = valueObj.centreAddress.split("~#");
+                            if(addressArr && addressArr.length > 0) {
+                                model.lead.addressLine2 = addressArr[0];
+                                if(addressArr.length >= 6) {
+                                    model.lead.area = addressArr[1];
+                                    model.lead.cityTownVillage = addressArr[2];
+                                    model.lead.district = addressArr[3];
+                                    model.lead.state = addressArr[4];
+                                    model.lead.pincode = Number(addressArr[5]);                                    
+                                }
+                            }
                     },
                     getListDisplayItem: function (item, index) {
                         return [
