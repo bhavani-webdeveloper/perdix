@@ -468,7 +468,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         model.applicant.telecallingRemarks = model.telecalling.applicant.telecallingRemarks;
                         model.applicant.customerCalledDate = (model.telecalling.applicant.customerCalledDate == moment().format(SessionStore.getSystemDateFormat())) ? model.telecalling.applicant.customerCalledDate : moment().format(SessionStore.getSystemDateFormat());
                         model.loanAccount.telecallingDetails.push(model.applicant);
-
+                        model.telecalling.applicant.customerCalledDate=moment().format(SessionStore.getSystemDateFormat());
                         model.loanCustomer.customerId = model.loanCustomer.customer.id;
                         model.loanCustomer.partyType = "loanCustomer";
                         model.loanCustomer.customerCalledAt = new Date();
