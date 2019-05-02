@@ -1674,6 +1674,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             })
                             .subscribe(function (value) {
                                 formHelper.resetFormValidityState(formCtrl);
+                                model.loanProcess.refreshRelatedCustomers();
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('enrolment', 'Customer Saved.', 5000);
                                 PageHelper.clearErrors();
@@ -1723,6 +1724,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             })
                             .subscribe(function (enrolmentProcess) {
                                 formHelper.resetFormValidityState(form);
+                                model.loanProcess.refreshRelatedCustomers();
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent(model.pageClass +"-updated", model._bundlePageObj, enrolmentProcess);
