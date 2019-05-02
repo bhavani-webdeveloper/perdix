@@ -319,6 +319,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "title": "VALUE_OF_THE_ASSET",
                                     "type":"amount"
                                 },
+
+                                "IndividualFinancials.expenditures":{
+                                    onArrayAdd: function(modelValue, form, model, formCtrl, $event) {
+                                        var index = model.customer.expenditures.length -1;
+                                        model.customer.expenditures[index].frequency="Monthly";
+                                    }
+                                },
+
                           
                                 "IndividualInformation.centreId": {
                                     "required": true,
@@ -2088,7 +2096,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "title":"EXPENSE_AMOUNT"
                     },
                     "IndividualFinancials.expenditures.frequency":{
-                        "required":true
+                        "required":true,
                     },
                     "IndividualFinancials":{
                         "title":"EXPENSE"
