@@ -1989,44 +1989,43 @@ define([],function(){
                                 "required":false,
                                 "titleMap":{"yes":"yes","no":"no"}
                             },
-                            "loanDisbursementSchedule":{
-                                "type":"array",
-                                // notitle:true,
-                                "title":"LOAN_DISBURSE",
-                                 add:null,
-                                remove:null,
-                                view: "fixed",
-                                key:"loanAccount.disbursementSchedules",
-                                startEmpty:false,
-                                items:{
-                                    "modeOfDisbursement":{
-                                        "key":"loanAccount.disbursementSchedules[].modeOfDisbursement",
-                                        "title":"MODE_OF_DISBURSEMENT",
-                                        "type":"select",
-                                        "required": true,
-                                        "enumCode":"mode_of_disbursement"
-                                    },
-                                    "collectionDate":{
-                                        "key":"loanAccount.firstRepaymentDate",
-                                        "title":"COLLECTION_DATE",
-                                        "type":"date",
-                                        "required":true
-                                    },
-                                    "disbursementDate":{
-                                        "key":"loanAccount.disbursementSchedules[].actualDisbursementDate",
-                                        "title":"DISBURSEMENT_DATE",
-                                        "type":"date",
-                                        "required":true
-                                    },
-                                    "gracePeriod":{
-                                        "key":"loanAccount.disbursementSchedules[].moratoriumPeriodInDays",
-                                        "title":"GRACE_PERIOD",
-                                        "type":"number",
-                                        "required":true
-                                    }
-                                }
-                            }
-                            ,
+                            // "loanDisbursementSchedule":{
+                            //     "type":"array",
+                            //     // notitle:true,
+                            //     "title":"LOAN_DISBURSE",
+                            //      add:null,
+                            //     remove:null,
+                            //     view: "fixed",
+                            //     key:"loanAccount.disbursementSchedules",
+                            //     startEmpty:false,
+                            //     items:{
+                            //         "modeOfDisbursement":{
+                            //             "key":"loanAccount.disbursementSchedules[].modeOfDisbursement",
+                            //             "title":"MODE_OF_DISBURSEMENT",
+                            //             "type":"select",
+                            //             "required": true,
+                            //             "enumCode":"mode_of_disbursement"
+                            //         },
+                            //         "collectionDate":{
+                            //             "key":"loanAccount.firstRepaymentDate",
+                            //             "title":"COLLECTION_DATE",
+                            //             "type":"date",
+                            //             "required":true
+                            //         },
+                            //         "disbursementDate":{
+                            //             "key":"loanAccount.disbursementSchedules[].actualDisbursementDate",
+                            //             "title":"DISBURSEMENT_DATE",
+                            //             "type":"date",
+                            //             "required":true
+                            //         },
+                            //         "gracePeriod":{
+                            //             "key":"loanAccount.disbursementSchedules[].moratoriumPeriodInDays",
+                            //             "title":"GRACE_PERIOD",
+                            //             "type":"number",
+                            //             "required":true
+                            //         }
+                            //     }
+                            // },
                             "date":{
                                 "key":"loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf12",
                                 "title":"DATE",
