@@ -227,7 +227,7 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                                 {
                                     "type": "actionbox",
                                     "orderNo": 3,
-                                    "condition": "model.sbTransaction.whichFinger",
+                                    // "condition": "model.sbTransaction.whichFinger",
                                     "items": [
                                         {
                                             "type": "submit",
@@ -425,15 +425,17 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                         Transaction.saveSBTransaction(model.sbTransaction).$promise.then(function(resp){
                             console.log("resp",resp);
                             PageHelper.hideLoader();
+                            PageHelper.showErrors({'data':{'error':resp.responseMsg}});
                         },function(err){
                             console.log(err);
                             PageHelper.hideLoader();
+                            PageHelper.showErrors(err);
                         })
 
-                        irfNavigator.go({
-                            "state": "Page.Engine",
-                            "pageName": "customer.banking.Banking"
-                        });
+                        // irfNavigator.go({
+                        //     "state": "Page.Engine",
+                        //     "pageName": "customer.banking.Banking"
+                        // });
                        
                     }
                 }
