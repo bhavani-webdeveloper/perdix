@@ -1680,6 +1680,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 PageHelper.clearErrors();
                                 BundleManager.pushEvent()
                             }, function (err) {
+                                if((!err.data) && err.message)
+                                        err.data = {error:err.message};
                                 PageHelper.showErrors(err);
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 
@@ -1706,6 +1708,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer});
 
                             }, function (err) {
+                                if((!err.data) && err.message)
+                                        err.data = {error:err.message};
                                 PageHelper.showErrors(err);
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 
@@ -1734,6 +1738,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 .subscribe(function(enrolmentProcess) {
                                     PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 }, function(err) {
+                                    if((!err.data) && err.message)  
+                                        err.data = {error:err.message};
                                     PageHelper.showErrors(err);
                                     PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 })

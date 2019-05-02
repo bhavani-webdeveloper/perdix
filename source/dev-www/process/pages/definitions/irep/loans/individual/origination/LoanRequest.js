@@ -859,7 +859,6 @@ define([],function(){
                         model.loanAccount.expectedInterestRate = model.loanAccount.expectedInterestRate.toString();
                     if (model.loanAccount.tenureRequested)
                         model.loanAccount.tenureRequested = model.loanAccount.tenureRequested.toString();
-                        debugger;
                     if (_.hasIn(model, 'loanAccount.loanCustomerRelations') &&
                         model.loanAccount.loanCustomerRelations!=null &&
                         model.loanAccount.loanCustomerRelations.length > 0) {
@@ -1178,6 +1177,8 @@ define([],function(){
                                 PageHelper.showProgress('loan-process', 'Loan Saved.', 5000);
 
                             }, function (err) {
+                                if((!err.data) && err.message)  
+                                        err.data = {'error':err.message};
                                 PageHelper.showErrors(err);
                                 PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);                                
                                 PageHelper.hideLoader();
@@ -1203,6 +1204,8 @@ define([],function(){
                                 PageHelper.showProgress('loan-process', 'Loan hold.', 5000);
                                 irfNavigator.goBack();
                             }, function (err) {
+                                if((!err.data) && err.message)  
+                                        err.data = {'error':err.message};
                                 PageHelper.showErrors(err);
                                 PageHelper.showProgress('loan-process', 'Oops. Some error.', 5000);
                                 
@@ -1221,6 +1224,8 @@ define([],function(){
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 irfNavigator.goBack();
                             }, function (err) {
+                                if((!err.data) && err.message)  
+                                        err.data = {'error':err.message};
                                 PageHelper.showErrors(err);
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 
@@ -1271,6 +1276,8 @@ define([],function(){
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 irfNavigator.goBack();
                             }, function (err) {
+                                if((!err.data) && err.message)  
+                                        err.data = {'error':err.message};
                                 PageHelper.showErrors(err);
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);
                                 
