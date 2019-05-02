@@ -664,6 +664,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         "required":true,
                                         type: "select",
                                         enumCode: "businessActivity",
+                                        "condition": "model.siteCode == 'KGFS'",
                                     },
                                     "udf3": {
                                         "key": "customer.enterpriseDocuments[].udf3",
@@ -672,6 +673,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         "title": "BUSINESS_SECTOR",
                                         "type": "select",
                                         "enumCode": "businessSector",
+                                        "condition": "model.siteCode == 'KGFS'",
                                     },
                                     "udf4": {
                                         "title": "ITR_AVAILABLE",
@@ -3450,7 +3452,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     }
                     /* Setting data recieved from Bundle */
                     model.loanCustomerRelationType = "Customer";
-                    model.currentStage = (bundleModel) ?  bundleModel.currentStage : model.currentStage ;  
+                    model.currentStage = (bundleModel) ?  bundleModel.currentStage : model.currentStage ; 
+                    model.siteCode = SessionStore.getGlobalSetting('siteCode'); 
                     // model.currentStage =  'KYCCheck';
                     /* End of setting data recieved from Bundle */
 
