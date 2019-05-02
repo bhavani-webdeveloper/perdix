@@ -3663,7 +3663,7 @@
                       "title":"dateOfRegistration",
                       "type":"date",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Screening","Application","CreditAppraisal", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
                       ]
                    },
  
@@ -3727,7 +3727,7 @@
                       "title":"relationWithApplicant",
                       "type":"string",
                       "captureStages":[
-                         "Application", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
+                         "Screening","Application","CreditAppraisal", "FieldAppraisal", "Sanction", "LoanInitiation", "PendingForPartner"
                       ]
                    },
  
