@@ -1,0 +1,14 @@
+{
+   "stages":[
+      {
+         "order":1,
+         "code":"Varam_Initiation",
+         "name":"Initiation",
+         "stageType":"CAPTURE",
+         "isBankAccountReversal":true,
+         "allowedRoles":[
+            "WM"
+         ]
+      }
+   ]
+}
