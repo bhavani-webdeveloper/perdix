@@ -20,9 +20,9 @@
       },
       {
          "displayFeeName":"Fee3",
-         "encoreFeeName":"fee3",
+         "encoreFeeName":"Stamp Duty",
          "feeColumnName":"fee3",
-         "override":"No"
+         "override":"Yes"
       },
       {
          "displayFeeName":"Fee4",
