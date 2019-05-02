@@ -1,6 +1,6 @@
 irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
-    ["PagesDefinition", "translateFilter", "$log", "GroupProcess", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal", "irfNavigator", "RepaymentReminder", "Misc", "$httpParamSerializer",
-        function (PagesDefinition, translateFilter, $log, GroupProcess, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal, irfNavigator, RepaymentReminder, Misc, $httpParamSerializer) {
+    ["PagesDefinition", "translateFilter", "$log", "GroupProcess", "SessionStore", "LoanAccount", "$state", "$stateParams", "SchemaResource", "PageHelper", "Enrollment", "formHelper", "IndividualLoan", "Utils", "$filter", "$q", "irfProgressMessage", "Queries", "Files", "LoanBookingCommons", "irfSimpleModal", "irfNavigator", "RepaymentReminder", "Misc", "$httpParamSerializer","irfPrinter",
+        function (PagesDefinition, translateFilter, $log, GroupProcess, SessionStore, LoanAccount, $state, $stateParams, SchemaResource, PageHelper, Enrollment, formHelper, IndividualLoan, Utils, $filter, $q, irfProgressMessage, Queries, Files, LoanBookingCommons, irfSimpleModal, irfNavigator, RepaymentReminder, Misc, $httpParamSerializer,irfPrinter) {
 
             var transactionDetailHtml = "\
         <irf-simple-summary-table irf-table-def='model.orgTransactionDetails' />\
@@ -22,6 +22,89 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                 for (var i=0; i<config.length; i++){
                     model.additional.config[(config[i].replace('.','_'))] = true;
                 }
+            }
+
+            var prepareData = function(model,data,receiptName,flag){
+                var opts = {
+                    'branch': SessionStore.getBranch(),
+                    'entity_name': SessionStore.getBankName() + " KGFS",
+                    'company_name': "Dvara Kshetriya Gramin Financial Services Private Limited",
+                    'cin': 'U65991TN1993PTC024547',
+                    'address1': 'IITM Research Park, Phase 1, 10th Floor',
+                    'address2': 'Kanagam Village, Taramani',
+                    'address3': 'Chennai - 600113, Phone: 91 44 66687000',
+                    'website': "http://ruralchannels.kgfs.co.in",
+                    'helpline': '18001029370',
+                    'branch_id': SessionStore.getBranchId(),
+                    'branch_code': SessionStore.getBranchCode(),
+                    'ReceiptName' : receiptName
+                };
+                var repaymentInfo = {
+                    'customerURN': model.customer.urnNo,
+                    'customerId': model.loanAccount.customerId,
+                    'customerName': model.customer.firstName,
+                    'accountNumber': model.loanAccount.accountNumber,
+                    'transactionType': receiptName,
+                    'transactionID': data.transactionId,
+                    'productCode': model.loanAccount.productName,
+                    'partnerCode': model.loanAccount.partnerCode,
+                };
+                if (flag == 0)
+                repaymentInfo = {...repaymentInfo,...{
+                    'loanAmount':data.amount1,
+                    'disbursedamount':data.amount1
+                }}
+                else
+                repaymentInfo = {...repaymentInfo,...{
+                    'amountPaid':data.amount1,
+                    'demandAmount':data.amount1,
+                    'processingFee':data.amount2,
+                    'serviceTaxFee':data.amount3,
+                    'totalPayOffAmount':data.amount1
+                }}
+                return {
+                    'opts':opts,
+                    'repaymentInfo':repaymentInfo
+                }
+            }
+            var getThermalReceipt = function(opts,repaymentInfo,indvTransaction){
+                var thermalReceiptArray = [
+                    [1,4,"DUPLICATE RECEIPT"],
+                    [1,4,SessionStore.getBankName()+" KGFS"],
+                    [1,4,SessionStore.getBranch()],
+                    [1,3,"Date:"+moment().local().format("DD-MM-YYYY HH:MM:SS")],
+                    [1,2,"Loan Repayment"],
+                    [1,4,repaymentInfo.productCode],
+                    [3," "],
+                    [0,3,"Branch Code",SessionStore.getBranchCode()],
+                    [0,3,"Customer Id",repaymentInfo.customerId],
+                    [0,3,"Customer Name",repaymentInfo.firstName],
+                    [0,3,"Loan A/C Number",repaymentInfo.accountNumber],
+                    [0,3,"Transaction Type",indvTransaction.param1],
+                    [0,3,"Transaction Id",indvTransaction.transactionId],
+                    // [0,3,"Loan Amount",additional.loanAmountRequested],
+                    // [0,3,"Disbursed Amount",additional.loanAmount],
+                    [0,3,"Demand Amount",indvTransaction.demandAmount],
+                    // [0,3,"Amount ",requestObj.collectionDemands[i].overdueAmount],
+                    [0,3,"Amount Paid",indvTransaction.amount1],
+                    [0,3,"Processing Fee",0],
+                    [0,3,"Service Tax Fee",indvTransaction.amount1],
+                    [0,3,"Total PayOff Amount",indvTransaction.payOffAmount],
+                    [3," "],
+                    [3,"-"],
+                    [1,3,"Dvara Kshetriya Gramin Financial Services Private Limited."],
+                    [1,3,"CIN:U65991TN1993PTC024547"],
+                    [1,3,"Address:IITM Research Park, Phase 1, 10th Floor"],
+                    [1,3,"Kanagam Village, Taramani"],
+                    [1,3,"Chennai - 600113, Phone: 91 44 66687000"],
+                    [1,3,"Website:http://ruralchannels.ifmr.co.in/"],
+                    [1,3,"HelpLine:18001029370"],
+                    [3," "],
+                    [1,3,"Signature not required as this is an"],
+                    [1,3,"electronically generated receipt."],
+                    [3," "],
+                    [3," "],
+            ]
             }
 
             return {
@@ -387,7 +470,8 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                             }
                                                             return Utils.alert("Form not maintained");
                                                         }
-                                                    }
+                                                    },
+                                                    
                                                 ];
                                                 model.cbsLoan.orgTransactions.columns = [{
                                                         "title": "Transaction ID",
@@ -446,6 +530,35 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                     {
                                                         "title": "Transaction Date",
                                                         "data": "transactionDateStr"
+                                                    },
+                                                    {
+                                                        'title':"Receipt",
+                                                        "data":"<div><i class='fa fa-print'></i></div>",
+                                                        'format' : 'html',
+                                                        'onClick':function(col,index){
+                                                            debugger;
+                                                            console.log(model);
+                                                            var listTrans = model.cbsLoan.transactions.filter(function(o){
+                                                                return o.transactionId == col.transactionId;
+                                                            })
+                                                            var webReceipt = '<div class="receipt-container"> <style> .receipt-container {display:grid;grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); grid-column-gap:1em;} .single-receipt {margin:0px 12px 0px;}.single-receipt p {margin-bottom:2px;} .key-container p {display:grid;grid-template-columns:minmax(1px,1fr) minmax(1px,1.3fr);}</style>';
+                                                            var thermalReceipt = [];
+                                                            for (var i=0;i<listTrans.length;i++){
+                                                                var indvTransaction = listTrans[i];
+                                                                var flag = indvTransaction.transactionName == 'Disbursement' ? 0:1;
+                                                                var data = prepareData(model,indvTransaction,indvTransaction.transactionName,flag);
+                                                                var opts = data.opts;
+                                                                var repaymentInfo = data.repaymentInfo;
+                                                                webReceipt += GroupProcess.generateWebReceipt(repaymentInfo,opts,flag);
+                                                                thermalReceipt = thermalReceipt.concat(getThermalReceipt(opts,repaymentInfo,indvTransaction));
+                                                            }
+                                                            webReceipt += '</div>';
+                                                            irfPrinter.printPreview({
+                                                                'paperReceipt': webReceipt,
+                                                                'thermalReceipt': thermalReceipt
+                                                            });
+
+                                                        }
                                                     }
                                                 ];
 
@@ -2747,9 +2860,9 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
 
                                     var opts = {
                                         'branch': SessionStore.getBranch(),
-                                        'entity_name': SessionStore.getBankName() + " KGFS",
-                                        'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
-                                        'cin': 'U74990TN2011PTC081729',
+                                        'entity_name': "Dvara KGFS",
+                                        'company_name': "Dvara Kshetriya Gramin Financial Services Private Limited.",
+                                        'cin': 'U65991TN1993PTC024547',
                                         'address1': 'IITM Research Park, Phase 1, 10th Floor',
                                         'address2': 'Kanagam Village, Taramani',
                                         'address3': 'Chennai - 600113, Phone: 91 44 66687000',
