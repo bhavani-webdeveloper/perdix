@@ -1913,7 +1913,7 @@ define([],function(){
                         }
                         if(model.loanAccount.productCategory  == 'MEL')
                         {
-                            if(model.loanAccount.loanAmountRequested >= loanAmountRequestedLoanLimit)
+                            if(model.loanAccount.loanAmount >= loanAmountRequestedLoanLimit)
                             {
                                 if((_.hasIn(model.customer, 'customerBankAccounts')) && _.isArray(model.customer.customerBankAccounts) && model.customer.customerBankAccounts.length == 0) {
                                     PageHelper.showErrors({data:{error:"Business Tab - Bank accounts details should be mandatory"}});
