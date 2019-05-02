@@ -161,7 +161,8 @@ define([], function() {
                         "Screening": {
                             "excludes": [
                                 "FieldInvestigationDetails",
-                                "LoanRecommendation"
+                                "LoanRecommendation",
+                                "deviationsMitigants"
                             ],
                             "overrides": {
 
@@ -269,7 +270,8 @@ define([], function() {
                         },
                         "FieldInvestigation1": {
                             "excludes": [
-                                "LoanRecommendation"
+                                "LoanRecommendation",
+                                "deviationsMitigants"
                             ],
                             "overrides": {
 
@@ -294,7 +296,8 @@ define([], function() {
                         "TeleVerification": {
                             "excludes": [
                                 "LoanRecommendation",
-                                "FieldInvestigationDetails"
+                                "FieldInvestigationDetails",
+                                "deviationsMitigants"
                             ],
                             "overrides": {
                                 "FieldInvestigationDetails": {
