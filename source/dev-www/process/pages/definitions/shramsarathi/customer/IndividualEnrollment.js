@@ -58,11 +58,41 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
     }
     var regex = new RegExp(pattern);
     if(regex.test(model.customer.identityProofNo) == false){
-        model.warningHtml = '<p style=\"font-size:13px !important\"><font color=#FF6347>'+type+' Number doesn\'t match the Pattern : '+pattern+' Message : '+message+'</font><hp>'
+        model.identityProofWarningHtml = '<p style=\"font-size:13px !important\"><font color=#FF6347>'+type+' Number doesn\'t match the Pattern : '+pattern+' Message : '+message+'</font><hp>'
     }
     else{
-        if(model.warningHtml)
-            delete model.warningHtml;
+        if(model.identityProofWarningHtml)
+            delete model.identityProofWarningHtml;
+    }
+}
+
+ //addressProofNoValidation validation
+ var addressProofNoValidation = function (value,context,model,form){
+    var type = model.customer.addressProof;
+    var pattern,message;
+    switch(type){
+       case "Aadhaar Card":
+       pattern='^\\d{4}\\d{4}\\d{4}$';message='12 digits';break;
+       case "Driving License":
+       pattern='^[A-Z]{2}[0-9]{13}$';message='Required 2 uppercase alphabets, 13 digits';break;
+       case "PAN Card":
+       pattern='^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$';message='Required 5 alphabets, 4 digits, 1 alphabet';break;
+       case "Aajeevika Bureau Card":
+       pattern='^[a-zA-Z]{6}[0-9]{5}$';message='Required 6 alphabets, 5 digits';break;
+       case "NREGA Job Card":
+       pattern='^[0-9]{18}$';message='Required 18 digits';break;
+       case "Voter ID Card":
+       pattern ='^[a-zA-Z]{3}[0-9]{7}$';message='Required 3 alphabets,7 digits';break;
+       case "Passport":
+       pattern ='^[A-Z]{1}[0-9]{8}';message='Required 1 uppercase alphabet,8 digits';break;
+    }
+    var regex = new RegExp(pattern);
+    if(regex.test(model.customer.addressProofNo) == false){
+        model.addressProofWarningHtml = '<p style=\"font-size:13px !important\"><font color=#FF6347>'+type+' Number doesn\'t match the Pattern : '+pattern+' Message : '+message+'</font><hp>'
+    }
+    else{
+        if(model.addressProofWarningHtml)
+            delete model.addressProofWarningHtml;
     }
 }
             var preSaveOrProceed = function (reqData) {
@@ -153,6 +183,9 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                         model.customer.currentAssets[context.arrayIndex].titleExpr = getCurrentByCode(valueObj.toString());
                                     }
                                 },
+                                "KYC.idProofIssueDate":{
+                                    "orderNo":57
+                                },
                                 "IndividualInformation.customerId": {
                                     "readonly": true,
                                 },
@@ -215,7 +248,10 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                 },
                                 "KYC.addressProof": {
                                     "readonly": false,
-                                    "condition": "model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                    "condition": "model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'",
+                                    onChange: function(value, form, model) { 
+                                        if(model.addressProofWarningHtml){delete model.addressProofWarningHtml;}
+                               }
                                 },
                                 "KYC.addressProofImageId": {
                                     "required": true,
@@ -223,7 +259,8 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                 },
                                 "KYC.addressProofNo": {
                                     "required": true,
-                                    "condition": "model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                    "condition": "model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'",
+                                    "onChange":addressProofNoValidation
                                 },
                                 "KYC.addressProofIssueDate": {
                                     "condition": "model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
@@ -239,9 +276,12 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                         } else {
                                             model.customer.addressPfSameAsIdProof = 'NO'
                                         }
-
+                                        if(model.identityProofWarningHtml){delete model.identityProofWarningHtml;}
                                     }
 
+                                },
+                                "KYC.identityProofNo":{
+                                    "onChange": idCardNoValidation  
                                 }
 
 
@@ -433,7 +473,7 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                         } else {
                                             model.customer.addressPfSameAsIdProof = 'NO'
                                         }
-
+                                        if(model.identityProofWarningHtml){delete model.identityProofWarningHtml;}
                                     }
 
                                 },
@@ -445,20 +485,16 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                     // }
                                     "onChange": idCardNoValidation 
                                 },
-                                "KYC.regexWarning":{
-                                    "type":'html',
-                                    // "title":"regex",
-                                     "notitle":true,
-                                    "key":"warningHtml",
-                                   "condition":"model.warningHtml",
-                                    "orderNo":55
-                                },
+                             
                                 "KYC.addressProofFieldSet": {
                                     "condition": "model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
                                 },
                                 "KYC.addressProof": {
                                     "readonly": false,
-                                    "condition": "model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
+                                    "condition": "model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'",
+                                    onChange: function(value, form, model) { 
+                                        if(model.addressProofWarningHtml){delete model.addressProofWarningHtml;}
+                               }
                                 },
                                 "KYC.addressProofImageId": {
                                     "required": true,
@@ -466,7 +502,8 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                 },
                                 "KYC.addressProofNo": {
                                     "required": true,
-                                    "condition": "model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
+                                    "condition": "model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'",
+                                    "onChange":addressProofNoValidation
                                 },
                                 "KYC.addressProofIssueDate": {
                                     "condition": "model.customer.addressPfSameAsIdProof=='NO'|| model.customer.identityProof=='PAN Card'"
@@ -2009,6 +2046,9 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                     "KYC.identityProofImageId": {
                         "required": false
                     },
+                    "KYC.idProofIssueDate":{
+                        "orderNo":57
+                    },
                     "ContactInformation.locality": {
                         "title": "PANCHAYAT",
                         "required": true,
@@ -2462,6 +2502,7 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                     "KYC.identityProof",
                     "KYC.identityProofImageId",
                     "KYC.identityProofNo",
+                    "KYC.regexIdentityProofWarning",
                     "KYC.idProofIssueDate",
                     "KYC.idProofValidUptoDate",
                     "KYC.identityProofBackside",
@@ -2471,6 +2512,7 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                     "KYC.addressProofImageId",
                     "KYC.addressProofBackside",
                     "KYC.addressProofNo",
+                    "KYC.regexAddressProofWarning",
                     "KYC.addressProofIssueDate",
                     "KYC.addressProofValidUptoDate",
                     "KYC.additionalKYCs",
@@ -2995,6 +3037,22 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                             "using": "scanner",
                                             "title": "IDENTITY_PROOF_BACKSIDE",
                                             // "orderNo":70
+                                        },
+                                        "regexIdentityProofWarning":{
+                                            "type":'html',
+                                            // "title":"regex",
+                                             "notitle":true,
+                                            "key":"identityProofWarningHtml",
+                                            "condition":"model.identityProofWarningHtml",
+                                             "orderNo": 55
+                                        },
+                                        "regexAddressProofWarning":{
+                                            "type":'html',
+                                            // "title":"regex",
+                                             "notitle":true,
+                                            "key":"addressProofWarningHtml",
+                                             "condition":"model.addressProofWarningHtml",
+                                             "orderNo": 79
                                         },
                                         "addressProofSameAsIdProof": {
                                             "condition": "model.customer.identityProof!='PAN Card'",
@@ -3893,6 +3951,62 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                             model.customer.addressProofValidUptoDate = model.customer.idProofValidUptoDate;
                         }
 
+   //identity proof number validation
+   try{
+    var type = model.customer.identityProof;
+    var pattern="";
+    switch(type){
+       case "Aadhaar Card":
+       pattern='^\\d{4}\\d{4}\\d{4}$';break;
+       case "Driving License":
+       pattern='^[A-Z]{2}[0-9]{13}$';break;
+       case "PAN Card":
+       pattern='^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$';break;
+       case "Aajeevika Bureau Card":
+       pattern='^[a-zA-Z]{6}[0-9]{5}$';break;
+       case "NREGA Job Card":
+       pattern='^[0-9]{18}$';break;
+       case "Voter ID Card":
+       pattern ='^[a-zA-Z]{3}[0-9]{7}$';break;
+       case "Passport":
+       pattern ='^[A-Z]{1}[0-9]{8}';break;
+    }
+    var regex = new RegExp(pattern);
+    if(regex.test(model.customer.identityProofNo) == false){
+        PageHelper.showProgress("validation","Please enter valid " + model.customer.identityProof + " no",9000);
+        return false;
+    }
+} catch(err){
+    console.error("idcardproofno validation err",err);
+}
+
+try{
+    var type = model.customer.addressProof;
+    var pattern="";
+    switch(type){
+       case "Aadhaar Card":
+       pattern='^\\d{4}\\d{4}\\d{4}$';break;
+       case "Driving License":
+       pattern='^[A-Z]{2}[0-9]{13}$';break;
+       case "PAN Card":
+       pattern='^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$';break;
+       case "Aajeevika Bureau Card":
+       pattern='^[a-zA-Z]{6}[0-9]{5}$';break;
+       case "NREGA Job Card":
+       pattern='^[0-9]{18}$';break;
+       case "Voter ID Card":
+       pattern ='^[a-zA-Z]{3}[0-9]{7}$';break;
+       case "Passport":
+       pattern ='^[A-Z]{1}[0-9]{8}';break;
+    }
+    var regex = new RegExp(pattern);
+    if(regex.test(model.customer.addressProofNo) == false){
+        PageHelper.showProgress("validation","Please enter valid " + model.customer.addressProof + " no",9000);
+        return false;
+    }
+} catch(err){
+    console.error("addressproofno validation err",err);
+}
 
                         // $q.all start
                         model.enrolmentProcess.save()
@@ -3919,6 +4033,64 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                         if (PageHelper.isFormInvalid(form)) {
                             return false;
                         }
+
+                           //identity proof number validation
+                           try{
+                            var type = model.customer.identityProof;
+                            var pattern="";
+                            switch(type){
+                               case "Aadhaar Card":
+                               pattern='^\\d{4}\\d{4}\\d{4}$';break;
+                               case "Driving License":
+                               pattern='^[A-Z]{2}[0-9]{13}$';break;
+                               case "PAN Card":
+                               pattern='^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$';break;
+                               case "Aajeevika Bureau Card":
+                               pattern='^[a-zA-Z]{6}[0-9]{5}$';break;
+                               case "NREGA Job Card":
+                               pattern='^[0-9]{18}$';break;
+                               case "Voter ID Card":
+                               pattern ='^[a-zA-Z]{3}[0-9]{7}$';break;
+                               case "Passport":
+                               pattern ='^[A-Z]{1}[0-9]{8}';break;
+                            }
+                            var regex = new RegExp(pattern);
+                            if(regex.test(model.customer.identityProofNo) == false){
+                                PageHelper.showProgress("validation","Please enter valid " + model.customer.identityProof + " no",9000);
+                                return false;
+                            }
+                        } catch(err){
+                            console.error("idcardproofno validation err",err);
+                        }
+
+                        try{
+                            var type = model.customer.addressProof;
+                            var pattern="";
+                            switch(type){
+                               case "Aadhaar Card":
+                               pattern='^\\d{4}\\d{4}\\d{4}$';break;
+                               case "Driving License":
+                               pattern='^[A-Z]{2}[0-9]{13}$';break;
+                               case "PAN Card":
+                               pattern='^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$';break;
+                               case "Aajeevika Bureau Card":
+                               pattern='^[a-zA-Z]{6}[0-9]{5}$';break;
+                               case "NREGA Job Card":
+                               pattern='^[0-9]{18}$';break;
+                               case "Voter ID Card":
+                               pattern ='^[a-zA-Z]{3}[0-9]{7}$';break;
+                               case "Passport":
+                               pattern ='^[A-Z]{1}[0-9]{8}';break;
+                            }
+                            var regex = new RegExp(pattern);
+                            if(regex.test(model.customer.addressProofNo) == false){
+                                PageHelper.showProgress("validation","Please enter valid " + model.customer.addressProof + " no",9000);
+                                return false;
+                            }
+                        } catch(err){
+                            console.error("addressproofno validation err",err);
+                        }
+             
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
                         model.enrolmentProcess.proceed()
@@ -3953,6 +4125,64 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                             model.customer.addressProofIssueDate = model.customer.idProofIssueDate;
                             model.customer.addressProofValidUptoDate = model.customer.idProofValidUptoDate;
                         }
+
+                           //identity proof number validation
+                           try{
+                            var type = model.customer.identityProof;
+                            var pattern="";
+                            switch(type){
+                               case "Aadhaar Card":
+                               pattern='^\\d{4}\\d{4}\\d{4}$';break;
+                               case "Driving License":
+                               pattern='^[A-Z]{2}[0-9]{13}$';break;
+                               case "PAN Card":
+                               pattern='^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$';break;
+                               case "Aajeevika Bureau Card":
+                               pattern='^[a-zA-Z]{6}[0-9]{5}$';break;
+                               case "NREGA Job Card":
+                               pattern='^[0-9]{18}$';break;
+                               case "Voter ID Card":
+                               pattern ='^[a-zA-Z]{3}[0-9]{7}$';break;
+                               case "Passport":
+                               pattern ='^[A-Z]{1}[0-9]{8}';break;
+                            }
+                            var regex = new RegExp(pattern);
+                            if(regex.test(model.customer.identityProofNo) == false){
+                                PageHelper.showProgress("validation","Please enter valid " + model.customer.identityProof + " no",9000);
+                                return false;
+                            }
+                        } catch(err){
+                            console.error("idcardproofno validation err",err);
+                        }
+
+                        try{
+                            var type = model.customer.addressProof;
+                            var pattern="";
+                            switch(type){
+                               case "Aadhaar Card":
+                               pattern='^\\d{4}\\d{4}\\d{4}$';break;
+                               case "Driving License":
+                               pattern='^[A-Z]{2}[0-9]{13}$';break;
+                               case "PAN Card":
+                               pattern='^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$';break;
+                               case "Aajeevika Bureau Card":
+                               pattern='^[a-zA-Z]{6}[0-9]{5}$';break;
+                               case "NREGA Job Card":
+                               pattern='^[0-9]{18}$';break;
+                               case "Voter ID Card":
+                               pattern ='^[a-zA-Z]{3}[0-9]{7}$';break;
+                               case "Passport":
+                               pattern ='^[A-Z]{1}[0-9]{8}';break;
+                            }
+                            var regex = new RegExp(pattern);
+                            if(regex.test(model.customer.addressProofNo) == false){
+                                PageHelper.showProgress("validation","Please enter valid " + model.customer.addressProof + " no",9000);
+                                return false;
+                            }
+                        } catch(err){
+                            console.error("addressproofno validation err",err);
+                        }
+             
 
                         PageHelper.showProgress('enrolment', 'Updating Customer');
                         PageHelper.showLoader();
