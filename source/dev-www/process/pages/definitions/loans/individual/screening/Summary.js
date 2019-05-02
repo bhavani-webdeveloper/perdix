@@ -6,7 +6,7 @@ irf.pageCollection.directive("irfSimpleSummaryTable", function(){
         templateUrl: 'process/pages/templates/simple-summary-table.html',
         controller: 'irfSimpleSummaryTableController'
     }
-}).controller("irfSimpleSummaryTableController", ["$scope", function($scope){
+}).controller("irfSimpleSummaryTableController", ["$scope","$compile","$element", function($scope,$compile,element){
 
             $scope.getStyleClass = function(column, record){
 
@@ -44,8 +44,35 @@ irf.pageCollection.directive("irfSimpleSummaryTable", function(){
 
                 return displayFormat;
             }
+            $scope.renderHtml = function(column,record,e){
+                $compile(element.contents())($scope);
+            }
 
 }]);
+irf.pageCollection.directive('renderHtml',function($compile){
+    return{
+        restrict: 'A',
+        replace: true,
+        scope:{
+            col : '=col',
+            record : '=record'
+        },
+        link:function(scope,ele,attrs){
+            if (scope.col.condition){
+                var value = scope.$eval(scope.col.condition,scope.record);
+                if(value){
+                    ele.html(scope.col.data);
+                    $compile(ele.contents())(scope);
+                }
+                
+            }
+            else{
+                ele.html(scope.col.data);
+                $compile(ele.contents())(scope);
+            }            
+        }
+    }
+})
 irf.pageCollection.directive("irfScoringDisplay", function(){
 
     return {

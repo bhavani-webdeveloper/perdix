@@ -21,6 +21,7 @@
                     {{(record[column.data] !== null && record[column.data] !== undefined) ? ((record[column.data] |
                     number : 2) + '%') : record[column.data]}}
                     </dummy>
+                    <dummy ng-switch-when='html' render-html col='column' record='record'></dummy>
                     <dummy ng-switch-default>{{record[column.data]}}</dummy>
                 </td>
                 <td ng-repeat='column in tableData.columns' ng-class = 'getStyleClass(column, record)' ng-if="record.data"
@@ -29,6 +30,7 @@
                     <dummy  ng-switch-when="pct">
                     {{(record.data[column.data] !== null && record.data[column.data] !== undefined) ? ((record.data[column.data] | number : 2) + '%') : record.data[column.data]}}
                     </dummy>
+                    <dummy ng-switch-when="html" ng-change="renderHtml(column,record)" ng-model="record.data"></dummy>
                     <dummy ng-switch-default>{{record.data[column.data]}}</dummy>
                 </td>
             </tr>
