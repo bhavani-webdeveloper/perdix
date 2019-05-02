@@ -1390,6 +1390,13 @@ define([],function(){
                     }
                     /* Collateral */
 
+                    //added for frequency to be locked monthly
+                    if(model.loanAccount.currentStage == "Screening" && model.loanAccount.productCategory == 'MEL'){
+                       if(model.loanAccount.frequency == undefined || model.loanAccount.frequency == null){
+                        model.loanAccount.frequency="M";
+                       }
+                    }
+
                     self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
                     p1.then(function(repo) {                        

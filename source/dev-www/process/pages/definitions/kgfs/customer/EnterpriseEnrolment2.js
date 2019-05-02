@@ -266,7 +266,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "EnterpriseInformation.ownership": {
                         "required": true,
                         "orderNo": 90,
-                        "enumCode": "business_in_present_area_since",
+                        "type":"radios",
+                        "titleMap":{"Owned":"Owned","Rented":"Rented"}
                     },
                     "EnterpriseInformation.businessConstitution": {
                         "orderNo": 100,
@@ -644,6 +645,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     "pattern": "^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9]{1}Z[a-zA-Z0-9]{1}$",
                                     "type": ["string", "null"],
                                 }
+                            },
+                            "vintage":{
+                                "key": "customer.enterprise.businessVintage",
+                                "type": "select",
+                                "title": "BUSINESS_VINTAGE",
+                                "required":true,
+                                "enumCode": "business_in_present_area_since",
+                                "orderNo": 95,
+                            },
+                            "businessPhoto":{
+                                "key":"customer.enterprise.businessPhoto",
+                                "title":"BUSINESS_PHOTO",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "required":true,
+                                "category": "CustomerEnrollment",
+                                "subCategory": "PHOTO",
+                                "schema":{
+                                    "type": ["string","null"]
+                                },
+                                "orderNo":135
                             },
                             "enterpriseDocuments": {
                                 "type": "array",
@@ -2205,6 +2227,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "EnterpriseInformation.latitude",
                     "EnterpriseInformation.distanceFromBranch",
                     "EnterpriseInformation.ownership",
+                    "EnterpriseInformation.vintage",
                     "EnterpriseInformation.businessConstitution",
                     "EnterpriseInformation.serviceTaxNumber",
                     "EnterpriseInformation.noOfPartners",
@@ -2220,6 +2243,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "EnterpriseInformation.enterpriseDocuments.udf2",
                     "EnterpriseInformation.enterpriseDocuments.udf3",
                     "EnterpriseInformation.enterpriseDocuments.udf4",
+                    "EnterpriseInformation.businessPhoto",
 
                     "ContactInformation",
                     "ContactInformation.mobilePhone",
@@ -2398,7 +2422,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 "NetBusinessIncome"
                             ],
                             "overrides":{
-
+                                "EnterpriseInformation.companyOperatingSince": {
+                                  "onChange":function(modelValue, form, model){
+                                        var currentDate=SessionStore.getSystemDate();
+                                        var val=moment(modelValue).isSameOrBefore(currentDate);
+                                       if(val === false){
+                                          PageHelper.showProgress('enrolment', 'Operating Since Date must not be greater then current date.', 5000);
+                                          model.customer.enterprise.companyOperatingSince="";
+                                          modelValue="";
+                                       }
+                                  }
+                                }
                             } 
                         },
                         "Application":{
