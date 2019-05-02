@@ -604,7 +604,7 @@ define(['perdix/domain/model/journal/branchposting/BranchPostingProcess'], funct
                                         },
                                         "relatedAccountNo": {
                                             "title": "RELATED_ACCOUNT_NO",
-                                            "type": "string"
+                                            "type": ["string","null"]
                                         },
                                         "relatedAccountNo1": {
                                             "title": "RELATED_ACCOUNT_NO",
