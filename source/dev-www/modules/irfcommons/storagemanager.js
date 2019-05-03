@@ -165,8 +165,10 @@ function($log,$q,rcResource,$rootScope, SessionStore, $filter, Utils){
 	var factoryObj = {
 		storeMaster: function(value) {
 			var deferred = $q.defer()
+			var internalFlag = true;
 			document.addEventListener('file-system-ready',(e)=>{
-				internalEventCallFlag = true;
+				if(internalFlag){
+					internalEventCallFlag = true;
 				if (fileSystem.root) {
 					removeMasterFile().finally(function (){
 						try {
@@ -198,6 +200,8 @@ function($log,$q,rcResource,$rootScope, SessionStore, $filter, Utils){
 				} else {
 					deferred.resolve($q.resolve(factoryObj.storeJSON('irfMasters', value)));
 				}
+				}
+				internalFlag = false;
 			})
 			if(internalEventCallFlag){
 				const event = new CustomEvent('file-system-ready',{
@@ -211,9 +215,12 @@ function($log,$q,rcResource,$rootScope, SessionStore, $filter, Utils){
 			
 		},
 		retrieveMaster: function() {
-			if (fileSystem.root) {
-				var deferred = $q.defer();
-				try {
+			var deferred = $q.defer();
+			var internalFlag = true;
+			document.addEventListener('file-system-ready',(e)=>{
+				if (internalFlag){
+					if (fileSystem.root) {
+					try {
 					fileSystem.root.getFile('irfMasters', {}, function(fileEntry) {
 						fileEntry.file(function(file) {
 							var reader = new FileReader();
@@ -230,13 +237,24 @@ function($log,$q,rcResource,$rootScope, SessionStore, $filter, Utils){
 					}, function(e) {
 						deferred.reject(e);
 					});
-				} catch (e) {
-					deferred.reject(e);
+					} catch (e) {
+						deferred.reject(e);
+					}
+					} else {
+				 	deferred.resolve($q.resolve(factoryObj.retrieveJSON('irfMasters')));
+					}
 				}
-				return deferred.promise;
-			} else {
-				return $q.resolve(factoryObj.retrieveJSON('irfMasters'));
+				internalFlag = false;
+			})
+			if(internalEventCallFlag){
+				const event = new CustomEvent('file-system-ready',{
+					detail:{
+						value:'data'
+					}
+				})
+				document.dispatchEvent(event);
 			}
+			return deferred.promise;
 		},
 		storeJSON: function(key, value){
 			try {
