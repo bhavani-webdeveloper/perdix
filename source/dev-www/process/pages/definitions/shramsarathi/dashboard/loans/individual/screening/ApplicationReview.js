@@ -75,14 +75,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 maximum: 1,
                                 order: 70
                             },
-                            {
-                                pageName: 'shramsarathi.dashboard.loans.individual.screening.Summary',
-                                title: 'SUMMARY',
-                                pageClass: 'summary',
-                                minimum: 1,
-                                maximum: 1,
-                                order: 6
-                            }, 
+                            // {
+                            //     pageName: 'shramsarathi.dashboard.loans.individual.screening.Summary',
+                            //     title: 'SUMMARY',
+                            //     pageClass: 'summary',
+                            //     minimum: 1,
+                            //     maximum: 1,
+                            //     order: 6
+                            // }, 
                             {
                                 pageName: 'loans.individual.screening.CreditBureauView',//CreditBureauView
                                 title: 'CREDIT_BUREAU',
