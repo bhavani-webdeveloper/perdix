@@ -588,7 +588,7 @@ var getIncludes = function (model) {
                        'bankId': requestObj.bankId,
                        'branchId':requestObj.branchId,
                        'branchName':SessionStore.getBranch(),
-                       'entityName': SessionStore.getBankName(),
+                       'entityName': 'Dvara Kgfs',
                        'benificieryName': requestObj.benificieryName,
                        'insuranceId': requestObj.id,
                        'urnNo': requestObj.urnNo,
