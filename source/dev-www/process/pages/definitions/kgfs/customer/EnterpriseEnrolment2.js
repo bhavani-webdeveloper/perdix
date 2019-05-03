@@ -650,7 +650,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 "key": "customer.enterprise.businessVintage",
                                 "type": "select",
                                 "title": "BUSINESS_VINTAGE",
-                                "required":true,
+                                "required":false,
                                 "enumCode": "business_in_present_area_since",
                                 "orderNo": 95,
                             },
@@ -659,7 +659,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 "title":"BUSINESS_PHOTO",
                                 "type": "file",
                                 "fileType": "image/*",
-                                "required":true,
+                                "required":false,
                                 "category": "CustomerEnrollment",
                                 "subCategory": "PHOTO",
                                 "schema":{
