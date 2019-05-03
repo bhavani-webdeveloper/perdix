@@ -26,13 +26,23 @@ var fileSystem = {
 	errorHandler: function(e) {
 		console.log("Storage failed");
 		console.error(e);
+		internalEventCallFlag = true;
+		const event = new CustomEvent('file-system-ready',{
+			detail:{
+				value:'data'
+			}
+		})
+		document.dispatchEvent(event);
 	}
 };
+var internalEventCallFlag = false;
 
 window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
+debugger;
 if (navigator.webkitPersistentStorage && window.requestFileSystem) {
 	navigator.webkitPersistentStorage.requestQuota(100*1024*1024, function(grantedBytes) {
 		window.requestFileSystem(window.PERSISTENT, grantedBytes, function(fs) {
+			debugger;
 			console.log('Opened file system: ' + fs.name);
 			fileSystem.root = fs.root;
 			fileSystem.viewDirectory = function() {
@@ -59,6 +69,13 @@ if (navigator.webkitPersistentStorage && window.requestFileSystem) {
 					});
 				});
 			};
+			const event = new CustomEvent('file-system-ready',{
+				detail:{
+					value:'data'
+				}
+			})
+			document.dispatchEvent(event);
+			internalEventCallFlag = true;
 		}, fileSystem.errorHandler);
 	}, function(e) {
 		alert("Storage permission denied, Please approve storage permission for continuous access. " + e);
