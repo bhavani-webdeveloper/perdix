@@ -1285,13 +1285,7 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
 
                             },
                             onChange: "actions.changeStatus(modelValue, form, model)"
-                        }, {
-                            key: "lead.screeningDate",
-                            required: false,
-                            condition: "((model.lead.interestedInProduct==='YES' || model.lead.interestedInProduct==='Yes' ) && model.lead.productRequiredBy ==='In this week')",
-                            type: "date",
-                            onChange: "actions.changeStatus(modelValue, form, model)"
-                        }, {
+                        },  {
                             key: "lead.followUpDate",
                             condition: "((model.lead.interestedInProduct==='YES' || model.lead.interestedInProduct==='Yes') && model.lead.productRequiredBy =='In this month'||model.lead.productRequiredBy =='Next 2 -3 months'||model.lead.productRequiredBy =='Next 4-6 months')",
                             type: "date",
