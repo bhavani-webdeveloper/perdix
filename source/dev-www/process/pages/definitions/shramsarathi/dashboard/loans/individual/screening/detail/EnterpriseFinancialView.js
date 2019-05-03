@@ -29,10 +29,10 @@ define({
 				model.incomeExpense={};
 				model.incomeExpense.destinationTotalIncome= resp.destination ;
 				model.incomeExpense.sourceTotalIncome= resp.source;
-				model.incomeExpense.incomeGrandTotal=resp.grand_total;
+				model.incomeExpense.incomeGrandTotal= resp.destination + resp.source;
 				model.incomeExpense.destinationTotalExpenses= resp.distination_total_expense;
 				model.incomeExpense.sourceTotalExpenses=resp.source_total_expense;
-				model.incomeExpense.expensesGrandTotal= resp.expense_grand_total;
+				model.incomeExpense.expensesGrandTotal= resp.distination_total_expense + resp.source_total_expense;
 				model.incomeExpense.destinationExtra = resp.destination - resp.distination_total_expense;
 				model.incomeExpense.sourceExtra = resp.source - resp.source_total_expense;
 				model.incomeExpense.totalExtra = model.incomeExpense.destinationExtra + model.incomeExpense.sourceExtra;
