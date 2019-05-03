@@ -270,7 +270,7 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 										pageName: "ProfileInformation",
 										pageId: item.accountId,
 										pageData: {
-											pageData: item
+											lead_id: item.id
 										}
 										
 									});
