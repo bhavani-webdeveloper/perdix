@@ -39,11 +39,11 @@ define({
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
 				console.log("shramsarathi.dashboard.lead.ReadyForScreeningQueue");
-				model.branch = branch;
+				//model.branch = branch;
 				$log.info("search-list sample got initialized");
-				var branchId = SessionStore.getBranchId();
-				var branchName = SessionStore.getBranch();
-				model.branchName = SessionStore.getCurrentBranch().branchName;
+				/* var branchId = SessionStore.getBranchId();
+				var branchName = SessionStore.getBranch(); */
+				model.branch = SessionStore.getCurrentBranch().branchId;
 				// var centres = SessionStore.getCentres();
 				// if (_.isArray(centres) && centres.length > 0){
 				// 	model.centre = centres[0].centreName;
@@ -87,7 +87,7 @@ define({
 								"screenFilter": true
 							}
 						},
-						"centre": {
+						"centreCode": {
 							"title": "ZONE_NAME",
 							"type": ["integer", "null"],
 							"x-schema-form": {
@@ -150,14 +150,14 @@ define({
 				},
 				getResultsPromise: function(searchOptions, pageOpts) {
 					var promise = Lead.search({
-						'branchName': searchOptions.branchName,
+						'branchId': searchOptions.branch,
 						'currentStage': "ReadyForScreening",
 						'leadName': searchOptions.leadName,
 						'page': pageOpts.pageNo,
 						'per_page': pageOpts.itemsPerPage,
 						'area': searchOptions.area,
 						'cityTownVillage': searchOptions.cityTownVillage,
-						'centreName': searchOptions.centre,
+						'centreCode': searchOptions.centreCode,
 						'screeningDate':searchOptions.screeningDate
 					}).$promise;
 					return promise;
