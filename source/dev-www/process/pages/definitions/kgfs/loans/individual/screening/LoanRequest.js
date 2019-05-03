@@ -1217,6 +1217,8 @@ define([],function(){
                     "CollateralInformation.collateral.collateralType",
                     "CollateralInformation.collateral.nameOfOwner",
                     "CollateralInformation.collateral.collateralName",
+                    "CollateralInformation.collateral.dateOfRegistration",
+                    "CollateralInformation.collateral.relationWithApplicant",
                     "CollateralInformation.collateral.marketValueOfAsset",
                     "CollateralInformation.collateral.timeSinceTheAssetIsOwned",
                     "CollateralInformation.collateral.collateralDocuments",
@@ -1503,11 +1505,65 @@ define([],function(){
                                             "nameOfOwner":{
                                                 "key": "loanAccount.collateral[].propertyOwnerName",
                                                 "title":"NAME_OF_OWNER",
-                                                "type":"string"
+                                                "type":"lov",
+                                                searchHelper: formHelper,
+                                                search: function (inputModel, form, model, context) {
+                                                    var out = [];
+                                                    var applicantCustomer = [];
+                                                    if (typeof model.loanProcess == "undefined" || typeof model.loanProcess.applicantEnrolmentProcess == "undefined" || typeof model.loanProcess.applicantEnrolmentProcess.customer == "undefined") {
+                                                        return out;
+                                                    }
+                                                    applicantCustomer = model.loanProcess.applicantEnrolmentProcess.customer;
+                                                    if (!applicantCustomer) {
+                                                        return out;
+                                                    }
+
+                                                    for (var i = 0; i < applicantCustomer.familyMembers.length; i++) {
+                                                        if(!(applicantCustomer.urnNo == applicantCustomer.familyMembers[i].enrolledUrnNo)){
+                                                            out.push({
+                                                                name: applicantCustomer.familyMembers[i].familyMemberFirstName,
+                                                                dob: applicantCustomer.familyMembers[i].dateOfBirth,
+                                                                relationship: applicantCustomer.familyMembers[i].relationShip,
+                                                            })
+                                                        }
+                                                    }
+                                                    return $q.resolve({
+                                                        headers: {
+                                                            "x-total-count": out.length
+                                                        },
+                                                        body: out
+                                                    });
+                                                },
+                                                onSelect: function (valueObj, model, context) {
+                                                    //add to the witnees array.
+                                                    if (_.isUndefined(model.loanAccount.collateral[context.arrayIndex])) {
+                                                        model.loanAccount.collateral[context.arrayIndex] = [];
+                                                    }
+                                                    model.loanAccount.collateral[context.arrayIndex].propertyOwnerName = valueObj.name;
+                                                    model.loanAccount.collateral[context.arrayIndex].udf1 = valueObj.name;
+                                                    model.loanAccount.collateral[context.arrayIndex].dateOfRegistration = valueObj.dob;
+                                                    model.loanAccount.collateral[context.arrayIndex].relationWithApplicant = valueObj.relationship;
+                                                    
+                                                },
+                                                getListDisplayItem: function (item, index) {
+                                                    return [
+                                                        item.name
+                                                    ];
+                                                }
                                             },
                                             "collateralName":{
                                                 "key": "loanAccount.collateral[].udf1",
                                                 "title":"COLLATERAL_NAME",
+                                                "type":"string"
+                                            },
+                                            "dateOfRegistration":{
+                                                "key": "loanAccount.collateral[].dateOfRegistration",
+                                                "title":"DATE",
+                                                "type":"date"
+                                            },
+                                            "relationWithApplicant":{
+                                                "key": "loanAccount.collateral[].relationWithApplicant",
+                                                "title":"RELATION",
                                                 "type":"string"
                                             },
                                             "marketValueOfAsset":{
