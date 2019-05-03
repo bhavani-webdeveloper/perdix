@@ -267,7 +267,7 @@ irf.pageCollection.factory(irf.page("lead.ReadyForScreeningQueue"), ["$log", "fo
 									});
 								} else if (siteCode == 'KGFS') {
 									$state.go("Page.Engine", {
-										pageName: "kgfs.customer.Enrollment",
+										pageName: "ProfileInformation",
 										pageId: item.accountId,
 										pageData: {
 											pageData: item

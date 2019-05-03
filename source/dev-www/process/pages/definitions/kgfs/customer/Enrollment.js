@@ -1489,10 +1489,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             if (reqData.customer.id) {
                                 EnrollmentHelper.proceedData(reqData).then(function(resp) {
                                     PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                    $state.go("Page.Engine", {
-                                        pageName: 'ProfileInformation',
-                                        pageId: reqData.customer.id
-                                    });
+                                    $state.go('Page.Landing', null);
                                 });
                             } else {
                                 reqData.customer.currentStage="Stage02";
@@ -1653,10 +1650,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             if (reqData.customer.id) {
                                 EnrollmentHelper.saveandproceed(reqData).then(function(resp) {
                                     PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                    $state.go("Page.Engine", {
-                                        pageName: 'ProfileInformation',
-                                        pageId: reqData.customer.id
-                                    });
+                                    $state.go('Page.Landing', null);
                                 });
                             } else {
                                 reqData.customer.currentStage="Stage02";
