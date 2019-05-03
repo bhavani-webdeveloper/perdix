@@ -655,7 +655,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 "orderNo": 95,
                             },
                             "businessPhoto":{
-                                "key":"customer.enterprise.businessPhoto",
+                                "key":"customer.photoImageId",
                                 "title":"BUSINESS_PHOTO",
                                 "type": "file",
                                 "fileType": "image/*",
