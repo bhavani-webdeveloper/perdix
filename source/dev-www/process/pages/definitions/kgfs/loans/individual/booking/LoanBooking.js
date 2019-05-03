@@ -315,6 +315,8 @@ define([], function () {
                     "LoanDetails.witnessDetails.witnessRelationship",
                     "LoanDetails.numberOfGuarantorsCoApplicants",
                     "LoanDetails.collectionPaymentType",
+                    "LoanDetails.modeOfDisbursement",
+                    
 
 
                     "NomineeDetails",
@@ -1283,6 +1285,14 @@ define([], function () {
                                                         "CASH":"CASH"
                                                     },
                                                     "orderNo": 120
+                                                },
+                                                "modeOfDisbursement": {
+                                                    "key":"loanAccount.psychometricCompleted",
+                                                    "title": "MODE_OF_DISBURSEMENT",
+                                                    "type": "select",
+                                                    "enumCode":"mode_of_disbursement",
+                                                    "orderNo": 110,
+                                                    "readonly":true,
                                                 }
 
                                             }
