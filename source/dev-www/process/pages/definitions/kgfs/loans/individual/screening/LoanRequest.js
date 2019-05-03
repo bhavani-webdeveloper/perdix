@@ -1385,7 +1385,9 @@ define([],function(){
                      /* Collateral */
                     if (_.hasIn(model.loanAccount, 'collateral') && _.isArray(model.loanAccount.collateral)){
                         for (var i=0; i<model.loanAccount.collateral.length; i++){
-                          model.loanAccount.collateral[i].udf3 = Number(model.loanAccount.collateral[i].udf3);     
+                          model.loanAccount.collateral[i].udf3 = Number(model.loanAccount.collateral[i].udf3);
+                          if(model.loanAccount.collateral[i].udf3 == 0)
+                             model.loanAccount.collateral[i].udf3=null;  
                         }
                     }
                     /* Collateral */
@@ -1959,7 +1961,9 @@ define([],function(){
                                 /* Collateral */
                                     if (_.hasIn(model.loanAccount, 'collateral') && _.isArray(model.loanAccount.collateral)){
                                         for (var i=0; i<model.loanAccount.collateral.length; i++){
-                                          model.loanAccount.collateral[i].udf3 = Number(model.loanAccount.collateral[i].udf3);     
+                                          model.loanAccount.collateral[i].udf3 = Number(model.loanAccount.collateral[i].udf3);
+                                          if(model.loanAccount.collateral[i].udf3 == 0)
+                                             model.loanAccount.collateral[i].udf3=null;       
                                         }
                                     }
                                 /* Collateral */
