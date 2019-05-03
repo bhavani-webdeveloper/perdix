@@ -164,8 +164,10 @@ function($log,$q,rcResource,$rootScope, SessionStore, $filter, Utils){
 	}
 	var factoryObj = {
 		storeMaster: function(value) {
-			if (fileSystem.root) {
-				var deferred = $q.defer();
+			var deferred = $q.defer()
+			document.addEventListener('file-system-ready',(e)=>{
+				internalEventCallFlag = true;
+				if (fileSystem.root) {
 					removeMasterFile().finally(function (){
 						try {
 							fileSystem.root.getFile('irfMasters', {create: true}, function(fileEntry) {
@@ -193,10 +195,20 @@ function($log,$q,rcResource,$rootScope, SessionStore, $filter, Utils){
 					},function(e){
 						deferred.reject(e);
 					});
-				return deferred.promise;
-			} else {
-				return $q.resolve(factoryObj.storeJSON('irfMasters', value));
+				} else {
+					deferred.resolve($q.resolve(factoryObj.storeJSON('irfMasters', value)));
+				}
+			})
+			if(internalEventCallFlag){
+				const event = new CustomEvent('file-system-ready',{
+					detail:{
+						value:'data'
+					}
+				})
+				document.dispatchEvent(event);
 			}
+			return deferred.promise;
+			
 		},
 		retrieveMaster: function() {
 			if (fileSystem.root) {
