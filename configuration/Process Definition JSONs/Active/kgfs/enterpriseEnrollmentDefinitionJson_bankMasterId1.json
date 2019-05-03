@@ -749,6 +749,13 @@
                         "minLength": 0,
                         "maxLength": 100,
                         "captureStages": ["Completed"]
+                    },
+                    "photoImageId": {
+                        "title": "photoImageId",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": ["Completed"]
                     }
                 }
             },
