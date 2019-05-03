@@ -1489,7 +1489,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             if (reqData.customer.id) {
                                 EnrollmentHelper.proceedData(reqData).then(function(resp) {
                                     PageHelper.showProgress('enrolment', 'Done.', 5000);
-                                    $state.go('Page.Landing', null);
+                                    $state.go("Page.Engine", {
+                                        pageName: 'ProfileInformation',
+                                        pageId: reqData.customer.id
+                                    });
                                 });
                             } else {
                                 reqData.customer.currentStage="Stage02";
