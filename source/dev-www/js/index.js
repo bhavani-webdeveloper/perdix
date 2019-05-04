@@ -41,6 +41,33 @@ var app = {
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
         document.addEventListener("backbutton", onBackKeyDown, false);
+
+        /** 
+         * Ensuring required permissions are set for the application
+         */
+        if (cordova.plugins && cordova.plugins.permissions) {
+            var cdvPermissions = cordova.plugins.permissions;
+            var listOfPermissions = [
+                cdvPermissions.BLUETOOTH,
+                cdvPermissions.BLUETOOTH_ADMIN,
+                cdvPermissions.ACCESS_COARSE_LOCATION,
+                cdvPermissions.ACCESS_FINE_LOCATION,
+                cdvPermissions.CAMERA,
+                cdvPermissions.FLASHLIGHT,
+                cdvPermissions.WRITE_EXTERNAL_STORAGE,
+                cdvPermissions.READ_EXTERNAL_STORAG,
+            ];
+
+            permissions.hasPermission(listOfPermissions, function(status){
+                if (!status.hasPermission){
+                    cdvPermissions.requestPermissions(listOfPermissions, function(status){
+                        if (!status.hasPermission) console.log("Permissions are not granted");
+                    }, function(error){
+                        console.log(error)
+                    })
+                }
+            });
+        }
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
