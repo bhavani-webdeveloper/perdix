@@ -33,7 +33,6 @@
     "irf-bluetooth-plugin": "^1.2.3",
     "irf-sqlite-cordova": "^1.0.0",
     "js-logger": "^1.4.1",
-    "location": "https://github.com/snokleby/cordova-fusedlocation.git",
     "mysql": "^2.15.0",
     "npm-git-install": "^0.2.0",
     "phonegap-plugin-barcodescanner": "^4.1.0",
