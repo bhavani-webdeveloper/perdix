@@ -1155,7 +1155,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                 ],
                                 "overrides": {
                                     "KYC": {
-                                        "readonly": false
+                                        "readonly": true
                                     },
                                     "IndividualFinancials": {
                                         "readonly": true
@@ -1178,7 +1178,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                 ],
                                 "overrides": {
                                     "KYC": {
-                                        "readonly": false
+                                        "readonly": true
                                     },
                                     "FamilyDetails": {
                                         "readonly": true
@@ -1204,7 +1204,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                                 ],
                                 "overrides": {
                                     "KYC": {
-                                        "readonly": false
+                                        "readonly": true
                                     },
                                     "KYC.customerId": {
                                         key: "customer.id",
