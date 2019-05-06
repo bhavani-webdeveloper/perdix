@@ -220,12 +220,12 @@ define({
                             var opts = {
                                 'branch': model.customer.kgfsName,
                                 'entity_name': model.customer.kgfsBankName+ " KGFS",
-                                'company_name': "Dvara Kshetriya Gramin Financial Services Private Limited.",
-                                'cin': 'U65991TN1993PTC024547',
+                                'company_name': "DVARA Kshetriya Gramin Financial Services Pvt. Ltd.",
+                                'cin': 'U74990TN2011PTC081729',
                                 'address1': 'IITM Research Park, Phase 1, 10th Floor',
                                 'address2': 'Kanagam Village, Taramani',
                                 'address3': 'Chennai - 600113, Phone: 91 44 66687000',
-                                'website': "http://ruralchannels.ifmr.co.in/",
+                                'website': "https://www.dvarakgfs.com/",
                                 'helpline': '18001029370',
                             };
 
