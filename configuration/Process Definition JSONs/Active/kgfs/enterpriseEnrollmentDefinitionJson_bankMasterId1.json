@@ -750,7 +750,7 @@
                         "maxLength": 100,
                         "captureStages": ["Completed"]
                     },
-                    "photoImageId": {
+                    "photoImageId": { 
                         "title": "photoImageId",
                         "type": "string",
                         "minLength": 1,
@@ -1811,6 +1811,16 @@
                         "minLength": 1,
                         "maxLength": 45,
                         "captureStages": ["BasicEnrolment", "Completed"]
+                    },
+                    "photoImageId": {
+                        "title": "photoImageId",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "captureStages": [
+                          "BasicEnrolment",
+                          "Completed"
+                        ]
                     },
                     "mobilePhone": {
                         "title": "mobilePhone",

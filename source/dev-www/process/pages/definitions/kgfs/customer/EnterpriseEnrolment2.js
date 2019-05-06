@@ -279,6 +279,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "EnterpriseInformation.noOfPartners": {
                         "orderNo": 120
                     },
+                    "EnterpriseInformation.photoImageId": {
+                        "orderNo": 135
+                    },
                     "EnterpriseInformation.companyRegistered": {
                         "required": true,
                         "orderNo": 130,
@@ -637,6 +640,22 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 "title": "BRANCH_NAME",
                                 "required":true
                             },
+                            "photoImageId":{
+                                "key": "customer.photoImageId",
+                                "required":true,
+                                "title": "BUSINESS_PHOTO",
+                                type: "file",
+                                fileType: "image/*",
+                                "category": "CustomerEnrollment",
+                                "subCategory": "PHOTO"
+                            },
+                            "businessInPresentAreaSince":{
+                                "key": "customer.enterprise.businessInPresentAreaSince",
+                                "type": "select",
+                                "enumCode": "business_in_present_area_since",
+                                "title":"BUSINESS_VINTAGE",
+                                "orderNo": 95
+                            },
                             "serviceTaxNumber": {
                                 "key": "customer.enterprise.serviceTaxNumber",
                                 "type": "text",
@@ -646,26 +665,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                     "type": ["string", "null"],
                                 }
                             },
-                            "vintage":{
-                                "key": "customer.enterprise.businessVintage",
-                                "type": "select",
-                                "title": "BUSINESS_VINTAGE",
-                                "required":false,
-                                "enumCode": "business_in_present_area_since",
-                                "orderNo": 95,
-                            },
-                            "businessPhoto":{
-                                "key": "customer.photoImageId",
-                                "title":"BUSINESS_PHOTO",
-                                "type": "file",
-                                "fileType": "image/*",
-                                "viewParams": function(modelValue, form, model) {
-                                    return {
-                                        customerId: model.customer.id
-                                    };
-                                 },      
-                                "orderNo":135
-                            },
+                           // "businessPhoto":{
+                                // "key": "customer.photoImageId",
+                                // "title":"BUSINESS_PHOTO",
+                                // "type": "file",
+                                // "fileType": "image/*",
+                                // "viewParams": function(modelValue, form, model) {
+                                //     return {
+                                //         customerId: model.customer.id
+                                //     };
+                                //  },      
+                              //  "orderNo":135
+                            //},
                             "enterpriseDocuments": {
                                 "type": "array",
                                 "title": "BUSINESS_DOCUMENT",
@@ -2224,9 +2235,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "EnterpriseInformation.firstName",
                     "EnterpriseInformation.companyOperatingSince",
                     "EnterpriseInformation.latitude",
+                    "EnterpriseInformation.photoImageId",
                     "EnterpriseInformation.distanceFromBranch",
+                    "EnterpriseInformation.businessInPresentAreaSince",
                     "EnterpriseInformation.ownership",
-                    "EnterpriseInformation.vintage",
+                   // "EnterpriseInformation.vintage",
                     "EnterpriseInformation.businessConstitution",
                     "EnterpriseInformation.serviceTaxNumber",
                     "EnterpriseInformation.noOfPartners",
@@ -2242,7 +2255,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "EnterpriseInformation.enterpriseDocuments.udf2",
                     "EnterpriseInformation.enterpriseDocuments.udf3",
                     "EnterpriseInformation.enterpriseDocuments.udf4",
-                    "EnterpriseInformation.businessPhoto",
+                   // "EnterpriseInformation.businessPhoto",
 
                     "ContactInformation",
                     "ContactInformation.mobilePhone",
@@ -3833,7 +3846,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         //         return false;
                         //     } 
                         // }
-                        var dateFlag;     
+
+                        var dateA = new Date(model.customer.enterprise.companyOperatingSince);
+                        var dateB = new Date();
+                        if (dateA > dateB) {
+                            PageHelper.showErrors({
+                                'data': {
+                                    'error': "OperatingSinceDate can't be more than current Date"
+                                }
+                            })
+                            return false;
+                        }
+                        var dateFlag;
                         if (model.customer.enterpriseRegistrations != 'undefined' && model.customer.enterpriseRegistrations != null)
                         {                            
                             model.customer.enterpriseRegistrations.map((epReg => {
