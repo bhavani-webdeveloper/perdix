@@ -30,7 +30,8 @@ var ret = $resource(endpoint, null, {
         updateEOD:{
             method: 'POST',
             url: endpoint + '/updateEOD',
-            params:{eodDate:'@eodDate'}
+            params:{eodDate:'@eodDate'},
+            isArray: true
         }
     });
     return ret;
