@@ -171,6 +171,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         model.showLoanBookingDetails = data.showLoanBookingDetails;
                         model.BackedDatedDisbursement = data.BackedDatedDisbursement;
                         model.allowPreEmiInterest = data.allowPreEmiInterest;
+                        model.additional = model.additional || {};
+                        model.additional.config = {};
+                        debugger;
+                        if(data.conditionConfig){
+                            for (var i=0;i<data.conditionConfig.length;i++){
+                                model.additional.config[data.conditionConfig[i].split('.').join('_')] = true;
+                            }
+                        }
                     }
                 }, function(err) {
                     console.log(err);
@@ -482,6 +490,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         "title": "CENTRE",
                         "readonly": true,
                         "type":"select",
+                    },
+                    {
+                        key:"loanAccount.portfolioInsurancePremium",
+                        condition:'model.additional.config.portfolioInsurancePremium && model.loanAccount.id',
+                        readonly:true,
+                        required:false,
+                        "title":"PORTFOLIO_INSURANCE_PREMIUM",
+                        type:'amount',
                     },
                     {
                         "key": "loanAccount.interestRate",
