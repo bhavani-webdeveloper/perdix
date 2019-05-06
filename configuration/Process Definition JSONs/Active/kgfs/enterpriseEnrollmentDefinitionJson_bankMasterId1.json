@@ -464,7 +464,7 @@
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 50,
-                        "captureStages": ["Completed"]
+                        "captureStages": ["BasicEnrolment","Completed"]
                     },
                     "doorNo": {
                         "title": "Door Number",
@@ -755,7 +755,7 @@
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
-                        "captureStages": ["Completed"]
+                        "captureStages": ["BasicEnrolment","Completed"]
                     }
                 }
             },
