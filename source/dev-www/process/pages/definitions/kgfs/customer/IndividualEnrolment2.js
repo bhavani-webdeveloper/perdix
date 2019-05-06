@@ -634,7 +634,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "KYC.customerId":{
                             orderNo:10,
                             required:true,
-                            condition:"!model.customer.customerId && !model.loanProcess.loanAccount.id",
+                            condition:"!model.customer.customerId || (model.currentStage=='Screening' && model.pageClass=='guarantor' || model.pageClass =='co-applicant')",
                             initialize: function(model, form, parentModel, context) {
                                 model.customerBranchId = parentModel.customer.customerBranchId;
                                 model.centreId = parentModel.customer.centreId;
