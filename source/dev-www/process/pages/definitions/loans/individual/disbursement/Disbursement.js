@@ -461,7 +461,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         {
                             "key": "loanAccountDisbursementSchedule.firstRepaymentDate",
                             "condition":"model.siteCode=='IREPDhan' && model.loanAccountDisbursementSchedule.moratoriumPeriodInDays != '0' && model.CanChangeRepaymentDateIndisbursement",
-                            "title":"FIRST_REPAYMENT_DATE",
+                            "title":"IREP_FIRST_REPAYMENT_DATE",
                             "type":"date",
                             "readonly":true,
                             "onChange": function(value ,form ,model, event){
@@ -472,7 +472,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                         {
                             "key": "loanAccountDisbursementSchedule.firstRepaymentDate",
                             "condition":"model.siteCode=='IREPDhan' && model.loanAccountDisbursementSchedule.moratoriumPeriodInDays == '0' && model.CanChangeRepaymentDateIndisbursement",
-                            "title":"FIRST_REPAYMENT_DATE",
+                            "title":"IREP_FIRST_REPAYMENT_DATE",
                             "type":"date",
                             "onChange": function(value ,form ,model, event){
                                 model.validateFirstRepaymentDate(model);
