@@ -505,12 +505,12 @@
                             var opts = {
                                 'branch': model.customer.kgfsName,
                                 'entity_name': model.customer.kgfsBankName+ " KGFS",
-                                'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
+                                'company_name': "DVARA Kshetriya Gramin Financial Services Pvt. Ltd.",
                                 'cin': 'U74990TN2011PTC081729',
                                 'address1': 'IITM Research Park, Phase 1, 10th Floor',
                                 'address2': 'Kanagam Village, Taramani',
                                 'address3': 'Chennai - 600113, Phone: 91 44 66687000',
-                                'website': "http://ruralchannels.kgfs.co.in",
+                                'website': "https://www.dvarakgfs.com",
                                 'helpline': '18001029370',
                             };
 

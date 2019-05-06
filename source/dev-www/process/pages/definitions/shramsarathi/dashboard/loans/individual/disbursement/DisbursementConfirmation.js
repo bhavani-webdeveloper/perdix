@@ -168,13 +168,13 @@ irf.pageCollection.factory(irf.page("shramsarathi.dashboard.loans.individual.dis
 
                         //             var opts = {
                         //                 'branch': SessionStore.getBranch(),
-                        //                 'entity_name': SessionStore.getBankName() + " KGFS",
-                        //                 'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
+                        //                 'entity_name': "Dvara KGFS",
+                        //                 'company_name': "DVARA Kshetriya Gramin Financial Services Pvt. Ltd.",
                         //                 'cin': 'U74990TN2011PTC081729',
                         //                 'address1': 'IITM Research Park, Phase 1, 10th Floor',
                         //                 'address2': 'Kanagam Village, Taramani',
                         //                 'address3': 'Chennai - 600113, Phone: 91 44 66687000',
-                        //                 'website': "http://ruralchannels.kgfs.co.in",
+                        //                 'website': "https://www.dvarakgfs.com",
                         //                 'helpline': '18001029370',
                         //                 'branch_id': SessionStore.getBranchId(),
                         //                 'branch_code': SessionStore.getBranchCode()

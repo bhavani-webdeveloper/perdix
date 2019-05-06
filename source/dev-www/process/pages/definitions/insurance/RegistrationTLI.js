@@ -588,7 +588,7 @@ var getIncludes = function (model) {
                        'bankId': requestObj.bankId,
                        'branchId':requestObj.branchId,
                        'branchName':SessionStore.getBranch(),
-                       'entityName': 'Dvara Kgfs',
+                       'entityName': 'Dvara KGFS',
                        'benificieryName': requestObj.benificieryName,
                        'insuranceId': requestObj.id,
                        'urnNo': requestObj.urnNo,
@@ -596,12 +596,12 @@ var getIncludes = function (model) {
                        'premiumCollected': requestObj.insuranceTransactionDetailsDTO[0].totalPremium,
                        'policyNumber' :  requestObj.policyNumber,
                        'policyType' : "TERM LIFE INSURANCE PREMIUM",
-                       'company_name': "IFMR Rural Channels and Services Pvt. Ltd.",
+                       'company_name': "DVARA Kshetriya Gramin Financial Services Pvt. Ltd.",
                        'cin': 'U74990TN2011PTC081729',
                        'address1': 'IITM Research Park, Phase 1, 10th Floor',
                        'address2': 'Kanagam Village, Taramani',
                        'address3': 'Chennai - 600113, Phone: 91 44 66687000',
-                       'website': "http://ruralchannels.ifmr.co.in/",
+                       'website': "https://www.dvarakgfs.com/",
                        'helpline': '18001029370',
                    };
    
