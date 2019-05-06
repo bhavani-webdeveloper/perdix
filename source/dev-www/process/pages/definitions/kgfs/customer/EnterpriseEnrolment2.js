@@ -2427,8 +2427,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         var val=moment(modelValue).isSameOrBefore(currentDate);
                                        if(val === false){
                                           PageHelper.showProgress('enrolment', 'Operating Since Date must not be greater then current date.', 5000);
-                                          model.customer.enterprise.companyOperatingSince="";
-                                          modelValue="";
+                                          model.customer.enterprise.companyOperatingSince=null;
+                                          return false;
                                        }
                                   }
                                 }
