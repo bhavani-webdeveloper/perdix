@@ -1112,6 +1112,14 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 condition: "model.siteCode=='pahal'"
                             },
                             {
+                                key:"loanAccount.portfolioInsurancePremium",
+                                condition:'model.additional.config.portfolioInsurancePremium && model.loanAccount.id',
+                                readonly:true,
+                                required:false,
+                                "title":"PORTFOLIO_INSURANCE_PREMIUM",
+                                type:'amount',
+                            },
+                            {
                                 "key":"loanAccount.interestRate",
                                 "type":"number",
                                 "readonly" : nonEditable['loanAccount.interestRate'],
