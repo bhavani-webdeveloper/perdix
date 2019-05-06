@@ -3240,6 +3240,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                     "NOTaMigrate":"NOT A MIGRANT"
                                                     }
                                         },
+
                                         "incomes": {
                                             "orderNo": 11,
                                             key: "customer.familyMembers[].incomes",
@@ -3871,7 +3872,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     }
                    }
                    model.customer.mailSameAsResidence=false;
-               
+                   
                     /* Form rendering starts */
                     var self = this;
                     UIRepository.getEnrolmentProcessUIRepository().$promise
@@ -3982,7 +3983,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                             model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
                                         }
                                     } 
-                                }  
+                                } 
+                                
+                                if(obj.udf.userDefinedFieldValues.udf1 != undefined){
+                                    if(obj.udf.userDefinedFieldValues.udf1 == "false"){
+                                        model.customer.familyMembers[0].migrantType = 'NOTaMigrate'; 
+                                   }
+                                  }    
                             })
                     },
                     "origination-stage": function (bundleModel, model, obj) {
