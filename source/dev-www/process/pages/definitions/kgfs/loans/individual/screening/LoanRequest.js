@@ -857,11 +857,14 @@ define([],function(){
                         "CollateralInformation": {
                             "title":"COLLATERAL",
                             "orderNo":20,
-                            "condition": "model.loanAccount.loanType=='SECURED'"
+                            "condition": "model.loanAccount.loanType=='SECURED'",                          
                         },
                         "CollateralInformation.collateral": {
                             "title":"COLLATERAL",
-                            "required":true
+                            "required":true,
+                            "startEmpty":false,
+                            "remove": null,
+                            "view": "fixed",
                         },
                         "CollateralInformation.collateral.collateralType": {
                             "title":"COLLATERAL_TYPE",
