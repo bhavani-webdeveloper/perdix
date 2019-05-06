@@ -1260,11 +1260,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                                 "title": "FCF:EMI",
                                                                 "readonly": true
                                                             }
-                                                        ]
+                                                        ]   
                                                     },
                                                     {
                                                         "type": "fieldset",
                                                         "title": "Vehicle Valuation",
+                                                        "condition": "model.loanAccount.currentStage !='TeleVerification' " ,
                                                         "items": [
                                                             {
                                                                 "key": "loanAccount.vehicleLoanDetails.currentMarketValue",
