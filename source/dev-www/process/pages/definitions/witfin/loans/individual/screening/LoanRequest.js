@@ -1531,7 +1531,7 @@ define([], function() {
                                 }
                             });
                     }
-                    
+                    model.loanAccount.expectedInterestRate=Math.round(model.loanAccount.expectedInterestRate * 100)/100;
                     var self = this;
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
 
