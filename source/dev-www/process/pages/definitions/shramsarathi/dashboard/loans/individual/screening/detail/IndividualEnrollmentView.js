@@ -71,9 +71,28 @@ define({
                         //     res.district,
                         //     res.state
                         // ].join(', ') + ' - ' + res.pincode;
-                        if(model.UIUDF.income[0].incomes[0]!=undefined){
-                            
-                            model.netincome=model.UIUDF.income[0].incomes[0].incomeEarned - model.UIUDF.expenditures[0].annualExpenses;
+                        if(model.UIUDF.income!=undefined || model.UIUDF.income.length>0){
+                            var incomeEarned=0;
+                            var annualExpenses=0;
+
+                           // model.netincome=model.UIUDF.income[0].incomes[0].incomeEarned - model.UIUDF.expenditures[0].annualExpenses;
+
+                            for(var i=0;i<model.UIUDF.income.length;i++){
+                                if(model.UIUDF.income[i].incomes.length>0 || model.UIUDF.income[i].incomes!=undefined){
+                                    for(var j=0;j<model.UIUDF.income[i].incomes.length;j++){
+                                        incomeEarned+= model.UIUDF.income[i].incomes[j].incomeEarned;
+                                    }
+                                    
+                                }
+                            }
+
+                            for(var i=0;i<model.UIUDF.expenditures.length;i++){
+                                annualExpenses+=model.UIUDF.expenditures[i].annualExpenses;
+                            }
+
+                            model.netincome=incomeEarned-annualExpenses;
+                            model.incomeEarned=incomeEarned;
+                            model.annualExpenses=annualExpenses;
                         }
                         else
                         {
@@ -1082,11 +1101,11 @@ define({
                                 "type": "grid",
                                 "orientation": "vertical",
                                 "items": [{
-                                    "key": "UIUDF.income[0].incomes[0].incomeEarned",
+                                    "key": "incomeEarned",
                                     "title": "Income",
                                     "type": "amount"
                                 }, {
-                                    "key": "UIUDF.expenditures[0].annualExpenses",
+                                    "key": "annualExpenses",
                                     "title": "Expenses",
                                     "type": "amount"
                                 }, {
