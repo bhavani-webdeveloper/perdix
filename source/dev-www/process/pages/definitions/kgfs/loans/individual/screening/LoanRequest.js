@@ -1861,6 +1861,7 @@ define([],function(){
                     "cb-check-update": function(bundleModel, model, params){
                     $log.info("Inside cb-check-update of LoanRequest");
                     for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                            model.loanAccount.dataCheckChanges=true;
                             if (model.loanAccount.loanCustomerRelations[i].customerId == params.customerId) {
                                 model.loanAccount.loanCustomerRelations[i].cbCheckCompleted=false;
                                 if(params.cbType == 'BASE')
@@ -2163,13 +2164,14 @@ define([],function(){
                                         {
                                             PageHelper.showProgress("loan-create","CB Check pending. Please do a CB check and then proceed",5000);
                                             return false;                                            
-                                        }                                            
+                                        }
+
                                     }
-                                    else if(model.loanAccount.dataCheckChanges)
-                                    {
-                                        PageHelper.showProgress("loan-create","CB Check pending. Please do a CB check and then proceed",5000);
-                                        return false;                                            
-                                    }                          
+                                    // else if(model.loanAccount.dataCheckChanges)
+                                    // {
+                                    //     PageHelper.showProgress("loan-create","CB Check pending. Please do a CB check and then proceed",5000);
+                                    //     return false;                                            
+                                    // }                          
                                 }
                             }
                         }
