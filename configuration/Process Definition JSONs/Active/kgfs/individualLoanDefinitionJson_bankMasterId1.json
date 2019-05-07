@@ -11,6 +11,7 @@
           "name":"Screening",
           "stageType":"CAPTURE",
           "sendSms":"No",
+	"isSchemaValidationRequired":true,
           "smsCategory":"LoanBooking",
           "isAccountOpening": false,
           "riskScoreName":"RiskScore1",
