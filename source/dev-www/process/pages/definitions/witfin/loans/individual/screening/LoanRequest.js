@@ -881,6 +881,7 @@ define([], function() {
                                                 var obj = calculateNominalRate(model.loanAccount.loanAmountRequested, model.loanAccount.frequencyRequested, model.loanAccount.tenureRequested, parseFloat(model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf5));
                                                 model.loanAccount.expectedInterestRate = obj.nominalRate;
                                                 model.loanAccount.estimatedEmi = obj.estimatedEmi;
+                                                model.loanAccount.expectedInterestRate=Math.round(model.loanAccount.expectedInterestRate * 100)/100;
                                             } catch (e){
                                                 console.log(e);
                                                 PageHelper.showProgress("nominal-rate-calculation", "Error while calculating nominal rate, check the input values.", 5000);
