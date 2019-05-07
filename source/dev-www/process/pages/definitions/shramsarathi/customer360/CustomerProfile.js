@@ -3285,7 +3285,14 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                                             type: "select",
                                                             title:"OCCUPATION",
                                                             "parentEnumCode": "work_sector",
-                                                            "parentValueExpr": "model.customer.familyMembers[context.arrayIndex].incomes[context.arrayIndex].workSector",
+                                                            "parentValueExpr": "model.customer.familyMembers[arrayIndexes[0]].incomes[arrayIndexes[1]].workSector",
+                                                            "onChange":function(valueObj,context,model){
+                                                                var skillLevel  = formHelper.enum('skill_type').data.filter(function(value){
+                                                                    return value.parentCode == valueObj;
+                                                                });
+                                                                if (skillLevel && skillLevel.length > 0)
+                                                                    model.customer.familyMembers[context.arrayIndexes[0]].incomes[context.arrayIndexes[1]].skillLevel = skillLevel[0].name;
+                                                            },
                                                             required: false,
                                                             orderNo:60
                                                         },
@@ -3326,11 +3333,9 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                                             "key":"customer.familyMembers[].incomes[].skillLevel",
                                                             "title":"SKILL_LEVEL",
                                                             "type":"select",
-                                                            "titleMap":{
-                                                                "skilled":"SKILLED",
-                                                                "unskilled":"UNSKILLED",
-                                                                "semi_skilled":"SEMI_SKILLED"
-                                                            },
+                                                            "enumCode":"skill_type",
+                                                            "parentEnumCode": "occupation",
+                                                            "parentValueExpr":"model.customer.familyMembers[arrayIndexes[0]].incomes[arrayIndexes[1]].incomeSource",
                                                             "required":true,
                                                             orderNo:70
                                                             

@@ -700,6 +700,7 @@ irf.commons.run(["irfStorageService", "SessionStore", "$q", "$log", "filterFilte
 			createEnum("lender_product_type", "lender_product_type", codeToValue);
 			createEnum("loan_partner","partner_master_new",codeToValue);
 			createEnum("sorted_loan_source","loan_source", sortByName);
+			createEnum("loan_source","loan_source", codeToValue);
 			createEnum('no_of_payments','no_of_payments',codeAsNumberToValue);
 
 			return irfStorageService.storeMaster(masters);
