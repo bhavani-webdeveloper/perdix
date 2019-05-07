@@ -10,50 +10,52 @@
                   "null"
                ]
             },
-"religion":{  
+            "religion":{  
                "type":[  
                   "string",
                   "null"
                ]
             },
-"caste":{  
+            "caste":{  
                "type":[  
                   "string",
                   "null"
                ]
             },
-"language":{  
+            "language":{  
                "type":[  
                   "string",
                   "null"
                ]
             },
-"houseVerificationPhoto":{  
+            "houseVerificationPhoto":{  
                "type":[  
                   "string",
                   "null"
                ]
             },
-"latitude":{  
+            "latitude":{  
                "type":[  
                   "string",
                   "null"
                ]
             },
-"longitude":{  
+            "longitude":{  
                "type":[  
                   "string",
                   "null"
                ]
             },
-
             "verification":{  
                "type":"array",
                "minItems":1,
                "items":{  
                   "type":"object",
                   "required":[  
-"houseNo","houseNoIsVerified","relationship","referenceFirstName"
+                     "houseNo",
+                     "houseNoIsVerified",
+                     "relationship",
+                     "referenceFirstName"
                   ],
                   "properties":{  
                      "referenceFirstName":{  
@@ -62,7 +64,7 @@
                            "null"
                         ]
                      },
-"houseNoIsVerified":{  
+                     "houseNoIsVerified":{  
                         "type":[  
                            "boolean",
                            "null"
@@ -205,13 +207,18 @@
             },
             "required":[  
                "doorNo",
-"religion","caste","language","houseVerificationPhoto","latitude","longitude",
+               "religion",
+               "caste",
+               "language",
+               "houseVerificationPhoto",
+               "latitude",
+               "longitude",
                "verification"
             ]
          },
          "coApplicants":{  
             "type":"array",
-            "minItems":0
+            "minItems":0,
             "items":{  
                "type":"object",
                "properties":{  
@@ -226,7 +233,7 @@
          },
          "gaurantors":{  
             "type":"array",
-            "minItems":0
+            "minItems":0,
             "items":{  
                "type":"object",
                "properties":{  
