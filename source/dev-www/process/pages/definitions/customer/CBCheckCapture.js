@@ -189,7 +189,8 @@ irf.pageCollection.factory(irf.page("CBCheckCapture"),
 							loanAmount: model.loanAmount,	
 							subModuleCode :  model.subModuleCode,
 							productCode : model.productCode,					
-							force: model.force						
+							force: model.force,
+							partnerCode: model.partnerCode						
 						}, function(response){
 							PageHelper.hideLoader();
 							if(response.success==true){
