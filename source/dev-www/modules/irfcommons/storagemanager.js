@@ -633,6 +633,7 @@ irf.commons.run(["irfStorageService", "SessionStore", "$q", "$log", "filterFilte
 			createEnum("state_master1", "state_master1", codeAsNumberToValue);
 			createEnum("branch_id", "branch", codeAsNumberToValue);
 			createEnum("mutualFundScheme", "mutualFundScheme", codeAsNumberToValue);
+			createEnum("lead_source", "mutualFundScheme", codeAsNumberToValue);
 			createEnum("loan_product", "loan_product", function(s, o) {
 				for (i in o.data) {
 					o.data[i].value = o.data[i].field1.toString().trim();
@@ -700,6 +701,7 @@ irf.commons.run(["irfStorageService", "SessionStore", "$q", "$log", "filterFilte
 			createEnum("lender_product_type", "lender_product_type", codeToValue);
 			createEnum("loan_partner","partner_master_new",codeToValue);
 			createEnum("sorted_loan_source","loan_source", sortByName);
+			createEnum("loan_source","loan_source", codeToValue);
 			createEnum('no_of_payments','no_of_payments',codeAsNumberToValue);
 
 			return irfStorageService.storeMaster(masters);
