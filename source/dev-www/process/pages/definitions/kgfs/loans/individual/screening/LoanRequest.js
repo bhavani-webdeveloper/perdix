@@ -1308,6 +1308,15 @@ define([],function(){
                         "PROCEED": "PROCEED"
                     }
 
+                    /* ornamentsAppraisals */
+                    if (_.hasIn(model.loanAccount, 'ornamentsAppraisals') && _.isArray(model.loanAccount.ornamentsAppraisals)){
+                        for (var i=0; i<model.loanAccount.ornamentsAppraisals.length; i++){
+                            model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa=model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa/100;
+                            model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa=model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa/100;                      
+                        }
+                    }
+                    /* ornamentsAppraisals */
+
                     model.loanAccount.cbCheckCompletedFlag=false;
                     model.loanAccount.dataCheckChanges=false;
 
@@ -2003,6 +2012,15 @@ define([],function(){
                             model.loanAccount.cbCheckCompletedFlag=false;
                         }
 
+                         /* ornamentsAppraisals */
+                        if (_.hasIn(model.loanAccount, 'ornamentsAppraisals') && _.isArray(model.loanAccount.ornamentsAppraisals)){
+                            for (var i=0; i<model.loanAccount.ornamentsAppraisals.length; i++){
+                               model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa=model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa*100;
+                               model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa=model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa*100;                      
+                            }
+                        }
+                        /* ornamentsAppraisals */
+
                         if(!(validateCoGuarantor(model.additions.co_borrower_required,model.additions.number_of_guarantors,'validate',model.loanAccount.loanCustomerRelations,model)))
                             return false;
                         PageHelper.showProgress('loan-process', 'Updating Loan');
@@ -2027,6 +2045,14 @@ define([],function(){
                                         }
                                     }
                                 /* Collateral */
+                                /* ornamentsAppraisals */
+                                if (_.hasIn(model.loanAccount, 'ornamentsAppraisals') && _.isArray(model.loanAccount.ornamentsAppraisals)){
+                                    for (var i=0; i<model.loanAccount.ornamentsAppraisals.length; i++){
+                                       model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa=model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa/100;
+                                       model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa=model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa/100;                      
+                                    }
+                                }
+                                /* ornamentsAppraisals */
                                 setLoanMitigantsGroup(model);
                                 BundleManager.pushEvent('new-loan', model._bundlePageObj, {loanAccount: model.loanAccount}); 
                                 BundleManager.pushEvent('new-loanAccount-id', model._bundlePageObj, {loanId: model.loanAccount.id});                                    
@@ -2238,6 +2264,14 @@ define([],function(){
                         if(model.loanAccount.currentStage=='DSCOverride'){
                             model.loanProcess.stage='DSCApproval';
                         }
+                        /* ornamentsAppraisals */
+                        if (_.hasIn(model.loanAccount, 'ornamentsAppraisals') && _.isArray(model.loanAccount.ornamentsAppraisals)){
+                            for (var i=0; i<model.loanAccount.ornamentsAppraisals.length; i++){
+                               model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa=model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa*100;
+                               model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa=model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa*100;                      
+                            }
+                        }
+                        /* ornamentsAppraisals */
                         PageHelper.showLoader();
                         PageHelper.showProgress('enrolment', 'Updating Loan');
                         model.loanProcess.proceed(model.loanProcess.stage)
