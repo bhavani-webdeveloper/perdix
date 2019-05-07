@@ -2149,6 +2149,18 @@ define([],function(){
                             PageHelper.showErrors({data:{error:"Loan Amount Recommended should not be more than loan Amount requested"}});
                             return false;
                         }
+
+                         if(model.loanAccount.productCategory  == 'MEL')
+                        {
+                            if(model.loanAccount.loanAmount >= loanAmountRequestedLoanLimit)
+                            {
+                                if((_.hasIn(model.customer, 'customerBankAccounts')) && _.isArray(model.customer.customerBankAccounts) && model.customer.customerBankAccounts.length == 0) {
+                                    PageHelper.showErrors({data:{error:"Business Tab - Bank accounts details should be mandatory"}});
+                                    return false;
+                                } 
+                            }                            
+                        }
+
                         if(model.loanAccount.cbCheckCompletedFlag)
                         {
                             model.loanAccount.dataCheckChanges=true;
