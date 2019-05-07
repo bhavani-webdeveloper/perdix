@@ -328,6 +328,65 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
                 "condition": "(model.ai.current_stage == 'start' || model.ai.current_stage == 'create' || model.ai.current_stage == 'publish' || model.ai.current_stage == 'L1-approve') && !model.readonly && !model.ai._dirty && model.siteCode == 'KGFS'"
             }]
 
+        },{
+            "type": "box",
+            "title": "AUDIT_REPORT",
+            "condition": "model.ai.status !== 'O'",
+            "items": [{
+                "key": "issueGroupType",
+                "type": "radios",
+                "titleMap": [{
+                    "name": "Process View",
+                    "value": "PROCESS"
+                },{
+                    "name": "File View",
+                    "value": "SAMPLE",
+                },{
+                    "name": "Risk Classification View",
+                    "value": "RISK"
+                }],
+                onChange: function(value, form, model) {
+                    $scope.model.report = reportView(value, 'draft'); // TODO: next phase dev: responsibilityType [draft|fix]
+                }
+            }, {
+                "type": "tableview",
+                "condition": "model.report",
+                "key": "report",
+                "tableConfig": {
+                    "searching": false
+                },
+                getColumns: function() {
+                    return [{
+                        "title": "NAME",
+                        "data": 'name'
+                    }, {
+                        "title": "NO_OF_ISSUES",
+                        "data": 'count'
+                    }];
+                },
+                getActions: function() {
+                    return [{
+                        "name": "VIEW_ISSUES",
+                        fn: function(item, index, model) {
+                            irfNavigator.go({
+                                'state': 'Page.Engine',
+                                'pageName': 'audit.AuditIssues',
+                                'pageId': $this.auditId + ":" + item.type + ":" + item.id,
+                                'pageData': {
+                                    "readonly": $scope.model.readonly,
+                                    "type": $scope.model.type,
+                                    "report": item,
+                                    "stage": $scope.model.stage
+                                }
+                            });
+                        },
+                        isApplicable: function(item, index) {
+                            return true;
+                        }
+                    }];
+                }
+            }]
+
         }, {
             "type": "box",
             "condition": "model.ai.messages.length && model.type == 'audit'",
