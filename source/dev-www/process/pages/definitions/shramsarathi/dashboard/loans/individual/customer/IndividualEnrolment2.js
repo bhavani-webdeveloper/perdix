@@ -53,7 +53,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                    case "Voter ID Card":
                    pattern ='^[a-zA-Z]{3}[0-9]{7}$';message='Required 3 alphabets,7 digits';break;
                    case "Passport":
-                   pattern ='^[A-Z]{1}[0-9]{8}';message='Required 1 uppercase alphabet,8 digits';break;
+                   pattern ='^[A-Z]{1}[0-9]{7}$';message='Required 1 uppercase alphabet,7 digits';break;
                 }
                 var regex = new RegExp(pattern);
                 if(regex.test(model.customer.identityProofNo) == false){
@@ -84,7 +84,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                case "Voter ID Card":
                pattern ='^[a-zA-Z]{3}[0-9]{7}$';message='Required 3 alphabets,7 digits';break;
                case "Passport":
-               pattern ='^[A-Z]{1}[0-9]{8}';message='Required 1 uppercase alphabet,8 digits';break;
+               pattern ='^[A-Z]{1}[0-9]{7}$';message='Required 1 uppercase alphabet,7 digits';break;
             }
             var regex = new RegExp(pattern);
             if(regex.test(model.customer.addressProofNo) == false){
@@ -4164,7 +4164,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                case "Voter ID Card":
                                pattern ='^[a-zA-Z]{3}[0-9]{7}$';break;
                                case "Passport":
-                               pattern ='^[A-Z]{1}[0-9]{8}';break;
+                               pattern ='^[A-Z]{1}[0-9]{7}$';break;
                             }
                             var regex = new RegExp(pattern);
                             if(regex.test(model.customer.identityProofNo) == false){
@@ -4192,7 +4192,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                case "Voter ID Card":
                                pattern ='^[a-zA-Z]{3}[0-9]{7}$';break;
                                case "Passport":
-                               pattern ='^[A-Z]{1}[0-9]{8}';break;
+                               pattern ='^[A-Z]{1}[0-9]{7}$';break;
                             }
                             var regex = new RegExp(pattern);
                             if(regex.test(model.customer.addressProofNo) == false){
@@ -4244,7 +4244,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                case "Voter ID Card":
                                pattern ='^[a-zA-Z]{3}[0-9]{7}$';break;
                                case "Passport":
-                               pattern ='^[A-Z]{1}[0-9]{8}';break;
+                               pattern ='^[A-Z]{1}[0-9]{7}$';break;
                             }
                             var regex = new RegExp(pattern);
                             if(regex.test(model.customer.identityProofNo) == false){
@@ -4272,7 +4272,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                case "Voter ID Card":
                                pattern ='^[a-zA-Z]{3}[0-9]{7}$';break;
                                case "Passport":
-                               pattern ='^[A-Z]{1}[0-9]{8}';break;
+                               pattern ='^[A-Z]{1}[0-9]{7}$';break;
                             }
                             var regex = new RegExp(pattern);
                             if(regex.test(model.customer.addressProofNo) == false){
@@ -4355,7 +4355,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                    case "Voter ID Card":
                                    pattern ='^[a-zA-Z]{3}[0-9]{7}$';break;
                                    case "Passport":
-                                   pattern ='^[A-Z]{1}[0-9]{8}';break;
+                                   pattern ='^[A-Z]{1}[0-9]{7}$';break;
                                 }
                                 var regex = new RegExp(pattern);
                                 if(regex.test(model.customer.identityProofNo) == false){
@@ -4383,7 +4383,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                    case "Voter ID Card":
                                    pattern ='^[a-zA-Z]{3}[0-9]{7}$';break;
                                    case "Passport":
-                                   pattern ='^[A-Z]{1}[0-9]{8}';break;
+                                   pattern ='^[A-Z]{1}[0-9]{7}$';break;
                                 }
                                 var regex = new RegExp(pattern);
                                 if(regex.test(model.customer.addressProofNo) == false){
