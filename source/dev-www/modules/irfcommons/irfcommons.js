@@ -464,6 +464,10 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 					fileId = fingerObj[fingerId];
 					if(!fileId){
 						document.getElementById("selectedFinger").style.visibility = 'visible';
+						document.getElementById("statusMatchTrue").style.visibility = 'hidden';
+						document.getElementById("statusMatchFalse").style.visibility = 'hidden';
+						document.getElementById("notCaptured").style.visibility = 'hidden';
+						document.getElementById("serverMessage").style.visibility = 'hidden';
 					}
 					else{
 						document.getElementById("selectedFinger").style.visibility = 'hidden';
