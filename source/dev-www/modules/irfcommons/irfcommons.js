@@ -433,6 +433,7 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 		        '<div><button id="statusMatchTrue" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 350%; color: green;">✓</button>' +
 		        '<button id="statusMatchFalse"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 350%; color: red;">X</button> <div>' +
 				'<button id="notCaptured"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Unable to capture Finger print, please try again</button> <div>' +
+				'<button id="selectedFinger"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Finger print not available for selected finger</button> <div>' +
 				'<button id="placeFinger"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: #0f18af;">Kindly place your finger on mantra device</button> <div>' +
 				'<div id="responsediv" class="text-danger">' +
 		        '</div>' +
@@ -460,6 +461,12 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 		        changeFinger: function (fingerId) {
 		            // Get Finger Data Using API
 					fileId = fingerObj[fingerId];
+					if(!fileId){
+						document.getElementById("selectedFinger").style.visibility = 'visible';
+					}
+					else{
+						document.getElementById("selectedFinger").style.visibility = 'hidden';
+					}
 					document.getElementById("statusMatchTrue").style.visibility = 'hidden';
 					document.getElementById("statusMatchFalse").style.visibility = 'hidden';
 					document.getElementById("notCaptured").style.visibility = 'hidden';
