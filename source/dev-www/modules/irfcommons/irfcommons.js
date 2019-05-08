@@ -475,45 +475,48 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 					
 		        },
 				takeDataForMantra: function () {fpMatchStatus="";
-				document.getElementById("notCaptured").style.visibility = 'hidden';
-				document.getElementById("placeFinger").style.visibility = 'visible';
-		            Files.getBase64DataFromFileId(fileId, {}, true)
-		                .then(function (res) {
-		                    fingerData = res;
-							document.getElementById("notCaptured").style.visibility = 'hidden';
-		                    MantraFingrePrintService.verifyFingerPrintMantra({
-		                            base64ISOTemplate: fingerData
-		                        },
-		                        function (verifyResponse) {
-									//responsediv.innerHTML=verifyResponse.match;
-								   // lastCapturedFingerValidationStatus = verifyResponse.match;
-								   document.getElementById("placeFinger").style.visibility = 'hidden';
-								   fpMatchStatus=verifyResponse.match?"Match found":"Not Matched";
-		                            if (verifyResponse.match) {
-		                                document.getElementById("statusMatchTrue").style.visibility = 'visible';
-		                                document.getElementById("statusMatchFalse").style.visibility = 'hidden';
-		                            } else {
-		                                document.getElementById("statusMatchTrue").style.visibility = 'hidden';
-		                                document.getElementById("statusMatchFalse").style.visibility = 'visible';
-									}
-									deferred.resolve(fpMatchStatus);
-		                        },
-		                        function (error) {
-		                            document.getElementById("statusMatchTrue").style.visibility = 'hidden';
-									document.getElementById("statusMatchFalse").style.visibility = 'hidden';
-									document.getElementById("notCaptured").style.visibility = 'hidden';
-									if(error.status==-1){
-										document.getElementById("serverMessage").style.visibility = 'visible';
-									}else{
-										document.getElementById("notCaptured").style.visibility = 'visible';
-									}
-									
-									console.log(error);
-									$log.info("verify error");
-		                        });
-		                }, function (err) {
-		                    deferred.reject(err);
-		                });
+				if(!fileId){
+				}else{
+					document.getElementById("notCaptured").style.visibility = 'hidden';
+					document.getElementById("placeFinger").style.visibility = 'visible';
+						Files.getBase64DataFromFileId(fileId, {}, true)
+							.then(function (res) {
+								fingerData = res;
+								document.getElementById("notCaptured").style.visibility = 'hidden';
+								MantraFingrePrintService.verifyFingerPrintMantra({
+										base64ISOTemplate: fingerData
+									},
+									function (verifyResponse) {
+										//responsediv.innerHTML=verifyResponse.match;
+									   // lastCapturedFingerValidationStatus = verifyResponse.match;
+									   document.getElementById("placeFinger").style.visibility = 'hidden';
+									   fpMatchStatus=verifyResponse.match?"Match found":"Not Matched";
+										if (verifyResponse.match) {
+											document.getElementById("statusMatchTrue").style.visibility = 'visible';
+											document.getElementById("statusMatchFalse").style.visibility = 'hidden';
+										} else {
+											document.getElementById("statusMatchTrue").style.visibility = 'hidden';
+											document.getElementById("statusMatchFalse").style.visibility = 'visible';
+										}
+										deferred.resolve(fpMatchStatus);
+									},
+									function (error) {
+										document.getElementById("statusMatchTrue").style.visibility = 'hidden';
+										document.getElementById("statusMatchFalse").style.visibility = 'hidden';
+										document.getElementById("notCaptured").style.visibility = 'hidden';
+										if(error.status==-1){
+											document.getElementById("serverMessage").style.visibility = 'visible';
+										}else{
+											document.getElementById("notCaptured").style.visibility = 'visible';
+										}
+										console.log(error);
+										$log.info("verify error");
+									});
+							}, function (err) {
+								deferred.reject(err);
+							});
+				}
+			
 		        }
 		    });
 
