@@ -1456,7 +1456,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess'], function(EnrolmentProc
                                     "orderNo": 1200,
                                     "items": [
                                         {
-                                            "type": "submit",
+                                            "type": "button",
                                             "title": "SUBMIT",
                                             "buttonType": "submit"
                                         }
