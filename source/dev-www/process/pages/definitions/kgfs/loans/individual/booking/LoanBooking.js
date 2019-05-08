@@ -1172,6 +1172,15 @@ define([], function () {
                     }
                     /* Collateral */
 
+                    /* ornamentsAppraisals */
+                    if (_.hasIn(model.loanAccount, 'ornamentsAppraisals') && _.isArray(model.loanAccount.ornamentsAppraisals)){
+                        for (var i=0; i<model.loanAccount.ornamentsAppraisals.length; i++){
+                            model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa=model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa/100;
+                            model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa=model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa/100;                      
+                        }
+                    }
+                    /* ornamentsAppraisals */
+
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
                     p1.then(function (repo) {
                         var formRequest = {
@@ -1730,6 +1739,14 @@ define([], function () {
                             model.loanAccount.documentTracking = "PENDING";
                             model.loanAccount.psychometricCompleted = "NO";
                         }
+                        /* ornamentsAppraisals */
+                                if (_.hasIn(model.loanAccount, 'ornamentsAppraisals') && _.isArray(model.loanAccount.ornamentsAppraisals)){
+                                    for (var i=0; i<model.loanAccount.ornamentsAppraisals.length; i++){
+                                       model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa=model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa*100;
+                                       model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa=model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa*100;                      
+                                    }
+                                }
+                                /* ornamentsAppraisals */
                         if(!(validateCoGuarantor(model.additions.co_borrower_required,model.additions.number_of_guarantors,'validate',model.loanAccount.loanCustomerRelations,model)))
                             return false;
                         PageHelper.showProgress('loan-process', 'Updating Loan');
@@ -1745,6 +1762,15 @@ define([], function () {
                                 PageHelper.hideLoader();
                             })
                             .subscribe(function (value) {
+
+                                /* ornamentsAppraisals */
+                                if (_.hasIn(model.loanAccount, 'ornamentsAppraisals') && _.isArray(model.loanAccount.ornamentsAppraisals)){
+                                    for (var i=0; i<model.loanAccount.ornamentsAppraisals.length; i++){
+                                       model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa=model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa/100;
+                                       model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa=model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa/100;                      
+                                    }
+                                }
+                                /* ornamentsAppraisals */
 
                                 /* Collateral */
                                     if (_.hasIn(model.loanAccount, 'collateral') && _.isArray(model.loanAccount.collateral)){
@@ -1832,6 +1858,15 @@ define([], function () {
                         
                         if(!(policyBasedOnLoanType(model.loanAccount.loanType,model)))
                             return false;
+
+                        /* ornamentsAppraisals */
+                                if (_.hasIn(model.loanAccount, 'ornamentsAppraisals') && _.isArray(model.loanAccount.ornamentsAppraisals)){
+                                    for (var i=0; i<model.loanAccount.ornamentsAppraisals.length; i++){
+                                       model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa=model.loanAccount.ornamentsAppraisals[i].ratePerGramInPaisa*100;
+                                       model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa=model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa*100;                      
+                                    }
+                                }
+                                /* ornamentsAppraisals */
                         
                         mapNomineeAddress(model);    
                         

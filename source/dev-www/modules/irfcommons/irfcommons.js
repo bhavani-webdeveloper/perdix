@@ -433,6 +433,7 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 		        '<div><button id="statusMatchTrue" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 350%; color: green;">✓</button>' +
 		        '<button id="statusMatchFalse"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 350%; color: red;">X</button> <div>' +
 				'<button id="notCaptured"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Unable to capture Finger print, please try again</button> <div>' +
+				'<button id="selectedFinger"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Finger print not available for selected finger</button> <div>' +
 				'<button id="placeFinger"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: #0f18af;">Kindly place your finger on mantra device</button> <div>' +
 				'<button id="serverMessage"  class="" style="font-size: 8px; visibility:hidden;background-color:white;border: aliceblue; font-size: 150%; color: red;">Please restart the server</button> <div>'+
 				'<div id="responsediv" class="text-danger">' +
@@ -461,51 +462,69 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 		        changeFinger: function (fingerId) {
 		            // Get Finger Data Using API
 					fileId = fingerObj[fingerId];
-					document.getElementById("statusMatchTrue").style.visibility = 'hidden';
-					document.getElementById("statusMatchFalse").style.visibility = 'hidden';
-					document.getElementById("notCaptured").style.visibility = 'hidden';
-					document.getElementById("serverMessage").style.visibility = 'hidden';
+					if(!fileId){
+						document.getElementById("selectedFinger").style.visibility = 'visible';
+						document.getElementById("statusMatchTrue").style.visibility = 'hidden';
+						document.getElementById("statusMatchFalse").style.visibility = 'hidden';
+						document.getElementById("notCaptured").style.visibility = 'hidden';
+						document.getElementById("serverMessage").style.visibility = 'hidden';
+						document.getElementById("placeFinger").style.visibility = 'hidden';
+						
+					}
+					else{
+						document.getElementById("selectedFinger").style.visibility = 'hidden';
+						document.getElementById("statusMatchTrue").style.visibility = 'hidden';
+						document.getElementById("statusMatchFalse").style.visibility = 'hidden';
+						document.getElementById("notCaptured").style.visibility = 'hidden';
+						document.getElementById("serverMessage").style.visibility = 'hidden';
+					}
+					
 		        },
 				takeDataForMantra: function () {fpMatchStatus="";
-				document.getElementById("notCaptured").style.visibility = 'hidden';
-				document.getElementById("placeFinger").style.visibility = 'visible';
-		            Files.getBase64DataFromFileId(fileId, {}, true)
-		                .then(function (res) {
-		                    fingerData = res;
-							document.getElementById("notCaptured").style.visibility = 'hidden';
-		                    MantraFingrePrintService.verifyFingerPrintMantra({
-		                            base64ISOTemplate: fingerData
-		                        },
-		                        function (verifyResponse) {
-									//responsediv.innerHTML=verifyResponse.match;
-								   // lastCapturedFingerValidationStatus = verifyResponse.match;
-								   document.getElementById("placeFinger").style.visibility = 'hidden';
-								   fpMatchStatus=verifyResponse.match?"Match found":"Not Matched";
-		                            if (verifyResponse.match) {
-		                                document.getElementById("statusMatchTrue").style.visibility = 'visible';
-		                                document.getElementById("statusMatchFalse").style.visibility = 'hidden';
-		                            } else {
-		                                document.getElementById("statusMatchTrue").style.visibility = 'hidden';
-		                                document.getElementById("statusMatchFalse").style.visibility = 'visible';
-									}
-									deferred.resolve(fpMatchStatus);
-		                        },
-		                        function (error) {
-		                            document.getElementById("statusMatchTrue").style.visibility = 'hidden';
-									document.getElementById("statusMatchFalse").style.visibility = 'hidden';
-									document.getElementById("notCaptured").style.visibility = 'hidden';
-									if(error.status==-1){
-										document.getElementById("serverMessage").style.visibility = 'visible';
-									}else{
-										document.getElementById("notCaptured").style.visibility = 'visible';
-									}
-									
-									console.log(error);
-									$log.info("verify error");
-		                        });
-		                }, function (err) {
-		                    deferred.reject(err);
-		                });
+				if(!fileId){
+				}else{
+					document.getElementById("notCaptured").style.visibility = 'hidden';
+					document.getElementById("placeFinger").style.visibility = 'visible';
+						Files.getBase64DataFromFileId(fileId, {}, true)
+							.then(function (res) {
+								fingerData = res;
+								document.getElementById("notCaptured").style.visibility = 'hidden';
+								MantraFingrePrintService.verifyFingerPrintMantra({
+										base64ISOTemplate: fingerData
+									},
+									function (verifyResponse) {
+										//responsediv.innerHTML=verifyResponse.match;
+									   // lastCapturedFingerValidationStatus = verifyResponse.match;
+									   document.getElementById("placeFinger").style.visibility = 'hidden';
+									   fpMatchStatus=verifyResponse.match?"Match found":"Not Matched";
+										if (verifyResponse.match) {
+											document.getElementById("statusMatchTrue").style.visibility = 'visible';
+											document.getElementById("statusMatchFalse").style.visibility = 'hidden';
+										} else {
+											document.getElementById("statusMatchTrue").style.visibility = 'hidden';
+											document.getElementById("statusMatchFalse").style.visibility = 'visible';
+										}
+										deferred.resolve(fpMatchStatus);
+									},
+									function (error) {
+										document.getElementById("statusMatchTrue").style.visibility = 'hidden';
+										document.getElementById("statusMatchFalse").style.visibility = 'hidden';
+										document.getElementById("notCaptured").style.visibility = 'hidden';
+										document.getElementById("placeFinger").style.visibility = 'hidden';
+										if(error.status==-1){
+											document.getElementById("serverMessage").style.visibility = 'visible';
+										}else{
+											document.getElementById("notCaptured").style.visibility = 'visible';
+										}
+										console.log(error);
+										$log.info("verify error");
+									});
+							}, function (err) {
+								document.getElementById("placeFinger").style.visibility = 'hidden';
+								deferred.reject(err);
+							});
+				}
+			
 		        }
 		    });
 

@@ -321,7 +321,11 @@ define({
                                 PageHelper.showProgress("Branch Save", "Branch Updated with id" + '  ' + res.id, 3000);
                                 $log.info(res);
                                 model.branch = res;
-                                $state.go('Page/Adhoc/management.BranchCreationDashboard', null);
+
+                                $state.go('Page.Adhoc', {
+                                    pageName: 'management.BranchCreationDashboard'
+                                });
+
                             }, function(httpRes) {
                                 PageHelper.showProgress("Branch Save", "Oops. Some error occured.", 3000);
                                 PageHelper.showErrors(httpRes);
@@ -335,7 +339,11 @@ define({
                                 PageHelper.showProgress("Branch Save", "Branch Created with id" + '  ' + res.id, 3000);
                                 $log.info(res);
                                 model.branch = res;
-                                $state.go('Page/Adhoc/management.BranchCreationDashboard', null);
+                                
+                                $state.go('Page.Adhoc', {
+                                    pageName: 'management.BranchCreationDashboard'
+                                });
+
                             }, function(httpRes) {
                                 PageHelper.showProgress("Branch Save", "Oops. Some error occured.", 3000);
                                 PageHelper.showErrors(httpRes);
