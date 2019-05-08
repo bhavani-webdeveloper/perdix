@@ -376,7 +376,7 @@ define([], function () {
                     "LoanSanction.sanctionDate",
                     "LoanSanction.scheduleDisbursementDate",
                     "LoanSanction.firstRepaymentDate",
-                    "LoanSanction.customerSignatureDate",
+                    // "LoanSanction.customerSignatureDate",
                     "LoanSanction.disbursementSchedules",
                     "LoanSanction.disbursementSchedules.trancheNumber",
                     "LoanSanction.disbursementSchedules.disbursementAmount",
@@ -1083,8 +1083,11 @@ define([], function () {
                             }
                         }
                     },
+                    "LoanSanction.sanctionDate":{
+                        orderNo : 4,
+                    },
                     "LoanSanction.firstRepaymentDate": {
-                        orderNo : 5,
+                        orderNo : 6,
                         required : true,
                         onChange: function (value, form, model, event) {
                             var repaymentDate = moment(model.loanAccount.firstRepaymentDate, SessionStore.getSystemDateFormat());
@@ -1097,7 +1100,7 @@ define([], function () {
 
                     },
                     "LoanSanction.scheduleDisbursementDate": {
-                        orderNo : 4,
+                        orderNo : 5,
                         required: true,
                         onChange: function (value, form, model) {
                             var repaymentDate = moment(model.loanAccount.firstRepaymentDate, SessionStore.getSystemDateFormat());
@@ -1179,6 +1182,18 @@ define([], function () {
                             model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa=model.loanAccount.ornamentsAppraisals[i].marketValueInPaisa/100;                      
                         }
                     }
+                    
+                    if (typeof model.loanAccount.sanctionDate == "undefined" || model.loanAccount.sanctionDate == "" || model.loanAccount.sanctionDate == null) {
+                        model.loanAccount.sanctionDate = moment(new Date()).format("YYYY-MM-DD");
+                    }
+                    if (typeof model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate == "undefined" || model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate == "" || model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate == null) {
+                        var disbursementSchedules = moment(new Date()).add(2, "d").format("YYYY-MM-DD");
+                        model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate = disbursementSchedules;
+                    }
+                    if (typeof model.loanAccount.firstRepaymentDate == "undefined" || model.loanAccount.firstRepaymentDate == "" || model.loanAccount.firstRepaymentDate == null) {
+                        model.loanAccount.firstRepaymentDate = moment(new Date()).add(30, "d").format("YYYY-MM-DD");
+                    }
+
                     /* ornamentsAppraisals */
 
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
