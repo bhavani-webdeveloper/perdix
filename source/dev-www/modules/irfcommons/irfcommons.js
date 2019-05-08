@@ -468,9 +468,9 @@ irf.commons.factory("BiometricService", ['$log', '$q','irfSimpleModal','$sce','F
 					else{
 						document.getElementById("selectedFinger").style.visibility = 'hidden';
 						document.getElementById("statusMatchTrue").style.visibility = 'hidden';
-					document.getElementById("statusMatchFalse").style.visibility = 'hidden';
-					document.getElementById("notCaptured").style.visibility = 'hidden';
-					document.getElementById("serverMessage").style.visibility = 'hidden';
+						document.getElementById("statusMatchFalse").style.visibility = 'hidden';
+						document.getElementById("notCaptured").style.visibility = 'hidden';
+						document.getElementById("serverMessage").style.visibility = 'hidden';
 					}
 					
 		        },
