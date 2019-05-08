@@ -4044,7 +4044,7 @@
                      "minLength":1,
                      "maxLength":100,
                      "captureStages":[
-                        "LoanBooking","LinkedAccountVerification","Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","LoanInitiation","Checker1","Checker2"
+                        "LoanBooking","LinkedAccountVerification","Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","LoanInitiation","Checker1","Checker2","Completed"
                      ]
                    },
                    "rejectReason":{
