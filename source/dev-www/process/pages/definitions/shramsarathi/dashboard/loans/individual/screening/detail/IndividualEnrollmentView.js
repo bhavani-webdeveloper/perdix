@@ -609,16 +609,16 @@ define({
                                 "type": "grid",
                                 "orientation": "vertical",
                                 "items": [{
-                                    "key": "avarage_deposit",
-                                    "title": "Average Monthly Deposit",
+                                    "key": "UIUDF.bankAccount[0].bankStatements[0].totalDeposits",
+                                    "title": "Monthly Deposit",
                                     "type": "amount"
                                 }, {
-                                    "key": "avarage_withdrawal",
-                                    "title": "Average Monthly Withdrawls",
+                                    "key": "UIUDF.bankAccount[0].bankStatements[0].totalWithdrawals",
+                                    "title": "Monthly Withdrawl",
                                     "type": "amount"
                                 }, {
-                                    "key": "avarage_balance",
-                                    "title": "Average Monthly Balances",
+                                    "key": "UIUDF.bankAccount[0].bankStatements[0].balanceAsOn15th",
+                                    "title": "Monthly Balance",
                                     "type": "amount"
                                 }]
                             }, {
