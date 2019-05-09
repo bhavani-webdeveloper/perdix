@@ -1242,57 +1242,6 @@
                   }
                }
             }
-         },
-         "expenditures":{
-            "title":"Expenditures",
-            "type":"array",
-            "items":{  
-               "type":"object",
-               "required":[  
-                  
-               ],
-               "properties":{  
-                  "expenditureSource":{  
-                     "title":"Expenditure Source",
-                     "type":"string",
-                     "captureStages":[  
-                        "BasicEnrolment",
-                        "Completed"
-                     ]
-                  },
-                  "frequency":{  
-                     "title":"Frequency",
-                     "type":"string",
-                     "captureStages":[  
-                        "BasicEnrolment",
-                        "Completed"
-                     ]
-                  }
-               }
-            
-            }
-
-         },
-         "familyMembers":{
-            "title":"Expenditures",
-            "type":"array",
-            "items":{  
-               "type":"object",
-               "required":[  
-                  
-               ],
-               "properties":{  
-                  "relationShip":{  
-                     "title":"RelationShip",
-                     "type":"string",
-                     "captureStages":[  
-                        "BasicEnrolment",
-                        "Completed"
-                     ]
-                  }
-               }
-            }
-
          }
       }
    }
