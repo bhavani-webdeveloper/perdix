@@ -14,7 +14,7 @@
          "order":2,
          "code":"Deposit",
          "name":"Deposit",
-         "stageType":"DEPOSIT",
+         "stageType":"CAPTURE",
          "sendSms":"Yes",
          "smsCategory":"ODCollection",
          "isBankAccountReversal":true,
