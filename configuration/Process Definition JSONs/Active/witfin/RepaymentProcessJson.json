@@ -5,6 +5,8 @@
          "code":"Initiation",
          "name":"Initiation",
          "stageType":"CAPTURE",
+         "sendSms":"Yes",
+         "smsCategory":"ODCollection",
          "isBankAccountReversal":true,
          "allowedRoles":[
             "WM"
