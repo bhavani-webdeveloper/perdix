@@ -377,7 +377,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "pageClass": {
                         "applicant": {
-                            "excludes": [],
+                            "excludes": [
+                            ],
                             "overrides": {
                                
                             }
@@ -389,63 +390,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             }
                         },
                         "co-applicant": {
-                            "excludes": [],
+                            "excludes": [
+                            ],
                             "overrides": {
-                                "KYC.customerId": {
-                                    key: "customer.id",
-                                    type: "lov",
-                                    title: "CUSTOMER_SEARCH",
-                                    autolov:false,
-                                    bindMap: {},
-                                    inputMap: {},
-                                    outputMap:{},
-                                    searchHelper: formHelper,
-                                    search: function (inputModel, form, model, context) {
-                                        var temp = model.loanProcess.applicantEnrolmentProcess.customer.familyMembers;
-                                        var temp2 = model.loanProcess.applicantEnrolmentProcess.customer;
-                                        var out = [];
-                                        if(temp){
-                                       for(i=0;i<temp.length;i++)
-                                        {
-                                           if(temp[i].enrolledUrnNo != null && temp[i].enrolledUrnNo != "" && temp[i].enrolledUrnNo != temp2.urnNo){
-                                               out.push(temp[i]);
-                                           }
-                                        } 
-                                        }  
-                                       return $q.resolve( {
-                                            headers: {
-                                                "x-total-count": out.length
-                                            },
-                                            body: out
-                                        })
-                                    },
-                                    onSelect: function (valueObj, model, context) {
-                                        PageHelper.showLoader()
-                                        Enrollment.search({"urnNo":valueObj.enrolledUrnNo}).$promise.then(function(resp){
-                                            Enrollment.getCustomerById({id:resp.body[0].id}).$promise.then(function(resp){
-                                                var temp = model.loanProcess.loanAccount.loanCustomerRelations;
-                                                for(i=0;i<temp.length;i++){
-                                                    if(temp[i].customerId == resp.id ){
-                                                        PageHelper.showProgress('enrollment','This customer is already selected',2000);
-                                                        PageHelper.hideLoader();
-                                                        return;
-                                                    }
-                                                }
-                                                model.customer = resp;
-                                                PageHelper.hideLoader();
-                                                model.enrolmentProcess.customer = resp;
-                                                    model.loanProcess.loanAccount.loanCustomerRelations.push({customerId:resp.id,name:resp.firstName,relation:"Co-Applicant",urn:resp.urnNo});
-                                                    BundleManager.pushEvent("new-enrolment",model._bundlePageObj,{customer:resp});
-
-                                            })
-                                        })
-                                    },
-                                    getListDisplayItem: function (item, index) {
-                                        return [
-                                            item.familyMemberFirstName
-                                        ];
-                                    }
-                                }
                             }
                         }
                     }
@@ -634,7 +581,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         "KYC.customerId":{
                             orderNo:10,
                             required:true,
-                            condition:"!model.customer.customerId || (model.currentStage=='Screening' && model.pageClass=='guarantor' || model.pageClass =='co-applicant')",
+                            condition:"!model.customer.customerId && (model.currentStage=='Screening' &&  (model.pageClass=='applicant' || model.pageClass=='guarantor'))",
                             initialize: function(model, form, parentModel, context) {
                                 model.customerBranchId = parentModel.customer.customerBranchId;
                                 model.centreId = parentModel.customer.centreId;
@@ -792,6 +739,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
                                     })
                             }
+                        },
+                        "KYC.coApplicantcustomerId":{
+                            condition : "model.currentStage == 'Screening' && model.pageClass =='co-applicant'",  
                         },
                         "KYC.identityProofFieldSet":{
                             orderNo: 20,
@@ -1330,6 +1280,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                 
                 "KYC",
                 "KYC.customerId",
+                "KYC.coApplicantcustomerId",
                 "KYC.identityProofFieldSet",
                 "KYC.identityProof",
                 "KYC.identityProofImageId",
@@ -1534,6 +1485,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         }
                                     }
                                 },
+                                
                                 "KYC":{
                                         "items":{
                                             "addressProofSameAsIdProof": {
@@ -1541,6 +1493,63 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 key: "customer.addressProofSameAsIdProof",
                                                 title:"ADDRESS_PROOF_SAME_AS_ID",
                                                 condition: "model.customer.identityProof != 'Pan Card'"
+                                            },
+                                            "coApplicantcustomerId": {
+                                                key: "customer.id",
+                                                orderNo:10,
+                                                type: "lov",
+                                                title: "CUSTOMER_SEARCH",
+                                                autolov: true,
+                                                lovonly: true,
+                                                bindMap: {},
+                                                inputMap: {},
+                                                outputMap:{},
+                                                searchHelper: formHelper,
+                                                search: function (inputModel, form, model, context) {
+                                                    var temp = model.loanProcess.applicantEnrolmentProcess.customer.familyMembers;
+                                                    var temp2 = model.loanProcess.applicantEnrolmentProcess.customer;
+                                                    var out = [];
+                                                    if(temp){
+                                                   for(i=0;i<temp.length;i++)
+                                                    {
+                                                       if(temp[i].enrolledUrnNo != null && temp[i].enrolledUrnNo != "" && temp[i].enrolledUrnNo != temp2.urnNo){
+                                                           out.push(temp[i]);
+                                                       }
+                                                    } 
+                                                    }  
+                                                   return $q.resolve( {
+                                                        headers: {
+                                                            "x-total-count": out.length
+                                                        },
+                                                        body: out
+                                                    })
+                                                },
+                                                onSelect: function (valueObj, model, context) {
+                                                    PageHelper.showLoader()
+                                                    Enrollment.search({"urnNo":valueObj.enrolledUrnNo}).$promise.then(function(resp){
+                                                        Enrollment.getCustomerById({id:resp.body[0].id}).$promise.then(function(resp){
+                                                            var temp = model.loanProcess.loanAccount.loanCustomerRelations;
+                                                            for(i=0;i<temp.length;i++){
+                                                                if(temp[i].customerId == resp.id ){
+                                                                    PageHelper.showProgress('enrollment','This customer is already selected',2000);
+                                                                    PageHelper.hideLoader();
+                                                                    return;
+                                                                }
+                                                            }
+                                                            model.customer = resp;
+                                                            PageHelper.hideLoader();
+                                                            model.enrolmentProcess.customer = resp;
+                                                                model.loanProcess.loanAccount.loanCustomerRelations.push({customerId:resp.id,name:resp.firstName,relation:"Co-Applicant",urn:resp.urnNo});
+                                                                BundleManager.pushEvent("new-enrolment",model._bundlePageObj,{customer:resp});
+            
+                                                        })
+                                                    })
+                                                },
+                                                getListDisplayItem: function (item, index) {
+                                                    return [
+                                                        item.familyMemberFirstName
+                                                    ];
+                                                }
                                             }
                                         }
                                 },
