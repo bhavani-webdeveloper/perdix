@@ -5,8 +5,6 @@
          "code":"Initiation",
          "name":"Initiation",
          "stageType":"CAPTURE",
-         "sendSms":"Yes",
-         "smsCategory":"ODCollection",
          "isBankAccountReversal":true,
          "allowedRoles":[
             "WM"
@@ -29,8 +27,6 @@
          "code":"BRSValidation",
          "name":"BRSValidation",
          "stageType":"CAPTURE",
-         "sendSms":"No",
-         "smsCategory":"ODCollection",
          "brsStage":"yes",
          "allowedRoles":[
             "APPROVER"
