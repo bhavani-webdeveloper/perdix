@@ -41,8 +41,8 @@
         "code":"ScreeningReview",
         "name":"Screening Review",
         "stageType":"CAPTURE",
-        "sendSms":"No",
-        "smsCategory":"LoanBooking",
+        "sendSms":"Yes",
+        "smsCategory":"ScreeningReview",
         "isAccountOpening":false,
         "allowedRoles":[
            "WM"
@@ -53,7 +53,7 @@
         "code":"BusinessApproval1",
         "name":"Business Approval 1",
         "stageType":"CAPTURE",
-        "sendSms":"Yes",
+        "sendSms":"No",
         "smsCategory":"LoanBooking",
         "isAccountOpening":false,
         "allowedRoles":[
@@ -65,7 +65,7 @@
         "code":"CreditApproval1",
         "name":"Credit Approval 1",
         "stageType":"CAPTURE",
-        "sendSms":"Yes",
+        "sendSms":"No",
         "smsCategory":"LoanBooking",
         "isAccountOpening":false,
         "allowedRoles":[
@@ -77,7 +77,7 @@
         "code":"CreditApproval2",
         "name":"Credit Approval 2",
         "stageType":"CAPTURE",
-        "sendSms":"Yes",
+        "sendSms":"No",
         "smsCategory":"LoanBooking",
         "isAccountOpening":false,
         "allowedRoles":[
@@ -89,7 +89,7 @@
         "code":"CreditApproval3",
         "name":"Credit Approval 3",
         "stageType":"CAPTURE",
-        "sendSms":"Yes",
+        "sendSms":"No",
         "smsCategory":"LoanBooking",
         "isAccountOpening":false,
         "allowedRoles":[
@@ -137,7 +137,7 @@
         "code":"LoanBooking",
         "name":"Loan Booking",
         "stageType":"CAPTURE",
-        "sendSms":"No",
+        "sendSms":"Yes",
         "smsCategory":"LoanBooking",
         "isAccountOpening":true,
         "allowedRoles":[

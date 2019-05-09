@@ -103,7 +103,7 @@
          "code":"ReadyForDisbursement",
          "name":"Ready For Disburse",
          "stageType":"DISBURSE",
-         "sendSms":"Yes",
+         "sendSms":"No",
          "smsCategory":"SentForDisbursement",
          "allowedRoles":[
             "WM"
@@ -132,7 +132,7 @@
          "name":"Disbursement Confirmation",
          "stageType":"DISBURSEMENTCONFIRMATION",
          "sendSms":"Yes",
-         "smsCategory":"Disbursed",
+         "smsCategory":"SentForDisbursement",
          "documentTrackingRequired":"Yes",
          "allowedRoles":[
             "WM"
