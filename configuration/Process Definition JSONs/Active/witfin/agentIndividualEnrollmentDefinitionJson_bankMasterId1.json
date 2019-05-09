@@ -1250,7 +1250,6 @@
             "items": {
               "type": "object",
               "required": [
-                "educationStatus"
               ],
               "properties": {
                 "familyMemberFirstName": {
