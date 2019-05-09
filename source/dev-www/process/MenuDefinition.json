@@ -114,12 +114,8 @@
                 "Page/Engine/management.TaggingMaintenance",
                 "Page/ReferenceCodeDashboard",
                 "Page/Adhoc/management.BranchCreationDashboard",
-<<<<<<< Updated upstream
                 "Page/Adhoc/management.VillageCreationDashboard",
-                "Page/Adhoc/management.bankadmin.BankAdminDashboard",
-=======
                 "Page/Adhoc/management.branchadmin.BranchAdminDashboard",
->>>>>>> Stashed changes
                 "Page/ScoreParameterMaintenanceDashboard",
                 "Page/CentreCreationDashboard",
                 "Page/UserDashboard",
