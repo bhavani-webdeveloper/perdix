@@ -27,7 +27,7 @@ var fileSystem = {
 	errorHandler: function(e) {
 		console.log("Storage failed");
 		console.error(e);
-		isReady = true;
+		fileSystem.isReady = true;
 		const event = new CustomEvent('file-system-ready',{
 			detail:{
 				value:'data'
@@ -37,7 +37,7 @@ var fileSystem = {
 	}
 };
 
-if (irf.appConfig.FILESYSTEM_ENABLED) {
+if ( irf.appConfig.FILESYSTEM_ENABLED ) {
 
 window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
 if (navigator.webkitPersistentStorage && window.requestFileSystem) {
