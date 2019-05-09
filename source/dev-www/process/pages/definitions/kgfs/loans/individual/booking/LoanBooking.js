@@ -1183,15 +1183,15 @@ define([], function () {
                         }
                     }
                     
-                    if (typeof model.loanAccount.sanctionDate == "undefined" || model.loanAccount.sanctionDate == "" || model.loanAccount.sanctionDate == null) {
-                        model.loanAccount.sanctionDate = moment(new Date()).format("YYYY-MM-DD");
-                    }
+                    // if (typeof model.loanAccount.sanctionDate == "undefined" || model.loanAccount.sanctionDate == "" || model.loanAccount.sanctionDate == null) {
+                    //     model.loanAccount.sanctionDate = moment(new Date()).format("YYYY-MM-DD");
+                    // }
                     if (typeof model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate == "undefined" || model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate == "" || model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate == null) {
-                        var disbursementSchedules = moment(new Date()).add(2, "d").format("YYYY-MM-DD");
+                        var disbursementSchedules = moment(model.loanAccount.sanctionDate).add(2, "d").format("YYYY-MM-DD");
                         model.loanAccount.disbursementSchedules[0].scheduledDisbursementDate = disbursementSchedules;
                     }
                     if (typeof model.loanAccount.firstRepaymentDate == "undefined" || model.loanAccount.firstRepaymentDate == "" || model.loanAccount.firstRepaymentDate == null) {
-                        model.loanAccount.firstRepaymentDate = moment(new Date()).add(30, "d").format("YYYY-MM-DD");
+                        model.loanAccount.firstRepaymentDate = moment(model.loanAccount.sanctionDate).add(30, "d").format("YYYY-MM-DD");
                     }
 
                     /* ornamentsAppraisals */
