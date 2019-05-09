@@ -2012,6 +2012,11 @@ define([],function(){
                             model.loanAccount.cbCheckCompletedFlag=false;
                         }
 
+
+                         if(!(policyBasedOnLoanType(model.loanAccount.loanType,model))){
+                            PageHelper.showProgress('loan-process','Oops Some Error',2000);
+                            return false;}
+
                          /* ornamentsAppraisals */
                         if (_.hasIn(model.loanAccount, 'ornamentsAppraisals') && _.isArray(model.loanAccount.ornamentsAppraisals)){
                             for (var i=0; i<model.loanAccount.ornamentsAppraisals.length; i++){
@@ -2027,9 +2032,7 @@ define([],function(){
                         if(!savePolicies(model)){
                             PageHelper.showProgress('loan-process','Oops Some Error',2000);
                             return false;}
-                        if(!(policyBasedOnLoanType(model.loanAccount.loanType,model))){
-                            PageHelper.showProgress('loan-process','Oops Some Error',2000);
-                            return false;}
+                       
                         setDeviation(model);                                                    
                         model.loanProcess.save()
                             .finally(function () {
