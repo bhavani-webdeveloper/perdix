@@ -31,8 +31,7 @@ define({
 						if ((centres[i].parentCode) == branchCode) {
 							centreName.push(centres[i].name);
 						}
-					}
-*/
+					} */
 		return {
 			"type": "search-list",
 			"title": siteCode == 'sambandh' || siteCode == 'saija' ? "READY_FOR_ENROLLMENT" :"READY_FOR_SCREENING",
