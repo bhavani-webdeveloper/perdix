@@ -2649,14 +2649,7 @@ define([],function(){
                                 if(model.loanAccount.cbCheckIgnore == "YES") {
                                     irfNavigator.goBack();
                                 } else {
-                                    if(model.currentStage == 'ReadyForScreening'){
-                                        irfNavigator.go({
-                                            'state': 'Page.Adhoc',
-                                            'pageName': 'shramsarathi.dashboard.loans.LoanOriginationDashboard',
-                                            'pageId': null
-                                        })
-                                    }
-                                    else if(model.currentStage != 'Screening') {
+                                    if(model.currentStage != 'Screening') {
                                         irfNavigator.goBack(); 
                                     }
                                 }
