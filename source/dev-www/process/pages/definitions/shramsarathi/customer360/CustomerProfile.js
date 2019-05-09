@@ -2076,7 +2076,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                         "required": true,
                     },
                     "IndividualInformation.fatherFirstName": {
-                        "required": false,
+                        "required": true,
                         "title": "FATHER_NAME"
                     },
                     "ContactInformation.mobilePhone":{
@@ -2786,6 +2786,23 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                 if(model.customer.dateOfBirth !=null || model.customer.dateOfBirth != undefined){
                     model.customer.age = moment().diff(moment(model.customer.dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
                 }
+                if(model.customer.currentAssets!== undefined){
+                    if(model.customer.currentAssets.length > 0){
+                        for(var i=0;i<model.customer.currentAssets.length;i++){
+                            model.customer.currentAssets[i].titleExpr = model.customer.currentAssets[i].assetType;
+                        }
+                       
+                    }
+                }
+              
+                 if(model.customer.physicalAssets!== undefined){
+                if(model.customer.physicalAssets.length > 0)
+                {
+                    for(var i=0;i<model.customer.physicalAssets.length;i++){
+                        model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
+                    }
+                } 
+                } 
                
                   PageHelper.hideLoader();
               },function(resp){
@@ -3816,15 +3833,24 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                         model.customer.familyMembers[i].educationStatus = obj.educationStatus;
                                     }
                                 }
+                                if(model.customer.currentAssets!== undefined){
+                                    if(model.customer.currentAssets.length > 0){
+                                        for(var i=0;i<model.customer.currentAssets.length;i++){
+                                            model.customer.currentAssets[i].titleExpr = model.customer.currentAssets[i].assetType;
+                                        }
+                                       
+                                    }
+                                }
+                              
+                                 if(model.customer.physicalAssets!== undefined){
+                                if(model.customer.physicalAssets.length > 0)
+                                {
+                                    for(var i=0;i<model.customer.physicalAssets.length;i++){
+                                        model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
+                                    }
+                                } 
+                                }  
                             })
-
-
-
-
-
-
-
-
                     },
                     "origination-stage": function (bundleModel, model, obj) {
                         model.currentStage = obj
@@ -3908,7 +3934,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                 model.customer.physicalAssets[i].titleExpr = model.customer.physicalAssets[i].nameOfOwnedAsset;
                             }
                         } 
-                        }  
+                        }
                         
                     }
                     
