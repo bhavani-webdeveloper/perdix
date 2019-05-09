@@ -47,10 +47,10 @@
                ]
             },
             "verification":{  
-               "type":"array",
+               "type":"object",
                "minItems":1,
                "items":{  
-                  "type":"object",
+                  "type":"array",
                   "required":[  
                      "houseNo",
                      "houseNoIsVerified",
@@ -204,79 +204,64 @@
                      }
                   }
                }
-            },
-            "required":[  
-               "doorNo",
-               "religion",
-               "caste",
-               "language",
-               "houseVerificationPhoto",
-               "latitude",
-               "longitude",
-               "verification"
-            ]
-         },
-         "coApplicants":{  
-            "type":"array",
-            "minItems":0,
-            "items":{  
-               "type":"object",
-               "properties":{  
-                  "doorNo":{  
-                     "type":"string"
-                  }
-               },
-               "required":[  
-                  "doorNo"
-               ]
             }
          },
-         "gaurantors":{  
-            "type":"array",
-            "minItems":0,
-            "items":{  
-               "type":"object",
-               "properties":{  
-                  "doorNo":{  
-                     "type":"string"
-                  }
-               },
-               "required":[  
-                  "doorNo"
-               ]
-            }
-         },
-         "enterprise":{  
+         "required":[  
+            "doorNo",
+            "religion",
+            "caste",
+            "language",
+            "houseVerificationPhoto",
+            "latitude",
+            "longitude"
+         ]
+      },
+      "coApplicants":{  
+         "type":"array",
+         "minItems":0,
+         "items":{  
             "type":"object",
             "properties":{  
                "doorNo":{  
-                  "type":[  
-                     "string",
-                     "null"
-                  ]
-               },
-               "required":[  
-                  "doorNo"
+                  "type":"string"
+               }
+            },
+            "required":[  
+               
+            ]
+         }
+      },
+      "gaurantors":{  
+         "type":"array",
+         "minItems":0,
+         "items":{  
+            "type":"object",
+            "properties":{  
+               "doorNo":{  
+                  "type":"string"
+               }
+            },
+            "required":[  
+               
+            ]
+         }
+      },
+      "enterprise":{  
+         "type":"object",
+         "properties":{  
+            "doorNo":{  
+               "type":[  
+                  "string",
+                  "null"
                ]
             }
          },
-         "loanAccount":{  
-            "type":"object",
-            "properties":{  
-               "accountNumber":{  
-                  "type":[  
-                     "string",
-                     "null"
-                  ]
-               },
-               "required":[  
-                  "accountNumber"
-               ]
-            }
-         }
-      },
-      "required":[  
-         "applicant"
-      ]
-   }
+         "required":[  
+            
+         ]
+      }
+   },
+   "required":[  
+      "applicant"
+   ]
 }
