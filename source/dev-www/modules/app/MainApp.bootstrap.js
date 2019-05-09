@@ -23,10 +23,11 @@ var userAgent = {
 
 var fileSystem = {
 	root: null,
+	isReady: false,
 	errorHandler: function(e) {
 		console.log("Storage failed");
 		console.error(e);
-		internalEventCallFlag = true;
+		fileSystem.isReady = true;
 		const event = new CustomEvent('file-system-ready',{
 			detail:{
 				value:'data'
@@ -35,7 +36,8 @@ var fileSystem = {
 		document.dispatchEvent(event);
 	}
 };
-var internalEventCallFlag = false;
+
+if ( irf.appConfig.FILESYSTEM_ENABLED ) {
 
 window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
 if (navigator.webkitPersistentStorage && window.requestFileSystem) {
@@ -73,11 +75,15 @@ if (navigator.webkitPersistentStorage && window.requestFileSystem) {
 				}
 			})
 			document.dispatchEvent(event);
-			internalEventCallFlag = true;
+			fileSystem.isReady = true;
 		}, fileSystem.errorHandler);
 	}, function(e) {
 		alert("Storage permission denied, Please approve storage permission for continuous access. " + e);
 	});
+}
+
+} else {
+	fileSystem.isReady = true;
 }
 
 var MSIE = {

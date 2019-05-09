@@ -162,99 +162,109 @@ function($log,$q,rcResource,$rootScope, SessionStore, $filter, Utils){
 		}
 		return deferred.promise;
 	}
-	var factoryObj = {
-		storeMaster: function(value) {
-			var deferred = $q.defer()
-			var internalFlag = true;
-			document.addEventListener('file-system-ready',(e)=>{
-				if(internalFlag){
-					internalEventCallFlag = true;
-				if (fileSystem.root) {
-					removeMasterFile().finally(function (){
-						try {
-							fileSystem.root.getFile('irfMasters', {create: true}, function(fileEntry) {
-								fileEntry.createWriter(function(fileWriter) {
-									fileWriter.onwriteend = function() {
-										deferred.resolve();
-									};
-									fileWriter.onerror = function() {
-										fileSystem.errorHandler(e);
-										deferred.reject(e);
-									};
-									var blob = new Blob([JSON.stringify(value)], {type: 'application/json'});
-									fileWriter.write(blob);
-								}, function(e) {
-									fileSystem.errorHandler(e);
-									deferred.reject(e);
-								});
-							}, function(e) {
+
+	var f1 = function(value) {
+		var deferred = $q.defer();
+		if (fileSystem.root) {
+			removeMasterFile().finally(function (){
+				try {
+					fileSystem.root.getFile('irfMasters', {create: true}, function(fileEntry) {
+						fileEntry.createWriter(function(fileWriter) {
+							fileWriter.onwriteend = function() {
+								deferred.resolve();
+							};
+							fileWriter.onerror = function() {
 								fileSystem.errorHandler(e);
 								deferred.reject(e);
-							});
+							};
+							var blob = new Blob([JSON.stringify(value)], {type: 'application/json'});
+							fileWriter.write(blob);
+						}, function(e) {
+							fileSystem.errorHandler(e);
+							deferred.reject(e);
+						});
+					}, function(e) {
+						fileSystem.errorHandler(e);
+						deferred.reject(e);
+					});
+				} catch (e) {
+					deferred.reject(e);
+				}
+			},function(e){
+				deferred.reject(e);
+			});
+		} else {
+			deferred.resolve($q.resolve(factoryObj.storeJSON('irfMasters', value)));
+		}
+		return deferred.promise;
+	};
+	var f2 = function() {
+		var deferred = $q.defer();
+		if (fileSystem.root) {
+			try {
+			fileSystem.root.getFile('irfMasters', {}, function(fileEntry) {
+				fileEntry.file(function(file) {
+					var reader = new FileReader();
+					reader.onloadend = function(e) {
+						try {
+							var json = JSON.parse(this.result);
+							deferred.resolve(json);
 						} catch (e) {
 							deferred.reject(e);
 						}
-					},function(e){
-						deferred.reject(e);
-					});
-				} else {
-					deferred.resolve($q.resolve(factoryObj.storeJSON('irfMasters', value)));
-				}
-				}
-				internalFlag = false;
-			})
-			if(internalEventCallFlag){
-				const event = new CustomEvent('file-system-ready',{
-					detail:{
-						value:'data'
-					}
-				})
-				document.dispatchEvent(event);
+					};
+					reader.readAsText(file);
+				});
+			}, function(e) {
+				deferred.reject(e);
+			});
+			} catch (e) {
+				deferred.reject(e);
+			}
+		} else {
+			deferred.resolve($q.resolve(factoryObj.retrieveJSON('irfMasters')));
+		}
+		return deferred.promise;
+	}
+
+	var factoryObj = {
+		storeMaster: function(value) {
+			var deferred = $q.defer()
+			if(fileSystem.isReady){
+				f1(value).then(function(resp){
+					deferred.resolve(resp);
+				},function(err){
+					deferred.reject(err);
+				});
+			} else {
+				document.addEventListener('file-system-ready',function(e){
+					f1(value).then(function(resp){
+						deferred.resolve(resp);
+					},function(err){
+						deferred.reject(err);
+					})
+				});
 			}
 			return deferred.promise;
-			
 		},
 		retrieveMaster: function() {
-			var deferred = $q.defer();
-			var internalFlag = true;
-			document.addEventListener('file-system-ready',(e)=>{
-				if (internalFlag){
-					if (fileSystem.root) {
-					try {
-					fileSystem.root.getFile('irfMasters', {}, function(fileEntry) {
-						fileEntry.file(function(file) {
-							var reader = new FileReader();
-							reader.onloadend = function(e) {
-								try {
-									var json = JSON.parse(this.result);
-									deferred.resolve(json);
-								} catch (e) {
-									deferred.reject(e);
-								}
-							};
-							reader.readAsText(file);
-						});
-					}, function(e) {
-						deferred.reject(e);
-					});
-					} catch (e) {
-						deferred.reject(e);
-					}
-					} else {
-				 	deferred.resolve($q.resolve(factoryObj.retrieveJSON('irfMasters')));
-					}
+				var deferred = $q.defer();
+				if(fileSystem.isReady){
+					f2().then(function(resp){
+						deferred.resolve(resp);
+					},function(err){
+						deferred.reject(err);
+					})
+				} else{
+					document.addEventListener('file-system-ready',(e)=>{
+						f2().then(function(resp){
+							deferred.resolve(resp);
+						},function(err){
+							deferred.resolve(err);
+						})
+					})
 				}
-				internalFlag = false;
-			})
-			if(internalEventCallFlag){
-				const event = new CustomEvent('file-system-ready',{
-					detail:{
-						value:'data'
-					}
-				})
-				document.dispatchEvent(event);
-			}
-			return deferred.promise;
+				return deferred.promise;
 		},
 		storeJSON: function(key, value){
 			try {
