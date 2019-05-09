@@ -115,7 +115,7 @@ define({
 				<td style="text-align:right">{{model.portfolioAnalytics.emi.toLocaleString("en-in")}}</td>
 			</tr>
 			<tr>
-				<td>{{"Kinara EMI % to MC ABB" | translate}}</td>
+				<td>{{"Kinara EMI % to ABB" | translate}}</td>
 				<td style="text-align:right">{{model.portfolioAnalytics.emiBankBalancePercentage.toFixed(3)}}</td>
 			</tr>
 		</tbody>
