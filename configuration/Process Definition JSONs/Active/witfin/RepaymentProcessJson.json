@@ -15,7 +15,7 @@
          "code":"Deposit",
          "name":"Deposit",
          "stageType":"DEPOSIT",
-         "sendSms":"Yes",
+         "sendSms":"No",
          "smsCategory":"ODCollection",
          "isBankAccountReversal":true,
          "allowedRoles":[
@@ -27,6 +27,8 @@
          "code":"BRSValidation",
          "name":"BRSValidation",
          "stageType":"CAPTURE",
+         "sendSms":"No",
+         "smsCategory":"ODCollection",
          "brsStage":"yes",
          "allowedRoles":[
             "APPROVER"
