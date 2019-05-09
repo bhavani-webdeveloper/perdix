@@ -2649,12 +2649,15 @@ define([],function(){
                                 if(model.loanAccount.cbCheckIgnore == "YES") {
                                     irfNavigator.goBack();
                                 } else {
-                                    if(model.currentStage != 'Screening') {
-                                        irfNavigator.goBack(); 
+                                    if(model.currentStage == 'Screening'){
+                                        irfNavigator.go({
+                                            'state': 'Page.Adhoc',
+                                            'pageName': 'shramsarathi.dashboard.loans.LoanOriginationDashboard',
+                                            'pageId': null
+                                        })
                                     }
                                 }
-                                irfNavigator.goBack();
-
+                                // irfNavigator.goBack();
                             }, function (err) {
                                 PageHelper.showErrors(err);
                                 PageHelper.showProgress('enrolment', 'Oops. Some error.', 5000);                           

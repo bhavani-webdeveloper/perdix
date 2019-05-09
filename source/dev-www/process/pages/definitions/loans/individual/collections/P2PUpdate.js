@@ -299,6 +299,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         key: "promise.promiseToPay",
                                         type: "radios",
                                         required: true,
+                                        "condition": "model.siteCode != 'shramsarathi'",
                                         title: "P2P_DATA_PROVIDED",
                                         "titleMap": {
                                             "YES": "YES",
@@ -310,7 +311,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         title: "P2P_DATE",
                                         readonly: false,
                                         required: true,
-                                        "condition": "model.promise.promiseToPay=='YES'",
+                                        "condition": "model.promise.promiseToPay=='YES'  && model.siteCode != 'shramsarathi'",
                                         type: "date",
                                         "onChange": function (value, form, model, event) {
                                             model.validateP2PDate(model);
@@ -322,7 +323,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         title: "RECOVERY_ATTEMPT",
                                         type: "select",
                                         required: true,
-                                        "condition": "model.promise.promiseToPay=='NO'",
+                                        "condition": "model.promise.promiseToPay=='NO'  && model.siteCode != 'shramsarathi'",
                                         enumCode: "recovery_attempt",
                                     },
                                     {
@@ -330,7 +331,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         title: "SUB_STATUS",
                                         type: "select",
                                         required: true,
-                                        "condition": "model.promise.promiseToPay=='NO'",
+                                        "condition": "model.promise.promiseToPay=='NO' && model.siteCode != 'shramsarathi'",
                                         enumCode: "collection_sub_status",
                                         parentEnumCode: "recovery_attempt",
                                         parentValueExpr:"model.additional.currentCollectionStatus",
@@ -339,6 +340,7 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         key: "additional.reasonType",
                                         title: "REASON_FOR_DELAY",
                                         type: "select",
+                                        "condition" : "model.siteCode != 'shramsarathi'",
                                         required: true,
                                         titleMap: {
                                             "Business not running":"Business not running",
@@ -349,6 +351,65 @@ function($log, $q, ManagementHelper, LoanProcess, PageHelper,formHelper,irfProgr
                                         },
 
                                     },
+
+                                    {
+                                        key: "promise.promiseToPay",
+                                        type: "radios",
+                                        "condition" : "model.siteCode == 'shramsarathi'",
+                                        required: false,
+                                        title: "P2P_DATA_PROVIDED",
+                                        "titleMap": {
+                                            "YES": "YES",
+                                            "NO": "NO"
+                                        }
+                                    },
+                                    {
+                                        key: "additional.promiseToPayDate",
+                                        title: "P2P_DATE",
+                                        readonly: false,
+                                        required: false,
+                                        "condition": "model.promise.promiseToPay=='YES' && model.siteCode == 'shramsarathi'",
+                                        type: "date",
+                                        "onChange": function (value, form, model, event) {
+                                            model.validateP2PDate(model);
+                                        }
+
+                                    },
+                                    {
+                                        key: "additional.currentCollectionStatus",
+                                        title: "RECOVERY_ATTEMPT",
+                                        type: "select",
+                                        required: false,
+                                        "condition": "model.promise.promiseToPay=='NO' && model.siteCode == 'shramsarathi'",
+                                        enumCode: "recovery_attempt",
+                                    },
+                                    {
+                                        key: "additional.collectionSubStatus",
+                                        title: "SUB_STATUS",
+                                        type: "select",
+                                        required: false,
+                                        "condition": "model.promise.promiseToPay=='NO'  && model.siteCode == 'shramsarathi'",
+                                        enumCode: "collection_sub_status",
+                                        parentEnumCode: "recovery_attempt",
+                                        parentValueExpr:"model.additional.currentCollectionStatus",
+                                    },
+                                    {
+                                        key: "additional.reasonType",
+                                        title: "REASON_FOR_DELAY",
+                                        type: "select",
+                                        "condition":"model.siteCode == 'shramsarathi'",
+                                        required: false,
+                                        titleMap: {
+                                            "Business not running":"Business not running",
+                                            "Hardship": "Hardship",
+                                            "Wilful default":"Wilful default",
+                                            "Can pay":"Can pay",
+                                            "Others":"Others"
+                                        },
+
+                                    },
+
+
                                     // {
                                     //     key: "additional.reason",
                                     //     title: "REASON",
