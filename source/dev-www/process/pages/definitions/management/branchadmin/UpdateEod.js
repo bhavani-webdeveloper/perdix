@@ -1,6 +1,6 @@
 define(['perdix/infra/api/AngularResourceService'], function (AngularResourceService) {
     return {
-        pageUID: "management.bankadmin.UpdateEod",
+        pageUID: "management.branchadmin.UpdateEod",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
             "PageHelper", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","irfNavigator","Transaction","BranchCreationResource"],
