@@ -145,7 +145,6 @@ define({
                 model._screenMode = 'VIEW';
                 PageHelper.showLoader();
                 irfProgressMessage.pop("cust-load", "Loading Customer Data...");
-                model.workflow = model.workflow || {};
                 if (workflowId != undefined || workflowId != null) {
                     update(model, workflowId);
 
