@@ -15,7 +15,7 @@
          "code":"Deposit",
          "name":"Deposit",
          "stageType":"DEPOSIT",
-         "sendSms":"No",
+         "sendSms":"Yes",
          "smsCategory":"ODCollection",
          "isBankAccountReversal":true,
          "allowedRoles":[
