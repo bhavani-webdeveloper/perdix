@@ -113,7 +113,7 @@
         "code":"LoanInitiation",
         "name":"Loan Input",
         "stageType":"CAPTURE",
-        "sendSms":"Yes",
+        "sendSms":"No",
         "smsCategory":"Sanction",
         "isAccountOpening":false,
         "allowedRoles":[
@@ -138,7 +138,7 @@
         "name":"Loan Booking",
         "stageType":"CAPTURE",
         "sendSms":"Yes",
-        "smsCategory":"LoanBooking",
+        "smsCategory":"Sanction",
         "isAccountOpening":true,
         "allowedRoles":[
            "WM"
