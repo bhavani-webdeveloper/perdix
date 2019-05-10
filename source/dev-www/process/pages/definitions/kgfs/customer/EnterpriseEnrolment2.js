@@ -267,7 +267,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "orderNo": 60
                     },
                     "EnterpriseInformation.latitude": {
-                        "readonly": true,
+                      //  "readonly": true,
                         "required": true,
                         "orderNo": 70
                     },
