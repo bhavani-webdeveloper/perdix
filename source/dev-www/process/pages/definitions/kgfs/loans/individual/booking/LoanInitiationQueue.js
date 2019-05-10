@@ -33,6 +33,13 @@ define({
                                 "screenFilter": true
                             }
                         },
+                        "centre": {
+                            "title": "CENTRE",
+                            "type": ["integer", "null"],
+                            "x-schema-form":{
+                                "type": "select",
+                                "enumCode": "usercentre",
+                        },
                         "applicantName": {
                         "title": "CUSTOMER_NAME",
                         "type": "string"
@@ -69,6 +76,7 @@ define({
                     var promise = IndividualLoan.search({
                         'stage': 'LoanInitiation',
                         'branchId': searchOptions.branch,
+                        'centreCode': searchOptions.centre,
                         'applicantName': searchOptions.applicantName,
                         'urn': searchOptions.urn,
                         'loanType':searchOptions.loanType,
