@@ -1408,7 +1408,7 @@ define([],function(){
                     }
                     /* Collateral */
 
-                    //added for frequency to be locked monthly
+                    // added for frequency to be locked monthly
                     if(model.loanAccount.currentStage == "Screening"){
                        if(model.loanAccount.frequency == undefined || model.loanAccount.frequency == null){
                         model.loanAccount.frequency="M";
@@ -1453,16 +1453,17 @@ define([],function(){
                                                 "title": "FREQUENCY",
                                                 "type": "select",
                                                 "orderNo": 9,
-                                                "readonly":true,
-                                                "condition":"(model.loanAccount.productCategory == 'MEL')"
+                                                "readonly":false,
+                                                "condition":"(model.loanAccount.productCategory != 'MEL')"
                                             },
                                             "melFrequency": {
                                                 "key":"loanAccount.frequency",
                                                 "title": "FREQUENCY",
                                                 "type": "select",
                                                 "orderNo": 9,
-                                                "readonly":false,
-                                                "condition":"(model.loanAccount.productCategory != 'MEL')"
+                                                "enumCode":"loan_product_frequency",
+                                                "readonly":true,
+                                                "condition":"(model.loanAccount.productCategory == 'MEL')"
                                             },
                                             "loanProduct": {
                                                 "key":"loanAccount.productCode",
