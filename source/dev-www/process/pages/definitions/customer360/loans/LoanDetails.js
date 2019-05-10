@@ -149,6 +149,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     model.additional = {
                         "isLoanDocBox": true
                     };
+                    // model.additional.insuranceFormHtml = "sfsf";
 
                     PagesDefinition.getRolePageConfig("Page/Engine/customer360.loans.LoanDetails")
                         .then(function (data) {
@@ -180,6 +181,21 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                         .$promise
                         .then(function (res) {
                             model.loanAccount = res;
+                            var promiseArray = [];
+                            if (!model.loanAccount.bcAccount || model.loanAmount.bcAccount == null){
+                                promiseArray.push(Queries.isLoanDisbursed(model.loanAccount.id).then(function(resp){
+                                    if (resp.length > 0){
+                                        if (resp[0].currentStage != 'ReadyForDisbursement'){
+                                            model.additional.isInsuranceForm = true;
+                                            model.additional.insuranceFormHtml = "<a href ='' class='color-theme' ng-click='model.additional.insuranceFormDownload()'>Download</a>"
+                                            model.additional.insuranceFormDownload = function(){
+                                                Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=bajaj_insurance&record_id=" + model.loanAccount.id);
+                                            }
+                                        }
+                                    }   
+                                    
+                                },function(err){}))
+                            }
                             if (model.loanAccount.loanType == "JLG") {
                                 if (model.loanAccount.loanDocuments.length > 0) {
                                     model.additional.isLoanDocBox = true;
@@ -190,9 +206,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                 model.additional.isLoanDocBox = true;
                             }
                             uploadedExistingDocs = res.loanDocuments;
-
                             model.loanAccount.processingFee = model.loanAccount.processingFeeInPaisa ? model.loanAccount.processingFeeInPaisa / 100 : 0;
-                            var promiseArray = [];
                             if (model.loanAccount.loanDocuments && model.loanAccount.loanDocuments.length > 0) {
                                 for (documents of model.loanAccount.loanDocuments) {
                                     if (documents.document == 'WAIVERAPPROVAL') {
@@ -215,6 +229,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                     model.showmessageHistory = true;
                                 });
                             }
+        
                             if (_.hasIn(model.loanAccount, 'accountNumber') && !_.isNull(model.loanAccount.accountNumber)) {
                                 var loanpromise = LoanAccount.get({
                                         accountId: model.loanAccount.accountNumber
@@ -222,9 +237,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                     .$promise
                                     .then(
                                         function (res) {
-
                                             model.cbsLoan = res;
-
                                             /* DATE FIXES */
                                             if (model.cbsLoan.accountOpenDate)
                                                 model.cbsLoan.accountOpenDate = Utils.dateToLocalTZ(model.cbsLoan.accountOpenDate).format("D-MMM-YYYY");
@@ -547,7 +560,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                         "data":"<div><i class='fa fa-print'></i></div>",
                                                         'format' : 'html',
                                                         'onClick':function(col,index){
-                                                            debugger;
+                                                            
                                                             console.log(model);
                                                             var listTrans = model.cbsLoan.transactions.filter(function(o){
                                                                 return o.transactionId == col.transactionId;
@@ -2438,6 +2451,11 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                 "fileType": "*/*",
                                 "category": "Loan",
                                 "subCategory": "DOC1"
+                            },{
+                                "title":"INSURANCE_FORM",
+                                "key":"additional.insuranceFormHtml",
+                                "type":"html",
+                                "condition":"model.additional.isInsuranceForm",
                             },
                             {
                                 "type": "fieldset",
@@ -3028,6 +3046,9 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             PageHelper.hideLoader();
                         });
 
+                    },
+                    insuranceForm :function(model,form,formName){
+                        console.log('Here')
                     }
                 }
             };
