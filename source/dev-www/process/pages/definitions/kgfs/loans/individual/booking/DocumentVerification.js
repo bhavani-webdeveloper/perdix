@@ -51,11 +51,12 @@ define({
                             var documentObj = LoanBookingCommons.getDocumentDetails(docsForProduct, loanDocuments[i].document);
                             if (documentObj != null) {
                                 loanDocuments[i].$title = documentObj.document_name;
+                                loanDocuments[i].$formsKey = documentObj.forms_key;
                             } else {
                                 if (_.hasIn(loanDocuments[i],'document') && _.isString(loanDocuments[i].document)){
                                     loanDocuments[i].$title = loanDocuments[i].document;
                                 } else {
-                                    loanDocuments[i].$title = "DOCUMENT_TITLE_NOT_MAINTAINED";    
+                                    loanDocuments[i].$title = "DOCUMENT_TITLE_NOT_MAINTAINED";
                                 }
                             }
                         }
@@ -117,7 +118,16 @@ define({
                                         "key": "loanAccount.loanDocuments[].$title",
                                         "notitle": true,
                                         "title": " ",
-                                        "readonly": true
+                                        "readonly": true,
+                                        "titleExpr": "model.loanAccount.loanDocuments[arrayIndex].$title",
+                                            "type": "anchor",
+                                            "fieldHtmlClass": "text-bold",
+                                            "onClick": function (model, form, schemaForm, event) {
+                                                var doc = model.loanAccount.loanDocuments[event.arrayIndex];
+                                                console.log(doc);
+                                                Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + doc.$formsKey + "&record_id=" + model.loanAccount.id)
+                                                // Utils.downloadFile(Misc.allFormsDownload());
+                                            }
                                     }]
                                 }, {
                                     "type": "section",
