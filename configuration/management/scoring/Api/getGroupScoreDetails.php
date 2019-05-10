@@ -22,7 +22,7 @@ if (isset($_GET)) {
     $ScoreName = $_GET['ScoreName'];
     $GroupId = $_GET['GroupId'];
     $isScoringOptimizationEnabled = isset($_GET['isScoringOptimizationEnabled']) ? $_GET['isScoringOptimizationEnabled'] : false;
-    echo $loanQuery = "SELECT jad.loan_id FROM $perdix_db.jlg_groups jgr JOIN $perdix_db.jlg_account_details jad
+    $loanQuery = "SELECT jad.loan_id FROM $perdix_db.jlg_groups jgr JOIN $perdix_db.jlg_account_details jad
     ON jgr.group_code = jad.group_code  WHERE jgr.id = ". $GroupId;
     try {
         $db = ConnectDb();
@@ -30,9 +30,8 @@ if (isset($_GET)) {
         $LoanParams->execute();
         $LoanDetails = $LoanParams->fetchAll(PDO::FETCH_ASSOC);
         $db = null;
-        echo "<pre>";
-        print_r($LoanDetails);
-        echo json_encode($LoanDetails);
+        // print_r($LoanDetails);
+        json_encode($LoanDetails);
         $domain = $_SERVER['HTTP_HOST'];
         $prefix = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
         if(count($LoanDetails) > 0) {
