@@ -46,7 +46,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                     'accountNumber': model.loanAccount.accountNumber,
                     'transactionType': receiptName,
                     'transactionID': data.transactionId,
-                    'productCode': model.loanAccount.productName,
+                    'productCode': getProductName(model.loanAccount.productCode),
                     'partnerCode': model.loanAccount.partnerCode,
                 };
                 if (flag == 0)
@@ -108,6 +108,14 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
             }
             var insuranceForm = function(){
                 console.log('asfs');
+            }
+            var getProductName = function(code){
+                let temp = formHelper.enum('loan_product').data;
+                for (var i=0; i< temp.length;i++){
+                    if (code == temp[i].value)
+                            return temp[i].name;
+                        continue;
+                }
             }
 
             return {
