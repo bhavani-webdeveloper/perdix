@@ -39,6 +39,7 @@ define({
                             "x-schema-form":{
                                 "type": "select",
                                 "enumCode": "usercentre",
+                            }
                         },
                         "partner_code": {
                             "title": "PARTNER_CODE",

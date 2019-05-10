@@ -39,6 +39,7 @@ define({
                             "x-schema-form":{
                                 "type": "select",
                                 "enumCode": "usercentre",
+                            }
                         },
                         "applicantName": {
                         "title": "CUSTOMER_NAME",
