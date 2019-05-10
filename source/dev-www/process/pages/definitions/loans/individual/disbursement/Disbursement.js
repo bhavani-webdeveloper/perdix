@@ -952,6 +952,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                                 function(data){
                                                     PageHelper.showProgress('disbursement', 'Disbursement done', 2000);
                                                     model.additional.disbursementDone=true;
+                                                    model.additional.isDisbursementDone = true;
                                                     PageHelper.hideLoader();
                                                     $state.go('Page.Engine', {pageName: 'loans.individual.disbursement.ReadyForDisbursementQueue', pageId: null});
         
