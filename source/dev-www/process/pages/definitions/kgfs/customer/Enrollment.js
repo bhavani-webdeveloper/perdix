@@ -7,11 +7,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
             pageType: "Engine",
             dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper",
                 "$q", "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries",
-                "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","irfProgressMessage","Files","translateFilter","BranchCreationResource","Lead"],
+                "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository","irfProgressMessage","Files","translateFilter","BranchCreationResource","Lead","irfStorageService"],
 
             $pageFn: function ($log, $state, $stateParams, Enrollment, EnrollmentHelper, SessionStore, formHelper, $q,
                 PageHelper, Utils, BiometricService, PagesDefinition, Queries, CustomerBankBranch,
-                BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,irfProgressMessage,Files,translateFilter,BranchCreationResource,Lead) {
+                BundleManager, $filter, IrfFormRequestProcessor, $injector, UIRepository,irfProgressMessage,Files,translateFilter,BranchCreationResource,Lead,irfStorageService) {
 
                 AngularResourceService.getInstance().setInjector($injector);
                 var branch = SessionStore.getBranch();
@@ -1659,6 +1659,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             } else {
                                 reqData.customer.currentStage="Stage02";
                                 EnrollmentHelper.saveandproceed(reqData).then(function(res) {
+                                    if (model.$$STORAGE_KEY$$)
+                                        irfStorageService.deleteJSON('kgfs.customer.Enrollment', model.$$STORAGE_KEY$$);
                                     model.customer = _.clone(res.customer);
                                     model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
                                     model = EnrollmentHelper.fixData(model);
