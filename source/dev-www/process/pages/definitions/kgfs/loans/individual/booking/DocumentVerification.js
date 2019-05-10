@@ -52,6 +52,7 @@ define({
                             if (documentObj != null) {
                                 loanDocuments[i].$title = documentObj.document_name;
                                 loanDocuments[i].$formsKey = documentObj.forms_key;
+                                loanDocuments[i].$downloadRequired = documentObj.download_required;
                             } else {
                                 if (_.hasIn(loanDocuments[i],'document') && _.isString(loanDocuments[i].document)){
                                     loanDocuments[i].$title = loanDocuments[i].document;
@@ -122,13 +123,20 @@ define({
                                         "titleExpr": "model.loanAccount.loanDocuments[arrayIndex].$title",
                                             "type": "anchor",
                                             "fieldHtmlClass": "text-bold",
+                                            "condition": "model.loanAccount.loanDocuments[arrayIndex].$downloadRequired",
                                             "onClick": function (model, form, schemaForm, event) {
                                                 var doc = model.loanAccount.loanDocuments[event.arrayIndex];
                                                 console.log(doc);
                                                 Utils.downloadFile(irf.FORM_DOWNLOAD_URL + "?form_name=" + doc.$formsKey + "&record_id=" + model.loanAccount.id)
                                                 // Utils.downloadFile(Misc.allFormsDownload());
                                             }
-                                    }]
+                                    }, {
+                                            "key": "loanAccount.loanDocuments[].$title",
+                                            "notitle": true,
+                                            "title": " ",
+                                            "condition": "!model.loanAccount.loanDocuments[arrayIndex].$downloadRequired",
+                                            "readonly": true
+                                        }]
                                 }, {
                                     "type": "section",
                                     "htmlClass": "col-sm-2",
