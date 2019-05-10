@@ -102,3 +102,4 @@ getTelecallingSnapshotId = SELECT max(telecalling_details_id) as `telecalling_id
 productCode.type = SELECT loan_type as loanType from loan_products where product_code = :productCode
 customerDetails.list = SELECT l.customer_id as `customerId`,lcr.customer_id as `applicantCustomerId`,c.customer_type as `customerType` FROM `loan_accounts` l left join loan_customer_relation lcr on l.id=lcr.loan_id AND lcr.relation='Applicant' left join customer c on l.customer_id=c.id WHERE l.id = :loan_id
 customerInfo.list = SELECT * from customer where id = :customer_id
+isLoanDisbursed = SELECT current_stage as `currentStage` from loan_account_disbursement_schedule where loan_id = :loanId 
