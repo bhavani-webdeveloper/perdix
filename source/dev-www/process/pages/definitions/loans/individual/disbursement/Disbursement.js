@@ -953,6 +953,15 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                                     PageHelper.showProgress('disbursement', 'Disbursement done', 2000);
                                                     model.additional.disbursementDone=true;
                                                     model.additional.isDisbursementDone = true;
+                                                    model.additional.payOffAmount = resp.payOffAmount;
+                                                    model.additional.demandAmount = resp.totalDemandRaised;
+                                                        // model.loanacount.customer1FirstName = resp.customer1FirstName;
+                                                        for (i = 0; i < resp.transactions.length; i++) {
+                                                            if (resp.transactions[i].transactionName == "Disbursement") {
+                                                                model.additional.transactionId = resp.transactions[i].transactionId;
+                                                                model.additional.transactionType = resp.transactions[i].instrument;
+                                                            }
+                                                        }
                                                     PageHelper.hideLoader();
                                                     $state.go('Page.Engine', {pageName: 'loans.individual.disbursement.ReadyForDisbursementQueue', pageId: null});
         
