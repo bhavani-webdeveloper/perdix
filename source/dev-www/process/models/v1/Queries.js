@@ -1517,6 +1517,15 @@ irf.models.factory('Queries', [
         },deferred.reject);
         return deferred.promise;
     };
+    resource.isLoanDisbursed = function(loanId){
+        var deferred = $q.defer();
+        resource.getResult('isLoanDisbursed',{'loanId':loanId}).then(function(resp){
+            if (resp && resp.results)
+                deferred.resolve(resp.results);
+        },function(err){deferred.reject(err)})
+        return deferred.promise;
+    };
+
     return resource;
     
     }
