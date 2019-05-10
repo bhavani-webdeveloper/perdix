@@ -12,6 +12,7 @@
          "sendSms":"No",
          "smsCategory":"LoanBooking",
          "isAccountOpening":false,
+	"isSchemaValidationRequired":true,
          "riskScoreName":"RiskScore1",
          "allowedRoles":[
             "WM"
