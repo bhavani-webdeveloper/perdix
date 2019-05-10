@@ -1162,6 +1162,7 @@ define([],function(){
                     "PreliminaryInformation.productType",
                     "PreliminaryInformation.productCategory",
                     "PreliminaryInformation.frequency",
+                    "PreliminaryInformation.melFrequency",
                     "PreliminaryInformation.loanProduct",
                     "PreliminaryInformation.productName",
                     "PreliminaryInformation.numberOfGuarantorsCoApplicants",                    
@@ -1408,7 +1409,7 @@ define([],function(){
                     /* Collateral */
 
                     //added for frequency to be locked monthly
-                    if(model.loanAccount.currentStage == "Screening" && model.loanAccount.productCategory == 'MEL'){
+                    if(model.loanAccount.currentStage == "Screening"){
                        if(model.loanAccount.frequency == undefined || model.loanAccount.frequency == null){
                         model.loanAccount.frequency="M";
                        }
@@ -1451,7 +1452,17 @@ define([],function(){
                                                 "key":"loanAccount.frequency",
                                                 "title": "FREQUENCY",
                                                 "type": "select",
-                                                "orderNo": 9
+                                                "orderNo": 9,
+                                                "readonly":true,
+                                                "condition":"(model.loanAccount.productCategory == 'MEL')"
+                                            },
+                                            "melFrequency": {
+                                                "key":"loanAccount.frequency",
+                                                "title": "FREQUENCY",
+                                                "type": "select",
+                                                "orderNo": 9,
+                                                "readonly":false,
+                                                "condition":"(model.loanAccount.productCategory != 'MEL')"
                                             },
                                             "loanProduct": {
                                                 "key":"loanAccount.productCode",
