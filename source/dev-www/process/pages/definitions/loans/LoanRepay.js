@@ -811,9 +811,22 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             {
                                 key: "repayment.delayReasonType",
                                 title: "REASON_FOR_DELAY",
+                                condition:"model.siteCode == 'shramsarathi'",
+                                type: "select",
+                                titleMap: {
+                                    "Business not running":"Business not running",
+                                    "Hardship": "Hardship",
+                                    "Wilful default":"Wilful default",
+                                    "Can pay":"Can pay",
+                                    "Others":"Others"
+                                },
+                            },
+                            {
+                                key: "repayment.delayReasonType",
+                                title: "REASON_FOR_DELAY",
                                 required: true,
                                 type: "select",
-                                condition:"model.siteCode != 'witfin'",
+                                condition:"model.siteCode != 'witfin' && model.siteCode != 'shramsarathi'",
                                 titleMap: {
                                     "Business not running":"Business not running",
                                     "Hardship": "Hardship",
