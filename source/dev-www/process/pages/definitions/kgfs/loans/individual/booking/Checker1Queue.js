@@ -10,7 +10,8 @@ define({
             "subTitle": "",
             initialize: function (model, form, formCtrl) {
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
-                model.branch = SessionStore.getCurrentBranch().branchId;
+               // model.branch = SessionStore.getCurrentBranch().branchId;
+                model.branch = SessionStore.getBranch();
                 model.branchId = SessionStore.getBranchId();
             },
             definition: {
@@ -23,8 +24,7 @@ define({
                     "type": 'object',
                     "title": 'SearchOptions',
                     "properties": {
-                        'branch':
-                        {
+                        'branch':{
                             'title': "BRANCH_NAME",
                             "type": ["string", "null"],
                             "required":true,
