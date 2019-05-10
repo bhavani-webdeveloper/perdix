@@ -1318,7 +1318,8 @@ define([],function(){
                     /* ornamentsAppraisals */
 
                     model.loanAccount.cbCheckCompletedFlag=false;
-                    model.loanAccount.dataCheckChanges=false;
+                    model.loanAccount.dataCheckChanges=[];
+                    // model.loanAccount.dataCheckChanges=false;
 
                     
                     //var postReviewActionArray = {};
@@ -1870,14 +1871,14 @@ define([],function(){
                     "cb-check-update": function(bundleModel, model, params){
                     $log.info("Inside cb-check-update of LoanRequest");
                     for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
-                            model.loanAccount.dataCheckChanges=true;
+                            model.loanAccount.dataCheckChanges[i]=true;
                             if (model.loanAccount.loanCustomerRelations[i].customerId == params.customerId) {
                                 model.loanAccount.loanCustomerRelations[i].cbCheckCompleted=false;
                                 if(params.cbType == 'BASE')
                                     model.loanAccount.loanCustomerRelations[i].highmarkCompleted = true;
                                 else if(params.cbType == 'INDIVIDUAL')
                                     {   
-                                    model.loanAccount.dataCheckChanges=false;
+                                    model.loanAccount.dataCheckChanges[i]=false;
                                     model.loanAccount.loanCustomerRelations[i].cbCheckCompleted = true;
                                 }
                             }
@@ -2008,7 +2009,7 @@ define([],function(){
                         }
                         if(model.loanAccount.cbCheckCompletedFlag)
                         {
-                            model.loanAccount.dataCheckChanges=true;
+                            model.loanAccount.dataCheckChanges[0]=true;
                             model.loanAccount.cbCheckCompletedFlag=false;
                         }
 
@@ -2192,7 +2193,7 @@ define([],function(){
 
                         if(model.loanAccount.cbCheckCompletedFlag)
                         {
-                            model.loanAccount.dataCheckChanges=true;
+                            model.loanAccount.dataCheckChanges[0]=true;
                             model.loanAccount.cbCheckCompletedFlag=false;
                         }
 
@@ -2201,7 +2202,7 @@ define([],function(){
                                 if (model.loanAccount.loanCustomerRelations[i].customerId) {
                                     if(!model.loanAccount.loanCustomerRelations[i].cbCheckCompleted){
                                         model.loanAccount.loanMitigants=[];
-                                        if(model.loanAccount.dataCheckChanges)
+                                        if(model.loanAccount.dataCheckChanges[i])
                                         {
                                             PageHelper.showProgress("loan-create","CB Check pending. Please do a CB check and then proceed",5000);
                                             return false;                                            
