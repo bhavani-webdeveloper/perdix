@@ -12,7 +12,8 @@ define({
             initialize: function (model, form, formCtrl) {
                 // model.branch = branch;
                 model.siteCode = SessionStore.getGlobalSetting("siteCode");
-                model.branch = SessionStore.getCurrentBranch().branchId;
+                //model.branch = SessionStore.getCurrentBranch().branchId;
+                model.branch = SessionStore.getBranch();
             },
 
             definition: {
