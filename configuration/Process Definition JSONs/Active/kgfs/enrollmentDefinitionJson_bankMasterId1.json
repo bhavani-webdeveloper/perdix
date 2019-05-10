@@ -419,7 +419,7 @@
             "personalProfile": {
                 "title": "Personal Profile",
                 "type": "object",
-                "required": ["firstName", "fatherFirstName", "dateOfBirth", "gender", "district", "state", "pincode", "maritalStatus","verified"],
+                "required": ["firstName", "fatherFirstName", "dateOfBirth", "gender", "district", "state", "pincode", "maritalStatus","verified","caste","religion"],
                 "properties": {
                     "urnNo": {
                         "title": "URN",
