@@ -1871,8 +1871,8 @@ define([],function(){
                     "cb-check-update": function(bundleModel, model, params){
                     $log.info("Inside cb-check-update of LoanRequest");
                     for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
-                            model.loanAccount.dataCheckChanges[i]=true;
                             if (model.loanAccount.loanCustomerRelations[i].customerId == params.customerId) {
+                            model.loanAccount.dataCheckChanges[i]=true;
                                 model.loanAccount.loanCustomerRelations[i].cbCheckCompleted=false;
                                 if(params.cbType == 'BASE')
                                     model.loanAccount.loanCustomerRelations[i].highmarkCompleted = true;
