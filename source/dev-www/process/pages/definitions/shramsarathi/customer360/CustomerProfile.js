@@ -2220,21 +2220,22 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     "HouseVerification.place": {
                         "orderNo": 90
                     },
-                    "BankAccounts.customerBankAccounts": {
-                        onArrayAdd: function (modelValue, form, model, formCtrl, $event) {
-                            modelValue.bankStatements = [];
-                            var CBSDateMoment = moment(SessionStore.getCBSDate(), SessionStore.getSystemDateFormat());
-                            var noOfMonthsToDisplay = 6;
-                            var statementStartMoment = CBSDateMoment.subtract(noOfMonthsToDisplay, 'months').startOf('month');
-                            for (var i = 0; i < noOfMonthsToDisplay; i++) {
-                                modelValue.bankStatements.push({
-                                    startMonth: statementStartMoment.format(SessionStore.getSystemDateFormat())
-                                });
-                                statementStartMoment = statementStartMoment.add(1, 'months').startOf('month');
-                            }
-                        }
-                    },
+                    // "BankAccounts.customerBankAccounts": {
+                    //     onArrayAdd: function (modelValue, form, model, formCtrl, $event) {
+                    //         modelValue.bankStatements = [];
+                    //         var CBSDateMoment = moment(SessionStore.getCBSDate(), SessionStore.getSystemDateFormat());
+                    //         var noOfMonthsToDisplay = 6;
+                    //         var statementStartMoment = CBSDateMoment.subtract(noOfMonthsToDisplay, 'months').startOf('month');
+                    //         for (var i = 0; i < noOfMonthsToDisplay; i++) {
+                    //             modelValue.bankStatements.push({
+                    //                 startMonth: statementStartMoment.format(SessionStore.getSystemDateFormat())
+                    //             });
+                    //             statementStartMoment = statementStartMoment.add(1, 'months').startOf('month');
+                    //         }
+                    //     }
+                    // },
                     "BankAccounts.customerBankAccounts.bankStatements": {
+                        "startEmpty":true,
                         "titleExpr": "moment(model.customer.customerBankAccounts[arrayIndexes[0]].bankStatements[arrayIndexes[1]].startMonth).format('MMMM YYYY') + ' ' + ('STATEMENT_DETAILS' | translate)",
                         "titleExprLocals": { moment: window.moment },
                     },
