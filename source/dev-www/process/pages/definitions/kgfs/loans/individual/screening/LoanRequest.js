@@ -1544,13 +1544,13 @@ define([],function(){
                                                     }
 
                                                     for (var i = 0; i < applicantCustomer.familyMembers.length; i++) {
-                                                        if(!(applicantCustomer.urnNo == applicantCustomer.familyMembers[i].enrolledUrnNo)){
+                                                       // if(!(applicantCustomer.urnNo == applicantCustomer.familyMembers[i].enrolledUrnNo)){
                                                             out.push({
                                                                 name: applicantCustomer.familyMembers[i].familyMemberFirstName,
                                                                 dob: applicantCustomer.familyMembers[i].dateOfBirth,
                                                                 relationship: applicantCustomer.familyMembers[i].relationShip,
                                                             })
-                                                        }
+                                                       // }
                                                     }
                                                     return $q.resolve({
                                                         headers: {
