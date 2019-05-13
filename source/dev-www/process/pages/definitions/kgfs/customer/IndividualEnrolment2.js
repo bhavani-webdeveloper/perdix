@@ -1526,6 +1526,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 },
                                                 onSelect: function (valueObj, model, context) {
                                                     PageHelper.showLoader()
+                                                    var enrolmentDetails = {
+                                                        'customerId': model.customer.id,
+                                                        'customerClass': model._bundlePageObj.pageClass,
+                                                        'firstName': model.customer.firstName
+                                                    };
+                        
+                                                    if (_.hasIn(model, 'customer.id')){
+                                                        BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails)
+                                                        BundleManager.pushEvent('new-enrolment', model._bundlePageObj, {customer: model.customer})
+                                                    }
+                                                    
                                                     Enrollment.search({"urnNo":valueObj.enrolledUrnNo}).$promise.then(function(resp){
                                                         Enrollment.getCustomerById({id:resp.body[0].id}).$promise.then(function(resp){
                                                             var temp = model.loanProcess.loanAccount.loanCustomerRelations;
@@ -1537,10 +1548,20 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                                 }
                                                             }
                                                             model.customer = resp;
+                                                            // var enrolmentDetails = {
+                                                            //     'customerId': model.customer.id,
+                                                            //     'customerClass': model._bundlePageObj.pageClass,
+                                                            //     'firstName': model.customer.firstName
+                                                            // };
                                                             PageHelper.hideLoader();
                                                             model.enrolmentProcess.customer = resp;
-                                                                model.loanProcess.loanAccount.loanCustomerRelations.push({customerId:resp.id,name:resp.firstName,relation:"Co-Applicant",urn:resp.urnNo});
-                                                                BundleManager.pushEvent("new-enrolment",model._bundlePageObj,{customer:resp});
+                                                            model.loanProcess.loanAccount.loanCustomerRelations.push({customerId:resp.id,name:resp.firstName,relation:"Co-Applicant",urn:resp.urnNo});
+                                                            model.loanProcess.removeRelatedEnrolmentProcess(model.enrolmentProcess, model.loanCustomerRelationType);
+                                                            model.loanProcess.setRelatedCustomerWithRelation(model.enrolmentProcess, model.loanCustomerRelationType);
+                        
+                                                            /* Setting on the current page */
+                                                            BundleManager.pushEvent("enrolment-removed", model._bundlePageObj, enrolmentDetails);
+                                                            BundleManager.pushEvent("new-enrolment",model._bundlePageObj,{customer:resp});
             
                                                         })
                                                     })
