@@ -3853,7 +3853,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         if (!(validateRequest(reqData))) {
                             return;
                         }
-                        if(model.customer.latitude == null){
+                        if(Utils.isCordova && model.customer.latitude == null){
                             PageHelper.showErrors({
                                 'data': {
                                     'error': "Please capture Business Location"
