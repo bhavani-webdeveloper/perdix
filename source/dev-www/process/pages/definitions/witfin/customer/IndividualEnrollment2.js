@@ -929,7 +929,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                     },
                     "IndividualInformation.spouseFirstName":{
                         "type":"string",
-                        "condition": "model.customer.maritalStatus.toLowerCase() == 'married'"
+                        "condition": "model.customer.maritalStatus.toLowerCase() == 'married'",
+                        "required":true
                     },
                     "IndividualInformation.spouseDateOfBirth":{
                         "condition": "model.customer.spouseDateOfBirth.toLowerCase() == 'married'"
