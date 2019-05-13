@@ -17,12 +17,13 @@ export class VehicleValuatorLOVConfiguration extends LOVElementConfiguration {
 
     getListDisplayItem: Function =  function(item, index) {
         return [
-            item.userName
+            item.userName,
+            item.login
         ];
     };
 
     onSelect: Function = function(valueObj, model, context){
-        model.loanAccount.valuator = valueObj.userName;
+        model.loanAccount.valuator = valueObj.login;
         model.loanProcess.valuator = valueObj.login;
     };
     outputMap: Object = {
