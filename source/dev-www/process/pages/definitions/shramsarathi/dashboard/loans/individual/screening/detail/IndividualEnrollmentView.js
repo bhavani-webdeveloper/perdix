@@ -90,9 +90,7 @@ define({
                                 annualExpenses+=model.UIUDF.expenditures[i].annualExpenses;
                             }
 
-                            model.netincome=incomeEarned-annualExpenses;
-                            model.incomeEarned=incomeEarned;
-                            model.annualExpenses=annualExpenses;
+                            model.netincome=model.total.incomeExpense.incomeGrandTotal - model.total.incomeExpense.expensesGrandTotal;
                         }
                         else
                         {
@@ -1101,11 +1099,11 @@ define({
                                 "type": "grid",
                                 "orientation": "vertical",
                                 "items": [{
-                                    "key": "incomeEarned",
+                                    "key": "total.incomeExpense.incomeGrandTotal",
                                     "title": "Income",
                                     "type": "amount"
                                 }, {
-                                    "key": "annualExpenses",
+                                    "key": "total.incomeExpense.expensesGrandTotal",
                                     "title": "Expenses",
                                     "type": "amount"
                                 }, {
@@ -1344,9 +1342,9 @@ define({
                         })
     
                     }
-    
-    
-    
+                    },
+                    "financial-sum": function(bundleModel, model, params){
+                        model.total = params[0].data[0].financialSummaryModel;
                     },
                     "business-customer": function(bundleModel, model, params) {
                         model.business = params;
