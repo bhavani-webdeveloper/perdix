@@ -14,6 +14,7 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                 model.loanAmountRequestedLeadLimit = SessionStore.getGlobalSetting('loanAmountRequestedLeadLimit');
                 model.leadMinorMinimumAge = SessionStore.getGlobalSetting('leadMinorMinimumAge');
                 model.leadMinorMaximumAge = SessionStore.getGlobalSetting('leadMinorMaximumAge');
+                model.currentDate = SessionStore.getCBSDate()
 
                 if (!(model.$$STORAGE_KEY$$)) {
                     model.lead.customerType = "Enterprise";
@@ -1499,6 +1500,16 @@ function ($log,LoanAccount, Enrollment, $state, $stateParams, Lead, LeadHelper, 
                         if(model.lead.age < model.leadMinorMinimumAge || model.lead.age > model.leadMinorMaximumAge)
                         {
                             PageHelper.showErrors({data:{error:"Age should be Minimum Age 18 and Maximum Age 65"}});
+                            return false;
+                        }
+
+                        if(model.lead.followUpDate && model.lead.followUpDate < model.currentDate){
+                            PageHelper.showErrors({data:{error:"Follow up date cannot be less than current date"}});
+                            return false;
+                        }
+                        var maxLeadFollowUpDate = moment(model.currentDate).add(30, "d").format("YYYY-MM-DD");
+                        if(model.lead.followUpDate && model.lead.followUpDate > maxLeadFollowUpDate){
+                            PageHelper.showErrors({data:{error:"Follow up date cannot be more than 30 days from current date"}});
                             return false;
                         }
                     }

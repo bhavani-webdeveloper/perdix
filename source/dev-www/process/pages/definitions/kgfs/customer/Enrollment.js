@@ -384,7 +384,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess',
                             type: "qrcode",
                         },
                         "AdditionalKYC.additionalKYCs": {
-                            startEmpty: true,
+                           // startEmpty: true,
                             "schema": {
                                 "maxItems": 1
                             },

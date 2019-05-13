@@ -315,21 +315,25 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "Lead", "LeadHe
                     {
                         key: "customer.postOffice",
                         required: true
-                    }, {
+                    }, 
+                    {
                         key: "customer.district",
                         type: "select",
                         "enumCode": "district_master",
                         screenFilter: true,
                         parentEnumCode: "bankname",
                         parentValueExpr: "model.customer.kgfsBankName"
-                    }, "customer.pincode", {
+                    }, 
+                    "customer.pincode",
+                    {
                         key: "customer.state",
                         type: "select",
                         "enumCode": "state_master",
                         screenFilter: true,
                         parentEnumCode: "bankname",
                         parentValueExpr: "model.customer.kgfsBankName"
-                    }, "customer.stdCode", "customer.landLineNo", {
+                    },
+                     "customer.stdCode", "customer.landLineNo", {
                         key: "customer.mobilePhone",
                         required: true,
                     }, "customer.mailSameAsResidence"]
@@ -555,7 +559,7 @@ irf.pageCollection.factory("Pages__ProfileInformation", ["$log", "Lead", "LeadHe
                 "items": [{
                     "key": "customer.additionalKYCs",
                     "type": "array",
-                    "startEmpty": true,
+                  //  "startEmpty": true,
                     "schema": {
                         "maxItems": 1
                     },

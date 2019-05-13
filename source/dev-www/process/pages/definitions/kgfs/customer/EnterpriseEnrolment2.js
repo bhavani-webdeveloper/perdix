@@ -3546,6 +3546,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     model.customer['personalExpenses'] = []
                     model.customer['totalMonthlySurplus'] = '';
                     model.customer['debtServiceRatio'] = '';
+                
                     // model.customer.enterprise = {
                         
                     // }
@@ -3851,6 +3852,14 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
 
                         if (!(validateRequest(reqData))) {
                             return;
+                        }
+                        if(model.customer.latitude == null){
+                            PageHelper.showErrors({
+                                'data': {
+                                    'error': "Please capture Business Location"
+                                }
+                            });
+                            return false;
                         }
                         model.customer.enterprise.ownerSalary = 67;
                         // for (i in model.customer.enterpriseRegistrations){
