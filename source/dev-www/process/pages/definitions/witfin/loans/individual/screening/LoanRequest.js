@@ -191,6 +191,7 @@ define([], function() {
                             throw new Error("Invalid frequency");
                     }
                     var effectiveIRR = frequencyFactor * parseFloat(Math.pow(parseFloat(1 + parseFloat(lomsIRR / 100)), parseFloat(1/frequencyFactor))-1) * 100;
+                    effectiveIRR = Math.round( effectiveIRR * 100)/100;
                     // var someRate = parseFloat(nominalRate / (100 * frequencyFactor));
                     // var estimatedEmi = (parseFloat(loanAmount) * someRate / parseFloat((1 - Math.pow(1 + someRate, -tenure))));
                     return {
