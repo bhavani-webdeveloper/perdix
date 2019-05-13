@@ -99,6 +99,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 maximum: 1,
                                 order:80
                             },
+                            {
+                                pageName: 'loans.individual.misc.BalanceSheetHistory',
+                                title: 'BALANCE_SHEET_HISTORY',
+                                pageClass: 'balance-sheet-history',
+                                minimum: 1,
+                                maximum: 1,
+                                order: 90
+                            }
                             // {
                             //     pageName: 'shramsarathi.dashboard.loans.individual.screening.detail.SummaryView',
                             //     title: 'SummaryView',
@@ -357,6 +365,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                                             }
                                         });
 
+                                        $this.bundlePages.push({
+                                            pageClass: 'balance-sheet-history',
+                                            model: {
+                                                customerUrn: res.urnNo,
+                                                loanId: bundleModel.loanId
+                                            }
+                                        });
                                         // $this.bundlePages.push({
                                         //     pageClass: 'portfolio-analytics',
                                         //     model: {

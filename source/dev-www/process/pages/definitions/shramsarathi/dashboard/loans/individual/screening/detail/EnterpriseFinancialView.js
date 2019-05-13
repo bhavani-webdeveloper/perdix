@@ -56,7 +56,7 @@ define({
 				})
 				.$promise
 				.then(function(resp){
-					var params=[{data:[{'Loan Product':resp.productCategory,'Tenure':resp.tenure}]}];
+					var params=[{data:[{'Loan Product':resp.productCategory,'Tenure':resp.tenure,'financialSummaryModel':model}]}];
                        BundleManager.broadcastEvent('financial-sum', params);
 				},function(err){
 				})	

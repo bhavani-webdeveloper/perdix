@@ -79,14 +79,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                         maximum: 1,
                         order: 80
                     },
-                    //  {
-                    //     pageName: 'loans.individual.misc.BalanceSheetHistory',
-                    //     title: 'BALANCE_SHEET_HISTORY',
-                    //     pageClass: 'balance-sheet-history',
-                    //     minimum: 1,
-                    //     maximum: 1,
-                    //     order: 90
-                    // },
+                     {
+                        pageName: 'loans.individual.misc.BalanceSheetHistory',
+                        title: 'BALANCE_SHEET_HISTORY',
+                        pageClass: 'balance-sheet-history',
+                        minimum: 1,
+                        maximum: 1,
+                        order: 90
+                    },
                     {
                         pageName: 'shramsarathi.dashboard.loans.individual.screening.televerification',
                         title: 'TELE_VERIFICATION',
@@ -260,7 +260,16 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     model: {
                                         loanAccount: res
                                     }
-                                });  
+                                }); 
+                                
+                                $this.bundlePages.push({
+                                    pageClass: 'balance-sheet-history',
+                                    model: {
+                                        customerUrn: loanProcessts.applicantEnrolmentProcess.customer.urnNo,
+                                        loanId: bundleModel.loanId
+                                    }
+                                });
+
                                 $this.bundlePages.push({
                                     pageClass: 'televerification',
                                     model: {
@@ -318,9 +327,9 @@ define(["perdix/domain/model/loan/LoanProcess",
                         "deviation-loaded": function(pageObj, bundleModel, params) {
                             BundleManager.broadcastEvent("load-deviation", params);
                         },
-                        // "financialSummary": function(pageObj, bundleModel, params) {
-                        //     BundleManager.broadcastEvent("financial-summary", params);
-                        // },
+                        "financialSummary": function(pageObj, bundleModel, params) {
+                            BundleManager.broadcastEvent("financial-summary", params);
+                        },
                         "business": function(pageObj, bundleModel, params) {
                             BundleManager.broadcastEvent("business-customer", params);
                         }

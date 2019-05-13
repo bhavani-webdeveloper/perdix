@@ -106,6 +106,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 minimum: 1,
                                 maximum: 1,
                                 order:80
+                            },
+                            {
+                                pageName: 'loans.individual.misc.BalanceSheetHistory',
+                                title: 'BALANCE_SHEET_HISTORY',
+                                pageClass: 'balance-sheet-history',
+                                minimum: 1,
+                                maximum: 1,
+                                order: 90
                             }
                         ]);
                     },
@@ -250,6 +258,14 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
+                                $this.bundlePages.push({
+                                    pageClass: 'balance-sheet-history',
+                                    model: {
+                                        customerUrn: loanProcess.applicantEnrolmentProcess.customer.urnNo,
+                                        loanId: bundleModel.loanId
+                                    }
+                                });
+
                                $this.bundlePages.push({
                                         pageClass: 'loan-review',
                                         model: {
@@ -313,6 +329,15 @@ define(["perdix/domain/model/loan/LoanProcess",
                             if (enrolmentDetails.customerId){
                                 BundleManager.broadcastEvent('remove-customer-relation', enrolmentDetails);
                             }
+                        },
+                        "deviation-loaded":function(pageObj, bundleModel, params){
+                            BundleManager.broadcastEvent("load-deviation", params);
+                        },
+                        "financialSummary": function(pageObj, bundleModel, params) {
+                            BundleManager.broadcastEvent("financial-summary", params);
+                        },
+                        "business": function(pageObj, bundleModel, params) {
+                            BundleManager.broadcastEvent("business-customer", params);
                         }
                     }
                 }

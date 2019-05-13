@@ -79,15 +79,15 @@ define(["perdix/domain/model/loan/LoanProcess",
                         minimum: 1,
                         maximum: 1,
                         order:90
-                        }
-                    // {
-                    //     pageName: 'loans.individual.misc.BalanceSheetHistory',
-                    //     title: 'BALANCE_SHEET_HISTORY',
-                    //     pageClass: 'balance-sheet-history',
-                    //     minimum: 1,
-                    //     maximum: 1,
-                    //     order: 90
-                    // }
+                    },
+                    {
+                        pageName: 'loans.individual.misc.BalanceSheetHistory',
+                        title: 'BALANCE_SHEET_HISTORY',
+                        pageClass: 'balance-sheet-history',
+                        minimum: 1,
+                        maximum: 1,
+                        order: 90
+                    }
                 ];
                     // if(SessionStore.getGlobalSetting('siteCode') != 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'IREPDhan' || SessionStore.getGlobalSetting('siteCode') == 'maitreya') {
                     //     definition.push({
@@ -281,13 +281,13 @@ define(["perdix/domain/model/loan/LoanProcess",
                                     }
                                 });
 
-                                // $this.bundlePages.push({
-                                //     pageClass: 'balance-sheet-history',
-                                //     model: {
-                                //         customerUrn: loanAccount.urnNo,
-                                //         loanId: loanAccount.id
-                                //     }
-                                // });
+                                $this.bundlePages.push({
+                                    pageClass: 'balance-sheet-history',
+                                    model: {
+                                        customerUrn: loanAccount.urnNo,
+                                        loanId: loanAccount.id
+                                    }
+                                });
 
                                  $this.bundlePages.push({
                                     pageClass: 'cbview',
