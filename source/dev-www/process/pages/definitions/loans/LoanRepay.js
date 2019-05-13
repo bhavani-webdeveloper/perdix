@@ -296,6 +296,7 @@ irf.pageCollection.factory(irf.page('loans.LoanRepay'),
                             },
                             {
                                 key: "loanAccount.applicantName",
+                                condition:"model.siteCode != 'shramsarathi'",
                                 title: "APPLICANT_NAME",
                                 readonly: true
                             },{

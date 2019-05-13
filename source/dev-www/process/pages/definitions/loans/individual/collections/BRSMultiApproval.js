@@ -4,6 +4,7 @@ define({
     dependencies: ["$log", "LoanCollection", "SessionStore", "PageHelper", "formHelper", "RolesPages", "Utils", "translateFilter", "$state", "Queries", "Files"],
     $pageFn: function ($log, LoanCollection, SessionStore, PageHelper, formHelper, RolesPages, Utils, translateFilter, $state, Queries, Files) {
         var branch = SessionStore.getBranch();
+        var siteCode=SessionStore.getGlobalSetting('siteCode');
         var localFormCtrl;
         return {
             "type": "search-list",
@@ -127,7 +128,14 @@ define({
                         };
                     },
                     getColumns: function () {
+                        var hub="";
+                        if(siteCode=='shramsarathi'){
+                         hub='BranchName';
+                        }else{
+                            hub='HubName';
+                        }
                         return [
+                       
                             {
                                 "title": "Date",
                                 "data": "depositedOn"
@@ -137,7 +145,7 @@ define({
                                 "data": "reference"
                             },
                             {
-                                "title": "HubName",
+                                "title": hub,
                                 "data": "loanBranchName"
                             },
                             {

@@ -3,6 +3,7 @@ define({
     pageType: "Engine",
     dependencies: ["$log", "formHelper", "$state", "SessionStore", "Utils", "irfNavigator", "Queries","LoanCollection","PageHelper"],
     $pageFn: function($log, formHelper, $state, SessionStore, Utils, irfNavigator, Queries, LoanCollection,PageHelper) {
+        var siteCode=SessionStore.getGlobalSetting('siteCode');  
         return {
             "type": "search-list",
             "title": "REJECTED_QUEUE_COLLECTION",
@@ -10,6 +11,7 @@ define({
             initialize: function(model, form, formCtrl) {
                 $log.info("Branch Deposit queue is initialised");
                 model.branch = SessionStore.getCurrentBranch().branchId;
+               
             },
             definition: {
                 title: "SEARCH",
@@ -120,6 +122,12 @@ define({
                         };
                     },
                     getColumns: function() {
+                        var name="";
+                        if(siteCode=='shramsarathi'){
+                            name='CUSTOMER_NAME';
+                        }else{
+                            name='BUSINESS_NAME';
+                        }
                         return [
                             {
                                 title: 'Date',
@@ -138,7 +146,7 @@ define({
                                 data:"reference"
                             },
                             {
-                                title: 'BUSINESS_NAME',
+                                title: name,
                                 data: 'customerName'
                             },
                             {
