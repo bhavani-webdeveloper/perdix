@@ -288,9 +288,7 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
         });
 
         $scope.formName = irf.form($scope.pageName);
-        $scope.initialize = function(model, form, formCtrl) {
-            model.siteCode = SessionStore.getGlobalSetting('siteCode');
-        };
+        $scope.initialize = function(model, form, formCtrl) {};
         $scope.form = [{
             "type": "box",
             "title": "AUDIT_INFORMATION",
@@ -321,11 +319,8 @@ irf.pageCollection.controller(irf.controller("audit.AuditDetails"), ["$log", "tr
             }, {
                 key: "ai.message",
                 type: "textarea",
-                "condition": "(model.ai.current_stage == 'start' || model.ai.current_stage == 'create' || model.ai.current_stage == 'publish' || model.ai.current_stage == 'L1-approve') && !model.readonly && model.siteCode != 'KGFS'"
-            }, {
-                key: "ai.message",
-                type: "textarea",
-                "condition": "(model.ai.current_stage == 'start' || model.ai.current_stage == 'create' || model.ai.current_stage == 'publish' || model.ai.current_stage == 'L1-approve') && !model.readonly && !model.ai._dirty && model.siteCode == 'KGFS'"
+                "condition": "actions.showAddMessage(model)",
+                "required": true
             }]
 
         },{
