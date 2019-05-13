@@ -155,6 +155,52 @@ define([], function() {
                 }
             }
 
+            var calculateEffectiveIRR = function(loanAmount, frequency, tenure, lomsIRR) {
+                var frequencyFactor;
+                if (frequency && tenure && lomsIRR) {
+                    switch (frequency) {
+                        case 'D':
+                        case 'Daily':
+                            frequencyFactor = 365;
+                            break;
+                        case 'F':
+                        case 'Fortnightly':
+                            frequencyFactor = parseInt(365 / 15);
+                            break;
+                        case 'M':
+                        case 'Monthly':
+                            frequencyFactor = 12;
+                            break;
+                        case 'Q':
+                        case 'Quarterly':
+                            frequencyFactor = 4;
+                            break;
+                        case 'H':
+                        case 'Half Yearly':
+                            frequencyFactor = 2;
+                            break;
+                        case 'W':
+                        case 'Weekly':
+                            frequencyFactor = parseInt(365 / 7);
+                            break;
+                        case 'Y':
+                        case 'Yearly':
+                            frequencyFactor = 1;
+                            break;
+                        default:
+                            throw new Error("Invalid frequency");
+                    }
+                    var effectiveIRR = frequencyFactor * parseFloat(Math.pow(parseFloat(1 + parseFloat(lomsIRR / 100)), parseFloat(1/frequencyFactor))-1) * 100;
+                    // var someRate = parseFloat(nominalRate / (100 * frequencyFactor));
+                    // var estimatedEmi = (parseFloat(loanAmount) * someRate / parseFloat((1 - Math.pow(1 + someRate, -tenure))));
+                    return {
+                        effectiveIRR: effectiveIRR
+                    };
+                } else {
+                    throw new Error("Invalid input for Effective IRR calculation");
+                }
+            }
+
             var configFile = function() {
                 return {
                     "loanProcess.loanAccount.currentStage": {
@@ -1056,7 +1102,9 @@ define([], function() {
                                                     .$promise
                                                     .then(function (resp) {
                                                         $log.info(resp);
-                                                        model.loanAccount.dealIrr = Number(resp.xirr.substr(0, resp.xirr.length - 1));
+                                                        lomsIRR = Number(resp.xirr.substr(0, resp.xirr.length - 1));
+                                                        var obj = calculateEffectiveIRR(model.loanAccount.loanAmountRequested, model.loanAccount.frequencyRequested, model.loanAccount.tenureRequested, lomsIRR);
+                                                        model.loanAccount.dealIrr = obj.effectiveIRR;
                                                     },function (err) {
                                                         console.log(err);
                                                     });
@@ -1084,7 +1132,9 @@ define([], function() {
                                                     .$promise
                                                     .then(function (resp) {
                                                         $log.info(resp);
-                                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7 = Number(resp.xirr.substr(0, resp.xirr.length - 1));
+                                                        lomsIRR = Number(resp.xirr.substr(0, resp.xirr.length - 1));
+                                                        var obj = calculateEffectiveIRR(model.loanAccount.loanAmountRequested, model.loanAccount.frequencyRequested, model.loanAccount.tenureRequested, lomsIRR);
+                                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7 = obj.effectiveIRR;
                                                     },function (err) {
                                                         console.log(err);
                                                     });
@@ -1114,7 +1164,9 @@ define([], function() {
                                                     .$promise
                                                     .then(function (resp) {
                                                         $log.info(resp);
-                                                        model.loanAccount.dealIrr = Number(resp.xirr.substr(0, resp.xirr.length - 1));
+                                                        lomsIRR = Number(resp.xirr.substr(0, resp.xirr.length - 1));
+                                                        var obj = calculateEffectiveIRR(model.loanAccount.loanAmountRequested, model.loanAccount.frequencyRequested, model.loanAccount.tenureRequested,lomsIRR );
+                                                        model.loanAccount.dealIrr = obj.effectiveIRR;
                                                     }, function (err) {
                                                         console.log(err);
                                                     });
@@ -1142,7 +1194,9 @@ define([], function() {
                                                     .$promise
                                                     .then(function (resp) {
                                                         $log.info(resp);
-                                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7 = Number(resp.xirr.substr(0, resp.xirr.length - 1));
+                                                        lomsIRR = Number(resp.xirr.substr(0, resp.xirr.length - 1));
+                                                        var obj = calculateEffectiveIRR(model.loanAccount.loanAmountRequested, model.loanAccount.frequencyRequested, model.loanAccount.tenureRequested, lomsIRR);
+                                                        model.loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7 = obj.effectiveIRR;
                                                     },function (err) {
                                                         console.log(err);
                                                     });
