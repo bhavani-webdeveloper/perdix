@@ -143,8 +143,7 @@ define([], function() {
                         default:
                             throw new Error("Invalid frequency");
                     }
-                    // var nominalRate = Math.round(excelRate(parseFloat(tenure),  -Math.round(parseFloat(loanAmount) * (1 + (parseFloat(flatRate) / 100 * parseFloat(tenure) / frequencyFactor)) / parseFloat(tenure)), parseFloat(loanAmount)) * frequencyFactor * 1000000)/10000;
-                    var nominalRate = frequencyFactor * parseFloat(Math.pow(parseFloat(1 + parseFloat(flatRate / 100)), parseFloat(1/frequencyFactor))-1) * 100;
+                    var nominalRate = Math.round(excelRate(parseFloat(tenure),  -Math.round(parseFloat(loanAmount) * (1 + (parseFloat(flatRate) / 100 * parseFloat(tenure) / frequencyFactor)) / parseFloat(tenure)), parseFloat(loanAmount)) * frequencyFactor * 1000000)/10000;
                     var someRate = parseFloat(nominalRate / (100 * frequencyFactor));
                     var estimatedEmi = (parseFloat(loanAmount) * someRate / parseFloat((1 - Math.pow(1 + someRate, -tenure))));
                     return {
