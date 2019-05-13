@@ -74,7 +74,7 @@ define({
             },
             eventListeners: {
                 "teleVerification-capture": function(bundleModel, model, params){
-                    model.loanAccount.telecallingDetails = params.customer.telecallingDetails;            
+                    model.loanAccount.telecallingDetails = params.loanAccount.telecallingDetails;            
                 }
             },
             form: [
