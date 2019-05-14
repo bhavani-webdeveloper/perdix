@@ -90,7 +90,7 @@ export class EnrolmentProcess {
 
             /* @TODO Code to insert to enterprise customer relations */
 
-            if (aIndex==-1){
+            if (aIndex==-1 && loanProcess.applicantEnrolmentProcess.customer.id){
                 let a:EnterpriseCustomerRelation = new EnterpriseCustomerRelation();
                 a.linkedToCustomerId = loanProcess.applicantEnrolmentProcess.customer.id;
                 this.customer.enterpriseCustomerRelations.push(a);
@@ -106,7 +106,7 @@ export class EnrolmentProcess {
                 return item.linkedToCustomerId == coApplicant.customer.id;
             });
 
-            if (aIndex == -1) {
+            if (aIndex == -1 && coApplicant.customer.id) {
                 let a:EnterpriseCustomerRelation = new EnterpriseCustomerRelation();
                 a.linkedToCustomerId = coApplicant.customer.id;
                 this.customer.enterpriseCustomerRelations.push(a);
@@ -121,7 +121,7 @@ export class EnrolmentProcess {
                 return item.linkedToCustomerId == guarantor.customer.id;
             });
 
-            if (aIndex == -1) {
+            if (aIndex == -1 && guarantor.customer.id) {
                 let a:EnterpriseCustomerRelation = new EnterpriseCustomerRelation();
                 a.linkedToCustomerId = guarantor.customer.id;
                 this.customer.enterpriseCustomerRelations.push(a);
@@ -147,7 +147,7 @@ export class EnrolmentProcess {
 
             /* @TODO Code to insert to enterprise customer relations */
 
-            if (aIndex==-1){
+            if (aIndex==-1 && agentProcess.applicantEnrolmentProcess.customer.id){
                 let a:EnterpriseCustomerRelation = new EnterpriseCustomerRelation();
                 a.customerId = agentProcess.applicantEnrolmentProcess.customer.id;
                 this.customer.enterpriseCustomerRelations.push(a);
