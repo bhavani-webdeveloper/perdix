@@ -29,6 +29,13 @@
                 },
                 "customerCategory":{
                   "type":["string", "null"]
+                },
+                "addressProofFileID":{
+                    "title":"ADDRESS_PROOF",
+                    "type": "file",
+                    "category": "Loan",
+                    "subCategory": "DOC1",
+                    "fileType": "application/pdf"
                 }
             }
         },
