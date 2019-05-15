@@ -10,7 +10,9 @@ irf.pageCollection.controller(irf.controller("management.branchadmin.BranchAdmin
             "items": [
                 "Page/Engine/management.branchadmin.FreezeTransaction",
                 "Page/Engine/management.branchadmin.CashManagement",
-                "Page/Engine/management.branchadmin.UpdateEod"
+                "Page/Engine/management.branchadmin.UpdateEod",
+                "Page/Engine/management.branchadmin.TransferKey",
+                "Page/Engine/management.branchadmin.AllotKey"
             ]
         };
         PagesDefinition.getUserAllowedDefinition(fullDefinition).then(function(resp) {
