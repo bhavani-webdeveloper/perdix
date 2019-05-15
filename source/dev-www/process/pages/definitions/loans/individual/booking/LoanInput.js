@@ -1812,13 +1812,13 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                             }
                         }
                     },
-                    {
-                        "key": "loanAccount.scheduleStartDate",
-                        "title": "SCHEDULE_START_DATE",
-                        "condition": "model.allowPreEmiInterest",
-                        "type": "date",
-                        "required": true
-                    },
+                    // {
+                    //     "key": "loanAccount.scheduleStartDate",
+                    //     "title": "SCHEDULE_START_DATE",
+                    //     "condition": "model.allowPreEmiInterest",
+                    //     "type": "date",
+                    //     "required": true
+                    // },
                 ]
             },
             {
