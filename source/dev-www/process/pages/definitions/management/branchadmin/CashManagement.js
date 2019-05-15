@@ -399,18 +399,18 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                                         key:"cashManagement.eodCashDenominationDto.noOf500",
                                         onChange:"actions.valueOfDenoms(model,form)"
                                     }]
-                                },{
+                                },]
+                            },{
+                                "type": "section",
+                                "htmlClass": "row",
+                                "items": [{
                                     "type": "section",
                                     "htmlClass": "col-xs-4",
                                     "items": [{
                                         key:"cashManagement.eodCashDenominationDto.noOf200",
                                         onChange:"actions.valueOfDenoms(model,form)"
                                     }]
-                                },]
-                            },{
-                                "type": "section",
-                                "htmlClass": "row",
-                                "items": [{
+                                },{
                                     "type": "section",
                                     "htmlClass": "col-xs-4",
                                     "items": [{
@@ -424,18 +424,20 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                                         key:"cashManagement.eodCashDenominationDto.noOf50",
                                         onChange:"actions.valueOfDenoms(model,form)"
                                     }]
-                                },{
-                                    "type": "section",
-                                    "htmlClass": "col-xs-4",
-                                    "items": [{
-                                        key:"cashManagement.eodCashDenominationDto.noOf20",
-                                        onChange:"actions.valueOfDenoms(model,form)"
-                                    }]
                                 },]
                             },{
                                 "type": "section",
                                 "htmlClass": "row",
-                                "items": [{
+                                "items": [
+                                    {
+                                        "type": "section",
+                                        "htmlClass": "col-xs-4",
+                                        "items": [{
+                                            key:"cashManagement.eodCashDenominationDto.noOf20",
+                                            onChange:"actions.valueOfDenoms(model,form)"
+                                        }]
+                                    },
+                                    {
                                     "type": "section",
                                     "htmlClass": "col-xs-4",
                                     "items": [{
@@ -601,7 +603,6 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                             return false;
                         }
                         model.cashManagement.eodCashBalanceDto.confirmUserAuthenticationType = 'PASSWORD';
-                        model.cashManagement.eodCashDenominationDto.id = 0;
                         Transaction.saveCashManagement(model.cashManagement).$promise.then(function(resp){
                             console.log("resp",resp);
                         },function(err){
