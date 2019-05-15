@@ -274,6 +274,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                 model.disbursementCutOffTime=SessionStore.getGlobalSetting("disbursementCutOffTime");
                 model.loanView = SessionStore.getGlobalSetting("LoanViewPageName");
                 model.loanHoldRequired = SessionStore.getGlobalSetting("loanHoldRequired");
+                model.loanAccount.scheduleStartDate=null;
                 var init = function(model, form, formCtrl) {
                     model.loanAccount = model.loanAccount || {branchId :branchId};
                     model.additional = model.additional || {};
