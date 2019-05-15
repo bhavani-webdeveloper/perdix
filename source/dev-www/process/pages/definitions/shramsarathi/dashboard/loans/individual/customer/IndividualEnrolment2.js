@@ -2845,13 +2845,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 //     "orderNo":110
                                 // },
                                 "mailingMobileNo":{
-                                    "key":"ContactInformation.mailingMobileNo",
+                                    "key":"customer.mobileNumber2",
                                     "title":"DESTINATION_PHONE_NO",
                                     "type":"text",
                                     "schema":{
                                         "pattern": "^[0-9]{10,10}$"
                                     },
-                                    "condition": "!model.customer.mailSameAsResidence"
+                                    // "condition": "!model.customer.mailSameAsResidence"
                                 }
                             }
                         },
@@ -3949,7 +3949,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 model.customer.landLineNo = obj.alternateMobileNo;
                                 model.customer.landmark = obj.landmark;
                                 model.customer.postOffice = obj.postOffice;
-
+                                
                                 for (var i = 0; i < model.customer.familyMembers.length; i++) {
                                     // $log.info(model.customer.familyMembers[i].relationShip);
                                     // model.customer.familyMembers[i].educationStatus = obj.educationStatus;

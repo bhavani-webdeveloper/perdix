@@ -962,6 +962,13 @@
                 "numberType": "tel",
                 "orderNo": 10
             },
+            "mobileNumber2": {
+                "key": "customer.mobileNumber2",
+                "type": "text",
+                "inputmode": "number",
+                "numberType": "tel",
+                "orderNo": 10
+            },
             "landLineNo": {
                 "key": "customer.landLineNo",
                 "type": "string",
