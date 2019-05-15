@@ -33,6 +33,8 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                     }
 
                     /* Setting data for the form */
+                    var userName = SessionStore.getUsername();
+                    model.cashManagement.eodCashBalanceDto.confirmedUser = userName;
                     var branchId = SessionStore.getBranchId();
                     if (!model.customer) {
 
@@ -81,6 +83,9 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                             // "Denomination",
                             // "Denomination.denominationFieldset",
                             // "Denomination.denominationItems"
+                            "Details",
+                            "Details.userName",
+                            "Details.password",
 
                             "KeyCustodians",
                             "KeyCustodians.keycustodians",
@@ -106,7 +111,7 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                         "excludes": [],
                         "options": {
                             "repositoryAdditions": {
-                             "Bank":{
+                            "Bank":{
                                  "type":"box",
                                  "orderNo": 1,
                                  "title":"BRANCH_EOD_CASH_MANAGEMENT",
@@ -123,48 +128,75 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                                                         console.log(resp);
                                                         model.cashManagement=resp.body;
                                                        
+                                                        model.cashManagement.openingBal= ((model.cashManagement.eodCashBalanceDto.openingBalInPaisa)/100);
+                                                        model.cashManagement.cashReceivedFromCust= ((model.cashManagement.eodCashBalanceDto.cashReceivedFromCustInPaisa)/100);
+                                                        model.cashManagement.cashPaidToCust= ((model.cashManagement.eodCashBalanceDto.cashPaidToCustInPaisa)/100);
+                                                        model.cashManagement.miscCashReceived= ((model.cashManagement.eodCashBalanceDto.miscCashReceivedInPaisa)/100);
+                                                        model.cashManagement.miscCashPaid= ((model.cashManagement.eodCashBalanceDto.miscCashPaidInPaisa)/100);
+                                                        model.cashManagement.loanRepayment= ((model.cashManagement.eodCashBalanceDto.loanRepaymentInPaisa)/100);
+                                                        model.cashManagement.loanDisbursement= ((model.cashManagement.eodCashBalanceDto.loanDisbursementInPaisa)/100);
+                                                        model.cashManagement.remittanceAmt= ((model.cashManagement.eodCashBalanceDto.remittanceAmtInPaisa)/100);
+                                                        model.cashManagement.neftAmt= ((model.cashManagement.eodCashBalanceDto.neftAmtInPaisa)/100);
+                                                        model.cashManagement.sbAMCAmt= ((model.cashManagement.eodCashBalanceDto.sbAMCAmtInPaisa)/100);
+                                                        model.cashManagement.loanDisbursementByCheque= ((model.cashManagement.eodCashBalanceDto.loanDisbursementByChequeInPaisa)/100);
+                                                        
+                                                        model.cashManagement.cashDeposits = ((model.cashManagement.eodCashBalanceDto.cashDepositsInPaisa)/100);
+                                                        model.cashManagement.cashWithdrawl = ((model.cashManagement.eodCashBalanceDto.cashWithdrawlInPaisa)/100);
                                                         model.cashManagement.actual = (model.cashManagement.eodCashBalanceDto.jewelPouchCountInBranch )+ (model.cashManagement.eodCashBalanceDto.jewelPouchCountInHub) + (model.cashManagement.eodCashBalanceDto.jewelPouchCountInTransit);
+
+                                                        var totalCashIn = model.cashManagement.cashDeposits
+                                                        + model.cashManagement.miscCashReceived
+                                                        + model.cashManagement.cashReceivedFromCust
+                                                        + model.cashManagement.loanRepayment + model.cashManagement.sbAMCAmt
+                                                        + model.cashManagement.neftAmt;
+
+                                                        var totalCashOut = model.cashManagement.cashWithdrawl
+                                                        + model.cashManagement.miscCashPaid + model.cashManagement.remittanceAmt
+                                                        + model.cashManagement.loanDisbursement + model.cashManagement.cashPaidToCust; 
+
+                                                        model.cashManagement.totalCashPaid = model.cashManagement.openingBal + totalCashIn - totalCashOut;
                                                     },function(err){
                                                         console.log(err);
+                                                        PageHelper.showErrors(err.data);
                                                         model.cashManagement = {};
                                                     })
                                                 }
+
                                             }
                                         },
                                         "select1":{
-                                            // "key":"cashManagement.eodCashBalanceDto.transactionDate",
-                                            "key": "cashManagement.date",
+                                            "key":"cashManagement.eodCashBalanceDto.transactionDate",
                                             "type":"text",
                                             "title": "DATE",
                                             "readonly": true
                                         },
                                         "openingBalance":{
-                                            "key":"cashManagement.eodCashBalanceDto.openingBalInPaisa",
-                                            "type":"text",
+                                            "key":"cashManagement.openingBal",
+                                            "type":"amount",
                                             "title": "OPENING_BALANCE",
                                             "readonly": true
                                         },
                                         "cashReceived":{
-                                            "key":"cashManagement.eodCashBalanceDto.cashReceivedFromCustInPaisa",
-                                            "type":"text",
+                                            "key":"cashManagement.cashReceivedFromCust",
+                                            "type":"amount",
                                             "title":"CASH_RECEIVED(SB)",
                                             "readonly": true
                                         },
                                         "cashPaid":{
-                                            "key": "cashManagement.eodCashBalanceDto.cashPaidToCustInPaisa",
-                                            "type": "text",
+                                            "key": "cashManagement.cashPaidToCust",
+                                            "type": "amount",
                                             "title":"CASH_PAID(SB)",
                                             "readonly": true
                                         },
                                         "miscCashReceived":{
-                                            "key": "cashManagement.eodCashBalanceDto.miscCashReceivedInPaisa",
-                                            "type": "text",
+                                            "key": "cashManagement.miscCashReceived",
+                                            "type": "amount",
                                             "title":"MISC_CASH_RECEIVED",
                                             "readonly": true
                                         },
                                         "miscCashPaid":{
-                                            "key": "cashManagement.eodCashBalanceDto.miscCashPaidInPaisa",
-                                            "type": "text",
+                                            "key": "cashManagement.miscCashPaid",
+                                            "type": "amount",
                                             "title": "MISC_CASH_PAID",
                                             "readonly": true
                                         },
@@ -181,78 +213,96 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                                         //     "readonly": true
                                         // },
                                         "loanRepayment":{
-                                            "key":"cashManagement.eodCashBalanceDto.loanRepaymentInPaisa",
-                                            "type":"text",
+                                            "key":"cashManagement.loanRepayment",
+                                            "type":"amount",
                                             "title": "LOAN_REPAYMENT",
                                             "readonly": true
                                         },
                                         "loanDisbursement":{
-                                            "key":"cashManagement.eodCashBalanceDto.loanDisbursementInPaisa",
-                                            "type":"text",
+                                            "key":"cashManagement.loanDisbursement",
+                                            "type":"amount",
                                             "title": "LOAN_DISBURSEMENT",
                                             "readonly": true
                                         },
                                         "remittanceAmount":{
-                                            "key":"cashManagement.eodCashBalanceDto.remittanceAmtInPaisa",
-                                            "type":"text",
+                                            "key":"cashManagement.remittanceAmt",
+                                            "type":"amount",
                                             "title": "REMITTANCE_AMOUNT",
                                             "readonly": true
                                         },
                                         "localNEFTAmount":{
-                                            "key":"cashManagement.eodCashBalanceDto.neftAmtInPaisa",
-                                            "type":"text",
+                                            "key":"cashManagement.neftAmt",
+                                            "type":"amount",
                                             "title": "LOCAL_NEFT_AMOUNT",
                                             "readonly": true
                                         },
                                         "sbAMCandCardCharges":{
-                                            "key":"cashManagement.eodCashBalanceDto.sbAMCAmtInPaisa",
-                                            "type":"text",
+                                            "key":"cashManagement.sbAMCAmt",
+                                            "type":"amount",
                                             "title": "SB_AMC_AND_CARD_CHANGES",
                                             "readonly": true
                                         },
                                         "totalCash":{
-                                            "key":"cashManagement.eodCashDenominationDto.totalAmountInPaisa",
+                                            "key":"cashManagement.totalCashPaid",
                                             "type":"amount",
                                             "title": "TOTAL_CASH",
                                             "readonly": true
                                         },
                                         "loanDisbursementByCheque":{
-                                            "key":"cashManagement.eodCashBalanceDto.loanDisbursementByChequeInPaisa",
-                                            "type":"text",
+                                            "key":"cashManagement.loanDisbursementByCheque",
+                                            "type":"amount",
                                             "title": "LOAN_DISBURSEMENT_BY_CHEQUE",
                                             "readonly": true
                                         },
                                         "noOfRevenueStampPapers":{
                                             "key":"cashManagement.eodCashBalanceDto.noOfRevenueStamps",
-                                            "type":"text",
+                                            "type":"number",
                                             "title": "NO_OF_REVENUE_STAMP_PAPERS",
                                             "readonly": true
                                         },
                                         "noOfDOpartnersStampPapers":{
                                             "key":"cashManagement.eodCashBalanceDto.noOfAxisStamps",
-                                            "type":"text",
+                                            "type":"number",
                                             "title": "NO_OF_DO_PARTNERS_STAMP_PAPERS",
                                             "readonly": true
                                         },
                                         "noOfPFSPLStampPapers":{
                                             "key":"cashManagement.eodCashBalanceDto.noOfPFSPLStamps",
-                                            "type":"text",
+                                            "type":"number",
                                             "title": "NO_OF_PFSPL_STAMP_PAPERS",
                                             "readonly": true
                                         },
                                         "remarks":{
                                             "key":"cashManagement.eodCashBalanceDto.remarks",
-                                            "type":"message",
+                                            "type":"text",
                                             "title": "REMARKS",
                                             "readonly": true
                                         },
 
                                     }
                                 },
-                              
+                            "Details":{
+                                "type":"box",
+                                 "orderNo": 2,
+                                 "title":"USER_DETAILS",
+                                 "items":{
+                                    "userName":{
+                                        "key":"cashManagement.eodCashBalanceDto.confirmedUser",
+                                        "type":"text",
+                                        "title": "USER_NAME",
+                                        "readonly": true
+                                    },
+                                    "password":{
+                                        "key":"cashManagement.eodCashBalanceDto.confirmedUserPassword",
+                                        "type":"text",
+                                        "title": "PASSWORD",
+                                        "required" : true
+                                    },
+                                    }
+                                },
                             "KeyCustodians":{
                                     "type":"box",
-                                    "orderNo": 2,
+                                    "orderNo": 3,
                                     "title":"KEY_CUSTODIANS",
                                     "items":{
                                         //    "keycustodians":{
@@ -305,7 +355,7 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                             "additions": [
                                 {
                                     "type": "actionbox",
-                                    "orderNo": 3,
+                                    "orderNo": 4,
                                     "items":[
                                         {
                                             "type": "submit",
@@ -335,9 +385,14 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                                         key:"cashManagement.eodCashDenominationDto.noOf2000",
                                         onChange:"actions.valueOfDenoms(model,form)"
                                     }]
-                                }, 
-                                
-                                {
+                                }, {
+                                    "type": "section",
+                                    "htmlClass": "col-xs-4",
+                                    "items": [{
+                                        key:"cashManagement.eodCashDenominationDto.noOf1000",
+                                        onChange:"actions.valueOfDenoms(model,form)"
+                                    }]
+                                },{
                                     "type": "section",
                                     "htmlClass": "col-xs-4",
                                     "items": [{
@@ -411,13 +466,14 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                                 }]
                             },
                             {
-                                key:"cashManagement.eodCashDenominationDto.totalAmountInPaisa",
+                                key:"cashManagement.totalCash",
                                 title:"TOTAL_RS",
                                 "type": "amount",
                                 readonly:true
                             }]
                         }
                     ]}
+
 
                     UIRepository.getEnrolmentProcessUIRepository().$promise
                         .then(function (repo) {
@@ -430,8 +486,7 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                             // self.form.push(denomination);
                             console.log(form);
                             console.log("_________________Testing form data___________");
-                        });
-
+                        }); 
                     /* Form rendering ends */
                 },
 
@@ -451,7 +506,7 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                 },
                 actions: {
                     valueOfDenoms : function(model,form){
-                        var thousands = 1000*parseInt(model.cashManagement.eodCashDenominationDto.denominationThousand,10);
+                        var thousands = 1000*parseInt(model.cashManagement.eodCashDenominationDto.noOf1000,10);
                         var twoTthousands = 2000*parseInt(model.cashManagement.eodCashDenominationDto.noOf2000,10);
                         var fivehundreds = 500*parseInt(model.cashManagement.eodCashDenominationDto.noOf500,10);
                         var twohundreds = 200*parseInt(model.cashManagement.eodCashDenominationDto.noOf200,10);
@@ -479,7 +534,7 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                         if(!isNaN(fives)) denominationTotal+=fives;
                         if(!isNaN(twos)) denominationTotal+=twos;
                         if(!isNaN(ones)) denominationTotal+=ones;
-                        model.cashManagement.eodCashDenominationDto.totalAmountInPaisa = denominationTotal;
+                        model.cashManagement.totalCash = denominationTotal;
                         return (denominationTotal===model.collected);
                     },
                     save: function (model, formCtrl, form, $event) {
@@ -505,10 +560,10 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                                 "bFont": 1,
                                 "text": "2000  x" + summary.noOf2000
                             },
-                            // {
-                            //     "bFont": 1,
-                            //     "text": "1000  x" + summary.denominationThousand
-                            // },
+                            {
+                                "bFont": 1,
+                                "text": "1000  x" + summary.noOf1000
+                            },
                             {
                                 "bFont": 1,
                                 "text": "500   x" + summary.noOf500
@@ -523,7 +578,7 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                             },
                             {
                                 "bFont": 2,
-                                "text": "Total Rs. " + summary.totalAmountInPaisa
+                                "text": "Total Rs. " + summary.totalAmount
                             },
                         ]
                         var printObj = {
@@ -545,11 +600,13 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                         if (PageHelper.isFormInvalid(form)) {
                             return false;
                         }
-                        model.cashManagement.eodCashBalanceDto.transactionDate = model.cashManagement.date;
+                        model.cashManagement.eodCashBalanceDto.confirmUserAuthenticationType = 'PASSWORD';
+                        model.cashManagement.eodCashDenominationDto.id = 0;
                         Transaction.saveCashManagement(model.cashManagement).$promise.then(function(resp){
                             console.log("resp",resp);
                         },function(err){
                             console.log("ERR",err);
+                            PageHelper.showErrors(err);
                         })
                     }
                 },
@@ -566,6 +623,10 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                                         "noOf2000": {
                                             "type": "integer",
                                             "title": "2000 x"
+                                        },
+                                        "noOf1000": {
+                                            "type": "integer",
+                                            "title": "1000 x"
                                         },
                                         "noOf500": {
                                             "type": "integer",
