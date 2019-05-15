@@ -235,8 +235,12 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                                 }
                             });
                         }
-
-                            model.additional.netDisbursementAmount = Number(resp[0].netDisbursementAmount);
+                            if(model.siteCode == 'shramsarathi'){
+                                model.additional.netDisbursementAmount = Number(resp[0].amount);
+                            }else{
+                                model.additional.netDisbursementAmount = Number(resp[0].netDisbursementAmount);
+                            }
+                            
                             var j = 1;
                             if (model.additional.tempfees) {
                                 for (var i = 0; i < model.additional.tempfees.length; i++) {
