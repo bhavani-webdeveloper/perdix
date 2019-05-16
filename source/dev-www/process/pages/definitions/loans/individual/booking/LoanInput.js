@@ -1689,6 +1689,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                                 "title":"FIXED_INTREST_RETE",
                                 "type": "number"
                             }
+                            
                             /*{
                                 title: "BUSINESS_INCOME",
                                 //type: "amount",
