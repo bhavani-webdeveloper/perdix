@@ -557,7 +557,7 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                             for (var i=0;i<listTrans.length;i++){
                                                                 var indvTransaction = listTrans[i];
                                                                 var flag = indvTransaction.transactionName == 'Disbursement' ? 0:1;
-                                                                var data = prepareData(model,indvTransaction,indvTransaction.transactionName,flag);
+                                                                var data = prepareData(model,indvTransaction,indvTransaction.description || indvTransaction.transactionName,flag);
                                                                 var opts = data.opts;
                                                                 var repaymentInfo = data.repaymentInfo;
                                                                 webReceipt += GroupProcess.generateWebReceipt(repaymentInfo,opts,flag);
