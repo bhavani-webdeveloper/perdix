@@ -121,17 +121,17 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                         "readonly": true
 
                                     },
-                                    "zoneId": {
-                                        "key": "applicant.customer.centreId",
-                                        "type": "lov",
-                                        "title": "ZONE_ID",
-                                        "filter": {
-                                            "parentCode": "branch_id"
-                                        },
-                                        "parentEnumCode": "branch_id",
-                                        "parentValueExpr": "model.applicant.customer.customerBranchId",
-                                        "readonly": true
-                                    },
+                                    // "zoneId": {
+                                    //     "key": "applicant.customer.centreId",
+                                    //     "type": "lov",
+                                    //     "title": "ZONE_ID",
+                                    //     "filter": {
+                                    //         "parentCode": "branch_id"
+                                    //     },
+                                    //     "parentEnumCode": "branch_id",
+                                    //     "parentValueExpr": "model.applicant.customer.customerBranchId",
+                                    //     "readonly": true
+                                    // },
                                     "zoneName": {
                                         "key": "applicant.customer.centreId",
                                         "type": "select",
