@@ -163,6 +163,16 @@
                         "title": "state",
                         "type": "string",
                         "minLength": 1,
+                        "maxLength": 100,   
+                        "captureStages": [
+                            "PendingVerification"
+                        ]
+                    },
+                    "addressProofFileID":
+                    {
+                        "title": "addressProofFileID",
+                        "type": "string",
+                        "minLength": 1,
                         "maxLength": 100,
                         "captureStages": [
                             "PendingVerification"
