@@ -126,6 +126,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.firstName",
                                 //"References.verifications.ReferenceCheck",
                                 "IndividualReferences",
+                                "IndividualInformation.centreId",
                                 "HouseVerification.houseVerificationPhoto"
                                 // "References",   
                             ],
@@ -224,11 +225,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "BankAccounts.customerBankAccounts.bankingSince":{
                                    "title":"ACTIVE_FROM"
                                 },
-                                "IndividualInformation.centreId": {
-                                    "required": true,
-                                    "readonly": true,
-                                    "title": "ZONE_ID"
-                                },
+                                // "IndividualInformation.centreId": {
+                                //     "required": true,
+                                //     "readonly": true,
+                                //     "title": "ZONE_ID"
+                                // },
                                 "IndividualInformation.centreId1":{
                                     "title": "ZONE_NAME",
                                     "readonly":true
@@ -239,7 +240,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         {
                             "excludes": [
                                 "KYC.firstName",
-                                "IndividualReferences"
+                                "IndividualReferences",
+                                "IndividualInformation.centreId"
                             ],
                             "overrides": {
                                
@@ -328,11 +330,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
 
                           
-                                "IndividualInformation.centreId": {
-                                    "required": true,
-                                    "readonly": true,
-                                    "title": "ZONE_ID"
-                                },
+                                // "IndividualInformation.centreId": {
+                                //     "required": true,
+                                //     "readonly": true,
+                                //     "title": "ZONE_ID"
+                                // },
                                 "IndividualInformation.centreId1":{
                                     "title": "ZONE_NAME",
                                     "readonly":true
@@ -556,6 +558,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification.date",
                                 "PhysicalAssets",
                                 "IndividualReferences",
+                                "IndividualInformation.centreId",
                                 "References"
                             ],
                             "overrides": {
@@ -783,6 +786,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             },
                             "excludes": [
                                 "IndividualFinancials",
+                                "IndividualInformation.centreId",
                                 // "FamilyDetails.familyMembers.familyMemberFirstName",
                                 // "FamilyDetails.familyMembers.anualEducationFee",
                                 // "FamilyDetails.familyMembers.salary",
@@ -808,7 +812,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "FamilyDetails.familyMembers.noOfDependents",
                                 "PhysicalAssets",
                                 "IndividualFinancials",
-                                "References"
+                                "References",
+                                "IndividualInformation.centreId"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -881,10 +886,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualInformation.customerBranchId": {
                                     "readonly": true
                                 },
-                                "IndividualInformation.centreId": {
-                                    "readonly": true,
-                                    "title": "ZONE_ID"
-                                },
+                                // "IndividualInformation.centreId": {
+                                //     "readonly": true,
+                                //     "title": "ZONE_ID"
+                                // },
                                 "IndividualInformation.centreId1":{
                                     "title": "ZONE_NAME",
                                     "readonly":true
@@ -1038,7 +1043,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences",
                                 "PhysicalAssets",
                                 "IndividualFinancials",
-                                "References"
+                                "References",
+                                "IndividualInformation.centreId"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -1116,14 +1122,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences",
                                 "PhysicalAssets",
                                 "IndividualFinancials",
-                                "References"
+                                "References",
+                                "IndividualInformation.centreId"
                             ],
                             "overrides": {
-                                "IndividualInformation.centreId": {
-                                    "required": true,
-                                    "readonly": true,
-                                    "title": "ZONE_ID"
-                                },
+                                // "IndividualInformation.centreId": {
+                                //     "required": true,
+                                //     "readonly": true,
+                                //     "title": "ZONE_ID"
+                                // },
                                 "IndividualInformation.centreId1":{
                                     "title": "ZONE_NAME",
                                     "readonly":true
@@ -1214,7 +1221,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualReferences",
                                 "PhysicalAssets",
                                 "IndividualFinancials",
-                                "References"
+                                "References",
+                                "IndividualInformation.centreId"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -1283,6 +1291,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "FamilyDetails.familyMembers.noOfDependents",
                                 "PhysicalAssets",
                                 "IndividualFinancials",
+                                "IndividualInformation.centreId"
                                 // "References",
                                 
                             ],
@@ -1302,11 +1311,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 // "FamilyDetails.familyMembers.familyMemberFirstName": {
                                 //     "condition": "model.customer.familyMembers[arrayIndex].relationShip.toLowerCase() !== 'self'"
                                 // }, 
-                                 "IndividualInformation.centreId": {
-                                    "required": true,
-                                    "readonly": true,
-                                    "title": "ZONE_ID"
-                                },
+                                //  "IndividualInformation.centreId": {
+                                //     "required": true,
+                                //     "readonly": true,
+                                //     "title": "ZONE_ID"
+                                // },
                                 "IndividualInformation.centreId1":{
                                     "title": "ZONE_NAME",
                                     "readonly":true
@@ -1393,7 +1402,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.date",
                                 "HouseVerification.place",
-                                "KYC.customerId"
+                                "KYC.customerId",
+                                "IndividualInformation.centreId"
                             ],
                             "overrides": {
                                 "PhysicalAssets.physicalAssets":{
@@ -1493,7 +1503,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             "excludes": [
                                 "ContactInformation.whatsAppMobileNoOption",
                                 //"IndividualReferences.verifications.ReferenceCheck",
-                                "KYC.customerId"
+                                "KYC.customerId",
+                                "IndividualInformation.centreId"
 
                             ],
                             "overrides": {
@@ -1538,11 +1549,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualInformation": {
                                     "readonly": true
                                 },
-                                "IndividualInformation.centreId": {
-                                    "required": true,
-                                    "readonly": true,
-                                    "title": "ZONE_ID"
-                                },
+                                // "IndividualInformation.centreId": {
+                                //     "required": true,
+                                //     "readonly": true,
+                                //     "title": "ZONE_ID"
+                                // },
                                 "IndividualInformation.centreId1":{
                                     "title": "ZONE_NAME",
                                     "readonly":true
@@ -1588,7 +1599,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "ContactInformation.whatsAppMobileNoOption",
                                 //"IndividualReferences.verifications.ReferenceCheck",
                                 "IndividualReferences",
-                                "IndividualFinancials"
+                                "IndividualFinancials",
+                                "IndividualInformation.centreId"
                             ],
                             "overrides": {
                                 "KYC": {
@@ -1630,11 +1642,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 },
                                 "BankAccounts.customerBankAccounts": {
                                     "readonly": true
-                                },  "IndividualInformation.centreId": {
-                                    "required": true,
-                                    "readonly": true,
-                                    "title": "ZONE_ID"
-                                },
+                                },  
+                                // "IndividualInformation.centreId": {
+                                //     "required": true,
+                                //     "readonly": true,
+                                //     "title": "ZONE_ID"
+                                // },
                                 "IndividualInformation.centreId1":{
                                     "title": "ZONE_NAME",
                                     "readonly":true
@@ -1646,9 +1659,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                         },
                         "Rejected": {
                             "excludes": [
-                                "IndividualFinancials"
+                                "IndividualFinancials",
+                                "IndividualInformation.centreId"
                             ],
                             "overrides": {
+                                
                                 "KYC": {
                                     "orderNo": 1,
                                     "readonly": true
@@ -1672,11 +1687,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                     "orderNo": 4,
                                     "readonly": true
                                 },
-                                "IndividualInformation.centreId": {
-                                    "required": true,
-                                    "readonly": true,
-                                    "title": "ZONE_ID"
-                                },
+                                // "IndividualInformation.centreId": {
+                                //     "required": true,
+                                //     "readonly": true,
+                                //     "title": "ZONE_ID"
+                                // },
                                 "IndividualInformation.centreId1":{
                                     "title": "ZONE_NAME",
                                     "readonly":true
@@ -1752,10 +1767,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "IndividualInformation.customerBranchId": {
                                     "readonly": true
                                 },
-                                "IndividualInformation.centreId": {
-                                    "readonly": false,
-                                    "title": "ZONE_ID"
-                                },
+                                // "IndividualInformation.centreId": {
+                                //     "readonly": false,
+                                //     "title": "ZONE_ID"
+                                // },
                                 "IndividualInformation.centreId1":{
                                     "title": "ZONE_NAME",
                                     "readonly":true
@@ -1908,6 +1923,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             }
                         },
                         "FieldAppraisalReview": {
+                            "excludes": [
+                                "IndividualInformation.centreId"
+                            ],
                             "overrides": {
                                 "References": {
                                     "readonly": true
@@ -1921,6 +1939,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             }
                         },
                         "CentralRiskReview": {
+                            "excludes": [
+                                "IndividualInformation.centreId"
+                            ],
                             "overrides": {
                                 "References": {
                                     "readonly": true
@@ -1934,6 +1955,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                             }
                         },
                         "CreditCommitteeReview": {
+                            "excludes": [
+                                "IndividualInformation.centreId"
+                            ],
                             "overrides": {
                                 "IndividualInformation.centreId": {
                                     "required": true,
@@ -2018,11 +2042,11 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "References": {
                                     "readonly": true
                                 },
-                                "IndividualInformation.centreId": {
-                                    "required": true,
-                                    "readonly": true,
-                                    "title": "ZONE_ID"
-                                },
+                                // "IndividualInformation.centreId": {
+                                //     "required": true,
+                                //     "readonly": true,
+                                //     "title": "ZONE_ID"
+                                // },
                                 "IndividualInformation.centreId1":{
                                     "title": "ZONE_NAME",
                                     "readonly":true

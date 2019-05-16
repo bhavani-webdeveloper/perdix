@@ -95,7 +95,7 @@ define({
                             title: "REASON",
                             type: "select",
                             required: true,
-                            enumCode: "reason",
+                            enumCode: "key_transfer_reason",
                         },
                         {
                             title: "Specify Reason",
@@ -152,7 +152,7 @@ define({
                                 "reason": {
                                     "title": "REASON",
                                     "type": ["string", "null"],
-                                    "enumCode": "reason",
+                                    "enumCode": "key_transfer_reason",
                                     "x-schema-form": {
                                         "type": "select",
                                         "screenFilter": true
