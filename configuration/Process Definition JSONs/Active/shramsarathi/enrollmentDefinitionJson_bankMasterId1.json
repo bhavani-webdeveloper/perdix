@@ -191,6 +191,16 @@
                 "Completed"
               ]
             },
+			"mobileNumber2": {
+              "title": "Mobile Number",
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 10,
+              "captureStages": [
+                "BasicEnrolment",
+                "Completed"
+              ]
+            },
             "noOfDependents": {
               "title": "noOfDependents",
               "type": "string",
