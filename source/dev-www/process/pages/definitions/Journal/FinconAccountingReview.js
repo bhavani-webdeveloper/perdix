@@ -311,7 +311,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccountingReview"), 
                             model.showFeilds = false;
                             model.showFeild = false;
                             _.forEach(res.journalHeader.journalDetails ,function(journaldetail){
-                                journaldetail.glAcNo = "TESTGL101"
+                                journaldetail.glAcNo = journaldetail.glAcNo
                             })
                             if (res.journalHeader.entryType == ("Payment - Account") || res.journalHeader.entryType == ("Payment") || res.journalHeader.entryType == ("Journal - Account") || res.journalHeader.entryType == ("Journal")) {
                                 model.showFeilds = true;
