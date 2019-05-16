@@ -1288,7 +1288,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         }
                     }
 
-                    if (model.allowPreEmiInterest && model.siteCode == 'IREPDhan' ) {
+                    if (model.allowPreEmiInterest && (model.siteCode == 'IREPDhan' || model.siteCode == 'maitreya')) {
                         var diffDay = 0;
                         var scheduleStartDate;
                         if(model.loanAccount.scheduleStartDate){
@@ -1619,7 +1619,7 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanBooking"),
                         }
                     }
 
-                    if (model.allowPreEmiInterest && model.siteCode == 'IREPDhan' ) {
+                    if (model.allowPreEmiInterest && (model.siteCode == 'IREPDhan' || model.siteCode == 'maitreya')) {
                         var diffDay = 0;
                         var scheduleStartDate;
                         if(model.loanAccount.scheduleStartDate){
