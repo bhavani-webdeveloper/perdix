@@ -234,13 +234,20 @@ define({
                                         PageHelper.showProgress("brs-reject", "Only 1 entry can be rejected at a time.", 5000);
                                         return;
                                     }
-
+                                    siteCode = SessionStore.getGlobalSetting('siteCode');
                                     var reqData = { "loanCollectionSummaryDTOs": temp };
-
+                                    if(siteCode == 'witfin'){
+                                    if (instrument == 'CASH') {
+                                        reqData.stage = 'Deposit';
+                                    } else {
+                                        reqData.stage = 'Rejected';
+                                    }
+                                    }else{
                                     if (instrument == 'CASH'|| instrument == 'CHQ') {
                                         reqData.stage = 'Deposit';
                                     } else {
                                         reqData.stage = 'Rejected';
+                                    }
                                     }
 
                                     Utils.confirm("Are You Sure?")
