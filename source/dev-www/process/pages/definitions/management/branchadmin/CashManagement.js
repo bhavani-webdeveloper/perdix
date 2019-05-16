@@ -155,6 +155,8 @@ define(['perdix/infra/api/AngularResourceService'], function (AngularResourceSer
                                                         + model.cashManagement.loanDisbursement + model.cashManagement.cashPaidToCust; 
 
                                                         model.cashManagement.totalCashPaid = model.cashManagement.openingBal + totalCashIn - totalCashOut;
+                                                        var userName = SessionStore.getUsername();
+                                                            model.cashManagement.eodCashBalanceDto.confirmedUser = userName;
                                                     },function(err){
                                                         console.log(err);
                                                         PageHelper.showErrors(err.data);
