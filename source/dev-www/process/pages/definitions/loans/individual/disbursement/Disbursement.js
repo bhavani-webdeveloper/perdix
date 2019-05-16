@@ -187,6 +187,7 @@ irf.pageCollection.factory(irf.page("loans.individual.disbursement.Disbursement"
                             model.additional.fees = [];
                             model.additional.tempfees = resp[0].fees;
                             model.additional.firstRepaymentDate = resp[0].firstRepaymentDate;
+                            model.additional.moratoriumPeriodInDays = resp[0].moratoriumPeriodInDays;s
                             model.additional.loanamount = resp[0].amount;
                             model.additional.feeamount = resp[0].fees;
                             model.additional.transactionType = resp[0].transactionType;
