@@ -3314,7 +3314,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                                 "frequency": {
                                                     key: "customer.familyMembers[].incomes[].frequency",
                                                     type: "select",
-                                                    "enumCode":"income_frequency",
+                                                    "enumCode":"incomesfrequency",
                                                     "orderNo": 40
                                                 },
                                                 "occupationType":{

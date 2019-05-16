@@ -1,22 +1,8 @@
 irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQueue"), ["$log", "formHelper", "entityManager", "IndividualLoan", "$state", "SessionStore", "Utils", "irfNavigator",
-	function($log, formHelper, EntityManager, IndividualLoan, $state, SessionStore, Utils, irfNavigator) {
-
-
-		return {
-			"type": "search-list",
-			"title": "LOAN_ORIGINATION_QUEUE",
-			"subTitle": "",
-
-			initialize: function(model, form, formCtrl) {
-				model.branch = SessionStore.getCurrentBranch().branchId;
-			},
-
-			definition: {
-				title: "SEARCH_LOANS",
-				searchForm: [
-					"*"
-				],
-				searchSchema: {
+	function ($log, formHelper, EntityManager, IndividualLoan, $state, SessionStore, Utils, irfNavigator) {
+		var searchSchemaGen = function (siteCode) {
+			if (siteCode == 'shramsarathi') {
+				return {
 					"type": 'object',
 					"title": 'SearchOptions',
 					"properties": {
@@ -26,7 +12,73 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 							"enumCode": "origination_stage",
 							"x-schema-form": {
 								"type": "select",
-								"required":"true",
+								"required": "true",
+								"screenFilter": true
+							}
+						},
+						'branch': {
+							'title': "BRANCH",
+							"type": ["string", "null"],
+							"x-schema-form": {
+								"type": "userbranch",
+								"screenFilter": true
+							}
+						},
+						"centre": {
+							"title": "CENTRE",
+							"type": ["integer", "null"],
+							"x-schema-form": {
+								"type": "select",
+								"enumCode": "centre",
+								"parentEnumCode": "branch",
+								"parentValueExpr": "model.branch",
+								"screenFilter": true
+							}
+						},
+						"applicantName": {
+							"title": "APPLICANT_NAME",
+							"type": "string"
+						},
+						"accountNumber": {
+							"title": "ACCOUNT_NUMBER",
+							"type": "string"
+						},
+						"area": {
+							"title": "AREA",
+							"type": "string"
+						},
+						"cityTownVillage": {
+							"title": "CITY_TOWN_VILLAGE",
+							"type": "string"
+						},
+						"pincode": {
+							"title": "PIN_CODE",
+							"type": "string"
+						}
+						// "status": {
+						// 	"type": "string",
+						// 	"title": "STATUS",
+						// 	"enumCode": "origination_status",
+						// 	"x-schema-form": {
+						// 		"type": "select"
+						// 	}
+						// }
+					},
+					"required": []
+				}
+			}
+			else {
+				return {
+					"type": 'object',
+					"title": 'SearchOptions',
+					"properties": {
+						"stage": {
+							"title": "STAGE",
+							"type": ["string", "null"],
+							"enumCode": "origination_stage",
+							"x-schema-form": {
+								"type": "select",
+								"required": "true",
 								"screenFilter": true
 							}
 						},
@@ -83,34 +135,51 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 						// }
 					},
 					"required": []
-				},
+				}
+			}
+		}
 
-				getSearchFormHelper: function() {
+		return {
+			"type": "search-list",
+			"title": "LOAN_ORIGINATION_QUEUE",
+			"subTitle": "",
+
+			initialize: function (model, form, formCtrl) {
+				model.branch = SessionStore.getCurrentBranch().branchId;
+			},
+
+			definition: {
+				title: "SEARCH_LOANS",
+				searchForm: [
+					"*"
+				],
+				searchSchema: searchSchemaGen(SessionStore.getGlobalSetting("siteCode")),
+				getSearchFormHelper: function () {
 					return formHelper;
 				},
 
-				getResultsPromise: function(searchOptions, pageOpts) {
+				getResultsPromise: function (searchOptions, pageOpts) {
 
 					return IndividualLoan.search({
-	                    'stage': searchOptions.stage,
-	                    'branchId':searchOptions.branch,
-					    'centreCode': searchOptions.centre,
-	                    'enterprisePincode':searchOptions.pincode,
-	                    'applicantName':searchOptions.applicantName,
-	                    'accountNumber':searchOptions.accountNumber,
-	                    'area':searchOptions.area,
-	                    'villageName':searchOptions.villageName,
-	                    'customerName': searchOptions.businessName,
-	                    'page': pageOpts.pageNo,
-	                    'per_page': pageOpts.itemsPerPage,
-	                }).$promise;
+						'stage': searchOptions.stage,
+						'branchId': searchOptions.branch,
+						'centreCode': searchOptions.centre,
+						'enterprisePincode': searchOptions.pincode,
+						'applicantName': searchOptions.applicantName,
+						'accountNumber': searchOptions.accountNumber,
+						'area': searchOptions.area,
+						'villageName': searchOptions.villageName,
+						'customerName': searchOptions.businessName,
+						'page': pageOpts.pageNo,
+						'per_page': pageOpts.itemsPerPage,
+					}).$promise;
 				},
 
 				paginationOptions: {
-					"getItemsPerPage": function(response, headers) {
+					"getItemsPerPage": function (response, headers) {
 						return 100;
 					},
-					"getTotalItemsCount": function(response, headers) {
+					"getTotalItemsCount": function (response, headers) {
 						return headers['x-total-count']
 					}
 				},
@@ -118,14 +187,14 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 					selectable: false,
 					expandable: true,
 					listStyle: "table",
-					itemCallback: function(item, index) {},
-					getItems: function(response, headers) {
+					itemCallback: function (item, index) { },
+					getItems: function (response, headers) {
 						if (response != null && response.length && response.length != 0) {
 							return response;
 						}
 						return [];
 					},
-					getListItem: function(item) {
+					getListItem: function (item) {
 						return [
 							item.screeningDate,
 							item.applicantName,
@@ -135,68 +204,102 @@ irf.pageCollection.factory(irf.page("loans.individual.screening.LoanOriginationQ
 							item.enterprisePincode
 						]
 					},
-					getTableConfig: function() {
+					getTableConfig: function () {
 						return {
 							"serverPaginate": true,
 							"paginate": true,
 							"pageLength": 10
 						};
 					},
-					getColumns: function() {
-						return [
-						{
-							title: 'LOAN_ID',
-							data: 'loanId'
-						},	
-						{
-							title: 'HUB_NAME',
-							data: 'branchName'
-						},
-						{
-							title: 'SPOKE_NAME',
-							data: 'centreName'
-						},{
-							title: 'SCREENING_DATE',
-							data: 'screeningDate'
-						}, {
-							title: 'APPLICANT_NAME',
-							data: 'applicantName'
-						},{
-							title: 'BUSINESS_NAME',
-							data: 'customerName'
-						}, {
-							title: 'AREA',
-							data: 'area'
-						}, {
-							title: 'CITY_TOWN_VILLAGE',
-							data: 'villageName'
-						},	{
-							title: 'CURRENT_STAGE',
-							data: 'stage'
-						}]
-					},
-					getActions: function() {
-						return [
-							{
-							name: "VIEW LOAN",
-							desc: "",
-							icon: "fa fa-pencil-square-o",
-							fn: function(item, index) {
-								irfNavigator.go({
-									state: "Page.Bundle",
-									pageName: "loans.individual.screening.LoanViewList",
-									pageId: item.loanId
+					getColumns: function () {
+
+						if (SessionStore.getGlobalSetting("siteCode") == 'shramsarathi') {
+							return [
+								{
+									title: 'LOAN_ID',
+									data: 'loanId'
 								},
 								{
-									state: "Page.Engine",
-									pageName: "loans.individual.screening.LoanOriginationQueue"
-								});
-							},
-							isApplicable: function(item, index) {
+									title: 'HUB_NAME',
+									data: 'branchName'
+								},
+								{
+									title: 'SPOKE_NAME',
+									data: 'centreName'
+								}, {
+									title: 'SCREENING_DATE',
+									data: 'screeningDate'
+								}, {
+									title: 'APPLICANT_NAME',
+									data: 'applicantName'
+								},
+								{
+									title: 'AREA',
+									data: 'area'
+								}, {
+									title: 'CITY_TOWN_VILLAGE',
+									data: 'villageName'
+								}, {
+									title: 'CURRENT_STAGE',
+									data: 'stage'
+								}]
+						} else {
+							return [
+								{
+									title: 'LOAN_ID',
+									data: 'loanId'
+								},
+								{
+									title: 'HUB_NAME',
+									data: 'branchName'
+								},
+								{
+									title: 'SPOKE_NAME',
+									data: 'centreName'
+								}, {
+									title: 'SCREENING_DATE',
+									data: 'screeningDate'
+								}, {
+									title: 'APPLICANT_NAME',
+									data: 'applicantName'
+								}, {
+									title: 'BUSINESS_NAME',
+									data: 'customerName'
+								}, {
+									title: 'AREA',
+									data: 'area'
+								}, {
+									title: 'CITY_TOWN_VILLAGE',
+									data: 'villageName'
+								}, {
+									title: 'CURRENT_STAGE',
+									data: 'stage'
+								}]
+						}
 
-								return true;
-							}
-						}];
+					},
+					getActions: function () {
+						return [
+							{
+								name: "VIEW LOAN",
+								desc: "",
+								icon: "fa fa-pencil-square-o",
+								fn: function (item, index) {
+									irfNavigator.go({
+										state: "Page.Bundle",
+										pageName: "loans.individual.screening.LoanViewList",
+										pageId: item.loanId
+									},
+										{
+											state: "Page.Engine",
+											pageName: "loans.individual.screening.LoanOriginationQueue"
+										});
+								},
+								isApplicable: function (item, index) {
+
+									return true;
+								}
+							}];
 					}
 				}
 			}
