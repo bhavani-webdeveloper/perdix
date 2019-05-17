@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("base.dashboard.loans.individual.screening.CentralRiskReviewQueue"), 
+irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screening.CentralRiskReviewQueue"), 
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
 		return {
@@ -184,16 +184,16 @@ irf.pageCollection.factory(irf.page("base.dashboard.loans.individual.screening.C
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('base.dashboard.loans.individual.screening.CentralRiskReview', {
+								entityManager.setModel('sarvagram.dashboard.loans.individual.screening.CentralRiskReview', {
 									_request: item
 								});
 								irfNavigator.go({
 									state: "Page.Bundle",
-									pageName: "base.dashboard.loans.individual.screening.CentralRiskReview",
+									pageName: "sarvagram.dashboard.loans.individual.screening.CentralRiskReview",
 									pageId: item.loanId
 								}, {
 									state: 'Page.Engine',
-                                    pageName: "base.dashboard.loans.individual.screening.CentralRiskReviewQueue"
+                                    pageName: "sarvagram.dashboard.loans.individual.screening.CentralRiskReviewQueue"
 								});
 							},
 							isApplicable: function(item, index) {

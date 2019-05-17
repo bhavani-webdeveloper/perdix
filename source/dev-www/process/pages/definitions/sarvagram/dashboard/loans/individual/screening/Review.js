@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("base.dashboard.loans.individual.screening.Review"),
+irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screening.Review"),
 ["$log", 'SchemaResource', 'PageHelper', "Utils", "IndividualLoan", "Messaging", "SessionStore", "irfCurrencyFilter", "$filter",
 function($log, SchemaResource, PageHelper, Utils, IndividualLoan, Messaging, SessionStore, irfCurrencyFilter, $filter){
 	var getStageNameByStageCode = function(stageCode) {

@@ -1,5 +1,5 @@
 define({
-        pageUID: "base.dashboard.loans.individual.screening.detail.IndividualEnrollmentView",
+        pageUID: "sarvagram.dashboard.loans.individual.screening.detail.IndividualEnrollmentView",
         pageType: "Engine",
         dependencies: ["$log", "Enrollment", "formHelper", "filterFilter", "irfCurrencyFilter", "Model_ELEM_FC", "CreditBureau", "irfElementsConfig", "$filter"],
         $pageFn: function($log, Enrollment, formHelper, filterFilter, irfCurrencyFilter, Model_ELEM_FC, CreditBureau, irfElementsConfig, $filter) {

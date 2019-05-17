@@ -1,5 +1,5 @@
 define({
-	pageUID: "base.dashboard.loans.individual.screening.FieldAppraisalQueue",
+	pageUID: "sarvagram.dashboard.loans.individual.screening.FieldAppraisalQueue",
     pageType: "Engine",
     dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
@@ -176,11 +176,11 @@ define({
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('base.dashboard.loans.individual.screening.FieldAppraisal', {
+								entityManager.setModel('sarvagram.dashboard.loans.individual.screening.FieldAppraisal', {
 									_request: item
 								});
 								$state.go("Page.Bundle", {
-									pageName: "base.dashboard.loans.individual.screening.FieldAppraisal",
+									pageName: "sarvagram.dashboard.loans.individual.screening.FieldAppraisal",
 									pageId: item.loanId
 								});
 							},

@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("base.dashboard.loans.individual.screening.BranchNewConversationQueue"), 
+irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screening.BranchNewConversationQueue"), 
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","Messaging", "LoanBookingCommons", "irfNavigator",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, Messaging, LoanBookingCommons, irfNavigator) {
 		var branch = SessionStore.getBranch();
@@ -183,16 +183,16 @@ irf.pageCollection.factory(irf.page("base.dashboard.loans.individual.screening.B
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('base.dashboard.loans.individual.screening.LoanView', {
+								entityManager.setModel('sarvagram.dashboard.loans.individual.screening.LoanView', {
 									_request: item
 								});
 								irfNavigator.go({
 									state: "Page.Bundle",
-									pageName: "base.dashboard.loans.individual.screening.LoanView",
+									pageName: "sarvagram.dashboard.loans.individual.screening.LoanView",
 									pageId: item.loanId
 								}, {
 									state: 'Page.Engine',
-                                    pageName: "base.dashboard.loans.individual.screening.BranchNewConversationQueue"
+                                    pageName: "sarvagram.dashboard.loans.individual.screening.BranchNewConversationQueue"
 								});
 							},
 							isApplicable: function(item, index) {

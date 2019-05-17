@@ -7,7 +7,7 @@ define(["perdix/domain/model/loan/LoanProcess",
         var EnrolmentProcess = EnrolmentProcess["EnrolmentProcess"];
         var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
         return {
-            pageUID: "base.dashboard.loans.individual.screening.ManagementCommitteeCrAppraisal",
+            pageUID: "sarvagram.dashboard.loans.individual.screening.ManagementCommitteeCrAppraisal",
             pageType: "Bundle",
             dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams",
                             "Enrollment", "LoanAccount", "Lead", "PageHelper", "irfStorageService", "$filter", "Groups",

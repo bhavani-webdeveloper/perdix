@@ -1,7 +1,7 @@
 define([],function(){
  
     return {
-        pageUID: "base.dashboard.loans.individual.screening.LoanRequest",
+        pageUID: "sarvagram.dashboard.loans.individual.screening.LoanRequest",
         pageType: "Engine",
         dependencies: ["$log", "$q","LoanAccount","LoanProcess", 'Scoring', 'Enrollment','EnrollmentHelper', 'AuthTokenHelper', 'SchemaResource', 'PageHelper','formHelper',"elementsUtils",
             'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "IndividualLoan",

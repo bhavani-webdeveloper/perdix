@@ -7,7 +7,7 @@ define(["perdix/domain/model/loan/LoanProcess",
         var EnrolmentProcess = EnrolmentProcess["EnrolmentProcess"];
         var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
         return {
-            pageUID: "base.dashboard.loans.individual.screening.Application",
+            pageUID: "sarvagram.dashboard.loans.individual.screening.Application",
             pageType: "Bundle",
             dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager","formHelper", "$stateParams", "Enrollment"
         ,"IndividualLoan", "Lead", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
@@ -20,7 +20,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                     "bundleDefinitionPromise": function() {
                         return $q.resolve([
                             {
-                                pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
+                                pageName: 'sarvagram.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'APPLICANT',
                                 pageClass: 'applicant',
                                 minimum: 1,
@@ -28,7 +28,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:10
                             },
                             {
-                                pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
+                                pageName: 'sarvagram.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'CO_APPLICANT',
                                 pageClass: 'co-applicant',
                                 minimum: 1,
@@ -36,7 +36,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:20
                             },
                             {
-                                pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
+                                pageName: 'sarvagram.dashboard.loans.individual.customer.IndividualEnrolment2',
                                 title: 'GUARANTOR',
                                 pageClass: 'guarantor',
                                 minimum: 1,
@@ -44,7 +44,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:30
                             },
                             // {
-                            //     pageName: 'base.dashboard.loans.individual.customer.EnterpriseEnrolment2',
+                            //     pageName: 'sarvagram.dashboard.loans.individual.customer.EnterpriseEnrolment2',
                             //     title: 'BUSINESS',
                             //     pageClass: 'business',
                             //     minimum: 1,
@@ -52,7 +52,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             //     order:40
                             // },
                             // {
-                            //     pageName: 'base.dashboard.loans.individual.customer.EnterpriseEnrolmentBusinessFinancial',
+                            //     pageName: 'sarvagram.dashboard.loans.individual.customer.EnterpriseEnrolmentBusinessFinancial',
                             //     title: 'Business Financials',
                             //     pageClass: 'business-financial',
                             //     minimum: 1,
@@ -60,7 +60,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             //     order:50
                             // },
                             {
-                                pageName: 'base.dashboard.loans.individual.customer.Enrolment',
+                                pageName: 'sarvagram.dashboard.loans.individual.customer.Enrolment',
                                 title: 'BUSINESS',
                                 pageClass: 'business',
                                 minimum: 1,
@@ -68,7 +68,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:40
                             },
                             // {
-                            //     pageName: 'base.dashboard.loans.individual.customer.VehicleValuation',
+                            //     pageName: 'sarvagram.dashboard.loans.individual.customer.VehicleValuation',
                             //     title: 'VEHICLE_VALUATION',
                             //     pageClass: 'vehicle_valuation',
                             //     minimum: 1,
@@ -76,7 +76,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             //     order:40
                             // },
                             {
-                                pageName: 'base.dashboard.loans.individual.screening.LoanRequest',
+                                pageName: 'sarvagram.dashboard.loans.individual.screening.LoanRequest',
                                 title: 'LOAN_REQUEST',
                                 pageClass: 'loan-request',
                                 minimum: 1,
@@ -84,7 +84,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:60
                             },
                             // {
-                            //     pageName: 'base.dashboard.loans.individual.customer.VehicleValuation',
+                            //     pageName: 'sarvagram.dashboard.loans.individual.customer.VehicleValuation',
                             //     title: 'VEHICLE_VALUATION',
                             //     pageClass: 'vehicle-valuation',
                             //     minimum: 1,
@@ -100,7 +100,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                                 order:70
                             },
                             {
-                                pageName: 'base.dashboard.loans.individual.screening.Review',
+                                pageName: 'sarvagram.dashboard.loans.individual.screening.Review',
                                 title: 'REVIEW',
                                 pageClass: 'loan-review',
                                 minimum: 1,

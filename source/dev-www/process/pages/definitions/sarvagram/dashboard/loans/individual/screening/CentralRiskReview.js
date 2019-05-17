@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page('base.dashboard.loans.individual.screening.CentralRiskReview'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
+irf.pageCollection.factory(irf.page('sarvagram.dashboard.loans.individual.screening.CentralRiskReview'), ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "LoanProcess", "irfProgressMessage", "PageHelper", "irfStorageService", "$filter",
     "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "Message", "irfNavigator","Scoring",
     function($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, LoanProcess, irfProgressMessage, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, Message, irfNavigator,Scoring) {
         $log.info("Inside LoanBookingBundle");
@@ -9,35 +9,35 @@ irf.pageCollection.factory(irf.page('base.dashboard.loans.individual.screening.C
             "subTitle": "",
             "readonly": true,
             "bundleDefinition": [{
-                pageName: 'base.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
+                pageName: 'sarvagram.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
                 title: 'APPLICANT',
                 pageClass: 'applicant',
                 minimum: 1,
                 maximum: 1,
                 order: 10
             }, {
-                pageName: 'base.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
+                pageName: 'sarvagram.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
                 title: 'CO_APPLICANT',
                 pageClass: 'co-applicant',
                 minimum: 1,
                 maximum: 1,
                 order: 20
             }, {
-                pageName: 'base.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
+                pageName: 'sarvagram.dashboard.loans.individual.screening.detail.IndividualEnrollmentView',
                 title: 'GUARANTOR',
                 pageClass: 'guarantor',
                 minimum: 1,
                 maximum: 1,
                 order: 30
             }, {
-                pageName: 'base.dashboard.loans.individual.screening.detail.EnterpriseEnrollmentView',
+                pageName: 'sarvagram.dashboard.loans.individual.screening.detail.EnterpriseEnrollmentView',
                 title: 'BUSINESS',
                 pageClass: 'business',
                 minimum: 1,
                 maximum: 1,
                 order: 40
             }, {
-                pageName: 'base.dashboard.loans.individual.screening.detail.EnterpriseFinancialView',
+                pageName: 'sarvagram.dashboard.loans.individual.screening.detail.EnterpriseFinancialView',
                 title: 'Business Financials',
                 pageClass: 'business-finance',
                 minimum: 1,
@@ -60,21 +60,21 @@ irf.pageCollection.factory(irf.page('base.dashboard.loans.individual.screening.C
                 maximum: 1,
                 order: 52
             },{
-                pageName: 'base.dashboard.loans.individual.screening.detail.LoanApplicationView',
+                pageName: 'sarvagram.dashboard.loans.individual.screening.detail.LoanApplicationView',
                 title: 'Loan Recommendation',
                 pageClass: 'loan-recommendation',
                 minimum: 1,
                 maximum: 1,
                 order: 60
             }, {
-                pageName: 'base.dashboard.loans.individual.screening.detail.SummaryView',
+                pageName: 'sarvagram.dashboard.loans.individual.screening.detail.SummaryView',
                 title: 'SummaryView',
                 pageClass: 'summaryView',
                 minimum: 1,
                 maximum: 1,
                 order: 5
             }, {
-                pageName: 'base.dashboard.loans.individual.screening.Summary',
+                pageName: 'sarvagram.dashboard.loans.individual.screening.Summary',
                 title: 'SUMMARY',
                 pageClass: 'summary',
                 minimum: 1,
@@ -88,14 +88,14 @@ irf.pageCollection.factory(irf.page('base.dashboard.loans.individual.screening.C
                 maximum: 1,
                 order: 100
             }, {
-                pageName: 'base.dashboard.loans.individual.screening.Review',
+                pageName: 'sarvagram.dashboard.loans.individual.screening.Review',
                 title: 'REVIEW',
                 pageClass: 'loan-review',
                 minimum: 1,
                 maximum: 1,
                 order: 80
             }, {
-                pageName: 'base.dashboard.loans.individual.screening.detail.PortfolioAnalyticsView',
+                pageName: 'sarvagram.dashboard.loans.individual.screening.detail.PortfolioAnalyticsView',
                 title: 'Portfolio Analytics',
                 pageClass: 'portfolio-analytics',
                 minimum: 1,

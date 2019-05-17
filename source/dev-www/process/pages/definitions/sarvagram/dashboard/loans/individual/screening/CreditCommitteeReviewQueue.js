@@ -1,5 +1,5 @@
-define({////base.dashboard.loans.individual.screening.FieldAppraisal
-	pageUID: "base.dashboard.loans.individual.screening.CreditCommitteeReviewQueue", 
+define({////sarvagram.dashboard.loans.individual.screening.FieldAppraisal
+	pageUID: "sarvagram.dashboard.loans.individual.screening.CreditCommitteeReviewQueue", 
 	pageType: "Engine",
 	dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator"],
 	$pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
@@ -185,16 +185,16 @@ define({////base.dashboard.loans.individual.screening.FieldAppraisal
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('base.dashboard.loans.individual.screening.CreditCommitteeReview', {
+								entityManager.setModel('sarvagram.dashboard.loans.individual.screening.CreditCommitteeReview', {
 									_request: item
 								});
 								irfNavigator.go({
 									state: "Page.Bundle",
-									pageName: "base.dashboard.loans.individual.screening.CreditCommitteeReview",
+									pageName: "sarvagram.dashboard.loans.individual.screening.CreditCommitteeReview",
 									pageId: item.loanId
 								}, {
 									state: 'Page.Engine',
-                                    pageName: "base.dashboard.loans.individual.screening.CreditCommitteeReviewQueue"
+                                    pageName: "sarvagram.dashboard.loans.individual.screening.CreditCommitteeReviewQueue"
 								});
 							},
 							isApplicable: function(item, index) {

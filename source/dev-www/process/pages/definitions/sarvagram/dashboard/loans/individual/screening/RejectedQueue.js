@@ -1,5 +1,5 @@
 define({
-    pageUID: "base.dashboard.loans.individual.screening.RejectedQueue",
+    pageUID: "sarvagram.dashboard.loans.individual.screening.RejectedQueue",
     pageType: "Engine",
     dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons"],
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
@@ -15,7 +15,7 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 model.branch = branch;
-                console.log("r :: base.dashboard.loans.individual.screening.RejectedQueue")
+                console.log("r :: sarvagram.dashboard.loans.individual.screening.RejectedQueue")
                 $log.info("search-list sample got initialized");
             },
             definition: {
@@ -181,7 +181,7 @@ define({
                                     _request: item
                                 });
                                 $state.go("Page.Bundle", {
-                                    pageName: "base.dashboard.loans.individual.screening.Rejected",
+                                    pageName: "sarvagram.dashboard.loans.individual.screening.Rejected",
                                     pageId: item.id
                                 });
                             },

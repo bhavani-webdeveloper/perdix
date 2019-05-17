@@ -1,5 +1,5 @@
 define({
-	pageUID: "base.dashboard.loans.individual.screening.LoanSanctionQueue", 
+	pageUID: "sarvagram.dashboard.loans.individual.screening.LoanSanctionQueue", 
 	pageType: "Engine",
 	dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons", "irfNavigator"],
 	$pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons, irfNavigator) {
@@ -174,16 +174,16 @@ define({
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('base.dashboard.loans.individual.screening.SanctionInput', {
+								entityManager.setModel('sarvagram.dashboard.loans.individual.screening.SanctionInput', {
 									_request: item
 								});
 								irfNavigator.go({
 									state: "Page.Bundle",
-									pageName: "base.dashboard.loans.individual.screening.SanctionInput",
+									pageName: "sarvagram.dashboard.loans.individual.screening.SanctionInput",
 									pageId: item.loanId
 								}, {
 									state: 'Page.Engine',
-                                    pageName: "base.dashboard.loans.individual.screening.LoanSanctionQueue"
+                                    pageName: "sarvagram.dashboard.loans.individual.screening.LoanSanctionQueue"
 								});
 							},
 							isApplicable: function(item, index) {

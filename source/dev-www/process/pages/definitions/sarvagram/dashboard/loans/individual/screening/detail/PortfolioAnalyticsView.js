@@ -1,5 +1,5 @@
 define({
-	pageUID: "base.dashboard.loans.individual.screening.detail.PortfolioAnalyticsView",
+	pageUID: "sarvagram.dashboard.loans.individual.screening.detail.PortfolioAnalyticsView",
 	pageType: "Engine",
 	dependencies: ["$log", "IndividualLoan", "SessionStore"],
 	$pageFn: function ($log, IndividualLoan, SessionStore) {

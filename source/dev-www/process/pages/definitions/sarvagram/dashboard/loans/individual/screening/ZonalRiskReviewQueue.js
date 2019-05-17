@@ -1,4 +1,4 @@
-irf.pageCollection.factory(irf.page("base.dashboard.loans.individual.screening.ZonalRiskReviewQueue"),
+irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screening.ZonalRiskReviewQueue"),
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
 		
@@ -177,11 +177,11 @@ irf.pageCollection.factory(irf.page("base.dashboard.loans.individual.screening.Z
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('base.dashboard.loans.individual.screening.ZonalRiskReview', {
+								entityManager.setModel('sarvagram.dashboard.loans.individual.screening.ZonalRiskReview', {
 									_request: item
 								});
 								$state.go("Page.Bundle", {
-									pageName: "base.dashboard.loans.individual.screening.ZonalRiskReview",
+									pageName: "sarvagram.dashboard.loans.individual.screening.ZonalRiskReview",
 									pageId: item.loanId
 								});
 							},
