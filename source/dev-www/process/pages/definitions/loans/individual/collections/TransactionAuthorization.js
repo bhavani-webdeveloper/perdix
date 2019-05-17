@@ -188,7 +188,7 @@ irf.pageCollection.factory(irf.page("loans.individual.collections.TransactionAut
                             {
                                 key: "_transAuth.transactionName",
                                 title: "TRANSACTION_NAME",
-                                readonly: true
+                                //readonly: true
                             },
                             {
                                 key: "_transAuth.repaymentDate",
