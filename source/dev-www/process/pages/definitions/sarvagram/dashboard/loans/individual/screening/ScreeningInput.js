@@ -8,7 +8,7 @@ define(["perdix/domain/model/loan/LoanProcess",
     var LoanCustomerRelationTypes = LoanCustomerRelation["LoanCustomerRelationTypes"];
 
     return {
-        pageUID: "base.dashboard.loans.individual.screening.ScreeningInput",
+        pageUID: "sarvagram.dashboard.loans.individual.screening.ScreeningInput",
         pageType: "Bundle",
         dependencies: ["$log", "$q", "$timeout", "SessionStore", "$state", "entityManager", "formHelper", "$stateParams", "Enrollment", "LoanAccount", "Lead", "PageHelper", "irfStorageService", "$filter", "Groups", "AccountingUtils", "Enrollment", "Files", "elementsUtils", "CustomerBankBranch", "Queries", "Utils", "IndividualLoan", "BundleManager", "irfNavigator"],
         $pageFn: function ($log, $q, $timeout, SessionStore, $state, entityManager, formHelper, $stateParams, Enrollment, LoanAccount, Lead, PageHelper, StorageService, $filter, Groups, AccountingUtils, Enrollment, Files, elementsUtils, CustomerBankBranch, Queries, Utils, IndividualLoan, BundleManager, irfNavigator) {
@@ -19,8 +19,8 @@ define(["perdix/domain/model/loan/LoanProcess",
                 "bundleDefinitionPromise": function() {
                     return $q.resolve([
                         {
-                           // pageName: 'base.dashboard.loans.individual.customer.IndividualEnrollment2',
-                            pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
+                           // pageName: 'sarvagram.dashboard.loans.individual.customer.IndividualEnrollment2',
+                            pageName: 'sarvagram.dashboard.loans.individual.customer.IndividualEnrolment2',
                             title: 'APPLICANT',
                             pageClass: 'applicant',
                             minimum: 1,
@@ -28,7 +28,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:10
                         },
                         {
-                            pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
+                            pageName: 'sarvagram.dashboard.loans.individual.customer.IndividualEnrolment2',
                             title: 'CO_APPLICANT',
                             pageClass: 'co-applicant',
                             minimum: 0,
@@ -36,7 +36,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:20
                         },
                         {
-                            pageName: 'base.dashboard.loans.individual.customer.IndividualEnrolment2',
+                            pageName: 'sarvagram.dashboard.loans.individual.customer.IndividualEnrolment2',
                             title: 'GUARANTOR',
                             pageClass: 'guarantor',
                             minimum: 0,
@@ -44,7 +44,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:30
                         },
                         {
-                            pageName: 'base.dashboard.loans.individual.customer.EnterpriseEnrolment2',
+                            pageName: 'sarvagram.dashboard.loans.individual.customer.EnterpriseEnrolment2',
                             title: 'BUSINESS',
                             pageClass: 'business',
                             minimum: 1,
@@ -52,7 +52,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:40
                         },
                         {
-                            pageName: 'base.dashboard.loans.individual.screening.LoanRequest',
+                            pageName: 'sarvagram.dashboard.loans.individual.screening.LoanRequest',
                             title: 'LOAN_REQUEST',
                             pageClass: 'loan-request',
                             minimum: 1,
@@ -60,7 +60,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:50
                         },
                         // {
-                        //     pageName: 'base.dashboard.loans.individual.screening.VehicleDetails',
+                        //     pageName: 'sarvagram.dashboard.loans.individual.screening.VehicleDetails',
                         //     title: 'VEHICLE_DETAILS',
                         //     pageClass: 'vehicle-details',
                         //     minimum: 1,
@@ -84,7 +84,7 @@ define(["perdix/domain/model/loan/LoanProcess",
                             order:80
                         },
                         {
-                            pageName: 'base.dashboard.loans.individual.screening.Review',
+                            pageName: 'sarvagram.dashboard.loans.individual.screening.Review',
                             title: 'REVIEW',
                             pageClass: 'loan-review',
                             minimum: 0,

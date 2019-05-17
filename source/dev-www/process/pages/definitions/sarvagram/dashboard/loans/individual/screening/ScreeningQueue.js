@@ -1,5 +1,5 @@
 define({
-    pageUID: "base.dashboard.loans.individual.screening.ScreeningQueue",
+    pageUID: "sarvagram.dashboard.loans.individual.screening.ScreeningQueue",
     pageType: "Engine",
     dependencies: ["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager", "IndividualLoan", "LoanBookingCommons"],
     $pageFn: function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
@@ -207,11 +207,11 @@ define({
                             desc: "",
                             icon: "fa fa-pencil-square-o",
                             fn: function(item, index) {
-                                entityManager.setModel('base.dashboard.loans.individual.screening.ScreeningInput', {
+                                entityManager.setModel('sarvagram.dashboard.loans.individual.screening.ScreeningInput', {
                                     _request: item
                                 });
                                 $state.go("Page.Bundle", {
-                                    pageName: "base.dashboard.loans.individual.screening.ScreeningInput",
+                                    pageName: "sarvagram.dashboard.loans.individual.screening.ScreeningInput",
                                     pageId: item.loanId
                                 });
                             },

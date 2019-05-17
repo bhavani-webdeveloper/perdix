@@ -2,7 +2,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
     EnrolmentProcess = EnrolmentProcess['EnrolmentProcess'];
 
     return {
-        pageUID: "base.dashboard.loans.individual.customer.EnterpriseEnrolment2",
+        pageUID: "sarvagram.dashboard.loans.individual.customer.EnterpriseEnrolment2",
         pageType: "Engine",
         dependencies: ["$log", "$q","Enrollment","IrfFormRequestProcessor", 'EnrollmentHelper', 'PageHelper','formHelper',"elementsUtils",
 'irfProgressMessage','SessionStore',"$state", "$stateParams", "Queries", "Utils", "CustomerBankBranch", "BundleManager", "$filter", "$injector", "UIRepository"],

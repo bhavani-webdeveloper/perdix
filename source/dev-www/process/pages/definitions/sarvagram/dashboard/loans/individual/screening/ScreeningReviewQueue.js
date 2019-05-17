@@ -1,5 +1,5 @@
 
-irf.pageCollection.factory(irf.page("base.dashboard.loans.individual.screening.ScreeningReviewQueue"),
+irf.pageCollection.factory(irf.page("sarvagram.dashboard.loans.individual.screening.ScreeningReviewQueue"),
 	["$log", "formHelper", "$state", "$q", "SessionStore", "Utils", "entityManager","IndividualLoan", "LoanBookingCommons",
 	function($log, formHelper, $state, $q, SessionStore, Utils, entityManager, IndividualLoan, LoanBookingCommons) {
 		var branch = SessionStore.getBranch();
@@ -179,11 +179,11 @@ irf.pageCollection.factory(irf.page("base.dashboard.loans.individual.screening.S
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('base.dashboard.loans.individual.screening.ScreeningReview', {
+								entityManager.setModel('sarvagram.dashboard.loans.individual.screening.ScreeningReview', {
 									_request: item
 								});
 								$state.go("Page.Bundle", {
-									pageName: "base.dashboard.loans.individual.screening.ScreeningReview",
+									pageName: "sarvagram.dashboard.loans.individual.screening.ScreeningReview",
 									pageId: item.loanId
 								});
 							},

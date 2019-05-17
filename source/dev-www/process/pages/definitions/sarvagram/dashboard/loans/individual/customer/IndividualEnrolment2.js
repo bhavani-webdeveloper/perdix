@@ -1,8 +1,8 @@
-// pageUID: "base.dashboard.loans.individual.customer.IndividualEnrolment2",
+// pageUID: "sarvagram.dashboard.loans.individual.customer.IndividualEnrolment2",
 define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/AngularResourceService'], function (EnrolmentProcess, AngularResourceService) {
     EnrolmentProcess = EnrolmentProcess['EnrolmentProcess'];
     return {
-        pageUID: "base.dashboard.loans.individual.customer.IndividualEnrolment2",
+        pageUID: "sarvagram.dashboard.loans.individual.customer.IndividualEnrolment2",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams", "Enrollment", "EnrollmentHelper", "SessionStore", "formHelper", "$q",
             "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "CustomerBankBranch", "BundleManager", "$filter", "IrfFormRequestProcessor", "$injector", "UIRepository"],
