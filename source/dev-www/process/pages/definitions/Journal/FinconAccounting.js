@@ -60,12 +60,15 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                         console.log(err)
                     })
                 }
-                Journal.listAccountCode({
-                    'glType': 'LEDGER'
-                }).$promise.then(function(response) {
-                    model.glcodes = response.body;
-                    console.log(model.glcodes)
-                });
+                 Journal.listAccountCode({
+                     'glType': 'LEDGER',
+                     'page': 1,
+                     'per_page': 100,
+                 }).$promise.then(function(response) {
+                     model.glcodes = response.body;
+                     console.log(model.glcodes)
+                 });
+                
 
                 var pageDefPath = "perdix/domain/model/journal/finconaccounting/FinconPostingProcess";
                 var journaldetail = "perdix/domain/model/journal/finconaccounting/JournalDetail";
@@ -276,7 +279,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                                     <tr ng-repeat='d in model.journal.journalHeader.journalDetails track by $index'>\
                                                         <td class='col-xs-3'>\
                                                             <div> \
-                                                                <input type=\"text\" class=\"form-control\" ng-change='myFun()' ng-model=\"d['glAcNo']\" uib-typeahead=\"glcode.productCode as glcode.productCode for glcode in model.glcodes | filter:$viewValue | limitTo:10 \" placeholder=\"Enter code\" typeahead-editable='false' typeahead-popup-template-url=\"customPopupTemplate.html\" typeahead-template-url=\"customTemplate.html\" >\
+                                                                <input type=\"text\" class=\"form-control\" ng-change='myFun()' ng-model=\"d['glAcNo']\" uib-typeahead=\"glcode.productCode as glcode.productCode for glcode in model.glcodes | filter:$viewValue | limitTo:30 \" placeholder=\"Enter code\" typeahead-editable='false' typeahead-popup-template-url=\"customPopupTemplate.html\" typeahead-template-url=\"customTemplate.html\" >\
                                                             </div>\
                                                         </td>\
                                                         <td class='col-xs-2'> \

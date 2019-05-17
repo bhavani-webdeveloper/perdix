@@ -936,7 +936,7 @@ define(
                             }
                         },
                         "VehicleRouteDetails": {
-                            "condition": "(model.loanAccount.loanPurpose1 == 'Purchase - New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance')&& (model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'goods')"
+                            "condition": "(model.loanAccount.loanPurpose1 == 'Purchase - New Vehicle' || model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle' || model.loanAccount.loanPurpose1 == 'Refinance')&& (model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'goods' || model.loanAccount.vehicleLoanDetails.segment.toLowerCase() == 'passenger')"
                         },
                         "VehicleRouteDetails.vehicleRouteDetails.routeFrom": {
                             "required": true
