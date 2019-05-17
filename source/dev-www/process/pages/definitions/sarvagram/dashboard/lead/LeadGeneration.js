@@ -30,9 +30,6 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                     "leadProfile.centerName": {
                         "lovonly": true
                     },
-                    "leadProfile.contactDetails.alternateMobileNo":{
-                        "title": "WHATSAPP_NUMBER"
-                    },
                     "productDetails.screeningDate": {
                         "condition": "(model.lead.interestedInProduct==='YES' && model.lead.leadStatus ==='Screening')",
                     },
