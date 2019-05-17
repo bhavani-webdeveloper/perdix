@@ -284,7 +284,7 @@ irf.pageCollection.controller(irf.controller("Journal.FinconAccounting"), ["$log
                                                         \
                                                         </td>\
                                                         <td class='col-xs-1'>\
-                                                            <input ng-model=\"d['transactionAmount']\" type='number' ng-change='model.myFunc(d,model.journal.journalHeader.journalDetails)' class='form-control' />\
+                                                            <input ng-model=\"d['transactionAmount']\" type='number' step='any' ng-change='model.myFunc(d,model.journal.journalHeader.journalDetails)' class='form-control' />\
                                                         </td>\
                                                         <td class='col-xs-3'>\
                                                             <div> \
