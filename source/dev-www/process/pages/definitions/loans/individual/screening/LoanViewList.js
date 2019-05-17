@@ -7,7 +7,8 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanViewList'), 
             "title": "VIEW_LOAN",
             "subTitle": "",
             "readonly": true,
-            "bundleDefinition": [{
+            "bundleDefinition": [
+                {
                 pageName: 'loans.individual.screening.Summary',
                 title: 'SUMMARY',
                 pageClass: 'summary',
@@ -124,6 +125,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanViewList'), 
                                     }
                                 }
 
+                                if(siteCode!='shramsarathi'){
                                 $this.bundlePages.push({
                                     pageClass: 'summary',
                                     model: {
@@ -134,6 +136,7 @@ irf.pageCollection.factory(irf.page('loans.individual.screening.LoanViewList'), 
                                         }
                                     }
                                 });
+                            }
 
 
 
