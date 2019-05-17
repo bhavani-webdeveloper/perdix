@@ -1,5 +1,5 @@
 define({
-    pageUID: "base.dashboard.lead.LeadAssignmentPendingQueue",
+    pageUID: "sarvagram.dashboard.lead.LeadAssignmentPendingQueue",
     pageType: "Engine",
     dependencies:["$log", "formHelper","PageHelper", "Lead", "$state", "$q", "SessionStore", "Utils", "entityManager"],
 
@@ -12,7 +12,7 @@ define({
 			"title": "LEAD_ASSIGNMENT_PENDING",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				model.branch = branch;console.log(" r ::  base.dashboard.lead.LeadAssignmentPendingQueue");
+				model.branch = branch;console.log(" r ::  sarvagram.dashboard.lead.LeadAssignmentPendingQueue");
 				$log.info("search-list sample got initialized");
 			},
 			definition: {
@@ -166,7 +166,7 @@ define({
 									return false;
 								}
 								$state.go("Page.Engine", {
-									pageName: "base.dashboard.lead.LeadReassign",
+									pageName: "sarvagram.dashboard.lead.LeadReassign",
 									pageData: items
 								});
 							},

@@ -1,5 +1,5 @@
 define({
-    pageUID: "base.dashboard.lead.LeadRejectedQueue",
+    pageUID: "sarvagram.dashboard.lead.LeadRejectedQueue",
     pageType: "Engine",
     dependencies: ["$log", "formHelper", "Lead", "$state", "$q", "SessionStore", "Utils", "entityManager"],
 
@@ -11,7 +11,7 @@ define({
 			"title": "LEAD_REJECTED",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				console.log("r :: base.dashboard.lead.LeadRejectedQueue");
+				console.log("r :: sarvagram.dashboard.lead.LeadRejectedQueue");
 				model.branch = branch;
 				$log.info("search-list sample got initialized");
 				var branchId = SessionStore.getBranchId();
@@ -192,11 +192,11 @@ define({
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('base.dashboard.lead.LeadGeneration', {
+								entityManager.setModel('sarvagram.dashboard.lead.LeadGeneration', {
 									_request: item
 								});
 								$state.go("Page.Engine", {
-									pageName: "base.dashboard.lead.LeadGeneration",
+									pageName: "sarvagram.dashboard.lead.LeadGeneration",
 									pageId: item.id
 								});
 							},

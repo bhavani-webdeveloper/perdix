@@ -1,6 +1,6 @@
 
 define({
-    pageUID: "base.dashboard.lead.LeadBulkUpload",
+    pageUID: "sarvagram.dashboard.lead.LeadBulkUpload",
     pageType: "Engine",
     dependencies: ["$log", "SessionStore", "$state", "$stateParams", "Lead", "irfNavigator", "Utils"],
 
@@ -13,7 +13,7 @@ define({
             "subTitle": "",
             initialize: function(model, form, formCtrl) {
                 $log.info("LeadBulkUpload  Page got initialized");
-                console.log("base.dashboard.lead.LeadBulkUpload");
+                console.log("sarvagram.dashboard.lead.LeadBulkUpload");
             },
             offline: false,
             getOfflineDisplayItem: function(item, index) {},
@@ -33,7 +33,7 @@ define({
                         Lead.leadBulkUpload(file, progress).then(function(resp){
                             irfNavigator.go({
                                 state: "Page.Adhoc",
-                                pageName: "base.dashboard.lead.LeadDashboard"
+                                pageName: "sarvagram.dashboard.lead.LeadDashboard"
                             });
                         });
                     }

@@ -1,5 +1,5 @@
 define({
-    pageUID: "base.dashboard.lead.LeadFollowUpQueue",
+    pageUID: "sarvagram.dashboard.lead.LeadFollowUpQueue",
     pageType: "Engine",
     dependencies: ["$log", "formHelper", "Lead", "$state", "$q", "SessionStore", "Utils", "entityManager"],
 
@@ -13,7 +13,7 @@ define({
 			initialize: function(model, form, formCtrl) {
 				model.branch = branch;
 				$log.info("search-list sample got initialized");
-				console.log("base.dashboard.lead.LeadFollowUpQueue");
+				console.log("sarvagram.dashboard.lead.LeadFollowUpQueue");
 				var branchId = SessionStore.getBranchId();
 				var branchName = SessionStore.getBranch();
 				var centres = SessionStore.getCentres();
@@ -209,7 +209,7 @@ define({
 									_request: item
 								});
 								$state.go("Page.Engine", {
-									pageName: "base.dashboard.lead.LeadGeneration",
+									pageName: "sarvagram.dashboard.lead.LeadGeneration",
 									pageId: item.id
 								});
 							},

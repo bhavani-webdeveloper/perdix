@@ -3,7 +3,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
 
     return {
         //pageUID: "witfin.lead.leadGeneration",
-       pageUID:  "base.dashboard.lead.LeadGeneration",
+       pageUID:  "sarvagram.dashboard.lead.LeadGeneration",
        pageType: "Engine",
         //pageType: "Adhoc",
         dependencies: ["$log", "$state", "$filter", "$stateParams", "Lead", "LeadHelper","Enrollment", "SessionStore", "formHelper", "entityManager", "$q", "irfProgressMessage",
@@ -523,7 +523,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                 LeadHelper.followData(reqData).then(function (resp) {
                                     irfNavigator.go({
                                         state:"Page.Adhoc",
-                                        pageName:'base.dashboard.lead.LeadDashboard'
+                                        pageName:'sarvagram.dashboard.lead.LeadDashboard'
                                     })
                                 });
                             } else {
@@ -543,7 +543,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
 
                                     irfNavigator.go({
                                         state:"Page.Adhoc",
-                                        pageName:'base.dashboard.lead.LeadDashboard'
+                                        pageName:'sarvagram.dashboard.lead.LeadDashboard'
                                     })
                                 }, function (err) {
                                     PageHelper.showErrors(err);
@@ -558,7 +558,7 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                 LeadHelper.proceedData(res).then(function (resp) {
                                     irfNavigator.go({
                                         state:"Page.Adhoc",
-                                        pageName:'base.dashboard.lead.LeadDashboard'
+                                        pageName:'sarvagram.dashboard.lead.LeadDashboard'
                                     })
                                 }, function (err) {
                                     PageHelper.showErrors(err);

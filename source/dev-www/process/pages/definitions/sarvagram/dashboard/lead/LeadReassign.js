@@ -1,6 +1,6 @@
 define(['perdix/domain/model/lead/LeadRepository'], function(LeadRepository) {
     return {
-        pageUID: "base.dashboard.lead.LeadReassign",
+        pageUID: "sarvagram.dashboard.lead.LeadReassign",
         pageType: "Engine",
         dependencies: ["$log", "$state", "$stateParams", "Lead", "SessionStore",
         "formHelper", "$q", "irfProgressMessage", "PageHelper", "Utils", "PagesDefinition", "Queries", "LeadHelper", "irfNavigator"],
@@ -128,7 +128,7 @@ define(['perdix/domain/model/lead/LeadRepository'], function(LeadRepository) {
                             .subscribe(function(val) {
                                 irfNavigator.go({
                                     state: "Page.Adhoc",
-                                    pageName: "base.dashboard.lead.LeadDashboard"
+                                    pageName: "sarvagram.dashboard.lead.LeadDashboard"
                                 });
                             }, function(err) {
                                 PageHelper.showErrors(err);

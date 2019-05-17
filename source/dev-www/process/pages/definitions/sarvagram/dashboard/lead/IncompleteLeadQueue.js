@@ -21,7 +21,7 @@ define({
 			"title": "INCOMPLETE_LEAD",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				model.branch = branch;console.log("base.dashboard.lead.IncompleteLeadQueue");
+				model.branch = branch;console.log("sarvagram.dashboard.lead.IncompleteLeadQueue");
 				$log.info("search-list sample got initialized");
 				var branchId = SessionStore.getBranchId();
 				var branchName = SessionStore.getBranch();
@@ -204,7 +204,7 @@ define({
 									_request: item
 								});
 								$state.go("Page.Engine", {
-									pageName: "base.dashboard.lead.LeadGeneration",
+									pageName: "sarvagram.dashboard.lead.LeadGeneration",
 									pageId: item.id
 								});
 							},

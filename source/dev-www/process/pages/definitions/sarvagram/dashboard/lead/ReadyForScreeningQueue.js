@@ -1,5 +1,5 @@
 define({
-    pageUID: "base.dashboard.lead.ReadyForScreeningQueue",
+    pageUID: "sarvagram.dashboard.lead.ReadyForScreeningQueue",
     pageType: "Engine",
     dependencies: ["$log", "formHelper", "Lead", "$state", "$q", "SessionStore", "Utils", "entityManager"],
 
@@ -38,7 +38,7 @@ define({
 			"title": siteCode == 'sambandh' || siteCode == 'saija' ? "READY_FOR_ENROLLMENT" :"READY_FOR_SCREENING",
 			"subTitle": "",
 			initialize: function(model, form, formCtrl) {
-				console.log("base.dashboard.lead.ReadyForScreeningQueue");
+				console.log("sarvagram.dashboard.lead.ReadyForScreeningQueue");
 				model.branch = branch;
 				$log.info("search-list sample got initialized");
 				var branchId = SessionStore.getBranchId();
@@ -205,7 +205,7 @@ define({
 									_request: item
 								});
 								$state.go("Page.Bundle", {
-									pageName: "base.dashboard.loans.individual.screening.ScreeningInput",
+									pageName: "sarvagram.dashboard.loans.individual.screening.ScreeningInput",
 									pageData: {
 										lead_id: item.id
 									}
@@ -220,11 +220,11 @@ define({
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('base.dashboard.lead.LeadGeneration', {
+								entityManager.setModel('sarvagram.dashboard.lead.LeadGeneration', {
 									_request: item
 								});
 								$state.go("Page.Engine", {
-									pageName: "base.dashboard.loans.individual.customer.IndividualEnrollment2",
+									pageName: "sarvagram.dashboard.loans.individual.customer.IndividualEnrollment2",
 									pageData: {
 										lead_id: item.id
 									}
@@ -239,11 +239,11 @@ define({
 							desc: "",
 							icon: "fa fa-pencil-square-o",
 							fn: function(item, index) {
-								entityManager.setModel('base.dashboard.lead.LeadReject', {
+								entityManager.setModel('sarvagram.dashboard.lead.LeadReject', {
 									_request: item
 								});
 								$state.go("Page.Engine", {
-									pageName: "base.dashboard.lead.LeadReject",
+									pageName: "sarvagram.dashboard.lead.LeadReject",
 									pageId: item.id
 								});
 							},

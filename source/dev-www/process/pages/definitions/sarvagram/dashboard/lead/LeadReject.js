@@ -1,5 +1,5 @@
 define({
-    pageUID: "base.dashboard.lead.LeadReject",
+    pageUID: "sarvagram.dashboard.lead.LeadReject",
     pageType: "Engine",
     dependencies: ["$log", "$state", "$filter", "$stateParams", "Lead", "LeadHelper", "SessionStore", "formHelper", "entityManager", "$q", "irfProgressMessage",
     "PageHelper", "Utils", "BiometricService", "PagesDefinition", "Queries", "irfNavigator"],
@@ -516,7 +516,7 @@ define({
                             LeadHelper.proceedData(reqData).then(function(resp) {
                                 irfNavigator.go({
                                     state: "Page.Adhoc",
-                                    pageName: "base.dashboard.lead.LeadDashboard"
+                                    pageName: "sarvagram.dashboard.lead.LeadDashboard"
                                 });
                                 
                             }, function(err) {
@@ -529,7 +529,7 @@ define({
                             LeadHelper.proceedData(res).then(function(resp) {
                                 irfNavigator.go({
                                     state: "Page.Adhoc",
-                                    pageName: "base.dashboard.loans.LoanOriginationDashboard"
+                                    pageName: "sarvagram.dashboard.loans.LoanOriginationDashboard"
                                 });
                             }, function(err) {
                                 Utils.removeNulls(res.lead, true);

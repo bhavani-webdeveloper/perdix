@@ -1,4 +1,4 @@
-irf.pageCollection.controller(irf.controller("base.dashboard.lead.LeadDashboard"), ['$log', '$scope', "formHelper", "$state", "$q", "Utils", 'PagesDefinition', 'SessionStore', "entityManager", "IndividualLoan", "LoanBookingCommons", "Lead", "Messaging",
+irf.pageCollection.controller(irf.controller("sarvagram.dashboard.lead.LeadDashboard"), ['$log', '$scope', "formHelper", "$state", "$q", "Utils", 'PagesDefinition', 'SessionStore', "entityManager", "IndividualLoan", "LoanBookingCommons", "Lead", "Messaging",
 function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionStore, entityManager, IndividualLoan, LoanBookingCommons, Lead, Messaging) {
     $log.info("Dashboard.Page.LoanOriginationDashboard.html loaded");
     // $scope.$templateUrl = "process/pages/templates/Page.LoanOriginationDashboard.html";
@@ -9,13 +9,13 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
         "title": "Lead",
         "iconClass": "fa fa-users",
         "items": [
-            "Page/Engine/base.dashboard.lead.LeadGeneration",
-            "Page/Engine/base.dashboard.lead.IncompleteLeadQueue",
-            "Page/Engine/base.dashboard.lead.LeadFollowUpQueue",
-            "Page/Engine/base.dashboard.lead.ReadyForScreeningQueue",
-            "Page/Engine/base.dashboard.lead.LeadBulkUpload",
-            "Page/Engine/base.dashboard.lead.LeadAssignmentPendingQueue",
-            "Page/Engine/base.dashboard.lead.LeadRejectedQueue",
+            "Page/Engine/sarvagram.dashboard.lead.LeadGeneration",
+            "Page/Engine/sarvagram.dashboard.lead.IncompleteLeadQueue",
+            "Page/Engine/sarvagram.dashboard.lead.LeadFollowUpQueue",
+            "Page/Engine/sarvagram.dashboard.lead.ReadyForScreeningQueue",
+            "Page/Engine/sarvagram.dashboard.lead.LeadBulkUpload",
+            "Page/Engine/sarvagram.dashboard.lead.LeadAssignmentPendingQueue",
+            "Page/Engine/sarvagram.dashboard.lead.LeadRejectedQueue",
 
         ]
        
@@ -28,11 +28,11 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
         var branchName = SessionStore.getBranch();
         var centres = SessionStore.getCentres();
 
-        var lapqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.LeadAssignmentPendingQueue"];
-        var lfuqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.LeadFollowUpQueue"];
-        var ilqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.IncompleteLeadQueue"];
-        var rsMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.ReadyForScreeningQueue"];
-        var rMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.LeadRejectedQueue"];
+        var lapqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.lead.LeadAssignmentPendingQueue"];
+        var lfuqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.lead.LeadFollowUpQueue"];
+        var ilqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.lead.IncompleteLeadQueue"];
+        var rsMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.lead.ReadyForScreeningQueue"];
+        var rMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.lead.LeadRejectedQueue"];
         
        
         if (rMenu) rMenu.data = 0;

@@ -1,4 +1,4 @@
-irf.pageCollection.controller(irf.controller("base.dashboard.loans.LoanOriginationDashboard"), ['$log', '$scope', "formHelper", "$state", "$q", "Utils", 'PagesDefinition', 'SessionStore', "entityManager", "IndividualLoan", "LoanBookingCommons", "Lead", "Messaging",
+irf.pageCollection.controller(irf.controller("sarvagram.dashboard.loans.LoanOriginationDashboard"), ['$log', '$scope', "formHelper", "$state", "$q", "Utils", 'PagesDefinition', 'SessionStore', "entityManager", "IndividualLoan", "LoanBookingCommons", "Lead", "Messaging",
 function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionStore, entityManager, IndividualLoan, LoanBookingCommons, Lead, Messaging) {
     $log.info("Dashboard.Page.LoanOriginationDashboard.html loaded");
     //$scope.$templateUrl = "process/pages/templates/Page.LoanOriginationDashboard.html";
@@ -9,26 +9,26 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
         "title": "Loan Origination Dashboard",
         "iconClass": "fa fa-users",
         "items": [
-            "Page/Bundle/base.dashboard.loans.individual.screening.ScreeningInput",
-           // "Page/Engine/base.dashboard.lead.ReadyForScreeningQueue",
-            "Page/Engine/base.dashboard.loans.individual.screening.ScreeningQueue",
-            "Page/Engine/base.dashboard.loans.individual.screening.ScreeningReviewQueue",
-            "Page/Engine/base.dashboard.loans.individual.screening.ApplicationQueue",  
-            "Page/Engine/base.dashboard.loans.individual.screening.ApplicationReviewQueue", 
-            "Page/Engine/base.dashboard.loans.individual.screening.ScrutinyQueue",  
-            "Page/Engine/base.dashboard.loans.individual.screening.FieldAppraisalQueue",
-            "Page/Engine/base.dashboard.loans.individual.screening.RcuQueue",  
-            "Page/Engine/base.dashboard.loans.individual.screening.FieldAppraisalReviewQueue",
-            "Page/Engine/base.dashboard.loans.individual.screening.ZonalRiskReviewQueue",
-            "Page/Engine/base.dashboard.loans.individual.screening.CentralRiskReviewQueue",
-            // "Page/Engine/base.dashboard.loans.individual.screening.FieldAppraisalReview",
-            "Page/Engine/base.dashboard.loans.individual.screening.CreditCommitteeReviewQueue",
-            "Page/Engine/base.dashboard.loans.individual.screening.LoanSanctionQueue",
-            "Page/Engine/base.dashboard.loans.individual.screening.RejectedQueue",
-            "Page/Engine/base.dashboard.loans.individual.screening.BranchNewConversationQueue",
-            "Page/Engine/base.dashboard.loans.individual.screening.BranchRepliedConversationQueue",
-            "Page/Engine/base.dashboard.loans.individual.screening.SpokeNewConversationQueue", // sql done
-            "Page/Engine/base.dashboard.loans.individual.screening.SpokeRepliedConversationQueue",
+            "Page/Bundle/sarvagram.dashboard.loans.individual.screening.ScreeningInput",
+           // "Page/Engine/sarvagram.dashboard.lead.ReadyForScreeningQueue",
+            "Page/Engine/sarvagram.dashboard.loans.individual.screening.ScreeningQueue",
+            "Page/Engine/sarvagram.dashboard.loans.individual.screening.ScreeningReviewQueue",
+            "Page/Engine/sarvagram.dashboard.loans.individual.screening.ApplicationQueue",  
+            "Page/Engine/sarvagram.dashboard.loans.individual.screening.ApplicationReviewQueue", 
+            "Page/Engine/sarvagram.dashboard.loans.individual.screening.ScrutinyQueue",  
+            "Page/Engine/sarvagram.dashboard.loans.individual.screening.FieldAppraisalQueue",
+            "Page/Engine/sarvagram.dashboard.loans.individual.screening.RcuQueue",  
+            "Page/Engine/sarvagram.dashboard.loans.individual.screening.FieldAppraisalReviewQueue",
+            "Page/Engine/sarvagram.dashboard.loans.individual.screening.ZonalRiskReviewQueue",
+            "Page/Engine/sarvagram.dashboard.loans.individual.screening.CentralRiskReviewQueue",
+            // "Page/Engine/sarvagram.dashboard.loans.individual.screening.FieldAppraisalReview",
+            "Page/Engine/sarvagram.dashboard.loans.individual.screening.CreditCommitteeReviewQueue",
+            "Page/Engine/sarvagram.dashboard.loans.individual.screening.LoanSanctionQueue",
+            "Page/Engine/sarvagram.dashboard.loans.individual.screening.RejectedQueue",
+            "Page/Engine/sarvagram.dashboard.loans.individual.screening.BranchNewConversationQueue",
+            "Page/Engine/sarvagram.dashboard.loans.individual.screening.BranchRepliedConversationQueue",
+            "Page/Engine/sarvagram.dashboard.loans.individual.screening.SpokeNewConversationQueue", // sql done
+            "Page/Engine/sarvagram.dashboard.loans.individual.screening.SpokeRepliedConversationQueue",
            ]
     };
 
@@ -39,7 +39,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
         var branchName = SessionStore.getBranch();
         var centres = SessionStore.getCentres();
 
-        var crrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.CentralRiskReviewQueue"];
+        var crrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.loans.individual.screening.CentralRiskReviewQueue"];
         if (crrqMenu) {
             IndividualLoan.search({
                 'stage':'CentralRiskReview',
@@ -56,7 +56,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
                 crrqMenu.data = '-';
             });
         }
-        var zrrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.ZonalRiskReviewQueue"];
+        var zrrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.loans.individual.screening.ZonalRiskReviewQueue"];
         if (zrrqMenu) {
             IndividualLoan.search({
                 'stage': 'ZonalRiskReview',
@@ -73,7 +73,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
                 zrrqMenu.data = '-';
             });
         }
-        var ccrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.CreditCommitteeReviewQueue"];
+        var ccrqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.loans.individual.screening.CreditCommitteeReviewQueue"];
         if (ccrqMenu) {
             IndividualLoan.search({
                 'stage': 'CreditCommitteeReview',
@@ -91,7 +91,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             });
         }
 
-        var lsqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.LoanSanctionQueue"];
+        var lsqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.loans.individual.screening.LoanSanctionQueue"];
         if (lsqMenu) {
             IndividualLoan.search({
                 'stage':  'Sanction',
@@ -108,7 +108,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
                 lsqMenu.data = '-';
             });
         }
-       var rfqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.lead.ReadyForScreeningQueue"];
+       var rfqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.lead.ReadyForScreeningQueue"];
         
        if (rfqMenu) rfqMenu.data = 0;
         _.forEach(centres, function(centre) {
@@ -135,7 +135,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
 
         });
 
-        var sqMenu=$scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.ScreeningQueue"];
+        var sqMenu=$scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.loans.individual.screening.ScreeningQueue"];
         if (sqMenu) {
             sqMenu.data = 0;
             _.forEach(centres, function(centre) {
@@ -158,7 +158,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
             });
         }
 
-       var srqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.ScreeningReviewQueue"];
+       var srqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.loans.individual.screening.ScreeningReviewQueue"];
         
        if (srqMenu) {
             IndividualLoan.search({
@@ -178,7 +178,7 @@ function($log, $scope, formHelper, $state, $q, Utils, PagesDefinition, SessionSt
         }
 
 
-var aqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.ApplicationQueue"];
+var aqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.loans.individual.screening.ApplicationQueue"];
 
 if (aqMenu) {
     aqMenu.data = 0;
@@ -222,7 +222,7 @@ if (aqMenu) {
     
 }
 
-var faqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.FieldAppraisalQueue"];
+var faqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.loans.individual.screening.FieldAppraisalQueue"];
 if (faqMenu) {
     IndividualLoan.search({
         'stage': 'FieldAppraisal',
@@ -241,7 +241,7 @@ if (faqMenu) {
 }
 
 //
-// var farMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.FieldAppraisalReview"];
+// var farMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.loans.individual.screening.FieldAppraisalReview"];
 // if (farMenu) {
 //     IndividualLoan.search({
 //         'stage': 'FieldAppraisalReview',
@@ -259,7 +259,7 @@ if (faqMenu) {
 //     });
 // }
 
-var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.FieldAppraisalReviewQueue"];
+var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.loans.individual.screening.FieldAppraisalReviewQueue"];
             if (farqMenu) {
                 IndividualLoan.search({
                     'stage': 'FieldAppraisalReview',
@@ -277,7 +277,7 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.l
                 });
             }
 //
-        var arqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.ApplicationReviewQueue"];
+        var arqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.loans.individual.screening.ApplicationReviewQueue"];
         if (arqMenu) {
             IndividualLoan.search({
                 'stage': 'ApplicationReview',
@@ -295,7 +295,7 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.l
             });
         }
 
-        var scqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.ScrutinyQueue"];
+        var scqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.loans.individual.screening.ScrutinyQueue"];
         if (scqMenu) {
             IndividualLoan.search({
                 'stage': 'Scrutiny',
@@ -313,7 +313,7 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.l
             });
         }
 
-        var rcuMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.RcuQueue"];
+        var rcuMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.loans.individual.screening.RcuQueue"];
         if (rcuMenu) {
             IndividualLoan.search({
                 'stage': 'RCU',
@@ -367,7 +367,7 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.l
             });
         }
 
-        var tvq1Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.TeleVerificationQueue"];
+        var tvq1Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.loans.individual.screening.TeleVerificationQueue"];
         if (tvq1Menu) {
             IndividualLoan.search({
                 'stage': 'TeleVerification',
@@ -442,7 +442,7 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.l
         }
 
        
-        var caq3Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.CreditApproval3Queue"];
+        var caq3Menu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.loans.individual.screening.CreditApproval3Queue"];
 
         if (caq3Menu) {
             IndividualLoan.search({
@@ -500,7 +500,7 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.l
             });
         }
 
-        var rjqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.RejectedQueue"];
+        var rjqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.loans.individual.screening.RejectedQueue"];
         if (rjqMenu) {
             IndividualLoan.search({
                 'stage': 'Rejected',
@@ -518,7 +518,7 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.l
             });
         }
 
-       var bncqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.BranchNewConversationQueue"];
+       var bncqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.loans.individual.screening.BranchNewConversationQueue"];
        
         if (bncqMenu) {
             Messaging.findConversation({
@@ -532,7 +532,7 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.l
             });
         }
 
-       var brcqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.BranchRepliedConversationQueue"];
+       var brcqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.loans.individual.screening.BranchRepliedConversationQueue"];
        
         if (brcqMenu) {
             Messaging.findConversation({
@@ -546,7 +546,7 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.l
             });
         }
 
-       var sncqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.SpokeNewConversationQueue"];
+       var sncqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.loans.individual.screening.SpokeNewConversationQueue"];
        
         if (sncqMenu) {
             var centreCode = [];
@@ -567,7 +567,7 @@ var farqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.l
             });
         }
 
-        var srcqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/base.dashboard.loans.individual.screening.SpokeRepliedConversationQueue"];
+        var srcqMenu = $scope.dashboardDefinition.$menuMap["Page/Engine/sarvagram.dashboard.loans.individual.screening.SpokeRepliedConversationQueue"];
         if (srcqMenu) {
             var centreCode = [];
             _.forEach(centres, function (centre) {
