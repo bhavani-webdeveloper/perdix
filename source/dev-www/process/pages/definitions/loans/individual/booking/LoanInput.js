@@ -381,7 +381,11 @@ irf.pageCollection.factory(irf.page("loans.individual.booking.LoanInput"),
                     //     model.loanAccount.nominees[0].nomineeState = model.loanAccount.nominees[0].nomineeState || '';
                     //     model.loanAccount.nominees[0].nomineeRelationship = model.loanAccount.nominees[0].nomineeRelationship || '';
                     // }
+             if(model.siteCode!='shramsarathi'){
                     model.loanAccount.loanApplicationDate = model.loanAccount.loanApplicationDate || Utils.getCurrentDate();
+             }else{
+                model.loanAccount.loanApplicationDate = model.loanAccount.loanApplicationDate;
+             }
                     // model.loanAccount.commercialCibilCharge = 750; //Hard coded. This value to be changed to pickup from global_settings table
                     model.loanAccount.documentTracking = model.loanAccount.documentTracking || "PENDING";
                     model.loanAccount.isRestructure = false;
