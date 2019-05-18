@@ -2441,7 +2441,6 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 "lovonly": true,
                                 initialize: function(model, form, parentModel, context) {
                                     model.branchId = parentModel.lead.branchId;
-                                    model.centreId = parentModel.lead.centreId;
                                     model.globalSettings = {};
                                     model.globalSettings.allowCrossCentreBooking = SessionStore.getGlobalSetting("lead.allowCrossCentreBooking") || 'N';
                                 },
@@ -2458,7 +2457,7 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                         "screenFilter": true,
                                         "readonly": true
                                     },
-                                    "centreId": {
+                                    "centreId1": {
                                         "key": "lead.centreId",
                                         "condition": "model.globalSettings.allowCrossCentreBooking == 'Y'",
                                         "type": "select",
@@ -2482,10 +2481,16 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                         if (branches[i].code == inputModel.customerBranchId)
                                             branchName = branches[i].name;
                                     }
+                                    var centreId;
+                                    if (inputModel.globalSettings.allowCrossCentreBooking == 'Y'){
+                                        centreId = inputModel.centreId1;
+                                    } else {
+                                        centreId = inputModel.centreId2;
+                                    }
                                     var promise = Enrollment.search({
                                         'branchId': inputModel.branchId,
                                         'firstName': inputModel.firstName,
-                                        'centreId': inputModel.centreId,
+                                        'centreId': centreId,
                                         'customerType': "individual",
                                         'urnNo': inputModel.urnNo
                                     }).$promise;

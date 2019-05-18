@@ -15,6 +15,13 @@ export class IndividualCustomerIDLOVConfiguration extends LOVElementConfiguratio
         let Enrollment = AngularResourceService.getInstance().getNGService("Enrollment");
         let branches = formHelper.enum('branch_id').data;
         let branchName;
+
+        var centreId;
+        if (inputModel.globalSettings.allowCrossCentreBooking == 'Y'){
+            centreId = inputModel.centreId1;
+        } else {
+            centreId = inputModel.centreId2;
+        }
         for (let i=0; i<branches.length;i++){
             if(branches[i].code==inputModel.customerBranchId)
                 branchName = branches[i].name;
@@ -22,7 +29,7 @@ export class IndividualCustomerIDLOVConfiguration extends LOVElementConfiguratio
         let promise = Enrollment.search({
             'branchName': branchName ||SessionStore.getBranch(),
             'firstName': inputModel.firstName,
-            'centreId':inputModel.centreId,
+            'centreId':centreId,
             'customerType':"individual",
             'urnNo': inputModel.urnNo
         }).$promise;
@@ -97,24 +104,10 @@ export class IndividualCustomerIDLOVConfiguration extends LOVElementConfiguratio
     };
 
     initialize: Function = function(model, form, parentModel, context) {
-        let formHelper = AngularResourceService.getInstance().getNGService("formHelper");
-        let $filter = AngularResourceService.getInstance().getNGService("$filter");
-        // model.customerBranchId = parentModel.customer.customerBranchId;
-        // model.centreId = parentModel.customer.centreId;
-        // let centreCode = formHelper.enum('centre').data;
-
-        // let centreName = $filter('filter')(centreCode, {value: parentModel.customer.centreId}, true);
-        // if(centreName && centreName.length > 0) {
-        //     model.centreName = centreName[0].name;
-        // }
         model.customerBranchId = parentModel.customer.customerBranchId;
-        model.centreId = parentModel.customer.centreId;
-        var centreCode = formHelper.enum('centre').data;
-
-        var centreName = $filter('filter')(centreCode, {value: parentModel.customer.centreId}, true);
-        if(centreName && centreName.length > 0) {
-            model.centreName = centreName[0].name;
-        }
+        let SessionStore = AngularResourceService.getInstance().getNGService("SessionStore");
+        model.globalSettings = {};
+        model.globalSettings.allowCrossCentreBooking = SessionStore.getGlobalSetting("loan.allowCrossCentreBooking") || 'N';
     };
 
     inputMap: Object = {
@@ -133,59 +126,19 @@ export class IndividualCustomerIDLOVConfiguration extends LOVElementConfiguratio
             "screenFilter": true,
             "readonly": true
         },
-        "centreName": {
-            "key": "customer.place",
-            "title":"CENTRE_NAME",
-            "type": "string",
-            "readonly": true,
-
-        },
-        "centreId":{
+        "centreId1": {
             "key": "customer.centreId",
-            "title": "CENTRE_ID",
-            "type": "lov",
-            "autolov": true,
-            "lovonly": true,
-            "bindMap": {},
-            "search": function(inputModel, form, model, context) {
-                let SessionStore = AngularResourceService.getInstance().getNGService("SessionStore");
-                let formHelper = AngularResourceService.getInstance().getNGService("formHelper");
-                let $q = AngularResourceService.getInstance().getNGService("$q");
-                let centres = SessionStore.getCentres();
-                // $log.info("hi");
-                // $log.info(centres);
-
-                let centreCode = formHelper.enum('centre').data;
-                let out = [];
-                if (centres && centres.length) {
-                    for (var i = 0; i < centreCode.length; i++) {
-                        for (var j = 0; j < centres.length; j++) {
-                            if (centreCode[i].value == centres[j].id) {
-
-                                out.push({
-                                    name: centreCode[i].name,
-                                    id:centreCode[i].value
-                                })
-                            }
-                        }
-                    }
-                }
-                return $q.resolve({
-                    headers: {
-                        "x-total-count": out.length
-                    },
-                    body: out
-                });
-            },
-            "onSelect": function(valueObj, model, context) {
-                model.centreId = valueObj.id;
-                model.centreName = valueObj.name;
-            },
-            "getListDisplayItem": function(item, index) {
-                return [
-                    item.name
-                ];
-            }
+            "condition": "model.globalSettings.allowCrossCentreBooking == 'Y'",
+            "type": "select",
+            "enumCode": "centre",
+            "parentEnumCode": "branch",
+            "parentValueExpr": "model.customerBranchId"
+        },
+        "centreId2": {
+            "key": "customer.centreId",
+            "condition": "model.globalSettings.allowCrossCentreBooking == 'N'",
+            "type": "select",
+            "enumCode": "usercentre"
         }
     };
 
