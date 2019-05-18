@@ -84,7 +84,7 @@ define({
            
                     return IndividualLoan.search({
                         'branchName':searchOptions.branch,
-                        'stage': ['FieldInvestigation1','FieldInvestigation2','FieldInvestigation3','TeleVerification'],
+                        'stage': ['FieldInvestigation1','FieldInvestigation2','FieldInvestigation3','TeleVerification','ScreeningReview'],
                         'applicantName':searchOptions.applicantName,
                         'area':searchOptions.area,
                         'villageName':searchOptions.villageName,

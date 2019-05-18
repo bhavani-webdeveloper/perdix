@@ -77,7 +77,7 @@ define(
                                 "NewVehicleDetails.segment2",
                                 "VehicleLoanIncomesInformation1",
                                 "VehicleExpensesInformation1",
-                                "VehicleViability"
+                               // "VehicleViability"
                             ],
                             "overrides": {
                                  "VehicleLoanIncomesInformation": {
@@ -195,7 +195,7 @@ define(
                                 "NewVehicleDetails.segment1",
                                 "NewVehicleDetails.category2",
                                 "NewVehicleDetails.segment2",
-                                "VehicleViability",
+                               // "VehicleViability",
                                 "VehicleLoanIncomesInformation1",
                                 "VehicleExpensesInformation1"
                             ],
@@ -209,7 +209,7 @@ define(
                                 "NewVehicleDetails.segment1",
                                 "NewVehicleDetails.category2",
                                 "NewVehicleDetails.segment2",
-                                "VehicleViability",
+                               // "VehicleViability",
                                 "VehicleLoanIncomesInformation1",
                                 "VehicleExpensesInformation1"
                             ],
@@ -507,7 +507,7 @@ define(
                                 "NewVehicleDetails.segment2",
                                 "VehicleLoanIncomesInformation1",
                                 "VehicleExpensesInformation1",
-                                "VehicleViability"
+                              //  "VehicleViability"
                             ],
                             "overrides": {
 
@@ -521,7 +521,7 @@ define(
                                 "NewVehicleDetails.segment2",
                                 "VehicleLoanIncomesInformation1",
                                 "VehicleExpensesInformation1",
-                                "VehicleViability"
+                               // "VehicleViability"
                             ],
                             "overrides": {
 
@@ -535,7 +535,7 @@ define(
                                 "NewVehicleDetails.segment2",
                                 "VehicleLoanIncomesInformation1",
                                 "VehicleExpensesInformation1",
-                                "VehicleViability"
+                              //  "VehicleViability"
                             ],
                             "overrides": {
 

@@ -998,14 +998,16 @@ define([], function() {
                                         "title": "NET_IRR",
                                         "type": "number",
                                         "orderNo": 110,
-                                        "readonly": true
+                                        "readonly": true,
+                                        "required":true
                                     },
                                     "udf7": {
                                         "key": "loanAccount.accountUserDefinedFields.userDefinedFieldValues.udf7",
                                         "title": "GROSS_IRR",
                                         "type": "string",
                                         "orderNo": 110,
-                                        "readonly": true
+                                        "readonly": true,
+                                        "required": true
                                     },
                                     "vExpectedProcessingFee":{
                                         "key": "loanAccount.vExpectedProcessingFee",

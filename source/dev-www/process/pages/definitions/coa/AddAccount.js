@@ -20,6 +20,8 @@ define([], function() {
                     $log.info("Add Account got initialized");
 
                     model.glAccount = model.glAccount || {};
+                   // model.glAccount.category = _.upperFirst(model.glAccount.category);
+                    model.glAccount.category = _.startCase(_.toLower(model.glAccount.category));
                     if (!(model && model.glAccount && model.glAccount.id)) {
                         PageHelper.showLoader();
                         PageHelper.showProgress("page-init", "Loading...");
@@ -116,13 +118,20 @@ define([], function() {
                                     model.glAccount.parentId = valueObj.id;
                                     model.glAccount.parentGl = valueObj.glName;
                                 }
-                            }, {
-                                "title": "ACTIVE",
-                                "type": "checkbox",
-                                "required": true,
-                                "schema": {
-                                    default: false
-                                },
+                            }, 
+                            // {
+                            //     "title": "ACTIVE",
+                            //     "type": "checkbox",
+                            //     "required": true,
+                            //     "schema": {
+                            //         default: false
+                            //     },
+                            //     "key": "glAccount.status"
+                            // },
+                            {
+                                "title": "LMS Account Status",
+                                "type": "text",
+                                "readonly": true,
                                 "key": "glAccount.status"
                             },
                             // {
