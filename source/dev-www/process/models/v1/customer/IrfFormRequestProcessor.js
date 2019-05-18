@@ -1979,6 +1979,11 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                         type: "select",
                         readonly: true
                     },
+                    "branchId": {
+                        key: "lead.branchId",
+                        type: "select",
+                        readonly: true
+                    },
                     "centerName": {
                         key: "lead.centreName",
                         type: "lov",
@@ -2022,13 +2027,13 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                             ];
                         }
                     },
-                    /*{
-                     key: "lead.centreId",
-                     type: "select",
-                     parentEnumCode: "branch_id",
-                     parentValueExpr: "model.lead.branchId",
-                     screenFilter: true
-                     },*/
+                    "centreId": {
+                        key: "lead.centreId",
+                        type: "select",
+                        parentEnumCode: "branch",
+                        parentValueExpr: "model.lead.branchId",
+                        screenFilter: true
+                    },
                     "ID": {
                         key: "lead.id",
                         condition: "model.lead.id",
@@ -2435,8 +2440,10 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                 // "autolov": true,
                                 "lovonly": true,
                                 initialize: function(model, form, parentModel, context) {
-                                    model.branchId = parentModel.lead.branchName;
-                                    model.centreName = parentModel.lead.centreName;
+                                    model.branchId = parentModel.lead.branchId;
+                                    model.centreId = parentModel.lead.centreId;
+                                    model.globalSettings = {};
+                                    model.globalSettings.allowCrossCentreBooking = SessionStore.getGlobalSetting("lead.allowCrossCentreBooking") || 'N';
                                 },
                                 "inputMap": {
                                     "firstName": {
@@ -2446,16 +2453,25 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                         "key": "lead.urnNo",
                                     },
                                     "branchId": {
-                                        "key": "lead.branchName",
+                                        "key": "lead.branchId",
                                         "type": "select",
                                         "screenFilter": true,
                                         "readonly": true
                                     },
-                                    "centreName": {
-                                        "key": "lead.centreName",
-                                        "type": "string",
-                                        "readonly": true,
+                                    "centreId": {
+                                        "key": "lead.centreId",
+                                        "condition": "model.globalSettings.allowCrossCentreBooking == 'Y'",
+                                        "type": "select",
+                                        "enumCode": "centre",
+                                        "parentEnumCode": "branch",
+                                        "parentValueExpr": "model.branchId"
                                     },
+                                    "centreId2": {
+                                        "key": "lead.centreId",
+                                        "condition": "model.globalSettings.allowCrossCentreBooking == 'N'",
+                                        "type": "select",
+                                        "enumCode": "usercentre"
+                                    }
                                 },
                                 "searchHelper": formHelper,
                                 "search": function(inputModel, form,model) {
@@ -2467,9 +2483,9 @@ irf.pageCollection.factory("IrfFormRequestProcessor", ['$log', '$filter', 'Enrol
                                             branchName = branches[i].name;
                                     }
                                     var promise = Enrollment.search({
-                                        'branchName': branchName || SessionStore.getBranch(),
+                                        'branchId': inputModel.branchId,
                                         'firstName': inputModel.firstName,
-                                        'centreId': model.lead.centreId,
+                                        'centreId': inputModel.centreId,
                                         'customerType': "individual",
                                         'urnNo': inputModel.urnNo
                                     }).$promise;

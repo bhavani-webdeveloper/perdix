@@ -734,6 +734,7 @@ define([], function() {
 
                 return [
                     "PreliminaryInformation",
+                    "PreliminaryInformation.centreId",
                     "PreliminaryInformation.loan",
                     "PreliminaryInformation.loanPurpose1",
                     "PreliminaryInformation.loanPurpose2",
@@ -750,6 +751,7 @@ define([], function() {
                     "PreliminaryInformation.VehicleValuator",
                     "PreliminaryInformation.expectedProcessingFeePercentage",
                     "PreliminaryInformation.estimatedEmi",
+                    "LoanDetails.centreName",
                     "LoanCustomerRelations",
                     "LoanCustomerRelations.loanCustomerRelations",
                     "LoanCustomerRelations.loanCustomerRelations.customerId",
@@ -899,6 +901,13 @@ define([], function() {
                         "repositoryAdditions": {
                             "PreliminaryInformation": {
                                 "items": {
+                                    "centreId": {
+                                        "key": "loanAccount.loanCentre.centreId",
+                                        "title": "CENTRE",
+                                        "type": "select",
+                                        "enumCode": "usercentre",
+                                        "orderNo" : 2
+                                    },
                                     "parentLoanAccount": {
                                         "key": "loanAccount.parentLoanAccount",
                                         "title": "PARENT_LOAN_ACCOUNT",
