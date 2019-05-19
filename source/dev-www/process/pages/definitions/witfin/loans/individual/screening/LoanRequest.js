@@ -731,10 +731,8 @@ define([], function() {
             }
 
             var getIncludes = function(model) {
-
-                return [
+                var includes = [
                     "PreliminaryInformation",
-                    "PreliminaryInformation.centreId",
                     "PreliminaryInformation.loan",
                     "PreliminaryInformation.loanPurpose1",
                     "PreliminaryInformation.loanPurpose2",
@@ -799,6 +797,14 @@ define([], function() {
                     "actionbox.submit",
                     "actionbox.save",
                 ];
+
+                if (model.currentStage=='Screening'){
+                    includes.push('PreliminaryInformation.centreId')
+                } else {
+                    includes.push('PreliminaryInformation.centreIdRO')
+                }
+
+                return includes;
 
             }
 
@@ -895,7 +901,6 @@ define([], function() {
                     },
                     "includes": getIncludes(model),
                     "excludes": [
-                        ""
                     ],
                     "options": {
                         "repositoryAdditions": {
@@ -907,6 +912,14 @@ define([], function() {
                                         "type": "select",
                                         "enumCode": "usercentre",
                                         "orderNo" : 2
+                                    },
+                                    "centreIdRO": {
+                                        "key": "loanAccount.loanCentre.centreId",
+                                        "title": "CENTRE",
+                                        "type": "select",
+                                        "enumCode": "centre",
+                                        "orderNo" : 2,
+                                        "readonly": true
                                     },
                                     "parentLoanAccount": {
                                         "key": "loanAccount.parentLoanAccount",
