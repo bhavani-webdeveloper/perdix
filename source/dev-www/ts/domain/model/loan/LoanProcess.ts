@@ -7,6 +7,7 @@ import {ILoanRepository} from "./ILoanRepository";
 import {Observable} from "@reactivex/rxjs";
 import {plainToClass} from "class-transformer";
 import EnrollmentProcessFactory = require("../customer/EnrolmentProcessFactory");
+import AngularResourceService = require("../../../infra/api/AngularResourceService");
 import {EnrolmentProcess} from "../customer/EnrolmentProcess";
 import {Customer} from  "../customer/Customer";
 import LoanProcessFactory = require("./LoanProcessFactory");
@@ -87,21 +88,29 @@ export class LoanProcess {
      */
     public refreshRelatedCustomers(){
         /* Loan customer */
+        let SessionStore = AngularResourceService.getInstance().getNGService("SessionStore");
+        let allowCrossCentreBooking = SessionStore.getGlobalSetting("loan.allowCrossCentreBooking") || 'N';
         let lc = new LoanCenter();
+        
         if (_.hasIn(this.loanCustomerEnrolmentProcess, 'customer.id')) {
             this.loanAccount.customerId = this.loanCustomerEnrolmentProcess.customer.id;
             this.loanAccount.urnNo = this.loanCustomerEnrolmentProcess.customer.urnNo;
 
-            lc.centreId = this.loanCustomerEnrolmentProcess.customer.centreId;
-            this.loanAccount.loanCentre = lc;
+            if (allowCrossCentreBooking == 'N'){
+                lc.centreId = this.loanCustomerEnrolmentProcess.customer.centreId;
+                this.loanAccount.loanCentre = lc;
+            }
         }
 
         this.loanAccount.loanCustomerRelations = this.loanAccount.loanCustomerRelations || [];
 
         if (_.hasIn(this.applicantEnrolmentProcess, 'customer.id')) {
             this.loanAccount.applicant = this.applicantEnrolmentProcess.customer.urnNo;
-            lc.centreId = this.applicantEnrolmentProcess.customer.centreId;
-            this.loanAccount.loanCentre = lc;
+            
+            if (allowCrossCentreBooking == 'N'){
+                lc.centreId = this.loanCustomerEnrolmentProcess.customer.centreId;
+                this.loanAccount.loanCentre = lc;
+            }
 
             let aIndex = _.findIndex(this.loanAccount.loanCustomerRelations, (item) => {
                 return item.customerId == this.applicantEnrolmentProcess.customer.id;
