@@ -3312,7 +3312,7 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                                         "frequency": {
                                                             key: "customer.familyMembers[].incomes[].frequency",
                                                             type: "select",
-                                                            "enumCode": "income_frequency",
+                                                            "enumCode": "incomesfrequency",
                                                             "orderNo": 40
                                                         },
                                                         "workSector": {
