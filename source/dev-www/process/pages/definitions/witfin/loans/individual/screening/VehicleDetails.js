@@ -1918,13 +1918,6 @@ define(
                         });
                 },
                 eventListeners: {
-                    "lead-loaded": function(bundleModel, model, obj) {
-                        model.lead = obj;
-                        model.loanAccount.loanAmountRequested = obj.loanAmountRequested;
-                        model.loanAccount.loanPurpose1 = obj.loanPurpose1;
-                        model.loanAccount.loanPurpose2 = obj.loanPurpose2;
-                        model.loanAccount.screeningDate = obj.screeningDate || moment().format("YYYY-MM-DD");
-                    },
                     "get-vehicle-details": function(bundleModel, model, obj) {
                         $log.info(obj);
                         model.vehicleDetails = obj.results;

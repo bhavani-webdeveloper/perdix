@@ -731,8 +731,7 @@ define([], function() {
             }
 
             var getIncludes = function(model) {
-
-                return [
+                var includes = [
                     "PreliminaryInformation",
                     "PreliminaryInformation.loan",
                     "PreliminaryInformation.loanPurpose1",
@@ -750,6 +749,7 @@ define([], function() {
                     "PreliminaryInformation.VehicleValuator",
                     "PreliminaryInformation.expectedProcessingFeePercentage",
                     "PreliminaryInformation.estimatedEmi",
+                    "LoanDetails.centreName",
                     "LoanCustomerRelations",
                     "LoanCustomerRelations.loanCustomerRelations",
                     "LoanCustomerRelations.loanCustomerRelations.customerId",
@@ -797,6 +797,14 @@ define([], function() {
                     "actionbox.submit",
                     "actionbox.save",
                 ];
+
+                if (model.currentStage=='Screening'){
+                    includes.push('PreliminaryInformation.centreId')
+                } else {
+                    includes.push('PreliminaryInformation.centreIdRO')
+                }
+
+                return includes;
 
             }
 
@@ -893,12 +901,26 @@ define([], function() {
                     },
                     "includes": getIncludes(model),
                     "excludes": [
-                        ""
                     ],
                     "options": {
                         "repositoryAdditions": {
                             "PreliminaryInformation": {
                                 "items": {
+                                    "centreId": {
+                                        "key": "loanAccount.loanCentre.centreId",
+                                        "title": "CENTRE",
+                                        "type": "select",
+                                        "enumCode": "usercentre",
+                                        "orderNo" : 2
+                                    },
+                                    "centreIdRO": {
+                                        "key": "loanAccount.loanCentre.centreId",
+                                        "title": "CENTRE",
+                                        "type": "select",
+                                        "enumCode": "centre",
+                                        "orderNo" : 2,
+                                        "readonly": true
+                                    },
                                     "parentLoanAccount": {
                                         "key": "loanAccount.parentLoanAccount",
                                         "title": "PARENT_LOAN_ACCOUNT",

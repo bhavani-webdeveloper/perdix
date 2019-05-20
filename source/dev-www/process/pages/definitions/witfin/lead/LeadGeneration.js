@@ -50,6 +50,9 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                     "leadProfile.individualDetails.age": {
                         "readonly" : true
                     },
+                    "leadProfile.centreId": {
+                        "enumCode": "usercentre"
+                    },
                     "leadProfile.leadDetails.individualDetails.gender": {
                         "required": true
                     },
@@ -57,7 +60,10 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                         "required": true
                     },
                     "leadProfile.centerName": {
-                        "lovonly": true
+                        "type": "select",
+                        "enumCode": "centre",
+                        parentEnumCode: "branch_id",
+                        parentValueExpr: "model.lead.branchId",
                     },
                     "productDetails.screeningDate": {
                         "condition": "(model.lead.interestedInProduct==='YES' && model.lead.leadStatus ==='Screening')",
@@ -148,8 +154,8 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
             var getIncludes = function (model) {
                 return [
                     "leadProfile",
-                    "leadProfile.branchName",
-                    "leadProfile.centerName",
+                    "leadProfile.branchId",
+                    "leadProfile.centreId",
                     "sourceDetails",
                     "sourceDetails.leadSource",
                     "sourceDetails.referredBy",
@@ -285,7 +291,9 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                                 }
 
                                 promise.then(function(resp) {
-                                    self.form = IrfFormRequestProcessor.getFormDefinition('LeadGeneration', formRequest,configFile(), model);
+                                    IrfFormRequestProcessor.buildFormDefinition('LeadGeneration', formRequest,configFile(), model).then(function(form){
+                                        self.form = form;
+                                    });
                                     PageHelper.hideLoader();
                                 })
 
@@ -295,7 +303,9 @@ define(['perdix/domain/model/lead/LeadProcess', 'perdix/infra/api/AngularResourc
                             .subscribe(function(value){
                                 model.leadProcess = value;
                                 model.lead = model.leadProcess.lead;
-                                self.form = IrfFormRequestProcessor.getFormDefinition('LeadGeneration', formRequest);
+                                IrfFormRequestProcessor.buildFormDefinition('LeadGeneration', formRequest).then(function(form){
+                                    self.form = form;
+                                });
                             });
 
                     }
