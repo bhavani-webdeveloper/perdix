@@ -683,6 +683,7 @@ irf.pageCollection.factory("Pages__CustomerRUD", ["$log", "$q", "Enrollment", "Q
                                     model.customer.familyMembers[rowIndex].maritalStatus = resp.maritalStatus;
                                     model.customer.familyMembers[rowIndex].age = moment().diff(moment(resp.dateOfBirth), 'years');
                                     model.customer.familyMembers[rowIndex].mobilePhone = resp.mobilePhone;
+                                    model.customer.familyMembers[rowIndex].enrolledUrnNo = resp.urnNo;
                                     model.customer.familyMembers[rowIndex].relationShip = "";
                                     var selfIndex = _.findIndex(resp.familyMembers, function(o) {
                                         return o.relationShip.toUpperCase() == 'SELF'

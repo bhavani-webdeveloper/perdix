@@ -175,6 +175,11 @@
                             "title": "udf5",
                             "type": "string",
                             "captureStages": ["Completed"]
+                        },
+                        "enrolledUrnNo":{
+                            "title": "URN NO",
+                            "type": "string",
+                            "captureStages": ["BasicEnrolment", "Completed"]
                         }
                     }
                 }
