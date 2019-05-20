@@ -678,6 +678,11 @@
                         "refCodeCategory": "religion",
                         "captureStages": ["Stage02", "Completed"]
                     },
+                    "minimumOneFamilyMember":{
+                        "title":"Minimum One Family Member",
+                        "type":"string",
+                        "captureStages":["Stage02","Completed"]
+                    },
                     "caste": {
                         "title": "Caste",
                         "type": "string",
