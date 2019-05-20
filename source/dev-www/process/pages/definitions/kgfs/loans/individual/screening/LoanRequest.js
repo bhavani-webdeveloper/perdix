@@ -1928,6 +1928,7 @@ define([],function(){
                         for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
                             if (model.loanAccount.loanCustomerRelations[i].customerId == params.customer.id) {
                                 model.loanAccount.dataCheckChanges[i]=true;
+                                model.loanAccount.loanCustomerRelations[i].cbCheckCompleted = false;
                             }
                         }
                     },
@@ -1939,6 +1940,7 @@ define([],function(){
                             if (model.loanAccount.loanCustomerRelations[i].customerId == params.customer.id) {
                                 addToRelation = false;
                                 model.loanAccount.dataCheckChanges[i]=true;
+                                model.loanAccount.loanCustomerRelations[i].cbCheckCompleted = false;
                                 if (params.customer.urnNo)
                                     //model.loanAccount.loanCustomerRelations[i].urn =params.customer.urnNo;
                                     //model.loanAccount.loanCustomerRelations[i].name =params.customer.firstName;
