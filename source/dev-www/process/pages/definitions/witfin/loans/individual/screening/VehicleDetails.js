@@ -1877,7 +1877,7 @@ define(
                     }else if (model.loanAccount.loanPurpose1 == 'Purchase - Used Vehicle'){
                         model.loanAccount.vehicleLoanDetails.vehicleType = 'Used';
                     }
-                    model.loanAccount.payLoad = Number(model.loanAccount.payLoad);
+                    model.loanAccount.vehicleLoanDetails.payLoad = Number(model.loanAccount.vehicleLoanDetails.payLoad);
                     var self = this;
 
                     var p1 = UIRepository.getLoanProcessUIRepository().$promise;
