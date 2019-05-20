@@ -2997,7 +2997,8 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                             for (var i = 0; i < model.newLoanDocuments.length; i++) {
                                 model.newLoanDocuments[i].loanId = model.loanAccount.id;
                                 model.newLoanDocuments[i].accountNumber = model.loanAccount.accountNumber;
-                                model.newLoanDocuments[i].documentStatus = "APPROVED";
+                                if (model.siteCode != 'KGFS')
+                                    model.newLoanDocuments[i].documentStatus = "APPROVED";
 
                                 model.reqData.loanAccount.loanDocuments.push(model.newLoanDocuments[i]);
                             }
