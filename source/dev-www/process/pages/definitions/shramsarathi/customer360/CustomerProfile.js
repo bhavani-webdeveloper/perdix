@@ -2488,7 +2488,7 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                     // "IndividualInformation.groupID",
                     // "IndividualInformation.groupName",
                     "IndividualInformation.customerBranchId",
-                    "IndividualInformation.centreId",
+                    // "IndividualInformation.centreId",
                     "IndividualInformation.centreId1",
                     "IndividualInformation.customerId",
                     // "IndividualInformation.urnNo",
