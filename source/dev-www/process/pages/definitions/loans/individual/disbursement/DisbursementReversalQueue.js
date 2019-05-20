@@ -12,7 +12,7 @@ define({
                 model.DisbursementReverse = model.DisbursementReverse || {};
                 model.branchName = SessionStore.getBranch();
                 model.branch = SessionStore.getCurrentBranch().branchId;
-
+                
                 model.currentStage = 'Completed';
                 console.log(model);
             },
