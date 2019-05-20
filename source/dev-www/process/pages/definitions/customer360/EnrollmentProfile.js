@@ -704,17 +704,10 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                                 key:"customer.familyMembers[].customerId",
                                 //readonly: true,
                                 type:"lov",
-                                initialize: function(model, form, parentModel, context) {
-                                    model.branchName = SessionStore.getBranch();
-                                },
                                 "inputMap": {
                                     "firstName": {
                                         "key": "customer.firstName",
                                         "title": "CUSTOMER_NAME"
-                                    },
-                                    "urnNo":{
-                                        "key":"customer.urnNo",
-                                        'title':'URN_NO',
                                     },
                                     "branchName": {
                                         "key": "customer.kgfsName",
@@ -729,8 +722,6 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                                     "id": "customer.familyMembers[arrayIndex].customerId",
                                     "firstName": "customer.familyMembers[arrayIndex].familyMemberFirstName"
         
-                                },
-                                'bindMap':{
                                 },
                                 "searchHelper": formHelper,
                                 "search": function(inputModel, form) {
@@ -897,7 +888,8 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                                     var promise = Enrollment.search({
                                         'branchName':  inputModel.branchName || SessionStore.getBranch(),
                                         'firstName': inputModel.firstName,
-                                        'urnNo':inputModel.urnNo
+                                        'urnNo':inputModel.urnNo,
+                                        'centreId':inputModel.centreId
                                     }).$promise;
                                     return promise;
                                 },
