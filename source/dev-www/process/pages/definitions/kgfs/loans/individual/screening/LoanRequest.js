@@ -2031,7 +2031,10 @@ define([],function(){
                         }
                         if(model.loanAccount.cbCheckCompletedFlag)
                         {
-                            model.loanAccount.dataCheckChanges[0]=true;
+                            for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                                model.loanAccount.dataCheckChanges[i]=true;
+                                model.loanAccount.loanCustomerRelations[i].cbCheckCompleted=false;
+                            }                            
                             model.loanAccount.cbCheckCompletedFlag=false;
                         }
 
@@ -2215,7 +2218,10 @@ define([],function(){
 
                         if(model.loanAccount.cbCheckCompletedFlag)
                         {
-                            model.loanAccount.dataCheckChanges[0]=true;
+                            for (var i=0;i<model.loanAccount.loanCustomerRelations.length; i++){
+                                model.loanAccount.dataCheckChanges[i]=true;
+                                model.loanAccount.loanCustomerRelations[i].cbCheckCompleted=false;
+                            }
                             model.loanAccount.cbCheckCompletedFlag=false;
                         }
 
