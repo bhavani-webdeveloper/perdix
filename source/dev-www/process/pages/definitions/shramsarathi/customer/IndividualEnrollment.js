@@ -127,13 +127,14 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                 "HouseVerification.houseVerificationPhoto",
                                 "HouseVerification.place",
                                 "HouseVerification.date"
-                            ], "overrides": {
+                            ], 
+                            "overrides": {
                                 "IndividualInformation.customerBranchId": {
                                     "readonly": true
                                 },
-                                "BankAccounts.customerBankAccounts.customerNameAsInBank": {
-                                    "required": true
-                                },
+                                // "BankAccounts.customerBankAccounts.customerNameAsInBank": {
+                                //     "required": true
+                                // },
                                 "IndividualInformation.dateOfBirth": {
                                     "onChange": function (modelValue, form, model) {
                                         if (model.customer.dateOfBirth) {
@@ -607,7 +608,10 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                                 },
 
                                 "BankAccounts.customerBankAccounts.accountNumber": {
-                                    required: true
+                                    "required": true,
+                                },
+                                "BankAccounts.customerBankAccounts.customerNameAsInBank":{
+                                    "required": true
                                 },
                                 "BankAccounts.customerBankAccounts.isDisbersementAccount": {
                                     "type": "radios"
@@ -2004,6 +2008,9 @@ define(["perdix/domain/model/loan/LoanProcess", 'perdix/domain/model/customer/En
                         "condition": "!model.customer.mailSameAsResidence",
                         "title": "HAMLET_FALA",
                         "required": false
+                    },
+                    "BankAccounts.customerBankAccounts.customerNameAsInBank":{
+                        "required": true
                     },
                     "Liabilities.liabilities.noOfInstalmentPaid": {
                         "key": "customer.liabilities[].noOfInstalmentPaid",

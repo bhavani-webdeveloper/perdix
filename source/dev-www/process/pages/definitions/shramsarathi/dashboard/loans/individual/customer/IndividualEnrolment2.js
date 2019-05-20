@@ -131,7 +131,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 // "References",   
                             ],
                             "overrides": {
-                                
+                                "BankAccounts.customerBankAccounts.customerNameAsInBank":{
+                                    "required": true
+                                },
                                 "KYC.addressProofFieldSet":{
                                     "condition":"model.customer.addressPfSameAsIdProof=='NO' || model.customer.identityProof=='PAN Card'"
                                 },
@@ -285,7 +287,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', 'perdix/infra/api/Angul
                                 "KYC.firstName"
                             ],
                             "overrides": {
-                               
+                               "BankAccounts.customerBankAccounts.customerNameAsInBank":{
+                                "required": true
+                               },
                                 "PhysicalAssets.physicalAssets":{
                                     "title":"FIXED_ASSET",
                                     "titleExpr": "model.customer.physicalAssets[arrayIndex].titleExpr",

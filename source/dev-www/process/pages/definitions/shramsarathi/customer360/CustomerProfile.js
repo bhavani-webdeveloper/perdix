@@ -140,6 +140,9 @@ define(["perdix/domain/model/loan/LoanProcess",'perdix/domain/model/customer/Enr
                                     }
                                }
                             },
+                            "BankAccounts.customerBankAccounts.customerNameAsInBank":{
+                                "required": true
+                            },
                             "IndividualFinancials.expenditures.expenditureSource" : {
                                 "required": true,
                                 "key":"customer.expenditures[].expenseType",
