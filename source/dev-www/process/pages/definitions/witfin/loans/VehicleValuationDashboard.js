@@ -21,7 +21,7 @@ irf.pageCollection.controller(irf.controller("witfin.loans.VehicleValuationDashb
             var prqMenu = $scope.loanDashboardDefinition.$menuMap["Page/Engine/witfin.loans.individual.screening.vehiclevaluation.VehicleValuationQueue"];
             if (prqMenu) {
                 IndividualLoan.search({
-                    'stage': ['FieldInvestigation1','FieldInvestigation2','FieldInvestigation3','TeleVerification'],
+                    'stage': ['FieldInvestigation1','FieldInvestigation2','FieldInvestigation3','TeleVerification','ScreeningReview'],
                     'enterprisePincode': '',
                     'applicantName': '',
                     'area': '',
