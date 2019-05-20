@@ -3890,7 +3890,7 @@
                       "maximum":100000000,
                       "captureStages":[
                          "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","FieldAppraisalReview","ZonalRiskReview", "CentralRiskReview","CreditCommitteeReview","Rejected"
-                      ]
+                        ]
                    },
                     "mitigatedStatus":{
                       "title":"mitigatedStatus",
@@ -3907,7 +3907,17 @@
                       "captureStages":[
                          "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","FieldAppraisalReview", "ZonalRiskReview", "CentralRiskReview","CreditCommitteeReview","Rejected"
                       ]
-                   }
+                   },
+                   "isCurrentMitigation":{
+                     "title":"isCurrentMitigation",
+                     "type":"boolean",
+                     "minimum":1,
+                     "maximum":100000000,
+                     "captureStages":[
+                        "Screening","Application","ScreeningReview","CreditAppraisal","DSCApproval","DSCOverride","KYCCheck","RiskReviewAndLoanSanction","FieldAppraisalReview","ZonalRiskReview", "CentralRiskReview","CreditCommitteeReview","Rejected"
+                     ]
+                  }
+
                 }
              }
           },

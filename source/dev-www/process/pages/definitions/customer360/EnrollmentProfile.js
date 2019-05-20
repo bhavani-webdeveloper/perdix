@@ -99,6 +99,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                     model.customer.addressProofSameAsIdProof = (model.customer.title == "true") ? true : false;
                     model = EnrollmentHelper.fixData(model);
                     model.additional = {isStrategicEdit : false};
+                    model.additional.kgfsBankName = SessionStore.getBranch();
                     checkCentre(model);
                     PagesDefinition.getRolePageConfig("Page/Engine/customer360.EnrollmentProfile").then(function(data){
                         $log.info(data);
@@ -690,7 +691,7 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                 },
                 {
                     "type": "box",
-                    "condition":"!model.enabletrue",
+                    "condition":"!model.enabletrue && model.siteCode!='KGFS'",
                     "title": "T_FAMILY_DETAILS",
                     "items": [
                         {
@@ -726,8 +727,169 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
                                 "search": function(inputModel, form) {
                                     $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
                                     var promise = Enrollment.search({
-                                        'branchName': SessionStore.getBranch() || inputModel.branchName,
-                                        'firstName': inputModel.first_name,
+                                        'branchName':  inputModel.branchName || SessionStore.getBranch(),
+                                        'firstName': inputModel.firstName,
+                                        'urnNo':inputModel.urnNo
+                                    }).$promise;
+                                    return promise;
+                                },
+                                getListDisplayItem: function(data, index) {
+                                    return [
+                                        [data.firstName, data.fatherFirstName].join(' '),
+                                        data.id
+                                    ];
+                                }
+                            },
+                            {
+                                key:"customer.familyMembers[].familyMemberFirstName",
+                                title:"FAMILY_MEMBER_FULL_NAME",
+                                //readonly: true
+                            },
+                            {
+                                key:"customer.familyMembers[].familyMemberLastName",
+                                title:"FAMILY_MEMBER_LAST_NAME"
+                            },
+                            {
+                                key:"customer.familyMembers[].relationShip",
+                                type:"select",
+                                title: "T_RELATIONSHIP"
+                            },
+                            {
+                                key: "customer.familyMembers[].gender",
+                                type: "radios",
+                                title: "T_GENDER",
+                                //readonly: true
+                            },
+                            {
+                                key: "customer.familyMembers[].dateOfBirth",
+                                type:"date",
+                                title: "T_DATEOFBIRTH",
+                                onChange: function(modelValue, form, model) {
+                                if (model.customer.familyMembers[form.arrayIndex].dateOfBirth) {
+                                    model.customer.familyMembers[form.arrayIndex].age = moment().diff(moment(model.customer.familyMembers[form.arrayIndex].dateOfBirth, SessionStore.getSystemDateFormat()), 'years');
+                                }
+                                },
+                            },
+                            {
+                                key: "customer.familyMembers[].age",
+                                title: "AGE",
+                                "readonly":true
+                                //readonly: true
+                            },
+                            {
+                                key:"customer.familyMembers[].educationStatus",
+                                type:"select",
+                                title: "T_EDUCATION_STATUS"
+                            },
+                            {
+                                key:"customer.familyMembers[].maritalStatus",
+                                type:"select",
+                                title: "T_MARITAL_STATUS"
+                            },
+                            "customer.familyMembers[].mobilePhone",
+                            {
+                                key:"customer.familyMembers[].healthStatus",
+                                type:"radios",
+                                titleMap:{
+                                    "GOOD":"GOOD",
+                                    "BAD":"BAD"
+                                }
+                            },
+                            {
+                                key:"customer.familyMembers[].incomes",
+                                type:"array",
+                                startEmpty: true,
+                                items:[
+                                    {
+                                        key: "customer.familyMembers[].incomes[].incomeSource",
+                                        type:"select"
+                                    },
+                                    "customer.familyMembers[].incomes[].incomeEarned",
+                                    {
+                                        key: "customer.familyMembers[].incomes[].frequency",
+                                        type: "select"
+                                    },
+                                    {
+                                        key: "customer.familyMembers[].incomes[].monthsPerYear",
+                                        "schema": {
+                                            "minimum": 1,
+                                            "maximum": 12,
+                                        }
+                                    }
+                                ]
+                            },
+                            // {
+                            //     key:"customer.familyMembers[].enroll",
+                            //     type:"button",
+                            //     condition:"model.customer.currentStage=='Completed'&& !model.customer.familyMembers[arrayIndex].enrolled && ((model.customer.familyMembers[arrayIndex].relationShip).toLowerCase() != 'self' && (model.customer.familyMembers[arrayIndex].age >= 18) ) ",
+                            //     title:"ENROLL_AS_CUSTOMER",
+                            //     onClick: function(model, formCtrl,context) {
+                            //         model.family={};
+                            //         model.family=model.customer;
+                            //         model.family.familydata=model.customer.familyMembers[context.arrayIndex];
+                            //             $state.go("Page.Engine", {
+                            //                 pageName: "ProfileInformation",
+                            //                 pageId:undefined,
+                            //                 pageData:model.family
+                            //                 //pageData:model.customer.familyMembers[context.arrayIndex]
+                            //             });
+                            //     }
+                            // },
+                        ]
+                        }  
+                ]
+                },
+                {
+                    "type": "box",
+                    "condition":"!model.enabletrue && model.siteCode=='KGFS'",
+                    "title": "T_FAMILY_DETAILS",
+                    "items": [
+                        {
+                        key:"customer.familyMembers",
+                        type:"array",
+                        titleExpr: "(model.customer.familyMembers[arrayIndex].relationShip == 'Self'?'Self':'Family Memeber')",
+                        startEmpty: true,
+                        items: [
+                            {
+                                key:"customer.familyMembers[].customerId",
+                                //readonly: true,
+                                type:"lov",
+                                initialize: function(model, form, parentModel, context) {
+                                    model.branchName = SessionStore.getBranch();
+                                },
+                                "inputMap": {
+                                    "firstName": {
+                                        "key": "customer.firstName",
+                                        "title": "CUSTOMER_NAME"
+                                    },
+                                    "urnNo":{
+                                        "key":"customer.urnNo",
+                                        'title':'URN_NO',
+                                    },
+                                    "branchName": {
+                                        "key": "customer.kgfsName",
+                                        "type": "select"
+                                    },
+                                    "centreId": {
+                                        "key": "customer.centreId",
+                                        "type": "select"
+                                    }
+                                },
+                                "outputMap": {
+                                    "id": "customer.familyMembers[arrayIndex].customerId",
+                                    "firstName": "customer.familyMembers[arrayIndex].familyMemberFirstName"
+        
+                                },
+                                'bindMap':{
+                                },
+                                "searchHelper": formHelper,
+                                "search": function(inputModel, form) {
+                                    $log.info("SessionStore.getBranch: " + SessionStore.getBranch());
+                                    var promise = Enrollment.search({
+                                        'branchName':  inputModel.branchName || SessionStore.getBranch(),
+                                        'firstName': inputModel.firstName,
+                                        'urnNo':inputModel.urnNo,
+                                        'centreId':inputModel.centreId
                                     }).$promise;
                                     return promise;
                                 },
@@ -3159,7 +3321,9 @@ function($log, Enrollment,Queries, EnrollmentHelper,PagesDefinition, SessionStor
         },
         form: [],
         schema: function() {
-            return Enrollment.getSchema().$promise;
+            return Enrollment.getSchema().$promise.then(function(resp){
+                return resp;
+            });
         },
         actions: {
             submit: function(model, form, formName){
