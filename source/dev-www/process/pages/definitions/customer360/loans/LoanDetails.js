@@ -554,8 +554,10 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                     {
                                                         "title": "Transaction Date",
                                                         "data": "transactionDateStr"
-                                                    },
-                                                    {
+                                                    }
+                                                ];
+                                                if (model.siteCode =='KGFS'){
+                                                    model.cbsLoan.orgTransactions.columns.push({
                                                         'title':"Receipt",
                                                         "data":"<div><i class='fa fa-print'></i></div>",
                                                         'format' : 'html',
@@ -583,9 +585,8 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                                             });
 
                                                         }
-                                                    }
-                                                ];
-
+                                                    })
+                                                }
 
                                                 model.cbsLoan.orgTransactions.data = $filter('filter')(model.cbsLoan.transactions, {
                                                     transactionName: '!Demand'
@@ -797,7 +798,8 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
 
 
                 },
-                form: [{
+                form: [
+                    {
                         "type": "box",
                         "title": "LOAN_BASIC_INFORMATION",
                         "condition": "",
