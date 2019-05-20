@@ -163,7 +163,7 @@ irf.pageCollection.factory(irf.page("CBCheckCapture"),
 					Queries.getLoanProduct(model.productCode).then(
 						function(res) {                                       
 						model.loanType = res.body[0].loanType;
-						if(SessionStore.getGlobalSetting('siteCode')  == 'KGFS'){
+						if(SessionStore.getGlobalSetting('siteCode')  == 'KGFS' && model.creditBureau == 'INDIVIDUAL'){
 							if(model.loanType == 'JLG'){
 								model.subModuleCode = 'MFI';
 								if(model.partner == 'AXIS'){
