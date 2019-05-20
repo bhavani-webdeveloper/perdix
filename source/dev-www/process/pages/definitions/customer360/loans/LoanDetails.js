@@ -2980,7 +2980,8 @@ irf.pageCollection.factory(irf.page("customer360.loans.LoanDetails"),
                                 if (typeof model.newLoanDocumentsPerSession[i].documentId !='undefined' && model.newLoanDocumentsPerSession[i].documentId != null && model.newLoanDocumentsPerSession[i].documentId != ""){
                                     model.newLoanDocumentsPerSession[i].loanId = reqData.loanAccount.id;
                                     model.newLoanDocumentsPerSession[i].accountNumber = reqData.loanAccount.accountNumber;
-                                    model.newLoanDocumentsPerSession[i].documentStatus = "APPROVED";
+                                    if (model.siteCode != 'KGFS')
+                                        model.newLoanDocumentsPerSession[i].documentStatus = "APPROVED";
                                     reqData.loanAccount.loanDocuments.push(model.newLoanDocumentsPerSession[i]);
                                 }
                             }
