@@ -37,7 +37,7 @@ function($log, $q, LoanAccount, SchemaResource, PageHelper,formHelper,elementsUt
             Queries.getLoanProduct(productCode).then(
                 function(res) {                                       
                 model.loanType = res.body[0].loanType;
-                if(SessionStore.getGlobalSetting('siteCode')  == 'KGFS'){
+                if(SessionStore.getGlobalSetting('siteCode')  == 'KGFS' && CBType == 'INDIVIDUAL'){
                     if(model.loanType == 'JLG'){
                         subModuleCode = 'MFI';
                         if(partner == 'AXIS'){
