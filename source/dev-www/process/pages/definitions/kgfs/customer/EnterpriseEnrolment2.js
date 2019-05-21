@@ -9,7 +9,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
 
         $pageFn: function ($log, $q, Enrollment, IrfFormRequestProcessor, EnrollmentHelper, PageHelper, formHelper, elementsUtils,
             irfProgressMessage, SessionStore, $state, $stateParams, Queries, Utils, CustomerBankBranch, BundleManager, $filter, $injector, UIRepository, LoanAccount) {
-            
+
             var getDialySalesDetails = function (value, model, row, day) {
                 if(value){
                     model.customer.enterprise.weeklySale = 0;
@@ -20,28 +20,15 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         }
                         dailysales.total = (dailysales.mon ? dailysales.mon : 0) + (dailysales.tue ? dailysales.tue : 0) + (dailysales.wed ? dailysales.wed : 0) + (dailysales.thu ? dailysales.thu : 0) +
                             (dailysales.fri ?dailysales.fri : 0) + (dailysales.sat ? dailysales.sat : 0) + (dailysales.sun ? dailysales.sun : 0)
-                        model.customer.enterprise.weeklySale = round((model.customer.enterprise.weeklySale + dailysales.total),2);
-                        model.customer.enterprise.monthlySale =round((model.customer.enterprise.weeklySale * 4),2);
+                        model.customer.enterprise.weeklySale = model.customer.enterprise.weeklySale + dailysales.total;
+                        model.customer.enterprise.monthlySale = model.customer.enterprise.weeklySale * 4;
                     }
                     averageMonthlySale(model);
                     getBusinessExpenseData('value', model, 'row');
                     monthlySurpluse(model);
                 }
+               
             }
-
-            var clearAll = function(baseKey,listOfKeys,model){
-                if(listOfKeys != null && listOfKeys.length > 0){
-                    for(var i =0 ;i<listOfKeys.length;i++){
-                        if(typeof model[baseKey][listOfKeys[i]] !="undefined"){
-                                model[baseKey][listOfKeys[i]] = null;
-                        }
-                    }
-                }
-                else{
-                    model[baseKey] = {};
-                }
-            }
-
             var getEnterpriseProductDetails = function (model) {
                 model.customer.enterprise.totalDailySales = 0
                 model.customer.enterprise.totalDailyCost = 0
@@ -54,36 +41,23 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         productSale.totalCost = productSale.costPrice * productSale.quantity
                     }
                     if (productSale.totalSale) {
-                        model.customer.enterprise.totalDailySales = round((productSale.totalSale + model.customer.enterprise.totalDailySales),2);
+                        model.customer.enterprise.totalDailySales = productSale.totalSale + model.customer.enterprise.totalDailySales
                         model.customer.enterprise.totalWeeklySales = model.customer.enterprise.totalDailySales * 4;
                         model.customer.enterprise.totalMonthlySales = model.customer.enterprise.totalDailySales * 30;
                     }
                     if (productSale.totalCost) {
-                        model.customer.enterprise.totalDailyCost = round((productSale.totalCost + model.customer.enterprise.totalDailyCost),2);
+                        model.customer.enterprise.totalDailyCost = productSale.totalCost + model.customer.enterprise.totalDailyCost
                         model.customer.enterprise.totalWeeklyCost = model.customer.enterprise.totalDailyCost * 4;
                         model.customer.enterprise.totalMonthlyCost = model.customer.enterprise.totalDailyCost * 30;
-                        grossmargin = round((((model.customer.enterprise.totalDailySales - model.customer.enterprise.totalDailyCost) / model.customer.enterprise.totalDailySales)),2);
+                        grossmargin = ((model.customer.enterprise.totalDailySales - model.customer.enterprise.totalDailyCost) / model.customer.enterprise.totalDailySales);
                         model.customer.enterprise.grossMarginSales = grossmargin;
-                        grossmarginCost = round((((model.customer.enterprise.totalDailySales - model.customer.enterprise.totalDailyCost) / model.customer.enterprise.totalDailySales)),2);
-                        model.customer.enterprise.grossMarginCost = ((grossmarginCost/100));
+                        grossmarginCost = ((model.customer.enterprise.totalDailySales - model.customer.enterprise.totalDailyCost) / model.customer.enterprise.totalDailySales);
+                        model.customer.enterprise.grossMarginCost = (grossmarginCost/100);
                     }
                 }
                 averageMonthlySale(model);
                 getBusinessExpenseData('value', model, 'row');
                 monthlySurpluse(model);
-            }
-
-            var validateRequest = function(req) {
-                if (req.customer && req.customer.customerBankAccounts) {
-                    for (var i = 0; i < req.customer.customerBankAccounts.length; i++) {
-                        var bankAccount = req.customer.customerBankAccounts[i];
-                        if (bankAccount.accountNumber != bankAccount.confirmedAccountNumber) {
-                            PageHelper.showErrors({data:{error:"Bank Accounts: Account Number doesnt match with Confirmed Account Number"}});
-                            return false;
-                        }
-                    }
-                }
-                return true;
             }
 
             var getAnnualSales = function (value, model, row, month) {
@@ -97,7 +71,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     monthlySales.total = (monthlySales.Jan ? monthlySales.Jan : 0) + (monthlySales.Feb ? monthlySales.Feb : 0) + (monthlySales.Mar ? monthlySales.Mar : 0) + (monthlySales.Apr ? monthlySales.Apr : 0) +
                         (monthlySales.May ? monthlySales.May : 0) + (monthlySales.June ? monthlySales.June : 0) + (monthlySales.July ? monthlySales.July : 0) + (monthlySales.Aug ? monthlySales.Aug : 0) + (monthlySales.Sep ? monthlySales.Sep : 0) + (monthlySales.Oct ? monthlySales.Oct : 0) + (monthlySales.Nov ? monthlySales.Nov : 0) + (monthlySales.Dec ? monthlySales.Dec : 0);
                     model.customer.enterprise.avgAnnualSales = model.customer.enterprise.avgAnnualSales + monthlySales.total;
-                    model.customer.enterprise.avgMonthlySales = round(((model.customer.enterprise.avgAnnualSales/12)),2);
+                    model.customer.enterprise.avgMonthlySales = (model.customer.enterprise.avgAnnualSales/12);
                 }
                     averageMonthlySale(model);
                     getBusinessExpenseData('value', model, 'row');
@@ -107,19 +81,18 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
 
             var averageMonthlySale = function (model) {
                 data = model.customer.enterprise;
-                data.monthlySalesCal = round((((data.initialEstimateMonthlySale ? data.initialEstimateMonthlySale : 0) + (data.monthlySale ? data.monthlySale : 0) + (data.totalMonthlySales ? data.totalMonthlySales : 0) + (data.avgMonthlySales ? data.avgMonthlySales : 0)) / 4),2);
-                data.costOfGoodsSold = round(data.monthlySalesCal * (data.grossMarginCost ? data.grossMarginCost : 0),2);
-                data.grossProfit = round(data.monthlySalesCal - data.costOfGoodsSold,2);
+                data.monthlySalesCal = ((data.initialEstimateMonthlySale ? data.initialEstimateMonthlySale : 0) + (data.monthlySale ? data.monthlySale : 0) + (data.totalMonthlySales ? data.totalMonthlySales : 0) + (data.avgMonthlySales ? data.avgMonthlySales : 0)) / 4;
+                data.costOfGoodsSold = data.monthlySalesCal * (data.grossMarginCost ? data.grossMarginCost : 0)
+                data.grossProfit = data.monthlySalesCal - data.costOfGoodsSold;
                // data.netBusinessIncome = 
             }
             var monthlySurpluse = function (model) {
                 model.customer.enterprise.avgDailySaleAmount = ((model.customer.enterprise.netBusinessIncome ? model.customer.enterprise.netBusinessIncome : 0) + (model.customer.enterprise.additionalIncomeConsidered ? model.customer.enterprise.additionalIncomeConsidered : 0) - (model.customer.enterprise.totalPersonalExpense ? model.customer.enterprise.totalPersonalExpense : 0) - (model.customer.enterprise.totalEmiAmount ? model.customer.enterprise.totalEmiAmount : 0))
-                model.customer.enterprise.avgMonthlyNetIncome = round(((model.customer.enterprise.avgDailySaleAmount * (0.67))),2);
+                model.customer.enterprise.avgMonthlyNetIncome = (model.customer.enterprise.avgDailySaleAmount * (model.customer.enterprise.ownerSalary ? model.customer.enterprise.ownerSalary : 0));
                 model.customer.enterprise.workingDaysInMonth = Math.min((model.customer.enterprise.avgMonthlyNetIncome ? model.customer.enterprise.avgMonthlyNetIncome : 0), (model.loanAccount.estimatedEmi? model.loanAccount.estimatedEmi: 0));
                 var x = (((Math.pow(((model.loanAccount.interestRate / 12)), model.loanAccount.tenure) +1) * (model.customer.enterprise.workingDaysInMonth)) - 1)
                 var y = ((Math.pow(((model.loanAccount.interestRate/ 12)), model.loanAccount.tenure)+1) * ((model.loanAccount.interestRate/ 12))) + model.loanAccount.loanAmountRequested
-                // model.customer.enterprise.employeeSalary = Math.round((x/y));
-                model.customer.enterprise.employeeSalary = 111;
+                model.customer.enterprise.employeeSalary = (x/y);
             }
             var computeEstimatedEmi = function (model) {
                 if (model.loanAccount.loanAmountRequested == '' || model.loanAccount.interestRate == '' || model.loanAccount.frequencyRequested == '' || model.loanAccount.tenure == '')
@@ -132,7 +105,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                 if (!isNaN(monthly) &&
                     (monthly != Number.POSITIVE_INFINITY) &&
                     (monthly != Number.NEGATIVE_INFINITY)) {
-                    model.loanAccount.emiEstimated = Math.round(Math.ceil(monthly));
+                    model.loanAccount.emiEstimated = Math.ceil(monthly);
                 }
                 else {
                     model.loanAccount.emiEstimated = "";
@@ -174,8 +147,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         
                     }
                 }
-                model.customer.totalMonthlySurplus = round(((businessIncome - businessExpense)/12),2);
-                model.customer.debtServiceRatio = round(((businessExpense / businessIncome) * 100),2);
+                model.customer.totalMonthlySurplus = (businessIncome - businessExpense)/12;
+                model.customer.debtServiceRatio = (businessExpense / businessIncome) * 100;
                 monthlySurpluse(model);
             }
 
@@ -186,8 +159,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                 for (i in monthlyBusinessExpense) {
                     model.customer.enterprise.totalBusinessExpenses = model.customer.enterprise.totalBusinessExpenses + (monthlyBusinessExpense[i].annualExpenses ? monthlyBusinessExpense[i].annualExpenses : 0);
                 }
-                model.customer.enterprise.netBusinessIncome = round((model.customer.enterprise.monthlySalesCal - model.customer.enterprise.totalBusinessExpenses),2);
-                model.customer.enterprise.netBusinessIncomeGrossMargin = round((model.customer.enterprise.netBusinessIncome / model.customer.enterprise.grossMarginSales),2);
+                model.customer.enterprise.netBusinessIncome = model.customer.enterprise.monthlySalesCal - model.customer.enterprise.totalBusinessExpenses;
+                model.customer.enterprise.netBusinessIncomeGrossMargin = model.customer.enterprise.netBusinessIncome / model.customer.enterprise.grossMarginSales;
                 monthlySurpluse(model);
             }
 
@@ -196,7 +169,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                 personalExpense = model.customer.personalExpenses;
                 total = 0;
                 for (i in personalExpense) {
-                    model.customer.enterprise.totalPersonalExpense = round((model.customer.enterprise.totalPersonalExpense + (personalExpense[i].annualExpenses ? personalExpense[i].annualExpenses : 0)),2);
+                    model.customer.enterprise.totalPersonalExpense = model.customer.enterprise.totalPersonalExpense + (personalExpense[i].annualExpenses ? personalExpense[i].annualExpenses : 0);
                 }
                 monthlySurpluse(model);
             }
@@ -206,22 +179,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                 for (i in otherExpenses) {
                     model.customer.enterprise.totalMonthlyAdditionIncome = model.customer.enterprise.totalMonthlyAdditionIncome + (otherExpenses[i].amount ? otherExpenses[i].amount : 0);
                 }
-                model.customer.enterprise.additionalIncomeConsidered = round((Math.min(model.customer.enterprise.totalMonthlyAdditionIncome, model.customer.enterprise.netBusinessIncome)),2);
+                model.customer.enterprise.additionalIncomeConsidered = Math.min(model.customer.enterprise.totalMonthlyAdditionIncome, model.customer.enterprise.netBusinessIncome);
                 monthlySurpluse(model);
-            }
-            var round = function(value, exp){
-                if (typeof exp === 'undefined' || +exp === 0)
-                return Math.round(value);
-            
-              value = +value;
-              exp = +exp;
-            
-              if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0))
-                return NaN;
-              value = value.toString().split('e');
-              value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp)));
-              value = value.toString().split('e');
-              return +(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp));
             }
             var overridesFields = function (bundlePageObj) {
                 return {
@@ -267,7 +226,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         "orderNo": 60
                     },
                     "EnterpriseInformation.latitude": {
-                      //  "readonly": true,
+                        "readonly": true,
                         "required": true,
                         "orderNo": 70
                     },
@@ -292,9 +251,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "EnterpriseInformation.noOfPartners": {
                         "orderNo": 120
                     },
-                    "EnterpriseInformation.photoImageId": {
-                        "orderNo": 135
-                    },
                     "EnterpriseInformation.companyRegistered": {
                         "required": true,
                         "orderNo": 130,
@@ -303,19 +259,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "EnterpriseInformation.enterpriseRegistrations": {
                         "required": true,
-                        "orderNo": 140,
-                        "condition":"model.customer.enterprise.companyRegistered == 'YES'",
-                        "add": null,
-                        "remove": null,
-                        "view": "fixed",
-                        "startEmpty":false
+                        "orderNo": 140
                     },
                     "EnterpriseInformation.enterpriseDocuments": {
-                        "orderNo": 150,
-                        "startEmpty":false,
-                        "add": null,
-                        "remove": null,
-                        "view": "fixed",
+                        "orderNo": 150
                     },
                     "ContactInformation.mobilePhone": {
                         "required": true,
@@ -653,43 +600,37 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 "title": "BRANCH_NAME",
                                 "required":true
                             },
-                            "photoImageId":{
-                                "key": "customer.photoImageId",
-                                "required":true,
-                                "title": "BUSINESS_PHOTO",
-                                type: "file",
-                                fileType: "image/*",
-                                "category": "CustomerEnrollment",
-                                "subCategory": "PHOTO"
-                            },
-                            "businessInPresentAreaSince":{
-                                "key": "customer.enterprise.businessInPresentAreaSince",
-                                "type": "select",
-                                "enumCode": "business_in_present_area_since",
-                                "title":"BUSINESS_VINTAGE",
-                                "orderNo": 95
-                            },
                             "serviceTaxNumber": {
                                 "key": "customer.enterprise.serviceTaxNumber",
                                 "type": "text",
                                 "title": "GST_NUMBER",
+                                "required":true,
                                 schema: {
                                     "pattern": "^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9]{1}Z[a-zA-Z0-9]{1}$",
                                     "type": ["string", "null"],
                                 }
                             },
-                           // "businessPhoto":{
-                                // "key": "customer.photoImageId",
-                                // "title":"BUSINESS_PHOTO",
-                                // "type": "file",
-                                // "fileType": "image/*",
-                                // "viewParams": function(modelValue, form, model) {
-                                //     return {
-                                //         customerId: model.customer.id
-                                //     };
-                                //  },      
-                              //  "orderNo":135
-                            //},
+                            "vintage":{
+                                "key": "customer.enterprise.businessVintage",
+                                "type": "select",
+                                "title": "BUSINESS_VINTAGE",
+                                "required":false,
+                                "enumCode": "business_in_present_area_since",
+                                "orderNo": 95,
+                            },
+                            "businessPhoto":{
+                                "key":"customer.enterprise.businessPhoto",
+                                "title":"BUSINESS_PHOTO",
+                                "type": "file",
+                                "fileType": "image/*",
+                                "required":false,
+                                "category": "CustomerEnrollment",
+                                "subCategory": "PHOTO",
+                                "schema":{
+                                    "type": ["string","null"]
+                                },
+                                "orderNo":135
+                            },
                             "enterpriseDocuments": {
                                 "type": "array",
                                 "title": "BUSINESS_DOCUMENT",
@@ -708,10 +649,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         "title": "BUSINESS_ACTIVITY",
                                         "required":true,
                                         type: "select",
-                                        "enumCode": "businessActivity1",
-                                        "parentEnumCode": "businessType",
-                                        "parentValueExpr": "customer.enterpriseDocuments[arrayIndex].udf1",
-                                        "condition": "model.siteCode == 'KGFS'",
+                                        enumCode: "businessActivity",
                                     },
                                     "udf3": {
                                         "key": "customer.enterpriseDocuments[].udf3",
@@ -719,10 +657,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         "required": true,
                                         "title": "BUSINESS_SECTOR",
                                         "type": "select",
-                                        "enumCode": "businessSector1",
-                                        "parentEnumCode": "businessActivity1",
-                                        "parentValueExpr": "customer.enterpriseDocuments[arrayIndex].udf2",
-                                        "condition": "model.siteCode == 'KGFS'",
+                                        "enumCode": "businessSector",
                                     },
                                     "udf4": {
                                         "title": "ITR_AVAILABLE",
@@ -1545,7 +1480,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 "items":{
                                     'monthlySalesCal': {
                                         key: "customer.enterprise.monthlySalesCal",
-                                        title: "MONTHLY_SALES",
+                                        title: "AVERAGE_MONTHLY_SALES",
                                         "type": "number",
                                         "readonly": true
                                     },
@@ -2182,8 +2117,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             'ownerSalary': {
                                 key: "customer.enterprise.ownerSalary",
                                 title: "DEBT_SERVICE_RATIO",
-                                "readonly":true,
-                                "type": "text",
+                                "type": "number",
                                 "onChange": function (value, form, model) {
                                     monthlySurpluse(model);
                                 }
@@ -2252,11 +2186,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "EnterpriseInformation.firstName",
                     "EnterpriseInformation.companyOperatingSince",
                     "EnterpriseInformation.latitude",
-                    "EnterpriseInformation.photoImageId",
                     "EnterpriseInformation.distanceFromBranch",
-                    "EnterpriseInformation.businessInPresentAreaSince",
                     "EnterpriseInformation.ownership",
-                   // "EnterpriseInformation.vintage",
+                    "EnterpriseInformation.vintage",
                     "EnterpriseInformation.businessConstitution",
                     "EnterpriseInformation.serviceTaxNumber",
                     "EnterpriseInformation.noOfPartners",
@@ -2272,7 +2204,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "EnterpriseInformation.enterpriseDocuments.udf2",
                     "EnterpriseInformation.enterpriseDocuments.udf3",
                     "EnterpriseInformation.enterpriseDocuments.udf4",
-                   // "EnterpriseInformation.businessPhoto",
+                    "EnterpriseInformation.businessPhoto",
 
                     "ContactInformation",
                     "ContactInformation.mobilePhone",
@@ -2316,7 +2248,27 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     "Liabilities.liabilities.interestRate",
                     "Liabilities.liabilities.frequencyOfInstallment",
                     "Liabilities.liabilities.outstandingAmountInPaisa",
-                    "Liabilities.liabilities.noOfInstalmentPaid",        
+                    "Liabilities.liabilities.noOfInstalmentPaid",
+
+                    "EnterpriseFinancials",
+                    "EnterpriseFinancials.incomeThroughSales",
+                    "EnterpriseFinancials.incomeThroughSales.incomeType",
+                    "EnterpriseFinancials.incomeThroughSales.amount",
+                    "EnterpriseFinancials.incomeThroughSales.frequency",
+                    "EnterpriseFinancials.incomeThroughSales.invoiceDocId",
+                    "EnterpriseFinancials.incomeThroughSales.buyerName",
+
+                    "EnterpriseFinancials",
+                    "EnterpriseFinancials.rawMaterialExpenses",
+                    "EnterpriseFinancials.rawMaterialExpenses.vendorName",
+                    "EnterpriseFinancials.rawMaterialExpenses.amount",
+                    "EnterpriseFinancials.rawMaterialExpenses.frequency",
+                    "EnterpriseFinancials.rawMaterialExpenses.invoiceDocId",
+
+                    "EnterpriseFinancials",
+                    "EnterpriseFinancials.monthlySurplus",
+                    "EnterpriseFinancials.monthlySurplus.totalMonthlySurplus",
+                    "EnterpriseFinancials.monthlySurplus.debtServiceRatio",
 
                     "BuyerDetails",
                     "BuyerDetails.buyerDetails",
@@ -2457,8 +2409,8 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                         var val=moment(modelValue).isSameOrBefore(currentDate);
                                        if(val === false){
                                           PageHelper.showProgress('enrolment', 'Operating Since Date must not be greater then current date.', 5000);
-                                          model.customer.enterprise.companyOperatingSince=null;
-                                          return false;
+                                          model.customer.enterprise.companyOperatingSince="";
+                                          modelValue="";
                                        }
                                   }
                                 }
@@ -3515,8 +3467,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     }
                     /* Setting data recieved from Bundle */
                     model.loanCustomerRelationType = "Customer";
-                    model.currentStage = (bundleModel) ?  bundleModel.currentStage : model.currentStage ; 
-                    model.siteCode = SessionStore.getGlobalSetting('siteCode'); 
+                    model.currentStage = (bundleModel) ?  bundleModel.currentStage : model.currentStage ;  
                     // model.currentStage =  'KYCCheck';
                     /* End of setting data recieved from Bundle */
 
@@ -3550,11 +3501,10 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     model.customer['personalExpenses'] = []
                     model.customer['totalMonthlySurplus'] = '';
                     model.customer['debtServiceRatio'] = '';
-                
                     // model.customer.enterprise = {
                         
                     // }
-                   
+        
                     if (model.loanAccount.currentStage == 'Screening' && _.hasIn(model, 'loanProcess.applicantEnrolmentProcess') && model.loanProcess.applicantEnrolmentProcess !=null){
                         model.applicantEnrolmentProcessDetails = {}; 
                         model.applicantEnrolmentProcessDetails=model.loanProcess.applicantEnrolmentProcess.customer;
@@ -3567,10 +3517,9 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     model.customer.enterprise.businessType  = "Services";
                     computeTotalMonthlySurpluse("value","form",model);
                     if(model.currentStage != 'Screening' && model.currentStage != 'Application'){
-                        model.customer.enterprise.ownerSalary = "67%";
                         model.customer.enterprise.initialEstimateMonthlySale = (model.customer.enterprise.monthlyBusinessExpenses) ? Number(model.customer.enterprise.monthlyBusinessExpenses * 4):0;
                         if(model.customer.enterprise){
-                            model.customer.enterprise.serviceTaxNumber = model.customer.enterprise.serviceTaxNumber? model.customer.enterprise.serviceTaxNumber:null;
+                            model.customer.enterprise.serviceTaxNumber = model.customer.enterprise.serviceTaxNumber? model.customer.enterprise.serviceTaxNumber:0;
                             model.customer.enterprise.monthlyBusinessExpenses = model.customer.enterprise.monthlyBusinessExpenses? Number(model.customer.enterprise.monthlyBusinessExpenses):0;
                             model.customer.enterprise.insurancePremiumAmount = model.customer.enterprise.insurancePremiumAmount? Number(model.customer.enterprise.insurancePremiumAmount):0;
                             model.customer.enterprise.coOwnerSalary = model.customer.enterprise.coOwnerSalary? Number(model.customer.enterprise.coOwnerSalary):0;
@@ -3775,7 +3724,7 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                     },
                     "guarantor-updated": function (bundleModel, model, params) {
                         model.enrolmentProcess.refreshEnterpriseCustomerRelations(model.loanProcess);
-                    },                    
+                    },
                     "load-address-business": function (bundleModel, model, params) {
                         if(params.customer.fcuStatus){
                             model.customer.mobilePhone = params.customer.mobilePhone;
@@ -3811,20 +3760,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             model.applicantEnrolmentProcessDetails=model.loanProcess.applicantEnrolmentProcess.customer;
                             model.customer.customerBankAccounts=model.applicantEnrolmentProcessDetails.customerBankAccounts;
                         }
-                    },
-                    "refresh-all-tabs-customer": function (bundleModel, model, params) {
-                        clearAll('customer',['firstName',"distanceFromBranch","mobilePhone","landLineNo","doorNo","street","landmark","pincode","locality","villageName","district","state"],model);
-                        model.customer.enterprise.companyOperatingSince=null;
-                        model.customer.enterprise.ownership=null;
-                        model.customer.enterprise.businessConstitution=null;
-                        model.customer.enterprise.serviceTaxNumber=null;
-                        model.customer.enterprise.noOfPartners=null;
-                        model.customer.enterprise.companyRegistered=null;
-                        model.customer.customerBankAccounts=[];
-                        model.customer.enterpriseDocuments=[];                        
-                        model.customer.liabilities=[];
-                        model.customer.enterpriseRegistrations=[];   
-                                             
                     }
                 },
                 form: [
@@ -3852,38 +3787,13 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                         if (PageHelper.isFormInvalid(form)) {
                             return false;
                         }
-                         var reqData = _.cloneDeep(model);
-
-                        if (!(validateRequest(reqData))) {
-                            return;
-                        }
-                        if(Utils.isCordova && model.customer.latitude == null){
-                            PageHelper.showErrors({
-                                'data': {
-                                    'error': "Please capture Business Location"
-                                }
-                            });
-                            return false;
-                        }
-                        model.customer.enterprise.ownerSalary = 67;
                         // for (i in model.customer.enterpriseRegistrations){
                         //     if(model.customer.enterpriseRegistrations[i].registeredDate > model.customer.enterpriseRegistrations[i].expiryDate){
                         //         PageHelper.showErrors({data:{error:"Registration date cant be greater than valid upto date...."}});
                         //         return false;
                         //     } 
                         // }
-
-                        var dateA = new Date(model.customer.enterprise.companyOperatingSince);
-                        var dateB = new Date();
-                        if (dateA > dateB) {
-                            PageHelper.showErrors({
-                                'data': {
-                                    'error': "OperatingSinceDate can't be more than current Date"
-                                }
-                            })
-                            return false;
-                        }
-                        var dateFlag;
+                        var dateFlag;     
                         if (model.customer.enterpriseRegistrations != 'undefined' && model.customer.enterpriseRegistrations != null)
                         {                            
                             model.customer.enterpriseRegistrations.map((epReg => {
@@ -3907,13 +3817,12 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
                                 model.enrolmentProcess.proceed()
                                     .subscribe(function (enrolmentProcess) {
-                                        model.loanProcess.loanAccount.customerId = enrolmentProcess.customer.id;
                                         model.enrolmentProcess.customer.centreName =  model.centreName
                                         model.customer.centreName =  model.centreName
                                         
                                         model.customer.isCaptured = true
                                         BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer}); 
-                                        BundleManager.pushEvent('business-customer-bank-account', model._bundlePageObj, {customer: model.customer});                                         
+                                        
                                         PageHelper.showProgress('enrolment', 'Done.', 5000);
                                     }, function (err) {
                                         PageHelper.showErrors(err);
@@ -3939,13 +3848,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                             PageHelper.showProgress("loan-enrolment","Loan Amount Eligible for customer should be more than zero amount",5000);
                                 return false;    
                         }
-
-                         var reqData = _.cloneDeep(model);
-
-                        if (!(validateRequest(reqData))) {
-                            return;
-                        }
-                        model.customer.enterprise.ownerSalary = 67;
                         PageHelper.showProgress('enrolment', 'Updating Customer',5000);
                         PageHelper.showLoader();
                         _.forEach(model.customer.monthlySale, function (monthlysale) {
@@ -4006,8 +3908,6 @@ define(['perdix/domain/model/customer/EnrolmentProcess', "perdix/domain/model/lo
                                 
                                 model.customer.isCaptured = true
                                 BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer});
-                                BundleManager.pushEvent('business-customer-bank-account', model._bundlePageObj, {customer: model.customer});                                         
-
                                 if(model.currentStage == 'CreditAppraisal'){   
                                     model.customer.isCreditAppraisal = true
                                     BundleManager.pushEvent('business-capture', model._bundlePageObj, {customer: model.customer});
