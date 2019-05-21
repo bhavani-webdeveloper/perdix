@@ -216,9 +216,7 @@
                "religion",
                "caste",
                "language",
-               "houseVerificationPhoto",
-               "latitude",
-               "longitude"
+               "houseVerificationPhoto"
             ]
          }
       },
