@@ -2602,19 +2602,24 @@ define([],function(){
                          });
                     },
                     proceed: function(model, formCtrl, form, $event){
+                        PageHelper.hideLoader();
                         if (model.loanProcess.remarks==null || model.loanProcess.remarks ==""){
                             PageHelper.showProgress("update-loan", "Remarks is mandatory", 3000);
+                            PageHelper.hideLoader();
                             return false;
                         }
                         if((model.loanAccount.currentStage =='Televerification') && (model.loanAccount.telecallingDetails.length == 0)){
                             PageHelper.showErrors({"data": {"error":"Tele Verification should be Mandatory"}});
+                            PageHelper.hideLoader();
                             return false;
                         } 
                         model.loanAccount.interestRate=model.loanAccount.expectedInterestRate;
                         if (!validateForm(formCtrl)){
+                            PageHelper.hideLoader();
                             return;
                         }
                         if (!preLoanSaveOrProceed(model)){
+                            PageHelper.hideLoader();
                             return;
                         }
                         // var trancheTotalAmount=0;
@@ -2635,6 +2640,7 @@ define([],function(){
                         //     }
                         
                         // }
+                        debugger;
                         Utils.confirm("Are You Sure?")
                         .then(
                             function() {
@@ -2646,15 +2652,17 @@ define([],function(){
                             .subscribe(function (value) {
                                 Utils.removeNulls(value, true);
                                 PageHelper.showProgress('enrolment', 'Done.', 5000);
+                                PageHelper.hideLoader();
                                 if(model.loanAccount.cbCheckIgnore == "YES") {
                                     irfNavigator.goBack();
                                 } else {
-                                    if(model.currentStage == 'Screening'){
-                                        irfNavigator.go({
-                                            'state': 'Page.Adhoc',
-                                            'pageName': 'shramsarathi.dashboard.loans.LoanOriginationDashboard',
-                                            'pageId': null
-                                        })
+                                    if(model.currentStage == 'ScreeningReview' || 'Screening'){
+                                        // irfNavigator.go({
+                                        //     'state': 'Page.Adhoc',
+                                        //     'pageName': 'shramsarathi.dashboard.loans.LoanOriginationDashboard',
+                                        //     'pageId': null
+                                        // })
+                                        irfNavigator.goBack();
                                     }
                                 }
                                 // irfNavigator.goBack();
